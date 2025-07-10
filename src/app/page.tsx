@@ -1,88 +1,222 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Box, Container, Typography, Button, Card, CardContent, CardActions } from "@mui/material";
+import { 
+  Person as PersonIcon,
+  Work as WorkIcon,
+  Description as ResumeIcon,
+  ContactPhone as ContactIcon,
+  Article as BlogIcon,
+  Launch as LaunchIcon 
+} from "@mui/icons-material";
+
+const portfolioSections = [
+  {
+    title: "About",
+    description: "Learn about my background, skills, and professional journey",
+    href: "/about",
+    icon: PersonIcon,
+    color: "primary" as const,
+  },
+  {
+    title: "Career",
+    description: "Explore my professional experience and career timeline",
+    href: "/career", 
+    icon: WorkIcon,
+    color: "secondary" as const,
+  },
+  {
+    title: "Resume",
+    description: "View and download my complete resume and qualifications",
+    href: "/resume",
+    icon: ResumeIcon,
+    color: "success" as const,
+  },
+  {
+    title: "Blog",
+    description: "Read my thoughts on technology, development, and industry insights",
+    href: "/blog",
+    icon: BlogIcon,
+    color: "info" as const,
+  },
+  {
+    title: "Contact",
+    description: "Get in touch for opportunities, collaborations, or questions",
+    href: "/contact",
+    icon: ContactIcon,
+    color: "warning" as const,
+  },
+];
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <Box className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+      {/* Hero Section */}
+      <Container maxWidth="lg" sx={{ pt: 8, pb: 6 }}>
+        <Box textAlign="center" sx={{ mb: 8 }}>
+          <Typography 
+            variant="h2" 
+            component="h1" 
+            gutterBottom
+            sx={{ 
+              fontWeight: 700,
+              background: 'linear-gradient(45deg, #1976d2 30%, #42a5f5 90%)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              mb: 3
+            }}
           >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+            Welcome to My Portfolio
+          </Typography>
+          <Typography 
+            variant="h5" 
+            component="h2" 
+            color="text.secondary" 
+            sx={{ mb: 4, maxWidth: '800px', mx: 'auto', lineHeight: 1.6 }}
+          >
+            I&apos;m a passionate developer dedicated to creating innovative solutions and sharing knowledge through code and writing
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Button 
+              component={Link}
+              href="/about"
+              variant="contained" 
+              size="large"
+              startIcon={<PersonIcon />}
+              sx={{ px: 4, py: 1.5 }}
+            >
+              About Me
+            </Button>
+            <Button 
+              component={Link}
+              href="/contact"
+              variant="outlined" 
+              size="large"
+              startIcon={<ContactIcon />}
+              sx={{ px: 4, py: 1.5 }}
+            >
+              Get In Touch
+            </Button>
+          </Box>
+        </Box>
+
+        {/* Navigation Cards */}
+        <Box className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+          {portfolioSections.map((section) => {
+            const IconComponent = section.icon;
+            return (
+              <Card 
+                key={section.title}
+                sx={{ 
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  transition: 'all 0.3s ease-in-out',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: 6,
+                  },
+                  background: 'rgba(255, 255, 255, 0.9)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                }}
+              >
+                <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <IconComponent 
+                      sx={{ 
+                        fontSize: 32, 
+                        color: `${section.color}.main`,
+                        mr: 1.5 
+                      }} 
+                    />
+                    <Typography variant="h6" component="h3" fontWeight={600}>
+                      {section.title}
+                    </Typography>
+                  </Box>
+                  <Typography 
+                    variant="body2" 
+                    color="text.secondary"
+                    sx={{ lineHeight: 1.6 }}
+                  >
+                    {section.description}
+                  </Typography>
+                </CardContent>
+                <CardActions sx={{ p: 3, pt: 0 }}>
+                  <Button 
+                    component={Link}
+                    href={section.href}
+                    variant="contained"
+                    color={section.color}
+                    endIcon={<LaunchIcon />}
+                    fullWidth
+                    sx={{ 
+                      textTransform: 'none',
+                      fontWeight: 500,
+                    }}
+                  >
+                    Visit {section.title}
+                  </Button>
+                </CardActions>
+              </Card>
+            );
+          })}
+        </Box>
+
+        {/* Quick Stats Section */}
+        <Box sx={{ mt: 8, textAlign: 'center' }}>
+          <Typography variant="h4" component="h2" gutterBottom sx={{ mb: 4 }}>
+            Portfolio Highlights
+          </Typography>
+          <Box className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+            <Box>
+              <Typography variant="h3" color="primary.main" fontWeight={700}>
+                5+
+              </Typography>
+              <Typography variant="body1" color="text.secondary">
+                Years Experience
+              </Typography>
+            </Box>
+            <Box>
+              <Typography variant="h3" color="secondary.main" fontWeight={700}>
+                20+
+              </Typography>
+              <Typography variant="body1" color="text.secondary">
+                Projects Completed
+              </Typography>
+            </Box>
+            <Box>
+              <Typography variant="h3" color="success.main" fontWeight={700}>
+                10+
+              </Typography>
+              <Typography variant="body1" color="text.secondary">
+                Technologies Mastered
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+
+        {/* Call to Action */}
+        <Box sx={{ mt: 8, textAlign: 'center', p: 4, borderRadius: 2, bgcolor: 'primary.main', color: 'white' }}>
+          <Typography variant="h5" component="h2" gutterBottom>
+            Ready to Work Together?
+          </Typography>
+          <Typography variant="body1" sx={{ mb: 3, opacity: 0.9 }}>
+            I&apos;m always open to discussing new opportunities and interesting projects
+          </Typography>
+          <Button 
+            component={Link}
+            href="/contact"
+            variant="contained"
+            color="secondary"
+            size="large"
+            startIcon={<ContactIcon />}
+            sx={{ px: 4, py: 1.5 }}
+          >
+            Start a Conversation
+          </Button>
+        </Box>
+      </Container>
+    </Box>
   );
 }
