@@ -8,11 +8,12 @@ import {
   Article as BlogIcon,
   Launch as LaunchIcon 
 } from "@mui/icons-material";
+import { useTranslations } from 'next-intl';
 
 const portfolioSections = [
   {
     title: "About",
-    description: "Learn about my background, skills, and professional journey",
+    description: "Learn a little about me, my background, skills, and professional journey",
     href: "/about",
     icon: PersonIcon,
     color: "primary" as const,
@@ -48,6 +49,7 @@ const portfolioSections = [
 ];
 
 export default function Home() {
+  const t = useTranslations('common');
   return (
     <Box className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
       {/* Hero Section */}
@@ -66,7 +68,7 @@ export default function Home() {
               mb: 3
             }}
           >
-            Welcome to My Portfolio
+            {t('home')}
           </Typography>
           <Typography 
             variant="h5" 
@@ -74,7 +76,7 @@ export default function Home() {
             color="text.secondary" 
             sx={{ mb: 4, maxWidth: '800px', mx: 'auto', lineHeight: 1.6 }}
           >
-            I&apos;m a passionate developer dedicated to creating innovative solutions and sharing knowledge through code and writing
+            {t('homeDescription')}
           </Typography>
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
             <Button 
@@ -85,7 +87,7 @@ export default function Home() {
               startIcon={<PersonIcon />}
               sx={{ px: 4, py: 1.5 }}
             >
-              About Me
+              {t('about')}
             </Button>
             <Button 
               component={Link}
@@ -95,13 +97,13 @@ export default function Home() {
               startIcon={<ContactIcon />}
               sx={{ px: 4, py: 1.5 }}
             >
-              Get In Touch
+              {t('contact')}
             </Button>
           </Box>
         </Box>
 
         {/* Navigation Cards */}
-        <Box className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+        <Box className="grid grid-cols-1 sm:grid-cols-3 gap-8">
           {portfolioSections.map((section) => {
             const IconComponent = section.icon;
             return (
@@ -116,7 +118,8 @@ export default function Home() {
                     transform: 'translateY(-4px)',
                     boxShadow: 6,
                   },
-                  background: 'rgba(255, 255, 255, 0.9)',
+                  background: 'rgba(153, 153, 153, 0.9)',
+                  color: "black",
                   backdropFilter: 'blur(10px)',
                   border: '1px solid rgba(255, 255, 255, 0.2)',
                 }}
@@ -131,7 +134,7 @@ export default function Home() {
                       }} 
                     />
                     <Typography variant="h6" component="h3" fontWeight={600}>
-                      {section.title}
+                      {t(section.title.toLowerCase())}
                     </Typography>
                   </Box>
                   <Typography 
@@ -139,10 +142,10 @@ export default function Home() {
                     color="text.secondary"
                     sx={{ lineHeight: 1.6 }}
                   >
-                    {section.description}
+                    {t(section.title.toLowerCase() + 'Description')}
                   </Typography>
                 </CardContent>
-                <CardActions sx={{ p: 3, pt: 0 }}>
+                <CardActions>
                   <Button 
                     component={Link}
                     href={section.href}
@@ -155,7 +158,7 @@ export default function Home() {
                       fontWeight: 500,
                     }}
                   >
-                    Visit {section.title}
+                    {t('visit')} {t(section.title.toLowerCase())}
                   </Button>
                 </CardActions>
               </Card>
@@ -166,7 +169,7 @@ export default function Home() {
         {/* Quick Stats Section */}
         <Box sx={{ mt: 8, textAlign: 'center' }}>
           <Typography variant="h4" component="h2" gutterBottom sx={{ mb: 4 }}>
-            Portfolio Highlights
+            {t('portfolioHighlights')}
           </Typography>
           <Box className="grid grid-cols-1 sm:grid-cols-3 gap-8">
             <Box>
@@ -174,7 +177,7 @@ export default function Home() {
                 5+
               </Typography>
               <Typography variant="body1" color="text.secondary">
-                Years Experience
+                {t('yearsExperience')}
               </Typography>
             </Box>
             <Box>
@@ -182,7 +185,7 @@ export default function Home() {
                 20+
               </Typography>
               <Typography variant="body1" color="text.secondary">
-                Projects Completed
+                {t('projectsCompleted')}
               </Typography>
             </Box>
             <Box>
@@ -190,19 +193,19 @@ export default function Home() {
                 10+
               </Typography>
               <Typography variant="body1" color="text.secondary">
-                Technologies Mastered
+                {t('technologiesMastered')}
               </Typography>
             </Box>
           </Box>
         </Box>
 
         {/* Call to Action */}
-        <Box sx={{ mt: 8, textAlign: 'center', p: 4, borderRadius: 2, bgcolor: 'primary.main', color: 'white' }}>
+        <Box sx={{ mt: 8, textAlign: 'center' }}>
           <Typography variant="h5" component="h2" gutterBottom>
-            Ready to Work Together?
+            {t('readyToWorkTogether')}
           </Typography>
           <Typography variant="body1" sx={{ mb: 3, opacity: 0.9 }}>
-            I&apos;m always open to discussing new opportunities and interesting projects
+            {t('openToOpportunities')}
           </Typography>
           <Button 
             component={Link}
@@ -213,7 +216,7 @@ export default function Home() {
             startIcon={<ContactIcon />}
             sx={{ px: 4, py: 1.5 }}
           >
-            Start a Conversation
+            {t('startAConversation')}
           </Button>
         </Box>
       </Container>

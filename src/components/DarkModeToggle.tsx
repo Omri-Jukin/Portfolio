@@ -38,7 +38,7 @@ export default function DarkModeToggle() {
         aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
         onClick={toggleTheme}
         color="inherit"
-        sx={{ position: "fixed", top: 16, right: 16, zIndex: 100 }}
+        sx={{ position: "inline-block", top: "2vh", right: "2vw", zIndex: 100 }}
       >
         {isDark ? <Brightness4Icon /> : <Brightness7Icon />}
       </IconButton>

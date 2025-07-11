@@ -1,0 +1,32 @@
+{
+  "common": {
+    "language": "Language",
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "blog": "Blog",
+    "career": "Career",
+    "resume": "Resume"
+  },
+  "about": {
+    "title": "About Me",
+    "description": "Welcome to my portfolio. I'm a passionate developer who loves creating amazing web experiences focused on programming and developing data-driven systems and user experiences."
+  },
+  "theme": {
+    "light": "Switch to light mode",
+    "dark": "Switch to dark mode"
+  },
+  "language": {
+    "switch": "Switch language",
+    "english": "English",
+    "spanish": "Spanish",
+    "french": "French",
+    "hebrew": "Hebrew"
+  },
+  "location": {
+    "israel": "Israel",
+    "usa": "USA",
+    "france": "France",
+    "spain": "Spain"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "common": {
+    "language": "Idioma",
+    "home": "Inicio",
+    "about": "Acerca de",
+    "contact": "Contacto",
+    "blog": "Blog",
+    "career": "Carrera",
+    "resume": "Currículum"
+  },
+  "about": {
+    "title": "Acerca de mí",
+    "description": "Bienvenido a mi portafolio. Soy un desarrollador apasionado que ama crear experiencias web increíbles."
+  },
+  "theme": {
+    "light": "Cambiar a modo claro",
+    "dark": "Cambiar a modo oscuro"
+  },
+  "language": {
+    "switch": "Cambiar idioma",
+    "english": "Inglés",
+    "spanish": "Español",
+    "french": "Francés",
+    "hebrew": "Hebreo"
+  }
+} 
