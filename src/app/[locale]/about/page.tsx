@@ -1,26 +1,15 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import { Metadata } from "next";
-import { useTranslations } from "next-intl";
-import { getTranslations } from "next-intl/server";
-
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations();
-  return {
-    title: t("about.title"),
-    description: t("about.description"),
-  };
-}
 
 export default function AboutPage() {
-  const t = useTranslations();
   return (
     <Box sx={{ p: 2 }}>
       <Typography variant="h1" component="h1" gutterBottom>
-        {t("about.title")}
+        About Me
       </Typography>
       <Typography variant="body1" component="p" gutterBottom>
-        {t("about.description")}
+        Welcome to my portfolio. I'm a passionate developer who loves creating
+        amazing web experiences.
       </Typography>
     </Box>
   );

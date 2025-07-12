@@ -40,20 +40,11 @@ export default function LanguageSwitcher() {
       );
 
       if (hasLocaleInPath) {
-        // Current path has locale, replace or remove it
-        if (targetLocale === defaultLocale) {
-          // Remove locale segment for default locale
-          segments.splice(1, 1);
-        } else {
-          // Replace with new locale
-          segments[1] = targetLocale;
-        }
+        // Replace with new locale (always keep locale in URL)
+        segments[1] = targetLocale;
       } else {
-        // Current path doesn't have locale (default locale)
-        if (targetLocale !== defaultLocale) {
-          // Add locale segment for non-default locale
-          segments.splice(1, 0, targetLocale);
-        }
+        // Add locale segment (always show locale in URL)
+        segments.splice(1, 0, targetLocale);
       }
 
       newPath = segments.join("/");

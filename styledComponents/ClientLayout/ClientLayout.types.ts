@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
 
-export interface SimpleClientLayoutProps {
+export interface ClientLayoutProps {
   children: ReactNode;
 }

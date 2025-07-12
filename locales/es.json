@@ -15,6 +15,11 @@
     "title": "Acerca de mí",
     "description": "Bienvenido a mi portafolio. Soy un desarrollador apasionado que ama crear experiencias web increíbles."
   },
+  "career": {
+    "title": "Carrera",
+    "description": "Mi trayectoria profesional",
+    "experience": "Soy un desarrollador apasionado que ama crear experiencias web increíbles enfocadas en la programación y desarrollo de sistemas basados en datos y experiencias de usuario. Actualmente trabajo como ingeniero de software en una startup llamada \"The Startup\"."
+  },
   "theme": {
     "light": "Cambiar a modo claro",
     "dark": "Cambiar a modo oscuro"

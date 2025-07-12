@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
-import SimpleClientLayout from "~/SimpleClientLayout";
+import ClientLayout from "#/styledComponents/ClientLayout";
+import { ClientLayoutProps } from "#/styledComponents/ClientLayout/ClientLayout.types";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
+import { notFound } from "next/navigation";
+import { locales } from "#/i18n";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,7 +24,7 @@ export const metadata: Metadata = {
     "Learn a little about me, my background, skills, and professional journey",
 };
 
-interface Props {
+interface Props extends ClientLayoutProps {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 }
@@ -32,7 +37,7 @@ export default async function RootLayout({ children, params }: Props) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SimpleClientLayout>{children}</SimpleClientLayout>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );

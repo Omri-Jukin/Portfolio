@@ -15,6 +15,11 @@
     "title": "About Me",
     "description": "Welcome to my portfolio. I'm a passionate developer who loves creating amazing web experiences focused on programming and developing data-driven systems and user experiences."
   },
+  "career": {
+    "title": "Career",
+    "description": "My career journey",
+    "experience": "I'm a passionate developer who loves creating amazing web experiences focused on programming and developing data-driven systems and user experiences. I'm currently working as a software engineer at a startup called \"The Startup\"."
+  },
   "theme": {
     "light": "Switch to light mode",
     "dark": "Switch to dark mode"

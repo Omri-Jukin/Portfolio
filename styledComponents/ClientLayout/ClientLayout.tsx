@@ -3,12 +3,10 @@
 import { useState } from "react";
 import ThemeProvider from "~/ThemeProvider";
 import DarkModeToggle from "~/DarkModeToggle";
-import { SimpleClientLayoutProps } from "./SimpleClientLayout.types";
-import { StyledControlsContainer } from "./SimpleClientLayout.styles";
+import { ClientLayoutProps } from "./ClientLayout.types";
+import { StyledControlsContainer } from "./ClientLayout.styles";
 
-export default function SimpleClientLayout({
-  children,
-}: SimpleClientLayoutProps) {
+export default function ClientLayout({ children }: ClientLayoutProps) {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   const handleThemeToggle = (isDark: boolean) => {
