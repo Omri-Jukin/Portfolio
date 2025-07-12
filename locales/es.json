@@ -6,7 +6,10 @@
     "contact": "Contacto",
     "blog": "Blog",
     "career": "Carrera",
-    "resume": "Currículum"
+    "resume": "Currículum",
+    "description": "Bienvenido a mi portafolio. Soy un desarrollador apasionado que ama crear experiencias web increíbles.",
+    "projects": "Proyectos",
+    "skills": "Habilidades"
   },
   "about": {
     "title": "Acerca de mí",
@@ -17,10 +20,15 @@
     "dark": "Cambiar a modo oscuro"
   },
   "language": {
-    "switch": "Cambiar idioma",
-    "english": "Inglés",
-    "spanish": "Español",
-    "french": "Francés",
-    "hebrew": "Hebreo"
+    "en": "Inglés",
+    "es": "Español",
+    "fr": "Francés",
+    "he": "Hebreo"
+  },
+  "location": {
+    "israel": "Israel",
+    "usa": "USA",
+    "france": "Francia",
+    "spain": "España"
   }
-} 
+}

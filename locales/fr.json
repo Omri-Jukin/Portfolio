@@ -6,7 +6,10 @@
     "contact": "Contact",
     "blog": "Blog",
     "career": "Carrière",
-    "resume": "CV"
+    "resume": "CV",
+    "description": "Bienvenue dans mon portfolio. Je suis un développeur passionné qui aime créer des expériences web extraordinaires.",
+    "projects": "Projets",
+    "skills": "Compétences"
   },
   "about": {
     "title": "À propos de moi",
@@ -17,10 +20,15 @@
     "dark": "Passer en mode sombre"
   },
   "language": {
-    "switch": "Changer de langue",
-    "english": "Anglais",
-    "spanish": "Espagnol",
-    "french": "Français",
-    "hebrew": "Hébreu"
+    "en": "Anglais",
+    "es": "Espagnol",
+    "fr": "Français",
+    "he": "Hébreu"
+  },
+  "location": {
+    "israel": "Israël",
+    "usa": "États-Unis",
+    "france": "France",
+    "spain": "Espagne"
   }
-} 
+}

@@ -6,7 +6,10 @@
     "contact": "Contact",
     "blog": "Blog",
     "career": "Career",
-    "resume": "Resume"
+    "resume": "Resume",
+    "description": "Welcome to my portfolio. I'm a passionate developer who loves creating amazing web experiences focused on programming and developing data-driven systems and user experiences.",
+    "projects": "Projects",
+    "skills": "Skills"
   },
   "about": {
     "title": "About Me",
@@ -17,11 +20,10 @@
     "dark": "Switch to dark mode"
   },
   "language": {
-    "switch": "Switch language",
-    "english": "English",
-    "spanish": "Spanish",
-    "french": "French",
-    "hebrew": "Hebrew"
+    "en": "English",
+    "es": "Spanish",
+    "fr": "French",
+    "he": "Hebrew"
   },
   "location": {
     "israel": "Israel",
