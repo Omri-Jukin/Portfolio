@@ -19,7 +19,12 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "#/*": ["./*"],
+      "~/*": ["./styledComponents/*"],
+      "$/*": ["./lib/*"],
+      "%/*": ["./locales/*"],
+      "^/*": ["./public/*"]
     },
     "types": ["node", "@cloudflare/workers-types"]
   },

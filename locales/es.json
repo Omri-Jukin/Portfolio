@@ -6,21 +6,98 @@
     "contact": "Contacto",
     "blog": "Blog",
     "career": "Carrera",
-    "resume": "Currículum"
+    "resume": "Currículum",
+    "description": "Bienvenido a mi portafolio. Soy un desarrollador apasionado que ama crear experiencias web increíbles.",
+    "projects": "Proyectos",
+    "skills": "Habilidades"
   },
   "about": {
     "title": "Acerca de mí",
     "description": "Bienvenido a mi portafolio. Soy un desarrollador apasionado que ama crear experiencias web increíbles."
+  },
+  "career": {
+    "title": "Carrera",
+    "description": "Mi trayectoria profesional",
+    "experience": "Soy un desarrollador apasionado que ama crear experiencias web increíbles enfocadas en la programación y desarrollo de sistemas basados en datos y experiencias de usuario. Actualmente trabajo como ingeniero de software en una startup llamada \"The Startup\"."
+  },
+  "resume": {
+    "title": "Currículum",
+    "description": "Mi experiencia profesional y habilidades",
+    "experience": "Descarga mi currículum para conocer más sobre mi trayectoria"
   },
   "theme": {
     "light": "Cambiar a modo claro",
     "dark": "Cambiar a modo oscuro"
   },
   "language": {
-    "switch": "Cambiar idioma",
-    "english": "Inglés",
-    "spanish": "Español",
-    "french": "Francés",
-    "hebrew": "Hebreo"
+    "en": "Inglés",
+    "es": "Español",
+    "fr": "Francés",
+    "he": "Hebreo"
+  },
+  "location": {
+    "israel": "Israel",
+    "usa": "USA",
+    "france": "Francia",
+    "spain": "España"
+  },
+  "home": {
+    "hero": {
+      "title": "Bienvenido a mi portafolio",
+      "description": "Soy un desarrollador apasionado que ama crear experiencias web increíbles enfocadas en la programación y desarrollo de sistemas basados en datos y experiencias de usuario. Actualmente trabajo como ingeniero de software en una startup llamada \"The Startup\".",
+      "about": "Acerca de mí",
+      "contact": "Contacto",
+      "cards": {
+        "about": {
+          "title": "Acerca de mí",
+          "description": "Bienvenido a mi portafolio. Soy un desarrollador apasionado que ama crear experiencias web increíbles.",
+          "button": "Acerca de mí"
+        },
+        "career": {
+          "title": "Carrera",
+          "description": "Mi trayectoria profesional",
+          "button": "Carrera"
+        },
+        "resume": {
+          "title": "Currículum",
+          "description": "Mi experiencia profesional y habilidades",
+          "button": "Currículum"
+        },
+        "blog": {
+          "title": "Blog",
+          "description": "Read my thoughts on technology, development, and industry insights",
+          "button": "Blog"
+        },
+        "contact": {
+          "title": "Contacto",
+          "description": "Get in touch for opportunities, collaborations, or questions",
+          "button": "Contacto"
+        }
+      }
+    },
+    "about": {
+      "title": "Acerca de mí",
+      "description": "Bienvenido a mi portafolio. Soy un desarrollador apasionado que ama crear experiencias web increíbles."
+    },
+    "career": {
+      "title": "Carrera",
+      "description": "Mi trayectoria profesional",
+      "experience": "Soy un desarrollador apasionado que ama crear experiencias web increíbles enfocadas en la programación y desarrollo de sistemas basados en datos y experiencias de usuario. Actualmente trabajo como ingeniero de software en una startup llamada \"The Startup\"."
+    },
+    "resume": {
+      "title": "Currículum",
+      "description": "Mi experiencia profesional y habilidades",
+      "experience": "Descarga mi currículum para conocer más sobre mi trayectoria"
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "Read my thoughts on technology, development, and industry insights",
+      "experience": "Download my resume to learn more about my background"
+    },
+    "contact": {
+      "title": "Contacto",
+      "description": "Get in touch for opportunities, collaborations, or questions",
+      "experience": "Download my resume to learn more about my background"
+    }
   }
-} 
+}

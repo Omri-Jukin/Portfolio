@@ -1,34 +1,39 @@
-import React from 'react';
-import { Box, Typography } from '@mui/material';
-import { Metadata } from 'next';
-import { useTranslations } from 'next-intl';
-import { getTranslations } from 'next-intl/server';
-import { getLocale } from 'next-intl/server';
-import { getMessages } from 'next-intl/server';
-import { getDictionary } from '@/hooks/getDictionary';
+"use client";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations();
-  const locale = await getLocale();
-  const messages = await getMessages();
-  const dictionary = await getDictionary(locale, messages);
-  return {
-    title: t('about.title'),
-    description: t('about.description'),
-  };
-}
-
+import React from "react";
+import { Box, Typography } from "@mui/material";
+import { useTranslations } from "next-intl";
+import MotionWrapper from "~/MotionWrapper";
 
 export default function AboutPage() {
-  const t = useTranslations();
+  const t = useTranslations("about");
+
   return (
     <Box sx={{ p: 2 }}>
-      <Typography variant="h1" component="h1" gutterBottom>
-        {t('about.title')}
-      </Typography>
-      <Typography variant="body1" component="p" gutterBottom>
-        {t('about.description')}
-      </Typography>
+      <MotionWrapper variant="fadeIn" duration={0.8} delay={0.2}>
+        <Typography
+          variant="h1"
+          component="h1"
+          gutterBottom
+          data-aos="fade-down"
+          data-aos-duration="1000"
+        >
+          {t("title")}
+        </Typography>
+      </MotionWrapper>
+
+      <MotionWrapper variant="slideUp" duration={0.8} delay={0.4}>
+        <Typography
+          variant="body1"
+          component="p"
+          gutterBottom
+          data-aos="fade-up"
+          data-aos-duration="1000"
+          data-aos-delay="200"
+        >
+          {t("description")}
+        </Typography>
+      </MotionWrapper>
     </Box>
   );
 }
