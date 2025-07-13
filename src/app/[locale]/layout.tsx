@@ -4,9 +4,13 @@ import "../globals.css";
 import ClientLayout from "#/styledComponents/ClientLayout";
 import { ClientLayoutProps } from "#/styledComponents/ClientLayout/ClientLayout.types";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
-import { notFound } from "next/navigation";
-import { locales } from "#/i18n";
+
+interface Messages {
+  about?: {
+    title?: string;
+  };
+  [key: string]: unknown;
+}
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,15 +37,12 @@ export default async function RootLayout({ children, params }: Props) {
   const { locale } = await params;
 
   // Load messages with proper error handling - ensure we pass the locale explicitly
-  let messages = {};
+  let messages: Messages = {};
   try {
     // Load messages directly from the locale file to ensure correct locale
     messages = (await import(`../../../locales/${locale}.json`)).default;
     console.log(`Loaded messages for locale ${locale}:`, Object.keys(messages));
-    console.log(
-      `Sample about title for ${locale}:`,
-      (messages as any).about?.title
-    );
+    console.log(`Sample about title for ${locale}:`, messages.about?.title);
   } catch (error) {
     console.error(`Error loading messages for locale ${locale}:`, error);
     // Fallback to English messages
