@@ -179,3 +179,11 @@ This project is personal and proprietary. All rights reserved.
 ---
 
 Built with ❤️ using Next.js, TypeScript, and modern web technologies.
+
+## Content Management with YAML
+
+All portfolio content (about, resume, career, etc.) is managed in modular YAML files under the new `content/` directory at the project root. This approach allows for easy updates, localization, and dynamic section rendering. Content is parsed and validated at build time using a dedicated TypeScript class.
+
+- To add or update content, edit the relevant YAML file in `content/`.
+- The system will automatically detect and render new sections based on the YAML structure.
+- See the `content/README.md` for schema details and examples.

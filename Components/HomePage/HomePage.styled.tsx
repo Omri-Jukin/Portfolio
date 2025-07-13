@@ -50,6 +50,7 @@ export const StyledHeroButton = styled(Button)(({ theme }) => ({
 }));
 
 export const StyledSectionCard = styled(Card)(({ theme }) => ({
+  textAlign: "center",
   height: "100%",
   display: "flex",
   flexDirection: "column",
@@ -87,20 +88,28 @@ export const StyledIconContainer = styled(Box)(({ theme }) => ({
 
 export const StyledSectionIcon = styled(Box)(({ theme }) => ({
   fontSize: 32,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  "& > svg": {
+    fontSize: "inherit",
+    width: "1em",
+    height: "1em",
+  },
   ...(theme.direction === "rtl"
     ? { marginLeft: theme.spacing(1.5) }
     : { marginRight: theme.spacing(1.5) }),
 }));
 
-export const StyledSectionTitle = styled(Typography)(({ theme }) => ({
+export const StyledSectionTitle = styled(Typography)({
   fontWeight: 600,
-}));
+});
 
-export const StyledSectionDescription = styled(Typography)(({ theme }) => ({
+export const StyledSectionDescription = styled(Typography)({
   lineHeight: 1.6,
-}));
+});
 
-export const StyledSectionButton = styled(Button)(({ theme }) => ({
+export const StyledSectionButton = styled(Button)({
   textTransform: "none",
   fontWeight: 500,
-}));
+});

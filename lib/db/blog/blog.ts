@@ -1,8 +1,10 @@
 import { blogPosts } from "../schema/schema.tables";
-import { eq, desc } from "drizzle-orm";
 import { dbClient } from "../client";
 import { v4 as uuidv4 } from "uuid";
 import { PostStatus } from "../schema/schema.tables";
+import { eq, desc } from "drizzle-orm";
+
+export type Post = typeof blogPosts.$inferSelect;
 
 export type CreatePostInput = {
   title: string;
@@ -164,4 +166,4 @@ export const deletePost = async (id: string) => {
   }
 
   return deletedPost[0];
-}; 
+};

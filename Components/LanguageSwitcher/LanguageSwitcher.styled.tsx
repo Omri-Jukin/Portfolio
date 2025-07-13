@@ -11,12 +11,27 @@ export const StyledLanguageBox = styled(Box)(({ theme }) => ({
 
 export const StyledLanguageButton = styled(Button)(({ theme }) => ({
   position: "relative",
-  backgroundColor: theme.palette.background.paper,
-  boxShadow: theme.shadows[2],
+  backgroundColor: "rgba(255, 255, 255, 0.1) !important",
+  backdropFilter: "blur(10px)",
+  WebkitBackdropFilter: "blur(10px)", // Safari support
+  border: `1px solid ${
+    theme.palette.mode === "dark"
+      ? "rgba(255, 255, 255, 0.2)"
+      : "rgba(0, 0, 0, 0.1)"
+  }`,
+  borderRadius: theme.spacing(1),
+  color: theme.palette.mode === "dark" ? "#ffffff" : theme.palette.text.primary,
   textTransform: "uppercase",
   fontWeight: 600,
+  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+  transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
   "&:hover": {
-    boxShadow: theme.shadows[4],
+    backgroundColor: "rgba(255, 255, 255, 0.2) !important",
+    transform: "scale(1.05)",
+    boxShadow: "0 6px 12px rgba(0, 0, 0, 0.15)",
+  },
+  "&:focus": {
+    backgroundColor: "rgba(255, 255, 255, 0.15) !important",
   },
   [`& .${buttonClasses.startIcon}`]: {
     marginRight: theme.direction === "rtl" ? 0 : theme.spacing(1.5),

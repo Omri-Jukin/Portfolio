@@ -1,4 +1,7 @@
-// No props needed for LanguageSwitcher, but keeping file for consistency
 export interface LanguageSwitcherProps {
-  // Future props can be added here if needed
+  currentLocale: string;
+  availableLocales: string[];
+  onLocaleChange: (locale: string) => void;
 }
+
+export type Locale = "en" | "es" | "fr" | "he";

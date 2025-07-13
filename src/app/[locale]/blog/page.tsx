@@ -1,4 +1,4 @@
-import { getPublishedPosts } from "../../../../lib/db/blog/blog";
+import { getPublishedPosts, Post } from "$/db/blog/blog";
 import NextLink from "next/link";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -17,7 +17,7 @@ export default async function BlogPage() {
           Blog
         </Typography>
         <List>
-          {posts.map((post) => (
+          {posts.map((post: Post) => (
             <ListItem key={post.id} disablePadding sx={{ mb: 2 }}>
               <Box>
                 <Link

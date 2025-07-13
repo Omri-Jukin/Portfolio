@@ -16,7 +16,7 @@ export default function AboutPage() {
           component="h1"
           gutterBottom
           data-aos="fade-down"
-          data-aos-duration="1000"
+          data-aos-duration="250"
         >
           {t("title")}
         </Typography>
@@ -28,7 +28,7 @@ export default function AboutPage() {
           component="p"
           gutterBottom
           data-aos="fade-up"
-          data-aos-duration="1000"
+          data-aos-duration="250"
           data-aos-delay="200"
         >
           {t("description")}

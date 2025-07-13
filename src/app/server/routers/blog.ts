@@ -8,14 +8,14 @@ import {
   getPublishedPosts,
   updatePost,
   deletePost,
-} from "../../../../lib/db/blog/blog";
+} from "$/db/blog/blog";
 
 export const blogRouter = router({
   // Get all published posts (public)
   getPublished: procedure.query(async (opts) => {
     const { db } = opts.ctx;
     if (!db) throw new Error("Database not available");
-    
+
     return await getPublishedPosts();
   }),
 
@@ -26,17 +26,17 @@ export const blogRouter = router({
       const { db } = opts.ctx;
       const { input } = opts;
       if (!db) throw new Error("Database not available");
-      
+
       const post = await getPostBySlug(input.slug);
       if (!post) {
         throw new Error("Post not found");
       }
-      
+
       // Only return published posts for public access
       if (post.status !== "published") {
         throw new Error("Post not found");
       }
-      
+
       return post;
     }),
 
@@ -47,34 +47,34 @@ export const blogRouter = router({
     if (!user || user.role !== "admin") {
       throw new Error("Unauthorized");
     }
-    
+
     return await getAllPosts();
   }),
 
-  getById: procedure
-    .input(z.object({ id: z.string() }))
-    .query(async (opts) => {
-      const { db, user } = opts.ctx;
-      const { input } = opts;
-      if (!db) throw new Error("Database not available");
-      if (!user || user.role !== "admin") {
-        throw new Error("Unauthorized");
-      }
-      
-      return await getPostById(input.id);
-    }),
+  getById: procedure.input(z.object({ id: z.string() })).query(async (opts) => {
+    const { db, user } = opts.ctx;
+    const { input } = opts;
+    if (!db) throw new Error("Database not available");
+    if (!user || user.role !== "admin") {
+      throw new Error("Unauthorized");
+    }
+
+    return await getPostById(input.id);
+  }),
 
   create: procedure
-    .input(z.object({
-      title: z.string().min(1),
-      slug: z.string().min(1),
-      content: z.string().min(1),
-      excerpt: z.string().optional(),
-      status: z.enum(["draft", "published"]).default("draft"),
-      tags: z.array(z.string()).optional(),
-      imageUrl: z.string().optional(),
-      imageAlt: z.string().optional(),
-    }))
+    .input(
+      z.object({
+        title: z.string().min(1),
+        slug: z.string().min(1),
+        content: z.string().min(1),
+        excerpt: z.string().optional(),
+        status: z.enum(["draft", "published"]).default("draft"),
+        tags: z.array(z.string()).optional(),
+        imageUrl: z.string().optional(),
+        imageAlt: z.string().optional(),
+      })
+    )
     .mutation(async (opts) => {
       const { db, user } = opts.ctx;
       const { input } = opts;
@@ -82,7 +82,7 @@ export const blogRouter = router({
       if (!user || user.role !== "admin") {
         throw new Error("Unauthorized");
       }
-      
+
       return await createPost({
         ...input,
         authorId: user.id,
@@ -90,17 +90,19 @@ export const blogRouter = router({
     }),
 
   update: procedure
-    .input(z.object({
-      id: z.string(),
-      title: z.string().optional(),
-      slug: z.string().optional(),
-      content: z.string().optional(),
-      excerpt: z.string().optional(),
-      status: z.enum(["draft", "published"]).optional(),
-      tags: z.array(z.string()).optional(),
-      imageUrl: z.string().optional(),
-      imageAlt: z.string().optional(),
-    }))
+    .input(
+      z.object({
+        id: z.string(),
+        title: z.string().optional(),
+        slug: z.string().optional(),
+        content: z.string().optional(),
+        excerpt: z.string().optional(),
+        status: z.enum(["draft", "published"]).optional(),
+        tags: z.array(z.string()).optional(),
+        imageUrl: z.string().optional(),
+        imageAlt: z.string().optional(),
+      })
+    )
     .mutation(async (opts) => {
       const { db, user } = opts.ctx;
       const { input } = opts;
@@ -108,7 +110,7 @@ export const blogRouter = router({
       if (!user || user.role !== "admin") {
         throw new Error("Unauthorized");
       }
-      
+
       return await updatePost(input);
     }),
 
@@ -121,7 +123,7 @@ export const blogRouter = router({
       if (!user || user.role !== "admin") {
         throw new Error("Unauthorized");
       }
-      
+
       return await deletePost(input.id);
     }),
-}); 
+});

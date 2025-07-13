@@ -1,19 +1,16 @@
 "use client";
 
-import List from "@mui/material/List";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
+import { Container, Typography, List, Box } from "@mui/material";
 import Card from "#/Components/Card";
 import MotionWrapper from "#/Components/MotionWrapper";
 
-// Local type for blog posts used in this page
-interface Post {
+export interface Post {
   id: string;
   title: string;
-  excerpt?: string;
-  publishedAt?: number;
-  createdAt: number;
+  excerpt: string;
   slug: string;
+  publishedAt: string | null;
+  createdAt: string;
 }
 
 interface BlogPageClientProps {
@@ -29,7 +26,7 @@ export default function BlogPageClient({ posts }: BlogPageClientProps) {
           component="h1"
           gutterBottom
           data-aos="fade-down"
-          data-aos-duration="1000"
+          data-aos-duration="250"
         >
           Blog
         </Typography>
@@ -43,7 +40,7 @@ export default function BlogPageClient({ posts }: BlogPageClientProps) {
             duration={0.6}
             delay={0.4 + index * 0.1}
           >
-            <div
+            <Box
               data-aos="fade-up"
               data-aos-duration="800"
               data-aos-delay={200 + index * 100}
@@ -58,7 +55,7 @@ export default function BlogPageClient({ posts }: BlogPageClientProps) {
                 }
                 href={`/blog/${post.slug}`}
               />
-            </div>
+            </Box>
           </MotionWrapper>
         ))}
       </List>
@@ -69,7 +66,7 @@ export default function BlogPageClient({ posts }: BlogPageClientProps) {
             variant="body1"
             color="text.secondary"
             data-aos="fade-up"
-            data-aos-duration="1000"
+            data-aos-duration="250"
             data-aos-delay="200"
           >
             No blog posts published yet.

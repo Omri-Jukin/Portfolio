@@ -5,8 +5,11 @@ import {
   ThemeProvider as MuiThemeProvider,
 } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
-import { ReactNode, useMemo } from "react";
+import { ReactNode, useMemo, useState, useEffect } from "react";
 import { useLocale } from "next-intl";
+import DarkModeToggle from "#/Components/DarkModeToggle/DarkModeToggle";
+import LanguageSwitcher from "#/Components/LanguageSwitcher/LanguageSwitcher";
+import { StyledThemeProvider } from "./ThemeProvider.styled";
 
 // Module augmentation to add custom variants
 declare module "@mui/material/Button" {
@@ -44,20 +47,30 @@ declare module "@mui/material/Chip" {
   }
 }
 
-// Note: TextField doesn't support custom variants like other components
-// Instead, we'll use styleOverrides with different classes
-
 interface ThemeProviderProps {
   children: ReactNode;
-  isDarkMode?: boolean;
 }
 
-export default function ThemeProvider({
-  children,
-  isDarkMode = false,
-}: ThemeProviderProps) {
+export default function ThemeProvider({ children }: ThemeProviderProps) {
   const locale = useLocale();
   const isRTL = locale === "he";
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  // Initialize dark mode from localStorage on client side
+  useEffect(() => {
+    setIsClient(true);
+    const stored = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    const shouldBeDark = stored === "dark" || (!stored && prefersDark);
+    setIsDarkMode(shouldBeDark);
+  }, []);
+
+  const handleThemeToggle = (isDark: boolean) => {
+    setIsDarkMode(isDark);
+  };
 
   const theme = useMemo(() => {
     return createTheme({
@@ -153,10 +166,7 @@ export default function ThemeProvider({
       shape: {
         borderRadius: 12,
       },
-      // Custom theme options
       spacing: 8,
-
-      // Custom elevation/shadow options
       shadows: [
         "none",
         "0 2px 4px rgba(0, 0, 0, 0.1)",
@@ -184,8 +194,6 @@ export default function ThemeProvider({
         "0 80px 160px rgba(0, 0, 0, 1)",
         "0 84px 168px rgba(0, 0, 0, 1)",
       ],
-
-      // Custom component variants
       components: {
         MuiButton: {
           variants: [
@@ -198,6 +206,7 @@ export default function ThemeProvider({
                 fontWeight: 500,
                 textTransform: "none",
                 boxShadow: "none",
+                transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
                 "&:hover": {
                   boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
                 },
@@ -211,6 +220,7 @@ export default function ThemeProvider({
                 fontSize: "0.875rem",
                 fontWeight: 500,
                 textTransform: "none",
+                transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
               },
             },
             {
@@ -221,6 +231,7 @@ export default function ThemeProvider({
                 fontSize: "0.875rem",
                 fontWeight: 500,
                 textTransform: "none",
+                transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
               },
             },
             {
@@ -247,6 +258,7 @@ export default function ThemeProvider({
               props: { variant: "elevated" },
               style: {
                 borderRadius: 16,
+                transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
                 boxShadow: isDarkMode
                   ? "0 4px 20px rgba(0, 0, 0, 0.3)"
                   : "0 4px 20px rgba(0, 0, 0, 0.1)",
@@ -262,6 +274,7 @@ export default function ThemeProvider({
               style: {
                 borderRadius: 12,
                 boxShadow: "none",
+                transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
                 border: `1px solid ${isDarkMode ? "#333" : "#e0e0e0"}`,
               },
             },
@@ -270,6 +283,7 @@ export default function ThemeProvider({
               style: {
                 borderRadius: 8,
                 boxShadow: "none",
+                transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
                 border: `2px solid ${isDarkMode ? "#444" : "#ddd"}`,
               },
             },
@@ -277,6 +291,7 @@ export default function ThemeProvider({
               props: { variant: "soft" },
               style: {
                 borderRadius: 20,
+                transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
                 boxShadow: isDarkMode
                   ? "0 2px 8px rgba(0, 0, 0, 0.2)"
                   : "0 2px 8px rgba(0, 0, 0, 0.08)",
@@ -284,52 +299,34 @@ export default function ThemeProvider({
             },
           ],
         },
-        MuiTextField: {
-          styleOverrides: {
-            root: {
-              // Default rounded style
-              "& .MuiOutlinedInput-root": {
-                borderRadius: 8,
-              },
-              // Pill style class
-              "&.text-field-pill .MuiOutlinedInput-root": {
-                borderRadius: 50,
-              },
-              // Square style class
-              "&.text-field-square .MuiOutlinedInput-root": {
-                borderRadius: 4,
-              },
-              // Extra rounded style class
-              "&.text-field-rounded .MuiOutlinedInput-root": {
-                borderRadius: 12,
-              },
-            },
-          },
-        },
         MuiPaper: {
           variants: [
             {
               props: { variant: "rounded" },
               style: {
                 borderRadius: 12,
+                transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
               },
             },
             {
               props: { variant: "soft" },
               style: {
                 borderRadius: 20,
+                transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
               },
             },
             {
               props: { variant: "square" },
               style: {
                 borderRadius: 4,
+                transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
               },
             },
             {
               props: { variant: "pill" },
               style: {
                 borderRadius: 50,
+                transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
               },
             },
           ],
@@ -340,18 +337,21 @@ export default function ThemeProvider({
               props: { variant: "rounded" },
               style: {
                 borderRadius: 8,
+                transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
               },
             },
             {
               props: { variant: "square" },
               style: {
                 borderRadius: 4,
+                transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
               },
             },
             {
               props: { variant: "pill" },
               style: {
                 borderRadius: 50,
+                transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
               },
             },
             {
@@ -380,10 +380,38 @@ export default function ThemeProvider({
     });
   }, [isDarkMode, isRTL]);
 
+  // Prevent hydration mismatch by only applying client-side theme after hydration
+  if (!isClient) {
+    return (
+      <MuiThemeProvider theme={theme}>
+        <CssBaseline />
+        <div dir={isRTL ? "rtl" : "ltr"}>
+          <StyledThemeProvider>
+            <DarkModeToggle onToggle={handleThemeToggle} isDark={false} />
+            <LanguageSwitcher />
+          </StyledThemeProvider>
+          {children}
+        </div>
+      </MuiThemeProvider>
+    );
+  }
+
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
-      <div dir={isRTL ? "rtl" : "ltr"}>{children}</div>
+      <div
+        dir={isRTL ? "rtl" : "ltr"}
+        style={{
+          transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+          minHeight: "100vh",
+        }}
+      >
+        <StyledThemeProvider>
+          <DarkModeToggle onToggle={handleThemeToggle} isDark={isDarkMode} />
+          <LanguageSwitcher />
+        </StyledThemeProvider>
+        {children}
+      </div>
     </MuiThemeProvider>
   );
 }

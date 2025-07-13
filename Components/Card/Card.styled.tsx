@@ -42,7 +42,7 @@ export const StyledCardDescription = styled(Typography)(({ theme }) => ({
   lineHeight: 1.6,
 }));
 
-export const StyledCardDate = styled(Typography)(({ theme }) => ({
+export const StyledCardDate = styled(Typography)({
   fontSize: "0.75rem",
   opacity: 0.8,
-}));
+});

@@ -4,29 +4,31 @@ import IconButton from "@mui/material/IconButton";
 
 export const StyledDarkModeToggle = styled(IconButton)(({ theme }) => ({
   position: "relative",
-  backgroundColor: theme.palette.background.paper,
-  boxShadow: theme.shadows[2],
-  textTransform: "uppercase",
-  fontWeight: 600,
+  backgroundColor: "rgba(255, 255, 255, 0.1) !important",
+  backdropFilter: "blur(10px)",
+  WebkitBackdropFilter: "blur(10px)", // Safari support
+  border: `1px solid ${
+    theme.palette.mode === "dark"
+      ? "rgba(255, 255, 255, 0.2)"
+      : "rgba(0, 0, 0, 0.1)"
+  }`,
+  borderRadius: theme.spacing(1),
+  color:
+    theme.palette.mode === "dark"
+      ? theme.palette.warning.light
+      : theme.palette.info.main,
+  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+  transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
   "&:hover": {
-    boxShadow: theme.shadows[4],
+    backgroundColor: "rgba(255, 255, 255, 0.2) !important",
+    transform: "scale(1.05)",
+    boxShadow: "0 6px 12px rgba(0, 0, 0, 0.15)",
+  },
+  "&:focus": {
+    backgroundColor: "rgba(255, 255, 255, 0.15) !important",
   },
   [`& .${buttonClasses.startIcon}`]: {
     marginRight: theme.direction === "rtl" ? 0 : theme.spacing(1.5),
     marginLeft: theme.direction === "rtl" ? theme.spacing(1.5) : 0,
   },
-  ...(theme.palette.mode === "dark" && {
-    backgroundColor: theme.palette.background.default,
-    color: theme.palette.warning.light,
-    "&:hover": {
-      backgroundColor: theme.palette.background.paper,
-    },
-  }),
-  ...(theme.palette.mode === "light" && {
-    backgroundColor: theme.palette.background.default,
-    color: theme.palette.info.light,
-    "&:hover": {
-      backgroundColor: theme.palette.background.paper,
-    },
-  }),
 }));
