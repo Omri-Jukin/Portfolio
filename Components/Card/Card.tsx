@@ -10,7 +10,7 @@ import {
   StyledCardTitle,
   StyledCardDescription,
   StyledCardDate,
-} from "./Card.styles";
+} from "./Card.styled";
 
 const Card: React.FC<CardProps> = ({ title, description, date, href }) => {
   const [isVisible, setIsVisible] = useState(false);

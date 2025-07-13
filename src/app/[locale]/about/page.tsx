@@ -3,7 +3,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import { useTranslations } from "next-intl";
-import MotionWrapper from "~/MotionWrapper";
+import MotionWrapper from "#/Components/MotionWrapper";
 
 export default function AboutPage() {
   const t = useTranslations("about");

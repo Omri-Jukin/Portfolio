@@ -3,8 +3,8 @@
 import List from "@mui/material/List";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import Card from "~/Card";
-import MotionWrapper from "~/MotionWrapper";
+import Card from "#/Components/Card";
+import MotionWrapper from "#/Components/MotionWrapper";
 
 // Local type for blog posts used in this page
 interface Post {

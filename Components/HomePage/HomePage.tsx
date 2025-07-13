@@ -24,9 +24,9 @@ import {
   StyledSectionTitle,
   StyledSectionDescription,
   StyledSectionButton,
-} from "./HomePage.styles";
+} from "./HomePage.styled";
 import { useTranslations } from "next-intl";
-import MotionWrapper from "~/MotionWrapper";
+import MotionWrapper from "#/Components/MotionWrapper";
 
 export default function HomePage() {
   const t = useTranslations("home");

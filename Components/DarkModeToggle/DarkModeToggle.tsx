@@ -5,7 +5,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { DarkModeToggleProps } from "./DarkModeToggle.types";
-import { StyledDarkModeToggle } from "./DarkModeToggle.styles";
+import { StyledDarkModeToggle } from "./DarkModeToggle.styled";
 
 export default function DarkModeToggle({ onToggle }: DarkModeToggleProps) {
   const [isDark, setIsDark] = useState(false);

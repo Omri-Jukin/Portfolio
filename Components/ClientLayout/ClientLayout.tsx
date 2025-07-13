@@ -3,10 +3,10 @@
 import { useState, useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import ThemeProvider from "~/ThemeProvider";
-import DarkModeToggle from "~/DarkModeToggle";
+import ThemeProvider from "#/Components/ThemeProvider";
+import DarkModeToggle from "#/Components/DarkModeToggle";
 import { ClientLayoutProps } from "./ClientLayout.types";
-import { StyledControlsContainer } from "./ClientLayout.styles";
+import { StyledControlsContainer } from "./ClientLayout.styled";
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
 
 export default function ClientLayout({ children }: ClientLayoutProps) {

@@ -11,7 +11,8 @@ import {
   StyledLanguageBox,
   StyledLanguageButton,
   StyledLanguageMenuItem,
-} from "./LanguageSwitcher.styles";
+} from "./LanguageSwitcher.styled";
+import Link from "next/link";
 
 // Helper function to get language names
 const getLanguageName = (locale: string) => {
@@ -38,35 +39,41 @@ export default function LanguageSwitcher() {
     setAnchorEl(null);
   };
 
-  const handleSwitch = (targetLocale: string) => {
-    if (targetLocale !== locale) {
-      // Store locale preference in cookie
-      Cookies.set("locale", targetLocale, { expires: 365 });
+  // const handleSwitch = (targetLocale: string) => {
+  //   if (targetLocale !== locale) {
+  //     // Store locale preference in cookie
+  //     Cookies.set("locale", targetLocale, { expires: 365 });
 
-      const segments = pathname.split("/");
-      let newPath;
+  //     const segments = pathname.split("/");
+  //     let newPath;
 
-      // Check if current path has a locale segment
-      const hasLocaleInPath = locales.includes(
-        segments[1] as (typeof locales)[number]
-      );
+  //     // Check if current path has a locale segment
+  //     const hasLocaleInPath = locales.includes(
+  //       segments[1] as (typeof locales)[number]
+  //     );
 
-      if (hasLocaleInPath) {
-        // Replace with new locale (always keep locale in URL)
-        segments[1] = targetLocale;
-      } else {
-        // Add locale segment (always show locale in URL)
-        segments.splice(1, 0, targetLocale);
-      }
+  //     if (hasLocaleInPath) {
+  //       // Replace with new locale (always keep locale in URL)
+  //       segments[1] = targetLocale;
+  //     } else {
+  //       // Add locale segment (always show locale in URL)
+  //       segments.splice(1, 0, targetLocale);
+  //     }
 
-      newPath = segments.join("/");
-      if (!newPath.startsWith("/")) newPath = "/" + newPath;
-      newPath = newPath.replace(/\/+/g, "/");
+  //     newPath = segments.join("/");
+  //     if (!newPath.startsWith("/")) newPath = "/" + newPath;
+  //     newPath = newPath.replace(/\/+/g, "/");
 
-      // Use window.location for immediate navigation
-      window.location.href = newPath;
-    }
-    handleClose();
+  //     // Use window.location for immediate navigation
+  //     // window.location.href = newPath;
+  //   }
+  //   handleClose();
+  // };
+
+  const getTargetPath = (targetLocale: string) => {
+    const segments = pathname.split("/");
+    const path = segments.slice(1).join("/");
+    return `/${targetLocale}/${path}`;
   };
 
   return (
@@ -85,13 +92,16 @@ export default function LanguageSwitcher() {
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
         {locales.map((loc: string) => (
-          <StyledLanguageMenuItem
+          <Link
+            href={`/${loc}`}
+            prefetch={true}
             key={loc}
-            onClick={() => handleSwitch(loc)}
-            selected={loc === locale}
+            onNavigate={() => getTargetPath(loc)}
           >
-            {getLanguageName(loc)} ({loc.toUpperCase()})
-          </StyledLanguageMenuItem>
+            <StyledLanguageMenuItem key={loc} selected={loc === locale}>
+              {getLanguageName(loc)} ({loc.toUpperCase()})
+            </StyledLanguageMenuItem>
+          </Link>
         ))}
       </Menu>
     </StyledLanguageBox>
