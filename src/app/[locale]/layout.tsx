@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import DarkModeToggle from "@/components/DarkModeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { Box } from "@mui/material";
@@ -18,7 +18,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Omri's Portfolio",
-  description: "Learn a little about me, my background, skills, and professional journey",
+  description:
+    "Learn a little about me, my background, skills, and professional journey",
 };
 
 export default function RootLayout({
@@ -31,9 +32,18 @@ export default function RootLayout({
 
   return (
     <html lang={locale}>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              gap: 2,
+            }}
+          >
             <DarkModeToggle />
             <LanguageSwitcher />
           </Box>
