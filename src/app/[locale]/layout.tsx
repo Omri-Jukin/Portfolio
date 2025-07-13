@@ -26,6 +26,8 @@ export const metadata: Metadata = {
   title: "Omri's Portfolio",
   description:
     "Learn a little about me, my background, skills, and professional journey",
+  description:
+    "Learn a little about me, my background, skills, and professional journey",
 };
 
 interface Props extends ClientLayoutProps {
@@ -60,12 +62,19 @@ export default async function RootLayout({ children, params }: Props) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextIntlClientProvider
-          messages={messages}
-          locale={locale}
-          timeZone="UTC"
-        >
-          <ClientLayout>{children}</ClientLayout>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              gap: 2,
+            }}
+          >
+            <DarkModeToggle />
+            <LanguageSwitcher />
+          </Box>
+          {children}
         </NextIntlClientProvider>
       </body>
     </html>

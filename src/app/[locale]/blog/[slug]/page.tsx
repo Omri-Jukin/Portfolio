@@ -1,8 +1,8 @@
-import { getPostBySlug } from "../../../../../lib/db/blog/blog";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { notFound } from "next/navigation";
+import { getPostBySlug } from "../../../../../lib/db/blog/blog";
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -13,6 +13,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const post = await getPostBySlug(slug);
 
   if (!post || post.status !== "published") {
+  if (!post || post.status !== "published") {
     return notFound();
   }
 
@@ -22,15 +23,24 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         {post.title}
       </Typography>
       <Box sx={{ color: "text.secondary", mb: 2 }}>
+      <Box sx={{ color: "text.secondary", mb: 2 }}>
         By {post.authorId} • {new Date(post.createdAt).toLocaleDateString()}
+        {post.publishedAt &&
+          ` • Published ${new Date(post.publishedAt).toLocaleDateString()}`}
         {post.publishedAt &&
           ` • Published ${new Date(post.publishedAt).toLocaleDateString()}`}
       </Box>
       {post.excerpt && (
         <Typography variant="h6" sx={{ mb: 3, fontStyle: "italic" }}>
+        <Typography variant="h6" sx={{ mb: 3, fontStyle: "italic" }}>
           {post.excerpt}
         </Typography>
       )}
+      <Typography
+        variant="body1"
+        component="div"
+        sx={{ whiteSpace: "pre-line" }}
+      >
       <Typography
         variant="body1"
         component="div"
@@ -44,7 +54,22 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             Tags:
           </Typography>
           <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+          <Typography variant="h6" gutterBottom>
+            Tags:
+          </Typography>
+          <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
             {post.tags.map((tag, index) => (
+              <Box
+                key={index}
+                sx={{
+                  bgcolor: "primary.main",
+                  color: "primary.contrastText",
+                  px: 1,
+                  py: 0.5,
+                  borderRadius: 1,
+                  fontSize: "0.875rem",
+                }}
+              >
               <Box
                 key={index}
                 sx={{

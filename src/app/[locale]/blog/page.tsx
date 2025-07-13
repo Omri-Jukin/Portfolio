@@ -1,41 +1,58 @@
-import { getPublishedPosts } from "@/../lib/db/blog/blog";
+import { getPublishedPosts } from "../../../../lib/db/blog/blog";
+import NextLink from "next/link";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import BlogPageClient from "./BlogPageClient";
-
-// Local type for blog posts used in this page
-interface Post {
-  id: string;
-  title: string;
-  excerpt?: string;
-  publishedAt?: number;
-  createdAt: number;
-  slug: string;
-}
-
-// Local type for raw blog post objects returned by getPublishedPosts
-interface RawPost {
-  id: string;
-  title: string;
-  excerpt: string | null;
-  publishedAt: Date | null;
-  createdAt: Date;
-  slug: string;
-}
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import Link from "@mui/material/Link";
+import Box from "@mui/material/Box";
 
 export default async function BlogPage() {
   try {
-    const rawPosts: RawPost[] = await getPublishedPosts();
-    const posts: Post[] = rawPosts.map((p) => ({
-      id: p.id,
-      title: p.title,
-      excerpt: p.excerpt ?? undefined,
-      publishedAt: p.publishedAt ? p.publishedAt.getTime() : undefined,
-      createdAt: p.createdAt.getTime(),
-      slug: p.slug,
-    }));
+    const posts = await getPublishedPosts();
 
-    return <BlogPageClient posts={posts} />;
+    return (
+      <Container maxWidth="md" sx={{ py: 6 }}>
+        <Typography variant="h3" component="h1" gutterBottom>
+          Blog
+        </Typography>
+        <List>
+          {posts.map((post) => (
+            <ListItem key={post.id} disablePadding sx={{ mb: 2 }}>
+              <Box>
+                <Link
+                  component={NextLink}
+                  href={`/blog/${post.slug}`}
+                  underline="hover"
+                  sx={{ fontWeight: 500, fontSize: "1.1rem", display: "block" }}
+                >
+                  {post.title}
+                </Link>
+                {post.excerpt && (
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ mt: 0.5 }}
+                  >
+                    {post.excerpt}
+                  </Typography>
+                )}
+                <Typography variant="caption" color="text.secondary">
+                  {post.publishedAt
+                    ? new Date(post.publishedAt).toLocaleDateString()
+                    : new Date(post.createdAt).toLocaleDateString()}
+                </Typography>
+              </Box>
+            </ListItem>
+          ))}
+        </List>
+        {posts.length === 0 && (
+          <Typography variant="body1" color="text.secondary">
+            No blog posts published yet.
+          </Typography>
+        )}
+      </Container>
+    );
   } catch {
     return (
       <Container maxWidth="md" sx={{ py: 6 }}>
