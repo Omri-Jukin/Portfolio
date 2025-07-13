@@ -26,6 +26,7 @@ import {
   StyledSectionButton,
 } from "./HomePage.styles";
 import { useTranslations } from "next-intl";
+import MotionWrapper from "~/MotionWrapper";
 
 export default function HomePage() {
   const t = useTranslations("home");
@@ -75,69 +76,109 @@ export default function HomePage() {
     <StyledPageContainer>
       <Container maxWidth="lg" sx={{ pt: 8, pb: 6 }}>
         <StyledHeroContainer>
-          <StyledHeroTitle variant="h2" gutterBottom>
-            {t("hero.title")}
-          </StyledHeroTitle>
-
-          <StyledHeroDescription variant="h5" color="text.secondary">
-            {t("hero.description")}
-          </StyledHeroDescription>
-
-          <StyledButtonContainer>
-            <StyledHeroButton
-              href="/about"
-              variant="contained"
-              size="large"
-              endIcon={<PersonIcon />}
+          <MotionWrapper variant="fadeIn" duration={0.8} delay={0.2}>
+            <StyledHeroTitle
+              variant="h2"
+              gutterBottom
+              data-aos="fade-up"
+              data-aos-duration="1000"
             >
-              {t("hero.cards.about.button")}
-            </StyledHeroButton>
-            <StyledHeroButton
-              href="/contact"
-              variant="contained"
-              size="large"
-              endIcon={<ContactIcon />}
+              {t("hero.title")}
+            </StyledHeroTitle>
+          </MotionWrapper>
+
+          <MotionWrapper variant="slideUp" duration={0.8} delay={0.4}>
+            <StyledHeroDescription
+              variant="h5"
+              color="text.secondary"
+              data-aos="fade-up"
+              data-aos-duration="1000"
+              data-aos-delay="200"
             >
-              {t("hero.cards.contact.button")}
-            </StyledHeroButton>
-          </StyledButtonContainer>
+              {t("hero.description")}
+            </StyledHeroDescription>
+          </MotionWrapper>
+
+          <MotionWrapper variant="slideUp" duration={0.8} delay={0.6}>
+            <StyledButtonContainer
+              data-aos="fade-up"
+              data-aos-duration="1000"
+              data-aos-delay="400"
+            >
+              <StyledHeroButton
+                href="/about"
+                variant="contained"
+                size="large"
+                endIcon={<PersonIcon />}
+              >
+                {t("hero.cards.about.button")}
+              </StyledHeroButton>
+              <StyledHeroButton
+                href="/contact"
+                variant="contained"
+                size="large"
+                endIcon={<ContactIcon />}
+              >
+                {t("hero.cards.contact.button")}
+              </StyledHeroButton>
+            </StyledButtonContainer>
+          </MotionWrapper>
         </StyledHeroContainer>
 
         <StyledGridContainer>
-          {portfolioSections.map((section) => {
+          {portfolioSections.map((section, index) => {
             const IconComponent = section.icon;
             return (
-              <StyledSectionCard key={section.title}>
-                <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                  <StyledIconContainer>
-                    <StyledSectionIcon sx={{ color: `${section.color}.main` }}>
-                      <IconComponent />
-                    </StyledSectionIcon>
-                    <StyledSectionTitle variant="h6">
-                      {section.title}
-                    </StyledSectionTitle>
-                  </StyledIconContainer>
+              <MotionWrapper
+                key={section.title}
+                variant="slideUp"
+                duration={0.6}
+                delay={0.8 + index * 0.1}
+              >
+                <StyledSectionCard
+                  data-aos="fade-up"
+                  data-aos-duration="800"
+                  data-aos-delay={600 + index * 100}
+                >
+                  <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                    <StyledIconContainer>
+                      <MotionWrapper
+                        variant="scale"
+                        duration={0.5}
+                        delay={1 + index * 0.1}
+                      >
+                        <StyledSectionIcon
+                          sx={{ color: `${section.color}.main` }}
+                        >
+                          <IconComponent />
+                        </StyledSectionIcon>
+                      </MotionWrapper>
+                      <StyledSectionTitle variant="h6">
+                        {section.title}
+                      </StyledSectionTitle>
+                    </StyledIconContainer>
 
-                  <StyledSectionDescription
-                    variant="body2"
-                    color="text.secondary"
-                  >
-                    {section.description}
-                  </StyledSectionDescription>
-                </CardContent>
+                    <StyledSectionDescription
+                      variant="body2"
+                      color="text.secondary"
+                    >
+                      {section.description}
+                    </StyledSectionDescription>
+                  </CardContent>
 
-                <CardActions>
-                  <StyledSectionButton
-                    href={section.href}
-                    variant="contained"
-                    color={section.color}
-                    endIcon={<LaunchIcon />}
-                    fullWidth
-                  >
-                    {t(`hero.cards.${section.untranslatedSection}.button`)}
-                  </StyledSectionButton>
-                </CardActions>
-              </StyledSectionCard>
+                  <CardActions>
+                    <StyledSectionButton
+                      href={section.href}
+                      variant="contained"
+                      color={section.color}
+                      endIcon={<LaunchIcon />}
+                      fullWidth
+                    >
+                      {t(`hero.cards.${section.untranslatedSection}.button`)}
+                    </StyledSectionButton>
+                  </CardActions>
+                </StyledSectionCard>
+              </MotionWrapper>
             );
           })}
         </StyledGridContainer>

@@ -1,8 +1,7 @@
 import { getPublishedPosts } from "@/../lib/db/blog/blog";
-import List from "@mui/material/List";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import Card from "~/Card";
+import BlogPageClient from "./BlogPageClient";
 
 // Local type for blog posts used in this page
 interface Post {
@@ -36,33 +35,7 @@ export default async function BlogPage() {
       slug: p.slug,
     }));
 
-    return (
-      <Container maxWidth="md" sx={{ py: 6 }}>
-        <Typography variant="h3" component="h1" gutterBottom>
-          Blog
-        </Typography>
-        <List>
-          {posts.map((post: Post) => (
-            <Card
-              key={post.id}
-              title={post.title}
-              description={post.excerpt}
-              date={
-                post.publishedAt
-                  ? new Date(post.publishedAt).toLocaleDateString()
-                  : new Date(post.createdAt).toLocaleDateString()
-              }
-              href={`/blog/${post.slug}`}
-            />
-          ))}
-        </List>
-        {posts.length === 0 && (
-          <Typography variant="body1" color="text.secondary">
-            No blog posts published yet.
-          </Typography>
-        )}
-      </Container>
-    );
+    return <BlogPageClient posts={posts} />;
   } catch {
     return (
       <Container maxWidth="md" sx={{ py: 6 }}>

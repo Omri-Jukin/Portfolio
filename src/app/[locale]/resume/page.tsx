@@ -2,17 +2,36 @@
 
 import { Box, Typography } from "@mui/material";
 import { useTranslations } from "next-intl";
+import MotionWrapper from "~/MotionWrapper";
 
 export default function ResumePage() {
   const t = useTranslations("resume");
   return (
     <Box sx={{ p: 2 }}>
-      <Typography variant="h1" component="h1" gutterBottom>
-        {t("title")}
-      </Typography>
-      <Typography variant="body1" component="p" gutterBottom>
-        {t("experience")}
-      </Typography>
+      <MotionWrapper variant="fadeIn" duration={0.8} delay={0.2}>
+        <Typography
+          variant="h1"
+          component="h1"
+          gutterBottom
+          data-aos="fade-down"
+          data-aos-duration="1000"
+        >
+          {t("title")}
+        </Typography>
+      </MotionWrapper>
+
+      <MotionWrapper variant="slideUp" duration={0.8} delay={0.4}>
+        <Typography
+          variant="body1"
+          component="p"
+          gutterBottom
+          data-aos="fade-up"
+          data-aos-duration="1000"
+          data-aos-delay="200"
+        >
+          {t("experience")}
+        </Typography>
+      </MotionWrapper>
     </Box>
   );
 }
