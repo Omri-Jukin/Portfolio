@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { locales, defaultLocale } from "#/i18n";
 import { Menu } from "@mui/material";
+import { Language as LanguageIcon } from "@mui/icons-material";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import {
@@ -11,6 +12,17 @@ import {
   StyledLanguageButton,
   StyledLanguageMenuItem,
 } from "./LanguageSwitcher.styles";
+
+// Helper function to get language names
+const getLanguageName = (locale: string) => {
+  const names: Record<string, string> = {
+    en: "English",
+    es: "Spanish",
+    fr: "French",
+    he: "Hebrew",
+  };
+  return names[locale] || locale;
+};
 
 export default function LanguageSwitcher() {
   const pathname = usePathname();
@@ -61,8 +73,8 @@ export default function LanguageSwitcher() {
     <StyledLanguageBox>
       <StyledLanguageButton
         onClick={handleClick}
-        variant="outlined"
         size="small"
+        startIcon={<LanguageIcon />}
       >
         {locale}
       </StyledLanguageButton>
@@ -78,7 +90,7 @@ export default function LanguageSwitcher() {
             onClick={() => handleSwitch(loc)}
             selected={loc === locale}
           >
-            {t(loc)} ({loc.toUpperCase()})
+            {getLanguageName(loc)} ({loc.toUpperCase()})
           </StyledLanguageMenuItem>
         ))}
       </Menu>

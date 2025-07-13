@@ -44,7 +44,7 @@ const Card: React.FC<CardProps> = ({ title, description, date, href }) => {
             sx={{
               p: 3,
               display: "block",
-              textAlign: "left",
+              textAlign: "start",
             }}
           >
             <CardContent sx={{ p: 0 }}>

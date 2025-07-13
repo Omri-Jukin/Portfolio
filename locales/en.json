@@ -20,6 +20,11 @@
     "description": "My career journey",
     "experience": "I'm a passionate developer who loves creating amazing web experiences focused on programming and developing data-driven systems and user experiences. I'm currently working as a software engineer at a startup called \"The Startup\"."
   },
+  "resume": {
+    "title": "Resume",
+    "description": "My professional experience and skills",
+    "experience": "Download my resume to learn more about my background"
+  },
   "theme": {
     "light": "Switch to light mode",
     "dark": "Switch to dark mode"
@@ -35,5 +40,64 @@
     "usa": "USA",
     "france": "France",
     "spain": "Spain"
+  },
+  "home": {
+    "hero": {
+      "title": "Welcome to my portfolio",
+      "description": "I'm a passionate developer who loves creating amazing web experiences focused on programming and developing data-driven systems and user experiences.",
+      "about": "About me",
+      "contact": "Contact",
+      "cards": {
+        "about": {
+          "title": "About me",
+          "description": "Welcome to my portfolio. I'm a passionate developer who loves creating amazing web experiences focused on programming and developing data-driven systems and user experiences.",
+          "button": "About me"
+        },
+        "career": {
+          "title": "Career",
+          "description": "My career journey",
+          "button": "Career"
+        },
+        "resume": {
+          "title": "Resume",
+          "description": "My professional experience and skills",
+          "button": "Resume"
+        },
+        "blog": {
+          "title": "Blog",
+          "description": "Read my thoughts on technology, development, and industry insights",
+          "button": "Blog"
+        },
+        "contact": {
+          "title": "Contact",
+          "description": "Get in touch for opportunities, collaborations, or questions",
+          "button": "Contact"
+        }
+      }
+    },
+    "about": {
+      "title": "About me",
+      "description": "Welcome to my portfolio. I'm a passionate developer who loves creating amazing web experiences focused on programming and developing data-driven systems and user experiences."
+    },
+    "career": {
+      "title": "Career",
+      "description": "My career journey",
+      "experience": "I'm a passionate developer who loves creating amazing web experiences focused on programming and developing data-driven systems and user experiences. I'm currently working as a software engineer at a startup called \"The Startup\"."
+    },
+    "resume": {
+      "title": "Resume",
+      "description": "My professional experience and skills",
+      "experience": "Download my resume to learn more about my background"
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "Read my thoughts on technology, development, and industry insights",
+      "experience": "Download my resume to learn more about my background"
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "Get in touch for opportunities, collaborations, or questions",
+      "experience": "Download my resume to learn more about my background"
+    }
   }
 }

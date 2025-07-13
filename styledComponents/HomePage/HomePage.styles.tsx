@@ -1,12 +1,12 @@
 import { styled } from "@mui/material/styles";
-import { Box, Typography, Button, Card } from "@mui/material";
+import { Box, Typography, Button, Card, buttonClasses } from "@mui/material";
 
 export const StyledPageContainer = styled(Box)(({ theme }) => ({
   minHeight: "100vh",
   background:
     theme.palette.mode === "dark"
-      ? "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)"
-      : "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)",
+      ? "linear-gradient(135deg, #1a1a1a 0%,#787878 100%)"
+      : "linear-gradient(135deg, #f8fafc 0%,#d1d1d1 100%)",
 }));
 
 export const StyledHeroContainer = styled(Box)(({ theme }) => ({
@@ -38,10 +38,15 @@ export const StyledButtonContainer = styled(Box)(({ theme }) => ({
 }));
 
 export const StyledHeroButton = styled(Button)(({ theme }) => ({
-  paddingLeft: theme.spacing(4),
-  paddingRight: theme.spacing(4),
+  paddingInline: theme.spacing(4),
   paddingTop: theme.spacing(1.5),
   paddingBottom: theme.spacing(1.5),
+  [buttonClasses.endIcon]: {
+    ...(theme.direction === "rtl" ? { display: "block" } : { display: "none" }),
+  },
+  [buttonClasses.startIcon]: {
+    ...(theme.direction === "rtl" ? { display: "none" } : { display: "block" }),
+  },
 }));
 
 export const StyledSectionCard = styled(Card)(({ theme }) => ({
@@ -82,7 +87,9 @@ export const StyledIconContainer = styled(Box)(({ theme }) => ({
 
 export const StyledSectionIcon = styled(Box)(({ theme }) => ({
   fontSize: 32,
-  marginRight: theme.spacing(1.5),
+  ...(theme.direction === "rtl"
+    ? { marginLeft: theme.spacing(1.5) }
+    : { marginRight: theme.spacing(1.5) }),
 }));
 
 export const StyledSectionTitle = styled(Typography)(({ theme }) => ({

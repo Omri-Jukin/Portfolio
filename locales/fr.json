@@ -20,6 +20,11 @@
     "description": "Mon parcours professionnel",
     "experience": "Je suis un développeur passionné qui aime créer des expériences web extraordinaires axées sur la programmation et le développement de systèmes basés sur les données et les expériences utilisateur. Je travaille actuellement comme ingénieur logiciel dans une startup appelée \"The Startup\"."
   },
+  "resume": {
+    "title": "CV",
+    "description": "Mon expérience professionnelle et mes compétences",
+    "experience": "Téléchargez mon CV pour en savoir plus sur mon parcours"
+  },
   "theme": {
     "light": "Passer en mode clair",
     "dark": "Passer en mode sombre"
@@ -35,5 +40,64 @@
     "usa": "États-Unis",
     "france": "France",
     "spain": "Espagne"
+  },
+  "home": {
+    "hero": {
+      "title": "Bienvenue dans mon portfolio",
+      "description": "Je suis un développeur passionné qui aime créer des expériences web extraordinaires.",
+      "about": "À propos de moi",
+      "contact": "Contact",
+      "cards": {
+        "about": {
+          "title": "À propos de moi",
+          "description": "Bienvenue dans mon portfolio. Je suis un développeur passionné qui aime créer des expériences web extraordinaires.",
+          "button": "À propos de moi"
+        },
+        "career": {
+          "title": "Carrière",
+          "description": "Mon parcours professionnel",
+          "button": "Carrière"
+        },
+        "resume": {
+          "title": "CV",
+          "description": "Mon expérience professionnelle et mes compétences",
+          "button": "CV"
+        },
+        "blog": {
+          "title": "Blog",
+          "description": "Read my thoughts on technology, development, and industry insights",
+          "button": "Blog"
+        },
+        "contact": {
+          "title": "Contact",
+          "description": "Get in touch for opportunities, collaborations, or questions",
+          "button": "Contact"
+        }
+      }
+    },
+    "about": {
+      "title": "À propos de moi",
+      "description": "Bienvenue dans mon portfolio. Je suis un développeur passionné qui aime créer des expériences web extraordinaires."
+    },
+    "career": {
+      "title": "Carrière",
+      "description": "Mon parcours professionnel",
+      "experience": "Je suis un développeur passionné qui aime créer des expériences web extraordinaires axées sur la programmation et le développement de systèmes basés sur les données et les expériences utilisateur. Je travaille actuellement comme ingénieur logiciel dans une startup appelée \"The Startup\"."
+    },
+    "resume": {
+      "title": "CV",
+      "description": "Mon expérience professionnelle et mes compétences",
+      "experience": "Téléchargez mon CV pour en savoir plus sur mon parcours"
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "Read my thoughts on technology, development, and industry insights",
+      "experience": "Download my resume to learn more about my background"
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "Get in touch for opportunities, collaborations, or questions",
+      "experience": "Download my resume to learn more about my background"
+    }
   }
 }

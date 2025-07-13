@@ -32,12 +32,40 @@ interface Props extends ClientLayoutProps {
 export default async function RootLayout({ children, params }: Props) {
   const { locale } = await params;
 
+  // Load messages with proper error handling - ensure we pass the locale explicitly
+  let messages = {};
+  try {
+    // Load messages directly from the locale file to ensure correct locale
+    messages = (await import(`../../../locales/${locale}.json`)).default;
+    console.log(`Loaded messages for locale ${locale}:`, Object.keys(messages));
+    console.log(
+      `Sample about title for ${locale}:`,
+      (messages as any).about?.title
+    );
+  } catch (error) {
+    console.error(`Error loading messages for locale ${locale}:`, error);
+    // Fallback to English messages
+    try {
+      messages = (await import(`../../../locales/en.json`)).default;
+      console.log("Fallback to English messages");
+    } catch (fallbackError) {
+      console.error("Failed to load fallback messages:", fallbackError);
+      messages = {};
+    }
+  }
+
   return (
     <html lang={locale}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ClientLayout>{children}</ClientLayout>
+        <NextIntlClientProvider
+          messages={messages}
+          locale={locale}
+          timeZone="UTC"
+        >
+          <ClientLayout>{children}</ClientLayout>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

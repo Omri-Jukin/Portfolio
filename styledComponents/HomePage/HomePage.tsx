@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { Container, CardContent, CardActions } from "@mui/material";
 import {
   Person as PersonIcon,
@@ -26,59 +25,62 @@ import {
   StyledSectionDescription,
   StyledSectionButton,
 } from "./HomePage.styles";
-
-const portfolioSections: PortfolioSection[] = [
-  {
-    title: "About",
-    description:
-      "Learn a little about me, my background, skills, and professional journey",
-    href: "/about",
-    icon: PersonIcon,
-    color: "primary",
-  },
-  {
-    title: "Career",
-    description: "Explore my professional experience and career timeline",
-    href: "/career",
-    icon: WorkIcon,
-    color: "secondary",
-  },
-  {
-    title: "Resume",
-    description: "View and download my complete resume and qualifications",
-    href: "/resume",
-    icon: ResumeIcon,
-    color: "success",
-  },
-  {
-    title: "Blog",
-    description:
-      "Read my thoughts on technology, development, and industry insights",
-    href: "/blog",
-    icon: BlogIcon,
-    color: "info",
-  },
-  {
-    title: "Contact",
-    description: "Get in touch for opportunities, collaborations, or questions",
-    href: "/contact",
-    icon: ContactIcon,
-    color: "warning",
-  },
-];
+import { useTranslations } from "next-intl";
 
 export default function HomePage() {
+  const t = useTranslations("home");
+  const portfolioSections: PortfolioSection[] = [
+    {
+      title: t("hero.cards.about.title"),
+      description: t("hero.cards.about.description"),
+      href: "/about",
+      icon: PersonIcon,
+      color: "primary",
+      untranslatedSection: "about",
+    },
+    {
+      title: t("hero.cards.career.title"),
+      description: t("hero.cards.career.description"),
+      href: "/career",
+      icon: WorkIcon,
+      color: "secondary",
+      untranslatedSection: "career",
+    },
+    {
+      title: t("hero.cards.resume.title"),
+      description: t("hero.cards.resume.description"),
+      href: "/resume",
+      icon: ResumeIcon,
+      color: "success",
+      untranslatedSection: "resume",
+    },
+    {
+      title: t("hero.cards.blog.title"),
+      description: t("hero.cards.blog.description"),
+      href: "/blog",
+      icon: BlogIcon,
+      color: "info",
+      untranslatedSection: "blog",
+    },
+    {
+      title: t("hero.cards.contact.title"),
+      description: t("hero.cards.contact.description"),
+      href: "/contact",
+      icon: ContactIcon,
+      color: "warning",
+      untranslatedSection: "contact",
+    },
+  ];
   return (
     <StyledPageContainer>
       <Container maxWidth="lg" sx={{ pt: 8, pb: 6 }}>
         <StyledHeroContainer>
           <StyledHeroTitle variant="h2" gutterBottom>
-            Welcome to My Portfolio
+            {t("hero.title")}
           </StyledHeroTitle>
 
           <StyledHeroDescription variant="h5" color="text.secondary">
-            I'm a passionate developer who loves creating amazing web
-            experiences.
+            {t("hero.description")}
           </StyledHeroDescription>
 
           <StyledButtonContainer>
@@ -86,17 +88,17 @@ export default function HomePage() {
               href="/about"
               variant="contained"
               size="large"
-              startIcon={<PersonIcon />}
+              endIcon={<PersonIcon />}
             >
-              About
+              {t("hero.cards.about.button")}
             </StyledHeroButton>
             <StyledHeroButton
               href="/contact"
-              variant="outlined"
+              variant="contained"
               size="large"
-              startIcon={<ContactIcon />}
+              endIcon={<ContactIcon />}
             >
-              Contact
+              {t("hero.cards.contact.button")}
             </StyledHeroButton>
           </StyledButtonContainer>
         </StyledHeroContainer>
@@ -132,7 +134,7 @@ export default function HomePage() {
                     endIcon={<LaunchIcon />}
                     fullWidth
                   >
-                    Visit {section.title}
+                    {t(`hero.cards.${section.untranslatedSection}.button`)}
                   </StyledSectionButton>
                 </CardActions>
               </StyledSectionCard>

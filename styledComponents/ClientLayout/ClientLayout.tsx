@@ -5,6 +5,7 @@ import ThemeProvider from "~/ThemeProvider";
 import DarkModeToggle from "~/DarkModeToggle";
 import { ClientLayoutProps } from "./ClientLayout.types";
 import { StyledControlsContainer } from "./ClientLayout.styles";
+import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
 
 export default function ClientLayout({ children }: ClientLayoutProps) {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -17,6 +18,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
     <ThemeProvider isDarkMode={isDarkMode}>
       <StyledControlsContainer>
         <DarkModeToggle onToggle={handleThemeToggle} />
+        <LanguageSwitcher />
       </StyledControlsContainer>
       {children}
     </ThemeProvider>
