@@ -1,4 +1,4 @@
-import { Locale } from "./LanguageSwitcher.types";
+import { Locale } from "./LanguageSwitcher.type";
 
 export const getLanguageName = (locale: Locale) => {
   const names: Record<string, string> = {

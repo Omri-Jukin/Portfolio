@@ -65,7 +65,7 @@
   "imports": {
     "@/*": "./src/*",
     "#/*": "./*",
-    "~/*": "./styledComponents/*",
+    "~/*": "./Components/*",
     "$/*": "./lib/*",
     "%/*": "./locales/*",
     "^/*": "./public/*"

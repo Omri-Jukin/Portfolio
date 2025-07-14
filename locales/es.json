@@ -23,7 +23,8 @@
   "resume": {
     "title": "Currículum",
     "description": "Mi experiencia profesional y habilidades",
-    "experience": "Descarga mi currículum para conocer más sobre mi trayectoria"
+    "networkingSummary": "Descarga mi currículum para conocer más sobre mi trayectoria",
+    "experience": "Soy un desarrollador full-stack apasionado y motivado, con una sólida base en ingeniería eléctrica y un historial comprobado de obtener resultados en entornos de alta presión. Mi experiencia abarca desde liderar el desarrollo de plataformas escalables y bibliotecas de UI modulares hasta optimizar la lógica de negocio y guiar equipos en las industrias de seguros y telecomunicaciones.\n\nMe destaco resolviendo problemas complejos, impulsando la innovación y colaborando entre disciplinas para lograr objetivos ambiciosos. Mis colegas me reconocen por mi ética de trabajo incansable, atención al detalle y compromiso con el aprendizaje continuo. Ya sea construyendo sistemas backend robustos, diseñando interfaces intuitivas o optimizando flujos de trabajo, siempre doy el máximo para asegurar calidad e impacto.\n\nSi buscas a alguien que combine experiencia técnica con liderazgo, creatividad y una verdadera pasión por marcar la diferencia, ¡conectemos!"
   },
   "theme": {
     "light": "Cambiar a modo claro",

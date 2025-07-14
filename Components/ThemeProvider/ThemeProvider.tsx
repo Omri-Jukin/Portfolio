@@ -3,13 +3,20 @@
 import {
   createTheme,
   ThemeProvider as MuiThemeProvider,
-} from "@mui/material/styles";
-import { CssBaseline } from "@mui/material";
+  Box,
+  Breadcrumbs,
+  Button,
+  CssBaseline,
+  Link,
+  AppBar,
+  Toolbar,
+} from "@mui/material";
 import { ReactNode, useMemo, useState, useEffect } from "react";
 import { useLocale } from "next-intl";
 import DarkModeToggle from "#/Components/DarkModeToggle/DarkModeToggle";
 import LanguageSwitcher from "#/Components/LanguageSwitcher/LanguageSwitcher";
-import { StyledThemeProvider } from "./ThemeProvider.styled";
+import { StyledThemeProvider } from "./ThemeProvider.style";
+import { usePathname, useRouter } from "next/navigation";
 
 // Module augmentation to add custom variants
 declare module "@mui/material/Button" {
@@ -57,6 +64,10 @@ export default function ThemeProvider({ children }: ThemeProviderProps) {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [mounted, setMounted] = useState(false);
+
+  // Always call hooks at the top level
+  const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     setIsClient(true);
@@ -381,6 +392,25 @@ export default function ThemeProvider({ children }: ThemeProviderProps) {
     });
   }, [isDarkMode, isRTL]);
 
+  // Split and filter path segments
+  const pathSegments = pathname.split("/").filter(Boolean);
+
+  // Remove the locale segment if present
+  const segmentsWithoutLocale =
+    pathSegments[0] === locale ? pathSegments.slice(1) : pathSegments;
+
+  // Build breadcrumbs, always prefixing with locale
+  const breadcrumbs = [
+    { label: "Home", href: `/${locale}` },
+    ...segmentsWithoutLocale.map((segment, idx) => {
+      const href =
+        "/" + [locale, ...segmentsWithoutLocale.slice(0, idx + 1)].join("/");
+      // Optionally, prettify the label
+      const label = segment.charAt(0).toUpperCase() + segment.slice(1);
+      return { label, href };
+    }),
+  ];
+
   if (!mounted) return null;
 
   // Prevent hydration mismatch by only applying client-side theme after hydration
@@ -388,11 +418,80 @@ export default function ThemeProvider({ children }: ThemeProviderProps) {
     return (
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
-        <div dir={isRTL ? "rtl" : "ltr"}>
-          <StyledThemeProvider>
-            <DarkModeToggle onToggle={handleThemeToggle} isDark={false} />
-            <LanguageSwitcher />
-          </StyledThemeProvider>
+        <AppBar
+          position="static"
+          color="transparent"
+          elevation={0}
+          sx={{
+            borderBottom: `1px solid ${theme.palette.divider}`,
+            background: theme.palette.background.default,
+          }}
+        >
+          <Toolbar
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              minHeight: 64,
+              px: 2,
+            }}
+          >
+            {/* Navigation: Back + Breadcrumbs */}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Button
+                onClick={() => router && router.back()}
+                sx={{
+                  color: theme.palette.primary.main,
+                  fontSize: "1rem",
+                  textDecoration: "underline",
+                  minWidth: 0,
+                  p: 0,
+                  mr: 2,
+                }}
+                aria-label="Go back"
+              >
+                Back
+              </Button>
+              <Breadcrumbs>
+                {breadcrumbs.map((crumb, idx) =>
+                  idx < breadcrumbs.length - 1 ? (
+                    <Link
+                      key={crumb.href}
+                      href={crumb.href}
+                      style={{
+                        color: theme.palette.text.primary,
+                        textDecoration: "none",
+                      }}
+                    >
+                      {crumb.label}
+                    </Link>
+                  ) : (
+                    <span
+                      key={crumb.href}
+                      style={{ color: theme.palette.text.primary }}
+                    >
+                      {crumb.label}
+                    </span>
+                  )
+                )}
+              </Breadcrumbs>
+            </Box>
+            {/* Toggles: DarkMode + Language */}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <DarkModeToggle onToggle={handleThemeToggle} isDark={false} />
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <LanguageSwitcher />
+              </Box>
+            </Box>
+          </Toolbar>
+        </AppBar>
+        <div
+          dir={isRTL ? "rtl" : "ltr"}
+          style={{
+            transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            minHeight: "100vh",
+          }}
+        >
           {children}
         </div>
       </MuiThemeProvider>
@@ -402,6 +501,59 @@ export default function ThemeProvider({ children }: ThemeProviderProps) {
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
+      <AppBar
+        position="static"
+        color="transparent"
+        elevation={0}
+        sx={{
+          borderBottom: `1px solid ${theme.palette.divider}`,
+          background: theme.palette.background.default,
+        }}
+      >
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            minHeight: 64,
+            px: 2,
+          }}
+        >
+          {/* Navigation: Back + Breadcrumbs */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <Breadcrumbs>
+              {breadcrumbs.map((crumb, idx) =>
+                idx < breadcrumbs.length - 1 ? (
+                  <Link
+                    key={crumb.href}
+                    href={crumb.href}
+                    style={{
+                      color: theme.palette.text.primary,
+                      textDecoration: "none",
+                    }}
+                  >
+                    {crumb.label}
+                  </Link>
+                ) : (
+                  <span
+                    key={crumb.href}
+                    style={{ color: theme.palette.text.primary }}
+                  >
+                    {crumb.label}
+                  </span>
+                )
+              )}
+            </Breadcrumbs>
+          </Box>
+          {/* Toggles: DarkMode + Language */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <DarkModeToggle onToggle={handleThemeToggle} isDark={isDarkMode} />
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <LanguageSwitcher />
+            </Box>
+          </Box>
+        </Toolbar>
+      </AppBar>
       <div
         dir={isRTL ? "rtl" : "ltr"}
         style={{
@@ -409,10 +561,6 @@ export default function ThemeProvider({ children }: ThemeProviderProps) {
           minHeight: "100vh",
         }}
       >
-        <StyledThemeProvider>
-          <DarkModeToggle onToggle={handleThemeToggle} isDark={isDarkMode} />
-          <LanguageSwitcher />
-        </StyledThemeProvider>
         {children}
       </div>
     </MuiThemeProvider>

@@ -23,7 +23,8 @@
   "resume": {
     "title": "CV",
     "description": "Mon expérience professionnelle et mes compétences",
-    "experience": "Téléchargez mon CV pour en savoir plus sur mon parcours"
+    "networkingSummary": "Téléchargez mon CV pour en savoir plus sur mon parcours",
+    "experience": "Je suis un développeur full-stack passionné et déterminé, avec une solide formation en ingénierie électrique et un parcours prouvé dans la réalisation de résultats dans des environnements exigeants. Mon expérience va du pilotage du développement de plateformes évolutives et de bibliothèques UI modulaires à l’optimisation de la logique métier et à l’encadrement d’équipes dans les secteurs de l’assurance et des télécommunications.\n\nJ’excelle dans la résolution de problèmes complexes, la promotion de l’innovation et la collaboration interdisciplinaire pour atteindre des objectifs ambitieux. Mes collègues me reconnaissent pour mon éthique de travail sans relâche, mon souci du détail et mon engagement envers l’apprentissage continu. Que ce soit pour construire des systèmes backend robustes, concevoir des interfaces intuitives ou rationaliser les processus, je donne toujours le meilleur de moi-même pour garantir qualité et impact.\n\nSi vous cherchez quelqu’un qui allie expertise technique, leadership, créativité et une véritable passion pour faire la différence, connectons-nous !"
   },
   "theme": {
     "light": "Passer en mode clair",

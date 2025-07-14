@@ -1,8 +1,9 @@
 "use client";
 
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useTranslations } from "next-intl";
-import MotionWrapper from "#/Components/MotionWrapper";
+import MotionWrapper from "~/MotionWrapper";
+import { Typography } from "~/Typography";
 
 export default function ResumePage() {
   const t = useTranslations("resume");
@@ -17,6 +18,20 @@ export default function ResumePage() {
           data-aos-duration="250"
         >
           {t("title")}
+        </Typography>
+      </MotionWrapper>
+
+      <MotionWrapper variant="slideUp" duration={0.8} delay={0.3}>
+        <Typography
+          variant="h5"
+          component="p"
+          gutterBottom
+          weight="normal"
+          margin={{ bottom: "3rem" }}
+          data-aos="fade-up"
+          data-aos-duration="300"
+        >
+          {t("networkingSummary")}
         </Typography>
       </MotionWrapper>
 

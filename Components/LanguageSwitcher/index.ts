@@ -1,4 +1,4 @@
 export { default } from "./LanguageSwitcher";
-export * from "./LanguageSwitcher.types";
-export * from "./LanguageSwitcher.consts";
-export * from "./LanguageSwitcher.styled";
+export * from "./LanguageSwitcher.type";
+export * from "./LanguageSwitcher.const";
+export * from "./LanguageSwitcher.style";

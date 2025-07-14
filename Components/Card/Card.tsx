@@ -3,14 +3,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { CardContent, CardActionArea, Fade } from "@mui/material";
-import { CardProps } from "./Card.types";
+import { CardProps } from "./Card.type";
 import {
   StyledCardContainer,
   StyledCard,
   StyledCardTitle,
   StyledCardDescription,
   StyledCardDate,
-} from "./Card.styled";
+} from "./Card.style";
 
 const Card: React.FC<CardProps> = ({ title, description, date, href }) => {
   const [isVisible, setIsVisible] = useState(false);

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MotionWrapperProps, animationVariants } from "./MotionWrapper.types";
+import { MotionWrapperProps, animationVariants } from "./MotionWrapper.type";
 
 export default function MotionWrapper({
   children,

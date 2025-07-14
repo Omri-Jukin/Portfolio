@@ -1,6 +1,6 @@
 import { createTheme } from "@mui/material/styles";
 
-interface ThemeProps {
+export interface ThemeProps {
   isDarkMode: boolean;
   isRTL: boolean;
 }
@@ -305,6 +305,72 @@ export const theme = ({ isDarkMode, isRTL }: ThemeProps) =>
               "& .MuiChip-label": {
                 padding: "0 16px",
               },
+            },
+          },
+        ],
+      },
+      MuiTypography: {
+        variants: [
+          {
+            props: { variant: "h1" },
+            style: {
+              fontSize: "2.5rem",
+              fontWeight: 700,
+              lineHeight: 1.2,
+            },
+          },
+          {
+            props: { variant: "h2" },
+            style: {
+              fontSize: "2rem",
+              fontWeight: 600,
+              lineHeight: 1.3,
+            },
+          },
+          {
+            props: { variant: "h3" },
+            style: {
+              fontSize: "1.75rem",
+              fontWeight: 600,
+              lineHeight: 1.4,
+            },
+          },
+          {
+            props: { variant: "h4" },
+            style: {
+              fontSize: "1.5rem",
+              fontWeight: 600,
+              lineHeight: 1.4,
+            },
+          },
+          {
+            props: { variant: "h5" },
+            style: {
+              fontSize: "1.25rem",
+              fontWeight: 500,
+              lineHeight: 1.5,
+            },
+          },
+          {
+            props: { variant: "h6" },
+            style: {
+              fontSize: "1.125rem",
+              fontWeight: 500,
+              lineHeight: 1.5,
+            },
+          },
+          {
+            props: { variant: "body1" },
+            style: {
+              fontSize: "1rem",
+              lineHeight: 1.6,
+            },
+          },
+          {
+            props: { variant: "body2" },
+            style: {
+              fontSize: "0.875rem",
+              lineHeight: 1.6,
             },
           },
         ],

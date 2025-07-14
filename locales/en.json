@@ -23,7 +23,8 @@
   "resume": {
     "title": "Resume",
     "description": "My professional experience and skills",
-    "experience": "Download my resume to learn more about my background"
+    "networkingSummary": "Download my resume to learn more about my background",
+    "experience": "I am a passionate and driven full-stack developer with a strong foundation in electrical engineering and a proven track record of delivering results in high-pressure environments. My experience spans from leading the development of scalable platforms and modular UI libraries to optimizing business logic and mentoring teams in the insurance and telecom industries.\n\nI thrive on solving complex problems, driving innovation, and collaborating across disciplines to achieve ambitious goals. My colleagues know me for my relentless work ethic, attention to detail, and commitment to continuous learning. Whether building robust backend systems, designing intuitive user interfaces, or streamlining workflows, I always go the extra mile to ensure quality and impact.\n\nIf you’re looking for someone who combines technical expertise with leadership, creativity, and a genuine passion for making a difference, let’s connect."
   },
   "theme": {
     "light": "Switch to light mode",

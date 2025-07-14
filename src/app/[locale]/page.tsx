@@ -24,7 +24,7 @@ import {
   StyledSectionIcon,
   StyledSectionTitle,
   StyledSectionDescription,
-} from "~/HomePage/HomePage.styled";
+} from "#/Components/HomePage/HomePage.style";
 import { PortfolioSection } from "#/Components/HomePage";
 
 export default function HomePage() {

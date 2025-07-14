@@ -10,9 +10,9 @@ import {
   StyledLanguageBox,
   StyledLanguageButton,
   StyledLanguageMenuItem,
-} from "./LanguageSwitcher.styled";
-import { getLanguageName, getTargetPath } from "./LanguageSwitcher.consts";
-import { Locale } from "./LanguageSwitcher.types";
+} from "./LanguageSwitcher.style";
+import { getLanguageName, getTargetPath } from "./LanguageSwitcher.const";
+import { Locale } from "./LanguageSwitcher.type";
 
 export default function LanguageSwitcher() {
   const pathname = usePathname();

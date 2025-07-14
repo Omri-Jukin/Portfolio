@@ -24,7 +24,7 @@ import {
   StyledSectionIcon,
   StyledSectionTitle,
   StyledSectionDescription,
-} from "./HomePage.styled";
+} from "./HomePage.style";
 
 export default function HomePage() {
   const t = useTranslations("home");

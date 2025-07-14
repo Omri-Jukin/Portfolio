@@ -9,6 +9,19 @@ export const StyledLanguageBox = styled(Box)(({ theme }) => ({
   verticalAlign: "top",
 }));
 
+export const LanguageSwitcherButton = styled(Button)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  gap: "0.5em",
+}));
+
+// If you have a styled icon, ensure logical margin:
+export const LanguageSwitcherIcon = styled("span")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  marginInlineEnd: "0.5em",
+}));
+
 export const StyledLanguageButton = styled(Button)(({ theme }) => ({
   position: "relative",
   backgroundColor: "rgba(255, 255, 255, 0.1) !important",
@@ -25,6 +38,9 @@ export const StyledLanguageButton = styled(Button)(({ theme }) => ({
   fontWeight: 600,
   boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
   transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+  display: "flex",
+  alignItems: "center",
+  gap: theme.spacing(1.5),
   "&:hover": {
     backgroundColor: "rgba(255, 255, 255, 0.2) !important",
     transform: "scale(1.05)",
@@ -32,10 +48,6 @@ export const StyledLanguageButton = styled(Button)(({ theme }) => ({
   },
   "&:focus": {
     backgroundColor: "rgba(255, 255, 255, 0.15) !important",
-  },
-  [`& .${buttonClasses.startIcon}`]: {
-    marginRight: theme.direction === "rtl" ? 0 : theme.spacing(1.5),
-    marginLeft: theme.direction === "rtl" ? theme.spacing(1.5) : 0,
   },
 }));
 
