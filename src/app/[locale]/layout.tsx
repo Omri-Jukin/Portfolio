@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "../globals.css";
 import { NextIntlClientProvider } from "next-intl";
-import ThemeProvider from "#/Components/ThemeProvider";
+import ClientProviders from "./ClientProviders";
 import { geistSans, geistMono } from "#/lib/fonts";
 
 export const metadata: Metadata = {
@@ -33,7 +33,7 @@ export default async function RootLayout({ children, params }: Props) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <ThemeProvider>{children}</ThemeProvider>
+          <ClientProviders>{children}</ClientProviders>
         </NextIntlClientProvider>
       </body>
     </html>

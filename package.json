@@ -33,8 +33,8 @@
     "motion": "^12.23.3",
     "next": "15.3.3",
     "next-intl": "^4.3.4",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "zod": "^4.0.5"
   },
   "devDependencies": {
@@ -57,7 +57,7 @@
     "cf-typegen": "wrangler types --env-interface CloudflareEnv env.d.ts",
     "check": "npm run build && tsc",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "lint": "next lint",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "start": "next start"

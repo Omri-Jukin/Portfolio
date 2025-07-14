@@ -56,10 +56,11 @@ export default function ThemeProvider({ children }: ThemeProviderProps) {
   const isRTL = locale === "he";
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  // Initialize dark mode from localStorage on client side
   useEffect(() => {
     setIsClient(true);
+    setMounted(true);
     const stored = localStorage.getItem("theme");
     const prefersDark = window.matchMedia(
       "(prefers-color-scheme: dark)"
@@ -379,6 +380,8 @@ export default function ThemeProvider({ children }: ThemeProviderProps) {
       },
     });
   }, [isDarkMode, isRTL]);
+
+  if (!mounted) return null;
 
   // Prevent hydration mismatch by only applying client-side theme after hydration
   if (!isClient) {

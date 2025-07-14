@@ -1,5 +1,5 @@
 import { styled } from "@mui/material/styles";
-import { Box, Typography, Button, Card, buttonClasses } from "@mui/material";
+import { Box, Typography, Button, Card } from "@mui/material";
 
 export const StyledPageContainer = styled(Box)(({ theme }) => ({
   minHeight: "100vh",
@@ -41,11 +41,14 @@ export const StyledHeroButton = styled(Button)(({ theme }) => ({
   paddingInline: theme.spacing(4),
   paddingTop: theme.spacing(1.5),
   paddingBottom: theme.spacing(1.5),
-  [buttonClasses.endIcon]: {
-    ...(theme.direction === "rtl" ? { display: "block" } : { display: "none" }),
+  // Always show icons, but add margin to the icon on the correct side based on direction
+  "& .MuiButton-endIcon": {
+    marginLeft: theme.direction === "ltr" ? theme.spacing(1.5) : 0,
+    marginRight: theme.direction === "rtl" ? theme.spacing(1.5) : 0,
   },
-  [buttonClasses.startIcon]: {
-    ...(theme.direction === "rtl" ? { display: "none" } : { display: "block" }),
+  "& .MuiButton-startIcon": {
+    marginRight: theme.direction === "ltr" ? theme.spacing(1.5) : 0,
+    marginLeft: theme.direction === "rtl" ? theme.spacing(1.5) : 0,
   },
 }));
 
