@@ -1,5 +1,4 @@
 "use client";
-
 import {
   createTheme,
   ThemeProvider as MuiThemeProvider,
@@ -15,7 +14,6 @@ import { ReactNode, useMemo, useState, useEffect } from "react";
 import { useLocale } from "next-intl";
 import DarkModeToggle from "#/Components/DarkModeToggle/DarkModeToggle";
 import LanguageSwitcher from "#/Components/LanguageSwitcher/LanguageSwitcher";
-import { StyledThemeProvider } from "./ThemeProvider.style";
 import { usePathname, useRouter } from "next/navigation";
 
 // Module augmentation to add custom variants
