@@ -100,5 +100,32 @@
       "description": "הצטרפו לי בפייסבוק וגוגל והוסיפו אותי בלינקדאין",
       "experience": "הורד את קורות החייכדות על תכנות ופיתוח מערכות מבוססות נתונים וחווית משתמש."
     }
+  },
+  "footer": {
+    "title": "קצת רקע",
+    "children": "מפתח נלהב היוצר חוויות ווב מודרניות. תמיד לומד, תמיד יוצר.",
+    "linksTitle": "קישורים מהירים",
+    "links": [
+      { "label": "בית", "href": "/" },
+      { "label": "בלוג", "href": "/blog" },
+      { "label": "צור קשר", "href": "/contact" },
+      { "label": "קורות חיים", "href": "/resume" }
+    ],
+    "socialTitle": "רשתות חברתיות",
+    "social": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/omri-jukin",
+        "icon": "GitHub"
+      },
+      {
+        "label": "LinkedIn",
+        "href": "https://linkedin.com/in/omri-jukin",
+        "icon": "LinkedIn"
+      }
+    ],
+    "emailTitle": "צור קשר",
+    "email": "omrijukin@gmail.com",
+    "copyright": "עומרי חוקין. כל הזכויות שמורות."
   }
 }

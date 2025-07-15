@@ -17,17 +17,21 @@ export default function DarkModeToggle({
   };
 
   return (
-    <Tooltip title={isDark ? "Switch to light mode" : "Switch to dark mode"}>
+    <Tooltip
+      title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      id="dark-mode-toggle-tooltip"
+    >
       <StyledDarkModeToggle
         aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
         color="inherit"
         onClick={toggleTheme}
         size="small"
+        id="dark-mode-toggle-button"
       >
         {isDark ? (
-          <Brightness7Icon fontSize="small" />
+          <Brightness7Icon id="dark-mode-toggle-icon" fontSize="small" />
         ) : (
-          <Brightness4Icon fontSize="small" />
+          <Brightness4Icon id="dark-mode-toggle-icon" fontSize="small" />
         )}
       </StyledDarkModeToggle>
     </Tooltip>

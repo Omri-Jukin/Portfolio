@@ -3,6 +3,8 @@ import "../globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import ClientProviders from "./ClientProviders";
 import { geistSans, geistMono } from "#/lib/fonts";
+import ClientLayout from "./ClientLayout";
+import { en, es, fr, he } from "#/locales";
 
 export const metadata: Metadata = {
   title: "Omri's Portfolio",
@@ -16,24 +18,16 @@ export interface Props {
 
 export default async function RootLayout({ children, params }: Props) {
   const { locale } = await params;
-
-  // Load messages directly from the locale file - this was working before
-  let messages;
-  try {
-    messages = (await import(`../../../locales/${locale}.json`)).default;
-  } catch (error) {
-    console.error(`Failed to load messages for locale ${locale}:`, error);
-    // Fallback to English messages
-    messages = (await import(`../../../locales/en.json`)).default;
-  }
-
+  const messages = { en, es, fr, he }[locale] || en;
   return (
     <html lang={locale}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <ClientProviders>{children}</ClientProviders>
+          <ClientProviders>
+            <ClientLayout>{children}</ClientLayout>
+          </ClientProviders>
         </NextIntlClientProvider>
       </body>
     </html>

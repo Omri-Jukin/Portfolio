@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Container, CardContent, Box } from "@mui/material";
+import { Container } from "@mui/material";
 import { useTranslations } from "next-intl";
 import {
   Person as PersonIcon,
@@ -9,7 +9,6 @@ import {
   Work as WorkIcon,
   Description as ResumeIcon,
   Article as BlogIcon,
-  Launch as LaunchIcon,
 } from "@mui/icons-material";
 import MotionWrapper from "#/Components/MotionWrapper";
 import {
@@ -19,17 +18,13 @@ import {
   StyledHeroDescription,
   StyledButtonContainer,
   StyledHeroButton,
-  StyledSectionCard,
-  StyledIconContainer,
-  StyledSectionIcon,
-  StyledSectionTitle,
-  StyledSectionDescription,
 } from "./HomePage.style";
+import Card from "~/Card";
 
 export default function HomePage() {
   const t = useTranslations("home");
 
-  // Function to render icons based on section type
+  // Render icons based on section type
   const renderIcon = (sectionType: string) => {
     switch (sectionType) {
       case "about":
@@ -47,6 +42,7 @@ export default function HomePage() {
     }
   };
 
+  // Portfolio sections
   const portfolioSections = [
     {
       title: t("hero.cards.about.title"),
@@ -85,6 +81,7 @@ export default function HomePage() {
     },
   ];
 
+  // Home page
   return (
     <StyledPageContainer>
       <Container maxWidth="lg" sx={{ pt: 8, pb: 6 }}>
@@ -134,44 +131,16 @@ export default function HomePage() {
                 margin: "2vh 0",
               }}
             >
-              <StyledSectionCard>
-                <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                  <StyledIconContainer>
-                    <MotionWrapper
-                      variant="scale"
-                      duration={0.5}
-                      delay={index * 0.1}
-                    >
-                      <StyledSectionIcon
-                        sx={{ color: `${section.color}.main` }}
-                      >
-                        {renderIcon(section.untranslatedSection)}
-                      </StyledSectionIcon>
-                    </MotionWrapper>
-                    <StyledSectionTitle variant="h6">
-                      {section.title}
-                    </StyledSectionTitle>
-                  </StyledIconContainer>
-
-                  <StyledSectionDescription
-                    variant="body2"
-                    color="text.secondary"
-                  >
-                    {section.description}
-                  </StyledSectionDescription>
-                </CardContent>
-
-                <Box sx={{ p: 3, pt: 0 }}>
-                  <StyledHeroButton
-                    href={section.href}
-                    variant="outlined"
-                    size="small"
-                    endIcon={<LaunchIcon />}
-                  >
-                    {t(`hero.cards.${section.untranslatedSection}.button`)}
-                  </StyledHeroButton>
-                </Box>
-              </StyledSectionCard>
+              <Card
+                title={section.title}
+                description={section.description}
+                href={section.href}
+                icon={renderIcon(section.untranslatedSection)}
+                color={`var(--mui-palette-${section.color}-main)`}
+                buttonText={t(
+                  `hero.cards.${section.untranslatedSection}.button`
+                )}
+              />
             </MotionWrapper>
           );
         })}

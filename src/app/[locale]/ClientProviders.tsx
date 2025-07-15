@@ -1,8 +1,8 @@
 "use client";
 
-import ThemeProvider from "#/Components/ThemeProvider";
+import { Box } from "@mui/system";
 import { ReactNode } from "react";
 
 export default function ClientProviders({ children }: { children: ReactNode }) {
-  return <ThemeProvider>{children}</ThemeProvider>;
+  return <Box sx={{ minHeight: "100vh" }}>{children}</Box>;
 }

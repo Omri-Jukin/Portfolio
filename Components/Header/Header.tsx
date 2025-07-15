@@ -10,11 +10,13 @@ import {
   AppBar,
   Toolbar,
 } from "@mui/material";
-import { ReactNode, useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useLocale } from "next-intl";
 import DarkModeToggle from "#/Components/DarkModeToggle/DarkModeToggle";
 import LanguageSwitcher from "#/Components/LanguageSwitcher/LanguageSwitcher";
 import { usePathname, useRouter } from "next/navigation";
+import { HeaderProps } from "./Header.type";
+import AnimationSwitcher from "#/Components/AnimationSwitcher";
 
 // Module augmentation to add custom variants
 declare module "@mui/material/Button" {
@@ -52,11 +54,10 @@ declare module "@mui/material/Chip" {
   }
 }
 
-interface ThemeProviderProps {
-  children: ReactNode;
-}
-
-export default function ThemeProvider({ children }: ThemeProviderProps) {
+export default function Header({
+  animationType,
+  onAnimationTypeChange,
+}: HeaderProps) {
   const locale = useLocale();
   const isRTL = locale === "he";
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -479,19 +480,14 @@ export default function ThemeProvider({ children }: ThemeProviderProps) {
               <DarkModeToggle onToggle={handleThemeToggle} isDark={false} />
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <LanguageSwitcher />
+                <AnimationSwitcher
+                  animationType={animationType}
+                  onChange={onAnimationTypeChange}
+                />
               </Box>
             </Box>
           </Toolbar>
         </AppBar>
-        <div
-          dir={isRTL ? "rtl" : "ltr"}
-          style={{
-            transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
-            minHeight: "100vh",
-          }}
-        >
-          {children}
-        </div>
       </MuiThemeProvider>
     );
   }
@@ -543,24 +539,19 @@ export default function ThemeProvider({ children }: ThemeProviderProps) {
               )}
             </Breadcrumbs>
           </Box>
-          {/* Toggles: DarkMode + Language */}
+          {/* Toggles: DarkMode + AnimationSwitcher + Language */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             <DarkModeToggle onToggle={handleThemeToggle} isDark={isDarkMode} />
+            <AnimationSwitcher
+              animationType={animationType}
+              onChange={onAnimationTypeChange}
+            />
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <LanguageSwitcher />
             </Box>
           </Box>
         </Toolbar>
       </AppBar>
-      <div
-        dir={isRTL ? "rtl" : "ltr"}
-        style={{
-          transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
-          minHeight: "100vh",
-        }}
-      >
-        {children}
-      </div>
     </MuiThemeProvider>
   );
 }

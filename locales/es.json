@@ -100,5 +100,32 @@
       "description": "Get in touch for opportunities, collaborations, or questions",
       "experience": "Download my resume to learn more about my background"
     }
+  },
+  "footer": {
+    "title": "Acerca de",
+    "children": "Desarrollador apasionado creando experiencias web modernas. Siempre aprendiendo, siempre creando.",
+    "linksTitle": "Enlaces rápidos",
+    "links": [
+      { "label": "Inicio", "href": "/" },
+      { "label": "Blog", "href": "/blog" },
+      { "label": "Contacto", "href": "/contact" },
+      { "label": "Currículum", "href": "/resume" }
+    ],
+    "socialTitle": "Redes sociales",
+    "social": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/omri-jukin",
+        "icon": "GitHub"
+      },
+      {
+        "label": "LinkedIn",
+        "href": "https://linkedin.com/in/omri-jukin",
+        "icon": "LinkedIn"
+      }
+    ],
+    "emailTitle": "Contacto",
+    "email": "omrijukin@gmail.com",
+    "copyright": "Omri Jukin. Todos los derechos reservados."
   }
 }

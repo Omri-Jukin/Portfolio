@@ -7,11 +7,7 @@ export const StyledCardContainer = styled(Box)(({ theme }) => ({
 
 export const StyledCard = styled(MuiCard)(({ theme }) => ({
   borderRadius: theme.spacing(3),
-  background:
-    theme.palette.mode === "dark"
-      ? "rgba(26, 26, 26, 0.8)"
-      : "rgba(255, 255, 255, 0.8)",
-  backdropFilter: "blur(10px)",
+  background: "transparent",
   border: `1px solid ${
     theme.palette.mode === "dark"
       ? theme.palette.grey[700]

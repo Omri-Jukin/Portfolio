@@ -1,13 +1,10 @@
 import { styled } from "@mui/material/styles";
 import { Box, Typography, Button, Card } from "@mui/material";
 
-export const StyledPageContainer = styled(Box)(({ theme }) => ({
+export const StyledPageContainer = styled(Box)({
   minHeight: "100vh",
-  background:
-    theme.palette.mode === "dark"
-      ? "linear-gradient(135deg, #1a1a1a 0%,#787878 100%)"
-      : "linear-gradient(135deg, #f8fafc 0%,#d1d1d1 100%)",
-}));
+  background: "transparent",
+});
 
 export const StyledHeroContainer = styled(Box)(({ theme }) => ({
   textAlign: "center",
@@ -58,11 +55,7 @@ export const StyledSectionCard = styled(Card)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   transition: "all 0.3s ease-in-out",
-  background:
-    theme.palette.mode === "dark"
-      ? "rgba(26, 26, 26, 0.9)"
-      : "rgba(255, 255, 255, 0.9)",
-  backdropFilter: "blur(10px)",
+  background: "transparent",
   border: `1px solid ${
     theme.palette.mode === "dark"
       ? "rgba(255, 255, 255, 0.1)"

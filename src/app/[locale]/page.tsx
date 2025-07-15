@@ -24,8 +24,8 @@ import {
   StyledSectionIcon,
   StyledSectionTitle,
   StyledSectionDescription,
-} from "#/Components/HomePage/HomePage.style";
-import { PortfolioSection } from "#/Components/HomePage";
+} from "~/HomePage/HomePage.style";
+import { PortfolioSection } from "~/HomePage";
 
 export default function HomePage() {
   const t = useTranslations("home");
@@ -87,8 +87,13 @@ export default function HomePage() {
   ];
 
   return (
-    <StyledPageContainer>
-      <Container maxWidth="lg" sx={{ pt: 8, pb: 6 }}>
+    <StyledPageContainer
+      style={{ position: "relative", minHeight: "100vh", overflow: "hidden" }}
+    >
+      <Container
+        maxWidth="lg"
+        sx={{ pt: 8, pb: 6, position: "relative", zIndex: 1 }}
+      >
         <StyledHeroContainer>
           <MotionWrapper variant="fadeIn" duration={0.8} delay={0.2}>
             <StyledHeroTitle variant="h2" gutterBottom>
@@ -135,7 +140,13 @@ export default function HomePage() {
                 margin: "2vh 0",
               }}
             >
-              <StyledSectionCard>
+              <StyledSectionCard
+                sx={{
+                  background: "rgba(255,255,255,0.0)",
+                  boxShadow: "none",
+                  border: "none",
+                }}
+              >
                 <CardContent sx={{ flexGrow: 1, p: 3 }}>
                   <StyledIconContainer>
                     <MotionWrapper

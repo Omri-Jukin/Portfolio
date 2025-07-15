@@ -1,5 +1,5 @@
 import { styled } from "@mui/material/styles";
-import Button, { buttonClasses } from "@mui/material/Button";
+import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 
@@ -9,18 +9,18 @@ export const StyledLanguageBox = styled(Box)(({ theme }) => ({
   verticalAlign: "top",
 }));
 
-export const LanguageSwitcherButton = styled(Button)(({ theme }) => ({
+export const LanguageSwitcherButton = styled(Button)({
   display: "flex",
   alignItems: "center",
   gap: "0.5em",
-}));
+});
 
 // If you have a styled icon, ensure logical margin:
-export const LanguageSwitcherIcon = styled("span")(({ theme }) => ({
+export const LanguageSwitcherIcon = styled(Box)({
   display: "flex",
   alignItems: "center",
   marginInlineEnd: "0.5em",
-}));
+});
 
 export const StyledLanguageButton = styled(Button)(({ theme }) => ({
   position: "relative",
