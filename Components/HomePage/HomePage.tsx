@@ -105,6 +105,7 @@ export default function HomePage() {
                 variant="contained"
                 size="large"
                 endIcon={<PersonIcon />}
+                aria-label={t("hero.cards.about.button")}
               >
                 {t("hero.cards.about.button")}
               </StyledHeroButton>
@@ -113,6 +114,7 @@ export default function HomePage() {
                 variant="contained"
                 size="large"
                 endIcon={<ContactIcon />}
+                aria-label={t("hero.cards.contact.button")}
               >
                 {t("hero.cards.contact.button")}
               </StyledHeroButton>

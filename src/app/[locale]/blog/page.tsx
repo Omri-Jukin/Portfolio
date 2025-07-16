@@ -24,6 +24,7 @@ export default async function BlogPage() {
                   component={NextLink}
                   href={`/blog/${post.slug}`}
                   underline="hover"
+                  aria-label={`Read post: ${post.title}`}
                   sx={{ fontWeight: 500, fontSize: "1.1rem", display: "block" }}
                 >
                   {post.title}

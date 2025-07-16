@@ -69,6 +69,7 @@ export default function LanguageSwitcher() {
         onClick={handleClick}
         size="small"
         startIcon={<LanguageIcon />}
+        aria-label="Change language"
       >
         {locale}
       </StyledLanguageButton>
@@ -86,6 +87,7 @@ export default function LanguageSwitcher() {
             key={loc}
             selected={loc === locale}
             onClick={() => handleLanguageChange(loc)}
+            aria-label={`Switch to ${getLanguageName(loc)}`}
           >
             {getLanguageName(loc)} ({loc.toUpperCase()})
           </StyledLanguageMenuItem>

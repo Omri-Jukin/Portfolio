@@ -60,6 +60,7 @@ export default function Header({
                 <Link
                   key={crumb.href}
                   href={crumb.href}
+                  aria-label={`Go to ${crumb.label}`}
                   sx={{
                     color: "text.primary",
                     textDecoration: "none",

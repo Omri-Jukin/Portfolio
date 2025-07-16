@@ -104,6 +104,7 @@ const Card: React.FC<CardProps> = ({
             id="styled-card-action-area"
             component={Link}
             href={href}
+            aria-label={`Go to ${title}`}
             sx={{
               p: 3,
               display: "block",
@@ -162,6 +163,7 @@ const Card: React.FC<CardProps> = ({
               {buttonText && (
                 <div style={{ marginTop: 24 }}>
                   <button
+                    aria-label={buttonText ? buttonText : `Go to ${title}`}
                     style={{
                       background: "none",
                       border: `1px solid ${color || "#1976d2"}`,

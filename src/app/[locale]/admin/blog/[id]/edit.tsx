@@ -19,12 +19,22 @@ const AdminBlogEdit = () => {
           <Typography variant="h2">{post.title}</Typography>
           <Typography variant="body1">{post.content}</Typography>
           <Link href={`/admin/blog/${post.id}/edit`} underline="none">
-            <Button variant="contained" color="primary" size="small">
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              aria-label={`Edit post: ${post.title}`}
+            >
               Edit
             </Button>
           </Link>
           <Link href={`/admin/blog/${post.id}/delete`} underline="none">
-            <Button variant="contained" color="secondary" size="small">
+            <Button
+              variant="contained"
+              color="secondary"
+              size="small"
+              aria-label={`Delete post: ${post.title}`}
+            >
               Delete
             </Button>
           </Link>
