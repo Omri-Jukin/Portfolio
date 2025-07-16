@@ -11,11 +11,15 @@ export const StyledThemeProvider = styled(Box)(({ theme }) => ({
   gap: theme.spacing(2),
   backgroundColor: "transparent",
   color: "inherit",
-  zIndex: 1000,
 }));
 
 export const AppBar = styled(MuiAppBar)(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.divider}`,
+  height: "4rem",
+  zIndex: 1100,
+  backgroundColor:
+    theme.palette.mode === "dark" ? "rgba(0,0,0,0.7)" : "rgba(255,255,255,0.7)", // or use theme.palette.background.paper with alpha
+  backdropFilter: "blur(8px)", // <-- this line
 }));
 
 export const Toolbar = styled(MuiToolbar)({

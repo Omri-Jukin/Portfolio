@@ -6,9 +6,9 @@ export const baseTheme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: "#1976d2",
-      light: "#42a5f5",
-      dark: "#1565c0",
+      main: "#1f1f2f",
+      light: "#33334d",
+      dark: "#1f1f2f",
       contrastText: "#ffffff",
     },
     secondary: {
@@ -42,8 +42,8 @@ export const baseTheme = createTheme({
       paper: "#ffffff",
     },
     text: {
-      primary: "#212121",
-      secondary: "#757575",
+      primary: "#1f1f2f",
+      secondary: "#33334d",
     },
   },
   typography: {

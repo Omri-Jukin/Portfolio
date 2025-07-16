@@ -1,12 +1,14 @@
 "use client";
-import { Box, Breadcrumbs, Link } from "@mui/material";
+import { Box } from "@mui/material";
 import { useState, useEffect } from "react";
-import DarkModeToggle from "#/Components/DarkModeToggle/DarkModeToggle";
-import LanguageSwitcher from "#/Components/LanguageSwitcher/LanguageSwitcher";
+import DarkModeToggle from "~/DarkModeToggle/DarkModeToggle";
+import LanguageSwitcher from "~/LanguageSwitcher/LanguageSwitcher";
+import { Typography } from "~/Typography";
 import { usePathname } from "next/navigation";
 import { HeaderProps } from "./Header.type";
-import AnimationSwitcher from "#/Components/AnimationSwitcher";
+import AnimationSwitcher from "~/AnimationSwitcher";
 import { AppBar, Toolbar } from "./Header.style";
+import Image from "next/image";
 
 export default function Header({
   animationType,
@@ -49,10 +51,13 @@ export default function Header({
   }
 
   return (
-    <AppBar position="static" color="transparent" elevation={0} dir="ltr">
+    <AppBar position="fixed" color="transparent" elevation={0} dir="ltr">
       <Toolbar>
-        {/* Navigation: Back + Breadcrumbs */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Image src="/logo.png" alt="Logo" width={48} height={48} />
+          <Typography variant="h6">Omri's Dev Portfolio and Blog</Typography>
+        </Box>
+        {/* <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           <Breadcrumbs>
             {breadcrumbs.map((crumb, idx) =>
               idx < breadcrumbs.length - 1 ? (
@@ -74,7 +79,7 @@ export default function Header({
               )
             )}
           </Breadcrumbs>
-        </Box>
+        </Box> */}
         {/* Toggles: DarkMode + AnimationSwitcher + Language */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           <DarkModeToggle onToggle={onThemeToggle} isDark={isDarkMode} />

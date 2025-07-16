@@ -2,11 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import { baseTheme } from "#/theme/theme";
-import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
-import { Header } from "#/Components/Header";
-import AnimatedBackground, {
-  AnimationType,
-} from "#/Components/AnimatedBackground";
+import { createTheme, ThemeProvider, CssBaseline, Box } from "@mui/material";
+import { Header } from "~/Header";
+import AnimatedBackground, { AnimationType } from "~/AnimatedBackground";
 import Footer from "./Footer";
 import { useLocale } from "next-intl";
 import createEmotionCache from "../mui-emotion-cache";
@@ -76,7 +74,7 @@ export default function ClientLayout({
           onThemeToggle={handleThemeToggle}
         />
         <AnimatedBackground animationType={animationType} />
-        {children}
+        <Box sx={{ paddingTop: "4rem" }}>{children}</Box>
         <Footer />
       </ThemeProvider>
     </CacheProvider>

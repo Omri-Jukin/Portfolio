@@ -9,7 +9,7 @@ import {
   Work as WorkIcon,
   Description as ResumeIcon,
   Article as BlogIcon,
-  Launch as LaunchIcon,
+  Token as TokenIcon,
 } from "@mui/icons-material";
 import MotionWrapper from "~/MotionWrapper";
 import {
@@ -26,6 +26,8 @@ import {
   StyledSectionDescription,
 } from "~/HomePage/HomePage.style";
 import { PortfolioSection } from "~/HomePage";
+import { IconButton } from "~/Card";
+import { Logo } from "#/public/logo";
 
 export default function HomePage() {
   const t = useTranslations("home");
@@ -95,19 +97,19 @@ export default function HomePage() {
         sx={{ pt: 8, pb: 6, position: "relative", zIndex: 1 }}
       >
         <StyledHeroContainer>
-          <MotionWrapper variant="fadeIn" duration={0.8} delay={0.2}>
+          <MotionWrapper variant="fadeIn" duration={0.5} delay={0.2}>
             <StyledHeroTitle variant="h2" gutterBottom>
               {t("hero.title")}
             </StyledHeroTitle>
           </MotionWrapper>
 
-          <MotionWrapper variant="slideUp" duration={0.8} delay={0.4}>
+          <MotionWrapper variant="slideUp" duration={0.5} delay={0.4}>
             <StyledHeroDescription variant="h5" color="text.secondary">
               {t("hero.description")}
             </StyledHeroDescription>
           </MotionWrapper>
 
-          <MotionWrapper variant="slideUp" duration={0.8} delay={0.6}>
+          <MotionWrapper variant="slideUp" duration={0.5} delay={0.6}>
             <StyledButtonContainer>
               <StyledHeroButton
                 href="/about"
@@ -136,7 +138,7 @@ export default function HomePage() {
             <MotionWrapper
               key={section.title}
               variant="slideUp"
-              duration={0.6}
+              duration={0.5}
               delay={index * 0.1}
               style={{
                 margin: "2vh 0",
@@ -159,7 +161,9 @@ export default function HomePage() {
                       <StyledSectionIcon
                         sx={{ color: `${section.color}.main` }}
                       >
-                        {renderIcon(section.untranslatedSection)}
+                        <IconButton>
+                          <Logo />
+                        </IconButton>
                       </StyledSectionIcon>
                     </MotionWrapper>
                     <StyledSectionTitle variant="h6">
@@ -180,7 +184,9 @@ export default function HomePage() {
                     href={section.href}
                     variant="outlined"
                     size="small"
-                    endIcon={<LaunchIcon />}
+                    endIcon={
+                      <TokenIcon sx={{ color: `${section.color}.main` }} />
+                    }
                     aria-label={t(
                       `hero.cards.${section.untranslatedSection}.button`
                     )}

@@ -35,6 +35,8 @@ export const StyledButtonContainer = styled(Box)(({ theme }) => ({
 }));
 
 export const StyledHeroButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.text.primary,
+  backgroundColor: theme.palette.background.paper,
   paddingInline: theme.spacing(4),
   paddingTop: theme.spacing(1.5),
   paddingBottom: theme.spacing(1.5),
@@ -46,6 +48,26 @@ export const StyledHeroButton = styled(Button)(({ theme }) => ({
   "& .MuiButton-startIcon": {
     marginRight: theme.direction === "ltr" ? theme.spacing(1.5) : 0,
     marginLeft: theme.direction === "rtl" ? theme.spacing(1.5) : 0,
+  },
+  "@keyframes spin": {
+    "0%": {
+      transform: "rotate(0deg) scale(1)",
+    },
+    "100%": {
+      transform: "rotate(360deg) scale(1.2)",
+    },
+  },
+  "&:hover": {
+    "& .MuiButton-endIcon": {
+      transform: "rotate(360deg)",
+      transition: "transform 0.5s ease-in-out",
+      animation: "spin 0.5s linear infinite",
+      animationDirection: "alternate",
+    },
+    transform: "translateY(-2px)",
+    boxShadow: theme.shadows[6],
+    backgroundColor: theme.palette.background.paper,
+    color: theme.palette.text.secondary,
   },
 }));
 

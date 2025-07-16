@@ -2,7 +2,7 @@ import React from "react";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
-import { AnimationType } from "../AnimatedBackground";
+import { AnimationType } from "~/AnimatedBackground";
 
 interface AnimationSwitcherProps {
   animationType: AnimationType;
@@ -17,12 +17,12 @@ const AnimationSwitcher: React.FC<AnimationSwitcherProps> = ({
     let nextType: AnimationType;
     switch (animationType) {
       case "torusKnot":
-        nextType = "sphere";
-        break;
-      case "sphere":
         nextType = "stars";
         break;
       case "stars":
+        nextType = "torus";
+        break;
+      case "torus":
         nextType = "torusKnot";
         break;
       default:

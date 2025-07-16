@@ -1,11 +1,13 @@
-import React, { useRef, useState, useCallback, useEffect } from "react";
+import React, { useRef } from "react";
+import { useTheme } from "@mui/material/styles";
 import { Canvas, useFrame } from "@react-three/fiber";
 import {
-  OrbitControls,
+  PresentationControls,
   TorusKnot,
-  Text,
+  Torus,
   Stars,
-  Image,
+  Plane,
+  Polyhedron,
 } from "@react-three/drei";
 import * as THREE from "three";
 import {
@@ -15,65 +17,64 @@ import {
 
 const AnimatedObject: React.FC<{
   type: AnimationType;
-  mouse: { x: number; y: number };
-  clicked: boolean;
-}> = ({ type, mouse, clicked }) => {
+  spinning: boolean;
+}> = ({ type, spinning }) => {
   const meshRef = useRef<THREE.Mesh>(null);
-  const groupRef = useRef<THREE.Group>(null);
-  const targetRotation = useRef({ x: 0, y: 0 });
-  const targetScale = useRef(1);
-
-  useFrame((state) => {
-    const currentRef = type === "sphere" ? groupRef.current : meshRef.current;
-
-    if (currentRef) {
-      // Smooth rotation following mouse with lerp
-      targetRotation.current.x += mouse.y * 0.02;
-      targetRotation.current.y += mouse.x * 0.02;
-
-      // Apply smooth interpolation
-      currentRef.rotation.x +=
-        (targetRotation.current.x - currentRef.rotation.x) * 0.05;
-      currentRef.rotation.y +=
-        (targetRotation.current.y - currentRef.rotation.y) * 0.05;
-
-      // Add subtle continuous rotation
+  const themeMode = useTheme().palette.mode;
+  const darkColor = "#325663";
+  const lightColor = "#632024";
+  // Only animate if spinning is true
+  useFrame(() => {
+    const currentRef = meshRef.current;
+    if (currentRef && spinning) {
       currentRef.rotation.x += 0.005;
       currentRef.rotation.y += 0.005;
-
-      // Smooth scale animation on click
-      targetScale.current = clicked ? 1.3 : 1;
-      const scaleDiff = targetScale.current - currentRef.scale.x;
-      currentRef.scale.x += scaleDiff * 0.1;
-      currentRef.scale.y += scaleDiff * 0.1;
-      currentRef.scale.z += scaleDiff * 0.1;
-
-      // Add subtle floating animation
-      currentRef.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
     }
   });
 
   switch (type) {
     case "torusKnot":
       return (
-        <TorusKnot ref={meshRef} args={[2, 0.7, 100, 16]}>
+        <TorusKnot ref={meshRef} args={[5.5, 0.2, 200, 100]}>
           <meshStandardMaterial
-            color="#00bcd4"
-            transparent
-            opacity={0.25}
-            metalness={0.5}
+            color={themeMode === "dark" ? darkColor : lightColor}
+            emissive={themeMode === "dark" ? darkColor : lightColor}
+            emissiveIntensity={0.8}
+            metalness={1}
             roughness={0.2}
+            transparent
+            opacity={1}
           />
         </TorusKnot>
       );
-    case "sphere":
+    case "polyhedron":
       return (
-        <Image
-          url="/logo.png"
-          position={[0, 0, 0]}
-          scale={[1, 1]}
-          rotation={[0, 0, 0]}
-        />
+        <Polyhedron
+          ref={meshRef}
+          args={[
+            // vertices array
+            [
+              -1, 0, 1, 0, -1, -1, 0, 1, -1, 0, 0, -1, 0, 1, 1, 0, -1, -1, 0, 1,
+              -1, 1, 0, -1, 1, 0, 1, -1, 0, -1, -1, 0, 1,
+            ],
+            // indices array
+            [
+              0, 11, 5, 0, 5, 1, 0, 1, 7, 0, 7, 10, 0, 10, 11, 1, 5, 9, 5, 11,
+              4, 11, 10, 2, 10, 7, 6, 7, 1, 8, 3, 9, 4, 3, 4, 2, 3, 2, 6, 3, 6,
+              8, 3, 8, 9, 4, 9, 5, 2, 4, 11, 6, 2, 10, 8, 6, 7, 9, 8, 1,
+            ],
+          ]}
+        >
+          <meshStandardMaterial
+            color={themeMode === "dark" ? darkColor : lightColor}
+            emissive={themeMode === "dark" ? darkColor : lightColor}
+            emissiveIntensity={0.8}
+            metalness={0.8}
+            roughness={0.2}
+            transparent
+            opacity={1}
+          />
+        </Polyhedron>
       );
     case "stars":
       return <Stars />;
@@ -85,47 +86,8 @@ const AnimatedObject: React.FC<{
 const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
   animationType,
 }) => {
-  const [mouse, setMouse] = useState({ x: 0, y: 0 });
-  const [clicked, setClicked] = useState(false);
-  const [isHovering, setIsHovering] = useState(false);
-  const mouseRef = useRef({ x: 0, y: 0 });
-  const rafRef = useRef<number>(0);
-
-  // Throttled mouse move handler for better performance
-  const handlePointerMove = useCallback(
-    (e: React.PointerEvent<HTMLDivElement>) => {
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
-
-      rafRef.current = requestAnimationFrame(() => {
-        // Normalize mouse position to [-1, 1]
-        const x = (e.clientX / window.innerWidth) * 2 - 1;
-        const y = (e.clientY / window.innerHeight) * 2 - 1;
-
-        // Smooth mouse tracking
-        mouseRef.current.x += (x - mouseRef.current.x) * 0.1;
-        mouseRef.current.y += (y - mouseRef.current.y) * 0.1;
-
-        setMouse({ x: mouseRef.current.x, y: mouseRef.current.y });
-      });
-    },
-    []
-  );
-
-  const handlePointerEnter = () => setIsHovering(true);
-  const handlePointerLeave = () => setIsHovering(false);
-  const handlePointerDown = () => setClicked(true);
-  const handlePointerUp = () => setClicked(false);
-
-  // Cleanup RAF on unmount
-  useEffect(() => {
-    return () => {
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
-    };
-  }, []);
+  // Track whether the user is interacting (grabbing)
+  const [spinning, setSpinning] = React.useState(true);
 
   return (
     <div
@@ -136,38 +98,39 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
         width: "100vw",
         height: "100vh",
         zIndex: -1,
-        cursor: isHovering ? "pointer" : "default",
       }}
-      onPointerMove={handlePointerMove}
-      onPointerEnter={handlePointerEnter}
-      onPointerLeave={handlePointerLeave}
-      onPointerDown={handlePointerDown}
-      onPointerUp={handlePointerUp}
     >
       <Canvas
         camera={{ position: [0, 0, 6], fov: 60 }}
         style={{ background: "transparent" }}
       >
-        <ambientLight intensity={0.8} />
-        <directionalLight
-          position={[2, 2, 2]}
-          intensity={1.2}
-          color={animationType === "torusKnot" ? "#00bcd4" : "#ff9800"}
-        />
-        <pointLight
-          position={[-2, -2, -2]}
-          intensity={0.5}
-          color={animationType === "torusKnot" ? "#00bcd4" : "#ff9800"}
-        />
-        <AnimatedObject type={animationType} mouse={mouse} clicked={clicked} />
-        <OrbitControls
-          enableZoom={false}
-          enablePan={false}
-          autoRotate={!isHovering}
-          autoRotateSpeed={animationType === "sphere" ? 5 : 1}
-          enableDamping
-          dampingFactor={0.05}
-        />
+        <PresentationControls
+          global
+          polar={[-Math.PI / 3, Math.PI / 3]}
+          azimuth={[-Math.PI / 1.4, Math.PI / 2]}
+          enabled
+          cursor
+          snap
+          rotation={[0, 0, 0]}
+        >
+          <ambientLight intensity={0.8} />
+          <directionalLight
+            position={[2, 2, 2]}
+            intensity={1.2}
+            color={"#00bcd4"}
+          />
+          <pointLight
+            position={[-2, -2, -2]}
+            intensity={0.5}
+            color={"#00bcd4"}
+          />
+          <group
+            onPointerDown={() => setSpinning(false)}
+            onPointerUp={() => setSpinning(true)}
+          >
+            <AnimatedObject type={animationType} spinning={spinning} />
+          </group>
+        </PresentationControls>
       </Canvas>
     </div>
   );
