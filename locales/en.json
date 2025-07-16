@@ -1,4 +1,8 @@
 {
+  "metadata": {
+    "title": "From Atoms to Applications",
+    "description": "No gods, just logic. No bugs, just features."
+  },
   "common": {
     "language": "Language",
     "home": "Home",
@@ -44,8 +48,8 @@
   },
   "home": {
     "hero": {
-      "title": "Welcome to my portfolio",
-      "description": "I'm a passionate developer who loves creating amazing web experiences focused on programming and developing data-driven systems and user experiences.",
+      "title": "From Atoms to Applications",
+      "description": "No gods, just logic. No bugs, just features.",
       "about": "About me",
       "contact": "Contact",
       "cards": {

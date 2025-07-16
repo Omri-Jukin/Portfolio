@@ -1,4 +1,4 @@
-import Box from "@mui/material/Box";
+import { Box, AppBar as MuiAppBar, Toolbar as MuiToolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 export const StyledThemeProvider = styled(Box)(({ theme }) => ({
@@ -12,4 +12,16 @@ export const StyledThemeProvider = styled(Box)(({ theme }) => ({
   backgroundColor: "transparent",
   color: "inherit",
   zIndex: 1000,
+}));
+
+export const AppBar = styled(MuiAppBar)(({ theme }) => ({
+  borderBottom: `1px solid ${theme.palette.divider}`,
+}));
+
+export const Toolbar = styled(MuiToolbar)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  minHeight: 64,
+  px: 2,
 }));

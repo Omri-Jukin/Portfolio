@@ -1,4 +1,8 @@
 {
+  "metadata": {
+    "title": "De atomes à applications",
+    "description": "Pas de dieux, juste la logique. Pas de bugs, juste des fonctionnalités."
+  },
   "common": {
     "language": "Langue",
     "home": "Accueil",
@@ -44,8 +48,8 @@
   },
   "home": {
     "hero": {
-      "title": "Bienvenue dans mon portfolio",
-      "description": "Je suis un développeur passionné qui aime créer des expériences web extraordinaires.",
+      "title": "De atomes à applications",
+      "description": "Pas de dieux, juste la logique. Pas de bugs, juste des fonctionnalités.",
       "about": "À propos de moi",
       "contact": "Contact",
       "cards": {

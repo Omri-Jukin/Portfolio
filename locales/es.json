@@ -1,4 +1,8 @@
 {
+  "metadata": {
+    "title": "De átomos a aplicaciones",
+    "description": "No dioses, solo lógica. No errores, solo características."
+  },
   "common": {
     "language": "Idioma",
     "home": "Inicio",
@@ -44,8 +48,8 @@
   },
   "home": {
     "hero": {
-      "title": "Bienvenido a mi portafolio",
-      "description": "Soy un desarrollador apasionado que ama crear experiencias web increíbles enfocadas en la programación y desarrollo de sistemas basados en datos y experiencias de usuario. Actualmente trabajo como ingeniero de software en una startup llamada \"The Startup\".",
+      "title": "De átomos a aplicaciones",
+      "description": "No dioses, solo lógica. No errores, solo características.",
       "about": "Acerca de mí",
       "contact": "Contacto",
       "cards": {

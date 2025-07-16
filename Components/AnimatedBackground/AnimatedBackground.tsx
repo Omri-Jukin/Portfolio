@@ -2,12 +2,10 @@ import React, { useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, TorusKnot, Sphere, Stars } from "@react-three/drei";
 import * as THREE from "three";
-
-export type AnimationType = "torusKnot" | "sphere" | "stars";
-
-interface AnimatedBackgroundProps {
-  animationType: AnimationType;
-}
+import {
+  AnimationType,
+  AnimatedBackgroundProps,
+} from "./AnimatedBackground.type";
 
 const AnimatedObject: React.FC<{
   type: AnimationType;

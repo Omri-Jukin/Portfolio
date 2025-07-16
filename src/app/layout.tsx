@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Omri's Portfolio",
-  description:
-    "Learn a little about me, my background, skills, and professional journey",
+  title: "From Atoms to Applications",
+  description: "No gods, just logic. No bugs, just features.",
 };
 
 export default function RootLayout({
