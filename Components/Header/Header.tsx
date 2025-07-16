@@ -13,7 +13,6 @@ export default function Header({
   onAnimationTypeChange,
   isDarkMode = false,
   onThemeToggle,
-  isRTL = false,
 }: HeaderProps) {
   const [isClient, setIsClient] = useState(false);
   const [mounted, setMounted] = useState(false);

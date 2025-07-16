@@ -18,10 +18,10 @@ export const AppBar = styled(MuiAppBar)(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.divider}`,
 }));
 
-export const Toolbar = styled(MuiToolbar)(({ theme }) => ({
+export const Toolbar = styled(MuiToolbar)({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
   minHeight: 64,
   px: 2,
-}));
+});

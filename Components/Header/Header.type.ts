@@ -5,7 +5,6 @@ export interface HeaderProps {
   animationType: AnimationType;
   onAnimationTypeChange: (type: AnimationType) => void;
   onThemeToggle?: (isDark: boolean) => void;
-  isRTL?: boolean;
 }
 
 // Module augmentation to add custom variants

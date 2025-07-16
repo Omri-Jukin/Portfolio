@@ -74,7 +74,6 @@ export default function ClientLayout({
           onAnimationTypeChange={setAnimationType}
           isDarkMode={isDarkMode}
           onThemeToggle={handleThemeToggle}
-          isRTL={isRTL}
         />
         <AnimatedBackground animationType={animationType} />
         {children}
