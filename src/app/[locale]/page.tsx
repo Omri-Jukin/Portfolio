@@ -6,9 +6,6 @@ import { useTranslations } from "next-intl";
 import {
   Person as PersonIcon,
   Email as ContactIcon,
-  Work as WorkIcon,
-  Description as ResumeIcon,
-  Article as BlogIcon,
   Token as TokenIcon,
 } from "@mui/icons-material";
 import MotionWrapper from "~/MotionWrapper";
@@ -31,24 +28,6 @@ import { Logo } from "#/public/logo";
 
 export default function HomePage() {
   const t = useTranslations("home");
-
-  // Function to render icons based on section type
-  const renderIcon = (sectionType: string) => {
-    switch (sectionType) {
-      case "about":
-        return <PersonIcon />;
-      case "career":
-        return <WorkIcon />;
-      case "resume":
-        return <ResumeIcon />;
-      case "blog":
-        return <BlogIcon />;
-      case "contact":
-        return <ContactIcon />;
-      default:
-        return null;
-    }
-  };
 
   const portfolioSections: PortfolioSection[] = [
     {

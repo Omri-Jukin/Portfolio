@@ -48,7 +48,7 @@ export const StyledCardDate = styled(Typography)({
   opacity: 0.8,
 });
 
-export const IconButton = styled(MuiIconButton)(({ theme }) => ({
+export const IconButton = styled(MuiIconButton)({
   width: "fit-content",
   height: "fit-content",
   maxWidth: "2rem",
@@ -72,4 +72,4 @@ export const IconButton = styled(MuiIconButton)(({ theme }) => ({
     animation: "spin 1s linear infinite",
     animationDirection: "alternate",
   },
-}));
+});
