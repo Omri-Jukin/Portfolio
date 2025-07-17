@@ -37,7 +37,7 @@ export default function Header({
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           <Image src="/logo.png" alt="Logo" width={48} height={48} />
           <Typography variant="h6">
-            Omri&apos;s Dev Portfolio and Blog
+            {"Omri Jukin<FullStack & Rationalist>"}
           </Typography>
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>

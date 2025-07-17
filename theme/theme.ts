@@ -1,5 +1,50 @@
 import { createTheme } from "@mui/material/styles";
 
+declare module "@mui/material/styles" {
+  interface Theme {
+    gradients: {
+      warm: string;
+      cool: string;
+      neutral: string;
+      dark: string;
+    };
+    animations: {
+      bobbing: string;
+      rotating: string;
+      hover: string;
+      shadow: string;
+    };
+  }
+  // allow configuration using `createTheme`
+  interface ThemeOptions {
+    gradients?: {
+      warm?: string;
+      cool?: string;
+      neutral?: string;
+      dark?: string;
+    };
+    animations?: {
+      bobbing?: string;
+      rotating?: string;
+      hover?: string;
+      shadow?: string;
+    };
+  }
+  // Palette and PaletteOptions augmentation as you already have
+  interface Palette {
+    warm: { primary: string; secondary: string; accent: string };
+    cool: { primary: string; secondary: string; accent: string };
+    neutral: { primary: string; secondary: string; accent: string };
+    dark: { primary: string; secondary: string; accent: string };
+  }
+  interface PaletteOptions {
+    warm?: { primary?: string; secondary?: string; accent?: string };
+    cool?: { primary?: string; secondary?: string; accent?: string };
+    neutral?: { primary?: string; secondary?: string; accent?: string };
+    dark?: { primary?: string; secondary?: string; accent?: string };
+  }
+}
+
 // Export a static base theme (light mode, LTR, default palette)
 export const baseTheme = createTheme({
   direction: "ltr",
@@ -45,6 +90,38 @@ export const baseTheme = createTheme({
       primary: "#1f1f2f",
       secondary: "#33334d",
     },
+    warm: {
+      primary: "#fcb69f",
+      secondary: "#fbc2eb",
+      accent: "#a1c4fd",
+    },
+    cool: {
+      primary: "#c2e9fb",
+      secondary: "#42a5f5",
+      accent: "#64b5f6",
+    },
+    neutral: {
+      primary: "#fbc2eb",
+      secondary: "#fcb69f",
+      accent: "#c2e9fb",
+    },
+    dark: {
+      primary: "#1f1f2f",
+      secondary: "#33334d",
+      accent: "#55556d",
+    },
+  },
+  gradients: {
+    warm: "linear-gradient(to right, #fcb69f, #fbc2eb, #a1c4fd)",
+    cool: "linear-gradient(to right, #c2e9fb, #42a5f5, #64b5f6)",
+    neutral: "linear-gradient(to right, #fbc2eb, #fcb69f, #c2e9fb)",
+    dark: "linear-gradient(to right, #1f1f2f, #33334d, #55556d)",
+  },
+  animations: {
+    bobbing: "0.5s ease-in-out infinite normal",
+    rotating: "0.5s linear infinite normal",
+    hover: "0.2s ease-in-out normal",
+    shadow: "0 4px 12px rgba(0, 0, 0, 0.15) inset normal",
   },
   typography: {
     fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',

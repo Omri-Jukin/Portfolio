@@ -10,21 +10,23 @@ import {
 } from "@mui/icons-material";
 import MotionWrapper from "~/MotionWrapper";
 import {
-  StyledPageContainer,
-  StyledHeroContainer,
-  StyledHeroTitle,
-  StyledHeroDescription,
-  StyledButtonContainer,
-  StyledHeroButton,
-  StyledSectionCard,
-  StyledIconContainer,
-  StyledSectionIcon,
-  StyledSectionTitle,
-  StyledSectionDescription,
-} from "~/HomePage/HomePage.style";
-import { PortfolioSection } from "~/HomePage";
+  PageContainer,
+  HeroContainer,
+  HeroTitle,
+  HeroDescription,
+  ButtonContainer,
+  HeroButton,
+  SectionCard,
+  IconContainer,
+  SectionIcon,
+  SectionTitle,
+  SectionDescription,
+  CardsButton,
+} from "~/Common";
+import AnimatedText from "~/AnimatedText";
+import { PortfolioSection } from "~/Common";
 import { IconButton } from "~/Card";
-import { Logo } from "#/public/logo";
+import { Logo } from "^/logo";
 
 export default function HomePage() {
   const t = useTranslations("home");
@@ -68,29 +70,31 @@ export default function HomePage() {
   ];
 
   return (
-    <StyledPageContainer
+    <PageContainer
       style={{ position: "relative", minHeight: "100vh", overflow: "hidden" }}
     >
       <Container
         maxWidth="lg"
         sx={{ pt: 8, pb: 6, position: "relative", zIndex: 1 }}
       >
-        <StyledHeroContainer>
+        <HeroContainer>
           <MotionWrapper variant="fadeIn" duration={0.5} delay={0.2}>
-            <StyledHeroTitle variant="h2" gutterBottom>
-              {t("hero.title")}
-            </StyledHeroTitle>
+            <HeroTitle variant="h2" gutterBottom>
+              <AnimatedText type="scale" length={t("hero.title").length}>
+                {t("hero.title")}
+              </AnimatedText>
+            </HeroTitle>
           </MotionWrapper>
 
           <MotionWrapper variant="slideUp" duration={0.5} delay={0.4}>
-            <StyledHeroDescription variant="h5" color="text.secondary">
+            <HeroDescription variant="h5" color="text.secondary">
               {t("hero.description")}
-            </StyledHeroDescription>
+            </HeroDescription>
           </MotionWrapper>
 
           <MotionWrapper variant="slideUp" duration={0.5} delay={0.6}>
-            <StyledButtonContainer>
-              <StyledHeroButton
+            <ButtonContainer>
+              <HeroButton
                 href="/about"
                 variant="contained"
                 size="large"
@@ -98,8 +102,8 @@ export default function HomePage() {
                 aria-label={t("hero.cards.about.button")}
               >
                 {t("hero.cards.about.button")}
-              </StyledHeroButton>
-              <StyledHeroButton
+              </HeroButton>
+              <HeroButton
                 href="/contact"
                 variant="contained"
                 size="large"
@@ -107,10 +111,10 @@ export default function HomePage() {
                 aria-label={t("hero.cards.contact.button")}
               >
                 {t("hero.cards.contact.button")}
-              </StyledHeroButton>
-            </StyledButtonContainer>
+              </HeroButton>
+            </ButtonContainer>
           </MotionWrapper>
-        </StyledHeroContainer>
+        </HeroContainer>
 
         {portfolioSections.map((section, index: number) => {
           return (
@@ -123,43 +127,36 @@ export default function HomePage() {
                 margin: "2vh 0",
               }}
             >
-              <StyledSectionCard
+              <SectionCard
                 sx={{
-                  background: "rgba(255,255,255,0.0)",
+                  background: "transparent",
                   boxShadow: "none",
                   border: "none",
                 }}
               >
                 <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                  <StyledIconContainer>
+                  <IconContainer>
                     <MotionWrapper
                       variant="scale"
                       duration={0.5}
                       delay={index * 0.1}
                     >
-                      <StyledSectionIcon
-                        sx={{ color: `${section.color}.main` }}
-                      >
+                      <SectionIcon sx={{ color: `${section.color}.main` }}>
                         <IconButton>
                           <Logo />
                         </IconButton>
-                      </StyledSectionIcon>
+                      </SectionIcon>
                     </MotionWrapper>
-                    <StyledSectionTitle variant="h6">
-                      {section.title}
-                    </StyledSectionTitle>
-                  </StyledIconContainer>
+                    <SectionTitle variant="h6">{section.title}</SectionTitle>
+                  </IconContainer>
 
-                  <StyledSectionDescription
-                    variant="body2"
-                    color="text.secondary"
-                  >
+                  <SectionDescription variant="body2" color="text.secondary">
                     {section.description}
-                  </StyledSectionDescription>
+                  </SectionDescription>
                 </CardContent>
 
                 <Box sx={{ p: 3, pt: 0 }}>
-                  <StyledHeroButton
+                  <CardsButton
                     href={section.href}
                     variant="outlined"
                     size="small"
@@ -171,13 +168,13 @@ export default function HomePage() {
                     )}
                   >
                     {t(`hero.cards.${section.untranslatedSection}.button`)}
-                  </StyledHeroButton>
+                  </CardsButton>
                 </Box>
-              </StyledSectionCard>
+              </SectionCard>
             </MotionWrapper>
           );
         })}
       </Container>
-    </StyledPageContainer>
+    </PageContainer>
   );
 }

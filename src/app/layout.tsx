@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "From Atoms to Applications",
+  title: "Omri Jukin",
   description: "No gods, just logic. No bugs, just features.",
 };
 
