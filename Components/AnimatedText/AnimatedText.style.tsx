@@ -1,6 +1,6 @@
 import { styled } from "@mui/material/styles";
 import { Box, Typography } from "@mui/material";
-import type { AnimatedTextProps } from "./AnimatedText.type";
+import type { AnimatedTextProps, AnimationTypes } from "./AnimatedText.type";
 
 // Container with background and grid
 export const AnimatedTextContainer = styled(Box, {
@@ -92,43 +92,44 @@ export const StyledAnimatedText = styled(Typography, {
     };
 
     // Animation variants using props
-    const types: { [key: string]: any } = {
-      scale: (s: number = 1.5) => ({
+
+    const types: AnimationTypes = {
+      scale: (s = 1.5) => ({
         "&:hover": {
           transform: `scale(${s})`,
         },
       }),
-      fade: (o: number = 0.3) => ({
+      fade: (o = 0.3) => ({
         "&:hover": {
           opacity: o,
         },
       }),
-      scaleUp: (s: number = 2.5) => ({
+      scaleUp: (s = 2.5) => ({
         "&:hover": {
           transform: `scale(${s})`,
         },
       }),
-      scaleDown: (s: number = 0.5) => ({
+      scaleDown: (s = 0.5) => ({
         "&:hover": {
           transform: `scale(${s})`,
         },
       }),
-      fadeIn: (o: number = 1) => ({
+      fadeIn: (o = 1) => ({
         "&:hover": {
           opacity: o,
         },
       }),
-      fadeOut: (o: number = 0) => ({
+      fadeOut: (o = 0) => ({
         "&:hover": {
           opacity: o,
         },
       }),
-      slideUp: (y: number = -20) => ({
+      slideUp: (y = -20) => ({
         "&:hover": {
           transform: `translateY(${y}px)`,
         },
       }),
-      slideDown: (y: number = 20) => ({
+      slideDown: (y = 20) => ({
         "&:hover": {
           transform: `translateY(${y}px)`,
         },
