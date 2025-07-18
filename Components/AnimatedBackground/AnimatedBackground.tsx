@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import { Canvas, useFrame } from "@react-three/fiber";
 import {
@@ -12,6 +12,7 @@ import {
   AnimationType,
   AnimatedBackgroundProps,
 } from "./AnimatedBackground.type";
+import DNAHelix from "../DNAHelix/DNAHelix";
 
 const AnimatedObject: React.FC<{
   type: AnimationType;
@@ -31,6 +32,8 @@ const AnimatedObject: React.FC<{
   });
 
   switch (type) {
+    case "dna":
+      return <DNAHelix spinning={spinning} />;
     case "torusKnot":
       return (
         <TorusKnot ref={meshRef} args={[5.5, 0.2, 200, 100]}>
@@ -85,7 +88,17 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
   animationType,
 }) => {
   // Track whether the user is interacting (grabbing)
-  const [spinning, setSpinning] = React.useState(true);
+  const [spinning, setSpinning] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  // Prevent hydration issues
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null; // Return nothing during SSR
+  }
 
   return (
     <div
@@ -99,36 +112,62 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
       }}
     >
       <Canvas
-        camera={{ position: [0, 0, 6], fov: 60 }}
+        camera={{
+          position: [0, 0, 10],
+          fov: 75,
+        }}
         style={{ background: "transparent" }}
       >
-        <PresentationControls
-          global
-          polar={[-Math.PI / 3, Math.PI / 3]}
-          azimuth={[-Math.PI / 1.4, Math.PI / 2]}
-          enabled
-          cursor
-          snap
-          rotation={[0, 0, 0]}
-        >
-          <ambientLight intensity={0.8} />
-          <directionalLight
-            position={[2, 2, 2]}
-            intensity={1.2}
-            color={"#00bcd4"}
-          />
-          <pointLight
-            position={[-2, -2, -2]}
-            intensity={0.5}
-            color={"#00bcd4"}
-          />
-          <group
-            onPointerDown={() => setSpinning(false)}
-            onPointerUp={() => setSpinning(true)}
-          >
+        {animationType === "dna" ? (
+          // For DNA/helix, optimized lighting for right-side positioning
+          <>
+            <ambientLight intensity={0.5} />
+            <directionalLight
+              position={[15, 8, 10]} // Positioned to light the right side
+              intensity={0.8}
+              color={"#ffffff"}
+            />
+            <pointLight
+              position={[10, 5, 5]} // Additional light for the DNA area
+              intensity={0.4}
+              color={"#E3F2FD"}
+            />
+            <pointLight
+              position={[-5, -5, -5]} // Subtle fill light from left
+              intensity={0.2}
+              color={"#FFEAA7"}
+            />
             <AnimatedObject type={animationType} spinning={spinning} />
-          </group>
-        </PresentationControls>
+          </>
+        ) : (
+          <PresentationControls
+            global
+            polar={[-Math.PI / 3, Math.PI / 3]}
+            azimuth={[-Math.PI / 1.4, Math.PI / 2]}
+            enabled
+            cursor
+            snap
+            rotation={[0, 0, 0]}
+          >
+            <ambientLight intensity={0.8} />
+            <directionalLight
+              position={[2, 2, 2]}
+              intensity={1.2}
+              color={"#00bcd4"}
+            />
+            <pointLight
+              position={[-2, -2, -2]}
+              intensity={0.5}
+              color={"#00bcd4"}
+            />
+            <group
+              onPointerDown={() => setSpinning(false)}
+              onPointerUp={() => setSpinning(true)}
+            >
+              <AnimatedObject type={animationType} spinning={spinning} />
+            </group>
+          </PresentationControls>
+        )}
       </Canvas>
     </div>
   );

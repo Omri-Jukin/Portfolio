@@ -75,7 +75,8 @@
     "cf-typegen": "wrangler types --env-interface CloudflareEnv env.d.ts",
     "check": "npm run build && tsc",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
+    "dev:turbo": "next dev --turbopack",
     "lint": "next lint",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "start": "next start"
@@ -86,6 +87,7 @@
     "~/*": "./Components/*",
     "$/*": "./lib/*",
     "%/*": "./locales/locale.ts",
-    "^/*": "./public/*"
+    "^/*": "./public/*",
+    "!/*": "./theme/*"
   }
 }

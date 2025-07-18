@@ -6,6 +6,7 @@ export const FooterContainer = styled(Box)(({ theme }: { theme: Theme }) => ({
   backgroundColor: "transparent",
   padding: theme.spacing(6, 2, 2, 2),
   borderTop: `1px solid ${theme.palette.divider}`,
+  flexShrink: 0, // Prevent footer from shrinking
 }));
 
 export const FooterSection = styled(Box)(({ theme }: { theme: Theme }) => ({

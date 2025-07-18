@@ -14,6 +14,9 @@ export default function Header({
   onAnimationTypeChange,
   isDarkMode = false,
   onThemeToggle,
+  isMobile,
+  forceLayout,
+  onLayoutChange,
 }: HeaderProps) {
   const [isClient, setIsClient] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -37,7 +40,7 @@ export default function Header({
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           <Image src="/logo.png" alt="Logo" width={48} height={48} />
           <Typography variant="h6">
-            {"Omri Jukin<FullStack & Rationalist>"}
+            {/* {isMobile ? "Omri Jukin" : "Omri Jukin<FullStack & Rationalist>"} */}
           </Typography>
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>

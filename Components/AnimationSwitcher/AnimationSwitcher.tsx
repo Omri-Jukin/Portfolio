@@ -17,12 +17,18 @@ const AnimationSwitcher: React.FC<AnimationSwitcherProps> = ({
     let nextType: AnimationType;
     switch (animationType) {
       case "torusKnot":
+        nextType = "dna";
+        break;
+      case "dna":
+        nextType = "helix";
+        break;
+      case "helix":
         nextType = "stars";
         break;
       case "stars":
-        nextType = "torus";
+        nextType = "polyhedron";
         break;
-      case "torus":
+      case "polyhedron":
         nextType = "torusKnot";
         break;
       default:
@@ -31,8 +37,25 @@ const AnimationSwitcher: React.FC<AnimationSwitcherProps> = ({
     onChange(nextType);
   };
 
+  const getTooltipText = () => {
+    switch (animationType) {
+      case "torusKnot":
+        return "Switch to DNA helix";
+      case "dna":
+        return "Switch to helix";
+      case "helix":
+        return "Switch to stars";
+      case "stars":
+        return "Switch to polyhedron";
+      case "polyhedron":
+        return "Switch to torus knot";
+      default:
+        return "Change animation background";
+    }
+  };
+
   return (
-    <Tooltip title="Change animation background">
+    <Tooltip title={getTooltipText()}>
       <IconButton
         color="inherit"
         onClick={handleClick}

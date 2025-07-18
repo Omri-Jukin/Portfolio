@@ -20,7 +20,8 @@ export type AnimationType =
   | "extrude"
   | "lathe"
   | "capsule"
-  | "shape";
+  | "shape"
+  | "dna";
 
 export interface AnimatedBackgroundProps {
   animationType: AnimationType;

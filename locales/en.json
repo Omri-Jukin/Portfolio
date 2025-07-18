@@ -77,6 +77,11 @@
           "title": "Contact",
           "description": "Get in touch for opportunities, collaborations, or questions",
           "button": "Contact"
+        },
+        "dna": {
+          "title": "DNA",
+          "description": "Test",
+          "button": "DNA"
         }
       }
     },

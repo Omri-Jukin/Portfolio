@@ -15,6 +15,7 @@ declare module "@mui/material/styles" {
       shadow: string;
     };
   }
+
   // allow configuration using `createTheme`
   interface ThemeOptions {
     gradients?: {
@@ -43,11 +44,49 @@ declare module "@mui/material/styles" {
     neutral?: { primary?: string; secondary?: string; accent?: string };
     dark?: { primary?: string; secondary?: string; accent?: string };
   }
+  interface Breakpoints {
+    xs: true;
+    sm: true;
+    md: true;
+    lg: true;
+    xl: true;
+    ml: true;
+    xxl: true;
+    xxxl: true;
+    xxxxl: true;
+  }
+  interface BreakpointsOptions {
+    values: {
+      xs: number;
+      sm: number;
+      md: number;
+      lg: number;
+      xl: number;
+      ml: number;
+      xxl: number;
+      xxxl: number;
+      xxxxl: number;
+    };
+  }
 }
 
 // Export a static base theme (light mode, LTR, default palette)
 export const baseTheme = createTheme({
   direction: "ltr",
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 640,
+      md: 768,
+      ml: 1024,
+      lg: 1280,
+      xl: 1440,
+      xxl: 1920,
+      xxxl: 2560,
+      xxxxl: 3840,
+    },
+  },
+
   palette: {
     mode: "light",
     primary: {
@@ -129,39 +168,103 @@ export const baseTheme = createTheme({
       fontWeight: 700,
       fontSize: "2.5rem",
       lineHeight: 1.2,
+      "@media (max-width:900px)": {
+        fontSize: "2rem",
+        lineHeight: 1.3,
+      },
+      "@media (max-width:600px)": {
+        fontSize: "1.75rem",
+        lineHeight: 1.4,
+      },
     },
     h2: {
       fontWeight: 600,
       fontSize: "2rem",
       lineHeight: 1.3,
+      "@media (max-width:900px)": {
+        fontSize: "1.75rem",
+        lineHeight: 1.4,
+      },
+      "@media (max-width:600px)": {
+        fontSize: "1.5rem",
+        lineHeight: 1.4,
+      },
     },
     h3: {
       fontWeight: 600,
       fontSize: "1.75rem",
       lineHeight: 1.4,
+      "@media (max-width:900px)": {
+        fontSize: "1.5rem",
+        lineHeight: 1.4,
+      },
+      "@media (max-width:600px)": {
+        fontSize: "1.25rem",
+        lineHeight: 1.5,
+      },
     },
     h4: {
       fontWeight: 600,
       fontSize: "1.5rem",
       lineHeight: 1.4,
+      "@media (max-width:900px)": {
+        fontSize: "1.25rem",
+        lineHeight: 1.5,
+      },
+      "@media (max-width:600px)": {
+        fontSize: "1.125rem",
+        lineHeight: 1.5,
+      },
     },
     h5: {
       fontWeight: 500,
       fontSize: "1.25rem",
       lineHeight: 1.5,
+      "@media (max-width:900px)": {
+        fontSize: "1.125rem",
+        lineHeight: 1.5,
+      },
+      "@media (max-width:600px)": {
+        fontSize: "1rem",
+        lineHeight: 1.5,
+      },
     },
     h6: {
       fontWeight: 500,
       fontSize: "1.125rem",
       lineHeight: 1.5,
+      "@media (max-width:900px)": {
+        fontSize: "1rem",
+        lineHeight: 1.5,
+      },
+      "@media (max-width:600px)": {
+        fontSize: "0.875rem",
+        lineHeight: 1.6,
+      },
     },
     body1: {
       fontSize: "1rem",
       lineHeight: 1.6,
+      "@media (max-width:900px)": {
+        fontSize: "0.875rem",
+        lineHeight: 1.6,
+      },
+      "@media (max-width:600px)": {
+        fontSize: "0.8125rem",
+        lineHeight: 1.6,
+      },
     },
     body2: {
       fontSize: "0.875rem",
       lineHeight: 1.6,
+      "@media (max-width:900px)": {
+        fontSize: "0.8125rem",
+        lineHeight: 1.6,
+      },
+      "@media (max-width:600px)": {
+        fontSize: "0.75rem",
+        lineHeight: 1.6,
+      },
     },
     button: {
       textTransform: "none",
@@ -212,8 +315,14 @@ export const baseTheme = createTheme({
             textTransform: "none",
             boxShadow: "none",
             transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            minHeight: "44px",
+            minWidth: "44px",
             "&:hover": {
               boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+            },
+            "@media (max-width:600px)": {
+              padding: "10px 16px",
+              fontSize: "0.8125rem",
             },
           },
         },
