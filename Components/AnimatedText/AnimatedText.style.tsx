@@ -1,6 +1,6 @@
 import { styled } from "@mui/material/styles";
 import { Box, Typography } from "@mui/material";
-import type { AnimatedTextProps, AnimationTypes } from "./AnimatedText.type";
+import type { AnimatedTextProps, AnimatedTextType } from "./AnimatedText.type";
 
 // Container with background and grid
 export const AnimatedTextContainer = styled(Box, {
@@ -93,83 +93,67 @@ export const StyledAnimatedText = styled(Typography, {
 
     // Animation variants using props
 
-    const types: AnimationTypes = {
-      scale: (s = 1.5) => ({
+    const types = (
+      type: AnimatedTextType | undefined,
+      s?: number,
+      o?: number,
+      y?: number
+    ) => {
+      const scale: number = s || 1.2;
+      const opacity: number = o || 0.3;
+      const translateY: number = y || 0;
+      const scaleUp = (s: number) => ({
         "&:hover": {
           transform: `scale(${s})`,
         },
-      }),
-      fade: (o = 0.3) => ({
-        "&:hover": {
-          opacity: o,
-        },
-      }),
-      scaleUp: (s = 2.5) => ({
+      });
+      const scaleDown = (s: number) => ({
         "&:hover": {
           transform: `scale(${s})`,
         },
-      }),
-      scaleDown: (s = 0.5) => ({
-        "&:hover": {
-          transform: `scale(${s})`,
-        },
-      }),
-      fadeIn: (o = 1) => ({
+      });
+      const fadeIn = (o: number) => ({
         "&:hover": {
           opacity: o,
         },
-      }),
-      fadeOut: (o = 0) => ({
+      });
+      const fadeOut = (o: number) => ({
         "&:hover": {
           opacity: o,
         },
-      }),
-      slideUp: (y = -20) => ({
+      });
+      const slideUp = (y: number) => ({
         "&:hover": {
           transform: `translateY(${y}px)`,
         },
-      }),
-      slideDown: (y = 20) => ({
+      });
+      const slideDown = (y: number) => ({
         "&:hover": {
           transform: `translateY(${y}px)`,
         },
-      }),
-    };
+      });
 
-    // Merge animation styles if type is an array
-    let combinedStyles = {};
-    const getAnimValue = (anim: string) => {
-      switch (anim) {
-        case "scale":
+      switch (type) {
         case "scaleUp":
+          return scaleUp(scale);
         case "scaleDown":
-          return scale;
-        case "fade":
+          return scaleDown(scale);
         case "fadeIn":
+          return fadeIn(opacity);
         case "fadeOut":
-          return opacity;
+          return fadeOut(opacity);
         case "slideUp":
-          return translateY !== undefined ? -Math.abs(translateY) : undefined;
+          return slideUp(translateY);
         case "slideDown":
-          return translateY !== undefined ? Math.abs(translateY) : undefined;
+          return slideDown(translateY);
         default:
-          return undefined;
+          return {};
       }
     };
 
-    if (Array.isArray(type)) {
-      type.forEach((anim) => {
-        if (types[anim]) {
-          Object.assign(combinedStyles, types[anim](getAnimValue(anim)));
-        }
-      });
-    } else if (type && types[type]) {
-      combinedStyles = types[type](getAnimValue(type));
-    }
-
     return {
       ...base,
-      ...combinedStyles,
+      ...types(type, scale, opacity, translateY),
     };
   }
 );

@@ -13,6 +13,9 @@ const AnimatedText = ({
   length,
   fontSize,
   fontWeight,
+  scale,
+  opacity,
+  translateY,
 }: AnimatedTextProps) => {
   // If children is a string, split it into individual characters for the grid
   // If children is already an array or other type, use as is
@@ -46,6 +49,9 @@ const AnimatedText = ({
             <HoverWrapper key={index} id={`animated-text-${index}`}>
               <StyledAnimatedText
                 type={type}
+                scale={scale}
+                opacity={opacity}
+                translateY={translateY}
                 id={`animated-text-${index}`}
                 hoverColor={letterColors[index]}
                 fontSize={fontSize}
@@ -60,8 +66,11 @@ const AnimatedText = ({
         <HoverWrapper id="animated-text-container-single">
           <StyledAnimatedText
             type={type}
-            variant="h1"
+            scale={scale}
+            opacity={opacity}
+            translateY={translateY}
             id="animated-text-container-single"
+            variant="h1"
             hoverColor={letterColors[0]}
             fontSize={fontSize}
           >

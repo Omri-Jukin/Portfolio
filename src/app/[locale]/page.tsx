@@ -80,14 +80,18 @@ export default function HomePage() {
         <HeroContainer>
           <MotionWrapper variant="fadeIn" duration={0.5} delay={0.2}>
             <HeroTitle variant="h2" gutterBottom>
-              <AnimatedText type="scale" length={t("hero.title").length}>
+              <AnimatedText
+                type="scaleUp"
+                length={t("hero.title").length}
+                scale={1.3}
+              >
                 {t("hero.title")}
               </AnimatedText>
             </HeroTitle>
           </MotionWrapper>
 
           <MotionWrapper variant="slideUp" duration={0.5} delay={0.4}>
-            <HeroDescription variant="h5" color="text.secondary">
+            <HeroDescription variant="h5" color="text.primary">
               {t("hero.description")}
             </HeroDescription>
           </MotionWrapper>

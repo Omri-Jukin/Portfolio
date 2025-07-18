@@ -1,6 +1,4 @@
 export type AnimatedTextType =
-  | "scale"
-  | "fade"
   | "scaleUp"
   | "scaleDown"
   | "fadeIn"
@@ -9,7 +7,7 @@ export type AnimatedTextType =
   | "slideDown";
 
 export interface AnimatedTextProps {
-  type?: AnimatedTextType | AnimatedTextType[];
+  type?: AnimatedTextType;
   children: React.ReactNode;
   length?: number;
   hoverColor?: string;
@@ -23,8 +21,6 @@ export interface AnimatedTextProps {
 export type AnimationStyle = { [selector: string]: React.CSSProperties };
 
 export type AnimationTypes = {
-  scale: (s?: number) => AnimationStyle;
-  fade: (o?: number) => AnimationStyle;
   scaleUp: (s?: number) => AnimationStyle;
   scaleDown: (s?: number) => AnimationStyle;
   fadeIn: (o?: number) => AnimationStyle;
