@@ -51,8 +51,7 @@ export default function ClientLayout({
     }
 
     setMounted(true);
-    console.log(isMobile);
-  }, []);
+  }, [isMobile]);
 
   if (!mounted) {
     // Optionally, render a loader or just null
@@ -92,7 +91,8 @@ export default function ClientLayout({
         secondary: isDarkMode ? "#b0b0b0" : "#757575",
       },
     },
-  } as any);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } as unknown as any);
 
   const clientSideEmotionCache = createEmotionCache();
 

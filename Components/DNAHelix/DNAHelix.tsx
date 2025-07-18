@@ -32,20 +32,10 @@ const DNAHelix: React.FC<{ spinning: boolean; isMobile: boolean }> = ({
   const cytosineColor = isDark ? "#FF4500" : "#CC3300"; // Orange red - darker in light mode
 
   // Connection colors - darker for light mode
-  const hydrogenBondColor = isDark ? "#FFFFFF" : "#666666"; // White to dark gray
   const sugarPhosphateBondColor = isDark ? "#00FF00" : "#006600"; // Bright green to dark green
 
   // Background bond color - theme responsive
   const backgroundBondColor = isDark ? "#87CEEB" : "#4682B4"; // Sky blue to steel blue
-
-  // Assign specific colors for scientific accuracy but with your vibrant palette
-
-  // Connection colors for impressive visuals
-  // const hydrogenBondColor = isDark ? "#FFEAA7" : "#FFB74D"; // Bright yellow/amber
-  // const sugarPhosphateBondColor = isDark ? "#F06292" : "#E91E63"; // Pink connections
-
-  // Background bond color - warmer tone
-  // const backgroundBondColor = isDark ? "#FFEAA7" : "#5a5a5a"; // Dark blue or warm off-white
 
   // Animation - revolve around the DNA's natural helix axis (Y-axis) with persistence
   useFrame(() => {
@@ -334,7 +324,6 @@ const DNAHelix: React.FC<{ spinning: boolean; isMobile: boolean }> = ({
     thymineColor,
     guanineColor,
     cytosineColor,
-    hydrogenBondColor,
     sugarPhosphateBondColor,
     backgroundBondColor,
     isDark,

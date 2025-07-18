@@ -20,9 +20,6 @@ const AnimationSwitcher: React.FC<AnimationSwitcherProps> = ({
         nextType = "dna";
         break;
       case "dna":
-        nextType = "helix";
-        break;
-      case "helix":
         nextType = "stars";
         break;
       case "stars":
@@ -42,8 +39,6 @@ const AnimationSwitcher: React.FC<AnimationSwitcherProps> = ({
       case "torusKnot":
         return "Switch to DNA helix";
       case "dna":
-        return "Switch to helix";
-      case "helix":
         return "Switch to stars";
       case "stars":
         return "Switch to polyhedron";
