@@ -25,7 +25,8 @@
       "$/*": ["./lib/*"],
       "%/*": ["./locales/*"],
       "^/*": ["./public/*"],
-      "!/*": ["./theme/*"]
+      "!/*": ["./theme/*"],
+      "&/*": ["./Components/Providers/*"]
     }
   },
   "include": [

@@ -4,6 +4,7 @@ export * from "./AnimationSwitcher";
 export * from "./Card";
 export * from "./Common";
 export * from "./DarkModeToggle";
+export * from "./DNAHelix";
 export * from "./Footer";
 export * from "./Header";
 export * from "./LanguageSwitcher";

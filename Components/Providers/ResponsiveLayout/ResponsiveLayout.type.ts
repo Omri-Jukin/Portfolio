@@ -1,5 +1,7 @@
 export interface ResponsiveLayoutProps {
   children: React.ReactNode;
   isMobile?: boolean;
-  forceLayout?: "mobile" | "desktop" | "auto";
+  forceLayout?: ResponsiveLayout;
 }
+
+export type ResponsiveLayout = "mobile" | "desktop" | "auto";

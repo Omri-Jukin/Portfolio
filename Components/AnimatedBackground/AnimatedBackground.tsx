@@ -14,10 +14,11 @@ import {
 } from "./AnimatedBackground.type";
 import DNAHelix from "../DNAHelix/DNAHelix";
 
-const AnimatedObject: React.FC<{
+export const AnimatedObject: React.FC<{
   type: AnimationType;
   spinning: boolean;
-}> = ({ type, spinning }) => {
+  isMobile: boolean;
+}> = ({ type, spinning, isMobile }) => {
   const meshRef = useRef<THREE.Mesh>(null);
   const themeMode = useTheme().palette.mode;
   const darkColor = "#325663";
@@ -33,7 +34,7 @@ const AnimatedObject: React.FC<{
 
   switch (type) {
     case "dna":
-      return <DNAHelix spinning={spinning} />;
+      return <DNAHelix spinning={spinning} isMobile={isMobile} />;
     case "torusKnot":
       return (
         <TorusKnot ref={meshRef} args={[5.5, 0.2, 200, 100]}>
@@ -84,12 +85,27 @@ const AnimatedObject: React.FC<{
   }
 };
 
-const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
+export const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
   animationType,
+  isMobile,
 }) => {
   // Track whether the user is interacting (grabbing)
   const [spinning, setSpinning] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
+
+  // Fallback mobile detection if isMobile is undefined
+  const [detectedMobile, setDetectedMobile] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setDetectedMobile(window.innerWidth < 768);
+    }
+  }, []);
+
+  // Use passed isMobile prop, fallback to detection, or default to false
+  const isActuallyMobile = isMobile ?? detectedMobile ?? false;
 
   // Prevent hydration issues
   useEffect(() => {
@@ -117,27 +133,57 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
           fov: 75,
         }}
         style={{ background: "transparent" }}
+        gl={{
+          antialias: true,
+          toneMapping: THREE.ACESFilmicToneMapping, // Better tone mapping for glow
+          toneMappingExposure: isDark ? 1.5 : 0.8, // Higher exposure for dark mode glow
+        }}
       >
         {animationType === "dna" ? (
-          // For DNA/helix, optimized lighting for right-side positioning
+          // For DNA/helix, ultra-enhanced lighting for maximum glow
           <>
-            <ambientLight intensity={0.5} />
+            <ambientLight
+              intensity={isDark ? 0.2 : 0.4}
+              color={isDark ? "#001122" : "#112244"}
+            />
             <directionalLight
-              position={[15, 8, 10]} // Positioned to light the right side
-              intensity={0.8}
-              color={"#ffffff"}
+              position={[20, 8, 10]} // Moved further right to follow DNA
+              intensity={isDark ? 2.0 : 1.0}
+              color={isDark ? "#00BFFF" : "#0066CC"}
             />
             <pointLight
-              position={[10, 5, 5]} // Additional light for the DNA area
-              intensity={0.4}
-              color={"#E3F2FD"}
+              position={[15, 5, 5]} // Main DNA area light - moved right
+              intensity={isDark ? 2.5 : 1.2}
+              color={isDark ? "#FF1493" : "#CC0066"}
+              distance={25}
+              decay={2}
             />
             <pointLight
-              position={[-5, -5, -5]} // Subtle fill light from left
-              intensity={0.2}
-              color={"#FFEAA7"}
+              position={[12, -3, 8]} // Secondary glow light - moved right
+              intensity={isDark ? 1.8 : 0.9}
+              color={isDark ? "#00FFFF" : "#008B8B"}
+              distance={20}
+              decay={2}
             />
-            <AnimatedObject type={animationType} spinning={spinning} />
+            <pointLight
+              position={[8, 8, -5]} // Fill light - moved right
+              intensity={isDark ? 1.5 : 0.7}
+              color={isDark ? "#9370DB" : "#663399"}
+              distance={30}
+              decay={2}
+            />
+            <pointLight
+              position={[10, -8, 0]} // Bottom accent light - moved right
+              intensity={isDark ? 1.0 : 0.5}
+              color={isDark ? "#FF4500" : "#CC3300"}
+              distance={35}
+              decay={2}
+            />
+            <AnimatedObject
+              type={animationType}
+              spinning={spinning}
+              isMobile={isActuallyMobile}
+            />
           </>
         ) : (
           <PresentationControls
@@ -164,7 +210,11 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
               onPointerDown={() => setSpinning(false)}
               onPointerUp={() => setSpinning(true)}
             >
-              <AnimatedObject type={animationType} spinning={spinning} />
+              <AnimatedObject
+                type={animationType}
+                spinning={spinning}
+                isMobile={isActuallyMobile}
+              />
             </group>
           </PresentationControls>
         )}

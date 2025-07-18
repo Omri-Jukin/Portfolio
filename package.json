@@ -88,6 +88,7 @@
     "$/*": "./lib/*",
     "%/*": "./locales/locale.ts",
     "^/*": "./public/*",
-    "!/*": "./theme/*"
+    "!/*": "./theme/*",
+    "&/*": "./Components/Providers/*"
   }
 }

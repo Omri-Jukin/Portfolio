@@ -3,9 +3,13 @@ import { useFrame } from "@react-three/fiber";
 import { useTheme } from "@mui/material/styles";
 import * as THREE from "three";
 
-const DNAHelix: React.FC<{ spinning: boolean }> = ({ spinning }) => {
+const DNAHelix: React.FC<{ spinning: boolean; isMobile: boolean }> = ({
+  spinning,
+  isMobile,
+}) => {
   const positionGroupRef = useRef<THREE.Group>(null); // For positioning and orientation
   const rotationGroupRef = useRef<THREE.Group>(null); // For tube rolling around DNA's natural axis
+  const rotationState = useRef({ y: 0 }); // Persistent rotation state
   const theme = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -14,48 +18,42 @@ const DNAHelix: React.FC<{ spinning: boolean }> = ({ spinning }) => {
     setMounted(true);
   }, []);
 
-  // Impressive DNA colors using your color palette
+  // Electric glowing DNA colors with theme-responsive darkness for light mode
   const isDark = theme.palette.mode === "dark";
 
-  // DNA backbone colors - striking but professional
-  const strand1Color = isDark ? "#64B5F6" : "#42A5F5"; // Cool blue from theme
-  const strand2Color = isDark ? "#81C784" : "#4CAF50"; // Complementary green
+  // Electric backbone colors - darker for light mode, bright for dark mode
+  const strand1Color = isDark ? "#00BFFF" : "#0066CC"; // Electric blue - darker in light mode
+  const strand2Color = isDark ? "#FF1493" : "#CC0066"; // Deep pink/magenta - darker in light mode
 
-  // Generate nucleotide colors from your palette for visual appeal
-  const vibrantColors = [
-    "#FF6B6B", // Red
-    "#4ECDC4", // Teal
-    "#45B7D1", // Blue
-    "#96CEB4", // Green
-    "#FFEAA7", // Yellow
-    "#DDA0DD", // Purple
-    "#FF8A65", // Orange
-    "#81C784", // Light Green
-    "#64B5F6", // Light Blue
-    "#FFB74D", // Amber
-    "#F06292", // Pink
-    "#9575CD", // Deep Purple
-  ];
+  // Nucleotide colors - darker for light mode visibility
+  const adenineColor = isDark ? "#00FFFF" : "#008B8B"; // Cyan - darker teal in light mode
+  const thymineColor = isDark ? "#FF69B4" : "#C71585"; // Hot pink - darker in light mode
+  const guanineColor = isDark ? "#9370DB" : "#663399"; // Purple - darker in light mode
+  const cytosineColor = isDark ? "#FF4500" : "#CC3300"; // Orange red - darker in light mode
+
+  // Connection colors - darker for light mode
+  const hydrogenBondColor = isDark ? "#FFFFFF" : "#666666"; // White to dark gray
+  const sugarPhosphateBondColor = isDark ? "#00FF00" : "#006600"; // Bright green to dark green
+
+  // Background bond color - theme responsive
+  const backgroundBondColor = isDark ? "#87CEEB" : "#4682B4"; // Sky blue to steel blue
 
   // Assign specific colors for scientific accuracy but with your vibrant palette
-  const adenineColor = "#FF6B6B"; // Red - Adenine (A)
-  const thymineColor = "#64B5F6"; // Light Blue - Thymine (T)
-  const guanineColor = "#96CEB4"; // Green - Guanine (G)
-  const cytosineColor = "#DDA0DD"; // Purple - Cytosine (C)
 
   // Connection colors for impressive visuals
-  const hydrogenBondColor = isDark ? "#FFEAA7" : "#FFB74D"; // Bright yellow/amber
-  const sugarPhosphateBondColor = isDark ? "#F06292" : "#E91E63"; // Pink connections
+  // const hydrogenBondColor = isDark ? "#FFEAA7" : "#FFB74D"; // Bright yellow/amber
+  // const sugarPhosphateBondColor = isDark ? "#F06292" : "#E91E63"; // Pink connections
 
   // Background bond color - warmer tone
-  const backgroundBondColor = isDark ? theme.palette.dark.primary : "#F8F6F0"; // Dark blue or warm off-white
+  // const backgroundBondColor = isDark ? "#FFEAA7" : "#5a5a5a"; // Dark blue or warm off-white
 
-  // Animation - revolve around the DNA's natural helix axis (Y-axis)
+  // Animation - revolve around the DNA's natural helix axis (Y-axis) with persistence
   useFrame(() => {
     if (spinning && mounted && rotationGroupRef.current) {
-      // Rotate around the DNA's natural central axis (Y-axis is the helix length)
-      // This makes it revolve like a tube rolling around its own centerline
-      rotationGroupRef.current.rotation.y += 0.01; // Rolling around its natural length axis
+      // Update persistent rotation state
+      rotationState.current.y += 0.01;
+      // Apply to the actual rotation
+      rotationGroupRef.current.rotation.y = rotationState.current.y;
     }
   });
 
@@ -89,74 +87,75 @@ const DNAHelix: React.FC<{ spinning: boolean }> = ({ spinning }) => {
       3
     ); // Organic connections
 
-    // Create detailed texture-like materials with bump mapping simulation
+    // Create ULTRA glowing materials with maximum glow effects
     const strand1Material = new THREE.MeshStandardMaterial({
       color: strand1Color,
       transparent: false,
-      metalness: 0.3,
-      roughness: 0.4, // More realistic surface roughness
-      emissive: new THREE.Color(strand1Color).multiplyScalar(0.1),
-      emissiveIntensity: 0.8,
+      metalness: 0.0,
+      roughness: 0.1,
+      emissive: new THREE.Color(strand1Color),
+      emissiveIntensity: isDark ? 4.0 : 2.0, // Ultra bright in dark, moderate in light
     });
     const strand2Material = new THREE.MeshStandardMaterial({
       color: strand2Color,
       transparent: false,
-      metalness: 0.3,
-      roughness: 0.4,
-      emissive: new THREE.Color(strand2Color).multiplyScalar(0.1),
-      emissiveIntensity: 0.8,
+      metalness: 0.0,
+      roughness: 0.1,
+      emissive: new THREE.Color(strand2Color),
+      emissiveIntensity: isDark ? 4.0 : 2.0, // Ultra bright in dark, moderate in light
     });
 
-    // Enhanced nucleotide materials with more realistic properties
+    // MAXIMUM glow nucleotide materials
     const adenineMaterial = new THREE.MeshStandardMaterial({
       color: adenineColor,
       transparent: false,
-      metalness: 0.2,
-      roughness: 0.6, // More matte, organic appearance
-      emissive: new THREE.Color(adenineColor).multiplyScalar(0.15),
-      emissiveIntensity: 0.6,
+      metalness: 0.0,
+      roughness: 0.05,
+      emissive: new THREE.Color(adenineColor),
+      emissiveIntensity: isDark ? 5.0 : 2.5, // Maximum possible glow
     });
     const thymineMaterial = new THREE.MeshStandardMaterial({
       color: thymineColor,
       transparent: false,
-      metalness: 0.2,
-      roughness: 0.6,
-      emissive: new THREE.Color(thymineColor).multiplyScalar(0.15),
-      emissiveIntensity: 0.6,
+      metalness: 0.0,
+      roughness: 0.05,
+      emissive: new THREE.Color(thymineColor),
+      emissiveIntensity: isDark ? 5.0 : 2.5,
     });
     const guanineMaterial = new THREE.MeshStandardMaterial({
       color: guanineColor,
       transparent: false,
-      metalness: 0.2,
-      roughness: 0.6,
-      emissive: new THREE.Color(guanineColor).multiplyScalar(0.15),
-      emissiveIntensity: 0.6,
+      metalness: 0.0,
+      roughness: 0.05,
+      emissive: new THREE.Color(guanineColor),
+      emissiveIntensity: isDark ? 5.0 : 2.5,
     });
     const cytosineMaterial = new THREE.MeshStandardMaterial({
       color: cytosineColor,
       transparent: false,
-      metalness: 0.2,
-      roughness: 0.6,
-      emissive: new THREE.Color(cytosineColor).multiplyScalar(0.15),
-      emissiveIntensity: 0.6,
+      metalness: 0.0,
+      roughness: 0.05,
+      emissive: new THREE.Color(cytosineColor),
+      emissiveIntensity: isDark ? 5.0 : 2.5,
     });
 
-    // Enhanced bond materials with realistic properties
+    // Ultra bright glowing bond materials
     const basePairBondMaterial = new THREE.MeshStandardMaterial({
       color: backgroundBondColor,
       transparent: false,
       metalness: 0.1,
-      roughness: 0.8, // Very matte for organic bonds
-      emissive: new THREE.Color(backgroundBondColor).multiplyScalar(0.05),
+      roughness: 0.05,
+      emissive: new THREE.Color(backgroundBondColor),
+      emissiveIntensity: isDark ? 3.5 : 1.8, // Intense glow
     });
 
     const backboneConnectionMaterial = new THREE.MeshStandardMaterial({
       color: sugarPhosphateBondColor,
       transparent: false,
-      metalness: 0.4,
-      roughness: 0.3, // Slightly more reflective for phosphate groups
-      emissive: new THREE.Color(sugarPhosphateBondColor).multiplyScalar(0.2),
-      emissiveIntensity: 0.7,
+      metalness: 0.0,
+      roughness: 0.05,
+      emissive: new THREE.Color(sugarPhosphateBondColor),
+      emissiveIntensity: isDark ? 4.5 : 2.2, // Ultra bright green glow
     });
 
     // Create DNA double helix with enhanced detail for textured appearance
@@ -350,10 +349,10 @@ const DNAHelix: React.FC<{ spinning: boolean }> = ({ spinning }) => {
     // Outer group for positioning and diagonal orientation
     <group
       ref={positionGroupRef}
-      // Position on the right side of screen, responsive for mobile/PC
-      position={[4, 2, -4]} // Moved to positive X (right side), closer Z for visibility
+      // Position further to the right for desktop, closer for mobile
+      position={[isMobile ? 4 : 12, 2, isMobile ? -6 : -5]} // Moved further right (was 4), closer Z for better visibility
       rotation={[0, Math.PI / 6, 0]} // Slightly angled toward center for better view
-      scale={[0.8, 1.2, 0.8]} // Slightly smaller for better mobile compatibility
+      scale={[0.7, 1.1, 0.7]} // Slightly smaller scale for desktop positioning
     >
       {/* Inner group that rotates around DNA's natural Y-axis (helix length) */}
       <group ref={rotationGroupRef}>

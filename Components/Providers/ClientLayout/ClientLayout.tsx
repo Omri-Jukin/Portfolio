@@ -9,43 +9,49 @@ import Footer from "@/app/[locale]/Footer";
 import { useLocale } from "next-intl";
 import createEmotionCache from "@/app/mui-emotion-cache";
 import { CacheProvider } from "@emotion/react";
-import ResponsiveLayout from "~/Providers/ResponsiveLayout";
+import ResponsiveLayout from "&/ResponsiveLayout";
+import { ResponsiveLayout as TResponsiveLayout } from "&/ResponsiveLayout";
 
 export default function ClientLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [animationType, setAnimationType] =
-    useState<AnimationType>("torusKnot");
+  const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined);
+  const [animationType, setAnimationType] = useState<AnimationType>("dna"); // Default to DNA for impressive visual
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined);
-  const [forceLayout, setForceLayout] = useState<"mobile" | "desktop" | "auto">(
-    "auto"
-  );
+  const [forceLayout, setForceLayout] = useState<TResponsiveLayout>("auto");
   const locale = useLocale();
   const isRTL = locale === "he";
 
   useEffect(() => {
+    // Load theme preferences
     const stored = localStorage.getItem("theme");
     const prefersDark = window.matchMedia(
       "(prefers-color-scheme: dark)"
     ).matches;
     setIsDarkMode(stored === "dark" || (!stored && prefersDark));
 
+    // Load animation type preference
+    const storedAnimation = localStorage.getItem(
+      "animationType"
+    ) as AnimationType | null;
+    if (storedAnimation) {
+      setAnimationType(storedAnimation);
+    }
+
     // Get stored layout preferences
-    const storedLayout = localStorage.getItem("layout") as
-      | "mobile"
-      | "desktop"
-      | "auto"
-      | null;
+    const storedLayout = localStorage.getItem(
+      "layout"
+    ) as TResponsiveLayout | null;
     if (storedLayout) {
       setForceLayout(storedLayout);
       setIsMobile(storedLayout === "mobile" || storedLayout === "auto");
     }
 
     setMounted(true);
+    console.log(isMobile);
   }, []);
 
   if (!mounted) {
@@ -56,6 +62,11 @@ export default function ClientLayout({
   const handleThemeToggle = (isDark: boolean) => {
     setIsDarkMode(isDark);
     localStorage.setItem("theme", isDark ? "dark" : "light");
+  };
+
+  const handleAnimationChange = (newAnimationType: AnimationType) => {
+    setAnimationType(newAnimationType);
+    localStorage.setItem("animationType", newAnimationType);
   };
 
   const handleLayoutChange = (layout: TLayout) => {
@@ -92,7 +103,7 @@ export default function ClientLayout({
         {/* Fixed Header */}
         <Header
           animationType={animationType}
-          onAnimationTypeChange={setAnimationType}
+          onAnimationTypeChange={handleAnimationChange}
           isDarkMode={isDarkMode}
           onThemeToggle={handleThemeToggle}
           isMobile={isMobile}
@@ -100,8 +111,12 @@ export default function ClientLayout({
           onLayoutChange={handleLayoutChange}
         />
 
-        {/* Animated Background */}
-        <AnimatedBackground animationType={animationType} />
+        {/* Animated Background - Persistent across all pages */}
+        <AnimatedBackground
+          animationType={animationType}
+          isMobile={isMobile}
+          key="persistent-dna-background"
+        />
 
         {/* Main Layout Container */}
         <Box

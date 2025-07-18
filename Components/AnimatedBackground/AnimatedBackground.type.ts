@@ -25,4 +25,5 @@ export type AnimationType =
 
 export interface AnimatedBackgroundProps {
   animationType: AnimationType;
+  isMobile?: boolean;
 }
