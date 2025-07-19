@@ -7,9 +7,11 @@ export const AnimatedTextContainer = styled(Box, {
   shouldForwardProp: (prop) => prop !== "type",
 })<AnimatedTextProps>(({ length }) => ({
   display: "grid",
-  gridTemplateColumns: `repeat(${length || 1}, 1fr)`,
+  gridTemplateColumns: `repeat(${length || 1}, min-content)`,
   width: "100%",
   gap: 0,
+  justifyContent: "center",
+  overflow: "visible",
 }));
 
 export const HoverWrapper = styled(Box)(({ theme }) => ({
@@ -72,22 +74,22 @@ export const StyledAnimatedText = styled(Typography, {
         fontSize: fontSize
           ? `calc(${
               typeof fontSize === "number" ? fontSize + "px" : fontSize
-            } * 0.75)`
-          : "3rem",
+            } * 0.8)`
+          : "3.2rem",
       },
       "@media (max-width: 768px)": {
         fontSize: fontSize
           ? `calc(${
               typeof fontSize === "number" ? fontSize + "px" : fontSize
-            } * 0.5)`
-          : "2rem",
+            } * 0.6)`
+          : "2.4rem",
       },
       "@media (max-width: 480px)": {
         fontSize: fontSize
           ? `calc(${
               typeof fontSize === "number" ? fontSize + "px" : fontSize
-            } * 0.375)`
-          : "1.5rem",
+            } * 0.45)`
+          : "1.8rem",
       },
     };
 

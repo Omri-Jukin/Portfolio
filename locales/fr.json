@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Omri Jukin",
-    "description": "Pas de dieux, juste la logique. Pas de bugs, juste des fonctionnalités."
+    "description": "Développeur Full Stack | Ingénieur Électrique | Expert en Gestion de Données"
   },
   "common": {
     "language": "Langue",
@@ -11,24 +11,136 @@
     "blog": "Blog",
     "career": "Carrière",
     "resume": "CV",
-    "description": "Bienvenue dans mon portfolio. Je suis un développeur passionné qui aime créer des expériences web extraordinaires.",
     "projects": "Projets",
-    "skills": "Compétences"
+    "skills": "Compétences",
+    "description": "Ingénieur full-stack innovant avec une solide formation en ingénierie électrique et une passion pour créer des solutions efficaces centrées sur l'utilisateur."
   },
   "about": {
     "title": "À propos de moi",
-    "description": "Bienvenue dans mon portfolio. Je suis un développeur passionné qui aime créer des expériences web extraordinaires."
+    "description": "Ingénieur full-stack innovant avec une solide formation en ingénierie électrique et une passion pour créer des solutions efficaces centrées sur l'utilisateur.",
+    "profile": "• Ingénieur full-stack innovant avec une solide formation en ingénierie électrique et une passion pour créer des solutions efficaces centrées sur l'utilisateur.\n\n• Capacité prouvée à développer des applications évolutives et à gérer des systèmes de données complexes.\n\n• Vaste expérience dans l'industrie de l'assurance, du service client au développement de systèmes centraux.\n\n• Leadership démontré dans la formation et le mentorat d'équipes, l'amélioration des processus, et la conduite du changement organisationnel et de la croissance.\n\n• Solides compétences en résolution de problèmes avec un accent sur la conception et l'optimisation de systèmes.\n\n• Engagement envers l'apprentissage continu et la croissance professionnelle dans l'industrie technologique."
   },
   "career": {
     "title": "Carrière",
     "description": "Mon parcours professionnel",
-    "experience": "Je suis un développeur passionné qui aime créer des expériences web extraordinaires axées sur la programmation et le développement de systèmes basés sur les données et les expériences utilisateur. Je travaille actuellement comme ingénieur logiciel dans une startup appelée \"The Startup\"."
+    "experience": "Expérience pratique en développement full-stack, gestion d'équipes et amélioration des processus dans des entreprises leaders de technologie et d'assurance.",
+    "experiences": [
+      {
+        "role": "Développeur Full Stack",
+        "time": "2024 - 2025",
+        "company": "Avra Technologies, Israël",
+        "details": [
+          "A dirigé le développement d'une plateforme complète qui agrège et traite des données de marché critiques d'entités gouvernementales",
+          "A conçu et implémenté une bibliothèque de composants UI modulaire et réutilisable qui a réduit le temps de développement de 30%",
+          "A collaboré avec les équipes de design pour créer des interfaces intuitives qui ont augmenté l'engagement des utilisateurs",
+          "A développé des algorithmes efficaces pour le traitement de données qui ont amélioré les performances du système",
+          "Stack technologique : Next.js, tRPC, PayloadCMS, Storybook, Jest, Vitest, React"
+        ]
+      },
+      {
+        "role": "Expert en Développement de Règles Métier",
+        "time": "2023 - 2024",
+        "company": "Menorah Mivtachim Insurance, Israël",
+        "details": [
+          "A conçu et maintenu le système de règles métier, gérant des milliers de règles et réglementations de polices",
+          "A encadré et formé de nouveaux développeurs, réduisant le temps d'intégration et améliorant la productivité de l'équipe",
+          "A dirigé le développement de 12+ nouveaux produits d'assurance, résultant en des taux d'acquisition client plus élevés",
+          "A migré avec succès des composants critiques d'un système monolithique de 40 ans vers une architecture moderne"
+        ]
+      },
+      {
+        "role": "Représentant Senior du Service Client",
+        "time": "2021 - 2023",
+        "company": "Menorah Mivtachim Insurance, Israël",
+        "details": [
+          "A atteint un taux de satisfaction client de 95% tout en gérant des demandes et plaintes d'assurance complexes",
+          "A développé et implémenté de nouveaux protocoles de flux de travail qui ont réduit le temps de traitement moyen de 25%",
+          "A formé et encadré 10+ nouveaux membres d'équipe, résultant en une réduction de 35% du temps de formation",
+          "A collaboré avec plusieurs départements pour résoudre des problèmes clients complexes, améliorant le temps de résolution de 30%"
+        ]
+      },
+      {
+        "role": "Coordinateur Senior des Relations Publiques",
+        "time": "2020 - 2021",
+        "company": "Hot Telecom, Israël",
+        "details": [
+          "A maintenu un taux de satisfaction client de 90% tout en gérant des demandes à haut volume",
+          "A implémenté de nouveaux protocoles de flux de travail qui ont réduit le temps de réponse de 35%",
+          "A formé et encadré avec succès 15+ membres d'équipe, améliorant les performances globales de l'équipe de 30%",
+          "A collaboré avec divers départements, résultant en une amélioration de 40% du temps de résolution des cas"
+        ]
+      }
+    ]
   },
   "resume": {
     "title": "CV",
     "description": "Mon expérience professionnelle et mes compétences",
     "networkingSummary": "Téléchargez mon CV pour en savoir plus sur mon parcours",
-    "experience": "Je suis un développeur full-stack passionné et déterminé, avec une solide formation en ingénierie électrique et un parcours prouvé dans la réalisation de résultats dans des environnements exigeants. Mon expérience va du pilotage du développement de plateformes évolutives et de bibliothèques UI modulaires à l’optimisation de la logique métier et à l’encadrement d’équipes dans les secteurs de l’assurance et des télécommunications.\n\nJ’excelle dans la résolution de problèmes complexes, la promotion de l’innovation et la collaboration interdisciplinaire pour atteindre des objectifs ambitieux. Mes collègues me reconnaissent pour mon éthique de travail sans relâche, mon souci du détail et mon engagement envers l’apprentissage continu. Que ce soit pour construire des systèmes backend robustes, concevoir des interfaces intuitives ou rationaliser les processus, je donne toujours le meilleur de moi-même pour garantir qualité et impact.\n\nSi vous cherchez quelqu’un qui allie expertise technique, leadership, créativité et une véritable passion pour faire la différence, connectons-nous !"
+    "experience": "Je suis un développeur full-stack passionné et déterminé, avec une solide formation en ingénierie électrique et un parcours prouvé dans la réalisation de résultats dans des environnements exigeants. Mon expérience va du pilotage du développement de plateformes évolutives et de bibliothèques UI modulaires à l'optimisation de la logique métier et à l'encadrement d'équipes dans les secteurs de l'assurance et des télécommunications.\n\nJ'excelle dans la résolution de problèmes complexes, la promotion de l'innovation et la collaboration interdisciplinaire pour atteindre des objectifs ambitieux. Mes collègues me reconnaissent pour mon éthique de travail sans relâche, mon souci du détail et mon engagement envers l'apprentissage continu. Que ce soit pour construire des systèmes backend robustes, concevoir des interfaces intuitives ou rationaliser les processus, je donne toujours le meilleur de moi-même pour garantir qualité et impact.\n\nSi vous cherchez quelqu'un qui allie expertise technique, leadership, créativité et une véritable passion pour faire la différence, connectons-nous !"
+  },
+  "projects": {
+    "title": "Projets Clés",
+    "description": "Projets notables démontrant l'expertise technique et l'innovation",
+    "list": [
+      {
+        "title": "Snow HQ",
+        "link": "https://github.com/Omri-Jukin/Snow",
+        "description": "Système CRM de niveau entreprise avec analyses en temps réel, flux de travail automatisés et capacités de reporting avancées. Construit avec Next.js, tRPC, Drizzle ORM et PostgreSQL."
+      },
+      {
+        "title": "Clothest",
+        "link": "https://github.com/Omri-Jukin/Clothest",
+        "description": "Système de gestion de garde-robe avec recommandations personnalisées et suivi d'inventaire. Construit avec React, Express.js et MongoDB."
+      }
+    ]
+  },
+  "skills": {
+    "title": "Expertise Technique",
+    "categories": {
+      "technical": {
+        "title": "Compétences Techniques",
+        "items": [
+          { "name": "Architecture Système", "level": 100 },
+          { "name": "Développement Frontend", "level": 100 },
+          { "name": "Développement Backend", "level": 95 },
+          { "name": "Gestion de Base de Données", "level": 90 },
+          { "name": "Technologies Cloud", "level": 85 },
+          { "name": "DevOps et CI/CD", "level": 80 }
+        ]
+      },
+      "programming": {
+        "title": "Langages de Programmation",
+        "items": [
+          { "name": "TypeScript", "level": "Expert" },
+          { "name": "JavaScript", "level": "Expert" },
+          { "name": "Java", "level": "Débutant" },
+          { "name": "C#", "level": "Débutant" },
+          { "name": "Python", "level": "Débutant" }
+        ]
+      },
+      "languages": {
+        "title": "Langues",
+        "items": [
+          { "name": "Hébreu", "level": "Langue maternelle" },
+          { "name": "Anglais", "level": "Professionnel" },
+          { "name": "Espagnol", "level": "Débutant" }
+        ]
+      }
+    }
+  },
+  "interests": {
+    "title": "Intérêts Professionnels",
+    "professional": [
+      "Développement Logiciel",
+      "Gestion de Données",
+      "Design UI/UX",
+      "Résolution de Problèmes",
+      "Leadership d'Équipe",
+      "Apprentissage Continu",
+      "Rédaction Technique",
+      "Architecture Système"
+    ],
+    "additional": "• Fondateur d'une communauté en ligne promouvant la pensée critique, la rationalité et les discussions ouvertes.\n\n• Impliqué dans des conférences publiques et des diffusions en direct sur des sujets liés aux sciences exactes, sciences sociales, pensée rationnelle et technologie.\n\n• Magicien amateur, utilisant des compétences créatives pour engager le public et encourager la curiosité."
   },
   "theme": {
     "light": "Passer en mode clair",
@@ -49,65 +161,76 @@
   "home": {
     "hero": {
       "title": "Code sans foi, logique sans faille",
-      "description": "Pas de dieux, juste la logique. Pas de bugs, juste des fonctionnalités.",
+      "description": "Développeur Full Stack | Ingénieur Électrique | Expert en Gestion de Données",
       "about": "À propos de moi",
       "contact": "Contact",
       "cards": {
         "about": {
           "title": "À propos de moi",
-          "description": "Bienvenue dans mon portfolio. Je suis un développeur passionné qui aime créer des expériences web extraordinaires.",
+          "description": "Ingénieur full-stack innovant avec une solide formation en ingénierie électrique et une passion pour créer des solutions efficaces centrées sur l'utilisateur.",
           "button": "À propos de moi"
         },
         "career": {
           "title": "Carrière",
-          "description": "Mon parcours professionnel",
+          "description": "Mon parcours professionnel - de l'ingénierie électrique au développement full-stack",
           "button": "Carrière"
         },
         "resume": {
           "title": "CV",
-          "description": "Mon expérience professionnelle et mes compétences",
+          "description": "Mon expérience professionnelle et mes compétences en développement logiciel et gestion d'équipe",
           "button": "CV"
         },
         "blog": {
           "title": "Blog",
-          "description": "Read my thoughts on technology, development, and industry insights",
+          "description": "Lisez mes réflexions sur la technologie, le développement et les insights de l'industrie",
           "button": "Blog"
         },
         "contact": {
           "title": "Contact",
-          "description": "Get in touch for opportunities, collaborations, or questions",
+          "description": "Connectons-nous - je suis disponible pour des collaborations et de nouvelles opportunités",
           "button": "Contact"
         }
       }
     },
     "about": {
       "title": "À propos de moi",
-      "description": "Bienvenue dans mon portfolio. Je suis un développeur passionné qui aime créer des expériences web extraordinaires."
+      "description": "Ingénieur full-stack innovant avec une solide formation en ingénierie électrique et une passion pour créer des solutions efficaces centrées sur l'utilisateur."
     },
     "career": {
       "title": "Carrière",
       "description": "Mon parcours professionnel",
-      "experience": "Je suis un développeur passionné qui aime créer des expériences web extraordinaires axées sur la programmation et le développement de systèmes basés sur les données et les expériences utilisateur. Je travaille actuellement comme ingénieur logiciel dans une startup appelée \"The Startup\"."
+      "experience": "Expérience pratique en développement full-stack, gestion d'équipes et amélioration des processus dans des entreprises leaders de technologie et d'assurance."
     },
     "resume": {
       "title": "CV",
       "description": "Mon expérience professionnelle et mes compétences",
-      "experience": "Téléchargez mon CV pour en savoir plus sur mon parcours"
+      "experience": "Développeur full-stack passionné avec une solide formation en ingénierie électrique et des réalisations prouvées dans des environnements de travail exigeants."
     },
     "blog": {
       "title": "Blog",
-      "description": "Read my thoughts on technology, development, and industry insights",
-      "experience": "Download my resume to learn more about my background"
+      "description": "Lisez mes réflexions sur la technologie, le développement et les insights de l'industrie",
+      "experience": "Insights et expériences de l'industrie"
     },
     "contact": {
       "title": "Contact",
-      "description": "Get in touch for opportunities, collaborations, or questions",
-      "experience": "Download my resume to learn more about my background"
+      "description": "Connectons-nous - je suis disponible pour des collaborations et de nouvelles opportunités",
+      "experience": "J'aimerais avoir de vos nouvelles"
     }
+  },
+  "contact": {
+    "title": "Contact",
+    "email": "omrijukin@gmail.com",
+    "phone": "(+972) 052 334 4064",
+    "timezone": "Asia/Jerusalem",
+    "citizenship": "Israélien",
+    "website": "https://omrijukin.com",
+    "github": "Omri-Jukin",
+    "linkedin": "omri-jukin",
+    "telegram": "Agent_OJ"
   },
   "footer": {
     "title": "À propos",
-    "children": "Développeur passionné créant des expériences web modernes. Toujours en apprentissage, toujours en création.",
+    "children": "Développeur full-stack passionné créant des expériences web modernes. Toujours en apprentissage, toujours en création.",
     "linksTitle": "Liens rapides",
     "links": [
       { "label": "Accueil", "href": "/" },
@@ -119,13 +242,18 @@
     "social": [
       {
         "label": "GitHub",
-        "href": "https://github.com/omri-jukin",
+        "href": "https://github.com/Omri-Jukin",
         "icon": "GitHub"
       },
       {
         "label": "LinkedIn",
-        "href": "https://linkedin.com/in/omri-jukin",
+        "href": "https://www.linkedin.com/in/omri-jukin/",
         "icon": "LinkedIn"
+      },
+      {
+        "label": "Telegram",
+        "href": "https://t.me/Agent_OJ",
+        "icon": "Telegram"
       }
     ],
     "emailTitle": "Contact",

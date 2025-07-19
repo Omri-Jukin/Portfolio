@@ -8,6 +8,8 @@ import type { FooterProps } from "./Footer.type";
 import EmailIcon from "@mui/icons-material/Email";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import TelegramIcon from "@mui/icons-material/Telegram";
+import WebsiteIcon from "@mui/icons-material/Language";
 
 export const Footer: React.FC<FooterProps> = ({
   title,
@@ -71,7 +73,15 @@ export const Footer: React.FC<FooterProps> = ({
               rel="noopener noreferrer"
               sx={{ display: "flex", alignItems: "center", gap: 1 }}
             >
-              {item.icon === "GitHub" ? <GitHubIcon /> : <LinkedInIcon />}
+              {item.icon === "GitHub" ? (
+                <GitHubIcon />
+              ) : item.icon === "LinkedIn" ? (
+                <LinkedInIcon />
+              ) : item.icon === "Telegram" ? (
+                <TelegramIcon />
+              ) : (
+                <WebsiteIcon />
+              )}
             </IconButton>
           ))}
         </FooterSection>

@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Omri Jukin",
-    "description": "No gods, just logic. No bugs, just features."
+    "description": "Full Stack Developer | Electrical Engineer | Data Management Expert"
   },
   "common": {
     "language": "Language",
@@ -11,24 +11,140 @@
     "blog": "Blog",
     "career": "Career",
     "resume": "Resume",
-    "description": "Welcome to my portfolio. I'm a passionate developer who loves creating amazing web experiences focused on programming and developing data-driven systems and user experiences.",
     "projects": "Projects",
-    "skills": "Skills"
+    "skills": "Skills",
+    "description": "Innovative full-stack engineer with a strong background in electrical engineering and passion for creating efficient, user-focused solutions."
   },
   "about": {
     "title": "About Me",
-    "description": "Welcome to my portfolio. I'm a passionate developer who loves creating amazing web experiences focused on programming and developing data-driven systems and user experiences."
+    "description": "Innovative full-stack engineer with a strong background in electrical engineering and passion for creating efficient, user-focused solutions.",
+    "profile": "• Innovative full-stack engineer with a strong background in electrical engineering and passion for creating efficient, user-focused solutions.\n\n• Proven ability in developing scalable applications and managing complex data systems.\n\n• Extensive experience in the insurance industry, from customer service to core system development.\n\n• Demonstrated leadership in training and mentoring teams, process improvement, and driving organizational change and growth.\n\n• Strong problem-solving skills with emphasis on system design and optimization.\n\n• Commitment to continuous learning and professional growth in the technology industry."
   },
   "career": {
     "title": "Career",
-    "description": "My career journey",
-    "experience": "I'm a passionate developer who loves creating amazing web experiences focused on programming and developing data-driven systems and user experiences. I'm currently working as a software engineer at a startup called \"The Startup\"."
+    "description": "My professional journey",
+    "experience": "Hands-on experience in full-stack development, team management, and process improvement at leading technology and insurance companies.",
+    "experiences": [
+      {
+        "role": "Full Stack Developer",
+        "time": "2024 - 2025",
+        "company": "Abra Technologies, Israel",
+        "details": [
+          "Developed a comprehensive platform that aggregates and processes critical market data from government entities",
+          "Designed and implemented a modular, reusable UI component library that reduced development time by 30%",
+          "Collaborated with design teams to create intuitive interfaces that increased user engagement",
+          "Developed efficient algorithms for data processing that improved system performance and reduced data processing time by 50%",
+          "Tech stack: Next.js, tRPC, PayloadCMS, Storybook, Jest, Vitest, React"
+        ]
+      },
+      {
+        "role": "Business Rules Development Expert",
+        "time": "2023 - 2024",
+        "company": "Menorah Mivtachim Insurance, Israel",
+        "details": [
+          "Designed and maintained business rules system, managing thousands of policy rules and regulations",
+          "Mentored and trained new developers, reducing onboarding time and improving team productivity",
+          "Led development of 12+ new insurance products, resulting in higher customer acquisition rates",
+          "Successfully migrated critical components from 40-year-old monolithic system to modern architecture"
+        ]
+      },
+      {
+        "role": "Senior Customer Service Representative",
+        "time": "2021 - 2023",
+        "company": "Menorah Mivtachim Insurance, Israel",
+        "details": [
+          "Achieved 95% customer satisfaction rate while handling complex insurance inquiries and complaints",
+          "Developed and implemented new workflow protocols that reduced average handling time by 25%",
+          "Trained and mentored 10+ new team members, resulting in 35% reduction in training time",
+          "Collaborated with multiple departments to resolve complex customer issues, improving resolution time by 30%"
+        ]
+      },
+      {
+        "role": "Senior Public Relations Coordinator",
+        "time": "2020 - 2021",
+        "company": "Hot Telecom, Israel",
+        "details": [
+          "Maintained 90% customer satisfaction rate while handling high-volume inquiries",
+          "Implemented new workflow protocols that reduced response time by 35%",
+          "Successfully trained and mentored 15+ team members, improving overall team performance by 30%",
+          "Collaborated with various departments, resulting in 40% improvement in case resolution time"
+        ]
+      }
+    ]
   },
   "resume": {
     "title": "Resume",
     "description": "My professional experience and skills",
     "networkingSummary": "Download my resume to learn more about my background",
-    "experience": "I am a passionate and driven full-stack developer with a strong foundation in electrical engineering and a proven track record of delivering results in high-pressure environments. My experience spans from leading the development of scalable platforms and modular UI libraries to optimizing business logic and mentoring teams in the insurance and telecom industries.\n\nI thrive on solving complex problems, driving innovation, and collaborating across disciplines to achieve ambitious goals. My colleagues know me for my relentless work ethic, attention to detail, and commitment to continuous learning. Whether building robust backend systems, designing intuitive user interfaces, or streamlining workflows, I always go the extra mile to ensure quality and impact.\n\nIf you’re looking for someone who combines technical expertise with leadership, creativity, and a genuine passion for making a difference, let’s connect."
+    "experience": "I am a passionate and driven full-stack developer with a strong foundation in electrical engineering and a proven track record of delivering results in high-pressure environments. My experience spans from leading the development of scalable platforms and modular UI libraries to optimizing business logic and mentoring teams in the insurance and telecommunications industries.\n\nI excel at solving complex problems, driving innovation, and collaborating across disciplines to achieve ambitious goals. My colleagues recognize me for my relentless work ethic, attention to detail, and commitment to continuous learning. Whether building robust backend systems, designing intuitive interfaces, or streamlining workflows, I always give my best to ensure quality and impact.\n\nIf you're looking for someone who combines technical expertise with leadership, creativity, and a genuine passion for making a difference, let's connect!"
+  },
+  "projects": {
+    "title": "Key Projects",
+    "description": "Notable projects demonstrating technical expertise and innovation",
+    "list": [
+      {
+        "title": "Snow HQ",
+        "link": "https://github.com/Omri-Jukin/Snow",
+        "description": "Enterprise-level CRM system featuring real-time analytics, automated workflows, and advanced reporting capabilities. Built with Next.js, tRPC, Drizzle ORM, and PostgreSQL."
+      },
+      {
+        "title": "Clothest",
+        "link": "https://github.com/Omri-Jukin/Clothest",
+        "description": "Wardrobe management system with personalized recommendations and inventory tracking. Built with React, Express.js, and MongoDB."
+      }
+    ]
+  },
+  "skills": {
+    "title": "Technical Expertise",
+    "categories": {
+      "technical": {
+        "title": "Technical Skills",
+        "items": [
+          { "name": "System Architecture", "level": 100 },
+          { "name": "Frontend Development", "level": 100 },
+          { "name": "Backend Development", "level": 95 },
+          { "name": "Database Management", "level": 90 },
+          { "name": "Cloud Technologies", "level": 85 },
+          { "name": "DevOps & CI/CD", "level": 80 }
+        ]
+      },
+      "programming": {
+        "title": "Programming Languages",
+        "items": [
+          { "name": "TypeScript", "level": "Expert" },
+          { "name": "JavaScript", "level": "Expert" },
+          { "name": "Java", "level": "Beginner" },
+          { "name": "C#", "level": "Beginner" },
+          { "name": "Python", "level": "Beginner" }
+        ]
+      },
+      "languages": {
+        "title": "Languages",
+        "items": [
+          { "name": "Hebrew", "level": "Native" },
+          { "name": "English", "level": "Professional" },
+          { "name": "Spanish", "level": "Beginner" }
+        ]
+      }
+    }
+  },
+  "interests": {
+    "title": "Professional Interests",
+    "professional": [
+      "Software Development",
+      "Data Management",
+      "UI/UX Design",
+      "Problem Solving",
+      "Team Leadership",
+      "Continuous Learning",
+      "Technical Writing",
+      "System Architecture"
+    ],
+    "additional": [
+      "Founder of an online community promoting critical thinking, rationality, and open discussions",
+      "Involved in public speaking and live broadcasts on topics related to hard sciences, soft sciences, rational thinking, and technology",
+      "Amateur magician, using creative skills to engage audiences and encourage curiosity"
+    ]
   },
   "theme": {
     "light": "Switch to light mode",
@@ -48,24 +164,24 @@
   },
   "home": {
     "hero": {
-      "title": "Faithless Code, Flawless Logic",
-      "description": "No gods, just logic. No bugs, just features.",
-      "about": "About me",
+      "title": "Faithless code, flawless logic",
+      "description": "Full Stack Developer | Electrical Engineer | Data Management Expert",
+      "about": "About Me",
       "contact": "Contact",
       "cards": {
         "about": {
-          "title": "About me",
-          "description": "Welcome to my portfolio. I'm a passionate developer who loves creating amazing web experiences focused on programming and developing data-driven systems and user experiences.",
-          "button": "About me"
+          "title": "About Me",
+          "description": "Innovative full-stack engineer with a strong background in electrical engineering and passion for creating efficient, user-focused solutions.",
+          "button": "About Me"
         },
         "career": {
           "title": "Career",
-          "description": "My career journey",
+          "description": "My professional journey - from electrical engineering to full-stack development",
           "button": "Career"
         },
         "resume": {
           "title": "Resume",
-          "description": "My professional experience and skills",
+          "description": "My professional experience and skills in software development and team management",
           "button": "Resume"
         },
         "blog": {
@@ -75,44 +191,50 @@
         },
         "contact": {
           "title": "Contact",
-          "description": "Get in touch for opportunities, collaborations, or questions",
+          "description": "Let's connect - I'm available for collaborations and new opportunities",
           "button": "Contact"
-        },
-        "dna": {
-          "title": "DNA",
-          "description": "Test",
-          "button": "DNA"
         }
       }
     },
     "about": {
-      "title": "About me",
-      "description": "Welcome to my portfolio. I'm a passionate developer who loves creating amazing web experiences focused on programming and developing data-driven systems and user experiences."
+      "title": "About Me",
+      "description": "Innovative full-stack engineer with a strong background in electrical engineering and passion for creating efficient, user-focused solutions."
     },
     "career": {
       "title": "Career",
-      "description": "My career journey",
-      "experience": "I'm a passionate developer who loves creating amazing web experiences focused on programming and developing data-driven systems and user experiences. I'm currently working as a software engineer at a startup called \"The Startup\"."
+      "description": "My professional journey",
+      "experience": "Hands-on experience in full-stack development, team management, and process improvement at leading technology and insurance companies."
     },
     "resume": {
       "title": "Resume",
       "description": "My professional experience and skills",
-      "experience": "Download my resume to learn more about my background"
+      "experience": "Passionate full-stack developer with strong electrical engineering background and proven achievements in challenging work environments."
     },
     "blog": {
       "title": "Blog",
       "description": "Read my thoughts on technology, development, and industry insights",
-      "experience": "Download my resume to learn more about my background"
+      "experience": "Insights and experiences from the industry"
     },
     "contact": {
       "title": "Contact",
-      "description": "Get in touch for opportunities, collaborations, or questions",
-      "experience": "Download my resume to learn more about my background"
+      "description": "Let's connect - I'm available for collaborations and new opportunities",
+      "experience": "I'd love to hear from you"
     }
+  },
+  "contact": {
+    "title": "Contact",
+    "email": "omrijukin@gmail.com",
+    "phone": "(+972) 052 334 4064",
+    "timezone": "Asia/Jerusalem",
+    "citizenship": "Israeli",
+    "website": "https://omrijukin.com",
+    "github": "Omri-Jukin",
+    "linkedin": "omri-jukin",
+    "telegram": "Agent_OJ"
   },
   "footer": {
     "title": "About",
-    "children": "Passionate developer building modern web experiences. Always learning, always creating.",
+    "children": "Passionate full-stack developer creating modern web experiences. Always learning, always creating.",
     "linksTitle": "Quick Links",
     "links": [
       { "label": "Home", "href": "/" },
@@ -124,13 +246,18 @@
     "social": [
       {
         "label": "GitHub",
-        "href": "https://github.com/omri-jukin",
+        "href": "https://github.com/Omri-Jukin",
         "icon": "GitHub"
       },
       {
         "label": "LinkedIn",
-        "href": "https://linkedin.com/in/omri-jukin",
+        "href": "https://www.linkedin.com/in/omri-jukin/",
         "icon": "LinkedIn"
+      },
+      {
+        "label": "Telegram",
+        "href": "https://t.me/Agent_OJ",
+        "icon": "Telegram"
       }
     ],
     "emailTitle": "Contact",

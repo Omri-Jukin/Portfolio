@@ -71,7 +71,7 @@ export default function HomePage() {
 
   return (
     <PageContainer
-      style={{ position: "relative", minHeight: "100vh", overflow: "hidden" }}
+      style={{ position: "relative", minHeight: "100vh", overflow: "visible" }}
     >
       <Container
         maxWidth="lg"
