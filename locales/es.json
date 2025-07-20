@@ -128,6 +128,7 @@
       }
     }
   },
+
   "interests": {
     "title": "Intereses Profesionales",
     "professional": [
@@ -140,7 +141,29 @@
       "Escritura Técnica",
       "Arquitectura de Sistemas"
     ],
-    "additional": "• Fundador de una comunidad en línea que promueve el pensamiento crítico, la racionalidad y las discusiones abiertas.\n\n• Involucrado en charlas públicas y transmisiones en vivo sobre temas relacionados con ciencias exactas, ciencias sociales, pensamiento racional y tecnología.\n\n• Mago aficionado, utilizando habilidades creativas para involucrar audiencias y fomentar la curiosidad."
+    "additional": [
+      "Fundador de una comunidad en línea que promueve el pensamiento crítico, la racionalidad y las discusiones abiertas",
+      "Involucrado en charlas públicas y transmisiones en vivo sobre temas relacionados con ciencias exactas, ciencias sociales, pensamiento racional y tecnología",
+      "Mago aficionado, utilizando habilidades creativas para involucrar audiencias y fomentar la curiosidad"
+    ],
+    "professionalProfile": {
+      "title": "Perfil Profesional",
+      "points": [
+        "Habilidad comprobada en el desarrollo de aplicaciones escalables y gestión de sistemas de datos complejos.",
+        "Amplia experiencia en la industria de seguros, desde atención al cliente hasta desarrollo de sistemas centrales.",
+        "Liderazgo demostrado en entrenamiento y mentoría de equipos, mejora de procesos, e impulso del cambio organizacional y crecimiento.",
+        "Fuertes habilidades de resolución de problemas con énfasis en diseño y optimización de sistemas.",
+        "Compromiso con el aprendizaje continuo y crecimiento profesional en la industria tecnológica."
+      ]
+    },
+    "additionalActivities": {
+      "title": "Actividades Adicionales",
+      "points": [
+        "Fundador de una comunidad en línea que promueve el pensamiento crítico, la racionalidad y las discusiones abiertas.",
+        "Involucrado en charlas públicas y transmisiones en vivo sobre temas relacionados con ciencias exactas, ciencias sociales, pensamiento racional y tecnología.",
+        "Mago aficionado, utilizando habilidades creativas para involucrar audiencias y fomentar la curiosidad."
+      ]
+    }
   },
   "theme": {
     "light": "Cambiar a modo claro",

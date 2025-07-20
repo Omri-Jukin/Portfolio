@@ -26,4 +26,6 @@ export type AnimationType =
 export interface AnimatedBackgroundProps {
   animationType: AnimationType;
   isMobile?: boolean;
+  path?: string; // Current path for path-dependent animations
+  manualOverride?: boolean; // Whether user manually overrode the animation
 }

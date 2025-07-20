@@ -62,9 +62,11 @@
     "eslint-config-next": "15.3.3",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^30.0.4",
+    "jest-environment-jsdom": "^30.0.4",
     "jsdom": "^26.1.0",
     "tailwindcss": "4.1.1",
     "ts-jest": "^29.4.0",
+    "ts-node": "^10.9.2",
     "typescript": "5.8.3",
     "vitest": "^3.2.4",
     "wrangler": "4.21.2"
@@ -79,7 +81,10 @@
     "dev:turbo": "next dev --turbopack",
     "lint": "next lint",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "start": "next start"
+    "start": "next start",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "clean-install": "rm -rf node_modules package-lock.json .next && npm install"
   },
   "imports": {
     "@/*": "./src/*",

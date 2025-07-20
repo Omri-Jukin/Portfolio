@@ -141,10 +141,28 @@
       "System Architecture"
     ],
     "additional": [
-      "Founder of an online community promoting critical thinking, rationality, and open discussions",
+      "Founder of a community promoting critical thinking, rationality, and open discussions",
       "Involved in public speaking and live broadcasts on topics related to hard sciences, soft sciences, rational thinking, and technology",
       "Amateur magician, using creative skills to engage audiences and encourage curiosity"
-    ]
+    ],
+    "professionalProfile": {
+      "title": "Professional Profile",
+      "points": [
+        "Proven ability in developing scalable applications and managing complex data systems.",
+        "Extensive experience in the insurance industry, from customer service to core system development.",
+        "Demonstrated leadership in training and mentoring teams, process improvement, and driving organizational change and growth.",
+        "Strong problem-solving skills with emphasis on system design and optimization.",
+        "Commitment to continuous learning and professional growth in the technology industry."
+      ]
+    },
+    "additionalActivities": {
+      "title": "Additional Activities",
+      "points": [
+        "Founder of an online community promoting critical thinking, rationality, and open discussions.",
+        "Involved in public speaking and live broadcasts on topics related to hard sciences, soft sciences, rational thinking, and technology.",
+        "Amateur magician, using creative skills to engage audiences and encourage curiosity."
+      ]
+    }
   },
   "theme": {
     "light": "Switch to light mode",

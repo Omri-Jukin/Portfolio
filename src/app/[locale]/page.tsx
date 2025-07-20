@@ -1,12 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container, CardContent, Box } from "@mui/material";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import {
   Person as PersonIcon,
   Email as ContactIcon,
-  Token as TokenIcon,
 } from "@mui/icons-material";
 import MotionWrapper from "~/MotionWrapper";
 import {
@@ -30,40 +29,52 @@ import { Logo } from "^/logo";
 
 export default function HomePage() {
   const t = useTranslations("home");
+  const locale = useLocale();
+  const [mounted, setMounted] = useState(false);
+
+  // Force re-render when locale changes
+  useEffect(() => {
+    setMounted(true);
+  }, [locale]);
+
+  // Don't render until mounted to prevent hydration mismatches
+  if (!mounted) {
+    return null;
+  }
 
   const portfolioSections: PortfolioSection[] = [
     {
       title: t("hero.cards.about.title"),
       description: t("hero.cards.about.description"),
-      href: "/about",
+      href: `/${locale}/about`,
       color: "primary" as const,
       untranslatedSection: "about",
     },
     {
       title: t("hero.cards.career.title"),
       description: t("hero.cards.career.description"),
-      href: "/career",
+      href: `/${locale}/career`,
       color: "secondary" as const,
       untranslatedSection: "career",
     },
     {
       title: t("hero.cards.resume.title"),
       description: t("hero.cards.resume.description"),
-      href: "/resume",
+      href: `/${locale}/resume`,
       color: "success" as const,
       untranslatedSection: "resume",
     },
     {
       title: t("hero.cards.blog.title"),
       description: t("hero.cards.blog.description"),
-      href: "/blog",
+      href: `/${locale}/blog`,
       color: "info" as const,
       untranslatedSection: "blog",
     },
     {
       title: t("hero.cards.contact.title"),
       description: t("hero.cards.contact.description"),
-      href: "/contact",
+      href: `/${locale}/contact`,
       color: "warning" as const,
       untranslatedSection: "contact",
     },
@@ -71,6 +82,7 @@ export default function HomePage() {
 
   return (
     <PageContainer
+      key={locale} // Force re-render when locale changes
       style={{ position: "relative", minHeight: "100vh", overflow: "visible" }}
     >
       <Container
@@ -79,7 +91,13 @@ export default function HomePage() {
       >
         <HeroContainer>
           <MotionWrapper variant="fadeIn" duration={0.5} delay={0.2}>
-            <HeroTitle variant="h2" gutterBottom>
+            <HeroTitle
+              variant="h2"
+              gutterBottom
+              onClick={() => {
+                console.log("Clicked title:", t("hero.title"));
+              }}
+            >
               <AnimatedText
                 type="scaleUp"
                 length={t("hero.title").length}
@@ -99,7 +117,7 @@ export default function HomePage() {
           <MotionWrapper variant="slideUp" duration={0.5} delay={0.6}>
             <ButtonContainer>
               <HeroButton
-                href="/about"
+                href={`/${locale}/about`}
                 variant="contained"
                 size="large"
                 endIcon={<PersonIcon />}
@@ -108,7 +126,7 @@ export default function HomePage() {
                 {t("hero.cards.about.button")}
               </HeroButton>
               <HeroButton
-                href="/contact"
+                href={`/${locale}/contact`}
                 variant="contained"
                 size="large"
                 endIcon={<ContactIcon />}
@@ -123,7 +141,7 @@ export default function HomePage() {
         {portfolioSections.map((section, index: number) => {
           return (
             <MotionWrapper
-              key={section.title}
+              key={`${section.title}-${locale}`} // Include locale in key
               variant="slideUp"
               duration={0.5}
               delay={index * 0.1}
@@ -151,29 +169,39 @@ export default function HomePage() {
                         </IconButton>
                       </SectionIcon>
                     </MotionWrapper>
-                    <SectionTitle variant="h6">{section.title}</SectionTitle>
                   </IconContainer>
-
-                  <SectionDescription variant="body2" color="text.secondary">
+                  <SectionTitle
+                    variant="h5"
+                    gutterBottom
+                    sx={{ textAlign: "center" }}
+                  >
+                    {section.title}
+                  </SectionTitle>
+                  <SectionDescription
+                    variant="body1"
+                    color="text.secondary"
+                    sx={{ textAlign: "center", mb: 2 }}
+                  >
                     {section.description}
                   </SectionDescription>
-                </CardContent>
-
-                <Box sx={{ p: 3, pt: 0 }}>
-                  <CardsButton
-                    href={section.href}
-                    variant="outlined"
-                    size="small"
-                    endIcon={
-                      <TokenIcon sx={{ color: `${section.color}.main` }} />
-                    }
-                    aria-label={t(
-                      `hero.cards.${section.untranslatedSection}.button`
-                    )}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      mt: 2,
+                    }}
                   >
-                    {t(`hero.cards.${section.untranslatedSection}.button`)}
-                  </CardsButton>
-                </Box>
+                    <CardsButton
+                      href={section.href}
+                      variant="contained"
+                      color={section.color}
+                      sx={{ borderRadius: 1 }}
+                    >
+                      {t(`hero.cards.${section.untranslatedSection}.button`)}
+                    </CardsButton>
+                  </Box>
+                </CardContent>
               </SectionCard>
             </MotionWrapper>
           );

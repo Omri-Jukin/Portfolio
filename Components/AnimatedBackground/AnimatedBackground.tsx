@@ -8,11 +8,47 @@ import {
   Polyhedron,
 } from "@react-three/drei";
 import * as THREE from "three";
+import { usePathname } from "next/navigation";
 import {
   AnimationType,
   AnimatedBackgroundProps,
 } from "./AnimatedBackground.type";
 import DNAHelix from "../DNAHelix/DNAHelix";
+
+// Path-based animation mapping
+export const getAnimationForPath = (path: string): AnimationType => {
+  // Only remove locale if it's a valid locale code
+  const validLocales = ["en", "es", "fr", "he"];
+  const localeMatch = path.match(/^\/([a-z]{2})\/?/);
+  const cleanPath =
+    localeMatch && validLocales.includes(localeMatch[1])
+      ? path.replace(/^\/[a-z]{2}\/?/, "").replace(/^\//, "")
+      : path.replace(/^\//, "");
+
+  switch (cleanPath) {
+    case "":
+    case "home":
+      return "torusKnot"; // Home page gets torus knot
+    case "about":
+      return "dna"; // About page gets the impressive DNA animation
+    case "contact":
+      return "stars"; // Contact page gets stars
+    case "blog":
+      return "polyhedron"; // Blog page gets polyhedron
+    case "career":
+      return "dna"; // Career page gets DNA (professional/scientific)
+    case "resume":
+      return "torusKnot"; // Resume page gets torus knot
+    case "admin":
+      return "stars"; // Admin pages get stars
+    default:
+      // For any other paths, check if they contain certain keywords
+      if (cleanPath.includes("blog")) return "polyhedron";
+      if (cleanPath.includes("admin")) return "stars";
+      if (cleanPath.includes("dna")) return "dna";
+      return "dna"; // Default fallback
+  }
+};
 
 export const AnimatedObject: React.FC<{
   type: AnimationType;
@@ -88,12 +124,15 @@ export const AnimatedObject: React.FC<{
 export const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
   animationType,
   isMobile,
+  path,
+  manualOverride = false,
 }) => {
   // Track whether the user is interacting (grabbing)
   const [spinning, setSpinning] = useState(true);
   const [mounted, setMounted] = useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
+  const currentPath = usePathname();
 
   // Fallback mobile detection if isMobile is undefined
   const [detectedMobile, setDetectedMobile] = useState(false);
@@ -106,6 +145,16 @@ export const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
 
   // Use passed isMobile prop, fallback to detection, or default to false
   const isActuallyMobile = isMobile ?? detectedMobile ?? false;
+
+  // Determine which animation to use based on path or fallback to provided animationType
+  // If user manually overrode, use their choice; otherwise use path-based animation
+  const effectiveAnimationType = manualOverride
+    ? animationType
+    : path
+    ? getAnimationForPath(path)
+    : currentPath
+    ? getAnimationForPath(currentPath)
+    : animationType;
 
   // Prevent hydration issues
   useEffect(() => {
@@ -139,7 +188,7 @@ export const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
           toneMappingExposure: isDark ? 1.5 : 0.8, // Higher exposure for dark mode glow
         }}
       >
-        {animationType === "dna" ? (
+        {effectiveAnimationType === "dna" ? (
           // For DNA/helix, ultra-enhanced lighting for maximum glow
           <>
             <ambientLight
@@ -180,7 +229,7 @@ export const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
               decay={2}
             />
             <AnimatedObject
-              type={animationType}
+              type={effectiveAnimationType}
               spinning={spinning}
               isMobile={isActuallyMobile}
             />
@@ -211,7 +260,7 @@ export const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
               onPointerUp={() => setSpinning(true)}
             >
               <AnimatedObject
-                type={animationType}
+                type={effectiveAnimationType}
                 spinning={spinning}
                 isMobile={isActuallyMobile}
               />

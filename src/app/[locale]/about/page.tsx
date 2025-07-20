@@ -1,27 +1,13 @@
 "use client";
 
 import React from "react";
-import {
-  Box,
-  Typography,
-  Grid,
-  Card,
-  CardContent,
-  Chip,
-  Stack,
-} from "@mui/material";
+import { Box, Typography, Card, CardContent, Chip, Stack } from "@mui/material";
 import { useTranslations } from "next-intl";
 import MotionWrapper from "#/Components/MotionWrapper";
 
 export default function AboutPage() {
   const t = useTranslations("about");
   const interestsT = useTranslations("interests");
-
-  // Parse the profile text into bullet points
-  const profilePoints = t("profile")
-    .split("•")
-    .filter((point) => point.trim())
-    .map((point) => point.trim());
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: "1200px", mx: "auto" }}>
@@ -67,39 +53,47 @@ export default function AboutPage() {
               gutterBottom
               sx={{ color: "primary.main" }}
             >
-              Professional Profile
+              {interestsT("professionalProfile.title")}
             </Typography>
             <Stack spacing={2}>
-              {profilePoints.map((point, index) => (
-                <Box
-                  key={index}
-                  sx={{ display: "flex", alignItems: "flex-start" }}
-                >
+              {interestsT
+                .raw("professionalProfile.points")
+                .map((point: string, index: number) => (
                   <Box
-                    sx={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: "50%",
-                      backgroundColor: "primary.main",
-                      mt: 1,
-                      mr: 2,
-                      flexShrink: 0,
-                    }}
-                  />
-                  <Typography variant="body1" sx={{ lineHeight: 1.7 }}>
-                    {point}
-                  </Typography>
-                </Box>
-              ))}
+                    key={index}
+                    sx={{ display: "flex", alignItems: "flex-start" }}
+                  >
+                    <Box
+                      sx={{
+                        width: 8,
+                        height: 8,
+                        borderRadius: "50%",
+                        backgroundColor: "primary.main",
+                        mt: 1,
+                        mr: 2,
+                        flexShrink: 0,
+                      }}
+                    />
+                    <Typography variant="body1" sx={{ lineHeight: 1.7 }}>
+                      {point}
+                    </Typography>
+                  </Box>
+                ))}
             </Stack>
           </CardContent>
         </Card>
       </MotionWrapper>
 
       {/* Professional Interests & Additional Activities */}
-      <Grid container spacing={4}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          gap: 4,
+        }}
+      >
         {/* Professional Interests */}
-        <Grid component="div">
+        <Box sx={{ flex: 1 }}>
           <MotionWrapper variant="slideUp" duration={0.8} delay={0.8}>
             <Card sx={{ height: "100%", backgroundColor: "background.paper" }}>
               <CardContent sx={{ p: 3 }}>
@@ -133,10 +127,10 @@ export default function AboutPage() {
               </CardContent>
             </Card>
           </MotionWrapper>
-        </Grid>
+        </Box>
 
         {/* Additional Activities */}
-        <Grid component="div">
+        <Box sx={{ flex: 1 }}>
           <MotionWrapper variant="slideUp" duration={0.8} delay={1.0}>
             <Card sx={{ height: "100%", backgroundColor: "background.paper" }}>
               <CardContent sx={{ p: 3 }}>
@@ -146,11 +140,11 @@ export default function AboutPage() {
                   gutterBottom
                   sx={{ color: "info.main" }}
                 >
-                  Additional Activities
+                  {interestsT("additionalActivities.title")}
                 </Typography>
                 <Stack spacing={2}>
                   {interestsT
-                    .raw("additional")
+                    .raw("additionalActivities.points")
                     .map((activity: string, index: number) => (
                       <Box
                         key={index}
@@ -176,8 +170,8 @@ export default function AboutPage() {
               </CardContent>
             </Card>
           </MotionWrapper>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
     </Box>
   );
 }

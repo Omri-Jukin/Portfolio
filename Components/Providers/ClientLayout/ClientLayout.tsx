@@ -7,6 +7,7 @@ import { Header, TLayout } from "~/Header";
 import AnimatedBackground, { AnimationType } from "~/AnimatedBackground";
 import Footer from "@/app/[locale]/Footer";
 import { useLocale } from "next-intl";
+import { usePathname } from "next/navigation";
 import createEmotionCache from "@/app/mui-emotion-cache";
 import { CacheProvider } from "@emotion/react";
 import ResponsiveLayout from "&/ResponsiveLayout";
@@ -22,8 +23,10 @@ export default function ClientLayout({
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [forceLayout, setForceLayout] = useState<TResponsiveLayout>("auto");
+  const [manualOverride, setManualOverride] = useState(false); // Track if user manually overrode animation
   const locale = useLocale();
   const isRTL = locale === "he";
+  const currentPath = usePathname();
 
   useEffect(() => {
     // Load theme preferences
@@ -41,6 +44,10 @@ export default function ClientLayout({
       setAnimationType(storedAnimation);
     }
 
+    // Load manual override preference
+    const storedOverride = localStorage.getItem("manualOverride");
+    setManualOverride(storedOverride === "true");
+
     // Get stored layout preferences
     const storedLayout = localStorage.getItem(
       "layout"
@@ -52,6 +59,14 @@ export default function ClientLayout({
 
     setMounted(true);
   }, [isMobile]);
+
+  // Reset manual override when path changes (user navigates to new page)
+  useEffect(() => {
+    if (manualOverride) {
+      setManualOverride(false);
+      localStorage.removeItem("manualOverride");
+    }
+  }, [currentPath, manualOverride]);
 
   if (!mounted) {
     // Optionally, render a loader or just null
@@ -65,7 +80,9 @@ export default function ClientLayout({
 
   const handleAnimationChange = (newAnimationType: AnimationType) => {
     setAnimationType(newAnimationType);
+    setManualOverride(true); // Mark that user manually overrode the animation
     localStorage.setItem("animationType", newAnimationType);
+    localStorage.setItem("manualOverride", "true");
   };
 
   const handleLayoutChange = (layout: TLayout) => {
@@ -111,11 +128,13 @@ export default function ClientLayout({
           onLayoutChange={handleLayoutChange}
         />
 
-        {/* Animated Background - Persistent across all pages */}
+        {/* Animated Background - Path-dependent animations */}
         <AnimatedBackground
           animationType={animationType}
           isMobile={isMobile}
-          key="persistent-dna-background"
+          path={currentPath}
+          manualOverride={manualOverride}
+          key={`background-${currentPath}-${manualOverride}`}
         />
 
         {/* Main Layout Container */}

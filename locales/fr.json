@@ -140,7 +140,29 @@
       "Rédaction Technique",
       "Architecture Système"
     ],
-    "additional": "• Fondateur d'une communauté en ligne promouvant la pensée critique, la rationalité et les discussions ouvertes.\n\n• Impliqué dans des conférences publiques et des diffusions en direct sur des sujets liés aux sciences exactes, sciences sociales, pensée rationnelle et technologie.\n\n• Magicien amateur, utilisant des compétences créatives pour engager le public et encourager la curiosité."
+    "additional": [
+      "Fondateur d'une communauté en ligne promouvant la pensée critique, la rationalité et les discussions ouvertes",
+      "Impliqué dans des conférences publiques et des diffusions en direct sur des sujets liés aux sciences exactes, sciences sociales, pensée rationnelle et technologie",
+      "Magicien amateur, utilisant des compétences créatives pour engager le public et encourager la curiosité"
+    ],
+    "professionalProfile": {
+      "title": "Profil Professionnel",
+      "points": [
+        "Capacité prouvée à développer des applications évolutives et à gérer des systèmes de données complexes.",
+        "Vaste expérience dans l'industrie de l'assurance, du service client au développement de systèmes centraux.",
+        "Leadership démontré dans la formation et le mentorat d'équipes, l'amélioration des processus, et la conduite du changement organisationnel et de la croissance.",
+        "Solides compétences en résolution de problèmes avec un accent sur la conception et l'optimisation de systèmes.",
+        "Engagement envers l'apprentissage continu et la croissance professionnelle dans l'industrie technologique."
+      ]
+    },
+    "additionalActivities": {
+      "title": "Activités Supplémentaires",
+      "points": [
+        "Fondateur d'une communauté en ligne promouvant la pensée critique, la rationalité et les discussions ouvertes.",
+        "Impliqué dans des conférences publiques et des diffusions en direct sur des sujets liés aux sciences exactes, sciences sociales, pensée rationnelle et technologie.",
+        "Magicien amateur, utilisant des compétences créatives pour engager le public et encourager la curiosité."
+      ]
+    }
   },
   "theme": {
     "light": "Passer en mode clair",

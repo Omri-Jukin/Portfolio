@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "../globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import { geistSans, geistMono } from "#/lib/fonts";
-import ClientLayout from "../../../Components/Providers/ClientLayout/ClientLayout";
+import ClientLayout from "&/ClientLayout/ClientLayout";
 import { getMessages, getTranslations } from "next-intl/server";
 
 export interface Props {
@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function RootLayout({ children, params }: Props) {
   const { locale } = await params;
-  const messages = await getMessages();
+  const messages = await getMessages({ locale });
   const isRTL = locale === "he";
 
   return (
