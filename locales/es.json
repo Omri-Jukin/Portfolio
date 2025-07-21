@@ -242,6 +242,41 @@
   },
   "contact": {
     "title": "Contacto",
+    "description": "¡Ponte en contacto conmigo para colaboraciones, oportunidades o simplemente para saludar!",
+    "form": {
+      "title": "Envíame un mensaje",
+      "description": "Me encantaría saber de ti. Completa el formulario a continuación y te responderé lo antes posible.",
+      "name": "Nombre Completo",
+      "email": "Dirección de Email",
+      "phone": "Número de Teléfono",
+      "subject": "Asunto",
+      "message": "Tu Mensaje",
+      "submit": "Enviar Mensaje",
+      "sending": "Enviando...",
+      "success": "¡Gracias! Tu mensaje ha sido enviado exitosamente. Te responderé pronto.",
+      "error": "Algo salió mal. Por favor intenta de nuevo o contáctame directamente.",
+      "validation": {
+        "nameRequired": "El nombre es requerido",
+        "nameMin": "El nombre debe tener al menos 2 caracteres",
+        "emailRequired": "El email es requerido",
+        "emailInvalid": "Por favor ingresa una dirección de email válida",
+        "phoneRequired": "El número de teléfono es requerido",
+        "subjectRequired": "El asunto es requerido",
+        "subjectMin": "El asunto debe tener al menos 5 caracteres",
+        "messageRequired": "El mensaje es requerido",
+        "messageMin": "El mensaje debe tener al menos 10 caracteres"
+      }
+    },
+    "info": {
+      "title": "Información de Contacto",
+      "email": "Email",
+      "phone": "Teléfono",
+      "timezone": "Zona Horaria",
+      "location": "Ubicación"
+    },
+    "location": {
+      "israel": "Israel"
+    },
     "email": "omrijukin@gmail.com",
     "phone": "(+972) 052 334 4064",
     "timezone": "Asia/Jerusalem",

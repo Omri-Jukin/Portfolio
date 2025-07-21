@@ -241,6 +241,41 @@
   },
   "contact": {
     "title": "צור קשר",
+    "description": "צור איתי קשר לשיתופי פעולה, הזדמנויות או פשוט לומר שלום!",
+    "form": {
+      "title": "שלח לי הודעה",
+      "description": "אשמח לשמוע ממך. מלא את הטופס למטה ואחזור אליך בהקדם האפשרי.",
+      "name": "שם מלא",
+      "email": "כתובת אימייל",
+      "phone": "מספר טלפון",
+      "subject": "נושא",
+      "message": "ההודעה שלך",
+      "submit": "שלח הודעה",
+      "sending": "שולח...",
+      "success": "תודה! ההודעה שלך נשלחה בהצלחה. אחזור אליך בקרוב.",
+      "error": "משהו השתבש. אנא נסה שוב או צור איתי קשר ישירות.",
+      "validation": {
+        "nameRequired": "השם נדרש",
+        "nameMin": "השם חייב להכיל לפחות 2 תווים",
+        "emailRequired": "האימייל נדרש",
+        "emailInvalid": "אנא הכנס כתובת אימייל תקינה",
+        "phoneRequired": "מספר הטלפון נדרש",
+        "subjectRequired": "הנושא נדרש",
+        "subjectMin": "הנושא חייב להכיל לפחות 5 תווים",
+        "messageRequired": "ההודעה נדרשת",
+        "messageMin": "ההודעה חייבת להכיל לפחות 10 תווים"
+      }
+    },
+    "info": {
+      "title": "פרטי קשר",
+      "email": "אימייל",
+      "phone": "טלפון",
+      "timezone": "אזור זמן",
+      "location": "מיקום"
+    },
+    "location": {
+      "israel": "ישראל"
+    },
     "email": "omrijukin@gmail.com",
     "phone": "(+972) 052 334 4064",
     "timezone": "Asia/Jerusalem",

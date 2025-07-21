@@ -100,21 +100,21 @@
       "technical": {
         "title": "Technical Skills",
         "items": [
-          { "name": "System Architecture", "level": 100 },
-          { "name": "Frontend Development", "level": 100 },
-          { "name": "Backend Development", "level": 95 },
-          { "name": "Database Management", "level": 90 },
-          { "name": "Cloud Technologies", "level": 85 },
-          { "name": "DevOps & CI/CD", "level": 80 }
+          { "name": "Frontend Development", "level": 90 },
+          { "name": "Backend Development", "level": 80 },
+          { "name": "System Architecture", "level": 50 },
+          { "name": "Database Management", "level": 50 },
+          { "name": "Cloud Technologies", "level": 35 },
+          { "name": "DevOps & CI/CD", "level": 30 }
         ]
       },
       "programming": {
         "title": "Programming Languages",
         "items": [
-          { "name": "TypeScript", "level": "Expert" },
-          { "name": "JavaScript", "level": "Expert" },
-          { "name": "Java", "level": "Beginner" },
-          { "name": "C#", "level": "Beginner" },
+          { "name": "TypeScript", "level": "Advanced" },
+          { "name": "JavaScript", "level": "Advanced" },
+          { "name": "Java", "level": "Intermediate" },
+          { "name": "C#", "level": "Intermediate" },
           { "name": "Python", "level": "Beginner" }
         ]
       },
@@ -241,6 +241,41 @@
   },
   "contact": {
     "title": "Contact",
+    "description": "Get in touch with me for collaborations, opportunities, or just to say hello!",
+    "form": {
+      "title": "Send me a message",
+      "description": "I'd love to hear from you. Fill out the form below and I'll get back to you as soon as possible.",
+      "name": "Full Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "subject": "Subject",
+      "message": "Your Message",
+      "submit": "Send Message",
+      "sending": "Sending...",
+      "success": "Thank you! Your message has been sent successfully. I'll get back to you soon.",
+      "error": "Something went wrong. Please try again or contact me directly.",
+      "validation": {
+        "nameRequired": "Name is required",
+        "nameMin": "Name must be at least 2 characters",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email address",
+        "phoneRequired": "Phone number is required",
+        "subjectRequired": "Subject is required",
+        "subjectMin": "Subject must be at least 5 characters",
+        "messageRequired": "Message is required",
+        "messageMin": "Message must be at least 10 characters"
+      }
+    },
+    "info": {
+      "title": "Contact Information",
+      "email": "Email",
+      "phone": "Phone",
+      "timezone": "Timezone",
+      "location": "Location"
+    },
+    "location": {
+      "israel": "Israel"
+    },
     "email": "omrijukin@gmail.com",
     "phone": "(+972) 052 334 4064",
     "timezone": "Asia/Jerusalem",

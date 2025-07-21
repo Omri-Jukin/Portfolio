@@ -12,6 +12,7 @@ import createEmotionCache from "@/app/mui-emotion-cache";
 import { CacheProvider } from "@emotion/react";
 import ResponsiveLayout from "&/ResponsiveLayout";
 import { ResponsiveLayout as TResponsiveLayout } from "&/ResponsiveLayout";
+import { TRPCProvider } from "$/trpc/provider";
 
 export default function ClientLayout({
   children,
@@ -114,65 +115,67 @@ export default function ClientLayout({
   const clientSideEmotionCache = createEmotionCache();
 
   return (
-    <CacheProvider value={clientSideEmotionCache}>
-      <ThemeProvider theme={appTheme}>
-        <CssBaseline />
-        {/* Fixed Header */}
-        <Header
-          animationType={animationType}
-          onAnimationTypeChange={handleAnimationChange}
-          isDarkMode={isDarkMode}
-          onThemeToggle={handleThemeToggle}
-          isMobile={isMobile}
-          forceLayout={forceLayout}
-          onLayoutChange={handleLayoutChange}
-        />
+    <TRPCProvider>
+      <CacheProvider value={clientSideEmotionCache}>
+        <ThemeProvider theme={appTheme}>
+          <CssBaseline />
+          {/* Fixed Header */}
+          <Header
+            animationType={animationType}
+            onAnimationTypeChange={handleAnimationChange}
+            isDarkMode={isDarkMode}
+            onThemeToggle={handleThemeToggle}
+            isMobile={isMobile}
+            forceLayout={forceLayout}
+            onLayoutChange={handleLayoutChange}
+          />
 
-        {/* Animated Background - Path-dependent animations */}
-        <AnimatedBackground
-          animationType={animationType}
-          isMobile={isMobile}
-          path={currentPath}
-          manualOverride={manualOverride}
-          key={`background-${currentPath}-${manualOverride}`}
-        />
+          {/* Animated Background - Path-dependent animations */}
+          <AnimatedBackground
+            animationType={animationType}
+            isMobile={isMobile}
+            path={currentPath}
+            manualOverride={manualOverride}
+            key={`background-${currentPath}-${manualOverride}`}
+          />
 
-        {/* Main Layout Container */}
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            minHeight: "100vh",
-            pt: "4rem", // Account for fixed header height
-          }}
-        >
-          {/* Main Content Area */}
+          {/* Main Layout Container */}
           <Box
             sx={{
-              flex: 1,
               display: "flex",
               flexDirection: "column",
-              overflow: "hidden", // Prevent scrolling in main content
+              minHeight: "100vh",
+              pt: "4rem", // Account for fixed header height
             }}
           >
-            <ResponsiveLayout isMobile={isMobile} forceLayout={forceLayout}>
-              <Box
-                sx={{
-                  flex: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                  overflow: "auto", // Allow scrolling only within content area
-                }}
-              >
-                {children}
-              </Box>
-            </ResponsiveLayout>
-          </Box>
+            {/* Main Content Area */}
+            <Box
+              sx={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                overflow: "hidden", // Prevent scrolling in main content
+              }}
+            >
+              <ResponsiveLayout isMobile={isMobile} forceLayout={forceLayout}>
+                <Box
+                  sx={{
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    overflow: "auto", // Allow scrolling only within content area
+                  }}
+                >
+                  {children}
+                </Box>
+              </ResponsiveLayout>
+            </Box>
 
-          {/* Footer */}
-          <Footer />
-        </Box>
-      </ThemeProvider>
-    </CacheProvider>
+            {/* Footer */}
+            <Footer />
+          </Box>
+        </ThemeProvider>
+      </CacheProvider>
+    </TRPCProvider>
   );
 }

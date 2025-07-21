@@ -91,13 +91,7 @@ export default function HomePage() {
       >
         <HeroContainer>
           <MotionWrapper variant="fadeIn" duration={0.5} delay={0.2}>
-            <HeroTitle
-              variant="h2"
-              gutterBottom
-              onClick={() => {
-                console.log("Clicked title:", t("hero.title"));
-              }}
-            >
+            <HeroTitle variant="h2" gutterBottom>
               <AnimatedText
                 type="scaleUp"
                 length={t("hero.title").length}
