@@ -5,26 +5,57 @@ import {
   Typography,
   IconButton as MuiIconButton,
 } from "@mui/material";
+import { Canvas } from "@react-three/fiber";
 
-export const StyledCardContainer = styled(Box)(({ theme }) => ({
+export const StyledCardContainer = styled(Box, {
+  shouldForwardProp: (prop) => prop !== "transparent",
+})<{ transparent?: boolean }>(({ theme, transparent }) => ({
+  background: transparent ? "transparent" : theme.palette.background.paper,
   marginBottom: theme.spacing(2),
 }));
 
-export const StyledCard = styled(MuiCard)(({ theme }) => ({
-  borderRadius: theme.spacing(3),
-  background: "transparent",
+export const StyledCard = styled(MuiCard, {
+  shouldForwardProp: (prop) =>
+    prop !== "gradient" && prop !== "glow" && prop !== "transparent",
+})<{
+  gradient?: boolean;
+  glow?: boolean;
+  transparent?: boolean;
+}>(({ theme, gradient, glow, transparent }) => ({
+  borderRadius: theme.spacing(2),
+  background: transparent
+    ? "transparent"
+    : gradient
+    ? `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${theme.palette.background.default} 100%)`
+    : theme.palette.background.paper,
   border: `1px solid ${
     theme.palette.mode === "dark"
       ? theme.palette.grey[700]
       : theme.palette.grey[200]
   }`,
   transition: "all 0.3s ease-in-out",
+  position: "relative",
+  overflow: "hidden",
+  ...(glow && {
+    "&::before": {
+      content: '""',
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: `linear-gradient(45deg, ${theme.palette.primary.main}20, ${theme.palette.secondary.main}20)`,
+      borderRadius: theme.spacing(2),
+      zIndex: -1,
+    },
+  }),
   "&:hover": {
     transform: "translateY(-4px)",
-    boxShadow:
-      theme.palette.mode === "dark"
-        ? "0 8px 32px rgba(0, 0, 0, 0.4)"
-        : "0 8px 32px rgba(0, 0, 0, 0.15)",
+    boxShadow: glow
+      ? `0 8px 32px ${theme.palette.primary.main}40`
+      : theme.palette.mode === "dark"
+      ? "0 8px 32px rgba(0, 0, 0, 0.4)"
+      : "0 8px 32px rgba(0, 0, 0, 0.15)",
   },
   "&:focus-within": {
     outline: `2px solid ${theme.palette.primary.main}`,
@@ -38,6 +69,15 @@ export const StyledCardTitle = styled(Typography)(({ theme }) => ({
   marginBottom: theme.spacing(1),
 }));
 
+export const StyledCardTagline = styled(Typography)(({ theme }) => ({
+  fontSize: "0.9rem",
+  fontWeight: 500,
+  color: theme.palette.primary.main,
+  marginBottom: theme.spacing(1),
+  textTransform: "uppercase",
+  letterSpacing: "0.5px",
+}));
+
 export const StyledCardDescription = styled(Typography)(({ theme }) => ({
   marginBottom: theme.spacing(1.5),
   lineHeight: 1.6,
@@ -48,7 +88,7 @@ export const StyledCardDate = styled(Typography)({
   opacity: 0.8,
 });
 
-export const IconButton = styled(MuiIconButton)({
+export const IconButton = styled(MuiIconButton)(({ theme }) => ({
   width: "fit-content",
   height: "fit-content",
   maxWidth: "2rem",
@@ -56,7 +96,7 @@ export const IconButton = styled(MuiIconButton)({
   padding: 0,
   margin: 0,
   borderRadius: "50%",
-  backgroundColor: "transparent",
+  backgroundColor: theme.palette.background.paper,
   border: "none",
   "@keyframes spin": {
     "0%": {
@@ -72,4 +112,101 @@ export const IconButton = styled(MuiIconButton)({
     animation: "spin 1s linear infinite",
     animationDirection: "alternate",
   },
+}));
+
+// Photo Card styles
+export const PhotoCardContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  gap: theme.spacing(3),
+  width: "100%",
+  [theme.breakpoints.down("md")]: {
+    flexDirection: "column",
+    alignItems: "center",
+  },
+}));
+
+export const PhotoCardImage = styled(Box, {
+  shouldForwardProp: (prop) => prop !== "size" && prop !== "photoposition",
+})<{
+  size: string;
+  photoposition: string;
+}>(({ theme, size, photoposition }) => ({
+  flexShrink: 0,
+  width: size === "small" ? "120px" : size === "medium" ? "180px" : "240px",
+  height: size === "small" ? "120px" : size === "medium" ? "180px" : "240px",
+  borderRadius: theme.spacing(1.5),
+  overflow: "hidden",
+  border: `3px solid ${theme.palette.primary.main}`,
+  boxShadow: theme.shadows[4],
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  order: photoposition === "left" ? 0 : 1,
+  [theme.breakpoints.down("md")]: {
+    order: 0,
+    alignSelf: "center",
+    marginBottom: theme.spacing(2),
+  },
+}));
+
+export const PhotoCardContent = styled(Box)(() => ({
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+  minHeight: 0,
+}));
+
+export const PhotoCardImageElement = styled("img")({
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+  objectPosition: "center",
+  transition: "transform 0.3s ease",
+  display: "block",
+  "&:hover": {
+    transform: "scale(1.05)",
+  },
 });
+
+// Enhanced animations
+export const AnimatedCard = styled(Box, {
+  shouldForwardProp: (prop) => prop !== "animation",
+})<{ animation: string }>(({ animation }) => ({
+  ...(animation === "fade" && {
+    animation: "fadeIn 0.6s ease-in-out",
+  }),
+  ...(animation === "slide" && {
+    animation: "slideIn 0.6s ease-in-out",
+  }),
+  ...(animation === "scale" && {
+    animation: "scaleIn 0.6s ease-in-out",
+  }),
+  ...(animation === "bounce" && {
+    animation: "bounceIn 0.8s ease-in-out",
+  }),
+  "@keyframes fadeIn": {
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+  },
+  "@keyframes slideIn": {
+    from: { transform: "translateY(20px)", opacity: 0 },
+    to: { transform: "translateY(0)", opacity: 1 },
+  },
+  "@keyframes scaleIn": {
+    from: { transform: "scale(0.9)", opacity: 0 },
+    to: { transform: "scale(1)", opacity: 1 },
+  },
+  "@keyframes bounceIn": {
+    "0%": { transform: "scale(0.3)", opacity: 0 },
+    "50%": { transform: "scale(1.05)" },
+    "70%": { transform: "scale(0.9)" },
+    "100%": { transform: "scale(1)", opacity: 1 },
+  },
+}));
+
+export const CanvasContainer = styled(Canvas)(({ theme }) => ({
+  background: "transparent",
+  borderRadius: theme.spacing(2),
+}));

@@ -44,10 +44,10 @@ export const dropVanishAnimation = keyframes`
 	}
 `;
 
-export const PageContainer = styled(Box)({
+export const PageContainer = styled(Box)(({ theme }) => ({
   minHeight: "100vh",
-  background: "transparent",
-});
+  background: theme.palette.background.paper,
+}));
 
 export const HeroContainer = styled(Box)(({ theme }) => ({
   textAlign: "center",
@@ -167,7 +167,7 @@ export const SectionCard = styled(Card)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   transition: "all 0.3s ease-in-out",
-  background: "transparent",
+  background: theme.palette.background.paper,
   border: `1px solid ${
     theme.palette.mode === "dark"
       ? "rgba(255, 255, 255, 0.1)"

@@ -4,7 +4,7 @@ import IconButton from "@mui/material/IconButton";
 
 export const StyledDarkModeToggle = styled(IconButton)(({ theme }) => ({
   position: "relative",
-  backgroundColor: "transparent",
+  backgroundColor: theme.palette.background.paper,
   border: `1px solid ${
     theme.palette.mode === "dark"
       ? "rgba(255, 255, 255, 0.2)"

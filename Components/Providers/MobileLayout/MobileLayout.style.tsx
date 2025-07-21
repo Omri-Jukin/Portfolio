@@ -1,11 +1,11 @@
 import { Box, styled } from "@mui/material";
 
-export const MobileLayoutContainer = styled(Box)({
+export const MobileLayoutContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   flex: 1,
   padding: "16px",
-  backgroundColor: "transparent",
+  backgroundColor: theme.palette.background.paper,
   overflow: "hidden",
   WebkitOverflowScrolling: "touch",
 
@@ -59,4 +59,4 @@ export const MobileLayoutContainer = styled(Box)({
     fontSize: "0.8125rem",
     lineHeight: 1.6,
   },
-});
+}));

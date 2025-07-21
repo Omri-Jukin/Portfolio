@@ -1,11 +1,15 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Container, CardContent, Box } from "@mui/material";
+import { Container } from "@mui/material";
 import { useTranslations, useLocale } from "next-intl";
+import ProfilePhoto from "^/profile-photo.jpg";
 import {
   Person as PersonIcon,
   Email as ContactIcon,
+  Work as WorkIcon,
+  Description as DescriptionIcon,
+  Article as ArticleIcon,
 } from "@mui/icons-material";
 import MotionWrapper from "~/MotionWrapper";
 import {
@@ -15,17 +19,10 @@ import {
   HeroDescription,
   ButtonContainer,
   HeroButton,
-  SectionCard,
-  IconContainer,
-  SectionIcon,
-  SectionTitle,
-  SectionDescription,
-  CardsButton,
+  PortfolioSection,
 } from "~/Common";
 import AnimatedText from "~/AnimatedText";
-import { PortfolioSection } from "~/Common";
-import { IconButton } from "~/Card";
-import { Logo } from "^/logo";
+import Card from "~/Card";
 
 export default function HomePage() {
   const t = useTranslations("home");
@@ -45,38 +42,72 @@ export default function HomePage() {
   const portfolioSections: PortfolioSection[] = [
     {
       title: t("hero.cards.about.title"),
+      tagline: "About Me",
       description: t("hero.cards.about.description"),
       href: `/${locale}/about`,
-      color: "primary" as const,
-      untranslatedSection: "about",
+      color: "#1976d2",
+      icon: <PersonIcon />,
+      buttonText: t("hero.cards.about.button"),
+      photoUrl: ProfilePhoto.src,
+      photoAlt: "Omri Jukin",
+      photoPosition: "left" as const,
+      photoSize: "large" as const,
+      animation: "bounce" as const,
+      transparent: true,
+      gradient: true,
+      glow: true,
     },
     {
       title: t("hero.cards.career.title"),
+      tagline: "Professional Journey",
       description: t("hero.cards.career.description"),
       href: `/${locale}/career`,
-      color: "secondary" as const,
-      untranslatedSection: "career",
+      color: "#dc004e",
+      icon: <WorkIcon />,
+      buttonText: t("hero.cards.career.button"),
+      animation: "fade" as const,
+      transparent: true,
+      gradient: true,
+      glow: true,
     },
     {
       title: t("hero.cards.resume.title"),
+      tagline: "Skills & Experience",
       description: t("hero.cards.resume.description"),
       href: `/${locale}/resume`,
-      color: "success" as const,
-      untranslatedSection: "resume",
+      color: "#2e7d32",
+      icon: <DescriptionIcon />,
+      buttonText: t("hero.cards.resume.button"),
+      animation: "scale" as const,
+      transparent: true,
+      gradient: true,
+      glow: true,
     },
     {
       title: t("hero.cards.blog.title"),
+      tagline: "Thoughts & Insights",
       description: t("hero.cards.blog.description"),
       href: `/${locale}/blog`,
-      color: "info" as const,
-      untranslatedSection: "blog",
+      color: "#0288d1",
+      icon: <ArticleIcon />,
+      buttonText: t("hero.cards.blog.button"),
+      animation: "bounce" as const,
+      transparent: true,
+      gradient: true,
+      glow: true,
     },
     {
       title: t("hero.cards.contact.title"),
+      tagline: "Get In Touch",
       description: t("hero.cards.contact.description"),
       href: `/${locale}/contact`,
-      color: "warning" as const,
-      untranslatedSection: "contact",
+      color: "#ed6c02",
+      icon: <ContactIcon />,
+      buttonText: t("hero.cards.contact.button"),
+      animation: "fade" as const,
+      transparent: true,
+      gradient: true,
+      glow: true,
     },
   ];
 
@@ -132,74 +163,19 @@ export default function HomePage() {
           </MotionWrapper>
         </HeroContainer>
 
-        {portfolioSections.map((section, index: number) => {
-          return (
-            <MotionWrapper
-              key={`${section.title}-${locale}`} // Include locale in key
-              variant="slideUp"
-              duration={0.5}
-              delay={index * 0.1}
-              style={{
-                margin: "2vh 0",
-              }}
-            >
-              <SectionCard
-                sx={{
-                  background: "transparent",
-                  boxShadow: "none",
-                  border: "none",
-                }}
-              >
-                <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                  <IconContainer>
-                    <MotionWrapper
-                      variant="scale"
-                      duration={0.5}
-                      delay={index * 0.1}
-                    >
-                      <SectionIcon sx={{ color: `${section.color}.main` }}>
-                        <IconButton>
-                          <Logo />
-                        </IconButton>
-                      </SectionIcon>
-                    </MotionWrapper>
-                  </IconContainer>
-                  <SectionTitle
-                    variant="h5"
-                    gutterBottom
-                    sx={{ textAlign: "center" }}
-                  >
-                    {section.title}
-                  </SectionTitle>
-                  <SectionDescription
-                    variant="body1"
-                    color="text.secondary"
-                    sx={{ textAlign: "center", mb: 2 }}
-                  >
-                    {section.description}
-                  </SectionDescription>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      mt: 2,
-                    }}
-                  >
-                    <CardsButton
-                      href={section.href}
-                      variant="contained"
-                      color={section.color}
-                      sx={{ borderRadius: 1 }}
-                    >
-                      {t(`hero.cards.${section.untranslatedSection}.button`)}
-                    </CardsButton>
-                  </Box>
-                </CardContent>
-              </SectionCard>
-            </MotionWrapper>
-          );
-        })}
+        {portfolioSections.map((section, index: number) => (
+          <MotionWrapper
+            key={`${section.title}-${locale}`}
+            variant="slideUp"
+            duration={0.5}
+            delay={index * 0.1}
+            style={{
+              margin: "2vh 0",
+            }}
+          >
+            <Card {...section} />
+          </MotionWrapper>
+        ))}
       </Container>
     </PageContainer>
   );

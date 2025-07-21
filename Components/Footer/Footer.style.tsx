@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import type { Theme } from "@mui/material/styles";
 
 export const FooterContainer = styled(Box)(({ theme }: { theme: Theme }) => ({
-  backgroundColor: "transparent",
+  backgroundColor: theme.palette.background.paper,
   padding: theme.spacing(6, 2, 2, 2),
   borderTop: `1px solid ${theme.palette.divider}`,
   flexShrink: 0, // Prevent footer from shrinking

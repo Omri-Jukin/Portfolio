@@ -8,17 +8,19 @@ import {
   Paper,
 } from "@mui/material";
 
-export const FormContainer = styled(Paper)(({ theme }) => ({
+export const FormContainer = styled(Paper, {
+  shouldForwardProp: (prop) => prop !== "transparent",
+})<{ transparent?: boolean }>(({ theme, transparent }) => ({
   padding: theme.spacing(4),
   maxWidth: "600px",
   margin: "0 auto",
-  background: theme.palette.background.paper,
+  background: transparent ? "transparent" : theme.palette.background.paper,
   border: `1px solid ${
     theme.palette.mode === "dark"
       ? "rgba(255, 255, 255, 0.1)"
       : "rgba(0, 0, 0, 0.1)"
   }`,
-  borderRadius: (theme.shape.borderRadius as number) * 2,
+  borderRadius: theme.spacing(2),
   boxShadow: theme.shadows[4],
   transition: "all 0.3s ease-in-out",
   "&:hover": {
@@ -83,7 +85,7 @@ export const SubmitButton = styled(Button)(({ theme }) => ({
   fontSize: "1.1rem",
   fontWeight: 600,
   textTransform: "none",
-  borderRadius: (theme.shape.borderRadius as number) * 2,
+  borderRadius: theme.spacing(2),
   transition: "all 0.3s ease-in-out",
   "&:hover": {
     transform: "translateY(-2px)",
@@ -97,7 +99,7 @@ export const SubmitButton = styled(Button)(({ theme }) => ({
 
 export const SuccessMessage = styled(Alert)(({ theme }) => ({
   marginBottom: theme.spacing(3),
-  borderRadius: (theme.shape.borderRadius as number) * 2,
+  borderRadius: theme.spacing(2),
   "& .MuiAlert-icon": {
     fontSize: "1.5rem",
   },
@@ -105,7 +107,7 @@ export const SuccessMessage = styled(Alert)(({ theme }) => ({
 
 export const ErrorMessage = styled(Alert)(({ theme }) => ({
   marginBottom: theme.spacing(3),
-  borderRadius: (theme.shape.borderRadius as number) * 2,
+  borderRadius: theme.spacing(2),
   "& .MuiAlert-icon": {
     fontSize: "1.5rem",
   },
