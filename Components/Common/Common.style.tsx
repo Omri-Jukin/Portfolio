@@ -61,7 +61,10 @@ export const HeroTitle = styled(Typography)(({ theme }) => ({
   WebkitBackgroundClip: "text",
   WebkitTextFillColor: "transparent",
   marginBottom: theme.spacing(3),
-  textShadow: "0 10px 10px rgba(0, 0, 0, 0.5)",
+  textShadow:
+    theme.palette.mode === "dark"
+      ? "0 6px 12px rgba(0, 0, 0, 0.8), 3px 3px 6px rgba(0, 0, 0, 0.6)"
+      : "0 6px 12px rgba(0, 0, 0, 0.3), 3px 3px 6px rgba(0, 0, 0, 0.2)",
 }));
 
 export const HeroDescription = styled(Typography)(({ theme }) => ({

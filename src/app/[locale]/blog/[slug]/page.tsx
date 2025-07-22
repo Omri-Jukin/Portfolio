@@ -1,30 +1,46 @@
+"use client";
+
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { notFound } from "next/navigation";
-import { getPostBySlug } from "$/db/blog/blog";
+import { useParams } from "next/navigation";
+import { api } from "$/trpc/client";
+import TagChip from "~/TagChip";
 
-interface BlogPostPageProps {
-  params: Promise<{ slug: string }>;
-}
+export default function BlogPostPage() {
+  const params = useParams();
+  const slug = params.slug as string;
+  const {
+    data: post,
+    isLoading,
+    error,
+  } = api.blog.getBySlug.useQuery({ slug });
 
-export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  if (isLoading) {
+    return (
+      <Container maxWidth="md" sx={{ py: 6 }}>
+        <Typography>Loading post...</Typography>
+      </Container>
+    );
+  }
 
-  if (!post || post.status !== "published") {
-    return notFound();
+  if (error || !post) {
+    return (
+      <Container maxWidth="md" sx={{ py: 6 }}>
+        <Typography color="error">
+          Post not found or error loading post.
+        </Typography>
+      </Container>
+    );
   }
 
   return (
     <Container maxWidth="md" sx={{ py: 6 }}>
-      <Typography variant="h3" component="h1" gutterBottom>
+      <Typography variant="h3" gutterBottom>
         {post.title}
       </Typography>
       <Box sx={{ color: "text.secondary", mb: 2 }}>
         By {post.authorId} • {new Date(post.createdAt).toLocaleDateString()}
-        {post.publishedAt &&
-          ` • Published ${new Date(post.publishedAt).toLocaleDateString()}`}
         {post.publishedAt &&
           ` • Published ${new Date(post.publishedAt).toLocaleDateString()}`}
       </Box>
@@ -33,11 +49,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           {post.excerpt}
         </Typography>
       )}
-      <Typography
-        variant="body1"
-        component="div"
-        sx={{ whiteSpace: "pre-line" }}
-      >
+      <Typography variant="body1" sx={{ whiteSpace: "pre-line" }}>
         {post.content}
       </Typography>
       {post.tags && post.tags.length > 0 && (
@@ -46,20 +58,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             Tags:
           </Typography>
           <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-            {post.tags.map((tag: string, index: number) => (
-              <Box
-                key={index}
-                sx={{
-                  bgcolor: "primary.main",
-                  color: "primary.contrastText",
-                  px: 1,
-                  py: 0.5,
-                  borderRadius: 1,
-                  fontSize: "0.875rem",
-                }}
-              >
-                {tag}
-              </Box>
+            {post.tags.map((tag: string) => (
+              <TagChip tag={tag} key={tag} />
             ))}
           </Box>
         </Box>

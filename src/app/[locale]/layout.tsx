@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { geistSans, geistMono } from "#/lib/fonts";
 import ClientLayout from "&/ClientLayout/ClientLayout";
 import { getMessages, getTranslations } from "next-intl/server";
+import StructuredData from "./structured-data";
 
 export interface Props {
   children: React.ReactNode;
@@ -17,6 +18,55 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: t("title"),
     description: t("description"),
+    keywords: [
+      "full stack developer",
+      "web development",
+      "React",
+      "Next.js",
+      "TypeScript",
+      "portfolio",
+    ],
+    authors: [{ name: "Omri Jukin" }],
+    creator: "Omri Jukin",
+    publisher: "Omri Jukin",
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+    },
+    metadataBase: new URL("https://omrijukin.com"),
+    alternates: {
+      canonical: "/",
+      languages: {
+        en: "/en",
+        es: "/es",
+        fr: "/fr",
+        he: "/he",
+      },
+    },
+    openGraph: {
+      title: t("title"),
+      description: t("description"),
+      type: "website",
+      locale: locale,
+      siteName: "Omri Jukin Portfolio",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("title"),
+      description: t("description"),
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
   };
 }
 
@@ -27,6 +77,9 @@ export default async function RootLayout({ children, params }: Props) {
 
   return (
     <html lang={locale} dir={isRTL ? "rtl" : "ltr"}>
+      <head>
+        <StructuredData />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

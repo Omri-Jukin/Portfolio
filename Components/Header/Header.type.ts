@@ -1,11 +1,7 @@
-import { AnimationType } from "../AnimatedBackground";
-
 export type TLayout = "mobile" | "desktop" | "auto";
 
 export interface HeaderProps {
   isDarkMode?: boolean;
-  animationType: AnimationType;
-  onAnimationTypeChange: (type: AnimationType) => void;
   onThemeToggle?: (isDark: boolean) => void;
   isMobile?: boolean | undefined;
   forceLayout?: TLayout;

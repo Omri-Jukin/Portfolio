@@ -79,7 +79,7 @@ export default function CareerPage() {
       <Stack spacing={4}>
         {t.raw("experiences").map((experience: Experience, index: number) => (
           <MotionWrapper
-            key={index}
+            key={experience.role + experience.company}
             variant="slideUp"
             duration={0.8}
             delay={0.8 + index * 0.2}

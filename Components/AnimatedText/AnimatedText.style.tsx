@@ -25,7 +25,10 @@ export const HoverWrapper = styled(Box)(({ theme }) => ({
       color: "var(--hover-color, #fff)", // Fill the inside
       WebkitTextStroke: "2px var(--hover-color, #fff)", // Stroke the outline
       WebkitTextFillColor: "var(--hover-color, #fff)", // Ensure fill color
-      textShadow: theme.shadows[7],
+      textShadow:
+        theme.palette.mode === "dark"
+          ? "0 4px 8px rgba(0, 0, 0, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.6)"
+          : "0 4px 8px rgba(0, 0, 0, 0.3), 2px 2px 4px rgba(0, 0, 0, 0.2)",
     },
   },
 }));
@@ -56,7 +59,10 @@ export const StyledAnimatedText = styled(Typography, {
       WebkitTextStroke: `${
         theme.palette.mode === "dark" ? "3px #fff" : "3px #000"
       }`,
-      textShadow: theme.shadows[7],
+      textShadow:
+        theme.palette.mode === "dark"
+          ? "0 4px 8px rgba(0, 0, 0, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.6)"
+          : "0 4px 8px rgba(0, 0, 0, 0.3), 2px 2px 4px rgba(0, 0, 0, 0.2)",
       transition: "0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
       fontSize: fontSize || "4rem", // Use prop or default
       fontWeight: fontWeight || 600, // Extra bold

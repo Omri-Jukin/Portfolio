@@ -4,10 +4,9 @@ import React, { useState, useEffect } from "react";
 import { baseTheme } from "!/theme";
 import { createTheme, ThemeProvider, CssBaseline, Box } from "@mui/material";
 import { Header, TLayout } from "~/Header";
-import AnimatedBackground, { AnimationType } from "~/AnimatedBackground";
+
 import Footer from "@/app/[locale]/Footer";
 import { useLocale } from "next-intl";
-import { usePathname } from "next/navigation";
 import createEmotionCache from "@/app/mui-emotion-cache";
 import { CacheProvider } from "@emotion/react";
 import ResponsiveLayout from "&/ResponsiveLayout";
@@ -20,14 +19,13 @@ export default function ClientLayout({
   children: React.ReactNode;
 }) {
   const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined);
-  const [animationType, setAnimationType] = useState<AnimationType>("dna"); // Default to DNA for impressive visual
+
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [forceLayout, setForceLayout] = useState<TResponsiveLayout>("auto");
   const [manualOverride, setManualOverride] = useState(false); // Track if user manually overrode animation
   const locale = useLocale();
   const isRTL = locale === "he";
-  const currentPath = usePathname();
 
   useEffect(() => {
     // Load theme preferences
@@ -36,14 +34,6 @@ export default function ClientLayout({
       "(prefers-color-scheme: dark)"
     ).matches;
     setIsDarkMode(stored === "dark" || (!stored && prefersDark));
-
-    // Load animation type preference
-    const storedAnimation = localStorage.getItem(
-      "animationType"
-    ) as AnimationType | null;
-    if (storedAnimation) {
-      setAnimationType(storedAnimation);
-    }
 
     // Load manual override preference
     const storedOverride = localStorage.getItem("manualOverride");
@@ -56,34 +46,37 @@ export default function ClientLayout({
     if (storedLayout) {
       setForceLayout(storedLayout);
       setIsMobile(storedLayout === "mobile" || storedLayout === "auto");
+    } else {
+      // Default mobile detection if no stored preference
+      setIsMobile(window.innerWidth < 768);
     }
 
     setMounted(true);
-  }, [isMobile]);
+  }, []);
 
-  // Reset manual override when path changes (user navigates to new page)
+  // Reset manual override when user navigates to new page
   useEffect(() => {
     if (manualOverride) {
       setManualOverride(false);
       localStorage.removeItem("manualOverride");
     }
-  }, [currentPath, manualOverride]);
+  }, [manualOverride]);
 
-  if (!mounted) {
-    // Optionally, render a loader or just null
-    return null;
-  }
+  // Handle window resize for mobile detection
+  useEffect(() => {
+    const handleResize = () => {
+      if (forceLayout === "auto") {
+        setIsMobile(window.innerWidth < 768);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [forceLayout]);
 
   const handleThemeToggle = (isDark: boolean) => {
     setIsDarkMode(isDark);
     localStorage.setItem("theme", isDark ? "dark" : "light");
-  };
-
-  const handleAnimationChange = (newAnimationType: AnimationType) => {
-    setAnimationType(newAnimationType);
-    setManualOverride(true); // Mark that user manually overrode the animation
-    localStorage.setItem("animationType", newAnimationType);
-    localStorage.setItem("manualOverride", "true");
   };
 
   const handleLayoutChange = (layout: TLayout) => {
@@ -105,8 +98,20 @@ export default function ClientLayout({
       },
       text: {
         ...baseTheme.palette.text,
-        primary: isDarkMode ? "#ffffff" : "#000000",
-        secondary: isDarkMode ? "#b0b0b0" : "#757575",
+        primary: isDarkMode ? "#FFEAA7" : "#2C3E50", // Yellow in dark, Dark blue-gray in light
+        secondary: isDarkMode ? "#FFFFFF" : "#34495E", // White in dark, Dark gray in light
+      },
+      primary: {
+        ...baseTheme.palette.primary,
+        main: isDarkMode ? "#64B5F6" : "#4ECDC4", // Light blue in dark, Teal in light
+        light: isDarkMode ? "#45B7D1" : "#64B5F6", // Blue in dark, Light blue in light
+        dark: isDarkMode ? "#4ECDC4" : "#45B7D1", // Teal in dark, Blue in light
+      },
+      secondary: {
+        ...baseTheme.palette.secondary,
+        main: isDarkMode ? "#FF6B6B" : "#FF6B6B", // Red in both modes
+        light: isDarkMode ? "#F06292" : "#F06292", // Pink in both modes
+        dark: isDarkMode ? "#9575CD" : "#9575CD", // Purple in both modes
       },
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -114,66 +119,67 @@ export default function ClientLayout({
 
   const clientSideEmotionCache = createEmotionCache();
 
+  // Always render the providers, but conditionally render the content
   return (
     <TRPCProvider>
       <CacheProvider value={clientSideEmotionCache}>
         <ThemeProvider theme={appTheme}>
           <CssBaseline />
-          {/* Fixed Header */}
-          <Header
-            animationType={animationType}
-            onAnimationTypeChange={handleAnimationChange}
-            isDarkMode={isDarkMode}
-            onThemeToggle={handleThemeToggle}
-            isMobile={isMobile}
-            forceLayout={forceLayout}
-            onLayoutChange={handleLayoutChange}
-          />
+          {mounted ? (
+            <Box sx={{ minHeight: "100vh" }}>
+              {/* Fixed Header */}
+              <Header
+                isDarkMode={isDarkMode}
+                onThemeToggle={handleThemeToggle}
+                isMobile={isMobile}
+                forceLayout={forceLayout}
+                onLayoutChange={handleLayoutChange}
+              />
 
-          {/* Animated Background - Path-dependent animations */}
-          <AnimatedBackground
-            animationType={animationType}
-            isMobile={isMobile}
-            path={currentPath}
-            manualOverride={manualOverride}
-            key={`background-${currentPath}-${manualOverride}`}
-          />
-
-          {/* Main Layout Container */}
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              minHeight: "100vh",
-              pt: "4rem", // Account for fixed header height
-            }}
-          >
-            {/* Main Content Area */}
-            <Box
-              sx={{
-                flex: 1,
-                display: "flex",
-                flexDirection: "column",
-                overflow: "hidden", // Prevent scrolling in main content
-              }}
-            >
-              <ResponsiveLayout isMobile={isMobile} forceLayout={forceLayout}>
+              {/* Main Layout Container */}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  minHeight: "100vh",
+                  pt: "4rem", // Account for fixed header height
+                }}
+              >
+                {/* Main Content Area */}
                 <Box
                   sx={{
                     flex: 1,
                     display: "flex",
                     flexDirection: "column",
-                    overflow: "auto", // Allow scrolling only within content area
+                    overflow: "hidden", // Prevent scrolling in main content
                   }}
                 >
-                  {children}
+                  <ResponsiveLayout
+                    isMobile={isMobile}
+                    forceLayout={forceLayout}
+                  >
+                    <Box
+                      sx={{
+                        flex: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                        overflow: "auto", // Allow scrolling only within content area
+                      }}
+                    >
+                      {children}
+                    </Box>
+                  </ResponsiveLayout>
                 </Box>
-              </ResponsiveLayout>
-            </Box>
 
-            {/* Footer */}
-            <Footer />
-          </Box>
+                {/* Footer */}
+                <Footer />
+              </Box>
+            </Box>
+          ) : (
+            <Box sx={{ minHeight: "100vh", paddingTop: "4rem" }}>
+              {children}
+            </Box>
+          )}
         </ThemeProvider>
       </CacheProvider>
     </TRPCProvider>

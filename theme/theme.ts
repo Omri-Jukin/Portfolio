@@ -90,71 +90,71 @@ export const baseTheme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: "#1f1f2f",
-      light: "#33334d",
-      dark: "#1f1f2f",
+      main: "#4ECDC4", // Teal from vibrant palette
+      light: "#64B5F6", // Light blue from vibrant palette
+      dark: "#45B7D1", // Blue from vibrant palette
       contrastText: "#ffffff",
     },
     secondary: {
-      main: "#dc004e",
-      light: "#ff5983",
-      dark: "#9a0036",
+      main: "#FF6B6B", // Red from vibrant palette
+      light: "#F06292", // Pink from vibrant palette
+      dark: "#9575CD", // Deep purple from vibrant palette
       contrastText: "#ffffff",
     },
     success: {
-      main: "#2e7d32",
-      light: "#4caf50",
-      dark: "#1b5e20",
+      main: "#96CEB4", // Light green from vibrant palette
+      light: "#81C784", // Light green from vibrant palette
+      dark: "#4ECDC4", // Teal from vibrant palette
     },
     warning: {
-      main: "#ed6c02",
-      light: "#ff9800",
-      dark: "#e65100",
+      main: "#FFB74D", // Amber from vibrant palette
+      light: "#FFEAA7", // Yellow from vibrant palette
+      dark: "#FF8A65", // Orange from vibrant palette
     },
     info: {
-      main: "#0288d1",
-      light: "#03a9f4",
-      dark: "#01579b",
+      main: "#64B5F6", // Light blue from vibrant palette
+      light: "#45B7D1", // Blue from vibrant palette
+      dark: "#4ECDC4", // Teal from vibrant palette
     },
     error: {
-      main: "#d32f2f",
-      light: "#f44336",
-      dark: "#c62828",
+      main: "#FF6B6B", // Red from vibrant palette
+      light: "#F06292", // Pink from vibrant palette
+      dark: "#E74C3C", // Red from vibrant palette
     },
     background: {
       default: "#fafafa",
       paper: "#ffffff",
     },
     text: {
-      primary: "#1f1f2f",
-      secondary: "#33334d",
+      primary: "#2C3E50", // Dark blue-gray for better contrast
+      secondary: "#34495E", // Dark gray for better contrast
     },
     warm: {
-      primary: "#fcb69f",
-      secondary: "#fbc2eb",
-      accent: "#a1c4fd",
+      primary: "#FF6B6B", // Red from vibrant palette
+      secondary: "#FF8A65", // Orange from vibrant palette
+      accent: "#FFEAA7", // Yellow from vibrant palette
     },
     cool: {
-      primary: "#c2e9fb",
-      secondary: "#42a5f5",
-      accent: "#64b5f6",
+      primary: "#4ECDC4", // Teal from vibrant palette
+      secondary: "#64B5F6", // Light blue from vibrant palette
+      accent: "#45B7D1", // Blue from vibrant palette
     },
     neutral: {
-      primary: "#fbc2eb",
-      secondary: "#fcb69f",
-      accent: "#c2e9fb",
+      primary: "#96CEB4", // Light green from vibrant palette
+      secondary: "#81C784", // Light green from vibrant palette
+      accent: "#DDA0DD", // Purple from vibrant palette
     },
     dark: {
-      primary: "#1f1f2f",
-      secondary: "#33334d",
-      accent: "#55556d",
+      primary: "#2C3E50", // Dark blue-gray
+      secondary: "#34495E", // Dark gray
+      accent: "#4ECDC4", // Teal accent
     },
   },
   gradients: {
-    warm: "linear-gradient(to right, #fcb69f, #fbc2eb, #a1c4fd)",
-    cool: "linear-gradient(to right, #c2e9fb, #42a5f5, #64b5f6)",
-    neutral: "linear-gradient(to right, #fbc2eb, #fcb69f, #c2e9fb)",
-    dark: "linear-gradient(to right, #1f1f2f, #33334d, #55556d)",
+    warm: "linear-gradient(to right, #FF6B6B, #FF8A65, #FFEAA7)", // Red to Orange to Yellow
+    cool: "linear-gradient(to right, #4ECDC4, #64B5F6, #45B7D1)", // Teal to Light Blue to Blue
+    neutral: "linear-gradient(to right, #96CEB4, #81C784, #DDA0DD)", // Light Green to Green to Purple
+    dark: "linear-gradient(to right, #2C3E50, #34495E, #4ECDC4)", // Dark Blue-gray to Gray to Teal
   },
   animations: {
     bobbing: "0.5s ease-in-out infinite normal",
@@ -277,30 +277,30 @@ export const baseTheme = createTheme({
   spacing: 8,
   shadows: [
     "none",
-    "0 2px 4px rgba(0, 0, 0, 0.1)",
-    "0 4px 8px rgba(0, 0, 0, 0.1)",
-    "0 4px 12px rgba(0, 0, 0, 0.15)",
-    "0 6px 16px rgba(0, 0, 0, 0.2)",
-    "0 8px 20px rgba(0, 0, 0, 0.25)",
-    "0 12px 24px rgba(0, 0, 0, 0.3)",
-    "0 16px 32px rgba(0, 0, 0, 0.35)",
-    "0 20px 40px rgba(0, 0, 0, 0.4)",
-    "0 24px 48px rgba(0, 0, 0, 0.45)",
-    "0 28px 56px rgba(0, 0, 0, 0.5)",
-    "0 32px 64px rgba(0, 0, 0, 0.55)",
-    "0 36px 72px rgba(0, 0, 0, 0.6)",
-    "0 40px 80px rgba(0, 0, 0, 0.65)",
-    "0 44px 88px rgba(0, 0, 0, 0.7)",
-    "0 48px 96px rgba(0, 0, 0, 0.75)",
-    "0 52px 104px rgba(0, 0, 0, 0.8)",
-    "0 56px 112px rgba(0, 0, 0, 0.85)",
-    "0 60px 120px rgba(0, 0, 0, 0.9)",
-    "0 64px 128px rgba(0, 0, 0, 0.95)",
-    "0 68px 136px rgba(0, 0, 0, 1)",
-    "0 72px 144px rgba(0, 0, 0, 1)",
-    "0 76px 152px rgba(0, 0, 0, 1)",
-    "0 80px 160px rgba(0, 0, 0, 1)",
-    "0 84px 168px rgba(0, 0, 0, 1)",
+    "0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.08)",
+    "0 2px 4px rgba(0, 0, 0, 0.1), 1px 1px 2px rgba(0, 0, 0, 0.08)",
+    "0 3px 6px rgba(0, 0, 0, 0.15), 1px 1px 3px rgba(0, 0, 0, 0.1)",
+    "0 4px 8px rgba(0, 0, 0, 0.2), 2px 2px 4px rgba(0, 0, 0, 0.15)",
+    "0 6px 12px rgba(0, 0, 0, 0.25), 3px 3px 6px rgba(0, 0, 0, 0.2)",
+    "0 8px 16px rgba(0, 0, 0, 0.3), 4px 4px 8px rgba(0, 0, 0, 0.25)",
+    "0 10px 20px rgba(0, 0, 0, 0.35), 5px 5px 10px rgba(0, 0, 0, 0.3)",
+    "0 12px 24px rgba(0, 0, 0, 0.4), 6px 6px 12px rgba(0, 0, 0, 0.35)",
+    "0 14px 28px rgba(0, 0, 0, 0.45), 7px 7px 14px rgba(0, 0, 0, 0.4)",
+    "0 16px 32px rgba(0, 0, 0, 0.5), 8px 8px 16px rgba(0, 0, 0, 0.45)",
+    "0 18px 36px rgba(0, 0, 0, 0.55), 9px 9px 18px rgba(0, 0, 0, 0.5)",
+    "0 20px 40px rgba(0, 0, 0, 0.6), 10px 10px 20px rgba(0, 0, 0, 0.55)",
+    "0 22px 44px rgba(0, 0, 0, 0.65), 11px 11px 22px rgba(0, 0, 0, 0.6)",
+    "0 24px 48px rgba(0, 0, 0, 0.7), 12px 12px 24px rgba(0, 0, 0, 0.65)",
+    "0 26px 52px rgba(0, 0, 0, 0.75), 13px 13px 26px rgba(0, 0, 0, 0.7)",
+    "0 28px 56px rgba(0, 0, 0, 0.8), 14px 14px 28px rgba(0, 0, 0, 0.75)",
+    "0 30px 60px rgba(0, 0, 0, 0.85), 15px 15px 30px rgba(0, 0, 0, 0.8)",
+    "0 32px 64px rgba(0, 0, 0, 0.9), 16px 16px 32px rgba(0, 0, 0, 0.85)",
+    "0 34px 68px rgba(0, 0, 0, 0.95), 17px 17px 34px rgba(0, 0, 0, 0.9)",
+    "0 36px 72px rgba(0, 0, 0, 1), 18px 18px 36px rgba(0, 0, 0, 0.95)",
+    "0 38px 76px rgba(0, 0, 0, 1), 19px 19px 38px rgba(0, 0, 0, 1)",
+    "0 40px 80px rgba(0, 0, 0, 1), 20px 20px 40px rgba(0, 0, 0, 1)",
+    "0 42px 84px rgba(0, 0, 0, 1), 21px 21px 42px rgba(0, 0, 0, 1)",
+    "0 44px 88px rgba(0, 0, 0, 1), 22px 22px 44px rgba(0, 0, 0, 1)",
   ],
   components: {
     MuiButton: {

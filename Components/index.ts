@@ -10,4 +10,6 @@ export * from "./Header";
 export * from "./LanguageSwitcher";
 export * from "./MotionWrapper";
 export * from "./Providers";
+export * from "./ScrollingSections";
+export * from "./TagChip";
 export * from "./Typography";

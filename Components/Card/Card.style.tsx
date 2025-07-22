@@ -5,13 +5,13 @@ import {
   Typography,
   IconButton as MuiIconButton,
 } from "@mui/material";
-import { Canvas } from "@react-three/fiber";
 
 export const StyledCardContainer = styled(Box, {
   shouldForwardProp: (prop) => prop !== "transparent",
 })<{ transparent?: boolean }>(({ theme, transparent }) => ({
   background: transparent ? "transparent" : theme.palette.background.paper,
   marginBottom: theme.spacing(2),
+  padding: theme.spacing(1), // Add padding to prevent hover cutoff
 }));
 
 export const StyledCard = styled(MuiCard, {
@@ -27,15 +27,23 @@ export const StyledCard = styled(MuiCard, {
     ? "transparent"
     : gradient
     ? `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${theme.palette.background.default} 100%)`
+    : theme.palette.mode === "dark"
+    ? "rgba(255, 255, 255, 0.05)"
     : theme.palette.background.paper,
-  border: `1px solid ${
+  border: `2px solid ${
     theme.palette.mode === "dark"
-      ? theme.palette.grey[700]
-      : theme.palette.grey[200]
+      ? "rgba(255, 255, 255, 0.15)"
+      : "rgba(0, 0, 0, 0.12)"
   }`,
   transition: "all 0.3s ease-in-out",
   position: "relative",
-  overflow: "hidden",
+  overflow: "visible",
+  // Add default shadow with strong top shadow to prevent disappearing top edge
+  boxShadow: glow
+    ? `0 4px 12px ${theme.palette.primary.main}30, 0 2px 6px rgba(0, 0, 0, 0.2), 1px 1px 4px rgba(0, 0, 0, 0.15)`
+    : theme.palette.mode === "dark"
+    ? "0 4px 12px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 0, 0, 0.2), 1px 1px 4px rgba(0, 0, 0, 0.15)"
+    : "0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.08), 1px 1px 4px rgba(0, 0, 0, 0.06)",
   ...(glow && {
     "&::before": {
       content: '""',
@@ -52,10 +60,10 @@ export const StyledCard = styled(MuiCard, {
   "&:hover": {
     transform: "translateY(-4px)",
     boxShadow: glow
-      ? `0 8px 32px ${theme.palette.primary.main}40`
+      ? `0 8px 24px ${theme.palette.primary.main}40, 0 4px 12px rgba(0, 0, 0, 0.3), 2px 2px 8px rgba(0, 0, 0, 0.2)`
       : theme.palette.mode === "dark"
-      ? "0 8px 32px rgba(0, 0, 0, 0.4)"
-      : "0 8px 32px rgba(0, 0, 0, 0.15)",
+      ? "0 8px 24px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3), 2px 2px 8px rgba(0, 0, 0, 0.2)"
+      : "0 8px 24px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1), 2px 2px 8px rgba(0, 0, 0, 0.08)",
   },
   "&:focus-within": {
     outline: `2px solid ${theme.palette.primary.main}`,
@@ -158,7 +166,7 @@ export const PhotoCardContent = styled(Box)(() => ({
   minHeight: 0,
 }));
 
-export const PhotoCardImageElement = styled("img")({
+export const PhotoCardImageElement = styled(Box)({
   width: "100%",
   height: "100%",
   objectFit: "cover",
@@ -204,9 +212,4 @@ export const AnimatedCard = styled(Box, {
     "70%": { transform: "scale(0.9)" },
     "100%": { transform: "scale(1)", opacity: 1 },
   },
-}));
-
-export const CanvasContainer = styled(Canvas)(({ theme }) => ({
-  background: "transparent",
-  borderRadius: theme.spacing(2),
 }));

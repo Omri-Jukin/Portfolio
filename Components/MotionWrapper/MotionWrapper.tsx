@@ -20,13 +20,13 @@ export default function MotionWrapper({
       initial="hidden"
       whileInView="visible"
       viewport={{ once, margin: "-100px" }}
+      className={className}
       variants={variants}
       transition={{
         duration,
         delay,
         ease: "easeOut",
       }}
-      className={className}
       style={style}
     >
       {children}

@@ -1,4 +1,6 @@
-import { getPublishedPosts, Post } from "$/db/blog/blog";
+"use client";
+
+import { api } from "$/trpc/client";
 import NextLink from "next/link";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -7,18 +9,44 @@ import ListItem from "@mui/material/ListItem";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 
-export default async function BlogPage() {
-  try {
-    const posts = await getPublishedPosts();
+export default function BlogPage() {
+  const { data: posts, isLoading, error } = api.blog.getPublished.useQuery();
 
+  if (isLoading) {
     return (
       <Container maxWidth="md" sx={{ py: 6 }}>
-        <Typography variant="h3" component="h1" gutterBottom>
+        <Typography variant="h3" gutterBottom>
           Blog
         </Typography>
-        <List>
-          {posts.map((post: Post) => (
-            <ListItem key={post.id} disablePadding sx={{ mb: 2 }}>
+        <Typography>Loading blog posts...</Typography>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container maxWidth="md" sx={{ py: 6 }}>
+        <Typography variant="h3" gutterBottom>
+          Blog
+        </Typography>
+        <Typography color="error">
+          Error loading blog posts. Please try again later.
+        </Typography>
+      </Container>
+    );
+  }
+
+  return (
+    <Container maxWidth="md" sx={{ py: 6 }}>
+      <Typography variant="h3" gutterBottom>
+        Blog
+      </Typography>
+      <List>
+        {posts?.map(
+          (
+            post: any // eslint-disable-line @typescript-eslint/no-explicit-any
+          ) => (
+            <ListItem disablePadding sx={{ mb: 2 }} key={post.slug}>
               <Box>
                 <Link
                   component={NextLink}
@@ -45,25 +73,14 @@ export default async function BlogPage() {
                 </Typography>
               </Box>
             </ListItem>
-          ))}
-        </List>
-        {posts.length === 0 && (
-          <Typography variant="body1" color="text.secondary">
-            No blog posts published yet.
-          </Typography>
+          )
         )}
-      </Container>
-    );
-  } catch {
-    return (
-      <Container maxWidth="md" sx={{ py: 6 }}>
-        <Typography variant="h3" component="h1" gutterBottom>
-          Blog
+      </List>
+      {(!posts || posts.length === 0) && (
+        <Typography variant="body1" color="text.secondary">
+          No blog posts published yet.
         </Typography>
-        <Typography color="error">
-          Error loading blog posts. Please try again later.
-        </Typography>
-      </Container>
-    );
-  }
+      )}
+    </Container>
+  );
 }

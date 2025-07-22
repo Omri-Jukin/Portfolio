@@ -3,7 +3,7 @@
 import React, { useRef } from "react";
 import Link from "next/link";
 import { CardContent, CardActionArea, Button } from "@mui/material";
-
+import Image from "next/image";
 import { CardProps } from "./Card.type";
 import {
   StyledCardContainer,
@@ -15,11 +15,8 @@ import {
   PhotoCardContainer,
   PhotoCardImage,
   PhotoCardContent,
-  PhotoCardImageElement,
   AnimatedCard,
-  CanvasContainer,
 } from "./Card.style";
-import { OrbitControls, TorusKnot } from "@react-three/drei";
 import { Box } from "@mui/system";
 
 const Card: React.FC<CardProps> = ({
@@ -49,8 +46,8 @@ const Card: React.FC<CardProps> = ({
         ref={cardRef}
         style={{ position: "relative", overflow: "hidden" }}
       >
-        {/* 3D Background Animation */}
-        <div
+        {/* 3D Background Animation - Commented out for now */}
+        {/* <div
           id="styled-card-3d-background"
           style={{
             position: "absolute",
@@ -83,7 +80,7 @@ const Card: React.FC<CardProps> = ({
               autoRotateSpeed={2}
             />
           </CanvasContainer>
-        </div>
+        </div> */}
 
         <AnimatedCard animation={animation}>
           <StyledCard
@@ -106,20 +103,40 @@ const Card: React.FC<CardProps> = ({
                 textAlign: "start",
               }}
             >
-              <CardContent id="styled-card-content" sx={{ p: 0 }}>
+              <CardContent sx={{ p: 0 }}>
                 <PhotoCardContainer>
                   {photoUrl && (
                     <PhotoCardImage
                       size={photoSize}
                       photoposition={photoPosition}
                     >
-                      <PhotoCardImageElement
+                      <Image
                         src={photoUrl}
                         alt={photoAlt || title}
-                        onError={(e) => {
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          objectPosition: "center",
+                          transition: "transform 0.3s ease",
+                          display: "block",
+                        }}
+                        onError={(
+                          e: React.SyntheticEvent<HTMLImageElement>
+                        ) => {
                           const target = e.target as HTMLImageElement;
                           target.src =
                             "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23e0e0e0'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23999' font-family='Arial' font-size='16'%3EPhoto%3C/text%3E%3C/svg%3E";
+                        }}
+                        onMouseEnter={(
+                          e: React.MouseEvent<HTMLImageElement>
+                        ) => {
+                          e.currentTarget.style.transform = "scale(1.05)";
+                        }}
+                        onMouseLeave={(
+                          e: React.MouseEvent<HTMLImageElement>
+                        ) => {
+                          e.currentTarget.style.transform = "scale(1)";
                         }}
                       />
                     </PhotoCardImage>
@@ -127,16 +144,16 @@ const Card: React.FC<CardProps> = ({
 
                   <PhotoCardContent>
                     {/* Icon and Title */}
-                    <div
-                      style={{
+                    <Box
+                      sx={{
                         display: "flex",
                         alignItems: "flex-start",
-                        marginBottom: 16,
+                        marginBottom: 2, // 16px (theme spacing)
                       }}
                     >
                       {icon && (
-                        <span
-                          style={{
+                        <Box
+                          sx={{
                             color: color || "#1976d2",
                             fontSize: 32,
                             display: "flex",
@@ -146,9 +163,9 @@ const Card: React.FC<CardProps> = ({
                           }}
                         >
                           {icon}
-                        </span>
+                        </Box>
                       )}
-                      <div style={{ flex: 1 }}>
+                      <Box sx={{ flex: 1 }}>
                         {tagline && (
                           <StyledCardTagline variant="body2">
                             {tagline}
@@ -161,8 +178,8 @@ const Card: React.FC<CardProps> = ({
                         >
                           {title}
                         </StyledCardTitle>
-                      </div>
-                    </div>
+                      </Box>
+                    </Box>
 
                     {description && (
                       <StyledCardDescription
@@ -185,23 +202,25 @@ const Card: React.FC<CardProps> = ({
 
                     {/* Button */}
                     {buttonText && (
-                      <Box style={{ marginTop: 24 }}>
+                      <Box sx={{ marginTop: 24 }}>
                         <Button
                           aria-label={
                             buttonText ? buttonText : `Go to ${title}`
                           }
-                          style={{
+                          sx={{
                             background: "none",
-                            border: `1px solid ${color || "#1976d2"}`,
-                            color: color || "#1976d2",
-                            padding: "8px 24px",
-                            borderRadius: "8px",
+                            border: `2px solid ${color || "#4ECDC4"}`,
+                            color: color || "#4ECDC4",
+                            padding: "10px 28px",
+                            borderRadius: "12px",
                             cursor: "pointer",
-                            fontWeight: 500,
+                            fontWeight: 600,
                             fontSize: 16,
                             display: "flex",
                             alignItems: "center",
                             gap: 8,
+                            transition: "all 0.3s ease-in-out",
+                            boxShadow: `0 2px 4px ${color || "#4ECDC4"}20`,
                           }}
                         >
                           {buttonText}
@@ -225,8 +244,8 @@ const Card: React.FC<CardProps> = ({
       ref={cardRef}
       style={{ position: "relative", overflow: "hidden" }}
     >
-      {/* 3D Background Animation */}
-      <div
+      {/* 3D Background Animation - Commented out for now */}
+      {/* <div
         id="styled-card-3d-background"
         style={{
           position: "absolute",
@@ -259,7 +278,7 @@ const Card: React.FC<CardProps> = ({
             autoRotateSpeed={2}
           />
         </CanvasContainer>
-      </div>
+      </div> */}
       {/* Card Content */}
       <AnimatedCard animation={animation}>
         <StyledCard
@@ -282,29 +301,30 @@ const Card: React.FC<CardProps> = ({
               textAlign: "start",
             }}
           >
-            <CardContent id="styled-card-content" sx={{ p: 0 }}>
+            <CardContent sx={{ p: 0 }}>
               {/* Icon and Title */}
-              <div
-                style={{
+              <Box
+                sx={{
                   display: "flex",
                   alignItems: "center",
                   marginBottom: 16,
                 }}
               >
                 {icon && (
-                  <span
-                    style={{
-                      color: color || "#1976d2",
+                  <Box
+                    sx={{
+                      color: color || "#4ECDC4",
                       fontSize: 32,
                       display: "flex",
                       alignItems: "center",
                       marginRight: 12,
+                      filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2))",
                     }}
                   >
                     {icon}
-                  </span>
+                  </Box>
                 )}
-                <div>
+                <Box sx={{ flex: 1 }}>
                   {tagline && (
                     <StyledCardTagline variant="body2">
                       {tagline}
@@ -317,8 +337,8 @@ const Card: React.FC<CardProps> = ({
                   >
                     {title}
                   </StyledCardTitle>
-                </div>
-              </div>
+                </Box>
+              </Box>
               {description && (
                 <StyledCardDescription
                   id="styled-card-description"
@@ -339,21 +359,23 @@ const Card: React.FC<CardProps> = ({
               )}
               {/* Button */}
               {buttonText && (
-                <Box style={{ marginTop: 24 }}>
+                <Box sx={{ marginTop: 24 }}>
                   <Button
                     aria-label={buttonText ? buttonText : `Go to ${title}`}
-                    style={{
+                    sx={{
                       background: "none",
-                      border: `1px solid ${color || "#1976d2"}`,
-                      color: color || "#1976d2",
-                      padding: "8px 24px",
-                      borderRadius: "8px",
+                      border: `2px solid ${color || "#4ECDC4"}`,
+                      color: color || "#4ECDC4",
+                      padding: "10px 28px",
+                      borderRadius: "12px",
                       cursor: "pointer",
-                      fontWeight: 500,
+                      fontWeight: 600,
                       fontSize: 16,
                       display: "flex",
                       alignItems: "center",
                       gap: 8,
+                      transition: "all 0.3s ease-in-out",
+                      boxShadow: `0 2px 4px ${color || "#4ECDC4"}20`,
                     }}
                   >
                     {buttonText}

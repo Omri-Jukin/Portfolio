@@ -240,6 +240,113 @@
       "experience": "Me encantaría saber de ti"
     }
   },
+  "scrollingSections": {
+    "hero": {
+      "title": "Creando magia digital",
+      "subtitle": "¿Te preguntas cómo funciono? Aquí tienes la información interna—sin relleno, solo hechos, con un toque de estilo.",
+      "exploreButton": "Explorar trabajo",
+      "aboutButton": "Sobre mí"
+    },
+    "about": {
+      "title": "Quién Soy",
+      "subtitle": "EXPLORA MI CAJA DE HERRAMIENTAS CREATIVA",
+      "description": "Soy un desarrollador y diseñador apasionado que cree que las grandes experiencias digitales provienen de la perfecta combinación de experiencia técnica y visión creativa. Con años de experiencia creando aplicaciones web, he aprendido que las mejores soluciones son aquellas que no solo funcionan perfectamente, sino que también deleitan a los usuarios en cada interacción.",
+      "skills": {
+        "codeConjurer": "HECHICERO DEL CÓDIGO",
+        "brandArchitect": "ARQUITECTO DE MARCA",
+        "designDreamer": "SOÑADOR DEL DISEÑO"
+      }
+    },
+    "qa": {
+      "title": "Preguntas Rápidas",
+      "subtitle": "Conóceme rápidamente",
+      "questions": [
+        {
+          "question": "¿Qué te motiva?",
+          "answer": "Resolver problemas complejos y crear soluciones elegantes que tengan un impacto real."
+        },
+        {
+          "question": "¿Tu estilo de trabajo?",
+          "answer": "Metódico pero creativo, con enfoque en la experiencia del usuario y código limpio."
+        },
+        {
+          "question": "¿Mayor logro?",
+          "answer": "Liderar el desarrollo de sistemas de nivel empresarial que sirven a miles de usuarios."
+        },
+        {
+          "question": "¿Qué te emociona?",
+          "answer": "Aprender nuevas tecnologías y empujar los límites de lo posible."
+        },
+        {
+          "question": "¿Tu filosofía?",
+          "answer": "El software excelente debe ser invisible—los usuarios deben enfocarse en sus objetivos, no en la interfaz."
+        },
+        {
+          "question": "¿Objetivos futuros?",
+          "answer": "Construir productos innovadores que resuelvan problemas del mundo real a escala."
+        }
+      ]
+    },
+    "services": {
+      "title": "Soluciones Innovadoras",
+      "subtitle": "Lo que aporto a la mesa",
+      "services": [
+        {
+          "title": "Construye tu futuro",
+          "description": "Desarrollando aplicaciones escalables y modernas que crecen con las necesidades de tu negocio.",
+          "buttonText": "Ver Trabajo",
+          "buttonVariant": "primary"
+        },
+        {
+          "title": "Habilidades que brillan",
+          "description": "Experiencia full-stack desde la finura del frontend hasta el brillo del backend.",
+          "buttonText": "Descubrir",
+          "buttonVariant": "secondary"
+        },
+        {
+          "title": "El feedback impulsa el crecimiento",
+          "description": "Mejora continua a través del feedback del usuario y desarrollo iterativo.",
+          "buttonText": "Ponte en Contacto",
+          "buttonVariant": "primary"
+        }
+      ]
+    },
+    "projects": {
+      "title": "Proyectos Destacados",
+      "subtitle": "Un vistazo a mi trabajo",
+      "projects": [
+        {
+          "title": "Snow HQ",
+          "description": "Sistema CRM de nivel empresarial con análisis en tiempo real, flujos de trabajo automatizados y capacidades avanzadas de reportes. Construido con Next.js, tRPC, Drizzle ORM y PostgreSQL.",
+          "link": "https://github.com/Omri-Jukin/Snow"
+        },
+        {
+          "title": "Clothest",
+          "description": "Sistema de gestión de guardarropa con recomendaciones personalizadas y seguimiento de inventario. Construido con React, Express.js y MongoDB.",
+          "link": "https://github.com/Omri-Jukin/Clothest"
+        },
+        {
+          "title": "Sitio Web Portfolio",
+          "description": "Sitio web portfolio moderno y responsivo con internacionalización, modo oscuro y animaciones suaves. Construido con Next.js, TypeScript, Material-UI y Framer Motion.",
+          "link": "https://github.com/Omri-Jukin/Portfolio"
+        }
+      ]
+    },
+    "contact": {
+      "title": "Conectemos",
+      "subtitle": "¿Listo para dar vida a tus ideas?",
+      "description": "Siempre estoy emocionado de discutir nuevas oportunidades, colaboraciones o simplemente charlar sobre tecnología. Envíame un mensaje y creemos algo increíble juntos.",
+      "form": {
+        "name": "Tu Nombre",
+        "email": "Tu Email",
+        "message": "Tu Mensaje",
+        "sendButton": "Enviar Mensaje",
+        "sending": "Enviando...",
+        "success": "¡Mensaje enviado exitosamente!",
+        "error": "Algo salió mal. Por favor intenta de nuevo."
+      }
+    }
+  },
   "contact": {
     "title": "Contacto",
     "description": "¡Ponte en contacto conmigo para colaboraciones, oportunidades o simplemente para saludar!",

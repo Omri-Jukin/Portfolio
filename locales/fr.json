@@ -239,6 +239,113 @@
       "experience": "J'aimerais avoir de vos nouvelles"
     }
   },
+  "scrollingSections": {
+    "hero": {
+      "title": "Créer de la magie numérique",
+      "subtitle": "Vous vous demandez comment je fonctionne ? Voici les détails internes—sans fioritures, juste des faits, avec une touche de style.",
+      "exploreButton": "Explorer le travail",
+      "aboutButton": "À propos de moi"
+    },
+    "about": {
+      "title": "Qui Je Suis",
+      "subtitle": "EXPLOREZ MA BOÎTE À OUTILS CRÉATIVE",
+      "description": "Je suis un développeur et designer passionné qui croit que les grandes expériences numériques naissent de la parfaite fusion entre expertise technique et vision créative. Avec des années d'expérience dans la création d'applications web, j'ai appris que les meilleures solutions sont celles qui non seulement fonctionnent parfaitement, mais qui ravissent également les utilisateurs à chaque interaction.",
+      "skills": {
+        "codeConjurer": "SORCIER DU CODE",
+        "brandArchitect": "ARCHITECTE DE MARQUE",
+        "designDreamer": "RÊVEUR DU DESIGN"
+      }
+    },
+    "qa": {
+      "title": "Questions Rapides",
+      "subtitle": "Apprenez à me connaître rapidement",
+      "questions": [
+        {
+          "question": "Qu'est-ce qui vous motive ?",
+          "answer": "Résoudre des problèmes complexes et créer des solutions élégantes qui ont un impact réel."
+        },
+        {
+          "question": "Votre style de travail ?",
+          "answer": "Méthodique mais créatif, avec un accent sur l'expérience utilisateur et le code propre."
+        },
+        {
+          "question": "Plus grande réussite ?",
+          "answer": "Diriger le développement de systèmes de niveau entreprise qui servent des milliers d'utilisateurs."
+        },
+        {
+          "question": "Qu'est-ce qui vous passionne ?",
+          "answer": "Apprendre de nouvelles technologies et repousser les limites du possible."
+        },
+        {
+          "question": "Votre philosophie ?",
+          "answer": "Les excellents logiciels doivent être invisibles—les utilisateurs doivent se concentrer sur leurs objectifs, pas sur l'interface."
+        },
+        {
+          "question": "Objectifs futurs ?",
+          "answer": "Construire des produits innovants qui résolvent des problèmes du monde réel à grande échelle."
+        }
+      ]
+    },
+    "services": {
+      "title": "Solutions Innovantes",
+      "subtitle": "Ce que j'apporte à la table",
+      "services": [
+        {
+          "title": "Construisez votre avenir",
+          "description": "Développement d'applications évolutives et modernes qui grandissent avec les besoins de votre entreprise.",
+          "buttonText": "Voir le Travail",
+          "buttonVariant": "primary"
+        },
+        {
+          "title": "Des compétences qui brillent",
+          "description": "Expertise full-stack de la finesse du frontend à la brillance du backend.",
+          "buttonText": "Découvrir",
+          "buttonVariant": "secondary"
+        },
+        {
+          "title": "Le feedback alimente la croissance",
+          "description": "Amélioration continue grâce au feedback utilisateur et au développement itératif.",
+          "buttonText": "Entrer en Contact",
+          "buttonVariant": "primary"
+        }
+      ]
+    },
+    "projects": {
+      "title": "Projets Vedettes",
+      "subtitle": "Un aperçu de mon travail",
+      "projects": [
+        {
+          "title": "Snow HQ",
+          "description": "Système CRM de niveau entreprise avec analyses en temps réel, flux de travail automatisés et capacités de reporting avancées. Construit avec Next.js, tRPC, Drizzle ORM et PostgreSQL.",
+          "link": "https://github.com/Omri-Jukin/Snow"
+        },
+        {
+          "title": "Clothest",
+          "description": "Système de gestion de garde-robe avec recommandations personnalisées et suivi d'inventaire. Construit avec React, Express.js et MongoDB.",
+          "link": "https://github.com/Omri-Jukin/Clothest"
+        },
+        {
+          "title": "Site Web Portfolio",
+          "description": "Site web portfolio moderne et responsive avec internationalisation, mode sombre et animations fluides. Construit avec Next.js, TypeScript, Material-UI et Framer Motion.",
+          "link": "https://github.com/Omri-Jukin/Portfolio"
+        }
+      ]
+    },
+    "contact": {
+      "title": "Connectons-nous",
+      "subtitle": "Prêt à donner vie à vos idées ?",
+      "description": "Je suis toujours excité de discuter de nouvelles opportunités, collaborations ou simplement de discuter de technologie. Envoyez-moi un message et créons quelque chose d'incroyable ensemble.",
+      "form": {
+        "name": "Votre Nom",
+        "email": "Votre Email",
+        "message": "Votre Message",
+        "sendButton": "Envoyer le Message",
+        "sending": "Envoi en cours...",
+        "success": "Message envoyé avec succès !",
+        "error": "Quelque chose s'est mal passé. Veuillez réessayer."
+      }
+    }
+  },
   "contact": {
     "title": "Contact",
     "description": "Contactez-moi pour des collaborations, des opportunités ou simplement pour dire bonjour !",
