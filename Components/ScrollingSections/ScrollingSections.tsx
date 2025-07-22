@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import {
   Code as CodeIcon,
   Star as StarIcon,
@@ -41,6 +42,32 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
   locale = "en",
 }) => {
   const t = useTranslations("scrollingSections");
+  const router = useRouter();
+
+  // Navigation functions
+  const scrollToSection = (sectionId: string) => {
+    // Update URL hash for better UX and accessibility
+    window.location.hash = sectionId;
+
+    // Ensure smooth scrolling to the section with retry logic
+    const scrollToElement = () => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+        return true;
+      }
+      return false;
+    };
+
+    // Try immediately, then retry after a short delay if needed
+    if (!scrollToElement()) {
+      setTimeout(scrollToElement, 100);
+    }
+  };
+
+  const navigateToPage = (path: string) => {
+    router.push(`/${locale}${path}`);
+  };
 
   return (
     <Box>
@@ -79,10 +106,15 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
               className="primary"
               endIcon={<ArrowForwardIcon />}
               aria-label="Explore my work and projects"
+              onClick={() => scrollToSection("projects-section")}
             >
               {t("hero.exploreButton")}
             </CTAButton>
-            <CTAButton className="secondary" aria-label="Learn more about me">
+            <CTAButton
+              className="secondary"
+              aria-label="Learn more about me"
+              onClick={() => scrollToSection("about-section")}
+            >
               {t("hero.aboutButton")}
             </CTAButton>
           </Box>
@@ -90,7 +122,7 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
       </Section>
 
       {/* About Section */}
-      <Section variant="about" aria-labelledby="about-title">
+      <Section variant="about" aria-labelledby="about-title" id="about-section">
         <MotionWrapper variant="fadeIn" duration={0.8}>
           <ScrollingSectionTitle id="about-title">
             {t("about.title")}
@@ -242,6 +274,15 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
                     className={service.buttonVariant}
                     variant="contained"
                     endIcon={<ArrowForwardIcon />}
+                    onClick={() => {
+                      if (index === 0) {
+                        scrollToSection("projects-section");
+                      } else if (index === 1) {
+                        navigateToPage("/resume");
+                      } else {
+                        scrollToSection("contact-section");
+                      }
+                    }}
                   >
                     {service.buttonText}
                   </ServiceButton>
@@ -253,7 +294,7 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
       </Section>
 
       {/* Projects Section */}
-      <Section variant="projects">
+      <Section variant="projects" id="projects-section">
         <MotionWrapper variant="fadeInUp" duration={1.0}>
           <ScrollingSectionTitle>{t("projects.title")}</ScrollingSectionTitle>
           <SectionSubtitle>{t("projects.subtitle")}</SectionSubtitle>
@@ -300,20 +341,18 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
                           View Code
                         </ProjectButton>
                       </Link>
-                      <Link
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ textDecoration: "none" }}
+                      <ProjectButton
+                        className="contained"
+                        variant="contained"
+                        startIcon={<LaunchIcon />}
+                        onClick={() => {
+                          // For now, show a placeholder message
+                          // In the future, this could link to actual demo URLs
+                          alert(`Demo for ${project.title} - Coming soon!`);
+                        }}
                       >
-                        <ProjectButton
-                          className="contained"
-                          variant="contained"
-                          startIcon={<LaunchIcon />}
-                        >
-                          Live Demo
-                        </ProjectButton>
-                      </Link>
+                        Live Demo
+                      </ProjectButton>
                     </Box>
                   </ProjectCard>
                 </MotionWrapper>
@@ -323,7 +362,7 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
       </Section>
 
       {/* Contact Section */}
-      <Section variant="contact">
+      <Section variant="contact" id="contact-section">
         <MotionWrapper variant="fadeInUp" duration={1.0}>
           <ScrollingSectionTitle sx={{ mb: 4 }}>
             {t("contact.title")}

@@ -21,9 +21,6 @@ const BackgroundContainer = styled(Box, {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  marginLeft: "calc(-50vw + 50%)",
-  marginRight: "calc(-50vw + 50%)",
-  overflow: "hidden",
 
   // Base gradient based on variant
   background: (() => {
