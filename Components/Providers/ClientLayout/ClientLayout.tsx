@@ -151,7 +151,6 @@ export default function ClientLayout({
                     flex: 1,
                     display: "flex",
                     flexDirection: "column",
-                    overflow: "hidden", // Prevent scrolling in main content
                   }}
                 >
                   <ResponsiveLayout
@@ -163,7 +162,6 @@ export default function ClientLayout({
                         flex: 1,
                         display: "flex",
                         flexDirection: "column",
-                        overflow: "auto", // Allow scrolling only within content area
                       }}
                     >
                       {children}

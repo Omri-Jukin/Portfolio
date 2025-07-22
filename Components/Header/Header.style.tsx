@@ -10,7 +10,7 @@ export const StyledThemeProvider = styled(Box)(({ theme }) => ({
   alignItems: "center",
   gap: theme.spacing(2),
   backgroundColor: theme.palette.background.paper,
-  color: "inherit",
+  color: theme.palette.text.primary,
 }));
 
 export const AppBar = styled(MuiAppBar)(({ theme }) => ({
@@ -18,6 +18,7 @@ export const AppBar = styled(MuiAppBar)(({ theme }) => ({
   height: "4rem",
   zIndex: 1100,
   backgroundColor: theme.palette.background.paper,
+  color: theme.palette.text.primary,
   backdropFilter: "blur(8px)", // <-- this line
 }));
 

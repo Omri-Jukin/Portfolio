@@ -318,6 +318,16 @@
       "subtitle": "A glimpse into my work",
       "projects": [
         {
+          "title": "Portfolio Website",
+          "description": "Modern, responsive portfolio website with internationalization, dark mode, and smooth animations. Built with Next.js, TypeScript, Material-UI, and Framer Motion.",
+          "link": "https://github.com/Omri-Jukin/Portfolio"
+        },
+        {
+          "title": "ClipWhisperer",
+          "description": "Comprehensive microservices platform for automated video processing and content creation. Features AI-powered narration, video rendering, and orchestrated workflows. Built with TypeScript, Node.js, and modern microservices architecture.",
+          "link": "https://github.com/Omri-Jukin/ClipWhisperer"
+        },
+        {
           "title": "Snow HQ",
           "description": "Enterprise-level CRM system featuring real-time analytics, automated workflows, and advanced reporting capabilities. Built with Next.js, tRPC, Drizzle ORM, and PostgreSQL.",
           "link": "https://github.com/Omri-Jukin/Snow"
@@ -326,11 +336,6 @@
           "title": "Clothest",
           "description": "Wardrobe management system with personalized recommendations and inventory tracking. Built with React, Express.js, and MongoDB.",
           "link": "https://github.com/Omri-Jukin/Clothest"
-        },
-        {
-          "title": "Portfolio Website",
-          "description": "Modern, responsive portfolio website with internationalization, dark mode, and smooth animations. Built with Next.js, TypeScript, Material-UI, and Framer Motion.",
-          "link": "https://github.com/Omri-Jukin/Portfolio"
         }
       ]
     },
@@ -338,6 +343,7 @@
       "title": "Let's Connect",
       "subtitle": "Ready to bring your ideas to life?",
       "description": "I'm always excited to discuss new opportunities, collaborations, or just chat about technology. Drop me a message and let's create something amazing together.",
+      "button": "Start a conversation",
       "form": {
         "name": "Your Name",
         "email": "Your Email",
@@ -423,8 +429,24 @@
         "icon": "Telegram"
       }
     ],
-    "emailTitle": "Contact",
-    "email": "omrijukin@gmail.com",
+    "contactTitle": "Contact",
+    "contact": [
+      {
+        "label": "Email",
+        "href": "mailto:omrijukin@gmail.com",
+        "icon": "Email"
+      },
+      {
+        "label": "Phone",
+        "href": "tel:+9720523344064",
+        "icon": "Phone"
+      },
+      {
+        "label": "WhatsApp",
+        "href": "https://wa.me/972523344064",
+        "icon": "WhatsApp"
+      }
+    ],
     "copyright": "Omri Jukin. All rights reserved."
   }
 }

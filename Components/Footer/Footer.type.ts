@@ -13,7 +13,11 @@ export interface FooterProps {
     href: string;
     icon?: string;
   }[];
-  emailTitle?: string;
-  email?: string;
+  contactTitle?: string;
+  contact?: {
+    label: string;
+    href: string;
+    icon?: string;
+  }[];
   copyright?: string;
 }

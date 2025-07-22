@@ -6,7 +6,6 @@ export const MobileLayoutContainer = styled(Box)(({ theme }) => ({
   flex: 1,
   padding: "16px",
   backgroundColor: theme.palette.background.paper,
-  overflow: "hidden",
   WebkitOverflowScrolling: "touch",
 
   // Mobile-specific optimizations

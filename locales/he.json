@@ -315,6 +315,16 @@
       "subtitle": "הצצה לעבודה שלי",
       "projects": [
         {
+          "title": "אתר פורטפוליו",
+          "description": "אתר פורטפוליו מודרני ורספונסיבי עם בינלאומיות, מצב כהה ואנימציות חלקות. נבנה עם Next.js, TypeScript, Material-UI ו-Framer Motion.",
+          "link": "https://github.com/Omri-Jukin/Portfolio"
+        },
+        {
+          "title": "ClipWhisperer",
+          "description": "מערכת מיקרוסרבים מלאה לטיפול אוטומטי בסרטונים ויצירת תוכן. תכונות נוספות של תירגום אוטומטי באמצעות מחשב עם תכונות נוספות של תירגום אוטומטי באמצעות מחשב, רינדור סרטונים וזרימות עבודה מסודרות. נבנה עם TypeScript, Node.js ומבנה מיקרוסרבים מודרני.",
+          "link": "https://github.com/Omri-Jukin/ClipWhisperer"
+        },
+        {
           "title": "Snow HQ",
           "description": "מערכת CRM ברמת ארגון עם אנליטיקה בזמן אמת, זרימות עבודה אוטומטיות ויכולות דיווח מתקדמות. נבנה עם Next.js, tRPC, Drizzle ORM ו-PostgreSQL.",
           "link": "https://github.com/Omri-Jukin/Snow"
@@ -323,11 +333,6 @@
           "title": "Clothest",
           "description": "מערכת ניהול ארון בגדים עם המלצות מותאמות אישית ומעקב מלאי. נבנה עם React, Express.js ו-MongoDB.",
           "link": "https://github.com/Omri-Jukin/Clothest"
-        },
-        {
-          "title": "אתר פורטפוליו",
-          "description": "אתר פורטפוליו מודרני ורספונסיבי עם בינלאומיות, מצב כהה ואנימציות חלקות. נבנה עם Next.js, TypeScript, Material-UI ו-Framer Motion.",
-          "link": "https://github.com/Omri-Jukin/Portfolio"
         }
       ]
     },
@@ -335,6 +340,7 @@
       "title": "בואו נתחבר",
       "subtitle": "מוכן להביא את הרעיונות שלך לחיים?",
       "description": "אני תמיד נרגש לדון בהזדמנויות חדשות, שיתופי פעולה או פשוט לשוחח על טכנולוגיה. שלח לי הודעה ובואו ניצור משהו מדהים יחד.",
+      "button": "התחל שיחה",
       "form": {
         "name": "השם שלך",
         "email": "האימייל שלך",
@@ -420,8 +426,24 @@
         "icon": "Telegram"
       }
     ],
-    "emailTitle": "צור קשר",
-    "email": "omrijukin@gmail.com",
+    "contactTitle": "צור קשר",
+    "contact": [
+      {
+        "label": "אימייל",
+        "href": "mailto:omrijukin@gmail.com",
+        "icon": "Email"
+      },
+      {
+        "label": "טלפון",
+        "href": "tel:+9720523344064",
+        "icon": "Phone"
+      },
+      {
+        "label": "WhatsApp",
+        "href": "https://wa.me/972523344064",
+        "icon": "WhatsApp"
+      }
+    ],
     "copyright": "עמרי חוקין. כל הזכויות שמורות."
   }
 }

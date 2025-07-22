@@ -1,9 +1,6 @@
 export { default } from "./ScrollingSections";
-export * from "./ScrollingSections";
-export * from "./ScrollingSections.style";
-export type {
-  ScrollingSectionsProps,
-  QAData,
-  ServiceData,
-  ProjectData,
-} from "./ScrollingSections.type";
+export { default as Section } from "./Section";
+export { default as ResponsiveBackground } from "./ResponsiveBackground";
+export { default as HeroBackgroundElements } from "./HeroBackgroundElements";
+export type { ScrollingSectionsProps } from "./ScrollingSections.type";
+export type { SectionProps } from "./Section.type";

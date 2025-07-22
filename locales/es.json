@@ -316,6 +316,16 @@
       "subtitle": "Un vistazo a mi trabajo",
       "projects": [
         {
+          "title": "Portfolio Website",
+          "description": "Sitio web portfolio moderno y responsivo con internacionalización, modo oscuro y animaciones suaves. Construido con Next.js, TypeScript, Material-UI y Framer Motion.",
+          "link": "https://github.com/Omri-Jukin/Portfolio"
+        },
+        {
+          "title": "ClipWhisperer",
+          "description": "Plataforma de microservicios para el procesamiento automático de videos y creación de contenido. Características de narración automatizada con IA, renderizado de videos y flujos de trabajo orquestados. Construido con TypeScript, Node.js y arquitectura de microservicios moderna.",
+          "link": "https://github.com/Omri-Jukin/ClipWhisperer"
+        },
+        {
           "title": "Snow HQ",
           "description": "Sistema CRM de nivel empresarial con análisis en tiempo real, flujos de trabajo automatizados y capacidades avanzadas de reportes. Construido con Next.js, tRPC, Drizzle ORM y PostgreSQL.",
           "link": "https://github.com/Omri-Jukin/Snow"
@@ -324,11 +334,6 @@
           "title": "Clothest",
           "description": "Sistema de gestión de guardarropa con recomendaciones personalizadas y seguimiento de inventario. Construido con React, Express.js y MongoDB.",
           "link": "https://github.com/Omri-Jukin/Clothest"
-        },
-        {
-          "title": "Sitio Web Portfolio",
-          "description": "Sitio web portfolio moderno y responsivo con internacionalización, modo oscuro y animaciones suaves. Construido con Next.js, TypeScript, Material-UI y Framer Motion.",
-          "link": "https://github.com/Omri-Jukin/Portfolio"
         }
       ]
     },
@@ -336,6 +341,7 @@
       "title": "Conectemos",
       "subtitle": "¿Listo para dar vida a tus ideas?",
       "description": "Siempre estoy emocionado de discutir nuevas oportunidades, colaboraciones o simplemente charlar sobre tecnología. Envíame un mensaje y creemos algo increíble juntos.",
+      "button": "Iniciar conversación",
       "form": {
         "name": "Tu Nombre",
         "email": "Tu Email",
@@ -421,8 +427,24 @@
         "icon": "Telegram"
       }
     ],
-    "emailTitle": "Contacto",
-    "email": "omrijukin@gmail.com",
+    "contactTitle": "Contacto",
+    "contact": [
+      {
+        "label": "Email",
+        "href": "mailto:omrijukin@gmail.com",
+        "icon": "Email"
+      },
+      {
+        "label": "Phone",
+        "href": "tel:+9720523344064",
+        "icon": "Phone"
+      },
+      {
+        "label": "WhatsApp",
+        "href": "https://wa.me/972523344064",
+        "icon": "WhatsApp"
+      }
+    ],
     "copyright": "Omri Jukin. Todos los derechos reservados."
   }
 }

@@ -7,13 +7,14 @@ export default function Footer() {
   const t = useTranslations("footer");
   const links = t.raw("links");
   const social = t.raw("social");
+  const contact = t.raw("contact");
   return (
     <FooterComponent
       title={t("title")}
       linksTitle={t("linksTitle")}
       socialTitle={t("socialTitle")}
-      emailTitle={t("emailTitle")}
-      email={t("email")}
+      contactTitle={t("contactTitle")}
+      contact={contact}
       copyright={t("copyright")}
       links={links}
       social={social}
