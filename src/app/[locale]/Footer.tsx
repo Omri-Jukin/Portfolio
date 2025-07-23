@@ -1,6 +1,6 @@
 "use client";
 
-import { Footer as FooterComponent } from "~/Footer";
+import FooterComponent from "~/Footer";
 import { useTranslations } from "next-intl";
 
 export default function Footer() {

@@ -73,6 +73,7 @@ export const ScrollingSectionTitle = styled(Box)(({ theme }) => ({
   color: theme.palette.text.primary,
   marginBottom: theme.spacing(2),
   textAlign: "center",
+  width: "100%",
   [theme.breakpoints.down("sm")]: {
     fontSize: "clamp(1.5rem, 5vw, 2.5rem)",
     marginBottom: theme.spacing(1.5),
@@ -86,6 +87,7 @@ export const SectionSubtitle = styled(Typography)(({ theme }) => ({
   textAlign: "center",
   maxWidth: "600px",
   margin: "0 auto",
+  width: "100%",
 }));
 
 export const SkillTag = styled(Button)(({ theme }) => ({
@@ -106,16 +108,69 @@ export const SkillTag = styled(Button)(({ theme }) => ({
   fontSize: "0.9rem",
   letterSpacing: "0.5px",
   minHeight: "32px", // Accessibility: minimum touch target size
-  transition: "all 0.3s ease",
+  transition: "all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+  position: "relative",
+  overflow: "hidden",
+
+  // Hover effects
   "&:hover": {
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
-    transform: "translateY(-2px)",
-    boxShadow: theme.shadows[4],
+    transform: "translateY(-3px) scale(1.05)",
+    boxShadow: `0 8px 25px ${theme.palette.primary.main}40, 0 4px 10px rgba(0,0,0,0.2)`,
+    borderColor: theme.palette.primary.dark,
   },
+
+  // Active/Click effects
+  "&:active": {
+    transform: "translateY(-1px) scale(1.02)",
+    transition: "all 0.1s ease",
+  },
+
+  // Focus for accessibility
   "&:focus-visible": {
     outline: `3px solid ${theme.palette.primary.main}`,
     outlineOffset: "2px",
+    transform: "translateY(-2px)",
+  },
+
+  // Glow effect on hover
+  "&::before": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: `radial-gradient(circle at center, ${theme.palette.primary.main}20 0%, transparent 70%)`,
+    opacity: 0,
+    transition: "opacity 0.3s ease",
+    pointerEvents: "none",
+  },
+
+  "&:hover::before": {
+    opacity: 1,
+  },
+
+  // Ripple effect
+  "&::after": {
+    content: '""',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    width: "0",
+    height: "0",
+    borderRadius: "50%",
+    background: `${theme.palette.primary.main}30`,
+    transform: "translate(-50%, -50%)",
+    transition: "width 0.6s, height 0.6s",
+    pointerEvents: "none",
+  },
+
+  "&:active::after": {
+    width: "300px",
+    height: "300px",
+    transition: "width 0.3s, height 0.3s",
   },
 }));
 

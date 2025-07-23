@@ -1,2 +1,4 @@
-export { default as Footer } from "./Footer";
-export type { FooterProps } from "./Footer.type";
+export { default } from "./Footer";
+export * from "./Footer.style";
+export * from "./Footer.type";
+export * from "./Footer.const";

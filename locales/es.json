@@ -255,6 +255,67 @@
         "codeConjurer": "HECHICERO DEL CÓDIGO",
         "brandArchitect": "ARQUITECTO DE MARCA",
         "designDreamer": "SOÑADOR DEL DISEÑO"
+      },
+      "skillDetails": {
+        "codeConjurer": {
+          "title": "HECHICERO DEL CÓDIGO",
+          "description": "Transformando problemas complejos en soluciones elegantes y escalables a través de código limpio y arquitectura innovadora.",
+          "experience": "Experto",
+          "technologies": [
+            "TypeScript",
+            "JavaScript",
+            "Node.js",
+            "React",
+            "Next.js",
+            "PostgreSQL",
+            "MongoDB",
+            "Python"
+          ],
+          "examples": [
+            "Arquitectura de Microservicios",
+            "Desarrollo de APIs",
+            "Diseño de Bases de Datos",
+            "Optimización de Rendimiento"
+          ],
+          "years": "4+ años"
+        },
+        "brandArchitect": {
+          "title": "ARQUITECTO DE MARCA",
+          "description": "Creando experiencias de marca convincentes que resuenan con los usuarios e impulsan el crecimiento empresarial a través del pensamiento estratégico de diseño.",
+          "experience": "Avanzado",
+          "technologies": [
+            "Estrategia de Marca",
+            "Diseño de Experiencia de Usuario",
+            "Identidad Visual",
+            "Automatización de Marketing"
+          ],
+          "examples": [
+            "Guías de Marca",
+            "Mapeo de Viaje del Usuario",
+            "Optimización de Conversión",
+            "Pruebas A/B"
+          ],
+          "years": "4+ años"
+        },
+        "designDreamer": {
+          "title": "SOÑADOR DEL DISEÑO",
+          "description": "Creando interfaces intuitivas y hermosas que conectan la funcionalidad con la estética.",
+          "experience": "Avanzado",
+          "technologies": [
+            "Figma",
+            "Adobe Creative Suite",
+            "Material-UI",
+            "Tailwind CSS",
+            "Framer Motion"
+          ],
+          "examples": [
+            "Diseño UI/UX",
+            "Prototipado",
+            "Sistemas de Diseño",
+            "Diseño de Animaciones"
+          ],
+          "years": "4+ años"
+        }
       }
     },
     "qa": {

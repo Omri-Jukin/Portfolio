@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { baseTheme } from "!/theme";
 import { createTheme, ThemeProvider, CssBaseline, Box } from "@mui/material";
-import { Header, TLayout } from "~/Header";
+import Header, { TLayout } from "~/Header";
 
 import Footer from "@/app/[locale]/Footer";
 import { useLocale } from "next-intl";

@@ -1,3 +1,4 @@
 export { default } from "./TagChip";
-export * from "./TagChip";
-export type { TagChipProps } from "./TagChip.type";
+export * from "./TagChip.style";
+export * from "./TagChip.type";
+export * from "./TagChip.const";

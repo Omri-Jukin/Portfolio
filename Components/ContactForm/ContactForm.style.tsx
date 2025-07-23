@@ -14,6 +14,7 @@ export const FormContainer = styled(Paper, {
   padding: theme.spacing(4),
   maxWidth: "600px",
   margin: "0 auto",
+  marginTop: theme.spacing(10),
   background: transparent
     ? "transparent"
     : theme.palette.mode === "dark"

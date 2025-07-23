@@ -257,6 +257,67 @@
         "codeConjurer": "CODE CONJURER",
         "brandArchitect": "BRAND ARCHITECT",
         "designDreamer": "DESIGN DREAMER"
+      },
+      "skillDetails": {
+        "codeConjurer": {
+          "title": "CODE CONJURER",
+          "description": "Transforming complex problems into elegant, scalable solutions through clean code and innovative architecture.",
+          "experience": "Expert",
+          "technologies": [
+            "TypeScript",
+            "JavaScript",
+            "Node.js",
+            "React",
+            "Next.js",
+            "PostgreSQL",
+            "MongoDB",
+            "Python"
+          ],
+          "examples": [
+            "Microservices Architecture",
+            "API Development",
+            "Database Design",
+            "Performance Optimization"
+          ],
+          "years": "4+ years"
+        },
+        "brandArchitect": {
+          "title": "BRAND ARCHITECT",
+          "description": "Crafting compelling brand experiences that resonate with users and drive business growth through strategic design thinking.",
+          "experience": "Advanced",
+          "technologies": [
+            "Brand Strategy",
+            "User Experience Design",
+            "Visual Identity",
+            "Marketing Automation"
+          ],
+          "examples": [
+            "Brand Guidelines",
+            "User Journey Mapping",
+            "Conversion Optimization",
+            "A/B Testing"
+          ],
+          "years": "4+ years"
+        },
+        "designDreamer": {
+          "title": "DESIGN DREAMER",
+          "description": "Creating intuitive, beautiful interfaces that bridge the gap between functionality and aesthetics.",
+          "experience": "Advanced",
+          "technologies": [
+            "Figma",
+            "Adobe Creative Suite",
+            "Material-UI",
+            "Tailwind CSS",
+            "Framer Motion"
+          ],
+          "examples": [
+            "UI/UX Design",
+            "Prototyping",
+            "Design Systems",
+            "Animation Design"
+          ],
+          "years": "4+ years"
+        }
       }
     },
     "qa": {

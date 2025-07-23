@@ -1,2 +1,4 @@
-export { Typography } from "./Typography";
-export type { TypographyProps } from "./Typography.type";
+export { default } from "./Typography";
+export * from "./Typography.style";
+export * from "./Typography.type";
+export * from "./Typography.const";

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Typography } from "@mui/material";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -14,7 +14,7 @@ import {
 import MotionWrapper from "~/MotionWrapper";
 import AnimatedText from "~/AnimatedText";
 import type { ScrollingSectionsProps } from "./ScrollingSections.type";
-import Section from "./Section";
+import SkillShowcase from "../SkillShowcase";
 import {
   ScrollingHeroTitle,
   HeroSubtitle,
@@ -44,6 +44,10 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
   const t = useTranslations("scrollingSections");
   const router = useRouter();
 
+  // State for skill showcase modal
+  const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
+  const [showSkillModal, setShowSkillModal] = useState(false);
+
   // Navigation functions
   const scrollToSection = (sectionId: string) => {
     // Update URL hash for better UX and accessibility
@@ -69,13 +73,42 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
     router.push(`/${locale}${path}`);
   };
 
+  // Skill showcase handlers
+  const handleSkillClick = (skillKey: string) => {
+    setSelectedSkill(skillKey);
+    setShowSkillModal(true);
+  };
+
+  const handleCloseSkillModal = () => {
+    setShowSkillModal(false);
+    setSelectedSkill(null);
+  };
+
+  // Get skill details for the selected skill
+  const getSkillDetail = () => {
+    if (!selectedSkill) return null;
+    try {
+      return t.raw(`about.skillDetails.${selectedSkill}`);
+    } catch {
+      return null;
+    }
+  };
+
+  const skillDetail = getSkillDetail();
+
   return (
     <Box>
       {/* Hero Section */}
-      <Section
-        variant="hero"
+      <Box
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: { xs: "16px", md: "20px 40px" },
+        }}
         aria-labelledby="hero-title"
-        // backgroundElements={<HeroBackgroundElements />}
       >
         <MotionWrapper variant="fadeInUp" duration={1.2} delay={0.2}>
           <ScrollingHeroTitle id="hero-title">
@@ -119,10 +152,21 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
             </CTAButton>
           </Box>
         </MotionWrapper>
-      </Section>
+      </Box>
 
       {/* About Section */}
-      <Section variant="about" aria-labelledby="about-title" id="about-section">
+      <Box
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: { xs: "16px", md: "20px 40px" },
+        }}
+        aria-labelledby="about-title"
+        id="about-section"
+      >
         <MotionWrapper variant="fadeIn" duration={0.8}>
           <ScrollingSectionTitle id="about-title">
             {t("about.title")}
@@ -151,9 +195,15 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
                 gap: 1,
               }}
             >
-              <SkillTag>{t("about.skills.codeConjurer")}</SkillTag>
-              <SkillTag>{t("about.skills.brandArchitect")}</SkillTag>
-              <SkillTag>{t("about.skills.designDreamer")}</SkillTag>
+              <SkillTag onClick={() => handleSkillClick("codeConjurer")}>
+                {t("about.skills.codeConjurer")}
+              </SkillTag>
+              <SkillTag onClick={() => handleSkillClick("brandArchitect")}>
+                {t("about.skills.brandArchitect")}
+              </SkillTag>
+              <SkillTag onClick={() => handleSkillClick("designDreamer")}>
+                {t("about.skills.designDreamer")}
+              </SkillTag>
             </Box>
           </Box>
         </MotionWrapper>
@@ -162,15 +212,30 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
           <Typography
             variant="body1"
             color="text.secondary"
-            sx={{ maxWidth: "800px", margin: "0 auto", lineHeight: 1.8 }}
+            sx={{
+              maxWidth: "800px",
+              margin: "0 auto",
+              lineHeight: 1.8,
+              textAlign: "center",
+              fontSize: "1.1rem",
+            }}
           >
             {t("about.description")}
           </Typography>
         </MotionWrapper>
-      </Section>
+      </Box>
 
       {/* Rapid Q&A Section */}
-      <Section variant="qa">
+      <Box
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: { xs: "16px", md: "20px 40px" },
+        }}
+      >
         <MotionWrapper variant="fadeInUp" duration={1.0}>
           <Typography
             variant="body2"
@@ -197,6 +262,9 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
               lg: "repeat(3, 1fr)",
             },
             gap: 3,
+            maxWidth: "1200px", // Limit maximum width
+            width: "100%", // Take full width up to maxWidth
+            margin: "0 auto", // Center the grid
           }}
         >
           {t
@@ -215,10 +283,19 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
               </MotionWrapper>
             ))}
         </Box>
-      </Section>
+      </Box>
 
       {/* Services Section */}
-      <Section variant="services">
+      <Box
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: { xs: "16px", md: "20px 40px" },
+        }}
+      >
         <MotionWrapper variant="fadeInUp" duration={1.0}>
           <Typography
             variant="body2"
@@ -240,6 +317,9 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
             gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" },
             gap: 4,
             mt: 6,
+            maxWidth: "1200px", // Limit maximum width
+            width: "100%", // Take full width up to maxWidth
+            margin: "0 auto", // Center the grid
           }}
         >
           {t.raw("services.services").map(
@@ -291,10 +371,20 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
             )
           )}
         </Box>
-      </Section>
+      </Box>
 
       {/* Projects Section */}
-      <Section variant="projects" id="projects-section">
+      <Box
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: { xs: "16px", md: "20px 40px" },
+        }}
+        id="projects-section"
+      >
         <MotionWrapper variant="fadeInUp" duration={1.0}>
           <ScrollingSectionTitle>{t("projects.title")}</ScrollingSectionTitle>
           <SectionSubtitle>{t("projects.subtitle")}</SectionSubtitle>
@@ -306,6 +396,9 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
             gridTemplateColumns: { xs: "1fr", md: "repeat(2, 1fr)" },
             gap: 4,
             mt: 6,
+            maxWidth: "1200px", // Limit maximum width
+            width: "100%", // Take full width up to maxWidth
+            margin: "0 auto", // Center the grid
           }}
         >
           {t
@@ -359,10 +452,20 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
               )
             )}
         </Box>
-      </Section>
+      </Box>
 
       {/* Contact Section */}
-      <Section variant="contact" id="contact-section">
+      <Box
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: { xs: "16px", md: "20px 40px" },
+        }}
+        id="contact-section"
+      >
         <MotionWrapper variant="fadeInUp" duration={1.0}>
           <ScrollingSectionTitle sx={{ mb: 4 }}>
             {t("contact.title")}
@@ -393,7 +496,16 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
             </Link>
           </ContactForm>
         </MotionWrapper>
-      </Section>
+      </Box>
+
+      {/* Skill Showcase Modal */}
+      {showSkillModal && skillDetail && (
+        <SkillShowcase
+          skillDetail={skillDetail}
+          open={showSkillModal}
+          onClose={handleCloseSkillModal}
+        />
+      )}
     </Box>
   );
 };

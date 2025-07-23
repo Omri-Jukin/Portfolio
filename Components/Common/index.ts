@@ -1,2 +1,3 @@
 export * from "./Common.style";
-export type { PortfolioSection } from "./Common.type";
+export * from "./Common.type";
+export * from "./Common.const";
