@@ -5,9 +5,17 @@ import { Box, Typography, Card, CardContent, Chip, Stack } from "@mui/material";
 import { useTranslations } from "next-intl";
 import MotionWrapper from "#/Components/MotionWrapper";
 
+type SkillDetail = {
+  title: string;
+  description: string;
+  experience: string;
+  years: string;
+  technologies: string[];
+  examples: string[];
+};
+
 export default function AboutPage() {
   const t = useTranslations("about");
-  const interestsT = useTranslations("interests");
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: "1200px", mx: "auto" }}>
@@ -39,139 +47,236 @@ export default function AboutPage() {
             fontWeight: "normal",
           }}
         >
+          {t("subtitle")}
+        </Typography>
+      </MotionWrapper>
+
+      <MotionWrapper variant="slideUp" duration={0.8} delay={0.6}>
+        <Typography
+          variant="body1"
+          sx={{
+            textAlign: "center",
+            color: "text.secondary",
+            mb: 6,
+            fontSize: "1.1rem",
+            lineHeight: 1.6,
+            maxWidth: "800px",
+            mx: "auto",
+          }}
+        >
           {t("description")}
         </Typography>
       </MotionWrapper>
 
-      {/* Professional Profile */}
-      <MotionWrapper variant="slideUp" duration={0.8} delay={0.6}>
-        <Card sx={{ mb: 4, backgroundColor: "background.paper" }}>
-          <CardContent sx={{ p: 3 }}>
+      {/* Skills Overview */}
+      <MotionWrapper variant="slideUp" duration={0.8} delay={0.8}>
+        <Card sx={{ mb: 6, backgroundColor: "background.paper" }}>
+          <CardContent sx={{ p: 4 }}>
             <Typography
               variant="h4"
               component="h2"
               gutterBottom
-              sx={{ color: "primary.main" }}
+              sx={{ color: "primary.main", textAlign: "center", mb: 4 }}
             >
-              {interestsT("professionalProfile.title")}
+              My Skills
             </Typography>
-            <Stack spacing={2}>
-              {interestsT
-                .raw("professionalProfile.points")
-                .map((point: string, index: number) => (
-                  <Box
-                    key={index}
-                    sx={{ display: "flex", alignItems: "flex-start" }}
-                  >
-                    <Box
-                      sx={{
-                        width: 8,
-                        height: 8,
-                        borderRadius: "50%",
-                        backgroundColor: "primary.main",
-                        mt: 1,
-                        mr: 2,
-                        flexShrink: 0,
-                      }}
-                    />
-                    <Typography variant="body1" sx={{ lineHeight: 1.7 }}>
-                      {point}
-                    </Typography>
-                  </Box>
-                ))}
-            </Stack>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 2,
+                justifyContent: "center",
+              }}
+            >
+              {Object.entries(t.raw("skills")).map(([key, skillName]) => (
+                <Chip
+                  key={key}
+                  label={skillName as string}
+                  variant="outlined"
+                  sx={{
+                    borderColor: "primary.main",
+                    color: "primary.main",
+                    fontSize: "1rem",
+                    padding: 1,
+                    "&:hover": {
+                      backgroundColor: "primary.main",
+                      color: "primary.contrastText",
+                    },
+                  }}
+                />
+              ))}
+            </Box>
           </CardContent>
         </Card>
       </MotionWrapper>
 
-      {/* Professional Interests & Additional Activities */}
+      {/* Skill Details */}
+      <MotionWrapper variant="slideUp" duration={0.8} delay={1.0}>
+        <Typography
+          variant="h3"
+          component="h2"
+          gutterBottom
+          sx={{ color: "primary.main", textAlign: "center", mb: 4 }}
+        >
+          Skill Details
+        </Typography>
+      </MotionWrapper>
+
       <Box
         sx={{
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" },
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" },
           gap: 4,
+          mb: 6,
         }}
       >
-        {/* Professional Interests */}
-        <Box sx={{ flex: 1 }}>
-          <MotionWrapper variant="slideUp" duration={0.8} delay={0.8}>
-            <Card sx={{ height: "100%", backgroundColor: "background.paper" }}>
-              <CardContent sx={{ p: 3 }}>
-                <Typography
-                  variant="h5"
-                  component="h3"
-                  gutterBottom
-                  sx={{ color: "secondary.main" }}
+        {Object.entries(t.raw("skillDetails")).map(
+          ([key, skillDetail], index) => {
+            const detail = skillDetail as SkillDetail;
+            return (
+              <MotionWrapper
+                key={key}
+                variant="slideUp"
+                duration={0.8}
+                delay={1.2 + index * 0.2}
+              >
+                <Card
+                  sx={{ height: "100%", backgroundColor: "background.paper" }}
                 >
-                  {interestsT("title")}
-                </Typography>
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                  {interestsT
-                    .raw("professional")
-                    .map((interest: string, index: number) => (
-                      <Chip
-                        key={index}
-                        label={interest}
-                        variant="outlined"
-                        sx={{
-                          borderColor: "secondary.main",
-                          color: "secondary.main",
-                          "&:hover": {
-                            backgroundColor: "secondary.main",
-                            color: "secondary.contrastText",
-                          },
-                        }}
-                      />
-                    ))}
-                </Box>
-              </CardContent>
-            </Card>
-          </MotionWrapper>
-        </Box>
+                  <CardContent sx={{ p: 3 }}>
+                    <Typography
+                      variant="h5"
+                      component="h3"
+                      gutterBottom
+                      sx={{
+                        color: "primary.main",
+                        textAlign: "center",
+                        mb: 2,
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {detail.title}
+                    </Typography>
 
-        {/* Additional Activities */}
-        <Box sx={{ flex: 1 }}>
-          <MotionWrapper variant="slideUp" duration={0.8} delay={1.0}>
-            <Card sx={{ height: "100%", backgroundColor: "background.paper" }}>
-              <CardContent sx={{ p: 3 }}>
-                <Typography
-                  variant="h5"
-                  component="h3"
-                  gutterBottom
-                  sx={{ color: "info.main" }}
-                >
-                  {interestsT("additionalActivities.title")}
-                </Typography>
-                <Stack spacing={2}>
-                  {interestsT
-                    .raw("additionalActivities.points")
-                    .map((activity: string, index: number) => (
-                      <Box
-                        key={index}
-                        sx={{ display: "flex", alignItems: "flex-start" }}
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: "text.secondary",
+                        mb: 2,
+                        textAlign: "center",
+                        fontStyle: "italic",
+                      }}
+                    >
+                      {detail.description}
+                    </Typography>
+
+                    <Box sx={{ mb: 2 }}>
+                      <Typography
+                        variant="body2"
+                        fontWeight="medium"
+                        sx={{ mb: 1 }}
                       >
-                        <Box
-                          sx={{
-                            width: 6,
-                            height: 6,
-                            borderRadius: "50%",
-                            backgroundColor: "info.main",
-                            mt: 1,
-                            mr: 2,
-                            flexShrink: 0,
-                          }}
-                        />
-                        <Typography variant="body2" sx={{ lineHeight: 1.6 }}>
-                          {activity}
-                        </Typography>
+                        Experience: {detail.experience}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        fontWeight="medium"
+                        sx={{ mb: 1 }}
+                      >
+                        Years: {detail.years}
+                      </Typography>
+                    </Box>
+
+                    <Box sx={{ mb: 2 }}>
+                      <Typography
+                        variant="body2"
+                        fontWeight="medium"
+                        sx={{ mb: 1 }}
+                      >
+                        Technologies:
+                      </Typography>
+                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                        {detail.technologies.map((tech, techIndex) => (
+                          <Chip
+                            key={techIndex}
+                            label={tech}
+                            size="small"
+                            variant="outlined"
+                            sx={{ fontSize: "0.7rem" }}
+                          />
+                        ))}
                       </Box>
-                    ))}
-                </Stack>
-              </CardContent>
-            </Card>
-          </MotionWrapper>
-        </Box>
+                    </Box>
+
+                    <Box>
+                      <Typography
+                        variant="body2"
+                        fontWeight="medium"
+                        sx={{ mb: 1 }}
+                      >
+                        Examples:
+                      </Typography>
+                      <Stack spacing={1}>
+                        {detail.examples.map((example, exampleIndex) => (
+                          <Box
+                            key={exampleIndex}
+                            sx={{ display: "flex", alignItems: "flex-start" }}
+                          >
+                            <Box
+                              sx={{
+                                width: 6,
+                                height: 6,
+                                borderRadius: "50%",
+                                backgroundColor: "primary.main",
+                                mt: 1,
+                                mr: 1,
+                                flexShrink: 0,
+                              }}
+                            />
+                            <Typography
+                              variant="body2"
+                              sx={{ lineHeight: 1.4 }}
+                            >
+                              {example}
+                            </Typography>
+                          </Box>
+                        ))}
+                      </Stack>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </MotionWrapper>
+            );
+          }
+        )}
       </Box>
+
+      {/* Call to Action */}
+      <MotionWrapper variant="slideUp" duration={0.8} delay={1.8}>
+        <Box
+          sx={{
+            mt: 6,
+            p: 4,
+            textAlign: "center",
+            backgroundColor: "background.default",
+            borderRadius: 2,
+            border: "1px solid",
+            borderColor: "divider",
+          }}
+        >
+          <Typography
+            variant="h5"
+            component="p"
+            sx={{ color: "primary.main", mb: 2 }}
+          >
+            Ready to Work Together?
+          </Typography>
+          <Typography variant="body1" sx={{ color: "text.secondary" }}>
+            Let&apos;s discuss how my skills and experience can help bring your
+            project to life.
+          </Typography>
+        </Box>
+      </MotionWrapper>
     </Box>
   );
 }

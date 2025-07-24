@@ -12,8 +12,9 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TelegramIcon from "@mui/icons-material/Telegram";
 import WebsiteIcon from "@mui/icons-material/Language";
+import { useTranslations } from "next-intl";
 
-export const Footer: React.FC<FooterProps> = ({
+export const FooterComponent: React.FC<FooterProps> = ({
   title,
   children,
   links,
@@ -136,4 +137,23 @@ export const Footer: React.FC<FooterProps> = ({
   </FooterContainer>
 );
 
-export default Footer;
+export default function Footer() {
+  const t = useTranslations("footer");
+  const links = t.raw("links");
+  const social = t.raw("social");
+  const contact = t.raw("contact");
+  return (
+    <FooterComponent
+      title={t("title")}
+      linksTitle={t("linksTitle")}
+      socialTitle={t("socialTitle")}
+      contactTitle={t("contactTitle")}
+      contact={contact}
+      copyright={t("copyright")}
+      links={links}
+      social={social}
+    >
+      {t("children")}
+    </FooterComponent>
+  );
+}

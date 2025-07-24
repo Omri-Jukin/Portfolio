@@ -15,10 +15,177 @@
     "skills": "Skills",
     "description": "Innovative full-stack engineer with a strong background in electrical engineering and passion for creating efficient, user-focused solutions."
   },
+  "hero": {
+    "title": "Crafting digital magic",
+    "subtitle": "Wondering how I tick? Here's the inside scoop—no fluff, just facts, with a dash of flair.",
+    "exploreButton": "Explore work",
+    "aboutButton": "About me"
+  },
   "about": {
-    "title": "About Me",
-    "description": "Innovative full-stack engineer with a strong background in electrical engineering and passion for creating efficient, user-focused solutions.",
-    "profile": "• Innovative full-stack engineer with a strong background in electrical engineering and passion for creating efficient, user-focused solutions.\n\n• Proven ability in developing scalable applications and managing complex data systems.\n\n• Extensive experience in the insurance industry, from customer service to core system development.\n\n• Demonstrated leadership in training and mentoring teams, process improvement, and driving organizational change and growth.\n\n• Strong problem-solving skills with emphasis on system design and optimization.\n\n• Commitment to continuous learning and professional growth in the technology industry."
+    "title": "Who I Am",
+    "subtitle": "EXPLORE MY CREATIVE TOOLKIT",
+    "description": "I'm a passionate developer and designer who believes that great digital experiences come from the perfect blend of technical expertise and creative vision. With years of experience crafting web applications, I've learned that the best solutions are those that not only work flawlessly but also delight users at every interaction.",
+    "skills": {
+      "codeConjurer": "CODE CONJURER",
+      "brandArchitect": "BRAND ARCHITECT",
+      "designDreamer": "DESIGN DREAMER"
+    },
+    "skillDetails": {
+      "codeConjurer": {
+        "title": "CODE CONJURER",
+        "description": "Transforming complex problems into elegant, scalable solutions through clean code and innovative architecture.",
+        "experience": "Expert",
+        "technologies": [
+          "TypeScript",
+          "JavaScript",
+          "Node.js",
+          "React",
+          "Next.js",
+          "PostgreSQL",
+          "MongoDB",
+          "Python"
+        ],
+        "examples": [
+          "Microservices Architecture",
+          "API Development",
+          "Database Design",
+          "Performance Optimization"
+        ],
+        "years": "4+ years"
+      },
+      "brandArchitect": {
+        "title": "BRAND ARCHITECT",
+        "description": "Crafting compelling brand experiences that resonate with users and drive business growth through strategic design thinking.",
+        "experience": "Advanced",
+        "technologies": [
+          "Brand Strategy",
+          "User Experience Design",
+          "Visual Identity",
+          "Marketing Automation"
+        ],
+        "examples": [
+          "Brand Guidelines",
+          "User Journey Mapping",
+          "Conversion Optimization",
+          "A/B Testing"
+        ],
+        "years": "4+ years"
+      },
+      "designDreamer": {
+        "title": "DESIGN DREAMER",
+        "description": "Creating intuitive, beautiful interfaces that bridge the gap between functionality and aesthetics.",
+        "experience": "Advanced",
+        "technologies": [
+          "Figma",
+          "Adobe Creative Suite",
+          "Material-UI",
+          "Tailwind CSS",
+          "Framer Motion"
+        ],
+        "examples": [
+          "UI/UX Design",
+          "Prototyping",
+          "Design Systems",
+          "Animation Design"
+        ],
+        "years": "4+ years"
+      }
+    }
+  },
+  "qa": {
+    "title": "Rapid Q&A",
+    "subtitle": "Get to know me quickly",
+    "questions": [
+      {
+        "question": "What drives you?",
+        "answer": "Solving complex problems and creating elegant solutions that make a real impact."
+      },
+      {
+        "question": "Your work style?",
+        "answer": "Methodical yet creative, with a focus on user experience and clean code."
+      },
+      {
+        "question": "Biggest achievement?",
+        "answer": "Leading the development of enterprise-level systems that serve thousands of users."
+      },
+      {
+        "question": "What excites you?",
+        "answer": "Learning new technologies and pushing the boundaries of what's possible."
+      },
+      {
+        "question": "Your philosophy?",
+        "answer": "Great software should be invisible—users should focus on their goals, not the interface."
+      },
+      {
+        "question": "Future goals?",
+        "answer": "Building innovative products that solve real-world problems at scale."
+      }
+    ]
+  },
+  "services": {
+    "title": "Innovative Solutions",
+    "subtitle": "What I bring to the table",
+    "services": [
+      {
+        "title": "Craft your future",
+        "description": "Building scalable, modern applications that grow with your business needs.",
+        "buttonText": "See Work",
+        "buttonVariant": "primary"
+      },
+      {
+        "title": "Skills that shine",
+        "description": "Full-stack expertise from frontend finesse to backend brilliance.",
+        "buttonText": "Discover",
+        "buttonVariant": "secondary"
+      },
+      {
+        "title": "Feedback fuels growth",
+        "description": "Continuous improvement through user feedback and iterative development.",
+        "buttonText": "Get in Touch",
+        "buttonVariant": "primary"
+      }
+    ]
+  },
+  "projects": {
+    "title": "Featured Projects",
+    "subtitle": "A glimpse into my work",
+    "projects": [
+      {
+        "title": "Portfolio Website",
+        "description": "Modern, responsive portfolio website with internationalization, dark mode, and smooth animations. Built with Next.js, TypeScript, Material-UI, and Framer Motion.",
+        "link": "https://github.com/Omri-Jukin/Portfolio"
+      },
+      {
+        "title": "ClipWhisperer",
+        "description": "Comprehensive microservices platform for automated video processing and content creation. Features AI-powered narration, video rendering, and orchestrated workflows. Built with TypeScript, Node.js, and modern microservices architecture.",
+        "link": "https://github.com/ClipWhisperer"
+      },
+      {
+        "title": "Snow HQ",
+        "description": "Enterprise-level CRM system featuring real-time analytics, automated workflows, and advanced reporting capabilities. Built with Next.js, tRPC, Drizzle ORM, and PostgreSQL.",
+        "link": "https://github.com/Omri-Jukin/Snow"
+      },
+      {
+        "title": "Clothest",
+        "description": "Wardrobe management system with personalized recommendations and inventory tracking. Built with React, Express.js, and MongoDB.",
+        "link": "https://github.com/Omri-Jukin/Clothest"
+      }
+    ]
+  },
+  "contact": {
+    "title": "Let's Connect",
+    "subtitle": "Ready to bring your ideas to life?",
+    "description": "I'm always excited to discuss new opportunities, collaborations, or just chat about technology. Drop me a message and let's create something amazing together.",
+    "button": "Start a conversation",
+    "form": {
+      "name": "Your Name",
+      "email": "Your Email",
+      "message": "Your Message",
+      "sendButton": "Send Message",
+      "sending": "Sending...",
+      "success": "Message sent successfully!",
+      "error": "Something went wrong. Please try again."
+    }
   },
   "career": {
     "title": "Career",
@@ -78,389 +245,91 @@
     "networkingSummary": "Download my resume to learn more about my background",
     "experience": "I am a passionate and driven full-stack developer with a strong foundation in electrical engineering and a proven track record of delivering results in high-pressure environments. My experience spans from leading the development of scalable platforms and modular UI libraries to optimizing business logic and mentoring teams in the insurance and telecommunications industries.\n\nI excel at solving complex problems, driving innovation, and collaborating across disciplines to achieve ambitious goals. My colleagues recognize me for my relentless work ethic, attention to detail, and commitment to continuous learning. Whether building robust backend systems, designing intuitive interfaces, or streamlining workflows, I always give my best to ensure quality and impact.\n\nIf you're looking for someone who combines technical expertise with leadership, creativity, and a genuine passion for making a difference, let's connect!"
   },
-  "projects": {
-    "title": "Key Projects",
-    "description": "Notable projects demonstrating technical expertise and innovation",
-    "list": [
-      {
-        "title": "Snow HQ",
-        "link": "https://github.com/Omri-Jukin/Snow",
-        "description": "Enterprise-level CRM system featuring real-time analytics, automated workflows, and advanced reporting capabilities. Built with Next.js, tRPC, Drizzle ORM, and PostgreSQL."
-      },
-      {
-        "title": "Clothest",
-        "link": "https://github.com/Omri-Jukin/Clothest",
-        "description": "Wardrobe management system with personalized recommendations and inventory tracking. Built with React, Express.js, and MongoDB."
-      }
-    ]
-  },
   "skills": {
     "title": "Technical Expertise",
     "categories": {
       "technical": {
         "title": "Technical Skills",
-        "items": [
-          { "name": "Frontend Development", "level": 90 },
-          { "name": "Backend Development", "level": 80 },
-          { "name": "System Architecture", "level": 50 },
-          { "name": "Database Management", "level": 50 },
-          { "name": "Cloud Technologies", "level": 35 },
-          { "name": "DevOps & CI/CD", "level": 30 }
+        "skills": [
+          {
+            "name": "Frontend Development",
+            "level": 90,
+            "technologies": [
+              "React",
+              "Next.js",
+              "TypeScript",
+              "JavaScript",
+              "HTML5",
+              "CSS3",
+              "Material-UI",
+              "Tailwind CSS"
+            ]
+          },
+          {
+            "name": "Backend Development",
+            "level": 85,
+            "technologies": [
+              "Node.js",
+              "Express.js",
+              "Python",
+              "PostgreSQL",
+              "MongoDB",
+              "tRPC",
+              "Drizzle ORM"
+            ]
+          },
+          {
+            "name": "DevOps & Tools",
+            "level": 80,
+            "technologies": [
+              "Git",
+              "Docker",
+              "AWS",
+              "Vercel",
+              "Jest",
+              "Vitest",
+              "Storybook"
+            ]
+          },
+          {
+            "name": "Design & UX",
+            "level": 75,
+            "technologies": [
+              "Figma",
+              "Adobe Creative Suite",
+              "Framer Motion",
+              "User Research",
+              "Prototyping"
+            ]
+          }
         ]
       },
-      "programming": {
-        "title": "Programming Languages",
-        "items": [
-          { "name": "TypeScript", "level": "Advanced" },
-          { "name": "JavaScript", "level": "Advanced" },
-          { "name": "Java", "level": "Intermediate" },
-          { "name": "C#", "level": "Intermediate" },
-          { "name": "Python", "level": "Beginner" }
+      "soft": {
+        "title": "Soft Skills",
+        "skills": [
+          {
+            "name": "Leadership",
+            "level": 90,
+            "description": "Team management, mentoring, and project coordination"
+          },
+          {
+            "name": "Problem Solving",
+            "level": 95,
+            "description": "Analytical thinking and creative solutions"
+          },
+          {
+            "name": "Communication",
+            "level": 85,
+            "description": "Technical and non-technical stakeholder communication"
+          },
+          {
+            "name": "Adaptability",
+            "level": 90,
+            "description": "Quick learning and technology adoption"
+          }
         ]
-      },
-      "languages": {
-        "title": "Languages",
-        "items": [
-          { "name": "Hebrew", "level": "Native" },
-          { "name": "English", "level": "Professional" },
-          { "name": "Spanish", "level": "Beginner" }
-        ]
       }
     }
-  },
-  "interests": {
-    "title": "Professional Interests",
-    "professional": [
-      "Software Development",
-      "Data Management",
-      "UI/UX Design",
-      "Problem Solving",
-      "Team Leadership",
-      "Continuous Learning",
-      "Technical Writing",
-      "System Architecture"
-    ],
-    "additional": [
-      "Founder of a community promoting critical thinking, rationality, and open discussions",
-      "Involved in public speaking and live broadcasts on topics related to hard sciences, soft sciences, rational thinking, and technology",
-      "Amateur magician, using creative skills to engage audiences and encourage curiosity"
-    ],
-    "professionalProfile": {
-      "title": "Professional Profile",
-      "points": [
-        "Proven ability in developing scalable applications and managing complex data systems.",
-        "Extensive experience in the insurance industry, from customer service to core system development.",
-        "Demonstrated leadership in training and mentoring teams, process improvement, and driving organizational change and growth.",
-        "Strong problem-solving skills with emphasis on system design and optimization.",
-        "Commitment to continuous learning and professional growth in the technology industry."
-      ]
-    },
-    "additionalActivities": {
-      "title": "Additional Activities",
-      "points": [
-        "Founder of an online community promoting critical thinking, rationality, and open discussions.",
-        "Involved in public speaking and live broadcasts on topics related to hard sciences, soft sciences, rational thinking, and technology.",
-        "Amateur magician, using creative skills to engage audiences and encourage curiosity."
-      ]
-    }
-  },
-  "theme": {
-    "light": "Switch to light mode",
-    "dark": "Switch to dark mode"
-  },
-  "language": {
-    "en": "English",
-    "es": "Spanish",
-    "fr": "French",
-    "he": "Hebrew"
-  },
-  "location": {
-    "israel": "Israel",
-    "usa": "USA",
-    "france": "France",
-    "spain": "Spain"
-  },
-  "home": {
-    "hero": {
-      "title": "Crafting digital magic",
-      "subtitle": "Wondering how I tick? Here's the inside scoop—no fluff, just facts, with a dash of flair.",
-      "exploreButton": "Explore work",
-      "aboutButton": "About me",
-      "description": "Full Stack Developer | Electrical Engineer | Data Management Expert",
-      "about": "About Me",
-      "contact": "Contact",
-      "cards": {
-        "about": {
-          "title": "About Me",
-          "description": "Innovative full-stack engineer with a strong background in electrical engineering and passion for creating efficient, user-focused solutions.",
-          "button": "About Me"
-        },
-        "career": {
-          "title": "Career",
-          "description": "My professional journey - from electrical engineering to full-stack development",
-          "button": "Career"
-        },
-        "resume": {
-          "title": "Resume",
-          "description": "My professional experience and skills in software development and team management",
-          "button": "Resume"
-        },
-        "blog": {
-          "title": "Blog",
-          "description": "Read my thoughts on technology, development, and industry insights",
-          "button": "Blog"
-        },
-        "contact": {
-          "title": "Contact",
-          "description": "Let's connect - I'm available for collaborations and new opportunities",
-          "button": "Contact"
-        }
-      }
-    },
-    "about": {
-      "title": "About Me",
-      "description": "Innovative full-stack engineer with a strong background in electrical engineering and passion for creating efficient, user-focused solutions."
-    },
-    "career": {
-      "title": "Career",
-      "description": "My professional journey",
-      "experience": "Hands-on experience in full-stack development, team management, and process improvement at leading technology and insurance companies."
-    },
-    "resume": {
-      "title": "Resume",
-      "description": "My professional experience and skills",
-      "experience": "Passionate full-stack developer with strong electrical engineering background and proven achievements in challenging work environments."
-    },
-    "blog": {
-      "title": "Blog",
-      "description": "Read my thoughts on technology, development, and industry insights",
-      "experience": "Insights and experiences from the industry"
-    },
-    "contact": {
-      "title": "Contact",
-      "description": "Let's connect - I'm available for collaborations and new opportunities",
-      "experience": "I'd love to hear from you"
-    }
-  },
-  "scrollingSections": {
-    "hero": {
-      "title": "Crafting digital magic",
-      "subtitle": "Wondering how I tick? Here's the inside scoop—no fluff, just facts, with a dash of flair.",
-      "exploreButton": "Explore work",
-      "aboutButton": "About me"
-    },
-    "about": {
-      "title": "Who I Am",
-      "subtitle": "EXPLORE MY CREATIVE TOOLKIT",
-      "description": "I'm a passionate developer and designer who believes that great digital experiences come from the perfect blend of technical expertise and creative vision. With years of experience crafting web applications, I've learned that the best solutions are those that not only work flawlessly but also delight users at every interaction.",
-      "skills": {
-        "codeConjurer": "CODE CONJURER",
-        "brandArchitect": "BRAND ARCHITECT",
-        "designDreamer": "DESIGN DREAMER"
-      },
-      "skillDetails": {
-        "codeConjurer": {
-          "title": "CODE CONJURER",
-          "description": "Transforming complex problems into elegant, scalable solutions through clean code and innovative architecture.",
-          "experience": "Expert",
-          "technologies": [
-            "TypeScript",
-            "JavaScript",
-            "Node.js",
-            "React",
-            "Next.js",
-            "PostgreSQL",
-            "MongoDB",
-            "Python"
-          ],
-          "examples": [
-            "Microservices Architecture",
-            "API Development",
-            "Database Design",
-            "Performance Optimization"
-          ],
-          "years": "4+ years"
-        },
-        "brandArchitect": {
-          "title": "BRAND ARCHITECT",
-          "description": "Crafting compelling brand experiences that resonate with users and drive business growth through strategic design thinking.",
-          "experience": "Advanced",
-          "technologies": [
-            "Brand Strategy",
-            "User Experience Design",
-            "Visual Identity",
-            "Marketing Automation"
-          ],
-          "examples": [
-            "Brand Guidelines",
-            "User Journey Mapping",
-            "Conversion Optimization",
-            "A/B Testing"
-          ],
-          "years": "4+ years"
-        },
-        "designDreamer": {
-          "title": "DESIGN DREAMER",
-          "description": "Creating intuitive, beautiful interfaces that bridge the gap between functionality and aesthetics.",
-          "experience": "Advanced",
-          "technologies": [
-            "Figma",
-            "Adobe Creative Suite",
-            "Material-UI",
-            "Tailwind CSS",
-            "Framer Motion"
-          ],
-          "examples": [
-            "UI/UX Design",
-            "Prototyping",
-            "Design Systems",
-            "Animation Design"
-          ],
-          "years": "4+ years"
-        }
-      }
-    },
-    "qa": {
-      "title": "Rapid Q&A",
-      "subtitle": "Get to know me quickly",
-      "questions": [
-        {
-          "question": "What drives you?",
-          "answer": "Solving complex problems and creating elegant solutions that make a real impact."
-        },
-        {
-          "question": "Your work style?",
-          "answer": "Methodical yet creative, with a focus on user experience and clean code."
-        },
-        {
-          "question": "Biggest achievement?",
-          "answer": "Leading the development of enterprise-level systems that serve thousands of users."
-        },
-        {
-          "question": "What excites you?",
-          "answer": "Learning new technologies and pushing the boundaries of what's possible."
-        },
-        {
-          "question": "Your philosophy?",
-          "answer": "Great software should be invisible—users should focus on their goals, not the interface."
-        },
-        {
-          "question": "Future goals?",
-          "answer": "Building innovative products that solve real-world problems at scale."
-        }
-      ]
-    },
-    "services": {
-      "title": "Innovative Solutions",
-      "subtitle": "What I bring to the table",
-      "services": [
-        {
-          "title": "Craft your future",
-          "description": "Building scalable, modern applications that grow with your business needs.",
-          "buttonText": "See Work",
-          "buttonVariant": "primary"
-        },
-        {
-          "title": "Skills that shine",
-          "description": "Full-stack expertise from frontend finesse to backend brilliance.",
-          "buttonText": "Discover",
-          "buttonVariant": "secondary"
-        },
-        {
-          "title": "Feedback fuels growth",
-          "description": "Continuous improvement through user feedback and iterative development.",
-          "buttonText": "Get in Touch",
-          "buttonVariant": "primary"
-        }
-      ]
-    },
-    "projects": {
-      "title": "Featured Projects",
-      "subtitle": "A glimpse into my work",
-      "projects": [
-        {
-          "title": "Portfolio Website",
-          "description": "Modern, responsive portfolio website with internationalization, dark mode, and smooth animations. Built with Next.js, TypeScript, Material-UI, and Framer Motion.",
-          "link": "https://github.com/Omri-Jukin/Portfolio"
-        },
-        {
-          "title": "ClipWhisperer",
-          "description": "Comprehensive microservices platform for automated video processing and content creation. Features AI-powered narration, video rendering, and orchestrated workflows. Built with TypeScript, Node.js, and modern microservices architecture.",
-          "link": "https://github.com/Omri-Jukin/ClipWhisperer"
-        },
-        {
-          "title": "Snow HQ",
-          "description": "Enterprise-level CRM system featuring real-time analytics, automated workflows, and advanced reporting capabilities. Built with Next.js, tRPC, Drizzle ORM, and PostgreSQL.",
-          "link": "https://github.com/Omri-Jukin/Snow"
-        },
-        {
-          "title": "Clothest",
-          "description": "Wardrobe management system with personalized recommendations and inventory tracking. Built with React, Express.js, and MongoDB.",
-          "link": "https://github.com/Omri-Jukin/Clothest"
-        }
-      ]
-    },
-    "contact": {
-      "title": "Let's Connect",
-      "subtitle": "Ready to bring your ideas to life?",
-      "description": "I'm always excited to discuss new opportunities, collaborations, or just chat about technology. Drop me a message and let's create something amazing together.",
-      "button": "Start a conversation",
-      "form": {
-        "name": "Your Name",
-        "email": "Your Email",
-        "message": "Your Message",
-        "sendButton": "Send Message",
-        "sending": "Sending...",
-        "success": "Message sent successfully!",
-        "error": "Something went wrong. Please try again."
-      }
-    }
-  },
-  "contact": {
-    "title": "Contact",
-    "description": "Get in touch with me for collaborations, opportunities, or just to say hello!",
-    "form": {
-      "title": "Send me a message",
-      "description": "I'd love to hear from you. Fill out the form below and I'll get back to you as soon as possible.",
-      "name": "Full Name",
-      "email": "Email Address",
-      "phone": "Phone Number",
-      "subject": "Subject",
-      "message": "Your Message",
-      "submit": "Send Message",
-      "sending": "Sending...",
-      "success": "Thank you! Your message has been sent successfully. I'll get back to you soon.",
-      "error": "Something went wrong. Please try again or contact me directly.",
-      "validation": {
-        "nameRequired": "Name is required",
-        "nameMin": "Name must be at least 2 characters",
-        "emailRequired": "Email is required",
-        "emailInvalid": "Please enter a valid email address",
-        "phoneRequired": "Phone number is required",
-        "subjectRequired": "Subject is required",
-        "subjectMin": "Subject must be at least 5 characters",
-        "messageRequired": "Message is required",
-        "messageMin": "Message must be at least 10 characters"
-      }
-    },
-    "info": {
-      "title": "Contact Information",
-      "email": "Email",
-      "phone": "Phone",
-      "timezone": "Timezone",
-      "location": "Location"
-    },
-    "location": {
-      "israel": "Israel"
-    },
-    "email": "omrijukin@gmail.com",
-    "phone": "(+972) 052 334 4064",
-    "timezone": "Asia/Jerusalem",
-    "citizenship": "Israeli",
-    "website": "https://omrijukin.com",
-    "github": "Omri-Jukin",
-    "linkedin": "omri-jukin",
-    "telegram": "Agent_OJ"
   },
   "footer": {
     "title": "About",

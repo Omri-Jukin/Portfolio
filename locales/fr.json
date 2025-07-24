@@ -15,25 +15,192 @@
     "skills": "Compétences",
     "description": "Ingénieur full-stack innovant avec une solide formation en ingénierie électrique et une passion pour créer des solutions efficaces centrées sur l'utilisateur."
   },
+  "hero": {
+    "title": "Créer de la magie numérique",
+    "subtitle": "Vous vous demandez comment je fonctionne ? Voici les détails internes—sans fioritures, juste des faits, avec une touche de style.",
+    "exploreButton": "Explorer le travail",
+    "aboutButton": "À propos de moi"
+  },
   "about": {
-    "title": "À propos de moi",
-    "description": "Ingénieur full-stack innovant avec une solide formation en ingénierie électrique et une passion pour créer des solutions efficaces centrées sur l'utilisateur.",
-    "profile": "• Ingénieur full-stack innovant avec une solide formation en ingénierie électrique et une passion pour créer des solutions efficaces centrées sur l'utilisateur.\n\n• Capacité prouvée à développer des applications évolutives et à gérer des systèmes de données complexes.\n\n• Vaste expérience dans l'industrie de l'assurance, du service client au développement de systèmes centraux.\n\n• Leadership démontré dans la formation et le mentorat d'équipes, l'amélioration des processus, et la conduite du changement organisationnel et de la croissance.\n\n• Solides compétences en résolution de problèmes avec un accent sur la conception et l'optimisation de systèmes.\n\n• Engagement envers l'apprentissage continu et la croissance professionnelle dans l'industrie technologique."
+    "title": "Qui Je Suis",
+    "subtitle": "EXPLOREZ MA BOÎTE À OUTILS CRÉATIVE",
+    "description": "Je suis un développeur et designer passionné qui croit que les grandes expériences numériques naissent de la parfaite fusion entre expertise technique et vision créative. Avec des années d'expérience dans la création d'applications web, j'ai appris que les meilleures solutions sont celles qui non seulement fonctionnent parfaitement, mais qui ravissent également les utilisateurs à chaque interaction.",
+    "skills": {
+      "codeConjurer": "SORCIER DU CODE",
+      "brandArchitect": "ARCHITECTE DE MARQUE",
+      "designDreamer": "RÊVEUR DU DESIGN"
+    },
+    "skillDetails": {
+      "codeConjurer": {
+        "title": "SORCIER DU CODE",
+        "description": "Transformer des problèmes complexes en solutions élégantes et évolutives grâce à un code propre et une architecture innovante.",
+        "experience": "Expert",
+        "technologies": [
+          "TypeScript",
+          "JavaScript",
+          "Node.js",
+          "React",
+          "Next.js",
+          "PostgreSQL",
+          "MongoDB",
+          "Python"
+        ],
+        "examples": [
+          "Architecture de Microservices",
+          "Développement d'APIs",
+          "Conception de Bases de Données",
+          "Optimisation des Performances"
+        ],
+        "years": "4+ années"
+      },
+      "brandArchitect": {
+        "title": "ARCHITECTE DE MARQUE",
+        "description": "Créer des expériences de marque convaincantes qui résonnent avec les utilisateurs et stimulent la croissance commerciale grâce à la pensée stratégique de design.",
+        "experience": "Avancé",
+        "technologies": [
+          "Stratégie de Marque",
+          "Conception d'Expérience Utilisateur",
+          "Identité Visuelle",
+          "Automatisation Marketing"
+        ],
+        "examples": [
+          "Guides de Marque",
+          "Cartographie du Parcours Utilisateur",
+          "Optimisation de Conversion",
+          "Tests A/B"
+        ],
+        "years": "4+ années"
+      },
+      "designDreamer": {
+        "title": "RÊVEUR DU DESIGN",
+        "description": "Créer des interfaces intuitives et belles qui connectent la fonctionnalité à l'esthétique.",
+        "experience": "Avancé",
+        "technologies": [
+          "Figma",
+          "Adobe Creative Suite",
+          "Material-UI",
+          "Tailwind CSS",
+          "Framer Motion"
+        ],
+        "examples": [
+          "Design UI/UX",
+          "Prototypage",
+          "Systèmes de Design",
+          "Design d'Animations"
+        ],
+        "years": "4+ années"
+      }
+    }
+  },
+  "qa": {
+    "title": "Questions Rapides",
+    "subtitle": "Apprenez à me connaître rapidement",
+    "questions": [
+      {
+        "question": "Qu'est-ce qui vous motive ?",
+        "answer": "Résoudre des problèmes complexes et créer des solutions élégantes qui ont un impact réel."
+      },
+      {
+        "question": "Votre style de travail ?",
+        "answer": "Méthodique mais créatif, avec un accent sur l'expérience utilisateur et le code propre."
+      },
+      {
+        "question": "Plus grande réussite ?",
+        "answer": "Diriger le développement de systèmes de niveau entreprise qui servent des milliers d'utilisateurs."
+      },
+      {
+        "question": "Qu'est-ce qui vous passionne ?",
+        "answer": "Apprendre de nouvelles technologies et repousser les limites du possible."
+      },
+      {
+        "question": "Votre philosophie ?",
+        "answer": "Les excellents logiciels doivent être invisibles—les utilisateurs doivent se concentrer sur leurs objectifs, pas sur l'interface."
+      },
+      {
+        "question": "Objectifs futurs ?",
+        "answer": "Construire des produits innovants qui résolvent des problèmes du monde réel à grande échelle."
+      }
+    ]
+  },
+  "services": {
+    "title": "Solutions Innovantes",
+    "subtitle": "Ce que j'apporte à la table",
+    "services": [
+      {
+        "title": "Construisez votre avenir",
+        "description": "Développement d'applications évolutives et modernes qui grandissent avec les besoins de votre entreprise.",
+        "buttonText": "Voir le Travail",
+        "buttonVariant": "primary"
+      },
+      {
+        "title": "Des compétences qui brillent",
+        "description": "Expertise full-stack de la finesse du frontend à la brillance du backend.",
+        "buttonText": "Découvrir",
+        "buttonVariant": "secondary"
+      },
+      {
+        "title": "Le feedback alimente la croissance",
+        "description": "Amélioration continue grâce au feedback utilisateur et au développement itératif.",
+        "buttonText": "Entrer en Contact",
+        "buttonVariant": "primary"
+      }
+    ]
+  },
+  "projects": {
+    "title": "Projets Vedettes",
+    "subtitle": "Un aperçu de mon travail",
+    "projects": [
+      {
+        "title": "Portfolio Website",
+        "description": "Site web portfolio moderne et responsive avec internationalisation, mode sombre et animations fluides. Construit avec Next.js, TypeScript, Material-UI et Framer Motion.",
+        "link": "https://github.com/Omri-Jukin/Portfolio"
+      },
+      {
+        "title": "ClipWhisperer",
+        "description": "Plateforme de microservices pour le traitement automatique de vidéos et la création de contenu. Fonctionnalités de narration automatique avec IA, rendu de vidéos et workflows orchestrés. Construit avec TypeScript, Node.js et architecture moderne de microservices.",
+        "link": "https://github.com/ClipWhisperer"
+      },
+      {
+        "title": "Snow HQ",
+        "description": "Système CRM de niveau entreprise avec analyses en temps réel, flux de travail automatisés et capacités de reporting avancées. Construit avec Next.js, tRPC, Drizzle ORM et PostgreSQL.",
+        "link": "https://github.com/Omri-Jukin/Snow"
+      },
+      {
+        "title": "Clothest",
+        "description": "Système de gestion de garde-robe avec recommandations personnalisées et suivi d'inventaire. Construit avec React, Express.js et MongoDB.",
+        "link": "https://github.com/Omri-Jukin/Clothest"
+      }
+    ]
+  },
+  "contact": {
+    "title": "Connectons-nous",
+    "subtitle": "Prêt à donner vie à vos idées ?",
+    "description": "Je suis toujours excité de discuter de nouvelles opportunités, collaborations ou simplement de discuter de technologie. Envoyez-moi un message et créons quelque chose d'incroyable ensemble.",
+    "button": "Commencer une conversation",
+    "form": {
+      "name": "Votre Nom",
+      "email": "Votre Email",
+      "message": "Votre Message",
+      "sendButton": "Envoyer le Message",
+      "sending": "Envoi en cours...",
+      "success": "Message envoyé avec succès !",
+      "error": "Quelque chose s'est mal passé. Veuillez réessayer."
+    }
   },
   "career": {
     "title": "Carrière",
     "description": "Mon parcours professionnel",
-    "experience": "Expérience pratique en développement full-stack, gestion d'équipes et amélioration des processus dans des entreprises leaders de technologie et d'assurance.",
+    "experience": "Expérience pratique en développement full-stack, gestion d'équipes et amélioration de processus dans des entreprises leaders de technologie et d'assurance.",
     "experiences": [
       {
         "role": "Développeur Full Stack",
         "time": "2024 - 2025",
         "company": "Avra Technologies, Israël",
         "details": [
-          "A dirigé le développement d'une plateforme complète qui agrège et traite des données de marché critiques d'entités gouvernementales",
-          "A conçu et implémenté une bibliothèque de composants UI modulaire et réutilisable qui a réduit le temps de développement de 30%",
-          "A collaboré avec les équipes de design pour créer des interfaces intuitives qui ont augmenté l'engagement des utilisateurs",
-          "A développé des algorithmes efficaces pour le traitement de données qui ont amélioré les performances du système",
+          "Dirigé le développement d'une plateforme intégrée qui agrège et traite des données critiques du marché d'entités gouvernementales",
+          "Conçu et implémenté une bibliothèque de composants UI modulaire et réutilisable qui a réduit le temps de développement de 30%",
+          "Collaboré avec des équipes de design pour créer des interfaces intuitives qui ont augmenté l'engagement utilisateur",
+          "Développé des algorithmes efficaces pour le traitement de données qui ont amélioré les performances du système",
           "Stack technologique : Next.js, tRPC, PayloadCMS, Storybook, Jest, Vitest, React"
         ]
       },
@@ -42,10 +209,10 @@
         "time": "2023 - 2024",
         "company": "Menorah Mivtachim Insurance, Israël",
         "details": [
-          "A conçu et maintenu le système de règles métier, gérant des milliers de règles et réglementations de polices",
-          "A encadré et formé de nouveaux développeurs, réduisant le temps d'intégration et améliorant la productivité de l'équipe",
-          "A dirigé le développement de 12+ nouveaux produits d'assurance, résultant en des taux d'acquisition client plus élevés",
-          "A migré avec succès des composants critiques d'un système monolithique de 40 ans vers une architecture moderne"
+          "Conçu et maintenu un système de règles métier, gérant des milliers de règles et réglementations de polices",
+          "Mentoré et formé de nouveaux développeurs, réduisant le temps d'intégration et améliorant la productivité de l'équipe",
+          "Dirigé le développement de 12+ nouveaux produits d'assurance, résultant en des taux d'acquisition de clients plus élevés",
+          "Migré avec succès des composants critiques depuis un système monolithique de 40 ans vers une architecture moderne"
         ]
       },
       {
@@ -53,10 +220,10 @@
         "time": "2021 - 2023",
         "company": "Menorah Mivtachim Insurance, Israël",
         "details": [
-          "A atteint un taux de satisfaction client de 95% tout en gérant des demandes et plaintes d'assurance complexes",
-          "A développé et implémenté de nouveaux protocoles de flux de travail qui ont réduit le temps de traitement moyen de 25%",
-          "A formé et encadré 10+ nouveaux membres d'équipe, résultant en une réduction de 35% du temps de formation",
-          "A collaboré avec plusieurs départements pour résoudre des problèmes clients complexes, améliorant le temps de résolution de 30%"
+          "Atteint 95% de taux de satisfaction client tout en gérant des requêtes et plaintes complexes d'assurance",
+          "Développé et implémenté de nouveaux protocoles de flux de travail qui ont réduit le temps de traitement moyen de 25%",
+          "Formé et mentoré 10+ nouveaux membres de l'équipe, résultant en une réduction de 35% du temps de formation",
+          "Collaboré avec plusieurs départements pour résoudre des problèmes complexes de clients, améliorant le temps de résolution de 30%"
         ]
       },
       {
@@ -64,339 +231,105 @@
         "time": "2020 - 2021",
         "company": "Hot Telecom, Israël",
         "details": [
-          "A maintenu un taux de satisfaction client de 90% tout en gérant des demandes à haut volume",
-          "A implémenté de nouveaux protocoles de flux de travail qui ont réduit le temps de réponse de 35%",
-          "A formé et encadré avec succès 15+ membres d'équipe, améliorant les performances globales de l'équipe de 30%",
-          "A collaboré avec divers départements, résultant en une amélioration de 40% du temps de résolution des cas"
+          "Maintenu 90% de taux de satisfaction client tout en gérant des requêtes à haut volume",
+          "Implémenté de nouveaux protocoles de flux de travail qui ont réduit le temps de réponse de 35%",
+          "Formé et mentoré avec succès 15+ membres de l'équipe, améliorant les performances générales de l'équipe de 30%",
+          "Collaboré avec plusieurs départements, résultant en une amélioration de 40% du temps de résolution des cas"
         ]
       }
     ]
   },
   "resume": {
     "title": "CV",
-    "description": "Mon expérience professionnelle et mes compétences",
+    "description": "Mon expérience professionnelle et compétences",
     "networkingSummary": "Téléchargez mon CV pour en savoir plus sur mon parcours",
-    "experience": "Je suis un développeur full-stack passionné et déterminé, avec une solide formation en ingénierie électrique et un parcours prouvé dans la réalisation de résultats dans des environnements exigeants. Mon expérience va du pilotage du développement de plateformes évolutives et de bibliothèques UI modulaires à l'optimisation de la logique métier et à l'encadrement d'équipes dans les secteurs de l'assurance et des télécommunications.\n\nJ'excelle dans la résolution de problèmes complexes, la promotion de l'innovation et la collaboration interdisciplinaire pour atteindre des objectifs ambitieux. Mes collègues me reconnaissent pour mon éthique de travail sans relâche, mon souci du détail et mon engagement envers l'apprentissage continu. Que ce soit pour construire des systèmes backend robustes, concevoir des interfaces intuitives ou rationaliser les processus, je donne toujours le meilleur de moi-même pour garantir qualité et impact.\n\nSi vous cherchez quelqu'un qui allie expertise technique, leadership, créativité et une véritable passion pour faire la différence, connectons-nous !"
-  },
-  "projects": {
-    "title": "Projets Clés",
-    "description": "Projets notables démontrant l'expertise technique et l'innovation",
-    "list": [
-      {
-        "title": "Snow HQ",
-        "link": "https://github.com/Omri-Jukin/Snow",
-        "description": "Système CRM de niveau entreprise avec analyses en temps réel, flux de travail automatisés et capacités de reporting avancées. Construit avec Next.js, tRPC, Drizzle ORM et PostgreSQL."
-      },
-      {
-        "title": "Clothest",
-        "link": "https://github.com/Omri-Jukin/Clothest",
-        "description": "Système de gestion de garde-robe avec recommandations personnalisées et suivi d'inventaire. Construit avec React, Express.js et MongoDB."
-      }
-    ]
+    "experience": "Je suis un développeur full-stack passionné et motivé avec une solide base en ingénierie électrique et un historique prouvé d'obtention de résultats dans des environnements à haute pression. Mon expérience s'étend de la direction du développement de plateformes évolutives et de bibliothèques UI modulaires à l'optimisation de la logique métier et à la guidance d'équipes dans les industries de l'assurance et des télécommunications.\n\nJe me distingue en résolvant des problèmes complexes, en stimulant l'innovation et en collaborant entre disciplines pour atteindre des objectifs ambitieux. Mes collègues me reconnaissent pour mon éthique de travail infatigable, mon attention aux détails et mon engagement envers l'apprentissage continu. Que ce soit en construisant des systèmes backend robustes, en concevant des interfaces intuitives ou en optimisant des flux de travail, je donne toujours le maximum pour assurer qualité et impact.\n\nSi vous cherchez quelqu'un qui combine expérience technique avec leadership, créativité et une véritable passion pour faire une différence, connectons-nous !"
   },
   "skills": {
-    "title": "Expertise Technique",
+    "title": "Expérience Technique",
     "categories": {
       "technical": {
         "title": "Compétences Techniques",
-        "items": [
-          { "name": "Architecture Système", "level": 100 },
-          { "name": "Développement Frontend", "level": 100 },
-          { "name": "Développement Backend", "level": 95 },
-          { "name": "Gestion de Base de Données", "level": 90 },
-          { "name": "Technologies Cloud", "level": 85 },
-          { "name": "DevOps et CI/CD", "level": 80 }
+        "skills": [
+          {
+            "name": "Développement Frontend",
+            "level": 90,
+            "technologies": [
+              "React",
+              "Next.js",
+              "TypeScript",
+              "JavaScript",
+              "HTML5",
+              "CSS3",
+              "Material-UI",
+              "Tailwind CSS"
+            ]
+          },
+          {
+            "name": "Développement Backend",
+            "level": 85,
+            "technologies": [
+              "Node.js",
+              "Express.js",
+              "Python",
+              "PostgreSQL",
+              "MongoDB",
+              "tRPC",
+              "Drizzle ORM"
+            ]
+          },
+          {
+            "name": "DevOps et Outils",
+            "level": 80,
+            "technologies": [
+              "Git",
+              "Docker",
+              "AWS",
+              "Vercel",
+              "Jest",
+              "Vitest",
+              "Storybook"
+            ]
+          },
+          {
+            "name": "Design et UX",
+            "level": 75,
+            "technologies": [
+              "Figma",
+              "Adobe Creative Suite",
+              "Framer Motion",
+              "Recherche Utilisateur",
+              "Prototypage"
+            ]
+          }
         ]
       },
-      "programming": {
-        "title": "Langages de Programmation",
-        "items": [
-          { "name": "TypeScript", "level": "Expert" },
-          { "name": "JavaScript", "level": "Expert" },
-          { "name": "Java", "level": "Débutant" },
-          { "name": "C#", "level": "Débutant" },
-          { "name": "Python", "level": "Débutant" }
+      "soft": {
+        "title": "Compétences Douces",
+        "skills": [
+          {
+            "name": "Leadership",
+            "level": 90,
+            "description": "Gestion d'équipes, mentorat et coordination de projets"
+          },
+          {
+            "name": "Résolution de Problèmes",
+            "level": 95,
+            "description": "Pensée analytique et solutions créatives"
+          },
+          {
+            "name": "Communication",
+            "level": 85,
+            "description": "Communication technique et non-technique avec les parties prenantes"
+          },
+          {
+            "name": "Adaptabilité",
+            "level": 90,
+            "description": "Apprentissage rapide et adoption de technologies"
+          }
         ]
-      },
-      "languages": {
-        "title": "Langues",
-        "items": [
-          { "name": "Hébreu", "level": "Langue maternelle" },
-          { "name": "Anglais", "level": "Professionnel" },
-          { "name": "Espagnol", "level": "Débutant" }
-        ]
       }
     }
-  },
-  "interests": {
-    "title": "Intérêts Professionnels",
-    "professional": [
-      "Développement Logiciel",
-      "Gestion de Données",
-      "Design UI/UX",
-      "Résolution de Problèmes",
-      "Leadership d'Équipe",
-      "Apprentissage Continu",
-      "Rédaction Technique",
-      "Architecture Système"
-    ],
-    "additional": [
-      "Fondateur d'une communauté en ligne promouvant la pensée critique, la rationalité et les discussions ouvertes",
-      "Impliqué dans des conférences publiques et des diffusions en direct sur des sujets liés aux sciences exactes, sciences sociales, pensée rationnelle et technologie",
-      "Magicien amateur, utilisant des compétences créatives pour engager le public et encourager la curiosité"
-    ],
-    "professionalProfile": {
-      "title": "Profil Professionnel",
-      "points": [
-        "Capacité prouvée à développer des applications évolutives et à gérer des systèmes de données complexes.",
-        "Vaste expérience dans l'industrie de l'assurance, du service client au développement de systèmes centraux.",
-        "Leadership démontré dans la formation et le mentorat d'équipes, l'amélioration des processus, et la conduite du changement organisationnel et de la croissance.",
-        "Solides compétences en résolution de problèmes avec un accent sur la conception et l'optimisation de systèmes.",
-        "Engagement envers l'apprentissage continu et la croissance professionnelle dans l'industrie technologique."
-      ]
-    },
-    "additionalActivities": {
-      "title": "Activités Supplémentaires",
-      "points": [
-        "Fondateur d'une communauté en ligne promouvant la pensée critique, la rationalité et les discussions ouvertes.",
-        "Impliqué dans des conférences publiques et des diffusions en direct sur des sujets liés aux sciences exactes, sciences sociales, pensée rationnelle et technologie.",
-        "Magicien amateur, utilisant des compétences créatives pour engager le public et encourager la curiosité."
-      ]
-    }
-  },
-  "theme": {
-    "light": "Passer en mode clair",
-    "dark": "Passer en mode sombre"
-  },
-  "language": {
-    "en": "Anglais",
-    "es": "Espagnol",
-    "fr": "Français",
-    "he": "Hébreu"
-  },
-  "location": {
-    "israel": "Israël",
-    "usa": "États-Unis",
-    "france": "France",
-    "spain": "Espagne"
-  },
-  "home": {
-    "hero": {
-      "title": "Code sans foi, logique sans faille",
-      "description": "Développeur Full Stack | Ingénieur Électrique | Expert en Gestion de Données",
-      "about": "À propos de moi",
-      "contact": "Contact",
-      "cards": {
-        "about": {
-          "title": "À propos de moi",
-          "description": "Ingénieur full-stack innovant avec une solide formation en ingénierie électrique et une passion pour créer des solutions efficaces centrées sur l'utilisateur.",
-          "button": "À propos de moi"
-        },
-        "career": {
-          "title": "Carrière",
-          "description": "Mon parcours professionnel - de l'ingénierie électrique au développement full-stack",
-          "button": "Carrière"
-        },
-        "resume": {
-          "title": "CV",
-          "description": "Mon expérience professionnelle et mes compétences en développement logiciel et gestion d'équipe",
-          "button": "CV"
-        },
-        "blog": {
-          "title": "Blog",
-          "description": "Lisez mes réflexions sur la technologie, le développement et les insights de l'industrie",
-          "button": "Blog"
-        },
-        "contact": {
-          "title": "Contact",
-          "description": "Connectons-nous - je suis disponible pour des collaborations et de nouvelles opportunités",
-          "button": "Contact"
-        }
-      }
-    },
-    "about": {
-      "title": "À propos de moi",
-      "description": "Ingénieur full-stack innovant avec une solide formation en ingénierie électrique et une passion pour créer des solutions efficaces centrées sur l'utilisateur."
-    },
-    "career": {
-      "title": "Carrière",
-      "description": "Mon parcours professionnel",
-      "experience": "Expérience pratique en développement full-stack, gestion d'équipes et amélioration des processus dans des entreprises leaders de technologie et d'assurance."
-    },
-    "resume": {
-      "title": "CV",
-      "description": "Mon expérience professionnelle et mes compétences",
-      "experience": "Développeur full-stack passionné avec une solide formation en ingénierie électrique et des réalisations prouvées dans des environnements de travail exigeants."
-    },
-    "blog": {
-      "title": "Blog",
-      "description": "Lisez mes réflexions sur la technologie, le développement et les insights de l'industrie",
-      "experience": "Insights et expériences de l'industrie"
-    },
-    "contact": {
-      "title": "Contact",
-      "description": "Connectons-nous - je suis disponible pour des collaborations et de nouvelles opportunités",
-      "experience": "J'aimerais avoir de vos nouvelles"
-    }
-  },
-  "scrollingSections": {
-    "hero": {
-      "title": "Créer de la magie numérique",
-      "subtitle": "Vous vous demandez comment je fonctionne ? Voici les détails internes—sans fioritures, juste des faits, avec une touche de style.",
-      "exploreButton": "Explorer le travail",
-      "aboutButton": "À propos de moi"
-    },
-    "about": {
-      "title": "Qui Je Suis",
-      "subtitle": "EXPLOREZ MA BOÎTE À OUTILS CRÉATIVE",
-      "description": "Je suis un développeur et designer passionné qui croit que les grandes expériences numériques naissent de la parfaite fusion entre expertise technique et vision créative. Avec des années d'expérience dans la création d'applications web, j'ai appris que les meilleures solutions sont celles qui non seulement fonctionnent parfaitement, mais qui ravissent également les utilisateurs à chaque interaction.",
-      "skills": {
-        "codeConjurer": "SORCIER DU CODE",
-        "brandArchitect": "ARCHITECTE DE MARQUE",
-        "designDreamer": "RÊVEUR DU DESIGN"
-      }
-    },
-    "qa": {
-      "title": "Questions Rapides",
-      "subtitle": "Apprenez à me connaître rapidement",
-      "questions": [
-        {
-          "question": "Qu'est-ce qui vous motive ?",
-          "answer": "Résoudre des problèmes complexes et créer des solutions élégantes qui ont un impact réel."
-        },
-        {
-          "question": "Votre style de travail ?",
-          "answer": "Méthodique mais créatif, avec un accent sur l'expérience utilisateur et le code propre."
-        },
-        {
-          "question": "Plus grande réussite ?",
-          "answer": "Diriger le développement de systèmes de niveau entreprise qui servent des milliers d'utilisateurs."
-        },
-        {
-          "question": "Qu'est-ce qui vous passionne ?",
-          "answer": "Apprendre de nouvelles technologies et repousser les limites du possible."
-        },
-        {
-          "question": "Votre philosophie ?",
-          "answer": "Les excellents logiciels doivent être invisibles—les utilisateurs doivent se concentrer sur leurs objectifs, pas sur l'interface."
-        },
-        {
-          "question": "Objectifs futurs ?",
-          "answer": "Construire des produits innovants qui résolvent des problèmes du monde réel à grande échelle."
-        }
-      ]
-    },
-    "services": {
-      "title": "Solutions Innovantes",
-      "subtitle": "Ce que j'apporte à la table",
-      "services": [
-        {
-          "title": "Construisez votre avenir",
-          "description": "Développement d'applications évolutives et modernes qui grandissent avec les besoins de votre entreprise.",
-          "buttonText": "Voir le Travail",
-          "buttonVariant": "primary"
-        },
-        {
-          "title": "Des compétences qui brillent",
-          "description": "Expertise full-stack de la finesse du frontend à la brillance du backend.",
-          "buttonText": "Découvrir",
-          "buttonVariant": "secondary"
-        },
-        {
-          "title": "Le feedback alimente la croissance",
-          "description": "Amélioration continue grâce au feedback utilisateur et au développement itératif.",
-          "buttonText": "Entrer en Contact",
-          "buttonVariant": "primary"
-        }
-      ]
-    },
-    "projects": {
-      "title": "Projets Vedettes",
-      "subtitle": "Un aperçu de mon travail",
-      "projects": [
-        {
-          "title": "Portfolio Website",
-          "description": "Site web portfolio moderne et responsive avec internationalisation, mode sombre et animations fluides. Construit avec Next.js, TypeScript, Material-UI et Framer Motion.",
-          "link": "https://github.com/Omri-Jukin/Portfolio"
-        },
-        {
-          "title": "ClipWhisperer",
-          "description": "Plateforme de microservices pour le traitement automatique de vidéos et la création de contenu. Fonctionnalités de narration automatique avec IA, rendu de vidéos et workflows orchestrés. Construit avec TypeScript, Node.js et architecture moderne de microservices.",
-          "link": "https://github.com/Omri-Jukin/ClipWhisperer"
-        },
-        {
-          "title": "Snow HQ",
-          "description": "Système CRM de niveau entreprise avec analyses en temps réel, flux de travail automatisés et capacités de reporting avancées. Construit avec Next.js, tRPC, Drizzle ORM et PostgreSQL.",
-          "link": "https://github.com/Omri-Jukin/Snow"
-        },
-        {
-          "title": "Clothest",
-          "description": "Système de gestion de garde-robe avec recommandations personnalisées et suivi d'inventaire. Construit avec React, Express.js et MongoDB.",
-          "link": "https://github.com/Omri-Jukin/Clothest"
-        }
-      ]
-    },
-    "contact": {
-      "title": "Connectons-nous",
-      "subtitle": "Prêt à donner vie à vos idées ?",
-      "description": "Je suis toujours excité de discuter de nouvelles opportunités, collaborations ou simplement de discuter de technologie. Envoyez-moi un message et créons quelque chose d'incroyable ensemble.",
-      "button": "Commencer une conversation",
-      "form": {
-        "name": "Votre Nom",
-        "email": "Votre Email",
-        "message": "Votre Message",
-        "sendButton": "Envoyer le Message",
-        "sending": "Envoi en cours...",
-        "success": "Message envoyé avec succès !",
-        "error": "Quelque chose s'est mal passé. Veuillez réessayer."
-      }
-    }
-  },
-  "contact": {
-    "title": "Contact",
-    "description": "Contactez-moi pour des collaborations, des opportunités ou simplement pour dire bonjour !",
-    "form": {
-      "title": "Envoyez-moi un message",
-      "description": "J'aimerais avoir de vos nouvelles. Remplissez le formulaire ci-dessous et je vous répondrai dès que possible.",
-      "name": "Nom Complet",
-      "email": "Adresse Email",
-      "phone": "Numéro de Téléphone",
-      "subject": "Sujet",
-      "message": "Votre Message",
-      "submit": "Envoyer le Message",
-      "sending": "Envoi en cours...",
-      "success": "Merci ! Votre message a été envoyé avec succès. Je vous répondrai bientôt.",
-      "error": "Quelque chose s'est mal passé. Veuillez réessayer ou me contacter directement.",
-      "validation": {
-        "nameRequired": "Le nom est requis",
-        "nameMin": "Le nom doit contenir au moins 2 caractères",
-        "emailRequired": "L'email est requis",
-        "emailInvalid": "Veuillez saisir une adresse email valide",
-        "phoneRequired": "Le numéro de téléphone est requis",
-        "subjectRequired": "Le sujet est requis",
-        "subjectMin": "Le sujet doit contenir au moins 5 caractères",
-        "messageRequired": "Le message est requis",
-        "messageMin": "Le message doit contenir au moins 10 caractères"
-      }
-    },
-    "info": {
-      "title": "Informations de Contact",
-      "email": "Email",
-      "phone": "Téléphone",
-      "timezone": "Fuseau Horaire",
-      "location": "Localisation"
-    },
-    "location": {
-      "israel": "Israël"
-    },
-    "email": "omrijukin@gmail.com",
-    "phone": "(+972) 052 334 4064",
-    "timezone": "Asia/Jerusalem",
-    "citizenship": "Israélien",
-    "website": "https://omrijukin.com",
-    "github": "Omri-Jukin",
-    "linkedin": "omri-jukin",
-    "telegram": "Agent_OJ"
   },
   "footer": {
     "title": "À propos",

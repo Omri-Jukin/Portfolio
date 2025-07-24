@@ -56,7 +56,7 @@ export default function CareerPage() {
             fontWeight: "normal",
           }}
         >
-          {t("description")}
+          {t("subtitle")}
         </Typography>
       </MotionWrapper>
 
@@ -69,9 +69,11 @@ export default function CareerPage() {
             mb: 6,
             fontSize: "1.1rem",
             lineHeight: 1.6,
+            maxWidth: "800px",
+            mx: "auto",
           }}
         >
-          {t("experience")}
+          {t("description")}
         </Typography>
       </MotionWrapper>
 

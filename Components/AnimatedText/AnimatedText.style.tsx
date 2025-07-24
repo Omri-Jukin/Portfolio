@@ -164,4 +164,4 @@ export const StyledAnimatedText = styled(Typography, {
       ...types(type, scale, opacity, translateY),
     };
   }
-);
+).withComponent("span");

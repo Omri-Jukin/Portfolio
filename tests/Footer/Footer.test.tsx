@@ -1,6 +1,6 @@
 import React from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { Footer as FooterComponent } from "~/Footer/Footer";
+import { FooterComponent as FooterComponent } from "~/Footer/Footer";
 import { render, screen } from "@testing-library/react";
 
 describe("Footer", () => {

@@ -5,7 +5,7 @@ import { baseTheme } from "!/theme";
 import { createTheme, ThemeProvider, CssBaseline, Box } from "@mui/material";
 import Header, { TLayout } from "~/Header";
 
-import Footer from "@/app/[locale]/Footer";
+import Footer from "~/Footer";
 import { useLocale } from "next-intl";
 import createEmotionCache from "@/app/mui-emotion-cache";
 import { CacheProvider } from "@emotion/react";

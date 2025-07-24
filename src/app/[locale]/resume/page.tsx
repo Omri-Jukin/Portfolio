@@ -5,7 +5,6 @@ import {
   Typography,
   Card,
   CardContent,
-  Grid,
   LinearProgress,
   Chip,
   Stack,
@@ -21,14 +20,16 @@ import {
   Download as DownloadIcon,
 } from "@mui/icons-material";
 
-export type Skill = {
+export type TechnicalSkill = {
   name: string;
   level: number;
+  technologies: string[];
 };
 
-export type Language = {
+export type SoftSkill = {
   name: string;
-  level: string;
+  level: number;
+  description: string;
 };
 
 export type Project = {
@@ -126,9 +127,16 @@ export default function ResumePage() {
         </Typography>
       </MotionWrapper>
 
-      <Grid container spacing={4} sx={{ mb: 6 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          gap: 4,
+          mb: 6,
+        }}
+      >
         {/* Technical Skills */}
-        <Grid component="div">
+        <Box sx={{ flex: 1 }}>
           <MotionWrapper variant="slideUp" duration={0.8} delay={0.8}>
             <Card sx={{ height: "100%", backgroundColor: "background.paper" }}>
               <CardContent sx={{ p: 3 }}>
@@ -142,8 +150,8 @@ export default function ResumePage() {
                 </Typography>
                 <Stack spacing={3}>
                   {skillsT
-                    .raw("categories.technical.items")
-                    .map((skill: Skill, index: number) => (
+                    .raw("categories.technical.skills")
+                    .map((skill: TechnicalSkill, index: number) => (
                       <Box key={index}>
                         <Box
                           sx={{
@@ -172,16 +180,34 @@ export default function ResumePage() {
                             },
                           }}
                         />
+                        <Box
+                          sx={{
+                            mt: 1,
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: 0.5,
+                          }}
+                        >
+                          {skill.technologies.map((tech, techIndex) => (
+                            <Chip
+                              key={techIndex}
+                              label={tech}
+                              size="small"
+                              variant="outlined"
+                              sx={{ fontSize: "0.7rem" }}
+                            />
+                          ))}
+                        </Box>
                       </Box>
                     ))}
                 </Stack>
               </CardContent>
             </Card>
           </MotionWrapper>
-        </Grid>
+        </Box>
 
-        {/* Programming Languages */}
-        <Grid component="div">
+        {/* Soft Skills */}
+        <Box sx={{ flex: 1 }}>
           <MotionWrapper variant="slideUp" duration={0.8} delay={1.0}>
             <Card sx={{ height: "100%", backgroundColor: "background.paper" }}>
               <CardContent sx={{ p: 3 }}>
@@ -191,12 +217,12 @@ export default function ResumePage() {
                   gutterBottom
                   sx={{ color: "info.main" }}
                 >
-                  {skillsT("categories.programming.title")}
+                  {skillsT("categories.soft.title")}
                 </Typography>
                 <Stack spacing={2}>
                   {skillsT
-                    .raw("categories.programming.items")
-                    .map((lang: Language, index: number) => (
+                    .raw("categories.soft.skills")
+                    .map((skill: SoftSkill, index: number) => (
                       <Box
                         key={index}
                         sx={{
@@ -205,19 +231,19 @@ export default function ResumePage() {
                           alignItems: "center",
                         }}
                       >
-                        <Typography variant="body1" fontWeight="medium">
-                          {lang.name}
-                        </Typography>
+                        <Box>
+                          <Typography variant="body1" fontWeight="medium">
+                            {skill.name}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {skill.description}
+                          </Typography>
+                        </Box>
                         <Chip
-                          label={lang.level}
+                          label={`${skill.level}%`}
                           size="small"
                           sx={{
-                            backgroundColor:
-                              lang.level === "מומחה" ||
-                              lang.level === "Expert" ||
-                              lang.level === "Experto"
-                                ? "success.main"
-                                : "warning.main",
+                            backgroundColor: "info.main",
                             color: "white",
                             fontWeight: "medium",
                           }}
@@ -228,47 +254,8 @@ export default function ResumePage() {
               </CardContent>
             </Card>
           </MotionWrapper>
-        </Grid>
-
-        {/* Languages */}
-        <Grid component="div">
-          <MotionWrapper variant="slideUp" duration={0.8} delay={1.2}>
-            <Card sx={{ height: "100%", backgroundColor: "background.paper" }}>
-              <CardContent sx={{ p: 3 }}>
-                <Typography
-                  variant="h5"
-                  component="h3"
-                  gutterBottom
-                  sx={{ color: "warning.main" }}
-                >
-                  {skillsT("categories.languages.title")}
-                </Typography>
-                <Stack spacing={2}>
-                  {skillsT
-                    .raw("categories.languages.items")
-                    .map((language: Language, index: number) => (
-                      <Box
-                        key={index}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Typography variant="body1" fontWeight="medium">
-                          {language.name}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {language.level}
-                        </Typography>
-                      </Box>
-                    ))}
-                </Stack>
-              </CardContent>
-            </Card>
-          </MotionWrapper>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
 
       {/* Projects Section */}
       <MotionWrapper variant="slideUp" duration={0.8} delay={1.4}>
@@ -281,13 +268,24 @@ export default function ResumePage() {
           {projectsT("title")}
         </Typography>
         <Typography variant="body1" sx={{ color: "text.secondary", mb: 4 }}>
-          {projectsT("description")}
+          {projectsT("subtitle")}
         </Typography>
       </MotionWrapper>
 
-      <Grid container spacing={4} sx={{ mb: 6 }}>
-        {projectsT.raw("list").map((project: Project, index: number) => (
-          <Grid component="div" key={index}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          gap: 4,
+          mb: 6,
+          flexWrap: "wrap",
+        }}
+      >
+        {projectsT.raw("projects").map((project: Project, index: number) => (
+          <Box
+            sx={{ flex: { xs: "1", md: "1 1 calc(50% - 16px)" } }}
+            key={index}
+          >
             <MotionWrapper
               variant="slideUp"
               duration={0.8}
@@ -348,9 +346,9 @@ export default function ResumePage() {
                 </CardContent>
               </Card>
             </MotionWrapper>
-          </Grid>
+          </Box>
         ))}
-      </Grid>
+      </Box>
 
       {/* Call to Action */}
       <MotionWrapper variant="slideUp" duration={0.8} delay={2.0}>
