@@ -1,6 +1,7 @@
 import { Typography } from "@mui/material";
 import { createTheme, styled } from "@mui/material/styles";
 import { TypographyProps } from "./Typography.type";
+import { Box } from "@mui/material";
 
 export const StyledTypography = styled(Typography)<TypographyProps>(
   ({ theme, variant, weight, color, align, margin }) => {
@@ -24,3 +25,54 @@ export const StyledTypography = styled(Typography)<TypographyProps>(
     };
   }
 );
+
+export const GooeyText = styled(Typography)(({ theme }) => ({
+  fontSize: "1.5rem",
+  fontWeight: 700,
+  color: theme.palette.text.primary,
+  textAlign: "center",
+}));
+
+export const MarqueeText = styled(Box)(({ theme }) => ({
+  position: "relative",
+  width: "100%",
+  height: "2em",
+  fontSize: "5em",
+  display: "grid",
+  placeItems: "center",
+  overflow: "hidden",
+}));
+
+export const MarqueeTextContent = styled(Typography)({
+  position: "absolute",
+  minWidth: "100%",
+  whiteSpace: "nowrap",
+  animation: "marquee 16s infinite linear",
+  "@keyframes marquee": {
+    "0%": { transform: "translateX(100vw)" },
+    "100%": { transform: "translateX(-100%)" },
+  },
+});
+
+export const MarqueeBlur = styled(Box)(({ theme }) => ({
+  position: "absolute",
+  inset: 0,
+  display: "grid",
+  placeItems: "center",
+  backgroundColor: theme.palette.background.default,
+  backgroundImage: `
+    linear-gradient(to right, ${theme.palette.background.default}, 1rem, transparent 50%),
+    linear-gradient(to left, ${theme.palette.background.default}, 1rem, transparent 50%)
+  `,
+  filter: "contrast(15)",
+  "& p": {
+    filter: "blur(0.07em)",
+  },
+}));
+
+export const MarqueeClear = styled(Box)({
+  position: "absolute",
+  inset: 0,
+  display: "grid",
+  placeItems: "center",
+});
