@@ -22,18 +22,6 @@ const QA: React.FC<QAProps> = () => {
         variant="fadeInUp"
         duration={QA_CONSTANTS.ANIMATION.TITLE_DURATION}
       >
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{
-            textAlign: "center",
-            mb: 1,
-            textTransform: "uppercase",
-            letterSpacing: "1px",
-          }}
-        >
-          {t("subtitle")}
-        </Typography>
         <QATitle>{t("title")}</QATitle>
         <QASubtitle>{t("subtitle")}</QASubtitle>
       </MotionWrapper>

@@ -60,18 +60,6 @@ const Projects: React.FC<ProjectsProps> = () => {
                         {PROJECTS_CONSTANTS.BUTTONS.VIEW_CODE}
                       </ProjectButton>
                     </Link>
-                    <ProjectButton
-                      className="contained"
-                      variant="contained"
-                      startIcon={<LaunchIcon />}
-                      onClick={() => {
-                        // For now, show a placeholder message
-                        // In the future, this could link to actual demo URLs
-                        alert(`Demo for ${project.title} - Coming soon!`);
-                      }}
-                    >
-                      {PROJECTS_CONSTANTS.BUTTONS.LIVE_DEMO}
-                    </ProjectButton>
                   </Box>
                 </ProjectCard>
               </MotionWrapper>

@@ -44,7 +44,7 @@ const Hero: React.FC<HeroProps> = ({ onExploreClick, onAboutClick }) => {
       >
         <HeroButtonsContainer>
           <HeroButton
-            className={HERO_CONSTANTS.BUTTONS.PRIMARY_CLASS}
+            className={HERO_CONSTANTS.BUTTONS.SECONDARY_CLASS}
             endIcon={<ArrowForwardIcon />}
             aria-label={HERO_CONSTANTS.ACCESSIBILITY.EXPLORE_LABEL}
             onClick={onExploreClick}

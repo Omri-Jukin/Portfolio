@@ -9,6 +9,7 @@ import QA from "../QA";
 import Services from "../Services";
 import Projects from "../Projects";
 import Contact from "../Contact";
+import SectionDivider from "./SectionDivider";
 import type { ScrollingSectionsProps } from "./ScrollingSections.type";
 
 const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
@@ -93,17 +94,32 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
         onAboutClick={handleAboutClick}
       />
 
+      {/* Section Divider */}
+      <SectionDivider text="ABOUT" />
+
       {/* About Section */}
       <About onSkillClick={handleSkillClick} />
+
+      {/* Section Divider */}
+      <SectionDivider text="Q&A" />
 
       {/* Rapid Q&A Section */}
       <QA />
 
+      {/* Section Divider */}
+      <SectionDivider text="SERVICES" />
+
       {/* Services Section */}
       <Services onServiceClick={handleServiceClick} />
 
+      {/* Section Divider */}
+      <SectionDivider text="PROJECTS" />
+
       {/* Projects Section */}
       <Projects />
+
+      {/* Section Divider */}
+      <SectionDivider text="CONTACT" />
 
       {/* Contact Section */}
       <Contact locale={locale} onContactClick={handleContactClick} />
