@@ -21,10 +21,42 @@
     "exploreButton": "Explore work",
     "aboutButton": "About me"
   },
+  "scrollGaps": {
+    "heroAbout": {
+      "text": "Discovering the journey ahead..."
+    },
+    "aboutQA": {
+      "text": "Building bridges between ideas and execution"
+    },
+    "qaServices": {
+      "text": "Spinning through the tech stack"
+    },
+    "servicesProjects": {
+      "text": "Where vision meets reality"
+    },
+    "servicesCareer": {
+      "text": "Exploring professional growth and experience"
+    },
+    "careerProjects": {
+      "text": "From experience to innovation"
+    },
+    "projectsContact": {
+      "text": "Ready to create something amazing together?"
+    }
+  },
   "about": {
     "title": "Who I Am",
     "subtitle": "EXPLORE MY CREATIVE TOOLKIT",
     "description": "I'm a passionate developer and designer who believes that great digital experiences come from the perfect blend of technical expertise and creative vision. With years of experience crafting web applications, I've learned that the best solutions are those that not only work flawlessly but also delight users at every interaction.",
+    "mySkills": "My Skills",
+    "skillDetailsTitle": "Skill Details",
+    "experience": "Experience:",
+    "years": "Years:",
+    "technologies": "Technologies:",
+    "examples": "Examples:",
+    "readyToWork": "Ready to Work Together?",
+    "letsDiscuss": "Let's discuss how my skills and experience can help bring your project to life.",
+    "cta": "View My Resume",
     "skills": {
       "codeConjurer": "CODE CONJURER",
       "brandArchitect": "BRAND ARCHITECT",
@@ -34,7 +66,7 @@
       "codeConjurer": {
         "title": "CODE CONJURER",
         "description": "Transforming complex problems into elegant, scalable solutions through clean code and innovative architecture.",
-        "experience": "Expert",
+        "experience": "Advanced",
         "technologies": [
           "TypeScript",
           "JavaScript",
@@ -169,6 +201,11 @@
         "title": "Clothest",
         "description": "Wardrobe management system with personalized recommendations and inventory tracking. Built with React, Express.js, and MongoDB.",
         "link": "https://github.com/Omri-Jukin/Clothest"
+      },
+      {
+        "title": "Microservices Manager",
+        "description": "Comprehensive CLI tool for managing a microservices ecosystem. Features unified service management, automated workflows, cross-service operations, and development tooling. Built with TypeScript, Node.js, and modern CLI architecture.",
+        "link": "https://github.com/ClipWhisperer/Utils"
       }
     ]
   },
@@ -178,19 +215,78 @@
     "description": "I'm always excited to discuss new opportunities, collaborations, or just chat about technology. Drop me a message and let's create something amazing together.",
     "button": "Start a conversation",
     "form": {
+      "title": "Get in Touch",
+      "description": "Have a project in mind? Let's discuss how we can bring your ideas to life. Fill out the form below and I'll get back to you as soon as possible.",
       "name": "Your Name",
       "email": "Your Email",
+      "phone": "Your Phone",
+      "subject": "Subject",
       "message": "Your Message",
-      "sendButton": "Send Message",
+      "submit": "Send Message",
       "sending": "Sending...",
       "success": "Message sent successfully!",
       "error": "Something went wrong. Please try again."
+    },
+    "info": {
+      "title": "Contact Information",
+      "email": "Email",
+      "emailValue": "omrijukin@gmail.com",
+      "phone": "Phone",
+      "phoneValue": "+972 52-334-4064",
+      "timezone": "Timezone",
+      "timezoneValue": "GMT+2 (Israel)",
+      "location": "Location",
+      "locationValue": "Israel"
+    },
+    "social": {
+      "title": "Connect on Social",
+      "email": {
+        "title": "Email",
+        "username": "omrijukin@gmail.com",
+        "button": "Let's connect!"
+      },
+      "phone": {
+        "title": "Phone",
+        "username": "+972 52-334-4064",
+        "button": "Call me!"
+      },
+      "github": {
+        "title": "GitHub",
+        "username": "@Omri-Jukin",
+        "button": "Connect"
+      },
+      "linkedin": {
+        "title": "LinkedIn",
+        "username": "@omri-jukin",
+        "button": "Connect"
+      },
+      "whatsapp": {
+        "title": "WhatsApp",
+        "username": "Agent OJ",
+        "button": "Connect"
+      },
+      "telegram": {
+        "title": "Telegram",
+        "username": "@Agent_OJ",
+        "button": "Connect"
+      }
+    },
+    "additional": {
+      "title": "Additional Information",
+      "website": "Website: Personal Website",
+      "timezone": "Timezone: Asia/Jerusalem",
+      "citizenship": "Citizenship: Israeli"
     }
   },
   "career": {
     "title": "Career",
+    "subtitle": "My professional journey and experience",
     "description": "My professional journey",
     "experience": "Hands-on experience in full-stack development, team management, and process improvement at leading technology and insurance companies.",
+    "keyAchievements": "Key Achievements & Responsibilities",
+    "interestedInLearning": "Interested in Learning More?",
+    "checkOutResume": "Check out my detailed resume or get in touch to discuss opportunities and collaborations.",
+    "viewResume": "View Resume",
     "experiences": [
       {
         "role": "Full Stack Developer",
@@ -243,7 +339,12 @@
     "title": "Resume",
     "description": "My professional experience and skills",
     "networkingSummary": "Download my resume to learn more about my background",
-    "experience": "I am a passionate and driven full-stack developer with a strong foundation in electrical engineering and a proven track record of delivering results in high-pressure environments. My experience spans from leading the development of scalable platforms and modular UI libraries to optimizing business logic and mentoring teams in the insurance and telecommunications industries.\n\nI excel at solving complex problems, driving innovation, and collaborating across disciplines to achieve ambitious goals. My colleagues recognize me for my relentless work ethic, attention to detail, and commitment to continuous learning. Whether building robust backend systems, designing intuitive interfaces, or streamlining workflows, I always give my best to ensure quality and impact.\n\nIf you're looking for someone who combines technical expertise with leadership, creativity, and a genuine passion for making a difference, let's connect!"
+    "experience": "I am a passionate and driven full-stack developer with a strong foundation in electrical engineering and a proven track record of delivering results in high-pressure environments. My experience spans from leading the development of scalable platforms and modular UI libraries to optimizing business logic and mentoring teams in the insurance and telecommunications industries.\n\nI excel at solving complex problems, driving innovation, and collaborating across disciplines to achieve ambitious goals. My colleagues recognize me for my relentless work ethic, attention to detail, and commitment to continuous learning. Whether building robust backend systems, designing intuitive interfaces, or streamlining workflows, I always give my best to ensure quality and impact.\n\nIf you're looking for someone who combines technical expertise with leadership, creativity, and a genuine passion for making a difference, let's connect!",
+    "professionalSummary": "Professional Summary",
+    "viewCode": "View Code",
+    "letsBuildTogether": "Let's Build Something Amazing Together",
+    "readyToDiscuss": "Ready to discuss your next project or opportunity?",
+    "getInTouch": "Get In Touch"
   },
   "skills": {
     "title": "Technical Expertise",
@@ -279,17 +380,9 @@
             ]
           },
           {
-            "name": "DevOps & Tools",
+            "name": "Dev Tools",
             "level": 80,
-            "technologies": [
-              "Git",
-              "Docker",
-              "AWS",
-              "Vercel",
-              "Jest",
-              "Vitest",
-              "Storybook"
-            ]
+            "technologies": ["Git", "Docker", "AWS", "Vercel", "Jest", "Vitest"]
           },
           {
             "name": "Design & UX",
@@ -299,7 +392,8 @@
               "Adobe Creative Suite",
               "Framer Motion",
               "User Research",
-              "Prototyping"
+              "Prototyping",
+              "Storybook"
             ]
           }
         ]
@@ -338,6 +432,7 @@
     "links": [
       { "label": "Home", "href": "/" },
       { "label": "Blog", "href": "/blog" },
+      { "label": "Career", "href": "/career" },
       { "label": "Contact", "href": "/contact" },
       { "label": "Resume", "href": "/resume" }
     ],

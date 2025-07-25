@@ -243,3 +243,125 @@ export const ContactInfoItem = styled(Box)(({ theme }) => ({
     fontWeight: 400,
   },
 }));
+
+// Contact Card Components
+export const ContactCard = styled(Box, {
+  shouldForwardProp: (prop) =>
+    !["variant", "clickable"].includes(prop as string),
+})<{ variant?: "info" | "social" | "additional"; clickable?: boolean }>(
+  ({ theme, variant = "info", clickable = false }) => ({
+    flex: 1,
+    minWidth: 200,
+    padding: variant === "info" ? theme.spacing(2) : theme.spacing(3),
+    borderRadius: theme.spacing(2),
+    backgroundColor: "background.paper",
+    border: "1px solid",
+    borderColor: "divider",
+    display: "flex",
+    alignItems: variant === "info" ? "center" : "center",
+    flexDirection: variant === "info" ? "row" : "column",
+    gap: variant === "info" ? theme.spacing(2) : theme.spacing(1),
+    cursor: clickable ? "pointer" : "default",
+    transition: "all 0.3s ease-in-out",
+    textDecoration: "none",
+    color: "inherit",
+    "&:hover": clickable
+      ? {
+          borderColor: "primary.main",
+          transform: "translateY(-2px)",
+          boxShadow:
+            theme.palette.mode === "dark"
+              ? "0 8px 24px rgba(100, 181, 246, 0.3), 0 4px 12px rgba(0, 0, 0, 0.3)"
+              : "0 8px 24px rgba(78, 205, 196, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1)",
+        }
+      : {},
+  })
+);
+
+export const ContactCardContent = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.spacing(0.5),
+}));
+
+export const ContactCardIcon = styled(Box, {
+  shouldForwardProp: (prop) => prop !== "color",
+})<{ color?: string }>(({ theme, color }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  "& .MuiSvgIcon-root": {
+    fontSize: 40,
+    color: color || theme.palette.primary.main,
+  },
+}));
+
+export const ContactCardTitle = styled(Typography)(({ theme }) => ({
+  fontWeight: "medium",
+  color: theme.palette.text.primary,
+  textAlign: "center",
+}));
+
+export const ContactCardSubtitle = styled(Typography)(({ theme }) => ({
+  color: theme.palette.text.secondary,
+  textAlign: "center",
+}));
+
+export const ContactCardButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== "brandColor",
+})<{ brandColor?: string }>(({ theme, brandColor }) => ({
+  marginTop: theme.spacing(1),
+  borderColor: brandColor || theme.palette.primary.main,
+  color: brandColor || theme.palette.primary.main,
+  "&:hover": {
+    borderColor: brandColor || theme.palette.primary.main,
+    backgroundColor: brandColor
+      ? `${brandColor}15` // 15% opacity for better visibility
+      : theme.palette.primary.main,
+    color: theme.palette.mode === "dark" ? "#FFFFFF" : "#000000",
+  },
+}));
+
+export const ContactSection = styled(Box)(({ theme }) => ({
+  marginBottom: theme.spacing(4),
+  marginTop: theme.spacing(4),
+}));
+
+export const ContactSectionTitle = styled(Typography)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
+  color: theme.palette.text.primary,
+  fontWeight: 600,
+}));
+
+export const ContactCardsContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  gap: theme.spacing(2),
+  flexWrap: "wrap",
+}));
+
+export const AdditionalInfoCard = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(3),
+  borderRadius: theme.spacing(2),
+  backgroundColor: "background.paper",
+  border: "1px solid",
+  borderColor: "divider",
+}));
+
+export const AdditionalInfoTitle = styled(Typography)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
+  color: theme.palette.error.main,
+  fontWeight: 600,
+}));
+
+export const AdditionalInfoItem = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  gap: theme.spacing(2),
+  marginBottom: theme.spacing(1),
+  "&:last-child": {
+    marginBottom: 0,
+  },
+  "& .MuiSvgIcon-root": {
+    color: theme.palette.action.active,
+  },
+}));

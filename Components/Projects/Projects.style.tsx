@@ -29,11 +29,17 @@ export const ProjectsGrid = styled(Box)(({ theme }) => ({
 export const ProjectCard = styled(Card)(({ theme }) => ({
   padding: theme.spacing(3),
   borderRadius: theme.spacing(2),
-  boxShadow: theme.shadows[4],
+  boxShadow:
+    theme.palette.mode === "dark"
+      ? "0 8px 24px rgba(150, 206, 180, 0.25), 0 4px 12px rgba(0, 0, 0, 0.3), 2px 2px 8px rgba(0, 0, 0, 0.2)"
+      : "0 8px 24px rgba(78, 205, 196, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1), 2px 2px 8px rgba(0, 0, 0, 0.08)",
   transition: "all 0.3s ease-in-out",
   "&:hover": {
     transform: "translateY(-4px)",
-    boxShadow: theme.shadows[8],
+    boxShadow:
+      theme.palette.mode === "dark"
+        ? "0 12px 36px rgba(150, 206, 180, 0.35), 0 6px 18px rgba(0, 0, 0, 0.4), 3px 3px 12px rgba(0, 0, 0, 0.25)"
+        : "0 12px 36px rgba(78, 205, 196, 0.3), 0 6px 18px rgba(0, 0, 0, 0.15), 3px 3px 12px rgba(0, 0, 0, 0.1)",
   },
 }));
 

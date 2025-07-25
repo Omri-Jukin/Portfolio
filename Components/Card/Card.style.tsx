@@ -38,9 +38,11 @@ export const StyledCard = styled(MuiCard, {
   transition: "all 0.3s ease-in-out",
   position: "relative",
   overflow: "visible",
-  // Add default shadow with strong top shadow to prevent disappearing top edge
+  // Enhanced glow effect matching contact page
   boxShadow: glow
-    ? `0 4px 12px ${theme.palette.primary.main}30, 0 2px 6px rgba(0, 0, 0, 0.2), 1px 1px 4px rgba(0, 0, 0, 0.15)`
+    ? theme.palette.mode === "dark"
+      ? "0 8px 24px rgba(150, 206, 180, 0.25), 0 4px 12px rgba(0, 0, 0, 0.3), 2px 2px 8px rgba(0, 0, 0, 0.2)"
+      : "0 8px 24px rgba(78, 205, 196, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1), 2px 2px 8px rgba(0, 0, 0, 0.08)"
     : theme.palette.mode === "dark"
     ? "0 4px 12px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 0, 0, 0.2), 1px 1px 4px rgba(0, 0, 0, 0.15)"
     : "0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.08), 1px 1px 4px rgba(0, 0, 0, 0.06)",
@@ -60,7 +62,9 @@ export const StyledCard = styled(MuiCard, {
   "&:hover": {
     transform: "translateY(-4px)",
     boxShadow: glow
-      ? `0 8px 24px ${theme.palette.primary.main}40, 0 4px 12px rgba(0, 0, 0, 0.3), 2px 2px 8px rgba(0, 0, 0, 0.2)`
+      ? theme.palette.mode === "dark"
+        ? "0 12px 36px rgba(150, 206, 180, 0.35), 0 6px 18px rgba(0, 0, 0, 0.4), 3px 3px 12px rgba(0, 0, 0, 0.25)"
+        : "0 12px 36px rgba(78, 205, 196, 0.3), 0 6px 18px rgba(0, 0, 0, 0.15), 3px 3px 12px rgba(0, 0, 0, 0.1)"
       : theme.palette.mode === "dark"
       ? "0 8px 24px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3), 2px 2px 8px rgba(0, 0, 0, 0.2)"
       : "0 8px 24px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1), 2px 2px 8px rgba(0, 0, 0, 0.08)",
@@ -146,7 +150,10 @@ export const PhotoCardImage = styled(Box, {
   borderRadius: theme.spacing(1.5),
   overflow: "hidden",
   border: `3px solid ${theme.palette.primary.main}`,
-  boxShadow: theme.shadows[4],
+  boxShadow:
+    theme.palette.mode === "dark"
+      ? "0 8px 24px rgba(150, 206, 180, 0.25), 0 4px 12px rgba(0, 0, 0, 0.3), 2px 2px 8px rgba(0, 0, 0, 0.2)"
+      : "0 8px 24px rgba(78, 205, 196, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1), 2px 2px 8px rgba(0, 0, 0, 0.08)",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",

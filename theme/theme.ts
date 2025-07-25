@@ -37,12 +37,24 @@ declare module "@mui/material/styles" {
     cool: { primary: string; secondary: string; accent: string };
     neutral: { primary: string; secondary: string; accent: string };
     dark: { primary: string; secondary: string; accent: string };
+    whatsapp: { primary: string; secondary: string; accent: string };
+    telegram: { primary: string; secondary: string; accent: string };
+    linkedin: { primary: string; secondary: string; accent: string };
+    github: { primary: string; secondary: string; accent: string };
+    email: { primary: string; secondary: string; accent: string };
+    phone: { primary: string; secondary: string; accent: string };
   }
   interface PaletteOptions {
     warm?: { primary?: string; secondary?: string; accent?: string };
     cool?: { primary?: string; secondary?: string; accent?: string };
     neutral?: { primary?: string; secondary?: string; accent?: string };
     dark?: { primary?: string; secondary?: string; accent?: string };
+    whatsapp?: { primary?: string; secondary?: string; accent?: string };
+    telegram?: { primary?: string; secondary?: string; accent?: string };
+    linkedin?: { primary?: string; secondary?: string; accent?: string };
+    github?: { primary?: string; secondary?: string; accent?: string };
+    email?: { primary?: string; secondary?: string; accent?: string };
+    phone?: { primary?: string; secondary?: string; accent?: string };
   }
   interface Breakpoints {
     xs: true;
@@ -148,6 +160,36 @@ export const baseTheme = createTheme({
       primary: "#2C3E50", // Dark blue-gray
       secondary: "#34495E", // Dark gray
       accent: "#4ECDC4", // Teal accent
+    },
+    whatsapp: {
+      primary: "#25D366", // WhatsApp green
+      secondary: "#25D366", // WhatsApp green
+      accent: "#25D366", // WhatsApp green
+    },
+    telegram: {
+      primary: "#0088CC", // Telegram blue
+      secondary: "#0088CC", // Telegram blue
+      accent: "#0088CC", // Telegram blue
+    },
+    linkedin: {
+      primary: "#0077B5", // LinkedIn blue
+      secondary: "#0077B5", // LinkedIn blue
+      accent: "#0077B5", // LinkedIn blue
+    },
+    github: {
+      primary: "#181717", // GitHub black
+      secondary: "#181717", // GitHub black
+      accent: "#181717", // GitHub black
+    },
+    email: {
+      primary: "#000000", // Email black
+      secondary: "#000000", // Email black
+      accent: "#000000", // Email black
+    },
+    phone: {
+      primary: "#000000", // Phone black
+      secondary: "#000000", // Phone black
+      accent: "#000000", // Phone black
     },
   },
   gradients: {

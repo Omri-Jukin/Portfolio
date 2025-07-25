@@ -13,10 +13,10 @@ import {
   Divider,
 } from "@mui/material";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import MotionWrapper from "~/MotionWrapper";
 import {
   GitHub as GitHubIcon,
-  Launch as LaunchIcon,
   Download as DownloadIcon,
 } from "@mui/icons-material";
 
@@ -42,6 +42,7 @@ export default function ResumePage() {
   const t = useTranslations("resume");
   const skillsT = useTranslations("skills");
   const projectsT = useTranslations("projects");
+  const router = useRouter();
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: "1400px", mx: "auto" }}>
@@ -99,7 +100,7 @@ export default function ResumePage() {
               gutterBottom
               sx={{ color: "primary.main" }}
             >
-              Professional Summary
+              {t("professionalSummary")}
             </Typography>
             <Typography
               variant="body1"
@@ -328,19 +329,7 @@ export default function ResumePage() {
                       size="small"
                       sx={{ textTransform: "none" }}
                     >
-                      View Code
-                    </Button>
-                    <Button
-                      component={Link}
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      variant="contained"
-                      startIcon={<LaunchIcon />}
-                      size="small"
-                      sx={{ textTransform: "none" }}
-                    >
-                      Live Demo
+                      {t("viewCode")}
                     </Button>
                   </Box>
                 </CardContent>
@@ -367,10 +356,10 @@ export default function ResumePage() {
             component="p"
             sx={{ mb: 2, fontWeight: "bold" }}
           >
-            Let&apos;s Build Something Amazing Together
+            {t("letsBuildTogether")}
           </Typography>
           <Typography variant="h6" sx={{ mb: 3, opacity: 0.9 }}>
-            Ready to discuss your next project or opportunity?
+            {t("readyToDiscuss")}
           </Typography>
           <Button
             variant="contained"
@@ -384,8 +373,9 @@ export default function ResumePage() {
               fontSize: "1.1rem",
               fontWeight: "bold",
             }}
+            onClick={() => router.push("/contact")}
           >
-            Get In Touch
+            {t("getInTouch")}
           </Button>
         </Box>
       </MotionWrapper>

@@ -3,7 +3,9 @@
 import React from "react";
 import { Box, Typography, Card, CardContent, Chip, Stack } from "@mui/material";
 import { useTranslations } from "next-intl";
-import MotionWrapper from "#/Components/MotionWrapper";
+import MotionWrapper from "~/MotionWrapper";
+import { CTA1Button } from "~/Button/Button.style";
+import { useRouter } from "next/navigation";
 
 type SkillDetail = {
   title: string;
@@ -16,7 +18,7 @@ type SkillDetail = {
 
 export default function AboutPage() {
   const t = useTranslations("about");
-
+  const router = useRouter();
   return (
     <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: "1200px", mx: "auto" }}>
       {/* Header */}
@@ -78,7 +80,7 @@ export default function AboutPage() {
               gutterBottom
               sx={{ color: "primary.main", textAlign: "center", mb: 4 }}
             >
-              My Skills
+              {t("mySkills")}
             </Typography>
             <Box
               sx={{
@@ -118,7 +120,7 @@ export default function AboutPage() {
           gutterBottom
           sx={{ color: "primary.main", textAlign: "center", mb: 4 }}
         >
-          Skill Details
+          {t("skillDetailsTitle")}
         </Typography>
       </MotionWrapper>
 
@@ -176,14 +178,14 @@ export default function AboutPage() {
                         fontWeight="medium"
                         sx={{ mb: 1 }}
                       >
-                        Experience: {detail.experience}
+                        {t("experience")} {detail.experience}
                       </Typography>
                       <Typography
                         variant="body2"
                         fontWeight="medium"
                         sx={{ mb: 1 }}
                       >
-                        Years: {detail.years}
+                        {t("years")} {detail.years}
                       </Typography>
                     </Box>
 
@@ -193,7 +195,7 @@ export default function AboutPage() {
                         fontWeight="medium"
                         sx={{ mb: 1 }}
                       >
-                        Technologies:
+                        {t("technologies")}
                       </Typography>
                       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                         {detail.technologies.map((tech, techIndex) => (
@@ -214,7 +216,7 @@ export default function AboutPage() {
                         fontWeight="medium"
                         sx={{ mb: 1 }}
                       >
-                        Examples:
+                        {t("examples")}
                       </Typography>
                       <Stack spacing={1}>
                         {detail.examples.map((example, exampleIndex) => (
@@ -269,12 +271,14 @@ export default function AboutPage() {
             component="p"
             sx={{ color: "primary.main", mb: 2 }}
           >
-            Ready to Work Together?
+            {t("readyToWork")}
           </Typography>
           <Typography variant="body1" sx={{ color: "text.secondary" }}>
-            Let&apos;s discuss how my skills and experience can help bring your
-            project to life.
+            {t("letsDiscuss")}
           </Typography>
+          <CTA1Button sx={{ mt: 2 }} onClick={() => router.push("/contact")}>
+            GREAT!
+          </CTA1Button>
         </Box>
       </MotionWrapper>
     </Box>

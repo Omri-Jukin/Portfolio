@@ -7,8 +7,10 @@ import Hero from "../Hero";
 import About from "../About";
 import QA from "../QA";
 import Services from "../Services";
+import Career from "../Career";
 import Projects from "../Projects";
 import Contact from "../Contact";
+import ScrollGapAnimator from "../ScrollGapAnimator";
 import type { ScrollingSectionsProps } from "./ScrollingSections.type";
 
 const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
@@ -85,6 +87,10 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
     // Additional contact logic if needed
   };
 
+  const handleCareerClick = () => {
+    navigateToPage("/career");
+  };
+
   return (
     <Box>
       {/* Hero Section */}
@@ -93,17 +99,62 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
         onAboutClick={handleAboutClick}
       />
 
+      {/* Gap Animation: Hero to About */}
+      <ScrollGapAnimator
+        sectionId="hero-about-gap"
+        gapType="hero-about"
+        height={200}
+      />
+
       {/* About Section */}
       <About onSkillClick={handleSkillClick} />
+
+      {/* Gap Animation: About to QA */}
+      <ScrollGapAnimator
+        sectionId="about-qa-gap"
+        gapType="about-qa"
+        height={200}
+      />
 
       {/* Rapid Q&A Section */}
       <QA />
 
+      {/* Gap Animation: QA to Services */}
+      <ScrollGapAnimator
+        sectionId="qa-services-gap"
+        gapType="qa-services"
+        height={200}
+      />
+
       {/* Services Section */}
       <Services onServiceClick={handleServiceClick} />
 
+      {/* Gap Animation: Services to Career */}
+      <ScrollGapAnimator
+        sectionId="services-career-gap"
+        gapType="services-career"
+        height={200}
+      />
+
+      {/* Career Section */}
+      <Career onCareerClick={handleCareerClick} />
+
+      {/* Gap Animation: Career to Projects */}
+      <ScrollGapAnimator
+        sectionId="career-projects-gap"
+        gapType="career-projects"
+        height={200}
+      />
+
       {/* Projects Section */}
       <Projects />
+
+      {/* Gap Animation: Projects to Contact */}
+      <ScrollGapAnimator
+        sectionId="projects-contact-gap"
+        gapType="projects-contact"
+        height={200}
+      />
 
       {/* Contact Section */}
       <Contact locale={locale} onContactClick={handleContactClick} />

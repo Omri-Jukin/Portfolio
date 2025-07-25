@@ -11,6 +11,12 @@ export const COLOR_PALETTE = [
   "#FFB74D", // Amber
   "#F06292", // Pink
   "#9575CD", // Deep Purple
+  "#25D366", // WhatsApp green
+  "#0088CC", // Telegram blue
+  "#0077B5", // LinkedIn blue
+  "#181717", // GitHub black
+  "#000000", // Email black
+  "#000000", // Phone black
 ] as const;
 
 // Font size options

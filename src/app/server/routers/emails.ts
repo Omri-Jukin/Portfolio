@@ -10,7 +10,12 @@ export const emailsRouter = router({
     .input(
       z.object({
         name: z.string().min(2, "Name must be at least 2 characters"),
-        email: z.string().email("Please enter a valid email address"),
+        email: z
+          .string()
+          .regex(
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            "Please enter a valid email address"
+          ),
         phone: z.string().min(1, "Phone number is required"),
         subject: z.string().min(5, "Subject must be at least 5 characters"),
         message: z.string().min(10, "Message must be at least 10 characters"),
@@ -142,6 +147,57 @@ export const emailsRouter = router({
         status: "error",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
+      };
+    }
+  }),
+
+  // Test AWS SES connectivity (admin only)
+  testSESConnectivity: procedure.mutation(async (opts) => {
+    const { user } = opts.ctx;
+
+    // Check if user is admin
+    if (!user || user.role !== "admin") {
+      throw new Error("Unauthorized: Admin access required");
+    }
+
+    try {
+      // Test SES client creation
+      const testClient = new (await import("@aws-sdk/client-ses")).SESClient({
+        region: process.env.AWS_REGION || "us-east-1",
+        credentials: {
+          accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+        },
+      });
+
+      // Test SES API call (GetSendQuota to check connectivity)
+      const { GetSendQuotaCommand } = await import("@aws-sdk/client-ses");
+      const quotaCommand = new GetSendQuotaCommand({});
+      const quotaResult = await testClient.send(quotaCommand);
+
+      return {
+        success: true,
+        message: "SES connectivity test successful",
+        quota: {
+          max24HourSend: quotaResult.Max24HourSend,
+          maxSendRate: quotaResult.MaxSendRate,
+          sentLast24Hours: quotaResult.SentLast24Hours,
+        },
+        config: {
+          region: process.env.AWS_REGION || "us-east-1",
+          fromEmail: process.env.SES_FROM_EMAIL,
+        },
+      };
+    } catch (error) {
+      console.error("SES connectivity test failed:", error);
+      return {
+        success: false,
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
+        details: {
+          errorType: error?.constructor?.name,
+          errorCode: (error as { code?: string })?.code,
+        },
       };
     }
   }),

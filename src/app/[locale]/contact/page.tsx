@@ -1,27 +1,36 @@
 "use client";
 
 import { api } from "$/trpc/client";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Box, Typography } from "@mui/material";
 import {
   contactFormSchema,
   type ContactFormData,
   type ContactFormState,
-} from "./Contact.type";
+} from "./page.type";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import * as Common from "~/Common/Common.style";
-import * as Styled from "./Contact.style";
+import * as Styled from "./page.style";
+import * as Constants from "./page.const";
+import { useTheme } from "@mui/material/styles";
 import {
   CheckCircle as CheckCircleIcon,
   Send as SendIcon,
-  Email as EmailIcon,
-  Phone as PhoneIcon,
-  Schedule as ScheduleIcon,
-  LocationOn as LocationIcon,
+  Language as LanguageIcon,
+  AccessTime as AccessTimeIcon,
+  Flag as FlagIcon,
 } from "@mui/icons-material";
 
 export default function ContactPage() {
+  const theme = useTheme();
   const submitContactForm = api.emails.submitContactForm.useMutation();
+
+  // Helper function to get appropriate color based on theme mode
+  const getBrandColor = (platform: keyof typeof Constants.SOCIALS_COLORS) => {
+    return theme.palette.mode === "dark"
+      ? Constants.SOCIALS_COLORS_DARK[platform]
+      : Constants.SOCIALS_COLORS_LIGHT[platform];
+  };
 
   const handleContactSubmit = async (data: ContactFormData) => {
     try {
@@ -226,39 +235,130 @@ export default function ContactPage() {
           </Styled.SubmitButton>
         </form>
 
-        <Styled.ContactInfo>
-          <Styled.ContactInfoTitle variant="h6">
-            {t("info.title")}
-          </Styled.ContactInfoTitle>
+        {/* Social Media Cards */}
+        <Styled.ContactSection>
+          <Styled.ContactSectionTitle variant="h6">
+            {t("social.title")}
+          </Styled.ContactSectionTitle>
+          <Styled.ContactCardsContainer>
+            {/* GitHub Card */}
+            <Styled.ContactCard variant="social" clickable>
+              <Styled.ContactCardIcon>
+                {Constants.SOCIAL_ICONS.GITHUB}
+              </Styled.ContactCardIcon>
+              <Styled.ContactCardTitle variant="h6">
+                {t("social.github.title")}
+              </Styled.ContactCardTitle>
+              <Styled.ContactCardSubtitle variant="body2">
+                {t("social.github.username")}
+              </Styled.ContactCardSubtitle>
+              <Styled.ContactCardButton
+                variant="outlined"
+                size="small"
+                brandColor={getBrandColor("GITHUB")}
+                onClick={() =>
+                  window.open(Constants.SOCIAL_LINKS.GITHUB, "_blank")
+                }
+              >
+                {t("social.github.button")}
+              </Styled.ContactCardButton>
+            </Styled.ContactCard>
 
-          <Styled.ContactInfoItem>
-            <EmailIcon color="primary" />
-            <span>
-              {t("info.email")}: {t("info.emailValue")}
-            </span>
-          </Styled.ContactInfoItem>
+            {/* LinkedIn Card */}
+            <Styled.ContactCard variant="social" clickable>
+              <Styled.ContactCardIcon>
+                {Constants.SOCIAL_ICONS.LINKEDIN}
+              </Styled.ContactCardIcon>
+              <Styled.ContactCardTitle variant="h6">
+                {t("social.linkedin.title")}
+              </Styled.ContactCardTitle>
+              <Styled.ContactCardSubtitle variant="body2">
+                {t("social.linkedin.username")}
+              </Styled.ContactCardSubtitle>
+              <Styled.ContactCardButton
+                variant="outlined"
+                size="small"
+                brandColor={getBrandColor("LINKEDIN")}
+                onClick={() =>
+                  window.open(Constants.SOCIAL_LINKS.LINKEDIN, "_blank")
+                }
+              >
+                {t("social.linkedin.button")}
+              </Styled.ContactCardButton>
+            </Styled.ContactCard>
 
-          <Styled.ContactInfoItem>
-            <PhoneIcon color="primary" />
-            <span>
-              {t("info.phone")}: {t("info.phoneValue")}
-            </span>
-          </Styled.ContactInfoItem>
+            {/* WhatsApp Card */}
+            <Styled.ContactCard variant="social" clickable>
+              <Styled.ContactCardIcon>
+                {Constants.SOCIAL_ICONS.WHATSAPP}
+              </Styled.ContactCardIcon>
+              <Styled.ContactCardTitle variant="h6">
+                {t("social.whatsapp.title")}
+              </Styled.ContactCardTitle>
+              <Styled.ContactCardSubtitle variant="body2">
+                {t("social.whatsapp.username")}
+              </Styled.ContactCardSubtitle>
+              <Styled.ContactCardButton
+                variant="outlined"
+                size="small"
+                brandColor={getBrandColor("WHATSAPP")}
+                onClick={() =>
+                  window.open(Constants.SOCIAL_LINKS.WHATSAPP, "_blank")
+                }
+              >
+                {t("social.whatsapp.button")}
+              </Styled.ContactCardButton>
+            </Styled.ContactCard>
 
-          <Styled.ContactInfoItem>
-            <ScheduleIcon color="primary" />
-            <span>
-              {t("info.timezone")}: {t("info.timezoneValue")}
-            </span>
-          </Styled.ContactInfoItem>
+            {/* Telegram Card */}
+            <Styled.ContactCard variant="social" clickable>
+              <Styled.ContactCardIcon>
+                {Constants.SOCIAL_ICONS.TELEGRAM}
+              </Styled.ContactCardIcon>
+              <Styled.ContactCardTitle variant="h6">
+                {t("social.telegram.title")}
+              </Styled.ContactCardTitle>
+              <Styled.ContactCardSubtitle variant="body2">
+                {t("social.telegram.username")}
+              </Styled.ContactCardSubtitle>
+              <Styled.ContactCardButton
+                variant="outlined"
+                size="small"
+                brandColor={getBrandColor("TELEGRAM")}
+                onClick={() =>
+                  window.open(Constants.SOCIAL_LINKS.TELEGRAM, "_blank")
+                }
+              >
+                {t("social.telegram.button")}
+              </Styled.ContactCardButton>
+            </Styled.ContactCard>
+          </Styled.ContactCardsContainer>
+        </Styled.ContactSection>
 
-          <Styled.ContactInfoItem>
-            <LocationIcon color="primary" />
-            <span>
-              {t("info.location")}: {t("info.locationValue")}
-            </span>
-          </Styled.ContactInfoItem>
-        </Styled.ContactInfo>
+        {/* Additional Information */}
+        <Styled.AdditionalInfoCard>
+          <Styled.AdditionalInfoTitle variant="h6">
+            {t("additional.title")}
+          </Styled.AdditionalInfoTitle>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+            <Styled.AdditionalInfoItem>
+              <LanguageIcon color="action" />
+              <Typography variant="body1">{t("additional.website")}</Typography>
+            </Styled.AdditionalInfoItem>
+            <Styled.AdditionalInfoItem>
+              <AccessTimeIcon color="action" />
+              <Typography variant="body1">
+                {t("additional.timezone")}
+              </Typography>
+            </Styled.AdditionalInfoItem>
+            <Styled.AdditionalInfoItem>
+              <FlagIcon color="action" />
+              <Typography variant="body1">
+                {t("additional.citizenship")}
+              </Typography>
+            </Styled.AdditionalInfoItem>
+          </Box>
+        </Styled.AdditionalInfoCard>
       </Styled.FormContainer>
     </Common.PageContainer>
   );

@@ -9,6 +9,7 @@ export const LAYOUT_TYPES = {
 export const NAVIGATION_ITEMS = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
+  { label: "Career", href: "/career" },
   { label: "Projects", href: "/projects" },
   { label: "Contact", href: "/contact" },
 ] as const;

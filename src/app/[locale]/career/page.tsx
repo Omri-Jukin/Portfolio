@@ -8,12 +8,15 @@ import {
   Chip,
   Stack,
   Divider,
+  Button,
 } from "@mui/material";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import MotionWrapper from "#/Components/MotionWrapper";
 import {
   Business as BusinessIcon,
   CalendarToday as CalendarIcon,
+  ArrowForward as ArrowForwardIcon,
 } from "@mui/icons-material";
 
 export type Experience = {
@@ -25,6 +28,11 @@ export type Experience = {
 
 export default function CareerPage() {
   const t = useTranslations("career");
+  const router = useRouter();
+
+  const handleResumeClick = () => {
+    router.push("/resume");
+  };
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: "1200px", mx: "auto" }}>
@@ -158,7 +166,7 @@ export default function CareerPage() {
                     mb: 2,
                   }}
                 >
-                  Key Achievements & Responsibilities
+                  {t("keyAchievements")}
                 </Typography>
 
                 <Stack spacing={2}>
@@ -219,12 +227,27 @@ export default function CareerPage() {
             component="p"
             sx={{ color: "primary.main", mb: 2 }}
           >
-            Interested in Learning More?
+            {t("interestedInLearning")}
           </Typography>
-          <Typography variant="body1" sx={{ color: "text.secondary" }}>
-            Check out my detailed resume or get in touch to discuss
-            opportunities and collaborations.
+          <Typography variant="body1" sx={{ color: "text.secondary", mb: 3 }}>
+            {t("checkOutResume")}
           </Typography>
+          <Button
+            variant="contained"
+            size="large"
+            endIcon={<ArrowForwardIcon />}
+            onClick={handleResumeClick}
+            sx={{
+              px: 4,
+              py: 1.5,
+              borderRadius: 2,
+              textTransform: "none",
+              fontSize: "1.1rem",
+              fontWeight: "bold",
+            }}
+          >
+            {t("viewResume")}
+          </Button>
         </Box>
       </MotionWrapper>
     </Box>

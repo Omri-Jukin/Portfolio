@@ -11,9 +11,13 @@ import {
 } from "./About.style";
 import { ABOUT_CONSTANTS } from "./About.const";
 import type { AboutProps } from "./About.type";
+import { CTA1Button } from "../Button/Button.style";
+import { useRouter } from "next/navigation";
+import Typography from "../Typography";
 
 const About: React.FC<AboutProps> = ({ onSkillClick }) => {
   const t = useTranslations("about");
+  const router = useRouter();
 
   return (
     <AboutContainer
@@ -66,6 +70,17 @@ const About: React.FC<AboutProps> = ({ onSkillClick }) => {
         delay={ABOUT_CONSTANTS.ANIMATION.DESCRIPTION_DELAY}
       >
         <AboutDescription>{t("description")}</AboutDescription>
+      </MotionWrapper>
+
+      <MotionWrapper
+        style={{ marginTop: "20px" }}
+        variant="slideUp"
+        duration={ABOUT_CONSTANTS.ANIMATION.DESCRIPTION_DURATION}
+        delay={ABOUT_CONSTANTS.ANIMATION.DESCRIPTION_DELAY}
+      >
+        <CTA1Button onClick={() => router.push("/resume")}>
+          <Typography variant="body1">{t("cta")}</Typography>
+        </CTA1Button>
       </MotionWrapper>
     </AboutContainer>
   );

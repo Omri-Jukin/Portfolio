@@ -21,10 +21,42 @@
     "exploreButton": "Explorar trabajo",
     "aboutButton": "Sobre mí"
   },
+  "scrollGaps": {
+    "heroAbout": {
+      "text": "Descubriendo el camino por delante..."
+    },
+    "aboutQA": {
+      "text": "Construyendo puentes entre ideas y ejecución"
+    },
+    "qaServices": {
+      "text": "Girando a través del stack tecnológico"
+    },
+    "servicesProjects": {
+      "text": "Donde la visión se encuentra con la realidad"
+    },
+    "servicesCareer": {
+      "text": "Explorando el crecimiento profesional y la experiencia"
+    },
+    "careerProjects": {
+      "text": "De la experiencia a la innovación"
+    },
+    "projectsContact": {
+      "text": "¿Listo para crear algo increíble juntos?"
+    }
+  },
   "about": {
     "title": "Quién Soy",
     "subtitle": "EXPLORA MI CAJA DE HERRAMIENTAS CREATIVA",
     "description": "Soy un desarrollador y diseñador apasionado que cree que las grandes experiencias digitales provienen de la perfecta combinación de experiencia técnica y visión creativa. Con años de experiencia creando aplicaciones web, he aprendido que las mejores soluciones son aquellas que no solo funcionan perfectamente, sino que también deleitan a los usuarios en cada interacción.",
+    "mySkills": "Mis Habilidades",
+    "skillDetailsTitle": "Detalles de Habilidades",
+    "experience": "Experiencia:",
+    "years": "Años:",
+    "technologies": "Tecnologías:",
+    "examples": "Ejemplos:",
+    "readyToWork": "¿Listo para Trabajar Juntos?",
+    "letsDiscuss": "Discutamos cómo mis habilidades y experiencia pueden ayudar a dar vida a tu proyecto.",
+    "cta": "Ver Mi Currículum",
     "skills": {
       "codeConjurer": "HECHICERO DEL CÓDIGO",
       "brandArchitect": "ARQUITECTO DE MARCA",
@@ -34,7 +66,7 @@
       "codeConjurer": {
         "title": "HECHICERO DEL CÓDIGO",
         "description": "Transformando problemas complejos en soluciones elegantes y escalables a través de código limpio y arquitectura innovadora.",
-        "experience": "Experto",
+        "experience": "Avanzado",
         "technologies": [
           "TypeScript",
           "JavaScript",
@@ -169,6 +201,11 @@
         "title": "Clothest",
         "description": "Sistema de gestión de guardarropa con recomendaciones personalizadas y seguimiento de inventario. Construido con React, Express.js y MongoDB.",
         "link": "https://github.com/Omri-Jukin/Clothest"
+      },
+      {
+        "title": "Microservices Manager",
+        "description": "Herramienta CLI integral para gestionar un ecosistema de microservicios. Características de gestión unificada de servicios, flujos de trabajo automatizados, operaciones entre servicios y herramientas de desarrollo. Construido con TypeScript, Node.js y arquitectura CLI moderna.",
+        "link": "https://github.com/ClipWhisperer/Utils"
       }
     ]
   },
@@ -178,19 +215,78 @@
     "description": "Siempre estoy emocionado de discutir nuevas oportunidades, colaboraciones o simplemente charlar sobre tecnología. Envíame un mensaje y creemos algo increíble juntos.",
     "button": "Iniciar conversación",
     "form": {
+      "title": "Ponte en Contacto",
+      "description": "¿Tienes un proyecto en mente? Discutamos cómo podemos dar vida a tus ideas. Completa el formulario de abajo y te responderé lo antes posible.",
       "name": "Tu Nombre",
       "email": "Tu Email",
+      "phone": "Tu Teléfono",
+      "subject": "Asunto",
       "message": "Tu Mensaje",
-      "sendButton": "Enviar Mensaje",
+      "submit": "Enviar Mensaje",
       "sending": "Enviando...",
       "success": "¡Mensaje enviado exitosamente!",
       "error": "Algo salió mal. Por favor intenta de nuevo."
+    },
+    "info": {
+      "title": "Información de Contacto",
+      "email": "Email",
+      "emailValue": "omrijukin@gmail.com",
+      "phone": "Teléfono",
+      "phoneValue": "+972 52-334-4064",
+      "timezone": "Zona Horaria",
+      "timezoneValue": "GMT+2 (Israel)",
+      "location": "Ubicación",
+      "locationValue": "Israel"
+    },
+    "social": {
+      "title": "Conecta en Redes Sociales",
+      "email": {
+        "title": "Email",
+        "username": "omrijukin@gmail.com",
+        "button": "¡Conectemos!"
+      },
+      "phone": {
+        "title": "Teléfono",
+        "username": "+972 52-334-4064",
+        "button": "¡Llámanos!"
+      },
+      "github": {
+        "title": "GitHub",
+        "username": "@Omri-Jukin",
+        "button": "Conectar"
+      },
+      "linkedin": {
+        "title": "LinkedIn",
+        "username": "@omri-jukin",
+        "button": "Conectar"
+      },
+      "whatsapp": {
+        "title": "WhatsApp",
+        "username": "+972523344064",
+        "button": "Conectar"
+      },
+      "telegram": {
+        "title": "Telegram",
+        "username": "@Agent_OJ",
+        "button": "Conectar"
+      }
+    },
+    "additional": {
+      "title": "Información Adicional",
+      "website": "Sitio Web: Sitio Web Personal",
+      "timezone": "Zona Horaria: Asia/Jerusalén",
+      "citizenship": "Nacionalidad: Israelí"
     }
   },
   "career": {
     "title": "Carrera",
+    "subtitle": "Mi trayectoria profesional y experiencia",
     "description": "Mi trayectoria profesional",
     "experience": "Experiencia práctica en desarrollo full-stack, gestión de equipos y mejora de procesos en empresas líderes de tecnología y seguros.",
+    "keyAchievements": "Logros Clave y Responsabilidades",
+    "interestedInLearning": "¿Interesado en Saber Más?",
+    "checkOutResume": "Revisa mi currículum detallado o ponte en contacto para discutir oportunidades y colaboraciones.",
+    "viewResume": "Ver Currículum",
     "experiences": [
       {
         "role": "Desarrollador Full Stack",
@@ -243,7 +339,13 @@
     "title": "Currículum",
     "description": "Mi experiencia profesional y habilidades",
     "networkingSummary": "Descarga mi currículum para conocer más sobre mi trayectoria",
-    "experience": "Soy un desarrollador full-stack apasionado y motivado con una sólida base en ingeniería eléctrica y un historial comprobado de obtener resultados en entornos de alta presión. Mi experiencia abarca desde liderar el desarrollo de plataformas escalables y bibliotecas de UI modulares hasta optimizar la lógica de negocio y guiar equipos en las industrias de seguros y telecomunicaciones.\n\nMe destaco resolviendo problemas complejos, impulsando la innovación y colaborando entre disciplinas para lograr objetivos ambiciosos. Mis colegas me reconocen por mi ética de trabajo incansable, atención al detalle y compromiso con el aprendizaje continuo. Ya sea construyendo sistemas backend robustos, diseñando interfaces intuitivas o optimizando flujos de trabajo, siempre doy el máximo para asegurar calidad e impacto.\n\nSi buscas a alguien que combine experiencia técnica con liderazgo, creatividad y una verdadera pasión por marcar la diferencia, ¡conectemos!"
+    "experience": "Soy un desarrollador full-stack apasionado y motivado con una sólida base en ingeniería eléctrica y un historial comprobado de obtener resultados en entornos de alta presión. Mi experiencia abarca desde liderar el desarrollo de plataformas escalables y bibliotecas de UI modulares hasta optimizar la lógica de negocio y guiar equipos en las industrias de seguros y telecomunicaciones.\n\nMe destaco resolviendo problemas complejos, impulsando la innovación y colaborando entre disciplinas para lograr objetivos ambiciosos. Mis colegas me reconocen por mi ética de trabajo incansable, atención al detalle y compromiso con el aprendizaje continuo. Ya sea construyendo sistemas backend robustos, diseñando interfaces intuitivas o optimizando flujos de trabajo, siempre doy el máximo para asegurar calidad e impacto.\n\nSi buscas a alguien que combine experiencia técnica con liderazgo, creatividad y una verdadera pasión por marcar la diferencia, ¡conectemos!",
+    "professionalSummary": "Resumen Profesional",
+    "viewCode": "Ver Código",
+    "liveDemo": "Demo en Vivo",
+    "letsBuildTogether": "Construyamos Algo Increíble Juntos",
+    "readyToDiscuss": "¿Listo para discutir tu próximo proyecto u oportunidad?",
+    "getInTouch": "Ponte en Contacto"
   },
   "skills": {
     "title": "Experiencia Técnica",
@@ -281,15 +383,7 @@
           {
             "name": "DevOps y Herramientas",
             "level": 80,
-            "technologies": [
-              "Git",
-              "Docker",
-              "AWS",
-              "Vercel",
-              "Jest",
-              "Vitest",
-              "Storybook"
-            ]
+            "technologies": ["Git", "Docker", "AWS", "Vercel", "Jest", "Vitest"]
           },
           {
             "name": "Diseño y UX",
@@ -299,7 +393,8 @@
               "Adobe Creative Suite",
               "Framer Motion",
               "Investigación de Usuario",
-              "Prototipado"
+              "Prototipado",
+              "Storybook"
             ]
           }
         ]
@@ -338,6 +433,7 @@
     "links": [
       { "label": "Inicio", "href": "/" },
       { "label": "Blog", "href": "/blog" },
+      { "label": "Carrera", "href": "/career" },
       { "label": "Contacto", "href": "/contact" },
       { "label": "Currículum", "href": "/resume" }
     ],

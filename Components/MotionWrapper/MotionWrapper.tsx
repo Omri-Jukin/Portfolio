@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 import { MotionWrapperProps, animationVariants } from "./MotionWrapper.type";
 
 export default function MotionWrapper({
@@ -8,18 +9,21 @@ export default function MotionWrapper({
   variant = "fadeIn",
   duration = 0.6,
   delay = 0,
-  once = true,
   className,
   style,
   custom,
 }: MotionWrapperProps) {
+  const [mounted, setMounted] = useState(false);
   const variants = custom || animationVariants[variant];
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <motion.div
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once, margin: "-100px" }}
+      animate={mounted ? "visible" : "hidden"}
       className={className}
       variants={variants}
       transition={{

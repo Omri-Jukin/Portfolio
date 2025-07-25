@@ -21,10 +21,42 @@
     "exploreButton": "Explorer le travail",
     "aboutButton": "À propos de moi"
   },
+  "scrollGaps": {
+    "heroAbout": {
+      "text": "Découvrir le chemin à venir..."
+    },
+    "aboutQA": {
+      "text": "Construire des ponts entre idées et exécution"
+    },
+    "qaServices": {
+      "text": "Tournant à travers la stack technologique"
+    },
+    "servicesProjects": {
+      "text": "Où la vision rencontre la réalité"
+    },
+    "servicesCareer": {
+      "text": "Explorer la croissance professionnelle et l'expérience"
+    },
+    "careerProjects": {
+      "text": "De l'expérience à l'innovation"
+    },
+    "projectsContact": {
+      "text": "Prêt à créer quelque chose d'incroyable ensemble ?"
+    }
+  },
   "about": {
     "title": "Qui Je Suis",
     "subtitle": "EXPLOREZ MA BOÎTE À OUTILS CRÉATIVE",
     "description": "Je suis un développeur et designer passionné qui croit que les grandes expériences numériques naissent de la parfaite fusion entre expertise technique et vision créative. Avec des années d'expérience dans la création d'applications web, j'ai appris que les meilleures solutions sont celles qui non seulement fonctionnent parfaitement, mais qui ravissent également les utilisateurs à chaque interaction.",
+    "mySkills": "Mes Compétences",
+    "skillDetailsTitle": "Détails des Compétences",
+    "experience": "Expérience:",
+    "years": "Années:",
+    "technologies": "Technologies:",
+    "examples": "Exemples:",
+    "readyToWork": "Prêt à Travailler Ensemble ?",
+    "letsDiscuss": "Discutons de la façon dont mes compétences et mon expérience peuvent aider à donner vie à votre projet.",
+    "cta": "Voir Mon CV",
     "skills": {
       "codeConjurer": "SORCIER DU CODE",
       "brandArchitect": "ARCHITECTE DE MARQUE",
@@ -34,7 +66,7 @@
       "codeConjurer": {
         "title": "SORCIER DU CODE",
         "description": "Transformer des problèmes complexes en solutions élégantes et évolutives grâce à un code propre et une architecture innovante.",
-        "experience": "Expert",
+        "experience": "Avancé",
         "technologies": [
           "TypeScript",
           "JavaScript",
@@ -169,6 +201,11 @@
         "title": "Clothest",
         "description": "Système de gestion de garde-robe avec recommandations personnalisées et suivi d'inventaire. Construit avec React, Express.js et MongoDB.",
         "link": "https://github.com/Omri-Jukin/Clothest"
+      },
+      {
+        "title": "Microservices Manager",
+        "description": "Outil CLI complet pour gérer un écosystème de microservices. Fonctionnalités de gestion unifiée des services, workflows automatisés, opérations inter-services et outils de développement. Construit avec TypeScript, Node.js et architecture CLI moderne.",
+        "link": "https://github.com/ClipWhisperer/Utils"
       }
     ]
   },
@@ -178,19 +215,78 @@
     "description": "Je suis toujours excité de discuter de nouvelles opportunités, collaborations ou simplement de discuter de technologie. Envoyez-moi un message et créons quelque chose d'incroyable ensemble.",
     "button": "Commencer une conversation",
     "form": {
+      "title": "Entrez en Contact",
+      "description": "Vous avez un projet en tête ? Discutons de la façon dont nous pouvons donner vie à vos idées. Remplissez le formulaire ci-dessous et je vous répondrai dès que possible.",
       "name": "Votre Nom",
       "email": "Votre Email",
+      "phone": "Votre Téléphone",
+      "subject": "Sujet",
       "message": "Votre Message",
-      "sendButton": "Envoyer le Message",
+      "submit": "Envoyer le Message",
       "sending": "Envoi en cours...",
       "success": "Message envoyé avec succès !",
       "error": "Quelque chose s'est mal passé. Veuillez réessayer."
+    },
+    "info": {
+      "title": "Informations de Contact",
+      "email": "Email",
+      "emailValue": "omrijukin@gmail.com",
+      "phone": "Téléphone",
+      "phoneValue": "+972 52-334-4064",
+      "timezone": "Fuseau Horaire",
+      "timezoneValue": "GMT+2 (Israël)",
+      "location": "Localisation",
+      "locationValue": "Israël"
+    },
+    "social": {
+      "title": "Connectez-vous sur les Réseaux Sociaux",
+      "email": {
+        "title": "Email",
+        "username": "omrijukin@gmail.com",
+        "button": "Connectons-nous !"
+      },
+      "phone": {
+        "title": "Téléphone",
+        "username": "+972 52-334-4064",
+        "button": "Appelez-moi !"
+      },
+      "github": {
+        "title": "GitHub",
+        "username": "@Omri-Jukin",
+        "button": "Se Connecter"
+      },
+      "linkedin": {
+        "title": "LinkedIn",
+        "username": "@omri-jukin",
+        "button": "Se Connecter"
+      },
+      "whatsapp": {
+        "title": "WhatsApp",
+        "username": "+972523344064",
+        "button": "Se Connecter"
+      },
+      "telegram": {
+        "title": "Telegram",
+        "username": "@Agent_OJ",
+        "button": "Se Connecter"
+      }
+    },
+    "additional": {
+      "title": "Informations Supplémentaires",
+      "website": "Site Web: Site Web Personnel",
+      "timezone": "Fuseau Horaire: Asia/Jérusalem",
+      "citizenship": "Nationalité: Israélienne"
     }
   },
   "career": {
     "title": "Carrière",
+    "subtitle": "Mon parcours professionnel et expérience",
     "description": "Mon parcours professionnel",
     "experience": "Expérience pratique en développement full-stack, gestion d'équipes et amélioration de processus dans des entreprises leaders de technologie et d'assurance.",
+    "keyAchievements": "Réalisations Clés et Responsabilités",
+    "interestedInLearning": "Intéressé à En Savoir Plus ?",
+    "checkOutResume": "Consultez mon CV détaillé ou contactez-moi pour discuter d'opportunités et de collaborations.",
+    "viewResume": "Voir Mon CV",
     "experiences": [
       {
         "role": "Développeur Full Stack",
@@ -243,7 +339,13 @@
     "title": "CV",
     "description": "Mon expérience professionnelle et compétences",
     "networkingSummary": "Téléchargez mon CV pour en savoir plus sur mon parcours",
-    "experience": "Je suis un développeur full-stack passionné et motivé avec une solide base en ingénierie électrique et un historique prouvé d'obtention de résultats dans des environnements à haute pression. Mon expérience s'étend de la direction du développement de plateformes évolutives et de bibliothèques UI modulaires à l'optimisation de la logique métier et à la guidance d'équipes dans les industries de l'assurance et des télécommunications.\n\nJe me distingue en résolvant des problèmes complexes, en stimulant l'innovation et en collaborant entre disciplines pour atteindre des objectifs ambitieux. Mes collègues me reconnaissent pour mon éthique de travail infatigable, mon attention aux détails et mon engagement envers l'apprentissage continu. Que ce soit en construisant des systèmes backend robustes, en concevant des interfaces intuitives ou en optimisant des flux de travail, je donne toujours le maximum pour assurer qualité et impact.\n\nSi vous cherchez quelqu'un qui combine expérience technique avec leadership, créativité et une véritable passion pour faire une différence, connectons-nous !"
+    "experience": "Je suis un développeur full-stack passionné et motivé avec une solide base en ingénierie électrique et un historique prouvé d'obtention de résultats dans des environnements à haute pression. Mon expérience s'étend de la direction du développement de plateformes évolutives et de bibliothèques UI modulaires à l'optimisation de la logique métier et à la guidance d'équipes dans les industries de l'assurance et des télécommunications.\n\nJe me distingue en résolvant des problèmes complexes, en stimulant l'innovation et en collaborant entre disciplines pour atteindre des objectifs ambitieux. Mes collègues me reconnaissent pour mon éthique de travail infatigable, mon attention aux détails et mon engagement envers l'apprentissage continu. Que ce soit en construisant des systèmes backend robustes, en concevant des interfaces intuitives ou en optimisant des flux de travail, je donne toujours le maximum pour assurer qualité et impact.\n\nSi vous cherchez quelqu'un qui combine expérience technique avec leadership, créativité et une véritable passion pour faire une différence, connectons-nous !",
+    "professionalSummary": "Résumé Professionnel",
+    "viewCode": "Voir le Code",
+    "liveDemo": "Démo en Direct",
+    "letsBuildTogether": "Construisons Quelque Chose d'Incroyable Ensemble",
+    "readyToDiscuss": "Prêt à discuter de votre prochain projet ou opportunité ?",
+    "getInTouch": "Entrez en Contact"
   },
   "skills": {
     "title": "Expérience Technique",
@@ -281,15 +383,7 @@
           {
             "name": "DevOps et Outils",
             "level": 80,
-            "technologies": [
-              "Git",
-              "Docker",
-              "AWS",
-              "Vercel",
-              "Jest",
-              "Vitest",
-              "Storybook"
-            ]
+            "technologies": ["Git", "Docker", "AWS", "Vercel", "Jest", "Vitest"]
           },
           {
             "name": "Design et UX",
@@ -299,7 +393,8 @@
               "Adobe Creative Suite",
               "Framer Motion",
               "Recherche Utilisateur",
-              "Prototypage"
+              "Prototypage",
+              "Storybook"
             ]
           }
         ]
@@ -338,6 +433,7 @@
     "links": [
       { "label": "Accueil", "href": "/" },
       { "label": "Blog", "href": "/blog" },
+      { "label": "Carrière", "href": "/career" },
       { "label": "Contact", "href": "/contact" },
       { "label": "CV", "href": "/resume" }
     ],

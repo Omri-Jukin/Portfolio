@@ -20,6 +20,7 @@ export { default as Hero } from "./Hero";
 export { default as About } from "./About";
 export { default as QA } from "./QA";
 export { default as Services } from "./Services";
+export { default as Career } from "./Career";
 export { default as Projects } from "./Projects";
 export { default as Contact } from "./Contact";
 
@@ -56,5 +57,6 @@ export type { HeroProps, HeroData } from "./Hero";
 export type { AboutProps, Skill, SkillDetail } from "./About";
 export type { QAProps, QAItem } from "./QA";
 export type { ServicesProps, Service } from "./Services";
+export type { CareerProps, Experience } from "./Career";
 export type { ProjectsProps, Project } from "./Projects";
 export type { ContactProps, ContactData } from "./Contact";

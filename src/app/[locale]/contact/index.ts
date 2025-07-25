@@ -1,4 +1,4 @@
 export { default } from "./page";
-export * from "./Contact.style";
-export * from "./Contact.type";
-export * from "./Contact.const";
+export * from "./page.style";
+export * from "./page.type";
+export * from "./page.const";
