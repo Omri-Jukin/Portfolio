@@ -22,7 +22,7 @@ const AnimatedTitleContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-const LetterSpan = styled("span")(({ theme }) => ({
+const LetterSpan = styled("span")({
   display: "inline-block",
   transition: "all 0.3s ease",
   // Create stroke effect using text-shadow
@@ -43,7 +43,7 @@ const LetterSpan = styled("span")(({ theme }) => ({
     textShadow: "none",
     WebkitTextStroke: "none",
   },
-}));
+});
 
 interface AnimatedHeroTitleProps {
   text: string;
