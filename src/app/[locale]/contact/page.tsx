@@ -23,7 +23,19 @@ import {
 
 export default function ContactPage() {
   const theme = useTheme();
-  const submitContactForm = api.emails.submitContactForm.useMutation();
+  const submitContactForm = api.emails.submitContactForm.useMutation({
+    onSuccess: () => {
+      setState((prev) => ({ ...prev, isSubmitted: true, isSubmitting: false }));
+      setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
+    },
+    onError: (error) => {
+      setState((prev) => ({
+        ...prev,
+        isSubmitting: false,
+        error: error.message || "An unexpected error occurred",
+      }));
+    },
+  });
 
   // Helper function to get appropriate color based on theme mode
   const getBrandColor = (platform: keyof typeof Constants.SOCIALS_COLORS) => {
@@ -32,16 +44,6 @@ export default function ContactPage() {
       : Constants.SOCIALS_COLORS_LIGHT[platform];
   };
 
-  const handleContactSubmit = async (data: ContactFormData) => {
-    try {
-      const result = await submitContactForm.mutateAsync(data);
-      console.log("Contact form submitted successfully:", result);
-      return Promise.resolve();
-    } catch (error) {
-      console.error("Contact form submission failed:", error);
-      return Promise.reject(error);
-    }
-  };
   const t = useTranslations("contact");
   const [formData, setFormData] = useState<ContactFormData>({
     name: "",
@@ -101,24 +103,33 @@ export default function ContactPage() {
 
     setState((prev) => ({ ...prev, isSubmitting: true, error: null }));
 
-    try {
-      await handleContactSubmit(formData);
-
-      setState((prev) => ({ ...prev, isSubmitting: false, isSubmitted: true }));
-      setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
-    } catch (error) {
-      setState((prev) => ({
-        ...prev,
-        isSubmitting: false,
-        error:
-          error instanceof Error
-            ? error.message
-            : "An unexpected error occurred",
-      }));
-    }
+    // Submit the form using the mutation
+    submitContactForm.mutate(
+      {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        subject: formData.subject,
+        message: formData.message,
+      },
+      {
+        onSuccess: () => {
+          setState((prev) => ({ ...prev, isSubmitted: true }));
+        },
+        onError: (error) => {
+          setState((prev) => ({
+            ...prev,
+            error:
+              error instanceof Error
+                ? error.message
+                : "An unexpected error occurred",
+          }));
+        },
+      }
+    );
   };
 
-  const isFormDisabled = state.isSubmitting;
+  const isFormDisabled = state.isSubmitting || submitContactForm.isPending;
 
   if (state.isSubmitted) {
     return (

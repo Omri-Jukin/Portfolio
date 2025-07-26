@@ -73,7 +73,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function RootLayout({ children, params }: Props) {
   const { locale } = await params;
   const messages = await getMessages({ locale });
-  const isRTL = locale === "he";
+
+  // Define RTL locales explicitly to avoid hydration issues
+  const rtlLocales = ["he", "ar", "fa", "ur"];
+  const isRTL = rtlLocales.includes(locale);
 
   return (
     <html lang={locale} dir={isRTL ? "rtl" : "ltr"}>

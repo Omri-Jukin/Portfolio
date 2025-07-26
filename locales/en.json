@@ -3,6 +3,33 @@
     "title": "Omri Jukin",
     "description": "Full Stack Developer | Electrical Engineer | Data Management Expert"
   },
+  "login": {
+    "title": "Admin Login",
+    "subtitle": "Enter your credentials to access the admin panel",
+    "username": "Username",
+    "password": "Password",
+    "signIn": "Sign In",
+    "signingIn": "Signing in...",
+    "invalidCredentials": "Invalid credentials",
+    "loginFailed": "Login failed. Please try again.",
+    "demoCredentials": "Demo credentials: admin / admin123"
+  },
+  "register": {
+    "title": "Create Account",
+    "subtitle": "Register for an account. Your registration will be reviewed by an admin.",
+    "name": "Full Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "createAccount": "Create Account",
+    "creatingAccount": "Creating Account...",
+    "registrationSuccess": "Registration successful! Please wait for admin approval.",
+    "registrationFailed": "Registration failed. Please try again.",
+    "passwordsDontMatch": "Passwords do not match",
+    "passwordTooShort": "Password must be at least 6 characters",
+    "alreadyHaveAccount": "Already have an account?",
+    "signInHere": "Sign in here"
+  },
   "common": {
     "language": "Language",
     "home": "Home",
@@ -183,6 +210,16 @@
     "subtitle": "A glimpse into my work",
     "projects": [
       {
+        "title": "Microservices Manager",
+        "description": "Comprehensive CLI tool for managing a microservices ecosystem. Features unified service management, automated workflows, cross-service operations, and development tooling. Built with TypeScript, Node.js, and modern CLI architecture.",
+        "link": "https://github.com/ClipWhisperer/Utils"
+      },
+      {
+        "title": "Published Library",
+        "description": "Published library for managing a microservices ecosystem. Features unified service management, automated workflows, cross-service operations, and development tooling. Built with TypeScript, Node.js, and modern CLI architecture.",
+        "link": "https://www.npmjs.com/package/@clipwhisperer/common"
+      },
+      {
         "title": "Portfolio Website",
         "description": "Modern, responsive portfolio website with internationalization, dark mode, and smooth animations. Built with Next.js, TypeScript, Material-UI, and Framer Motion.",
         "link": "https://github.com/Omri-Jukin/Portfolio"
@@ -201,11 +238,6 @@
         "title": "Clothest",
         "description": "Wardrobe management system with personalized recommendations and inventory tracking. Built with React, Express.js, and MongoDB.",
         "link": "https://github.com/Omri-Jukin/Clothest"
-      },
-      {
-        "title": "Microservices Manager",
-        "description": "Comprehensive CLI tool for managing a microservices ecosystem. Features unified service management, automated workflows, cross-service operations, and development tooling. Built with TypeScript, Node.js, and modern CLI architecture.",
-        "link": "https://github.com/ClipWhisperer/Utils"
       }
     ]
   },

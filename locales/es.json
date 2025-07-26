@@ -183,29 +183,34 @@
     "subtitle": "Un vistazo a mi trabajo",
     "projects": [
       {
-        "title": "Portfolio Website",
-        "description": "Sitio web portfolio moderno y responsivo con internacionalización, modo oscuro y animaciones suaves. Construido con Next.js, TypeScript, Material-UI y Framer Motion.",
+        "title": "Gestor de Microservicios",
+        "description": "Herramienta CLI para gestionar un ecosistema de microservicios. Características de gestión de servicios unificados, flujos de trabajo automatizados, operaciones entre servicios y herramientas de desarrollo. Desarrollado con TypeScript, Node.js y arquitectura moderna de CLI.",
+        "link": "https://github.com/ClipWhisperer/Utils"
+      },
+      {
+        "title": "Biblioteca Publicada",
+        "description": "Biblioteca publicada para gestionar un ecosistema de microservicios. Características de gestión de servicios unificados, flujos de trabajo automatizados, operaciones entre servicios y herramientas de desarrollo. Desarrollado con TypeScript, Node.js y arquitectura moderna de CLI.",
+        "link": "https://www.npmjs.com/package/@clipwhisperer/common"
+      },
+      {
+        "title": "Sitio Web de Portafolio",
+        "description": "Sitio web de portafolio moderno, responsivo con internacionalización, modo oscuro y animaciones suaves. Desarrollado con Next.js, TypeScript, Material-UI y Framer Motion.",
         "link": "https://github.com/Omri-Jukin/Portfolio"
       },
       {
         "title": "ClipWhisperer",
-        "description": "Plataforma de microservicios para el procesamiento automático de videos y creación de contenido. Características de narración automatizada con IA, renderizado de videos y flujos de trabajo orquestados. Construido con TypeScript, Node.js y arquitectura de microservicios moderna.",
+        "description": "Plataforma de microservicios para procesamiento de video automatizado y creación de contenido. Características de narración impulsada por IA, renderizado de video y flujos de trabajo orquestados. Desarrollado con TypeScript, Node.js y arquitectura moderna de microservicios.",
         "link": "https://github.com/ClipWhisperer"
       },
       {
         "title": "Snow HQ",
-        "description": "Sistema CRM de nivel empresarial con análisis en tiempo real, flujos de trabajo automatizados y capacidades avanzadas de reportes. Construido con Next.js, tRPC, Drizzle ORM y PostgreSQL.",
+        "description": "Sistema CRM de nivel empresarial con análisis en tiempo real, flujos de trabajo automatizados y capacidades avanzadas de reportes. Desarrollado con Next.js, tRPC, Drizzle ORM y PostgreSQL.",
         "link": "https://github.com/Omri-Jukin/Snow"
       },
       {
         "title": "Clothest",
-        "description": "Sistema de gestión de guardarropa con recomendaciones personalizadas y seguimiento de inventario. Construido con React, Express.js y MongoDB.",
+        "description": "Sistema de gestión de guardarropa con recomendaciones personalizadas y seguimiento de inventario. Desarrollado con React, Express.js y MongoDB.",
         "link": "https://github.com/Omri-Jukin/Clothest"
-      },
-      {
-        "title": "Microservices Manager",
-        "description": "Herramienta CLI integral para gestionar un ecosistema de microservicios. Características de gestión unificada de servicios, flujos de trabajo automatizados, operaciones entre servicios y herramientas de desarrollo. Construido con TypeScript, Node.js y arquitectura CLI moderna.",
-        "link": "https://github.com/ClipWhisperer/Utils"
       }
     ]
   },

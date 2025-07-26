@@ -45,11 +45,19 @@ export class EmailService {
       process.env.ADMIN_EMAIL || "omrijukin@gmail.com"
     );
 
+    // Validate required environment variables
+    if (!process.env.AWS_ACCESS_KEY_ID) {
+      throw new Error("AWS_ACCESS_KEY_ID environment variable is required");
+    }
+    if (!process.env.AWS_SECRET_ACCESS_KEY) {
+      throw new Error("AWS_SECRET_ACCESS_KEY environment variable is required");
+    }
+
     this.sesClient = new SESClient({
       region: process.env.AWS_REGION || "us-east-1",
       credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
       },
     });
 
@@ -123,10 +131,34 @@ export class EmailService {
         console.error("- AWS Error code:", (error as any).code);
       }
 
+      // Provide more specific error messages for common SES issues
+      let errorMessage = "Unknown error occurred";
+
+      if (error instanceof Error) {
+        if (error.message.includes("MessageRejected")) {
+          errorMessage =
+            "Email rejected by SES. Please check if the sender email is verified.";
+        } else if (error.message.includes("MailFromDomainNotVerified")) {
+          errorMessage =
+            "Sender domain not verified in SES. Please verify your domain.";
+        } else if (error.message.includes("MessageTooLarge")) {
+          errorMessage = "Email message is too large.";
+        } else if (error.message.includes("ConfigurationSetDoesNotExist")) {
+          errorMessage = "SES configuration set does not exist.";
+        } else if (error.message.includes("InvalidParameterValue")) {
+          errorMessage = "Invalid email parameters provided.";
+        } else if (error.message.includes("AccountSendingPausedException")) {
+          errorMessage = "SES sending is paused for this account.";
+        } else if (error.message.includes("SendingPausedException")) {
+          errorMessage = "SES sending is paused for this configuration set.";
+        } else {
+          errorMessage = error.message;
+        }
+      }
+
       return {
         success: false,
-        error:
-          error instanceof Error ? error.message : "Unknown error occurred",
+        error: errorMessage,
       };
     }
   }

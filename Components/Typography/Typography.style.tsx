@@ -26,14 +26,14 @@ export const StyledTypography = styled(Typography)<TypographyProps>(
   }
 );
 
-export const GooeyText = styled(Typography)(({ theme }) => ({
+export const GooeyText = styled(Typography)(() => ({
   fontSize: "1.5rem",
   fontWeight: 700,
-  color: theme.palette.text.primary,
+  color: "inherit",
   textAlign: "center",
 }));
 
-export const MarqueeText = styled(Box)(({ theme }) => ({
+export const MarqueeText = styled(Box)(() => ({
   position: "relative",
   width: "100%",
   height: "2em",

@@ -11,9 +11,12 @@ import {
   CircularProgress,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import DataGrid from "~/DataGrid/DataGrid";
 
 export default function AdminDashboard() {
+  const router = useRouter();
   const [testEmail, setTestEmail] = useState("");
   const [testResult, setTestResult] = useState<{
     success?: boolean;
@@ -26,6 +29,29 @@ export default function AdminDashboard() {
       sentLast24Hours?: number;
     };
   } | null>(null);
+
+  // Check authentication using tRPC
+  const { data: userData, error: authError } = api.auth.me.useQuery(undefined, {
+    retry: false,
+  });
+
+  // Handle authentication error
+  useEffect(() => {
+    if (authError) {
+      console.error("Authentication error:", authError);
+      router.push("/login");
+    }
+  }, [authError, router]);
+
+  const logoutMutation = api.auth.logout.useMutation({
+    onSuccess: () => {
+      router.push("/login");
+    },
+  });
+
+  const handleLogout = () => {
+    logoutMutation.mutate();
+  };
 
   const emailStatus = api.emails.getEmailServiceStatus.useQuery();
   const testSESConnectivity = api.emails.testSESConnectivity.useMutation();
@@ -60,11 +86,56 @@ export default function AdminDashboard() {
     }
   };
 
+  // Show loading while checking authentication
+  if (!userData && !authError) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
-    <Box sx={{ p: 3, maxWidth: 800, mx: "auto" }}>
-      <Typography variant="h4" gutterBottom>
-        Admin Dashboard
-      </Typography>
+    <Box sx={{ p: 3, maxWidth: 1200, mx: "auto" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 3,
+        }}
+      >
+        <Typography variant="h4">Admin Dashboard</Typography>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Typography variant="body2" color="text.secondary">
+            Welcome, {userData?.user.name}
+          </Typography>
+          <Button
+            variant="outlined"
+            onClick={handleLogout}
+            disabled={logoutMutation.isPending}
+          >
+            {logoutMutation.isPending ? "Logging out..." : "Logout"}
+          </Button>
+        </Box>
+      </Box>
+
+      {/* Pending Users Management */}
+      <Card sx={{ mb: 3 }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            Pending User Approvals
+          </Typography>
+          <DataGrid rows={[]} columns={[]} />
+        </CardContent>
+      </Card>
 
       {/* Email Service Status */}
       <Card sx={{ mb: 3 }}>

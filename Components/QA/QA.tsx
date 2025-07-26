@@ -1,4 +1,3 @@
-import { Typography } from "@mui/material";
 import { useTranslations } from "next-intl";
 import MotionWrapper from "../MotionWrapper/MotionWrapper";
 import {

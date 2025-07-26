@@ -14,6 +14,7 @@ export { default as ScrollingSections } from "./ScrollingSections";
 export { default as SkillShowcase } from "./SkillShowcase";
 export { default as TagChip } from "./TagChip";
 export { default as Typography } from "./Typography";
+export { default as DataGrid } from "./DataGrid";
 
 // New section components
 export { default as Hero } from "./Hero";
@@ -51,6 +52,7 @@ export type {
 } from "./SkillShowcase";
 export type { TagChipProps } from "./TagChip";
 export type { TypographyProps } from "./Typography";
+export type { DataGridProps, DataGridAction } from "./DataGrid";
 
 // New section type exports
 export type { HeroProps, HeroData } from "./Hero";

@@ -1,7 +1,6 @@
-import { Box, Link } from "@mui/material";
 import { useTranslations } from "next-intl";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import LaunchIcon from "@mui/icons-material/Launch";
+import { Box, Link } from "@mui/material";
+import { GitHub as GitHubIcon } from "@mui/icons-material";
 import MotionWrapper from "../MotionWrapper/MotionWrapper";
 import {
   ScrollingSectionTitle,

@@ -183,8 +183,18 @@
     "subtitle": "Un aperçu de mon travail",
     "projects": [
       {
-        "title": "Portfolio Website",
-        "description": "Site web portfolio moderne et responsive avec internationalisation, mode sombre et animations fluides. Construit avec Next.js, TypeScript, Material-UI et Framer Motion.",
+        "title": "Gestionnaire de Microservices",
+        "description": "Outil CLI complet pour gérer un écosystème de microservices. Fonctionnalités de gestion unifiée des services, workflows automatisés, opérations inter-services et outils de développement. Construit avec TypeScript, Node.js et architecture CLI moderne.",
+        "link": "https://github.com/ClipWhisperer/Utils"
+      },
+      {
+        "title": "Bibliothèque Publiée",
+        "description": "Bibliothèque publiée pour gérer un écosystème de microservices. Fonctionnalités de gestion unifiée des services, workflows automatisés, opérations inter-services et outils de développement. Construit avec TypeScript, Node.js et architecture CLI moderne.",
+        "link": "https://www.npmjs.com/package/@clipwhisperer/common"
+      },
+      {
+        "title": "Site Web de Portfolio",
+        "description": "Site web de portfolio moderne et responsive avec internationalisation, mode sombre et animations fluides. Construit avec Next.js, TypeScript, Material-UI et Framer Motion.",
         "link": "https://github.com/Omri-Jukin/Portfolio"
       },
       {
@@ -201,11 +211,6 @@
         "title": "Clothest",
         "description": "Système de gestion de garde-robe avec recommandations personnalisées et suivi d'inventaire. Construit avec React, Express.js et MongoDB.",
         "link": "https://github.com/Omri-Jukin/Clothest"
-      },
-      {
-        "title": "Microservices Manager",
-        "description": "Outil CLI complet pour gérer un écosystème de microservices. Fonctionnalités de gestion unifiée des services, workflows automatisés, opérations inter-services et outils de développement. Construit avec TypeScript, Node.js et architecture CLI moderne.",
-        "link": "https://github.com/ClipWhisperer/Utils"
       }
     ]
   },
