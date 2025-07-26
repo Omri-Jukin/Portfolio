@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "../globals.css";
 import { NextIntlClientProvider } from "next-intl";
-import { geistSans, geistMono } from "#/lib/fonts";
+import { bonaNovaSC, bonaNovaSCMono } from "$/fonts";
 import ClientLayout from "&/ClientLayout/ClientLayout";
 import { getMessages, getTranslations } from "next-intl/server";
 import StructuredData from "./structured-data";
@@ -20,11 +20,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: t("description"),
     keywords: [
       "full stack developer",
+      "software engineer",
+      "software developer",
+      "software architect",
       "web development",
-      "React",
-      "Next.js",
-      "TypeScript",
+      "web developer",
+      "react developer",
+      "next.js developer",
+      "typescript developer",
+      "javascript developer",
+      "html developer",
+      "css developer",
+      "tailwind developer",
+      "node.js developer",
+      "express developer",
+      "mongodb developer",
+      "mysql developer",
+      "postgresql developer",
+      "python developer",
+      "java developer",
+      "c# developer",
       "portfolio",
+      "omri jukin",
+      "omri jukin portfolio",
+      "omri jukin full stack developer",
+      "omri jukin web developer",
+      "omri jukin react developer",
+      "omri jukin next.js developer",
+      "omri jukin typescript developer",
     ],
     authors: [{ name: "Omri Jukin" }],
     creator: "Omri Jukin",
@@ -84,7 +107,7 @@ export default async function RootLayout({ children, params }: Props) {
         <StructuredData />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${bonaNovaSC.variable} ${bonaNovaSCMono.variable} antialiased`}
       >
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ClientLayout>{children}</ClientLayout>

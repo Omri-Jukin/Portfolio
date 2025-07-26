@@ -1,10 +1,9 @@
 import { ArrowForward as ArrowForwardIcon } from "@mui/icons-material";
 import { useTranslations } from "next-intl";
 import MotionWrapper from "../MotionWrapper/MotionWrapper";
-import AnimatedText from "../AnimatedText/AnimatedText";
+import AnimatedHeroTitle from "./AnimatedHeroTitle";
 import {
   HeroContainer,
-  HeroTitle,
   HeroSubtitle,
   HeroButtonsContainer,
   HeroButton,
@@ -22,11 +21,7 @@ const Hero: React.FC<HeroProps> = ({ onExploreClick, onAboutClick }) => {
         duration={HERO_CONSTANTS.ANIMATION.TITLE_DURATION}
         delay={HERO_CONSTANTS.ANIMATION.TITLE_DELAY}
       >
-        <HeroTitle id="hero-title">
-          <AnimatedText type="scaleUp" length={t("title").length} scale={1.2}>
-            {t("title")}
-          </AnimatedText>
-        </HeroTitle>
+        <AnimatedHeroTitle text={t("title")} className="hero-title" />
       </MotionWrapper>
 
       <MotionWrapper

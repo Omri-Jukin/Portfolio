@@ -1,11 +1,30 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 
-export const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+export const bonaNovaSC = localFont({
+  src: [
+    {
+      path: "../public/Bona_Nova_SC/BonaNovaSC-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/Bona_Nova_SC/BonaNovaSC-Bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../public/Bona_Nova_SC/BonaNovaSC-Italic.ttf",
+      weight: "400",
+      style: "italic",
+    },
+  ],
+  variable: "--font-bona-nova-sc",
+  display: "swap",
 });
 
-export const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+// Keep the mono font for code elements
+export const bonaNovaSCMono = localFont({
+  src: "../public/Bona_Nova_SC/BonaNovaSC-Regular.ttf",
+  variable: "--font-bona-nova-sc-mono",
+  display: "swap",
 });

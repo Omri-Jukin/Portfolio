@@ -14,6 +14,8 @@ declare module "@mui/material/styles" {
       hover: string;
       shadow: string;
     };
+    paperLight: string;
+    paperDark: string;
   }
 
   // allow configuration using `createTheme`
@@ -30,6 +32,8 @@ declare module "@mui/material/styles" {
       hover?: string;
       shadow?: string;
     };
+    paperLight?: string;
+    paperDark?: string;
   }
   // Palette and PaletteOptions augmentation as you already have
   interface Palette {
@@ -204,8 +208,10 @@ export const baseTheme = createTheme({
     hover: "0.2s ease-in-out normal",
     shadow: "0 4px 12px rgba(0, 0, 0, 0.15) inset normal",
   },
+  paperLight: "#fafafa",
+  paperDark: "#2C3E50",
   typography: {
-    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: 'var(--font-bona-nova-sc), "Bona Nova SC", serif',
     h1: {
       fontWeight: 700,
       fontSize: "2.5rem",
