@@ -1,9 +1,12 @@
+import { execSync } from "child_process";
+
 // Simple remote D1 client for development
 // This allows us to use npm run dev while still accessing the remote D1 database
 
-export async function executeRemoteD1Query(query: string) {
+export async function executeRemoteD1Query(
+  query: string
+): Promise<Record<string, string>[]> {
   try {
-    const { execSync } = require("child_process");
     const result = execSync(
       `npx wrangler d1 execute personal-website --remote --command="${query.replace(
         /"/g,
@@ -25,7 +28,7 @@ export async function executeRemoteD1Query(query: string) {
       .filter((h: string) => h);
 
     // Extract data rows
-    const dataRows: any[] = [];
+    const dataRows: Record<string, string>[] = [];
     for (let i = dataStart + 1; i < lines.length; i++) {
       const line = lines[i];
       if (line.includes("└──") || line.includes("┌──")) break;
@@ -35,7 +38,7 @@ export async function executeRemoteD1Query(query: string) {
           .map((v: string) => v.trim())
           .filter((v: string) => v);
         if (values.length === headers.length) {
-          const row: any = {};
+          const row: Record<string, string> = {};
           headers.forEach((header: string, index: number) => {
             row[header] = values[index];
           });
@@ -59,12 +62,14 @@ export async function insertUser(userData: {
   lastName: string;
   role: string;
   status: string;
-}) {
+}): Promise<Record<string, string>[]> {
   const query = `INSERT INTO users (id, email, password, first_name, last_name, role, status, created_at) VALUES ('${userData.id}', '${userData.email}', '${userData.password}', '${userData.firstName}', '${userData.lastName}', '${userData.role}', '${userData.status}', unixepoch());`;
   return executeRemoteD1Query(query);
 }
 
-export async function findUserByEmail(email: string) {
+export async function findUserByEmail(
+  email: string
+): Promise<Record<string, string> | null> {
   const query = `SELECT * FROM users WHERE email = '${email}';`;
   const results = await executeRemoteD1Query(query);
   return results[0] || null;

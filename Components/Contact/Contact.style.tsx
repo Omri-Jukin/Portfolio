@@ -32,6 +32,11 @@ export const ContactSubtitle = styled(Typography)(({ theme }) => ({
 }));
 
 export const ContactForm = styled(Card)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  gap: theme.spacing(2),
   padding: theme.spacing(4),
   borderRadius: theme.spacing(2),
   boxShadow:
@@ -56,6 +61,8 @@ export const ContactDescription = styled(Typography)(({ theme }) => ({
 }));
 
 export const ContactButton = styled(Button)(({ theme }) => ({
+  justifyContent: "center",
+  alignItems: "center",
   borderRadius: theme.spacing(1),
   textTransform: "none",
   fontWeight: 500,

@@ -2,7 +2,20 @@ import { z } from "zod";
 import { router, procedure } from "../trpc";
 import { EmailService } from "#/backend/email/email.service";
 
-const emailService = new EmailService();
+// Lazy initialization to avoid build-time errors
+let emailService: EmailService | null = null;
+
+const getEmailService = () => {
+  if (!emailService) {
+    // Only initialize if we're in a runtime environment with AWS credentials
+    if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
+      emailService = new EmailService();
+    } else {
+      throw new Error("AWS credentials not configured for email service");
+    }
+  }
+  return emailService;
+};
 
 export const emailsRouter = router({
   // Submit contact form and send emails
@@ -27,7 +40,7 @@ export const emailsRouter = router({
       try {
         // Send notification email to admin
         const adminNotification =
-          await emailService.sendContactFormNotification(input);
+          await getEmailService().sendContactFormNotification(input);
 
         if (!adminNotification.success) {
           console.error(
@@ -38,9 +51,8 @@ export const emailsRouter = router({
         }
 
         // Send confirmation email to user
-        const userConfirmation = await emailService.sendContactFormConfirmation(
-          input
-        );
+        const userConfirmation =
+          await getEmailService().sendContactFormConfirmation(input);
 
         if (!userConfirmation.success) {
           console.error(
@@ -83,7 +95,7 @@ export const emailsRouter = router({
       }
 
       try {
-        const result = await emailService.sendTestEmail(input.toEmail);
+        const result = await getEmailService().sendTestEmail(input.toEmail);
 
         if (!result.success) {
           throw new Error(result.error || "Failed to send test email");
@@ -222,7 +234,7 @@ export const emailsRouter = router({
       }
 
       try {
-        const result = await emailService.sendEmail({
+        const result = await getEmailService().sendEmail({
           to: input.to,
           from: process.env.SES_FROM_EMAIL || "noreply@omrijukin.com",
           subject: input.subject,

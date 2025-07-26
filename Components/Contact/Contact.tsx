@@ -31,12 +31,16 @@ const Contact: React.FC<ContactProps> = ({ locale = "en", onContactClick }) => {
         duration={CONTACT_CONSTANTS.ANIMATION.FORM_DURATION}
         delay={CONTACT_CONSTANTS.ANIMATION.FORM_DELAY}
       >
-        <ContactForm>
+        <ContactForm id={CONTACT_CONSTANTS.FORM_ID}>
           <ContactTitle sx={{ mb: 3, fontSize: "1.5rem" }}>
             {t("title")}
           </ContactTitle>
           <ContactDescription>{t("description")}</ContactDescription>
-          <Link href={`/${locale}/contact`} style={{ textDecoration: "none" }}>
+          <Link
+            href={`/${locale}/contact`}
+            style={{ textDecoration: "none" }}
+            id={CONTACT_CONSTANTS.FORM_BUTTON_ID}
+          >
             <ContactButton
               endIcon={<ArrowForwardIcon />}
               onClick={onContactClick}
