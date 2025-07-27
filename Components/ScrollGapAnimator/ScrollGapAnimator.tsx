@@ -6,7 +6,6 @@ import { ScrollGapAnimatorProps } from "./ScrollGapAnimator.type";
 import { ScrollGapAnimatorStyle } from "./ScrollGapAnimator.style";
 import { ColorWorm } from "../ColorWorm/ColorWorm";
 import { ConnectionLine } from "../ConnectionLine";
-import { ParticleBridge } from "../ParticleBridge";
 import { FloatingEmojis } from "../FloatingEmojis";
 import { InnovationFlow } from "../InnovationFlow";
 import { VisionRealityBridge } from "../VisionRealityBridge";
@@ -33,7 +32,6 @@ const ScrollGapAnimator: React.FC<ScrollGapAnimatorProps> = ({
     [0.8, 1, 1, 0.8]
   );
   const y = useTransform(scrollYProgress, [0, 0.5, 1], [50, 0, -50]);
-  const progressLineScale = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   const renderGapContent = () => {
     switch (gapType) {
