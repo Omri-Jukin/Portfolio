@@ -25,10 +25,12 @@ export default function ContactPage() {
   const theme = useTheme();
   const submitContactForm = api.emails.submitContactForm.useMutation({
     onSuccess: () => {
+      console.log("Contact form submitted successfully!");
       setState((prev) => ({ ...prev, isSubmitted: true, isSubmitting: false }));
       setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
     },
     onError: (error) => {
+      console.error("Contact form submission failed:", error);
       setState((prev) => ({
         ...prev,
         isSubmitting: false,
@@ -42,6 +44,12 @@ export default function ContactPage() {
     return theme.palette.mode === "dark"
       ? Constants.SOCIALS_COLORS_DARK[platform]
       : Constants.SOCIALS_COLORS_LIGHT[platform];
+  };
+
+  const getBrandBgColor = (
+    platform: keyof typeof Constants.SOCIALS_BG_COLORS
+  ) => {
+    return Constants.SOCIALS_BG_COLORS[platform];
   };
 
   const t = useTranslations("contact");
@@ -72,11 +80,21 @@ export default function ContactPage() {
     };
 
   const validateForm = (): boolean => {
+    console.log("=== Form Validation Debug ===");
+    console.log("Current form data:", formData);
+    console.log("Name length:", formData.name.length);
+    console.log("Email:", formData.email);
+    console.log("Phone length:", formData.phone.length);
+    console.log("Subject length:", formData.subject.length);
+    console.log("Message length:", formData.message.length);
+
     try {
       contactFormSchema.parse(formData);
+      console.log("Validation passed!");
       setErrors({});
       return true;
     } catch (error) {
+      console.log("Validation failed with error:", error);
       if (error instanceof Error) {
         const zodError = error as {
           errors?: Array<{ path: string[]; message: string }>;
@@ -86,6 +104,7 @@ export default function ContactPage() {
         zodError.errors?.forEach((err: { path: string[]; message: string }) => {
           const field = err.path[0] as keyof ContactFormData;
           newErrors[field] = err.message;
+          console.log(`Field "${field}" failed validation:`, err.message);
         });
 
         setErrors(newErrors);
@@ -96,12 +115,25 @@ export default function ContactPage() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    console.log("=== Form Submit Handler Called ===");
 
     if (!validateForm()) {
+      console.log("Form validation failed");
       return;
     }
 
+    console.log("Form validation passed, submitting...");
+    console.log("Form data:", {
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      subject: formData.subject,
+      messageLength: formData.message.length,
+    });
+
     setState((prev) => ({ ...prev, isSubmitting: true, error: null }));
+
+    console.log("Calling submitContactForm.mutate...");
 
     // Submit the form using the mutation
     submitContactForm.mutate(
@@ -114,9 +146,11 @@ export default function ContactPage() {
       },
       {
         onSuccess: () => {
+          console.log("Mutation onSuccess callback called");
           setState((prev) => ({ ...prev, isSubmitted: true }));
         },
         onError: (error) => {
+          console.error("Mutation onError callback called:", error);
           setState((prev) => ({
             ...prev,
             error:
@@ -156,7 +190,6 @@ export default function ContactPage() {
     <Common.PageContainer>
       <Styled.FormContainer>
         <Styled.FormTitle variant="h4">{t("form.title")}</Styled.FormTitle>
-
         <Styled.FormDescription variant="body1">
           {t("form.description")}
         </Styled.FormDescription>
@@ -246,6 +279,56 @@ export default function ContactPage() {
           </Styled.SubmitButton>
         </form>
 
+        {/* Direct Contact Cards */}
+        <Styled.ContactSection>
+          <Styled.ContactSectionTitle variant="h6">
+            Connect
+          </Styled.ContactSectionTitle>
+          <Styled.ContactCardsContainer>
+            {/* Email Card */}
+            <Styled.ContactCard variant="social" clickable>
+              <Styled.ContactCardIcon color={getBrandBgColor("EMAIL")}>
+                {Constants.SOCIAL_ICONS.EMAIL}
+              </Styled.ContactCardIcon>
+              <Styled.ContactCardTitle variant="h6">
+                {t("social.email.title")}
+              </Styled.ContactCardTitle>
+              <Styled.ContactCardSubtitle variant="body2"></Styled.ContactCardSubtitle>
+              <Styled.ContactCardButton
+                variant="outlined"
+                size="small"
+                brandColor={getBrandBgColor("EMAIL")}
+                onClick={() =>
+                  window.open(Constants.SOCIAL_LINKS.EMAIL, "_blank")
+                }
+              >
+                {t("social.email.button")}
+              </Styled.ContactCardButton>
+            </Styled.ContactCard>
+
+            {/* Phone Card */}
+            <Styled.ContactCard variant="social" clickable>
+              <Styled.ContactCardIcon color={getBrandBgColor("PHONE")}>
+                {Constants.SOCIAL_ICONS.PHONE}
+              </Styled.ContactCardIcon>
+              <Styled.ContactCardTitle variant="h6">
+                {t("social.phone.title")}
+              </Styled.ContactCardTitle>
+              <Styled.ContactCardSubtitle variant="body2"></Styled.ContactCardSubtitle>
+              <Styled.ContactCardButton
+                variant="outlined"
+                size="small"
+                brandColor={getBrandBgColor("PHONE")}
+                onClick={() =>
+                  window.open(Constants.SOCIAL_LINKS.PHONE, "_blank")
+                }
+              >
+                {t("social.phone.button")}
+              </Styled.ContactCardButton>
+            </Styled.ContactCard>
+          </Styled.ContactCardsContainer>
+        </Styled.ContactSection>
+
         {/* Social Media Cards */}
         <Styled.ContactSection>
           <Styled.ContactSectionTitle variant="h6">
@@ -254,7 +337,7 @@ export default function ContactPage() {
           <Styled.ContactCardsContainer>
             {/* GitHub Card */}
             <Styled.ContactCard variant="social" clickable>
-              <Styled.ContactCardIcon>
+              <Styled.ContactCardIcon color={getBrandBgColor("GITHUB")}>
                 {Constants.SOCIAL_ICONS.GITHUB}
               </Styled.ContactCardIcon>
               <Styled.ContactCardTitle variant="h6">
@@ -266,7 +349,7 @@ export default function ContactPage() {
               <Styled.ContactCardButton
                 variant="outlined"
                 size="small"
-                brandColor={getBrandColor("GITHUB")}
+                brandColor={getBrandBgColor("GITHUB")}
                 onClick={() =>
                   window.open(Constants.SOCIAL_LINKS.GITHUB, "_blank")
                 }
@@ -277,7 +360,7 @@ export default function ContactPage() {
 
             {/* LinkedIn Card */}
             <Styled.ContactCard variant="social" clickable>
-              <Styled.ContactCardIcon>
+              <Styled.ContactCardIcon color={getBrandBgColor("LINKEDIN")}>
                 {Constants.SOCIAL_ICONS.LINKEDIN}
               </Styled.ContactCardIcon>
               <Styled.ContactCardTitle variant="h6">
@@ -289,7 +372,7 @@ export default function ContactPage() {
               <Styled.ContactCardButton
                 variant="outlined"
                 size="small"
-                brandColor={getBrandColor("LINKEDIN")}
+                brandColor={getBrandBgColor("LINKEDIN")}
                 onClick={() =>
                   window.open(Constants.SOCIAL_LINKS.LINKEDIN, "_blank")
                 }
@@ -300,7 +383,7 @@ export default function ContactPage() {
 
             {/* WhatsApp Card */}
             <Styled.ContactCard variant="social" clickable>
-              <Styled.ContactCardIcon>
+              <Styled.ContactCardIcon color={getBrandBgColor("WHATSAPP")}>
                 {Constants.SOCIAL_ICONS.WHATSAPP}
               </Styled.ContactCardIcon>
               <Styled.ContactCardTitle variant="h6">
@@ -312,7 +395,7 @@ export default function ContactPage() {
               <Styled.ContactCardButton
                 variant="outlined"
                 size="small"
-                brandColor={getBrandColor("WHATSAPP")}
+                brandColor={getBrandBgColor("WHATSAPP")}
                 onClick={() =>
                   window.open(Constants.SOCIAL_LINKS.WHATSAPP, "_blank")
                 }
@@ -323,7 +406,7 @@ export default function ContactPage() {
 
             {/* Telegram Card */}
             <Styled.ContactCard variant="social" clickable>
-              <Styled.ContactCardIcon>
+              <Styled.ContactCardIcon color={getBrandBgColor("TELEGRAM")}>
                 {Constants.SOCIAL_ICONS.TELEGRAM}
               </Styled.ContactCardIcon>
               <Styled.ContactCardTitle variant="h6">
@@ -335,7 +418,7 @@ export default function ContactPage() {
               <Styled.ContactCardButton
                 variant="outlined"
                 size="small"
-                brandColor={getBrandColor("TELEGRAM")}
+                brandColor={getBrandBgColor("TELEGRAM")}
                 onClick={() =>
                   window.open(Constants.SOCIAL_LINKS.TELEGRAM, "_blank")
                 }

@@ -6,11 +6,30 @@ import { EmailService } from "#/backend/email/email.service";
 let emailService: EmailService | null = null;
 
 const getEmailService = () => {
+  // Add debugging to see what environment variables are available
+  console.log("=== Email Service Environment Debug ===");
+  console.log("NODE_ENV:", process.env.NODE_ENV);
+  console.log(
+    "AWS_ACCESS_KEY_ID:",
+    process.env.AWS_ACCESS_KEY_ID ? "SET" : "NOT SET"
+  );
+  console.log(
+    "AWS_SECRET_ACCESS_KEY:",
+    process.env.AWS_SECRET_ACCESS_KEY ? "SET" : "NOT SET"
+  );
+  console.log("AWS_REGION:", process.env.AWS_REGION);
+  console.log("SES_FROM_EMAIL:", process.env.SES_FROM_EMAIL);
+  console.log("ADMIN_EMAIL:", process.env.ADMIN_EMAIL);
+  console.log("========================================");
+
   if (!emailService) {
     // Only initialize if we're in a runtime environment with AWS credentials
     if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
+      console.log("Initializing EmailService...");
       emailService = new EmailService();
+      console.log("EmailService initialized successfully");
     } else {
+      console.error("AWS credentials not configured for email service");
       throw new Error("AWS credentials not configured for email service");
     }
   }
@@ -18,6 +37,78 @@ const getEmailService = () => {
 };
 
 export const emailsRouter = router({
+  // Public endpoint to check email service status (no auth required)
+  checkEmailServiceStatus: procedure.query(async () => {
+    console.log("=== Checking Email Service Status ===");
+
+    try {
+      // Check if required environment variables are set
+      const requiredEnvVars = [
+        "AWS_ACCESS_KEY_ID",
+        "AWS_SECRET_ACCESS_KEY",
+        "AWS_REGION",
+        "SES_FROM_EMAIL",
+      ];
+
+      const missingVars = requiredEnvVars.filter(
+        (varName) => !process.env[varName]
+      );
+
+      console.log("Environment variables check:");
+      console.log(
+        "- AWS_ACCESS_KEY_ID:",
+        process.env.AWS_ACCESS_KEY_ID ? "SET" : "NOT SET"
+      );
+      console.log(
+        "- AWS_SECRET_ACCESS_KEY:",
+        process.env.AWS_SECRET_ACCESS_KEY ? "SET" : "NOT SET"
+      );
+      console.log("- AWS_REGION:", process.env.AWS_REGION);
+      console.log("- SES_FROM_EMAIL:", process.env.SES_FROM_EMAIL);
+      console.log("- ADMIN_EMAIL:", process.env.ADMIN_EMAIL);
+
+      if (missingVars.length > 0) {
+        console.log("Missing environment variables:", missingVars);
+        return {
+          status: "error",
+          message: `Missing environment variables: ${missingVars.join(", ")}`,
+          missingVars,
+        };
+      }
+
+      // Try to initialize the email service
+      try {
+        const service = getEmailService();
+        console.log("Email service initialized successfully");
+
+        return {
+          status: "ready",
+          message: "Email service is properly configured",
+          config: {
+            region: process.env.AWS_REGION,
+            fromEmail: process.env.SES_FROM_EMAIL,
+            adminEmail: process.env.ADMIN_EMAIL || "omrijukin@gmail.com",
+          },
+        };
+      } catch (initError) {
+        console.error("Email service initialization failed:", initError);
+        return {
+          status: "error",
+          message: `Email service initialization failed: ${
+            initError instanceof Error ? initError.message : "Unknown error"
+          }`,
+        };
+      }
+    } catch (error) {
+      console.error("Email service status check failed:", error);
+      return {
+        status: "error",
+        message:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      };
+    }
+  }),
+
   // Submit contact form and send emails
   submitContactForm: procedure
     .input(
@@ -30,29 +121,45 @@ export const emailsRouter = router({
             "Please enter a valid email address"
           ),
         phone: z.string().min(1, "Phone number is required"),
-        subject: z.string().min(5, "Subject must be at least 5 characters"),
+        subject: z.string().min(3, "Subject must be at least 3 characters"), // Changed from 5 to 3
         message: z.string().min(10, "Message must be at least 10 characters"),
       })
     )
     .mutation(async (opts) => {
       const { input } = opts;
 
+      console.log("Contact form submission started with input:", {
+        name: input.name,
+        email: input.email,
+        subject: input.subject,
+        // Don't log the full message for privacy
+      });
+
       try {
+        console.log("Getting email service...");
+        const emailServiceInstance = getEmailService();
+
+        console.log("Sending admin notification...");
         // Send notification email to admin
         const adminNotification =
-          await getEmailService().sendContactFormNotification(input);
+          await emailServiceInstance.sendContactFormNotification(input);
 
         if (!adminNotification.success) {
           console.error(
             "Failed to send admin notification:",
             adminNotification.error
           );
-          throw new Error("Failed to send notification email");
+          throw new Error(
+            `Failed to send notification email: ${adminNotification.error}`
+          );
         }
 
+        console.log(
+          "Admin notification sent successfully, sending user confirmation..."
+        );
         // Send confirmation email to user
         const userConfirmation =
-          await getEmailService().sendContactFormConfirmation(input);
+          await emailServiceInstance.sendContactFormConfirmation(input);
 
         if (!userConfirmation.success) {
           console.error(
@@ -63,6 +170,7 @@ export const emailsRouter = router({
           // Just log the issue
         }
 
+        console.log("Contact form submission completed successfully");
         return {
           success: true,
           adminMessageId: adminNotification.messageId,
@@ -73,7 +181,9 @@ export const emailsRouter = router({
       } catch (error) {
         console.error("Contact form submission failed:", error);
         throw new Error(
-          "Failed to submit contact form. Please try again later."
+          `Failed to submit contact form: ${
+            error instanceof Error ? error.message : "Unknown error"
+          }`
         );
       }
     }),

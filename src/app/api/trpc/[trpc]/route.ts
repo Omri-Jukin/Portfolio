@@ -3,7 +3,12 @@ import { appRouter } from "../../../server/router";
 import { createContext } from "../../../server/context";
 
 const handler = (req: Request) => {
-  console.log(`incoming request ${req.url}`);
+  console.log(`=== tRPC API Request ===`);
+  console.log(`URL: ${req.url}`);
+  console.log(`Method: ${req.method}`);
+  console.log(`Headers:`, Object.fromEntries(req.headers.entries()));
+  console.log(`========================`);
+
   return fetchRequestHandler({
     endpoint: "/api/trpc",
     req,
@@ -12,4 +17,4 @@ const handler = (req: Request) => {
   });
 };
 
-export { handler as GET, handler as POST }; 
+export { handler as GET, handler as POST };

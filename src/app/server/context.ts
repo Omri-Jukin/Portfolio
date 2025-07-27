@@ -4,6 +4,13 @@ import { D1Database } from "@cloudflare/workers-types";
 import jwt from "jsonwebtoken";
 import { getUserById } from "../../../lib/db/users/users";
 
+// Load environment variables
+import dotenv from "dotenv";
+
+// Load .env.local first, then .env, then .env.example
+dotenv.config({ path: ".env.local" });
+dotenv.config({ path: ".env" });
+
 // Type for Cloudflare environment
 interface CloudflareEnv extends D1Database {
   DB: D1Database; // D1 Database

@@ -1,3 +1,11 @@
+// Load environment variables at the top
+import dotenv from "dotenv";
+
+// Load .env.local first, then .env, then .env.example
+dotenv.config({ path: ".env.local" });
+dotenv.config({ path: ".env" });
+dotenv.config({ path: ".env.example" });
+
 import { router } from "./trpc";
 import { blogRouter } from "./routers/blog";
 import { contactRouter } from "./routers/contact";
