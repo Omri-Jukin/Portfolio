@@ -7,6 +7,8 @@ import {
   updateUser,
   deleteUser,
 } from "../../../../lib/db/users/users";
+import { User } from "#/lib/db/users/users.type";
+import { TRPCError } from "@trpc/server";
 
 export const usersRouter = router({
   // Authentication
@@ -22,10 +24,30 @@ export const usersRouter = router({
       const { input } = opts;
       if (!db) throw new Error("Database not available");
 
-      const user = await loginUser(input);
+      const userResult = await loginUser(input);
 
-      if (!user) {
+      // Check if userResult is an error object or null
+      if (
+        !userResult ||
+        (typeof userResult === "object" &&
+          "success" in userResult &&
+          !userResult.success)
+      ) {
         throw new Error("Invalid email or password");
+      }
+
+      // At this point, userResult is guaranteed to be a user object
+      const user = userResult as User;
+
+      // Check if user is approved
+      if (user.status !== "approved") {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message:
+            user.status === "pending"
+              ? "Your account is pending approval. Please wait for admin approval."
+              : "Your account has been rejected. Please contact support.",
+        });
       }
 
       // In a real app, generate and return JWT token here

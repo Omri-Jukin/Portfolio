@@ -106,7 +106,7 @@ export const SOCIALS_COLORS_LIGHT = {
   WHATSAPP: "#25D366", // WhatsApp green
   TELEGRAM: "#0088CC", // Telegram blue
   LINKEDIN: "#0077B5", // LinkedIn blue
-  GITHUB: "#FFFFFF", // GitHub white for better contrast
+  GITHUB: "#181717", // GitHub white for better contrast
   EMAIL: "#EA4335", // Gmail red
   PHONE: "#34A853", // Google green for phone
 } as const;
@@ -126,7 +126,7 @@ export const SOCIALS_BG_COLORS = {
   WHATSAPP: "#25D366", // WhatsApp green background
   TELEGRAM: "#0088CC", // Telegram blue background
   LINKEDIN: "#0077B5", // LinkedIn blue background
-  GITHUB: "#333333", // GitHub dark background with white icon
+  GITHUB: "#181717", // GitHub dark background with white icon
   EMAIL: "#EA4335", // Gmail red background
   PHONE: "#34A853", // Google green background
 } as const;

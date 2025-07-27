@@ -59,21 +59,41 @@ export async function createContext({
       };
 
       // Fetch user from database to ensure they still exist and have correct role
-      if (db) {
-        try {
-          const user = await getUserById(decoded.userId);
-          if (user && user.role === "admin") {
-            return {
+      try {
+        let user;
+        if (db) {
+          // Try with database client first
+          user = await getUserById(decoded.userId);
+        } else if (process.env.NODE_ENV === "development") {
+          // Fallback to local D1 in development
+          const { findUserByIdLocal } = await import(
+            "../../../lib/db/remote-client"
+          );
+          user = await findUserByIdLocal(decoded.userId);
+          if (user) {
+            // Map the local user data to match the expected format
+            user = {
               id: user.id,
               email: user.email,
-              name: `${user.firstName} ${user.lastName}`,
+              firstName: user.first_name,
+              lastName: user.last_name,
               role: user.role,
+              status: user.status,
             };
           }
-        } catch (error) {
-          console.error("Failed to fetch user from database:", error);
-          return null;
         }
+
+        if (user && user.role === "admin") {
+          return {
+            id: user.id,
+            email: user.email,
+            name: `${user.firstName} ${user.lastName}`,
+            role: user.role,
+          };
+        }
+      } catch (error) {
+        console.error("Failed to fetch user from database:", error);
+        return null;
       }
 
       return null;

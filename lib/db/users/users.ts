@@ -35,9 +35,6 @@ export type UpdateUserInput = {
 
 export const createUser = async (input: CreateUserInput) => {
   if (!dbClient) {
-    console.error("DB CLIENT IS NULL! Check your Wrangler/D1 setup.");
-    console.log("Attempting to use remote D1 database...");
-
     // In development, we can use remote D1 commands
     if (process.env.NODE_ENV === "development") {
       try {
@@ -71,7 +68,6 @@ export const createUser = async (input: CreateUserInput) => {
           createdAt: new Date(),
         };
       } catch (error) {
-        console.error("Remote D1 createUser failed:", error);
         throw error;
       }
     }
@@ -113,16 +109,40 @@ export const createUser = async (input: CreateUserInput) => {
 
 export const loginUser = async (input: LoginInput) => {
   if (!dbClient) {
-    console.log("Using remote D1 for loginUser...");
-
-    // In development, use remote D1
+    // In development, use local D1
     if (process.env.NODE_ENV === "development") {
       try {
-        const user = await findUserByEmailRemote(input.email);
-        return user;
+        const { findUserByEmailLocal } = await import("../remote-client");
+        const user = await findUserByEmailLocal(input.email);
+
+        if (!user) {
+          return {
+            success: false,
+            error: "User not found.",
+          };
+        }
+
+        // Map the local user data to match the expected format
+        const mappedUser = {
+          id: user.id,
+          email: user.email,
+          password: user.password,
+          firstName: user.first_name,
+          lastName: user.last_name,
+          role: user.role as UserRole,
+          status: user.status as UserStatus,
+          createdAt: new Date(parseInt(user.created_at) * 1000),
+          updatedAt: user.updated_at
+            ? new Date(parseInt(user.updated_at) * 1000)
+            : null,
+        };
+
+        return mappedUser;
       } catch (error) {
-        console.error("Remote D1 loginUser failed:", error);
-        return null;
+        return {
+          success: false,
+          error: (error as Error).message,
+        };
       }
     }
 
@@ -158,6 +178,30 @@ export const getUserById = async (id: string) => {
 
 export const getPendingUsers = async () => {
   if (!dbClient) {
+    // In development, use remote D1
+    if (process.env.NODE_ENV === "development") {
+      try {
+        const { getPendingUsers: getPendingUsersRemote } = await import(
+          "../remote-client"
+        );
+        const results = await getPendingUsersRemote();
+        return results.map((user) => ({
+          id: user.id,
+          email: user.email,
+          firstName: user.first_name,
+          lastName: user.last_name,
+          role: user.role as UserRole,
+          status: user.status as UserStatus,
+          createdAt: new Date(parseInt(user.created_at) * 1000),
+          updatedAt: user.updated_at
+            ? new Date(parseInt(user.updated_at) * 1000)
+            : null,
+        }));
+      } catch (error) {
+        throw error;
+      }
+    }
+
     throw new Error("Database client not available.");
   }
 
@@ -171,6 +215,19 @@ export const getPendingUsers = async () => {
 
 export const approveUser = async (id: string) => {
   if (!dbClient) {
+    // In development, use remote D1
+    if (process.env.NODE_ENV === "development") {
+      try {
+        const { approveUser: approveUserRemote } = await import(
+          "../remote-client"
+        );
+        await approveUserRemote(id);
+        return { id, status: "approved" as UserStatus };
+      } catch (error) {
+        throw error;
+      }
+    }
+
     throw new Error("Database client not available.");
   }
 

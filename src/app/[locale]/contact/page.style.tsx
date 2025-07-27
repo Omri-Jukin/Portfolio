@@ -7,14 +7,6 @@ import {
   Alert,
   Paper,
 } from "@mui/material";
-import {
-  Email as EmailIcon,
-  Phone as PhoneIcon,
-  WhatsApp as WhatsAppIcon,
-  Telegram as TelegramIcon,
-  LinkedIn as LinkedInIcon,
-  GitHub as GitHubIcon,
-} from "@mui/icons-material";
 
 export const FormContainer = styled(Paper, {
   shouldForwardProp: (prop) => prop !== "transparent",
@@ -305,54 +297,51 @@ export const ContactCardsContainer = styled(Box)(({ theme }) => ({
 }));
 
 export const ContactCard = styled(Box, {
-  shouldForwardProp: (prop) =>
-    !["variant", "clickable"].includes(prop as string),
-})<{ variant?: "info" | "social" | "additional"; clickable?: boolean }>(
-  ({ theme, variant = "info", clickable = false }) => ({
-    padding: theme.spacing(3),
-    borderRadius: theme.spacing(2),
-    backgroundColor:
+  shouldForwardProp: (prop) => !["clickable"].includes(prop as string),
+})<{ clickable?: boolean }>(({ theme, clickable = false }) => ({
+  padding: theme.spacing(3),
+  borderRadius: theme.spacing(2),
+  backgroundColor:
+    theme.palette.mode === "dark"
+      ? "rgba(255, 255, 255, 0.05)"
+      : "rgba(255, 255, 255, 0.8)",
+  border: `2px solid ${
+    theme.palette.mode === "dark"
+      ? "rgba(255, 255, 255, 0.1)"
+      : "rgba(78, 205, 196, 0.2)"
+  }`,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  gap: theme.spacing(2),
+  cursor: clickable ? "pointer" : "default",
+  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+  position: "relative",
+  overflow: "hidden",
+  "&::before": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background:
       theme.palette.mode === "dark"
-        ? "rgba(255, 255, 255, 0.05)"
-        : "rgba(255, 255, 255, 0.8)",
-    border: `2px solid ${
-      theme.palette.mode === "dark"
-        ? "rgba(255, 255, 255, 0.1)"
-        : "rgba(78, 205, 196, 0.2)"
-    }`,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: theme.spacing(2),
-    cursor: clickable ? "pointer" : "default",
-    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-    position: "relative",
-    overflow: "hidden",
-    "&::before": {
-      content: '""',
-      position: "absolute",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      background:
-        theme.palette.mode === "dark"
-          ? "linear-gradient(135deg, rgba(150, 206, 180, 0.1) 0%, rgba(255, 107, 107, 0.05) 100%)"
-          : "linear-gradient(135deg, rgba(78, 205, 196, 0.1) 0%, rgba(100, 181, 246, 0.05) 100%)",
-      zIndex: -1,
-    },
-    "&:hover": clickable
-      ? {
-          transform: "translateY(-6px)",
-          boxShadow:
-            theme.palette.mode === "dark"
-              ? "0 12px 32px rgba(150, 206, 180, 0.3), 0 6px 16px rgba(0, 0, 0, 0.3)"
-              : "0 12px 32px rgba(78, 205, 196, 0.25), 0 6px 16px rgba(0, 0, 0, 0.1)",
-          borderColor: theme.palette.primary.main,
-        }
-      : {},
-  })
-);
+        ? "linear-gradient(135deg, rgba(150, 206, 180, 0.1) 0%, rgba(255, 107, 107, 0.05) 100%)"
+        : "linear-gradient(135deg, rgba(78, 205, 196, 0.1) 0%, rgba(100, 181, 246, 0.05) 100%)",
+    zIndex: -1,
+  },
+  "&:hover": clickable
+    ? {
+        transform: "translateY(-6px)",
+        boxShadow:
+          theme.palette.mode === "dark"
+            ? "0 12px 32px rgba(150, 206, 180, 0.3), 0 6px 16px rgba(0, 0, 0, 0.3)"
+            : "0 12px 32px rgba(78, 205, 196, 0.25), 0 6px 16px rgba(0, 0, 0, 0.1)",
+        borderColor: theme.palette.primary.main,
+      }
+    : {},
+}));
 
 export const ContactCardIcon = styled(Box, {
   shouldForwardProp: (prop) => prop !== "color",

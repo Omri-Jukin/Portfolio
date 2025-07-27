@@ -37,7 +37,7 @@ export default function LoginPage() {
   const loginMutation = api.auth.login.useMutation({
     onSuccess: () => {
       // Redirect to admin dashboard on successful login
-      router.push("/admin");
+      router.push("/en/admin");
     },
     onError: (error) => {
       setError(error.message || "Login failed");

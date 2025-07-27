@@ -16,6 +16,8 @@ export const dbClient =
     ? drizzle((globalThis as Record<string, unknown>).DB as D1Database, {
         schema,
       })
+    : process.env.NODE_ENV === "development"
+    ? null // We'll handle this in the user functions
     : null;
 
 // Export the type for use in other files
@@ -34,13 +36,5 @@ export const getDbClient = () => {
   if (dbClient) {
     return dbClient;
   }
-
-  // // In development, we can use remote D1
-  // if (process.env.NODE_ENV === "development") {
-  //   console.log("Using remote D1 database for development");
-  //   // This will be handled by the tRPC context
-  //   return null;
-  // }
-
   return null;
 };

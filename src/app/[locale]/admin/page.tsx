@@ -14,6 +14,7 @@ import {
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import DataGrid from "~/DataGrid/DataGrid";
+import { EmailServiceStatus } from "@/app/server/routers/emails";
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -163,23 +164,30 @@ export default function AdminDashboard() {
                 {emailStatus.data?.message}
               </Alert>
 
-              {emailStatus.data &&
-                "config" in emailStatus.data &&
-                emailStatus.data.config && (
-                  <Box sx={{ mt: 2 }}>
-                    <Typography variant="body2" color="text.secondary">
-                      <strong>Region:</strong> {emailStatus.data.config.region}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      <strong>From Email:</strong>{" "}
-                      {emailStatus.data.config.fromEmail}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      <strong>Admin Email:</strong>{" "}
-                      {emailStatus.data.config.adminEmail}
-                    </Typography>
-                  </Box>
-                )}
+              {(() => {
+                if (
+                  emailStatus.data &&
+                  "config" in emailStatus.data &&
+                  emailStatus.data.config
+                ) {
+                  const config = emailStatus.data
+                    .config as EmailServiceStatus["config"];
+                  return (
+                    <Box sx={{ mt: 2 }}>
+                      <Typography variant="body2" color="text.secondary">
+                        <strong>Region:</strong> {config?.region}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        <strong>From Email:</strong> {config?.fromEmail}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        <strong>Admin Email:</strong> {config?.adminEmail}
+                      </Typography>
+                    </Box>
+                  );
+                }
+                return null;
+              })()}
             </Box>
           )}
         </CardContent>

@@ -12,7 +12,6 @@ import { useState } from "react";
 import * as Common from "~/Common/Common.style";
 import * as Styled from "./page.style";
 import * as Constants from "./page.const";
-import { useTheme } from "@mui/material/styles";
 import {
   CheckCircle as CheckCircleIcon,
   Send as SendIcon,
@@ -22,15 +21,12 @@ import {
 } from "@mui/icons-material";
 
 export default function ContactPage() {
-  const theme = useTheme();
   const submitContactForm = api.emails.submitContactForm.useMutation({
     onSuccess: () => {
-      console.log("Contact form submitted successfully!");
       setState((prev) => ({ ...prev, isSubmitted: true, isSubmitting: false }));
       setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
     },
     onError: (error) => {
-      console.error("Contact form submission failed:", error);
       setState((prev) => ({
         ...prev,
         isSubmitting: false,
@@ -38,13 +34,6 @@ export default function ContactPage() {
       }));
     },
   });
-
-  // Helper function to get appropriate color based on theme mode
-  const getBrandColor = (platform: keyof typeof Constants.SOCIALS_COLORS) => {
-    return theme.palette.mode === "dark"
-      ? Constants.SOCIALS_COLORS_DARK[platform]
-      : Constants.SOCIALS_COLORS_LIGHT[platform];
-  };
 
   const getBrandBgColor = (
     platform: keyof typeof Constants.SOCIALS_BG_COLORS
@@ -80,21 +69,11 @@ export default function ContactPage() {
     };
 
   const validateForm = (): boolean => {
-    console.log("=== Form Validation Debug ===");
-    console.log("Current form data:", formData);
-    console.log("Name length:", formData.name.length);
-    console.log("Email:", formData.email);
-    console.log("Phone length:", formData.phone.length);
-    console.log("Subject length:", formData.subject.length);
-    console.log("Message length:", formData.message.length);
-
     try {
       contactFormSchema.parse(formData);
-      console.log("Validation passed!");
       setErrors({});
       return true;
     } catch (error) {
-      console.log("Validation failed with error:", error);
       if (error instanceof Error) {
         const zodError = error as {
           errors?: Array<{ path: string[]; message: string }>;
@@ -104,7 +83,6 @@ export default function ContactPage() {
         zodError.errors?.forEach((err: { path: string[]; message: string }) => {
           const field = err.path[0] as keyof ContactFormData;
           newErrors[field] = err.message;
-          console.log(`Field "${field}" failed validation:`, err.message);
         });
 
         setErrors(newErrors);
@@ -115,25 +93,11 @@ export default function ContactPage() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log("=== Form Submit Handler Called ===");
-
     if (!validateForm()) {
-      console.log("Form validation failed");
       return;
     }
 
-    console.log("Form validation passed, submitting...");
-    console.log("Form data:", {
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      subject: formData.subject,
-      messageLength: formData.message.length,
-    });
-
     setState((prev) => ({ ...prev, isSubmitting: true, error: null }));
-
-    console.log("Calling submitContactForm.mutate...");
 
     // Submit the form using the mutation
     submitContactForm.mutate(
@@ -146,11 +110,9 @@ export default function ContactPage() {
       },
       {
         onSuccess: () => {
-          console.log("Mutation onSuccess callback called");
           setState((prev) => ({ ...prev, isSubmitted: true }));
         },
         onError: (error) => {
-          console.error("Mutation onError callback called:", error);
           setState((prev) => ({
             ...prev,
             error:
@@ -187,21 +149,24 @@ export default function ContactPage() {
   }
 
   return (
-    <Common.PageContainer>
-      <Styled.FormContainer>
-        <Styled.FormTitle variant="h4">{t("form.title")}</Styled.FormTitle>
-        <Styled.FormDescription variant="body1">
+    <Common.PageContainer id="contact-page">
+      <Styled.FormContainer id="contact-form">
+        <Styled.FormTitle variant="h4" id="contact-form-title">
+          {t("form.title")}
+        </Styled.FormTitle>
+        <Styled.FormDescription variant="body1" id="contact-form-description">
           {t("form.description")}
         </Styled.FormDescription>
 
         {state.error && (
-          <Styled.ErrorMessage severity="error">
+          <Styled.ErrorMessage severity="error" id="contact-form-error">
             {state.error}
           </Styled.ErrorMessage>
         )}
 
         <form onSubmit={handleSubmit}>
           <Styled.FormField
+            id="contact-form-name"
             label={t("form.name")}
             value={formData.name}
             onChange={handleInputChange("name")}
@@ -213,6 +178,7 @@ export default function ContactPage() {
           />
 
           <Styled.FormField
+            id="contact-form-email"
             label={t("form.email")}
             type="email"
             value={formData.email}
@@ -225,6 +191,7 @@ export default function ContactPage() {
           />
 
           <Styled.FormField
+            id="contact-form-phone"
             label={t("form.phone")}
             type="tel"
             value={formData.phone}
@@ -237,6 +204,7 @@ export default function ContactPage() {
           />
 
           <Styled.FormField
+            id="contact-form-subject"
             label={t("form.subject")}
             value={formData.subject}
             onChange={handleInputChange("subject")}
@@ -248,6 +216,7 @@ export default function ContactPage() {
           />
 
           <Styled.MessageField
+            id="contact-form-message"
             label={t("form.message")}
             value={formData.message}
             onChange={handleInputChange("message")}
@@ -261,6 +230,7 @@ export default function ContactPage() {
           />
 
           <Styled.SubmitButton
+            id="contact-form-submit"
             type="submit"
             variant="contained"
             color="primary"
@@ -281,23 +251,30 @@ export default function ContactPage() {
 
         {/* Direct Contact Cards */}
         <Styled.ContactSection>
-          <Styled.ContactSectionTitle variant="h6">
+          <Styled.ContactSectionTitle variant="h6" id="contact-section-title">
             Connect
           </Styled.ContactSectionTitle>
           <Styled.ContactCardsContainer>
             {/* Email Card */}
-            <Styled.ContactCard variant="social" clickable>
+            <Styled.ContactCard clickable id="contact-card-email">
               <Styled.ContactCardIcon color={getBrandBgColor("EMAIL")}>
                 {Constants.SOCIAL_ICONS.EMAIL}
               </Styled.ContactCardIcon>
-              <Styled.ContactCardTitle variant="h6">
+              <Styled.ContactCardTitle
+                variant="h6"
+                id="contact-card-email-title"
+              >
                 {t("social.email.title")}
               </Styled.ContactCardTitle>
-              <Styled.ContactCardSubtitle variant="body2"></Styled.ContactCardSubtitle>
+              <Styled.ContactCardSubtitle
+                variant="body2"
+                id="contact-card-email-subtitle"
+              ></Styled.ContactCardSubtitle>
               <Styled.ContactCardButton
+                id="contact-card-email-button"
                 variant="outlined"
                 size="small"
-                brandColor={getBrandBgColor("EMAIL")}
+                brandColor={"#FFFFFF"}
                 onClick={() =>
                   window.open(Constants.SOCIAL_LINKS.EMAIL, "_blank")
                 }
@@ -307,18 +284,25 @@ export default function ContactPage() {
             </Styled.ContactCard>
 
             {/* Phone Card */}
-            <Styled.ContactCard variant="social" clickable>
+            <Styled.ContactCard clickable id="contact-card-phone">
               <Styled.ContactCardIcon color={getBrandBgColor("PHONE")}>
                 {Constants.SOCIAL_ICONS.PHONE}
               </Styled.ContactCardIcon>
-              <Styled.ContactCardTitle variant="h6">
+              <Styled.ContactCardTitle
+                variant="h6"
+                id="contact-card-phone-title"
+              >
                 {t("social.phone.title")}
               </Styled.ContactCardTitle>
-              <Styled.ContactCardSubtitle variant="body2"></Styled.ContactCardSubtitle>
+              <Styled.ContactCardSubtitle
+                variant="body2"
+                id="contact-card-phone-subtitle"
+              ></Styled.ContactCardSubtitle>
               <Styled.ContactCardButton
+                id="contact-card-phone-button"
                 variant="outlined"
                 size="small"
-                brandColor={getBrandBgColor("PHONE")}
+                brandColor={"#FFFFFF"}
                 onClick={() =>
                   window.open(Constants.SOCIAL_LINKS.PHONE, "_blank")
                 }
@@ -331,25 +315,32 @@ export default function ContactPage() {
 
         {/* Social Media Cards */}
         <Styled.ContactSection>
-          <Styled.ContactSectionTitle variant="h6">
+          <Styled.ContactSectionTitle variant="h6" id="contact-section-title">
             {t("social.title")}
           </Styled.ContactSectionTitle>
           <Styled.ContactCardsContainer>
             {/* GitHub Card */}
-            <Styled.ContactCard variant="social" clickable>
+            <Styled.ContactCard clickable id="contact-card-github">
               <Styled.ContactCardIcon color={getBrandBgColor("GITHUB")}>
                 {Constants.SOCIAL_ICONS.GITHUB}
               </Styled.ContactCardIcon>
-              <Styled.ContactCardTitle variant="h6">
+              <Styled.ContactCardTitle
+                variant="h6"
+                id="contact-card-github-title"
+              >
                 {t("social.github.title")}
               </Styled.ContactCardTitle>
-              <Styled.ContactCardSubtitle variant="body2">
+              <Styled.ContactCardSubtitle
+                variant="body2"
+                id="contact-card-github-subtitle"
+              >
                 {t("social.github.username")}
               </Styled.ContactCardSubtitle>
               <Styled.ContactCardButton
+                id="contact-card-github-button"
                 variant="outlined"
                 size="small"
-                brandColor={getBrandBgColor("GITHUB")}
+                brandColor={"#FFFFFF"}
                 onClick={() =>
                   window.open(Constants.SOCIAL_LINKS.GITHUB, "_blank")
                 }
@@ -359,20 +350,29 @@ export default function ContactPage() {
             </Styled.ContactCard>
 
             {/* LinkedIn Card */}
-            <Styled.ContactCard variant="social" clickable>
-              <Styled.ContactCardIcon color={getBrandBgColor("LINKEDIN")}>
+            <Styled.ContactCard clickable id="contact-card-linkedin">
+              <Styled.ContactCardIcon
+                color={getBrandBgColor("LINKEDIN")}
+                id="contact-card-linkedin-icon"
+              >
                 {Constants.SOCIAL_ICONS.LINKEDIN}
               </Styled.ContactCardIcon>
-              <Styled.ContactCardTitle variant="h6">
+              <Styled.ContactCardTitle
+                variant="h6"
+                id="contact-card-linkedin-title"
+              >
                 {t("social.linkedin.title")}
               </Styled.ContactCardTitle>
-              <Styled.ContactCardSubtitle variant="body2">
+              <Styled.ContactCardSubtitle
+                variant="body2"
+                id="contact-card-linkedin-subtitle"
+              >
                 {t("social.linkedin.username")}
               </Styled.ContactCardSubtitle>
               <Styled.ContactCardButton
                 variant="outlined"
                 size="small"
-                brandColor={getBrandBgColor("LINKEDIN")}
+                brandColor={"#FFFFFF"}
                 onClick={() =>
                   window.open(Constants.SOCIAL_LINKS.LINKEDIN, "_blank")
                 }
@@ -382,20 +382,27 @@ export default function ContactPage() {
             </Styled.ContactCard>
 
             {/* WhatsApp Card */}
-            <Styled.ContactCard variant="social" clickable>
+            <Styled.ContactCard clickable id="contact-card-whatsapp">
               <Styled.ContactCardIcon color={getBrandBgColor("WHATSAPP")}>
                 {Constants.SOCIAL_ICONS.WHATSAPP}
               </Styled.ContactCardIcon>
-              <Styled.ContactCardTitle variant="h6">
+              <Styled.ContactCardTitle
+                variant="h6"
+                id="contact-card-whatsapp-title"
+              >
                 {t("social.whatsapp.title")}
               </Styled.ContactCardTitle>
-              <Styled.ContactCardSubtitle variant="body2">
+              <Styled.ContactCardSubtitle
+                variant="body2"
+                id="contact-card-whatsapp-subtitle"
+              >
                 {t("social.whatsapp.username")}
               </Styled.ContactCardSubtitle>
               <Styled.ContactCardButton
+                id="contact-card-whatsapp-button"
                 variant="outlined"
                 size="small"
-                brandColor={getBrandBgColor("WHATSAPP")}
+                brandColor={"#FFFFFF"}
                 onClick={() =>
                   window.open(Constants.SOCIAL_LINKS.WHATSAPP, "_blank")
                 }
@@ -405,20 +412,27 @@ export default function ContactPage() {
             </Styled.ContactCard>
 
             {/* Telegram Card */}
-            <Styled.ContactCard variant="social" clickable>
+            <Styled.ContactCard clickable id="contact-card-telegram">
               <Styled.ContactCardIcon color={getBrandBgColor("TELEGRAM")}>
                 {Constants.SOCIAL_ICONS.TELEGRAM}
               </Styled.ContactCardIcon>
-              <Styled.ContactCardTitle variant="h6">
+              <Styled.ContactCardTitle
+                variant="h6"
+                id="contact-card-telegram-title"
+              >
                 {t("social.telegram.title")}
               </Styled.ContactCardTitle>
-              <Styled.ContactCardSubtitle variant="body2">
+              <Styled.ContactCardSubtitle
+                variant="body2"
+                id="contact-card-telegram-subtitle"
+              >
                 {t("social.telegram.username")}
               </Styled.ContactCardSubtitle>
               <Styled.ContactCardButton
+                id="contact-card-telegram-button"
                 variant="outlined"
                 size="small"
-                brandColor={getBrandBgColor("TELEGRAM")}
+                brandColor={"#FFFFFF"}
                 onClick={() =>
                   window.open(Constants.SOCIAL_LINKS.TELEGRAM, "_blank")
                 }
@@ -431,23 +445,34 @@ export default function ContactPage() {
 
         {/* Additional Information */}
         <Styled.AdditionalInfoCard>
-          <Styled.AdditionalInfoTitle variant="h6">
+          <Styled.AdditionalInfoTitle variant="h6" id="additional-info-title">
             {t("additional.title")}
           </Styled.AdditionalInfoTitle>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            <Styled.AdditionalInfoItem>
+            <Styled.AdditionalInfoItem id="additional-info-item-website">
               <LanguageIcon color="action" />
-              <Typography variant="body1">{t("additional.website")}</Typography>
+              <Typography
+                variant="body1"
+                id="additional-info-item-website-text"
+              >
+                {t("additional.website")}
+              </Typography>
             </Styled.AdditionalInfoItem>
-            <Styled.AdditionalInfoItem>
+            <Styled.AdditionalInfoItem id="additional-info-item-timezone">
               <AccessTimeIcon color="action" />
-              <Typography variant="body1">
+              <Typography
+                variant="body1"
+                id="additional-info-item-timezone-text"
+              >
                 {t("additional.timezone")}
               </Typography>
             </Styled.AdditionalInfoItem>
-            <Styled.AdditionalInfoItem>
+            <Styled.AdditionalInfoItem id="additional-info-item-citizenship">
               <FlagIcon color="action" />
-              <Typography variant="body1">
+              <Typography
+                variant="body1"
+                id="additional-info-item-citizenship-text"
+              >
                 {t("additional.citizenship")}
               </Typography>
             </Styled.AdditionalInfoItem>

@@ -5,31 +5,22 @@ import { EmailService } from "#/backend/email/email.service";
 // Lazy initialization to avoid build-time errors
 let emailService: EmailService | null = null;
 
-const getEmailService = () => {
-  // Add debugging to see what environment variables are available
-  console.log("=== Email Service Environment Debug ===");
-  console.log("NODE_ENV:", process.env.NODE_ENV);
-  console.log(
-    "AWS_ACCESS_KEY_ID:",
-    process.env.AWS_ACCESS_KEY_ID ? "SET" : "NOT SET"
-  );
-  console.log(
-    "AWS_SECRET_ACCESS_KEY:",
-    process.env.AWS_SECRET_ACCESS_KEY ? "SET" : "NOT SET"
-  );
-  console.log("AWS_REGION:", process.env.AWS_REGION);
-  console.log("SES_FROM_EMAIL:", process.env.SES_FROM_EMAIL);
-  console.log("ADMIN_EMAIL:", process.env.ADMIN_EMAIL);
-  console.log("========================================");
+export type EmailServiceStatus = {
+  status: "available" | "unavailable" | "error";
+  message: string;
+  config?: {
+    region?: string;
+    fromEmail?: string;
+    adminEmail?: string;
+  };
+};
 
+const getEmailService = () => {
   if (!emailService) {
     // Only initialize if we're in a runtime environment with AWS credentials
     if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
-      console.log("Initializing EmailService...");
       emailService = new EmailService();
-      console.log("EmailService initialized successfully");
     } else {
-      console.error("AWS credentials not configured for email service");
       throw new Error("AWS credentials not configured for email service");
     }
   }
@@ -39,73 +30,18 @@ const getEmailService = () => {
 export const emailsRouter = router({
   // Public endpoint to check email service status (no auth required)
   checkEmailServiceStatus: procedure.query(async () => {
-    console.log("=== Checking Email Service Status ===");
-
     try {
-      // Check if required environment variables are set
-      const requiredEnvVars = [
-        "AWS_ACCESS_KEY_ID",
-        "AWS_SECRET_ACCESS_KEY",
-        "AWS_REGION",
-        "SES_FROM_EMAIL",
-      ];
-
-      const missingVars = requiredEnvVars.filter(
-        (varName) => !process.env[varName]
-      );
-
-      console.log("Environment variables check:");
-      console.log(
-        "- AWS_ACCESS_KEY_ID:",
-        process.env.AWS_ACCESS_KEY_ID ? "SET" : "NOT SET"
-      );
-      console.log(
-        "- AWS_SECRET_ACCESS_KEY:",
-        process.env.AWS_SECRET_ACCESS_KEY ? "SET" : "NOT SET"
-      );
-      console.log("- AWS_REGION:", process.env.AWS_REGION);
-      console.log("- SES_FROM_EMAIL:", process.env.SES_FROM_EMAIL);
-      console.log("- ADMIN_EMAIL:", process.env.ADMIN_EMAIL);
-
-      if (missingVars.length > 0) {
-        console.log("Missing environment variables:", missingVars);
+      const emailService = getEmailService();
+      if (!emailService) {
         return {
-          status: "error",
-          message: `Missing environment variables: ${missingVars.join(", ")}`,
-          missingVars,
+          status: "unavailable",
+          message: "Email service not configured",
         };
       }
-
-      // Try to initialize the email service
-      try {
-        const service = getEmailService();
-        console.log("Email service initialized successfully");
-
-        return {
-          status: "ready",
-          message: "Email service is properly configured",
-          config: {
-            region: process.env.AWS_REGION,
-            fromEmail: process.env.SES_FROM_EMAIL,
-            adminEmail: process.env.ADMIN_EMAIL || "omrijukin@gmail.com",
-          },
-        };
-      } catch (initError) {
-        console.error("Email service initialization failed:", initError);
-        return {
-          status: "error",
-          message: `Email service initialization failed: ${
-            initError instanceof Error ? initError.message : "Unknown error"
-          }`,
-        };
-      }
+      return { status: "available", message: "Email service is ready" };
     } catch (error) {
       console.error("Email service status check failed:", error);
-      return {
-        status: "error",
-        message:
-          error instanceof Error ? error.message : "Unknown error occurred",
-      };
+      return { status: "error", message: "Email service check failed" };
     }
   }),
 
@@ -121,70 +57,46 @@ export const emailsRouter = router({
             "Please enter a valid email address"
           ),
         phone: z.string().min(1, "Phone number is required"),
-        subject: z.string().min(3, "Subject must be at least 3 characters"), // Changed from 5 to 3
+        subject: z.string().min(3, "Subject must be at least 3 characters"),
         message: z.string().min(10, "Message must be at least 10 characters"),
       })
     )
-    .mutation(async (opts) => {
-      const { input } = opts;
-
-      console.log("Contact form submission started with input:", {
-        name: input.name,
-        email: input.email,
-        subject: input.subject,
-        // Don't log the full message for privacy
-      });
-
+    .mutation(async ({ input }) => {
       try {
-        console.log("Getting email service...");
-        const emailServiceInstance = getEmailService();
+        const emailService = getEmailService();
+        if (!emailService) {
+          throw new Error("Email service not available");
+        }
 
-        console.log("Sending admin notification...");
-        // Send notification email to admin
+        // Send notification to admin
         const adminNotification =
-          await emailServiceInstance.sendContactFormNotification(input);
-
+          await emailService.sendContactFormNotification(input);
         if (!adminNotification.success) {
-          console.error(
-            "Failed to send admin notification:",
-            adminNotification.error
-          );
           throw new Error(
-            `Failed to send notification email: ${adminNotification.error}`
+            `Failed to send admin notification: ${adminNotification.error}`
           );
         }
 
-        console.log(
-          "Admin notification sent successfully, sending user confirmation..."
+        // Send confirmation to user
+        const userConfirmation = await emailService.sendContactFormConfirmation(
+          input
         );
-        // Send confirmation email to user
-        const userConfirmation =
-          await emailServiceInstance.sendContactFormConfirmation(input);
-
         if (!userConfirmation.success) {
-          console.error(
+          console.warn(
             "Failed to send user confirmation:",
             userConfirmation.error
           );
-          // Don't throw error here as admin notification was successful
-          // Just log the issue
+          // Don't fail the entire request if user confirmation fails
         }
 
-        console.log("Contact form submission completed successfully");
         return {
           success: true,
           adminMessageId: adminNotification.messageId,
           userMessageId: userConfirmation.messageId,
-          message:
-            "Contact form submitted successfully. You will receive a confirmation email shortly.",
         };
       } catch (error) {
-        console.error("Contact form submission failed:", error);
-        throw new Error(
-          `Failed to submit contact form: ${
-            error instanceof Error ? error.message : "Unknown error"
-          }`
-        );
+        console.error("Failed to send contact form email:", error);
+        throw new Error("Failed to send email");
       }
     }),
 
@@ -232,34 +144,20 @@ export const emailsRouter = router({
     if (!user || user.role !== "admin") {
       throw new Error("Unauthorized: Admin access required");
     }
-
     try {
-      // Check if required environment variables are set
-      const requiredEnvVars = [
-        "AWS_ACCESS_KEY_ID",
-        "AWS_SECRET_ACCESS_KEY",
-        "AWS_REGION",
-        "SES_FROM_EMAIL",
-      ];
-
-      const missingVars = requiredEnvVars.filter(
-        (varName) => !process.env[varName]
-      );
-
-      if (missingVars.length > 0) {
+      const emailService = getEmailService();
+      if (!emailService) {
         return {
-          status: "error",
-          message: `Missing environment variables: ${missingVars.join(", ")}`,
-          missingVars,
+          status: "unavailable",
+          message: "Email service not configured",
         };
       }
-
       return {
-        status: "ready",
-        message: "Email service is properly configured",
+        status: "available",
+        message: "Email service is ready",
         config: {
-          region: process.env.AWS_REGION,
-          fromEmail: process.env.SES_FROM_EMAIL,
+          region: process.env.AWS_REGION || "us-east-1",
+          fromEmail: process.env.FROM_EMAIL || "contact@omrijukin.com",
           adminEmail: process.env.ADMIN_EMAIL || "omrijukin@gmail.com",
         },
       };
@@ -267,8 +165,8 @@ export const emailsRouter = router({
       console.error("Email service status check failed:", error);
       return {
         status: "error",
-        message:
-          error instanceof Error ? error.message : "Unknown error occurred",
+        message: "Email service check failed",
+        config: undefined,
       };
     }
   }),
@@ -305,67 +203,13 @@ export const emailsRouter = router({
           maxSendRate: quotaResult.MaxSendRate,
           sentLast24Hours: quotaResult.SentLast24Hours,
         },
-        config: {
-          region: process.env.AWS_REGION || "us-east-1",
-          fromEmail: process.env.SES_FROM_EMAIL,
-        },
       };
     } catch (error) {
       console.error("SES connectivity test failed:", error);
       return {
         success: false,
-        error:
-          error instanceof Error ? error.message : "Unknown error occurred",
-        details: {
-          errorType: error?.constructor?.name,
-          errorCode: (error as { code?: string })?.code,
-        },
+        message: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }),
-
-  // Send custom email (admin only)
-  sendCustomEmail: procedure
-    .input(
-      z.object({
-        to: z.string().email("Please enter a valid recipient email"),
-        subject: z.string().min(1, "Subject is required"),
-        htmlBody: z.string().min(1, "Email body is required"),
-        textBody: z.string().optional(),
-      })
-    )
-    .mutation(async (opts) => {
-      const { input } = opts;
-      const { user } = opts.ctx;
-
-      // Check if user is admin
-      if (!user || user.role !== "admin") {
-        throw new Error("Unauthorized: Admin access required");
-      }
-
-      try {
-        const result = await getEmailService().sendEmail({
-          to: input.to,
-          from: process.env.SES_FROM_EMAIL || "noreply@omrijukin.com",
-          subject: input.subject,
-          htmlBody: input.htmlBody,
-          textBody: input.textBody,
-        });
-
-        if (!result.success) {
-          throw new Error(result.error || "Failed to send email");
-        }
-
-        return {
-          success: true,
-          messageId: result.messageId,
-          message: "Email sent successfully",
-        };
-      } catch (error) {
-        console.error("Custom email sending failed:", error);
-        throw new Error(
-          error instanceof Error ? error.message : "Failed to send email"
-        );
-      }
-    }),
 });

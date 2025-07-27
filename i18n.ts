@@ -14,7 +14,6 @@ const localeMessages = {
 export default getRequestConfig(async ({ locale }) => {
   // Validate that the incoming `locale` parameter is valid
   if (!locale || !locales.includes(locale as any)) {
-    console.log("i18n config - falling back to default locale:", defaultLocale);
     locale = defaultLocale;
   }
 

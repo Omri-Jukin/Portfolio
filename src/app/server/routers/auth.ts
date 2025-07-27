@@ -10,6 +10,7 @@ import {
 } from "../../../../lib/db/users/users";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import { User } from "$/db/users/users.type";
 
 const JWT_SECRET =
   process.env.JWT_SECRET || "your-secret-key-change-in-production";
@@ -55,7 +56,6 @@ export const authRouter = router({
           message: "Registration successful! Please wait for admin approval.",
         };
       } catch (error) {
-        console.error("Registration error:", error);
         if (
           error instanceof Error &&
           error.message.includes("already exists")
@@ -85,14 +85,23 @@ export const authRouter = router({
 
       try {
         // Find user by email
-        const user = await loginUser(input);
+        const userResult = await loginUser(input);
 
-        if (!user) {
+        // Check if userResult is an error object or null
+        if (
+          !userResult ||
+          (typeof userResult === "object" &&
+            "success" in userResult &&
+            !userResult.success)
+        ) {
           throw new TRPCError({
             code: "UNAUTHORIZED",
             message: "Invalid email or password",
           });
         }
+
+        // At this point, userResult is guaranteed to be a user object
+        const user = userResult as User;
 
         // Check if user is approved
         if (user.status !== "approved") {
@@ -212,10 +221,11 @@ export const authRouter = router({
         return {
           user: {
             id: approvedUser.id,
-            email: approvedUser.email,
-            firstName: approvedUser.firstName,
-            lastName: approvedUser.lastName,
-            role: approvedUser.role,
+            email: "email" in approvedUser ? approvedUser.email : "",
+            firstName:
+              "firstName" in approvedUser ? approvedUser.firstName : "",
+            lastName: "lastName" in approvedUser ? approvedUser.lastName : "",
+            role: "role" in approvedUser ? approvedUser.role : "visitor",
             status: approvedUser.status,
           },
           message: "User approved successfully",
@@ -247,10 +257,11 @@ export const authRouter = router({
         return {
           user: {
             id: rejectedUser.id,
-            email: rejectedUser.email,
-            firstName: rejectedUser.firstName,
-            lastName: rejectedUser.lastName,
-            role: rejectedUser.role,
+            email: "email" in rejectedUser ? rejectedUser.email : "",
+            firstName:
+              "firstName" in rejectedUser ? rejectedUser.firstName : "",
+            lastName: "lastName" in rejectedUser ? rejectedUser.lastName : "",
+            role: "role" in rejectedUser ? rejectedUser.role : "visitor",
             status: rejectedUser.status,
           },
           message: "User rejected successfully",

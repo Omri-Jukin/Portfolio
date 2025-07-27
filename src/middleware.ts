@@ -13,8 +13,10 @@ export default function middleware(request: NextRequest) {
   // Protect all /[locale]/admin routes
   const adminRouteRegex = /^\/(en|es|fr|he)\/admin(\/|$)/;
   if (adminRouteRegex.test(pathname)) {
-    // TODO: Replace this with real authentication logic
-    const isAuthenticated = false; // <-- Replace with real check
+    // Check for auth token in cookies
+    const cookieHeader = request.headers.get("cookie");
+    const isAuthenticated = cookieHeader?.includes("auth-token=");
+
     if (!isAuthenticated) {
       const loginUrl = new URL(`/${pathname.split("/")[1]}/login`, request.url);
       return NextResponse.redirect(loginUrl);
