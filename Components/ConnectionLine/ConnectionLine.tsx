@@ -27,7 +27,7 @@ export const ConnectionLine = ({
         height: `${height}px`,
         background,
         borderRadius,
-        margin: "0 auto",
+        margin: "1vh auto",
       }}
     />
   );

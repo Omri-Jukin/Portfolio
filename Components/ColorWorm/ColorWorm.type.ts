@@ -24,5 +24,4 @@ export type ColorWormProps = {
     left: number | string;
     right: number | string;
   };
-  type?: "default" | "worm";
 };

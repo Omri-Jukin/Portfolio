@@ -12,6 +12,7 @@ export const AnimatedTextContainer = styled(Box, {
   gap: 0,
   justifyContent: "center",
   overflow: "visible",
+  overflowX: "hidden",
 }));
 
 export const HoverWrapper = styled(Box)(({ theme }) => ({

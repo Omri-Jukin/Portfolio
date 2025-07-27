@@ -27,10 +27,5 @@ export type WaveTextProps = {
   frequency?: number;
   phase?: number;
   phaseOffset?: number;
-  margins?: {
-    top: number | string;
-    bottom: number | string;
-    left: number | string;
-    right: number | string;
-  };
+  style?: React.CSSProperties;
 };

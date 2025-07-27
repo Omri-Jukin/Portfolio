@@ -20,12 +20,7 @@ export const WaveText = ({
   frequency = 0.5,
   phase = 0,
   phaseOffset = 0,
-  margins = {
-    top: "2vh",
-    bottom: 0,
-    left: "2vw",
-    right: 0,
-  },
+  style,
 }: WaveTextProps) => {
   const theme = useTheme();
 
@@ -75,10 +70,7 @@ export const WaveText = ({
         gap: "12px",
         flexWrap: "wrap",
         justifyContent: "center",
-        marginTop: margins.top,
-        marginBottom: margins.bottom,
-        marginLeft: margins.left,
-        marginRight: margins.right,
+        ...style,
       }}
     >
       {text?.split(" ").map((word, wordIndex) => (

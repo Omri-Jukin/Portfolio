@@ -46,42 +46,6 @@ const Card: React.FC<CardProps> = ({
         ref={cardRef}
         style={{ position: "relative", overflow: "hidden" }}
       >
-        {/* 3D Background Animation - Commented out for now */}
-        {/* <div
-          id="styled-card-3d-background"
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            zIndex: 0,
-            pointerEvents: "none",
-          }}
-        >
-          <CanvasContainer camera={{ position: [0, 0, 2.5], fov: 50 }}>
-            <ambientLight intensity={1} />
-            <directionalLight
-              position={[2, 2, 2]}
-              intensity={1}
-              color={"#00bcd4"}
-            />
-            <TorusKnot args={[0.7, 0.25, 100, 16]}>
-              <meshStandardMaterial
-                color={"#00bcd4"}
-                transparent
-                opacity={0.85}
-              />
-            </TorusKnot>
-            <OrbitControls
-              enableZoom={false}
-              enablePan={false}
-              autoRotate
-              autoRotateSpeed={2}
-            />
-          </CanvasContainer>
-        </div> */}
-
         <AnimatedCard animation={animation}>
           <StyledCard
             id="styled-card-content"

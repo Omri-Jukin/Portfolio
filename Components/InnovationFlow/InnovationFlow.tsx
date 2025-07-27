@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { InnovationFlowProps } from "./InnovationFlow.type";
 
 export const InnovationFlow = ({
-  arrows = ["⬅️", "➡️", "⬅️", "➡️"],
   icons = ["📱", "💻", "🎨", "🔧"],
   duration = 2,
   delay = 0.3,
@@ -28,7 +27,7 @@ export const InnovationFlow = ({
           gap: "2rem",
         }}
       >
-        {arrows.map((arrow, index) => (
+        {icons.map((arrow, index) => (
           <motion.div
             key={index}
             animate={{
@@ -54,7 +53,7 @@ export const InnovationFlow = ({
       <motion.div
         className="innovation-sphere"
         animate={{
-          rotate: 360,
+          rotate: 0,
           scale: [1, 1.1, 1],
         }}
         transition={{
@@ -76,21 +75,9 @@ export const InnovationFlow = ({
           position: "relative",
         }}
       >
-        <motion.div
-          animate={{
-            rotate: [0, -360],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        >
-          💡
-        </motion.div>
+        🤘🏻
         {/* Floating particles around the sphere */}
-        {Array.from({ length: 20 }).map((_, index) => (
+        {Array.from({ length: 50 }).map((_, index) => (
           <motion.div
             key={index}
             animate={{

@@ -38,6 +38,7 @@ export const StyledCard = styled(MuiCard, {
   transition: "all 0.3s ease-in-out",
   position: "relative",
   overflow: "visible",
+  overflowX: "hidden",
   // Enhanced glow effect matching contact page
   boxShadow: glow
     ? theme.palette.mode === "dark"

@@ -9,6 +9,7 @@ export const ScrollGapAnimatorStyle = {
     justifyContent: "center",
     position: "relative",
     overflow: "visible",
+    overflowX: "hidden",
     padding: "2rem 0",
     "& .gap-content": {
       display: "flex",

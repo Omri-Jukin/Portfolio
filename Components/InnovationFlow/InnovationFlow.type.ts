@@ -1,5 +1,4 @@
 export type InnovationFlowProps = {
-  arrows?: string[];
   icons?: string[];
   duration?: number;
   delay?: number;

@@ -11,7 +11,7 @@ import { FloatingEmojis } from "../FloatingEmojis";
 import { InnovationFlow } from "../InnovationFlow";
 import { VisionRealityBridge } from "../VisionRealityBridge";
 import { CollaborationHub } from "../CollaborationHub";
-import { Journey } from "../Journey";
+import { WaveText } from "../WaveText/WaveText";
 
 const ScrollGapAnimator: React.FC<ScrollGapAnimatorProps> = ({
   sectionId,
@@ -40,7 +40,8 @@ const ScrollGapAnimator: React.FC<ScrollGapAnimatorProps> = ({
       case "hero-about":
         return (
           <motion.div style={{ opacity, scale, y }} className="gap-content">
-            <Journey />
+            <WaveText text={t("heroAbout.text")} type="text" />
+            <ColorWorm amount={17} size={10} speed={3} />
           </motion.div>
         );
 
@@ -58,6 +59,12 @@ const ScrollGapAnimator: React.FC<ScrollGapAnimatorProps> = ({
                 marginBottom: "-1rem",
               }}
             >
+              <ConnectionLine
+                width={400}
+                height={3}
+                background="linear-gradient(90deg, transparent, #4ECDC4, #96CEB4, #64B5F6, transparent)"
+              />
+
               <motion.div
                 className="floating-text"
                 animate={{
@@ -124,17 +131,10 @@ const ScrollGapAnimator: React.FC<ScrollGapAnimatorProps> = ({
                 ))}
               </motion.div>
 
-              <motion.div
-                className="progress-line"
-                style={{
-                  width: "200px",
-                  height: "3px",
-                  background:
-                    "linear-gradient(90deg, #4ECDC4, #96CEB4, #64B5F6)",
-                  borderRadius: "2px",
-                  scaleX: progressLineScale,
-                  transformOrigin: "left",
-                }}
+              <ConnectionLine
+                width={400}
+                height={3}
+                background="linear-gradient(90deg, transparent, #4ECDC4, #96CEB4, #64B5F6, transparent)"
               />
             </motion.div>
           </motion.div>
@@ -143,25 +143,29 @@ const ScrollGapAnimator: React.FC<ScrollGapAnimatorProps> = ({
       case "qa-services":
         return (
           <motion.div style={{ opacity, scale, y }} className="gap-content">
-            {/* <ColorWorm type="default" amount={50} size={15} speed={3} /> */}
-            <ColorWorm type="worm" amount={50} size={15} speed={3} />
+            <ColorWorm amount={50} size={15} speed={3} />
           </motion.div>
         );
 
       case "services-career":
         return (
-          <motion.div style={{ opacity, scale, y }} className="gap-content">
-            <div style={{ marginTop: "-1rem", marginBottom: "-1rem" }}>
-              <FloatingEmojis />
-              <ParticleBridge
-                particleCount={12}
-                opacity={0.8}
-                scale={0.6}
-                y={30}
-                x={150}
-                duration={4}
-                delay={0.15}
+          <motion.div
+            style={{
+              opacity,
+              scale,
+              y,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            className="gap-content"
+          >
+            <div>
+              <ConnectionLine
+                width={400}
+                height={3}
+                background="linear-gradient(90deg, transparent, #4ECDC4, #96CEB4, #64B5F6, transparent)"
               />
+              <FloatingEmojis />
               <ConnectionLine
                 width={400}
                 height={3}
