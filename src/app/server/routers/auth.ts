@@ -84,8 +84,8 @@ export const authRouter = router({
       const { input, ctx } = opts;
 
       try {
-        // Find user by email
-        const userResult = await loginUser(input);
+        // Find user by email - pass the database client from context
+        const userResult = await loginUser(input, ctx.db || undefined);
 
         // Check if userResult is an error object or null
         if (
@@ -140,12 +140,17 @@ export const authRouter = router({
 
         // Set HTTP-only cookie
         if (ctx.resHeaders) {
-          ctx.resHeaders.set(
-            "Set-Cookie",
-            `auth-token=${token}; HttpOnly; Path=/; Max-Age=${
-              7 * 24 * 60 * 60
-            }; SameSite=Strict; Secure=${process.env.NODE_ENV === "production"}`
-          );
+          const isProduction = process.env.NODE_ENV === "production";
+          const cookieOptions = [
+            `auth-token=${token}`,
+            "HttpOnly",
+            "Path=/",
+            `Max-Age=${7 * 24 * 60 * 60}`, // 7 days
+            "SameSite=Lax", // Changed from Strict to Lax for better compatibility
+            ...(isProduction ? ["Secure"] : []), // Only add Secure in production
+          ].join("; ");
+
+          ctx.resHeaders.set("Set-Cookie", cookieOptions);
         }
 
         // Return user data (without password)
@@ -280,10 +285,17 @@ export const authRouter = router({
 
     // Clear the auth cookie
     if (ctx.resHeaders) {
-      ctx.resHeaders.set(
-        "Set-Cookie",
-        "auth-token=; HttpOnly; Path=/; Max-Age=0; SameSite=Strict"
-      );
+      const isProduction = process.env.NODE_ENV === "production";
+      const cookieOptions = [
+        "auth-token=",
+        "HttpOnly",
+        "Path=/",
+        "Max-Age=0",
+        "SameSite=Lax",
+        ...(isProduction ? ["Secure"] : []),
+      ].join("; ");
+
+      ctx.resHeaders.set("Set-Cookie", cookieOptions);
     }
 
     return { success: true };
@@ -334,12 +346,17 @@ export const authRouter = router({
 
     // Set new cookie
     if (ctx.resHeaders) {
-      ctx.resHeaders.set(
-        "Set-Cookie",
-        `auth-token=${newToken}; HttpOnly; Path=/; Max-Age=${
-          7 * 24 * 60 * 60
-        }; SameSite=Strict; Secure=${process.env.NODE_ENV === "production"}`
-      );
+      const isProduction = process.env.NODE_ENV === "production";
+      const cookieOptions = [
+        `auth-token=${newToken}`,
+        "HttpOnly",
+        "Path=/",
+        `Max-Age=${7 * 24 * 60 * 60}`, // 7 days
+        "SameSite=Lax", // Changed from Strict to Lax for better compatibility
+        ...(isProduction ? ["Secure"] : []), // Only add Secure in production
+      ].join("; ");
+
+      ctx.resHeaders.set("Set-Cookie", cookieOptions);
     }
 
     return {

@@ -2,7 +2,8 @@ import { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 import { createDbClient } from "../../../lib/db/client";
 import { D1Database } from "@cloudflare/workers-types";
 import jwt from "jsonwebtoken";
-import { getUserById } from "../../../lib/db/users/users";
+import { getUserById } from "$/db/users/users";
+import { executeRemoteD1Query } from "$/db/remote-client";
 
 // Load environment variables
 import dotenv from "dotenv";
@@ -24,8 +25,6 @@ interface AuthenticatedUser {
   role: string;
 }
 
-const JWT_SECRET = process.env.JWT_SECRET;
-
 export async function createContext({
   req,
   resHeaders,
@@ -33,6 +32,13 @@ export async function createContext({
 }: FetchCreateContextFnOptions & { env?: CloudflareEnv }) {
   // Create database client with D1 instance
   const db = env?.DB ? createDbClient(env.DB) : null;
+
+  if (!process.env.JWT_SECRET) {
+    throw new Error("JWT_SECRET is not set");
+  }
+
+  // Get JWT secret from environment (works in both development and production)
+  const JWT_SECRET = process.env.JWT_SECRET;
 
   // Get user from JWT token in cookies
   async function getUserFromToken(): Promise<AuthenticatedUser | null> {
@@ -66,7 +72,7 @@ export async function createContext({
         let user;
         if (db) {
           // Try with database client first
-          user = await getUserById(decoded.userId);
+          user = await getUserById(decoded.userId, db);
         } else if (process.env.NODE_ENV === "development") {
           // Fallback to local D1 in development
           const { findUserByIdLocal } = await import(
@@ -82,6 +88,23 @@ export async function createContext({
               lastName: user.last_name,
               role: user.role,
               status: user.status,
+            };
+          }
+        } else if (process.env.NODE_ENV === "production") {
+          // Fallback to remote D1 in production
+          const results = await executeRemoteD1Query(
+            `SELECT * FROM users WHERE id = '${decoded.userId}';`
+          );
+
+          if (results.length > 0) {
+            const userData = results[0];
+            user = {
+              id: userData.id,
+              email: userData.email,
+              firstName: userData.first_name,
+              lastName: userData.last_name,
+              role: userData.role,
+              status: userData.status,
             };
           }
         }

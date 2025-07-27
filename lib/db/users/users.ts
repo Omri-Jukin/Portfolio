@@ -1,8 +1,7 @@
-import { users } from "../schema/schema.tables";
 import { eq } from "drizzle-orm";
-import { dbClient } from "../client";
+import { dbClient, createDbClient } from "../client";
+import { users, UserRole, UserStatus } from "../schema/schema.tables";
 import { v4 as uuidv4 } from "uuid";
-import { UserRole, UserStatus } from "../schema/schema.tables";
 import {
   insertUser as insertUserRemote,
   findUserByEmail as findUserByEmailRemote,
@@ -107,13 +106,18 @@ export const createUser = async (input: CreateUserInput) => {
   return newUser[0];
 };
 
-export const loginUser = async (input: LoginInput) => {
-  if (!dbClient) {
+export const loginUser = async (
+  input: LoginInput,
+  db?: ReturnType<typeof createDbClient>
+) => {
+  // Use the provided db client (from context) or fall back to global dbClient
+  const client = db || dbClient;
+
+  if (!client) {
     // In development, use local D1
     if (process.env.NODE_ENV === "development") {
       try {
-        const { findUserByEmailLocal } = await import("../remote-client");
-        const user = await findUserByEmailLocal(input.email);
+        const user = await findUserByEmailRemote(input.email);
 
         if (!user) {
           return {
@@ -146,10 +150,46 @@ export const loginUser = async (input: LoginInput) => {
       }
     }
 
+    // In production, try remote D1 as fallback
+    if (process.env.NODE_ENV === "production") {
+      try {
+        const user = await findUserByEmailRemote(input.email);
+
+        if (!user) {
+          return {
+            success: false,
+            error: "User not found.",
+          };
+        }
+
+        // Map the remote user data to match the expected format
+        const mappedUser = {
+          id: user.id,
+          email: user.email,
+          password: user.password,
+          firstName: user.first_name,
+          lastName: user.last_name,
+          role: user.role as UserRole,
+          status: user.status as UserStatus,
+          createdAt: new Date(parseInt(user.created_at) * 1000),
+          updatedAt: user.updated_at
+            ? new Date(parseInt(user.updated_at) * 1000)
+            : null,
+        };
+
+        return mappedUser;
+      } catch (error) {
+        return {
+          success: false,
+          error: (error as Error).message,
+        };
+      }
+    }
+
     throw new Error("Database client not available.");
   }
 
-  const user = await dbClient.query.users.findFirst({
+  const user = await client.query.users.findFirst({
     where: eq(users.email, input.email),
   });
 
@@ -160,12 +200,75 @@ export const loginUser = async (input: LoginInput) => {
   return user; // Return the full user object, password verification should be done in the auth router
 };
 
-export const getUserById = async (id: string) => {
-  if (!dbClient) {
+export const getUserById = async (
+  id: string,
+  db?: ReturnType<typeof createDbClient>
+) => {
+  // Use the provided db client (from context) or fall back to global dbClient
+  const client = db || dbClient;
+
+  if (!client) {
+    // In development, use local D1
+    if (process.env.NODE_ENV === "development") {
+      try {
+        const { findUserByIdLocal } = await import("../remote-client");
+        const user = await findUserByIdLocal(id);
+        if (user) {
+          return {
+            id: user.id,
+            email: user.email,
+            password: user.password,
+            firstName: user.first_name,
+            lastName: user.last_name,
+            role: user.role as UserRole,
+            status: user.status as UserStatus,
+            createdAt: new Date(parseInt(user.created_at) * 1000),
+            updatedAt: user.updated_at
+              ? new Date(parseInt(user.updated_at) * 1000)
+              : null,
+          };
+        }
+        throw new Error("User not found.");
+      } catch (error) {
+        throw error;
+      }
+    }
+
+    // In production, try remote D1 as fallback
+    if (process.env.NODE_ENV === "production") {
+      try {
+        // We need to create a findUserById function for remote D1
+        const { executeRemoteD1Query } = await import("../remote-client");
+        const results = await executeRemoteD1Query(
+          `SELECT * FROM users WHERE id = '${id}';`
+        );
+
+        if (results.length > 0) {
+          const user = results[0];
+          return {
+            id: user.id,
+            email: user.email,
+            password: user.password,
+            firstName: user.first_name,
+            lastName: user.last_name,
+            role: user.role as UserRole,
+            status: user.status as UserStatus,
+            createdAt: new Date(parseInt(user.created_at) * 1000),
+            updatedAt: user.updated_at
+              ? new Date(parseInt(user.updated_at) * 1000)
+              : null,
+          };
+        }
+        throw new Error("User not found.");
+      } catch (error) {
+        throw error;
+      }
+    }
+
     throw new Error("Database client not available.");
   }
 
-  const user = await dbClient.query.users.findFirst({
+  const user = await client.query.users.findFirst({
     where: eq(users.id, id),
   });
 

@@ -160,10 +160,6 @@ export default function LoginPage() {
               </Button>
             </form>
 
-            <Typography variant="body2" color="text.secondary" align="center">
-              {t("demoCredentials")}
-            </Typography>
-
             <Box sx={{ textAlign: "center", mt: 2 }}>
               <Typography variant="body2" color="text.secondary">
                 Don&apos;t have an account?{" "}

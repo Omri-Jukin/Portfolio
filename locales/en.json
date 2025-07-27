@@ -11,8 +11,7 @@
     "signIn": "Sign In",
     "signingIn": "Signing in...",
     "invalidCredentials": "Invalid credentials",
-    "loginFailed": "Login failed. Please try again.",
-    "demoCredentials": "Demo credentials: admin / admin123"
+    "loginFailed": "Login failed. Please try again."
   },
   "register": {
     "title": "Create Account",
