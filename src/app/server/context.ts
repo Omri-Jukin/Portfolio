@@ -24,8 +24,7 @@ interface AuthenticatedUser {
   role: string;
 }
 
-const JWT_SECRET =
-  process.env.JWT_SECRET || "your-secret-key-change-in-production";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export async function createContext({
   req,
@@ -50,6 +49,10 @@ export async function createContext({
 
       const token = cookies["auth-token"];
       if (!token) return null;
+
+      if (!JWT_SECRET) {
+        throw new Error("JWT_SECRET is not set");
+      }
 
       // Verify JWT token
       const decoded = jwt.verify(token, JWT_SECRET) as {
