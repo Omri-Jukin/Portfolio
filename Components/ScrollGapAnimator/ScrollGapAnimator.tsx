@@ -4,11 +4,19 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { ScrollGapAnimatorProps } from "./ScrollGapAnimator.type";
 import { ScrollGapAnimatorStyle } from "./ScrollGapAnimator.style";
+import { ColorWorm } from "../ColorWorm/ColorWorm";
+import { ConnectionLine } from "../ConnectionLine";
+import { ParticleBridge } from "../ParticleBridge";
+import { FloatingEmojis } from "../FloatingEmojis";
+import { InnovationFlow } from "../InnovationFlow";
+import { VisionRealityBridge } from "../VisionRealityBridge";
+import { CollaborationHub } from "../CollaborationHub";
+import { Journey } from "../Journey";
 
 const ScrollGapAnimator: React.FC<ScrollGapAnimatorProps> = ({
   sectionId,
   gapType = "default",
-  height = 200,
+  height = 300,
 }) => {
   const t = useTranslations("scrollGaps");
   const containerRef = useRef<HTMLDivElement>(null);
@@ -32,151 +40,155 @@ const ScrollGapAnimator: React.FC<ScrollGapAnimatorProps> = ({
       case "hero-about":
         return (
           <motion.div style={{ opacity, scale, y }} className="gap-content">
-            <Typography variant="h6" className="gap-text">
-              {t("heroAbout.text")}
-            </Typography>
-            <motion.div
-              className="floating-elements"
-              animate={{
-                y: [0, -10, 0],
-                rotate: [0, 5, 0],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            >
-              <div className="floating-dot" />
-              <div className="floating-dot" />
-              <div className="floating-dot" />
-            </motion.div>
+            <Journey />
           </motion.div>
         );
 
       case "about-qa":
         return (
           <motion.div style={{ opacity, scale, y }} className="gap-content">
-            <Typography variant="body1" className="gap-text">
-              {t("aboutQA.text")}
-            </Typography>
             <motion.div
-              className="progress-line"
+              className="bridge-animation"
               style={{
-                scaleX: progressLineScale,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "0.5rem",
+                marginTop: "-1rem",
+                marginBottom: "-1rem",
               }}
-            />
+            >
+              <motion.div
+                className="floating-text"
+                animate={{
+                  y: [0, -10, 0],
+                  scale: [1, 1.02, 1],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  className="gap-text"
+                  sx={{
+                    fontSize: "1.2rem",
+                    fontWeight: 600,
+                    textAlign: "center",
+                    background:
+                      "linear-gradient(45deg, #4ECDC4, #96CEB4, #64B5F6)",
+                    backgroundSize: "200% 200%",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    animation: "gradientShift 4s ease-in-out infinite",
+                    "@keyframes gradientShift": {
+                      "0%, 100%": { backgroundPosition: "0% 50%" },
+                      "50%": { backgroundPosition: "100% 50%" },
+                    },
+                  }}
+                >
+                  {t("aboutQA.text")}
+                </Typography>
+              </motion.div>
+
+              <motion.div
+                className="bridge-elements"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                }}
+              >
+                {["💡", "🔗", "⚡", "🎯"].map((icon, index) => (
+                  <motion.div
+                    key={icon}
+                    animate={{
+                      y: [0, -15, 0],
+                      rotate: [0, 5, -5, 0],
+                    }}
+                    transition={{
+                      duration: 2,
+                      delay: index * 0.3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    style={{
+                      fontSize: "1.5rem",
+                      filter: "drop-shadow(0 0 10px rgba(255,255,255,0.3))",
+                    }}
+                  >
+                    {icon}
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              <motion.div
+                className="progress-line"
+                style={{
+                  width: "200px",
+                  height: "3px",
+                  background:
+                    "linear-gradient(90deg, #4ECDC4, #96CEB4, #64B5F6)",
+                  borderRadius: "2px",
+                  scaleX: progressLineScale,
+                  transformOrigin: "left",
+                }}
+              />
+            </motion.div>
           </motion.div>
         );
 
       case "qa-services":
         return (
           <motion.div style={{ opacity, scale, y }} className="gap-content">
-            <motion.div
-              className="rotating-skill-tags"
-              animate={{ rotate: 360 }}
-              transition={{
-                duration: 20,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-            >
-              {["React", "TypeScript", "Node.js", "Next.js"].map(
-                (skill, index) => (
-                  <motion.span
-                    key={skill}
-                    className="skill-tag"
-                    style={{
-                      transform: `rotate(${index * 90}deg) translateY(-60px)`,
-                    }}
-                  >
-                    {skill}
-                  </motion.span>
-                )
-              )}
-            </motion.div>
+            {/* <ColorWorm type="default" amount={50} size={15} speed={3} /> */}
+            <ColorWorm type="worm" amount={50} size={15} speed={3} />
           </motion.div>
         );
 
       case "services-career":
         return (
           <motion.div style={{ opacity, scale, y }} className="gap-content">
-            <Typography variant="h6" className="gap-text">
-              {t("servicesCareer.text")}
-            </Typography>
-            <motion.div
-              className="career-path-animation"
-              animate={{
-                backgroundPosition: ["0% 0%", "100% 100%"],
-              }}
-              transition={{
-                duration: 12,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-            />
+            <div style={{ marginTop: "-1rem", marginBottom: "-1rem" }}>
+              <FloatingEmojis />
+              <ParticleBridge
+                particleCount={12}
+                opacity={0.8}
+                scale={0.6}
+                y={30}
+                x={150}
+                duration={4}
+                delay={0.15}
+              />
+              <ConnectionLine
+                width={400}
+                height={3}
+                background="linear-gradient(90deg, transparent, #4ECDC4, #96CEB4, #64B5F6, transparent)"
+              />
+            </div>
           </motion.div>
         );
 
       case "career-projects":
         return (
           <motion.div style={{ opacity, scale, y }} className="gap-content">
-            <Typography variant="body1" className="gap-text">
-              {t("careerProjects.text")}
-            </Typography>
-            <motion.div
-              className="project-showcase-animation"
-              animate={{
-                scale: [1, 1.1, 1],
-                opacity: [0.7, 1, 0.7],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
+            <InnovationFlow />
           </motion.div>
         );
 
       case "services-projects":
         return (
           <motion.div style={{ opacity, scale, y }} className="gap-content">
-            <Typography variant="h6" className="gap-text">
-              {t("servicesProjects.text")}
-            </Typography>
-            <motion.div
-              className="particle-system"
-              animate={{
-                backgroundPosition: ["0% 0%", "100% 100%"],
-              }}
-              transition={{
-                duration: 10,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-            />
+            <VisionRealityBridge />
           </motion.div>
         );
 
       case "projects-contact":
         return (
           <motion.div style={{ opacity, scale, y }} className="gap-content">
-            <Typography variant="body1" className="gap-text">
-              {t("projectsContact.text")}
-            </Typography>
-            <motion.div
-              className="pulse-circle"
-              animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.5, 1, 0.5],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
+            <CollaborationHub />
           </motion.div>
         );
 

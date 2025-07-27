@@ -100,31 +100,19 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
       />
 
       {/* Gap Animation: Hero to About */}
-      <ScrollGapAnimator
-        sectionId="hero-about-gap"
-        gapType="hero-about"
-        height={200}
-      />
+      <ScrollGapAnimator sectionId="hero-about-gap" gapType="hero-about" />
 
       {/* About Section */}
       <About onSkillClick={handleSkillClick} />
 
       {/* Gap Animation: About to QA */}
-      <ScrollGapAnimator
-        sectionId="about-qa-gap"
-        gapType="about-qa"
-        height={200}
-      />
+      <ScrollGapAnimator sectionId="about-qa-gap" gapType="about-qa" />
 
       {/* Rapid Q&A Section */}
       <QA />
 
       {/* Gap Animation: QA to Services */}
-      <ScrollGapAnimator
-        sectionId="qa-services-gap"
-        gapType="qa-services"
-        height={200}
-      />
+      <ScrollGapAnimator sectionId="qa-services-gap" gapType="qa-services" />
 
       {/* Services Section */}
       <Services onServiceClick={handleServiceClick} />
@@ -133,7 +121,6 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
       <ScrollGapAnimator
         sectionId="services-career-gap"
         gapType="services-career"
-        height={200}
       />
 
       {/* Career Section */}
@@ -143,7 +130,6 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
       <ScrollGapAnimator
         sectionId="career-projects-gap"
         gapType="career-projects"
-        height={200}
       />
 
       {/* Projects Section */}
@@ -153,7 +139,6 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
       <ScrollGapAnimator
         sectionId="projects-contact-gap"
         gapType="projects-contact"
-        height={200}
       />
 
       {/* Contact Section */}

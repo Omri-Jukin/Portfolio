@@ -2,7 +2,7 @@ import { styled } from "@mui/material/styles";
 import { Box, Button, Typography } from "@mui/material";
 
 export const HeroContainer = styled(Box)(({ theme }) => ({
-  minHeight: "100vh",
+  minHeight: "50vh",
   display: "flex",
   flexDirection: "column",
   alignItems: "center",

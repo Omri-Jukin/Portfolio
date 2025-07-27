@@ -50,7 +50,8 @@
   },
   "scrollGaps": {
     "heroAbout": {
-      "text": "Discovering the journey ahead..."
+      "text": "Discovering the journey ahead",
+      "cta": "Continue scrolling to find out more"
     },
     "aboutQA": {
       "text": "Building bridges between ideas and execution"

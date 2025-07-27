@@ -11,18 +11,31 @@ const AnimatedTitleContainer = styled(Box)(({ theme }) => ({
   textTransform: "uppercase",
   letterSpacing: "0.1em",
   display: "flex",
+  flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
-  flexWrap: "wrap",
+  gap: "0.5rem",
+  padding: "0 1rem",
   [theme.breakpoints.down("md")]: {
     fontSize: "2.5rem",
+    letterSpacing: "0.05em",
+    padding: "0 0.5rem",
+    gap: "0.4rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "2rem",
+    fontSize: "1.8rem",
+    letterSpacing: "0.03em",
+    padding: "0 0.25rem",
+    gap: "0.3rem",
+  },
+  [theme.breakpoints.down("xs")]: {
+    fontSize: "1.5rem",
+    letterSpacing: "0.02em",
+    gap: "0.2rem",
   },
 }));
 
-const LetterSpan = styled("span")({
+const LetterSpan = styled("span")(({ theme }) => ({
   display: "inline-block",
   transition: "all 0.3s ease",
   // Create stroke effect using text-shadow
@@ -43,7 +56,34 @@ const LetterSpan = styled("span")({
     textShadow: "none",
     WebkitTextStroke: "none",
   },
-});
+  // Improve readability on mobile
+  [theme.breakpoints.down("sm")]: {
+    textShadow: `
+      -0.5px -0.5px 0 #000,
+      0.5px -0.5px 0 #000,
+      -0.5px 0.5px 0 #000,
+      0.5px 0.5px 0 #000,
+      1px 1px 0 #000,
+      -1px -1px 0 #000,
+      1px -1px 0 #000,
+      -1px 1px 0 #000
+    `,
+    WebkitTextStroke: "1px #000",
+  },
+  [theme.breakpoints.down("xs")]: {
+    textShadow: `
+      -0.25px -0.25px 0 #000,
+      0.25px -0.25px 0 #000,
+      -0.25px 0.25px 0 #000,
+      0.25px 0.25px 0 #000,
+      0.5px 0.5px 0 #000,
+      -0.5px -0.5px 0 #000,
+      0.5px -0.5px 0 #000,
+      -0.5px 0.5px 0 #000
+    `,
+    WebkitTextStroke: "0.5px #000",
+  },
+}));
 
 interface AnimatedHeroTitleProps {
   text: string;
@@ -72,27 +112,45 @@ const AnimatedHeroTitle: React.FC<AnimatedHeroTitleProps> = ({
     "#81C784", // Light Green
   ];
 
-  // Filter out spaces and punctuation for animation
-  const letters = text.split("").map((letter, index) => ({
-    letter,
-    index,
-    isAnimatable: letter !== " " && letter !== "-" && letter !== "'",
-  }));
+  const words = text.split(" ");
 
-  const animatableLetters = letters.filter((l) => l.isAnimatable);
+  // Create a flat array of all animatable letters with their positions
+  const allLetters: Array<{
+    letter: string;
+    wordIndex: number;
+    letterIndex: number;
+    globalIndex: number;
+    isAnimatable: boolean;
+  }> = [];
+  let globalIndex = 0;
+
+  words.forEach((word, wordIndex) => {
+    word.split("").forEach((letter, letterIndex) => {
+      if (letter !== " " && letter !== "-" && letter !== "'") {
+        allLetters.push({
+          letter,
+          wordIndex,
+          letterIndex,
+          globalIndex,
+          isAnimatable: true,
+        });
+      }
+      globalIndex++;
+    });
+  });
+
+  const currentActiveLetter = allLetters[activeLetter];
 
   useEffect(() => {
-    if (!autoAnimate || animatableLetters.length === 0) return;
+    if (!autoAnimate || allLetters.length === 0) return;
 
     // Start immediately with a random letter
-    const initialRandomIndex = Math.floor(
-      Math.random() * animatableLetters.length
-    );
+    const initialRandomIndex = Math.floor(Math.random() * allLetters.length);
     setActiveLetter(initialRandomIndex);
 
     // Cycle through letters randomly
     const letterInterval = setInterval(() => {
-      const randomIndex = Math.floor(Math.random() * animatableLetters.length);
+      const randomIndex = Math.floor(Math.random() * allLetters.length);
       setActiveLetter(randomIndex);
     }, 300); // Change letter every 300ms
 
@@ -105,32 +163,59 @@ const AnimatedHeroTitle: React.FC<AnimatedHeroTitleProps> = ({
       clearInterval(letterInterval);
       clearInterval(colorInterval);
     };
-  }, [autoAnimate, animatableLetters.length, colors.length]);
+  }, [autoAnimate, allLetters.length, colors.length]);
 
   const currentColorValue = colors[currentColor];
-  const currentActiveIndex = animatableLetters[activeLetter]?.index || 0;
 
   return (
     <AnimatedTitleContainer className={className || "animated-title"}>
-      {letters.map(({ letter, index, isAnimatable }) => (
-        <LetterSpan
-          key={index}
-          className={
-            isAnimatable && index === currentActiveIndex ? "active" : ""
-          }
+      {words.map((word, wordIndex) => (
+        <Box
+          key={wordIndex}
+          component="div"
           sx={{
-            color:
-              isAnimatable && index === currentActiveIndex
-                ? currentColorValue
-                : theme.palette.mode === "light"
-                ? theme.paperDark
-                : theme.paperLight,
-            transition: "color 0.3s ease-in-out",
-            margin: letter === " " ? "0 0.2em" : "0 0.05em",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            whiteSpace: "nowrap",
           }}
         >
-          {letter}
-        </LetterSpan>
+          {word.split("").map((letter, index) => (
+            <LetterSpan
+              key={`${wordIndex}-${index}`}
+              className={
+                letter === " "
+                  ? "space"
+                  : currentActiveLetter &&
+                    currentActiveLetter.letter === letter &&
+                    currentActiveLetter.wordIndex === wordIndex &&
+                    currentActiveLetter.letterIndex === index
+                  ? "active"
+                  : ""
+              }
+              sx={{
+                color:
+                  letter === " "
+                    ? theme.palette.text.primary
+                    : currentActiveLetter &&
+                      currentActiveLetter.letter === letter &&
+                      currentActiveLetter.wordIndex === wordIndex &&
+                      currentActiveLetter.letterIndex === index
+                    ? currentColorValue
+                    : theme.palette.mode === "light"
+                    ? theme.paperDark
+                    : theme.paperLight,
+                transition: "color 0.3s ease-in-out",
+                margin: letter === " " ? "0 0.2em" : "0 0.05em",
+                [theme.breakpoints.down("sm")]: {
+                  margin: letter === " " ? "0 0.1em" : "0 0.02em",
+                },
+              }}
+            >
+              {letter}
+            </LetterSpan>
+          ))}
+        </Box>
       ))}
     </AnimatedTitleContainer>
   );

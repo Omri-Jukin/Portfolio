@@ -8,7 +8,8 @@ export const ScrollGapAnimatorStyle = {
     alignItems: "center",
     justifyContent: "center",
     position: "relative",
-    overflow: "hidden",
+    overflow: "visible",
+    padding: "2rem 0",
     "& .gap-content": {
       display: "flex",
       flexDirection: "column",
