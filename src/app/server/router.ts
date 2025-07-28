@@ -13,6 +13,7 @@ import { usersRouter } from "./routers/users";
 import { adminBlogRouter } from "./routers/adminBlog";
 import { emailsRouter } from "./routers/emails";
 import { authRouter } from "./routers/auth";
+import { uploadRouter } from "./routers/upload";
 
 export const appRouter = router({
   blog: blogRouter,
@@ -21,6 +22,7 @@ export const appRouter = router({
   adminBlog: adminBlogRouter,
   emails: emailsRouter,
   auth: authRouter,
+  upload: uploadRouter,
 });
 
 export type AppRouter = typeof appRouter;

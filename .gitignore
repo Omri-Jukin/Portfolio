@@ -42,3 +42,11 @@ next-env.d.ts
 # wrangler files
 .wrangler
 .dev.vars*
+
+# uploaded files
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+# uploaded files
+/public/uploads/*
+!/public/uploads/.gitkeep

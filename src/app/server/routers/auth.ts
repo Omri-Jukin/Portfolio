@@ -36,13 +36,6 @@ export const authRouter = router({
     .mutation(async (opts) => {
       const { input, ctx } = opts;
 
-      console.log("Registration attempt:", {
-        email: input.email,
-        hasDB: !!ctx.db,
-        hasJWT_SECRET: !!process.env.JWT_SECRET,
-        NODE_ENV: process.env.NODE_ENV,
-      });
-
       try {
         // Check if this is the first user (make them admin)
         let isFirstUser = false;
@@ -52,7 +45,6 @@ export const authRouter = router({
               limit: 1,
             });
             isFirstUser = existingUsers.length === 0;
-            console.log("Database query successful, isFirstUser:", isFirstUser);
           } catch (dbError) {
             console.error("Database query failed:", dbError);
             throw new Error(`Database query failed: ${dbError}`);
@@ -64,7 +56,6 @@ export const authRouter = router({
 
         // Hash password
         const hashedPassword = await bcrypt.hash(input.password, 12);
-        console.log("Password hashed successfully");
 
         // Create user with appropriate role and status
         const newUser = await createUser({
@@ -74,13 +65,6 @@ export const authRouter = router({
           password: hashedPassword,
           role: isFirstUser ? "admin" : "visitor", // First user becomes admin
           status: isFirstUser ? "approved" : "pending", // First user is auto-approved
-        });
-
-        console.log("User created successfully:", {
-          id: newUser.id,
-          email: newUser.email,
-          role: newUser.role,
-          status: newUser.status,
         });
 
         return {
@@ -108,12 +92,6 @@ export const authRouter = router({
             message: "User with this email already exists",
           });
         }
-
-        // Log the full error for debugging
-        console.error("Full registration error:", {
-          message: error instanceof Error ? error.message : "Unknown error",
-          stack: error instanceof Error ? error.stack : undefined,
-        });
 
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -146,22 +124,8 @@ export const authRouter = router({
           process.env.NODE_ENV ||
           "development";
 
-        // Debug logging
-        console.log("Login Debug:", {
-          hasContextEnv: !!(ctx as ExtendedContext).env,
-          hasJWT_SECRET: !!JWT_SECRET,
-          NODE_ENV,
-          hasDB: !!ctx.db,
-          email: input.email,
-        });
-
         // Find user by email - pass the database client from context
-        console.log("Attempting to find user with email:", input.email);
         const userResult = await loginUser(input, ctx.db || undefined);
-        console.log(
-          "User result:",
-          userResult ? "Found user" : "No user found"
-        );
 
         // Check if userResult is an error object or null
         if (
@@ -170,7 +134,6 @@ export const authRouter = router({
             "success" in userResult &&
             !userResult.success)
         ) {
-          console.log("User lookup failed:", userResult);
           throw new TRPCError({
             code: "UNAUTHORIZED",
             message: "Invalid email or password",
@@ -179,17 +142,9 @@ export const authRouter = router({
 
         // At this point, userResult is guaranteed to be a user object
         const user = userResult as User;
-        console.log("User found:", {
-          id: user.id,
-          email: user.email,
-          role: user.role,
-          status: user.status,
-          hasPassword: !!user.password,
-        });
 
         // Check if user is approved
         if (user.status !== "approved") {
-          console.log("User not approved:", user.status);
           throw new TRPCError({
             code: "FORBIDDEN",
             message:
@@ -200,22 +155,18 @@ export const authRouter = router({
         }
 
         // Verify password
-        console.log("Verifying password...");
         const isValidPassword = await bcrypt.compare(
           input.password,
           user.password
         );
-        console.log("Password verification result:", isValidPassword);
 
         if (!isValidPassword) {
-          console.log("Password verification failed");
           throw new TRPCError({
             code: "UNAUTHORIZED",
             message: "Invalid email or password",
           });
         }
 
-        console.log("Password verified successfully, generating JWT token...");
         // Generate JWT token
         const token = jwt.sign(
           {
@@ -240,10 +191,8 @@ export const authRouter = router({
           ].join("; ");
 
           ctx.resHeaders.set("Set-Cookie", cookieOptions);
-          console.log("Cookie set successfully");
         }
 
-        console.log("Login successful for user:", user.email);
         // Return user data (without password)
         return {
           user: {

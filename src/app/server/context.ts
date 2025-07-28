@@ -3,11 +3,7 @@ dotenv.config({ path: ".env.local" });
 dotenv.config({ path: ".env" });
 
 import { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
-import {
-  getDB,
-  getEnvFromGlobal,
-  debugGlobalScope,
-} from "../../../lib/db/client";
+import { getDB } from "$/db/client";
 import jwt from "jsonwebtoken";
 import { getUserById } from "$/db/users/users";
 
@@ -23,41 +19,29 @@ export async function createContext({
   req,
   resHeaders,
 }: FetchCreateContextFnOptions) {
-  // Debug global scope to see what's available
-  await debugGlobalScope();
-
   // Create database client using the new getDB() function
   let db: Awaited<ReturnType<typeof getDB>> | null = null;
   try {
     db = await getDB();
-    console.log("Database client created successfully");
   } catch (error) {
     console.error("Failed to create database client:", error);
     db = null;
   }
 
   // Get JWT_SECRET from Cloudflare context
-  let JWT_SECRET = await getEnvFromGlobal("JWT_SECRET");
+  let JWT_SECRET = (globalThis as { __env?: { JWT_SECRET?: string } }).__env
+    ?.JWT_SECRET;
   if (!JWT_SECRET) {
     // Fallback to process.env (for development)
     JWT_SECRET = process.env.JWT_SECRET;
   }
 
   // Get NODE_ENV from environment
-  let NODE_ENV = await getEnvFromGlobal("NODE_ENV");
+  let NODE_ENV = (globalThis as { __env?: { NODE_ENV?: string } }).__env
+    ?.NODE_ENV;
   if (!NODE_ENV) {
     NODE_ENV = process.env.NODE_ENV || "development";
   }
-
-  // Debug logging
-  console.log("Context Debug:", {
-    hasDB: !!db,
-    hasJWT_SECRET: !!JWT_SECRET,
-    NODE_ENV,
-    JWT_SECRET_LENGTH: JWT_SECRET?.length || 0,
-    JWT_SECRET_START: JWT_SECRET?.substring(0, 10) || "none",
-    databaseClientCreated: !!db,
-  });
 
   if (!JWT_SECRET || JWT_SECRET === "your-secret-key-change-in-production") {
     console.error("JWT_SECRET is not properly configured");

@@ -109,8 +109,6 @@ export const loginUser = async (
   input: LoginInput,
   db?: Awaited<ReturnType<typeof getDB>>
 ) => {
-  console.log("loginUser called with:", { email: input.email, hasDB: !!db });
-
   // Use the provided db client (from context) or try to get a new one
   let client: Awaited<ReturnType<typeof getDB>> | null = db || null;
   if (!client) {
@@ -122,21 +120,14 @@ export const loginUser = async (
     }
   }
 
-  console.log("Database client status:", {
-    hasClient: !!client,
-  });
-
   if (!client) {
-    console.log("No database client available");
     // In development, use local D1
     if (process.env.NODE_ENV === "development") {
-      console.log("Using development fallback");
       try {
         const { findUserByEmailLocal } = await import("../remote-client");
         const user = await findUserByEmailLocal(input.email);
 
         if (!user) {
-          console.log("No user found in development fallback");
           return {
             success: false,
             error: "User not found.",
@@ -158,7 +149,6 @@ export const loginUser = async (
             : null,
         };
 
-        console.log("User found in development fallback:", mappedUser.email);
         return mappedUser;
       } catch (error) {
         console.error("Development fallback error:", error);
@@ -171,31 +161,15 @@ export const loginUser = async (
 
     // In production, we can't use shell commands, so we need to throw an error
     // The database client should be available from the context in production
-    console.error("Database client not available in production");
     throw new Error(
       "Database client not available in production. Please check your D1 binding configuration."
     );
   }
 
-  console.log("Attempting database query for email:", input.email);
   try {
     const user = await client.query.users.findFirst({
       where: eq(users.email, input.email),
     });
-
-    console.log(
-      "Database query result:",
-      user ? "User found" : "No user found"
-    );
-    if (user) {
-      console.log("User details:", {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-        status: user.status,
-        hasPassword: !!user.password,
-      });
-    }
 
     if (!user) {
       return null; // Return null instead of throwing error for better error handling

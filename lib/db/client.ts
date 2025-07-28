@@ -67,16 +67,3 @@ export async function getEnvFromGlobal(
     return undefined;
   }
 }
-
-// Debug function to log all available global properties
-export async function debugGlobalScope() {
-  console.log("=== GLOBAL SCOPE DEBUG ===");
-  try {
-    const { env } = await getCloudflareContext({ async: true });
-    console.log("Cloudflare context env keys:", Object.keys(env));
-    console.log("DB available:", !!(env as CloudflareEnv).DB);
-  } catch (error) {
-    console.log("Failed to get Cloudflare context:", error);
-  }
-  console.log("=== END GLOBAL SCOPE DEBUG ===");
-}
