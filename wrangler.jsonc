@@ -24,7 +24,6 @@
     }
   ],
   "vars": {
-    "NODE_ENV": "production",
-    "JWT_SECRET": "b1d0a5abb6232c04eae891090fc129609045d34f0e3f14a3dd82981da80033f6734c5ce3c8f1bed64d8009f063d5bf6431c83fcbcc0e02de7953960e6201fbbd"
+    "NODE_ENV": "production"
   }
 }
