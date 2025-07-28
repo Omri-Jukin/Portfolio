@@ -17,6 +17,11 @@ import {
   IconButton,
   Alert,
   CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import {
   Add as AddIcon,
@@ -25,21 +30,57 @@ import {
 } from "@mui/icons-material";
 import { api } from "$/trpc/client";
 import { useRouter } from "next/navigation";
+import Snackbar, { SnackbarProps } from "~/Snackbar";
 
 const AdminBlogDashboard = () => {
   const router = useRouter();
   const { data: posts, isLoading, error, refetch } = api.blog.getAll.useQuery();
+  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
+  const [postToDelete, setPostToDelete] = React.useState<string | null>(null);
+  const [snackbar, setSnackbar] = React.useState<SnackbarProps>({
+    open: false,
+    message: "",
+    severity: "info",
+  });
 
   const deletePostMutation = api.blog.delete.useMutation({
     onSuccess: () => {
+      setSnackbar({
+        open: true,
+        message: "Blog post deleted successfully!",
+        severity: "success",
+      });
       refetch();
+      setDeleteDialogOpen(false);
+      setPostToDelete(null);
+    },
+    onError: (error) => {
+      setSnackbar({
+        open: true,
+        message: error.message || "Failed to delete blog post",
+        severity: "error",
+      });
     },
   });
 
-  const handleDelete = (id: string) => {
-    if (window.confirm("Are you sure you want to delete this post?")) {
-      deletePostMutation.mutate({ id });
+  const handleDeleteClick = (id: string) => {
+    setPostToDelete(id);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (postToDelete) {
+      deletePostMutation.mutate({ id: postToDelete });
     }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+    setPostToDelete(null);
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
   };
 
   if (isLoading) {
@@ -157,7 +198,7 @@ const AdminBlogDashboard = () => {
                         </IconButton>
                         <IconButton
                           size="small"
-                          onClick={() => handleDelete(post.id)}
+                          onClick={() => handleDeleteClick(post.id)}
                           aria-label="Delete post"
                           color="error"
                           disabled={deletePostMutation.isPending}
@@ -189,6 +230,50 @@ const AdminBlogDashboard = () => {
           </Button>
         </Paper>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteCancel}
+        aria-labelledby="delete-dialog-title"
+        aria-describedby="delete-dialog-description"
+      >
+        <DialogTitle id="delete-dialog-title">Delete Blog Post</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-dialog-description">
+            Are you sure you want to delete this blog post? This action cannot
+            be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={handleDeleteCancel}
+            disabled={deletePostMutation.isPending}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleDeleteConfirm}
+            color="error"
+            variant="contained"
+            disabled={deletePostMutation.isPending}
+            startIcon={
+              deletePostMutation.isPending ? (
+                <CircularProgress size={16} />
+              ) : null
+            }
+          >
+            {deletePostMutation.isPending ? "Deleting..." : "Delete"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Snackbar
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        onClose={handleSnackbarClose}
+      />
     </Container>
   );
 };

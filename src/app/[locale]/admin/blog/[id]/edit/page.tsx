@@ -21,11 +21,14 @@ import {
 } from "@mui/material";
 import { CloudUpload, Delete } from "@mui/icons-material";
 import { api } from "$/trpc/client";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import Snackbar from "~/Snackbar";
 
-const AdminBlogNew = () => {
+const AdminBlogEdit = () => {
   const router = useRouter();
+  const params = useParams();
+  const postId = params.id as string;
+
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -46,11 +49,38 @@ const AdminBlogNew = () => {
     severity: "info" as "success" | "error" | "info" | "warning",
   });
 
-  const createPostMutation = api.blog.create.useMutation({
+  // Fetch the post data
+  const { data: post, isLoading: isLoadingPost } = api.blog.getById.useQuery(
+    { id: postId },
+    {
+      enabled: !!postId,
+    }
+  );
+
+  // Update form data when post is loaded
+  React.useEffect(() => {
+    if (post) {
+      setFormData({
+        title: post.title,
+        slug: post.slug,
+        content: post.content,
+        excerpt: post.excerpt || "",
+        status: post.status,
+        tags: post.tags || [],
+        imageUrl: post.imageUrl || "",
+        imageAlt: post.imageAlt || "",
+      });
+      if (post.imageUrl) {
+        setUploadedImage(post.imageUrl);
+      }
+    }
+  }, [post]);
+
+  const updatePostMutation = api.blog.update.useMutation({
     onSuccess: () => {
       setSnackbar({
         open: true,
-        message: "Blog post created successfully!",
+        message: "Blog post updated successfully!",
         severity: "success",
       });
       setTimeout(() => {
@@ -60,7 +90,7 @@ const AdminBlogNew = () => {
     onError: (error) => {
       setSnackbar({
         open: true,
-        message: error.message || "Failed to create blog post",
+        message: error.message || "Failed to update blog post",
         severity: "error",
       });
     },
@@ -177,7 +207,10 @@ const AdminBlogNew = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    createPostMutation.mutate(formData);
+    updatePostMutation.mutate({
+      id: postId,
+      ...formData,
+    });
   };
 
   const generateSlug = () => {
@@ -192,10 +225,33 @@ const AdminBlogNew = () => {
     setSnackbar((prev) => ({ ...prev, open: false }));
   };
 
+  if (isLoadingPost) {
+    return (
+      <Container maxWidth="md" sx={{ py: 4 }}>
+        <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+          <CircularProgress />
+        </Box>
+      </Container>
+    );
+  }
+
+  if (!post) {
+    return (
+      <Container maxWidth="md" sx={{ py: 4 }}>
+        <Typography variant="h6" color="error" sx={{ mb: 2 }}>
+          Post not found
+        </Typography>
+        <Button variant="outlined" onClick={() => router.push("/admin/blog")}>
+          Back to Blog Management
+        </Button>
+      </Container>
+    );
+  }
+
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
       <Typography variant="h4" gutterBottom>
-        Create New Blog Post
+        Edit Blog Post
       </Typography>
 
       <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
@@ -406,21 +462,21 @@ const AdminBlogNew = () => {
             <Button
               variant="outlined"
               onClick={() => router.push("/admin/blog")}
-              disabled={createPostMutation.isPending}
+              disabled={updatePostMutation.isPending}
             >
               Cancel
             </Button>
             <Button
               type="submit"
               variant="contained"
-              disabled={createPostMutation.isPending}
+              disabled={updatePostMutation.isPending}
               startIcon={
-                createPostMutation.isPending ? (
+                updatePostMutation.isPending ? (
                   <CircularProgress size={20} />
                 ) : null
               }
             >
-              {createPostMutation.isPending ? "Creating..." : "Create Post"}
+              {updatePostMutation.isPending ? "Updating..." : "Update Post"}
             </Button>
           </Box>
         </Stack>
@@ -436,4 +492,4 @@ const AdminBlogNew = () => {
   );
 };
 
-export default AdminBlogNew;
+export default AdminBlogEdit;

@@ -1,0 +1,35 @@
+{
+  "example_request": {
+    "url": "https://yourdomain.com/api/blog/publish",
+    "method": "POST",
+    "headers": {
+      "Content-Type": "application/json",
+      "x-api-key": "d82276c37b7dc2425a914cb0a96e447942465e0d3e7bf45c51188b16e716097579423e81a7497c78dbec4ba45c303cff084b20bb4c163e82db91a7c6919136e5"
+    },
+    "body": {
+      "title": "My New Blog Post",
+      "content": "This is the content of my blog post. It supports **markdown** formatting and can include:\n\n- Bullet points\n- **Bold text**\n- *Italic text*\n- `Code snippets`\n\nYou can write this on your iPhone and it will be published immediately!",
+      "excerpt": "A quick summary of what this post is about",
+      "tags": ["iphone", "shortcut", "blogging", "productivity"],
+      "imageUrl": null,
+      "imageAlt": null
+    }
+  },
+  "example_response": {
+    "success": true,
+    "post": {
+      "id": "post-123",
+      "title": "My New Blog Post",
+      "slug": "my-new-blog-post",
+      "status": "published",
+      "publishedAt": "2024-01-01T12:00:00.000Z"
+    },
+    "message": "Blog post published successfully!"
+  },
+  "iphone_shortcut_variables": {
+    "title_input": "Shortcut Input",
+    "content_input": "Shortcut Input 2",
+    "excerpt_input": "Shortcut Input 3",
+    "tags_input": "Shortcut Input 4"
+  }
+}
