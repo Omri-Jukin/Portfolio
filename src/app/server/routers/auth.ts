@@ -36,18 +36,35 @@ export const authRouter = router({
     .mutation(async (opts) => {
       const { input, ctx } = opts;
 
+      console.log("Registration attempt:", {
+        email: input.email,
+        hasDB: !!ctx.db,
+        hasJWT_SECRET: !!process.env.JWT_SECRET,
+        NODE_ENV: process.env.NODE_ENV,
+      });
+
       try {
         // Check if this is the first user (make them admin)
         let isFirstUser = false;
         if (ctx.db) {
-          const existingUsers = await ctx.db.query.users.findMany({
-            limit: 1,
-          });
-          isFirstUser = existingUsers.length === 0;
+          try {
+            const existingUsers = await ctx.db.query.users.findMany({
+              limit: 1,
+            });
+            isFirstUser = existingUsers.length === 0;
+            console.log("Database query successful, isFirstUser:", isFirstUser);
+          } catch (dbError) {
+            console.error("Database query failed:", dbError);
+            throw new Error(`Database query failed: ${dbError}`);
+          }
+        } else {
+          console.error("No database client available in context");
+          throw new Error("Database client not available");
         }
 
         // Hash password
         const hashedPassword = await bcrypt.hash(input.password, 12);
+        console.log("Password hashed successfully");
 
         // Create user with appropriate role and status
         const newUser = await createUser({
@@ -57,6 +74,13 @@ export const authRouter = router({
           password: hashedPassword,
           role: isFirstUser ? "admin" : "visitor", // First user becomes admin
           status: isFirstUser ? "approved" : "pending", // First user is auto-approved
+        });
+
+        console.log("User created successfully:", {
+          id: newUser.id,
+          email: newUser.email,
+          role: newUser.role,
+          status: newUser.status,
         });
 
         return {
@@ -73,6 +97,8 @@ export const authRouter = router({
             : "Registration successful! Please wait for admin approval.",
         };
       } catch (error) {
+        console.error("Registration error:", error);
+
         if (
           error instanceof Error &&
           error.message.includes("already exists")
@@ -82,9 +108,18 @@ export const authRouter = router({
             message: "User with this email already exists",
           });
         }
+
+        // Log the full error for debugging
+        console.error("Full registration error:", {
+          message: error instanceof Error ? error.message : "Unknown error",
+          stack: error instanceof Error ? error.stack : undefined,
+        });
+
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to create user",
+          message: `Failed to create user: ${
+            error instanceof Error ? error.message : "Unknown error"
+          }`,
         });
       }
     }),
