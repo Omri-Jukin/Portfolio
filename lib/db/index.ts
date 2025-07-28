@@ -1,14 +1,14 @@
 // Database client
-export { dbClient, createDbClient } from './client';
+export { dbClient, getDB, getDbClient } from "./client";
 
 // Schema exports
-export * from './schema/schema.tables';
+export * from "./schema/schema.tables";
 
 // User functions
-export * from './users/users';
+export * from "./users/users";
 
-// Blog functions  
-export * from './blog/blog';
+// Blog functions
+export * from "./blog/blog";
 
 // Contact functions
-export * from './contact/contact';
+export * from "./contact/contact";

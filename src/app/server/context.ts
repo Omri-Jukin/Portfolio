@@ -4,21 +4,12 @@ dotenv.config({ path: ".env" });
 
 import { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 import {
-  createDbClient,
-  createDbClientWithFallback,
+  getDB,
   getEnvFromGlobal,
   debugGlobalScope,
 } from "../../../lib/db/client";
-import { D1Database } from "@cloudflare/workers-types";
 import jwt from "jsonwebtoken";
 import { getUserById } from "$/db/users/users";
-
-// Type for Cloudflare environment
-interface CloudflareEnv {
-  DB: D1Database;
-  JWT_SECRET?: string;
-  NODE_ENV?: string;
-}
 
 // User type for authentication
 interface AuthenticatedUser {
@@ -31,57 +22,37 @@ interface AuthenticatedUser {
 export async function createContext({
   req,
   resHeaders,
-  env,
-}: FetchCreateContextFnOptions & { env?: CloudflareEnv }) {
+}: FetchCreateContextFnOptions) {
   // Debug global scope to see what's available
-  debugGlobalScope();
+  await debugGlobalScope();
 
-  // Create database client with D1 instance
-  console.log("Context creation - env check:", {
-    hasEnv: !!env,
-    hasDB: !!env?.DB,
-    envKeys: env ? Object.keys(env) : [],
-  });
-
-  // Try to get D1 database from env parameter first (Cloudflare Workers way)
-  const d1Database = env?.DB;
-  let db: ReturnType<typeof createDbClient> | null = null;
-
-  if (d1Database) {
-    db = createDbClient(d1Database);
-    console.log("Database client created from env");
-  } else {
-    // Try using the new fallback method
-    db = createDbClientWithFallback();
-    console.log("Database client created from fallback:", !!db);
+  // Create database client using the new getDB() function
+  let db: Awaited<ReturnType<typeof getDB>> | null = null;
+  try {
+    db = await getDB();
+    console.log("Database client created successfully");
+  } catch (error) {
+    console.error("Failed to create database client:", error);
+    db = null;
   }
 
-  // Try multiple ways to access JWT_SECRET in Cloudflare Workers
-  let JWT_SECRET = env?.JWT_SECRET;
-  if (!JWT_SECRET) {
-    JWT_SECRET = getEnvFromGlobal("JWT_SECRET");
-  }
+  // Get JWT_SECRET from Cloudflare context
+  let JWT_SECRET = await getEnvFromGlobal("JWT_SECRET");
   if (!JWT_SECRET) {
     // Fallback to process.env (for development)
     JWT_SECRET = process.env.JWT_SECRET;
   }
 
   // Get NODE_ENV from environment
-  let NODE_ENV = env?.NODE_ENV;
-  if (!NODE_ENV) {
-    NODE_ENV = getEnvFromGlobal("NODE_ENV");
-  }
+  let NODE_ENV = await getEnvFromGlobal("NODE_ENV");
   if (!NODE_ENV) {
     NODE_ENV = process.env.NODE_ENV || "development";
   }
 
   // Debug logging
   console.log("Context Debug:", {
-    hasDB: !!env?.DB,
-    hasGlobalDB: !!(globalThis as Record<string, unknown>).DB,
-    hasEnvJWT_SECRET: !!env?.JWT_SECRET,
-    hasGlobalJWT_SECRET: !!getEnvFromGlobal("JWT_SECRET"),
-    hasProcessJWT_SECRET: !!process.env.JWT_SECRET,
+    hasDB: !!db,
+    hasJWT_SECRET: !!JWT_SECRET,
     NODE_ENV,
     JWT_SECRET_LENGTH: JWT_SECRET?.length || 0,
     JWT_SECRET_START: JWT_SECRET?.substring(0, 10) || "none",

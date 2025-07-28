@@ -1,5 +1,5 @@
 import { blogPosts } from "../schema/schema.tables";
-import { dbClient } from "../client";
+import { getDB } from "../client";
 import { v4 as uuidv4 } from "uuid";
 import { PostStatus } from "../schema/schema.tables";
 import { eq, desc } from "drizzle-orm";
@@ -31,6 +31,13 @@ export type UpdatePostInput = {
 };
 
 export const createPost = async (input: CreatePostInput) => {
+  let dbClient: Awaited<ReturnType<typeof getDB>> | null = null;
+  try {
+    dbClient = await getDB();
+  } catch (error) {
+    console.error("Failed to get database client:", error);
+  }
+
   if (!dbClient) {
     throw new Error("Database client not available.");
   }
@@ -71,6 +78,13 @@ export const createPost = async (input: CreatePostInput) => {
 };
 
 export const getPostBySlug = async (slug: string) => {
+  let dbClient: Awaited<ReturnType<typeof getDB>> | null = null;
+  try {
+    dbClient = await getDB();
+  } catch (error) {
+    console.error("Failed to get database client:", error);
+  }
+
   if (!dbClient) {
     throw new Error("Database client not available.");
   }
@@ -83,6 +97,13 @@ export const getPostBySlug = async (slug: string) => {
 };
 
 export const getPostById = async (id: string) => {
+  let dbClient: Awaited<ReturnType<typeof getDB>> | null = null;
+  try {
+    dbClient = await getDB();
+  } catch (error) {
+    console.error("Failed to get database client:", error);
+  }
+
   if (!dbClient) {
     throw new Error("Database client not available.");
   }
@@ -99,6 +120,13 @@ export const getPostById = async (id: string) => {
 };
 
 export const getAllPosts = async (status?: PostStatus) => {
+  let dbClient: Awaited<ReturnType<typeof getDB>> | null = null;
+  try {
+    dbClient = await getDB();
+  } catch (error) {
+    console.error("Failed to get database client:", error);
+  }
+
   if (!dbClient) {
     throw new Error("Database client not available.");
   }
@@ -116,6 +144,13 @@ export const getPublishedPosts = async () => {
 };
 
 export const updatePost = async (input: UpdatePostInput) => {
+  let dbClient: Awaited<ReturnType<typeof getDB>> | null = null;
+  try {
+    dbClient = await getDB();
+  } catch (error) {
+    console.error("Failed to get database client:", error);
+  }
+
   if (!dbClient) {
     throw new Error("Database client not available.");
   }
@@ -152,6 +187,13 @@ export const updatePost = async (input: UpdatePostInput) => {
 };
 
 export const deletePost = async (id: string) => {
+  let dbClient: Awaited<ReturnType<typeof getDB>> | null = null;
+  try {
+    dbClient = await getDB();
+  } catch (error) {
+    console.error("Failed to get database client:", error);
+  }
+
   if (!dbClient) {
     throw new Error("Database client not available.");
   }

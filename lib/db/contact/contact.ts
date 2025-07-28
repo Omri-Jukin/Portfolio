@@ -1,6 +1,6 @@
 import { contactInquiries } from "../schema/schema.tables";
 import { eq, desc } from "drizzle-orm";
-import { dbClient } from "../client";
+import { getDB } from "../client";
 import { v4 as uuidv4 } from "uuid";
 import { InquiryStatus } from "../schema/schema.tables";
 
@@ -17,6 +17,13 @@ export type UpdateContactInput = {
 };
 
 export const createContactInquiry = async (input: CreateContactInput) => {
+  let dbClient: Awaited<ReturnType<typeof getDB>> | null = null;
+  try {
+    dbClient = await getDB();
+  } catch (error) {
+    console.error("Failed to get database client:", error);
+  }
+
   if (!dbClient) {
     throw new Error("Database client not available.");
   }
@@ -42,6 +49,13 @@ export const createContactInquiry = async (input: CreateContactInput) => {
 };
 
 export const getContactInquiries = async (status?: InquiryStatus) => {
+  let dbClient: Awaited<ReturnType<typeof getDB>> | null = null;
+  try {
+    dbClient = await getDB();
+  } catch (error) {
+    console.error("Failed to get database client:", error);
+  }
+
   if (!dbClient) {
     throw new Error("Database client not available.");
   }
@@ -55,6 +69,13 @@ export const getContactInquiries = async (status?: InquiryStatus) => {
 };
 
 export const getContactInquiryById = async (id: string) => {
+  let dbClient: Awaited<ReturnType<typeof getDB>> | null = null;
+  try {
+    dbClient = await getDB();
+  } catch (error) {
+    console.error("Failed to get database client:", error);
+  }
+
   if (!dbClient) {
     throw new Error("Database client not available.");
   }
@@ -71,6 +92,13 @@ export const getContactInquiryById = async (id: string) => {
 };
 
 export const updateContactInquiry = async (input: UpdateContactInput) => {
+  let dbClient: Awaited<ReturnType<typeof getDB>> | null = null;
+  try {
+    dbClient = await getDB();
+  } catch (error) {
+    console.error("Failed to get database client:", error);
+  }
+
   if (!dbClient) {
     throw new Error("Database client not available.");
   }
@@ -95,6 +123,13 @@ export const updateContactInquiry = async (input: UpdateContactInput) => {
 };
 
 export const deleteContactInquiry = async (id: string) => {
+  let dbClient: Awaited<ReturnType<typeof getDB>> | null = null;
+  try {
+    dbClient = await getDB();
+  } catch (error) {
+    console.error("Failed to get database client:", error);
+  }
+
   if (!dbClient) {
     throw new Error("Database client not available.");
   }
@@ -109,4 +144,4 @@ export const deleteContactInquiry = async (id: string) => {
   }
 
   return deletedInquiry[0];
-}; 
+};

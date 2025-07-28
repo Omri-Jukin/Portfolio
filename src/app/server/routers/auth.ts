@@ -34,20 +34,29 @@ export const authRouter = router({
       })
     )
     .mutation(async (opts) => {
-      const { input } = opts;
+      const { input, ctx } = opts;
 
       try {
+        // Check if this is the first user (make them admin)
+        let isFirstUser = false;
+        if (ctx.db) {
+          const existingUsers = await ctx.db.query.users.findMany({
+            limit: 1,
+          });
+          isFirstUser = existingUsers.length === 0;
+        }
+
         // Hash password
         const hashedPassword = await bcrypt.hash(input.password, 12);
 
-        // Create user with pending status
+        // Create user with appropriate role and status
         const newUser = await createUser({
           email: input.email,
           firstName: input.firstName,
           lastName: input.lastName,
           password: hashedPassword,
-          role: "visitor", // Default role for new registrations
-          status: "pending", // Requires admin approval
+          role: isFirstUser ? "admin" : "visitor", // First user becomes admin
+          status: isFirstUser ? "approved" : "pending", // First user is auto-approved
         });
 
         return {
@@ -59,7 +68,9 @@ export const authRouter = router({
             role: newUser.role,
             status: newUser.status,
           },
-          message: "Registration successful! Please wait for admin approval.",
+          message: isFirstUser
+            ? "Admin account created successfully! You can now log in."
+            : "Registration successful! Please wait for admin approval.",
         };
       } catch (error) {
         if (

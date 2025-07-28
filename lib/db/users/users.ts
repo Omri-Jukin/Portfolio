@@ -1,15 +1,11 @@
 import { eq } from "drizzle-orm";
-import { createDbClient, getD1FromGlobal } from "../client";
+import { getDB } from "../client";
 import { users, UserRole, UserStatus } from "../schema/schema.tables";
 import { v4 as uuidv4 } from "uuid";
 import {
   insertUser as insertUserRemote,
   findUserByEmail as findUserByEmailRemote,
 } from "../remote-client";
-
-// Get the database client from the global scope
-const d1Database = getD1FromGlobal();
-const dbClient = d1Database ? createDbClient(d1Database) : null;
 
 // Simple types for portfolio user management
 export type CreateUserInput = {
@@ -37,8 +33,36 @@ export type UpdateUserInput = {
 };
 
 export const createUser = async (input: CreateUserInput) => {
-  if (!dbClient) {
-    // In development, we can use remote D1 commands
+  try {
+    const dbClient = await getDB();
+
+    // Check if user already exists
+    const existingUser = await dbClient.query.users.findFirst({
+      where: eq(users.email, input.email),
+    });
+
+    if (existingUser) {
+      throw new Error("User with this email already exists.");
+    }
+
+    const newUser = await dbClient
+      .insert(users)
+      .values({
+        id: uuidv4(),
+        email: input.email,
+        password: input.password, // This should be hashed before calling this function
+        firstName: input.firstName,
+        lastName: input.lastName,
+        role: input.role || "visitor",
+        status: input.status || "pending",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .returning();
+
+    return newUser[0];
+  } catch {
+    // In development, we can use remote D1 commands as fallback
     if (process.env.NODE_ENV === "development") {
       try {
         // Check if user already exists
@@ -70,57 +94,36 @@ export const createUser = async (input: CreateUserInput) => {
           status: input.status || "pending",
           createdAt: new Date(),
         };
-      } catch (error) {
-        throw error;
+      } catch (fallbackError) {
+        throw fallbackError;
       }
     }
 
     throw new Error(
-      "Database client not available. Please use 'npx wrangler dev --local' for development."
+      "Database client not available. Please check your D1 binding configuration."
     );
   }
-
-  // Check if user already exists
-  const existingUser = await dbClient.query.users.findFirst({
-    where: eq(users.email, input.email),
-  });
-
-  if (existingUser) {
-    throw new Error("User with this email already exists.");
-  }
-
-  const newUser = await dbClient
-    .insert(users)
-    .values({
-      id: uuidv4(),
-      email: input.email,
-      password: input.password, // This should be hashed before calling this function
-      firstName: input.firstName,
-      lastName: input.lastName,
-      role: input.role || "visitor",
-      status: input.status || "pending",
-      createdAt: new Date(),
-    })
-    .returning();
-
-  if (!newUser.length) {
-    throw new Error("Failed to create user.");
-  }
-
-  return newUser[0];
 };
 
 export const loginUser = async (
   input: LoginInput,
-  db?: ReturnType<typeof createDbClient>
+  db?: Awaited<ReturnType<typeof getDB>>
 ) => {
   console.log("loginUser called with:", { email: input.email, hasDB: !!db });
 
-  // Use the provided db client (from context) or fall back to global dbClient
-  const client = db || dbClient;
+  // Use the provided db client (from context) or try to get a new one
+  let client: Awaited<ReturnType<typeof getDB>> | null = db || null;
+  if (!client) {
+    try {
+      client = await getDB();
+    } catch (error) {
+      console.error("Failed to get database client:", error);
+      client = null;
+    }
+  }
+
   console.log("Database client status:", {
     hasClient: !!client,
-    hasGlobalDB: !!dbClient,
   });
 
   if (!client) {
@@ -207,10 +210,18 @@ export const loginUser = async (
 
 export const getUserById = async (
   id: string,
-  db?: ReturnType<typeof createDbClient>
+  db?: Awaited<ReturnType<typeof getDB>>
 ) => {
-  // Use the provided db client (from context) or fall back to global dbClient
-  const client = db || dbClient;
+  // Use the provided db client (from context) or try to get a new one
+  let client: Awaited<ReturnType<typeof getDB>> | null = db || null;
+  if (!client) {
+    try {
+      client = await getDB();
+    } catch (error) {
+      console.error("Failed to get database client:", error);
+      client = null;
+    }
+  }
 
   if (!client) {
     // In development, use local D1
@@ -257,6 +268,13 @@ export const getUserById = async (
 };
 
 export const getPendingUsers = async () => {
+  let dbClient: Awaited<ReturnType<typeof getDB>> | null = null;
+  try {
+    dbClient = await getDB();
+  } catch (error) {
+    console.error("Failed to get database client:", error);
+  }
+
   if (!dbClient) {
     // In development, use remote D1
     if (process.env.NODE_ENV === "development") {
@@ -294,6 +312,13 @@ export const getPendingUsers = async () => {
 };
 
 export const approveUser = async (id: string) => {
+  let dbClient: Awaited<ReturnType<typeof getDB>> | null = null;
+  try {
+    dbClient = await getDB();
+  } catch (error) {
+    console.error("Failed to get database client:", error);
+  }
+
   if (!dbClient) {
     // In development, use remote D1
     if (process.env.NODE_ENV === "development") {
@@ -328,6 +353,13 @@ export const approveUser = async (id: string) => {
 };
 
 export const rejectUser = async (id: string) => {
+  let dbClient: Awaited<ReturnType<typeof getDB>> | null = null;
+  try {
+    dbClient = await getDB();
+  } catch (error) {
+    console.error("Failed to get database client:", error);
+  }
+
   if (!dbClient) {
     throw new Error("Database client not available.");
   }
@@ -349,6 +381,13 @@ export const rejectUser = async (id: string) => {
 };
 
 export const updateUser = async (input: UpdateUserInput) => {
+  let dbClient: Awaited<ReturnType<typeof getDB>> | null = null;
+  try {
+    dbClient = await getDB();
+  } catch (error) {
+    console.error("Failed to get database client:", error);
+  }
+
   if (!dbClient) {
     throw new Error("Database client not available.");
   }
@@ -378,6 +417,13 @@ export const updateUser = async (input: UpdateUserInput) => {
 };
 
 export const deleteUser = async (id: string) => {
+  let dbClient: Awaited<ReturnType<typeof getDB>> | null = null;
+  try {
+    dbClient = await getDB();
+  } catch (error) {
+    console.error("Failed to get database client:", error);
+  }
+
   if (!dbClient) {
     throw new Error("Database client not available.");
   }
@@ -388,7 +434,7 @@ export const deleteUser = async (id: string) => {
     .returning();
 
   if (!deletedUser.length) {
-    throw new Error("Failed to delete user.");
+    throw new Error("User not found.");
   }
 
   return deletedUser[0];
