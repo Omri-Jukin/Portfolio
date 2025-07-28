@@ -25,7 +25,6 @@ import {
 } from "@mui/icons-material";
 import { api } from "$/trpc/client";
 import { useRouter } from "next/navigation";
-import { Post } from "#/lib/db/schema/schema.types";
 
 const AdminBlogDashboard = () => {
   const router = useRouter();
@@ -90,78 +89,86 @@ const AdminBlogDashboard = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {posts.map((post: Post) => (
-                <TableRow key={post.id}>
-                  <TableCell>
-                    <Typography variant="subtitle2">{post.title}</Typography>
-                    {post.excerpt && (
-                      <Typography variant="body2" color="text.secondary">
-                        {post.excerpt.substring(0, 100)}...
-                      </Typography>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="body2" fontFamily="monospace">
-                      {post.slug}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Chip
-                      label={post.status}
-                      color={
-                        post.status === "published" ? "success" : "default"
-                      }
-                      size="small"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
-                      {post.tags?.slice(0, 3).map((tag) => (
-                        <Chip
-                          key={tag}
-                          label={tag}
-                          size="small"
-                          variant="outlined"
-                        />
-                      ))}
-                      {post.tags && post.tags.length > 3 && (
-                        <Chip
-                          label={`+${post.tags.length - 3}`}
-                          size="small"
-                          variant="outlined"
-                        />
+              {posts.map(
+                (
+                  post: any // eslint-disable-line @typescript-eslint/no-explicit-any
+                ) => (
+                  <TableRow key={post.id}>
+                    <TableCell>
+                      <Typography variant="subtitle2">{post.title}</Typography>
+                      {post.excerpt && (
+                        <Typography variant="body2" color="text.secondary">
+                          {post.excerpt.substring(0, 100)}...
+                        </Typography>
                       )}
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="body2">
-                      {new Date(post.createdAt).toLocaleDateString()}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Box sx={{ display: "flex", gap: 1 }}>
-                      <IconButton
-                        size="small"
-                        onClick={() =>
-                          router.push(`/admin/blog/${post.id}/edit`)
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" fontFamily="monospace">
+                        {post.slug}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label={post.status}
+                        color={
+                          post.status === "published" ? "success" : "default"
                         }
-                        aria-label="Edit post"
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
                         size="small"
-                        onClick={() => handleDelete(post.id)}
-                        aria-label="Delete post"
-                        color="error"
-                        disabled={deletePostMutation.isPending}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              ))}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
+                        {post.tags?.slice(0, 3).map(
+                          (
+                            tag: any // eslint-disable-line @typescript-eslint/no-explicit-any
+                          ) => (
+                            <Chip
+                              key={tag}
+                              label={tag}
+                              size="small"
+                              variant="outlined"
+                            />
+                          )
+                        )}
+                        {post.tags && post.tags.length > 3 && (
+                          <Chip
+                            label={`+${post.tags.length - 3}`}
+                            size="small"
+                            variant="outlined"
+                          />
+                        )}
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2">
+                        {new Date(post.createdAt).toLocaleDateString()}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Box sx={{ display: "flex", gap: 1 }}>
+                        <IconButton
+                          size="small"
+                          onClick={() =>
+                            router.push(`/admin/blog/${post.id}/edit`)
+                          }
+                          aria-label="Edit post"
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          onClick={() => handleDelete(post.id)}
+                          aria-label="Delete post"
+                          color="error"
+                          disabled={deletePostMutation.isPending}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                )
+              )}
             </TableBody>
           </Table>
         </TableContainer>

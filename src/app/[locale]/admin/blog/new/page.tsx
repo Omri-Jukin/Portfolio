@@ -44,7 +44,7 @@ const AdminBlogNew = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const createPostMutation = api.blog.create.useMutation({
-    onSuccess: (data) => {
+    onSuccess: () => {
       setSuccess("Blog post created successfully!");
       setError(null);
       setTimeout(() => {
