@@ -22,5 +22,8 @@
       "database_id": "4219580a-35c2-41e5-9581-20d6e0d92185",
       "migrations_dir": "drizzle"
     }
-  ]
+  ],
+  "vars": {
+    "NODE_ENV": "production"
+  }
 }

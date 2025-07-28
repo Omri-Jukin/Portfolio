@@ -1,20 +1,23 @@
-import { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
-import { createDbClient } from "../../../lib/db/client";
-import { D1Database } from "@cloudflare/workers-types";
-import jwt from "jsonwebtoken";
-import { getUserById } from "$/db/users/users";
-import { executeRemoteD1Query } from "$/db/remote-client";
-
-// Load environment variables
 import dotenv from "dotenv";
-
-// Load .env.local first, then .env, then .env.example
 dotenv.config({ path: ".env.local" });
 dotenv.config({ path: ".env" });
 
+import { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
+import {
+  createDbClient,
+  createDbClientWithFallback,
+  getEnvFromGlobal,
+  debugGlobalScope,
+} from "../../../lib/db/client";
+import { D1Database } from "@cloudflare/workers-types";
+import jwt from "jsonwebtoken";
+import { getUserById } from "$/db/users/users";
+
 // Type for Cloudflare environment
-interface CloudflareEnv extends D1Database {
-  DB: D1Database; // D1 Database
+interface CloudflareEnv {
+  DB: D1Database;
+  JWT_SECRET?: string;
+  NODE_ENV?: string;
 }
 
 // User type for authentication
@@ -30,15 +33,64 @@ export async function createContext({
   resHeaders,
   env,
 }: FetchCreateContextFnOptions & { env?: CloudflareEnv }) {
-  // Create database client with D1 instance
-  const db = env?.DB ? createDbClient(env.DB) : null;
+  // Debug global scope to see what's available
+  debugGlobalScope();
 
-  if (!process.env.JWT_SECRET) {
-    throw new Error("JWT_SECRET is not set");
+  // Create database client with D1 instance
+  console.log("Context creation - env check:", {
+    hasEnv: !!env,
+    hasDB: !!env?.DB,
+    envKeys: env ? Object.keys(env) : [],
+  });
+
+  // Try to get D1 database from env parameter first (Cloudflare Workers way)
+  const d1Database = env?.DB;
+  let db: ReturnType<typeof createDbClient> | null = null;
+
+  if (d1Database) {
+    db = createDbClient(d1Database);
+    console.log("Database client created from env");
+  } else {
+    // Try using the new fallback method
+    db = createDbClientWithFallback();
+    console.log("Database client created from fallback:", !!db);
   }
 
-  // Get JWT secret from environment (works in both development and production)
-  const JWT_SECRET = process.env.JWT_SECRET;
+  // Try multiple ways to access JWT_SECRET in Cloudflare Workers
+  let JWT_SECRET = env?.JWT_SECRET;
+  if (!JWT_SECRET) {
+    JWT_SECRET = getEnvFromGlobal("JWT_SECRET");
+  }
+  if (!JWT_SECRET) {
+    // Fallback to process.env (for development)
+    JWT_SECRET = process.env.JWT_SECRET;
+  }
+
+  // Get NODE_ENV from environment
+  let NODE_ENV = env?.NODE_ENV;
+  if (!NODE_ENV) {
+    NODE_ENV = getEnvFromGlobal("NODE_ENV");
+  }
+  if (!NODE_ENV) {
+    NODE_ENV = process.env.NODE_ENV || "development";
+  }
+
+  // Debug logging
+  console.log("Context Debug:", {
+    hasDB: !!env?.DB,
+    hasGlobalDB: !!(globalThis as Record<string, unknown>).DB,
+    hasEnvJWT_SECRET: !!env?.JWT_SECRET,
+    hasGlobalJWT_SECRET: !!getEnvFromGlobal("JWT_SECRET"),
+    hasProcessJWT_SECRET: !!process.env.JWT_SECRET,
+    NODE_ENV,
+    JWT_SECRET_LENGTH: JWT_SECRET?.length || 0,
+    JWT_SECRET_START: JWT_SECRET?.substring(0, 10) || "none",
+    databaseClientCreated: !!db,
+  });
+
+  if (!JWT_SECRET || JWT_SECRET === "your-secret-key-change-in-production") {
+    console.error("JWT_SECRET is not properly configured");
+  }
 
   // Get user from JWT token in cookies
   async function getUserFromToken(): Promise<AuthenticatedUser | null> {
@@ -73,7 +125,7 @@ export async function createContext({
         if (db) {
           // Try with database client first
           user = await getUserById(decoded.userId, db);
-        } else if (process.env.NODE_ENV === "development") {
+        } else if (NODE_ENV === "development") {
           // Fallback to local D1 in development
           const { findUserByIdLocal } = await import(
             "../../../lib/db/remote-client"
@@ -90,23 +142,10 @@ export async function createContext({
               status: user.status,
             };
           }
-        } else if (process.env.NODE_ENV === "production") {
-          // Fallback to remote D1 in production
-          const results = await executeRemoteD1Query(
-            `SELECT * FROM users WHERE id = '${decoded.userId}';`
-          );
-
-          if (results.length > 0) {
-            const userData = results[0];
-            user = {
-              id: userData.id,
-              email: userData.email,
-              firstName: userData.first_name,
-              lastName: userData.last_name,
-              role: userData.role,
-              status: userData.status,
-            };
-          }
+        } else {
+          // In production, if no database client is available, we can't proceed
+          console.error("No database client available in production");
+          return null;
         }
 
         if (user && user.role === "admin") {

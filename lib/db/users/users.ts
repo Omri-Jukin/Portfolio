@@ -1,11 +1,15 @@
 import { eq } from "drizzle-orm";
-import { dbClient, createDbClient } from "../client";
+import { createDbClient, getD1FromGlobal } from "../client";
 import { users, UserRole, UserStatus } from "../schema/schema.tables";
 import { v4 as uuidv4 } from "uuid";
 import {
   insertUser as insertUserRemote,
   findUserByEmail as findUserByEmailRemote,
 } from "../remote-client";
+
+// Get the database client from the global scope
+const d1Database = getD1FromGlobal();
+const dbClient = d1Database ? createDbClient(d1Database) : null;
 
 // Simple types for portfolio user management
 export type CreateUserInput = {
@@ -110,16 +114,26 @@ export const loginUser = async (
   input: LoginInput,
   db?: ReturnType<typeof createDbClient>
 ) => {
+  console.log("loginUser called with:", { email: input.email, hasDB: !!db });
+
   // Use the provided db client (from context) or fall back to global dbClient
   const client = db || dbClient;
+  console.log("Database client status:", {
+    hasClient: !!client,
+    hasGlobalDB: !!dbClient,
+  });
 
   if (!client) {
+    console.log("No database client available");
     // In development, use local D1
     if (process.env.NODE_ENV === "development") {
+      console.log("Using development fallback");
       try {
-        const user = await findUserByEmailRemote(input.email);
+        const { findUserByEmailLocal } = await import("../remote-client");
+        const user = await findUserByEmailLocal(input.email);
 
         if (!user) {
+          console.log("No user found in development fallback");
           return {
             success: false,
             error: "User not found.",
@@ -141,8 +155,10 @@ export const loginUser = async (
             : null,
         };
 
+        console.log("User found in development fallback:", mappedUser.email);
         return mappedUser;
       } catch (error) {
+        console.error("Development fallback error:", error);
         return {
           success: false,
           error: (error as Error).message,
@@ -150,54 +166,43 @@ export const loginUser = async (
       }
     }
 
-    // In production, try remote D1 as fallback
-    if (process.env.NODE_ENV === "production") {
-      try {
-        const user = await findUserByEmailRemote(input.email);
+    // In production, we can't use shell commands, so we need to throw an error
+    // The database client should be available from the context in production
+    console.error("Database client not available in production");
+    throw new Error(
+      "Database client not available in production. Please check your D1 binding configuration."
+    );
+  }
 
-        if (!user) {
-          return {
-            success: false,
-            error: "User not found.",
-          };
-        }
+  console.log("Attempting database query for email:", input.email);
+  try {
+    const user = await client.query.users.findFirst({
+      where: eq(users.email, input.email),
+    });
 
-        // Map the remote user data to match the expected format
-        const mappedUser = {
-          id: user.id,
-          email: user.email,
-          password: user.password,
-          firstName: user.first_name,
-          lastName: user.last_name,
-          role: user.role as UserRole,
-          status: user.status as UserStatus,
-          createdAt: new Date(parseInt(user.created_at) * 1000),
-          updatedAt: user.updated_at
-            ? new Date(parseInt(user.updated_at) * 1000)
-            : null,
-        };
-
-        return mappedUser;
-      } catch (error) {
-        return {
-          success: false,
-          error: (error as Error).message,
-        };
-      }
+    console.log(
+      "Database query result:",
+      user ? "User found" : "No user found"
+    );
+    if (user) {
+      console.log("User details:", {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        status: user.status,
+        hasPassword: !!user.password,
+      });
     }
 
-    throw new Error("Database client not available.");
+    if (!user) {
+      return null; // Return null instead of throwing error for better error handling
+    }
+
+    return user; // Return the full user object, password verification should be done in the auth router
+  } catch (error) {
+    console.error("Database query error:", error);
+    throw error;
   }
-
-  const user = await client.query.users.findFirst({
-    where: eq(users.email, input.email),
-  });
-
-  if (!user) {
-    return null; // Return null instead of throwing error for better error handling
-  }
-
-  return user; // Return the full user object, password verification should be done in the auth router
 };
 
 export const getUserById = async (
@@ -234,38 +239,10 @@ export const getUserById = async (
       }
     }
 
-    // In production, try remote D1 as fallback
-    if (process.env.NODE_ENV === "production") {
-      try {
-        // We need to create a findUserById function for remote D1
-        const { executeRemoteD1Query } = await import("../remote-client");
-        const results = await executeRemoteD1Query(
-          `SELECT * FROM users WHERE id = '${id}';`
-        );
-
-        if (results.length > 0) {
-          const user = results[0];
-          return {
-            id: user.id,
-            email: user.email,
-            password: user.password,
-            firstName: user.first_name,
-            lastName: user.last_name,
-            role: user.role as UserRole,
-            status: user.status as UserStatus,
-            createdAt: new Date(parseInt(user.created_at) * 1000),
-            updatedAt: user.updated_at
-              ? new Date(parseInt(user.updated_at) * 1000)
-              : null,
-          };
-        }
-        throw new Error("User not found.");
-      } catch (error) {
-        throw error;
-      }
-    }
-
-    throw new Error("Database client not available.");
+    // In production, we can't use shell commands, so we need to throw an error
+    throw new Error(
+      "Database client not available in production. Please check your D1 binding configuration."
+    );
   }
 
   const user = await client.query.users.findFirst({

@@ -7,14 +7,20 @@ import {
   getPendingUsers,
   approveUser,
   rejectUser,
-} from "../../../../lib/db/users/users";
+} from "$/db/users/users";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { User } from "$/db/users/users.type";
 
-const JWT_SECRET =
-  process.env.JWT_SECRET || "your-secret-key-change-in-production";
 const JWT_EXPIRES_IN = "7d"; // 7 days
+
+// Extend the context type to include environment variables
+interface ExtendedContext {
+  env?: {
+    JWT_SECRET?: string;
+    NODE_ENV?: string;
+  };
+}
 
 export const authRouter = router({
   // Register new user (public - requires admin approval)
@@ -84,8 +90,32 @@ export const authRouter = router({
       const { input, ctx } = opts;
 
       try {
+        // Get JWT secret from context environment
+        const JWT_SECRET =
+          (ctx as ExtendedContext).env?.JWT_SECRET ||
+          process.env.JWT_SECRET ||
+          "your-secret-key-change-in-production";
+        const NODE_ENV =
+          (ctx as ExtendedContext).env?.NODE_ENV ||
+          process.env.NODE_ENV ||
+          "development";
+
+        // Debug logging
+        console.log("Login Debug:", {
+          hasContextEnv: !!(ctx as ExtendedContext).env,
+          hasJWT_SECRET: !!JWT_SECRET,
+          NODE_ENV,
+          hasDB: !!ctx.db,
+          email: input.email,
+        });
+
         // Find user by email - pass the database client from context
+        console.log("Attempting to find user with email:", input.email);
         const userResult = await loginUser(input, ctx.db || undefined);
+        console.log(
+          "User result:",
+          userResult ? "Found user" : "No user found"
+        );
 
         // Check if userResult is an error object or null
         if (
@@ -94,6 +124,7 @@ export const authRouter = router({
             "success" in userResult &&
             !userResult.success)
         ) {
+          console.log("User lookup failed:", userResult);
           throw new TRPCError({
             code: "UNAUTHORIZED",
             message: "Invalid email or password",
@@ -102,9 +133,17 @@ export const authRouter = router({
 
         // At this point, userResult is guaranteed to be a user object
         const user = userResult as User;
+        console.log("User found:", {
+          id: user.id,
+          email: user.email,
+          role: user.role,
+          status: user.status,
+          hasPassword: !!user.password,
+        });
 
         // Check if user is approved
         if (user.status !== "approved") {
+          console.log("User not approved:", user.status);
           throw new TRPCError({
             code: "FORBIDDEN",
             message:
@@ -115,18 +154,22 @@ export const authRouter = router({
         }
 
         // Verify password
+        console.log("Verifying password...");
         const isValidPassword = await bcrypt.compare(
           input.password,
           user.password
         );
+        console.log("Password verification result:", isValidPassword);
 
         if (!isValidPassword) {
+          console.log("Password verification failed");
           throw new TRPCError({
             code: "UNAUTHORIZED",
             message: "Invalid email or password",
           });
         }
 
+        console.log("Password verified successfully, generating JWT token...");
         // Generate JWT token
         const token = jwt.sign(
           {
@@ -140,7 +183,7 @@ export const authRouter = router({
 
         // Set HTTP-only cookie
         if (ctx.resHeaders) {
-          const isProduction = process.env.NODE_ENV === "production";
+          const isProduction = NODE_ENV === "production";
           const cookieOptions = [
             `auth-token=${token}`,
             "HttpOnly",
@@ -151,8 +194,10 @@ export const authRouter = router({
           ].join("; ");
 
           ctx.resHeaders.set("Set-Cookie", cookieOptions);
+          console.log("Cookie set successfully");
         }
 
+        console.log("Login successful for user:", user.email);
         // Return user data (without password)
         return {
           user: {
@@ -166,6 +211,7 @@ export const authRouter = router({
           token,
         };
       } catch (error) {
+        console.error("Login error:", error);
         if (error instanceof TRPCError) {
           throw error;
         }
@@ -283,9 +329,15 @@ export const authRouter = router({
   logout: procedure.mutation(async (opts) => {
     const { ctx } = opts;
 
+    // Get NODE_ENV from context environment
+    const NODE_ENV =
+      (ctx as ExtendedContext).env?.NODE_ENV ||
+      process.env.NODE_ENV ||
+      "development";
+
     // Clear the auth cookie
     if (ctx.resHeaders) {
-      const isProduction = process.env.NODE_ENV === "production";
+      const isProduction = NODE_ENV === "production";
       const cookieOptions = [
         "auth-token=",
         "HttpOnly",
@@ -333,6 +385,16 @@ export const authRouter = router({
       });
     }
 
+    // Get JWT secret and NODE_ENV from context environment
+    const JWT_SECRET =
+      (ctx as ExtendedContext).env?.JWT_SECRET ||
+      process.env.JWT_SECRET ||
+      "your-secret-key-change-in-production";
+    const NODE_ENV =
+      (ctx as ExtendedContext).env?.NODE_ENV ||
+      process.env.NODE_ENV ||
+      "development";
+
     // Generate new token
     const newToken = jwt.sign(
       {
@@ -346,7 +408,7 @@ export const authRouter = router({
 
     // Set new cookie
     if (ctx.resHeaders) {
-      const isProduction = process.env.NODE_ENV === "production";
+      const isProduction = NODE_ENV === "production";
       const cookieOptions = [
         `auth-token=${newToken}`,
         "HttpOnly",
