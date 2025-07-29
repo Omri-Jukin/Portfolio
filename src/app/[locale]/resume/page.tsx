@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import {
   Box,
   Typography,
@@ -11,14 +12,16 @@ import {
   Link,
   Button,
   Divider,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import MotionWrapper from "~/MotionWrapper";
-import {
-  GitHub as GitHubIcon,
-  Download as DownloadIcon,
-} from "@mui/icons-material";
+import { GitHub as GitHubIcon } from "@mui/icons-material";
+import ResumeLanguageSelector from "#/Components/ResumeLanguageSelector";
+import { generateResumePDF } from "#/lib/utils/pdfGenerator";
+import { extractResumeData } from "#/lib/utils/resumeDataExtractor";
 
 export type TechnicalSkill = {
   name: string;
@@ -43,6 +46,57 @@ export default function ResumePage() {
   const skillsT = useTranslations("skills");
   const projectsT = useTranslations("projects");
   const router = useRouter();
+
+  const [selectedLanguage, setSelectedLanguage] = useState("en");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [snackbar, setSnackbar] = useState<{
+    open: boolean;
+    message: string;
+    severity: "success" | "error" | "info";
+  }>({
+    open: false,
+    message: "",
+    severity: "info",
+  });
+
+  const handleLanguageSelect = (languageCode: string) => {
+    setSelectedLanguage(languageCode);
+  };
+
+  const handleDownload = async (languageCode: string) => {
+    try {
+      setIsGenerating(true);
+
+      // Extract resume data for the selected language
+      const resumeData = extractResumeData(languageCode);
+
+      // Generate PDF
+      const pdf = await generateResumePDF(resumeData, languageCode);
+
+      // Download the PDF
+      const filename = `Omri_Jukin_Resume_${languageCode.toUpperCase()}.pdf`;
+      pdf.save(filename);
+
+      setSnackbar({
+        open: true,
+        message: `Resume downloaded successfully in ${languageCode.toUpperCase()}!`,
+        severity: "success",
+      });
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      setSnackbar({
+        open: true,
+        message: "Error generating PDF. Please try again.",
+        severity: "error",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: "1400px", mx: "auto" }}>
@@ -72,23 +126,16 @@ export default function ResumePage() {
           >
             {t("description")}
           </Typography>
-
-          <Button
-            variant="contained"
-            startIcon={<DownloadIcon />}
-            size="large"
-            sx={{
-              px: 4,
-              py: 1.5,
-              borderRadius: 2,
-              textTransform: "none",
-              fontSize: "1.1rem",
-            }}
-          >
-            {t("networkingSummary")}
-          </Button>
         </Box>
       </MotionWrapper>
+
+      {/* Interactive Language Selector */}
+      <ResumeLanguageSelector
+        onLanguageSelect={handleLanguageSelect}
+        onDownload={handleDownload}
+        isLoading={isGenerating}
+        selectedLanguage={selectedLanguage}
+      />
 
       {/* Professional Summary */}
       <MotionWrapper variant="slideUp" duration={0.8} delay={0.4}>
@@ -379,6 +426,22 @@ export default function ResumePage() {
           </Button>
         </Box>
       </MotionWrapper>
+
+      {/* Snackbar for notifications */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

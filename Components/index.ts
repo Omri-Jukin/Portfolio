@@ -25,6 +25,7 @@ export { default as Services } from "./Services";
 export { default as Career } from "./Career";
 export { default as Projects } from "./Projects";
 export { default as Contact } from "./Contact";
+export { default as ResumeLanguageSelector } from "./ResumeLanguageSelector";
 
 // Provider exports
 export * from "./Providers";
@@ -63,3 +64,4 @@ export type { ServicesProps, Service } from "./Services";
 export type { CareerProps, Experience } from "./Career";
 export type { ProjectsProps, Project } from "./Projects";
 export type { ContactProps, ContactData } from "./Contact";
+export type { ResumeLanguageSelectorProps } from "./ResumeLanguageSelector";

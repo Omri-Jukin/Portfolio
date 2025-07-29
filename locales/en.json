@@ -376,7 +376,15 @@
     "viewCode": "View Code",
     "letsBuildTogether": "Let's Build Something Amazing Together",
     "readyToDiscuss": "Ready to discuss your next project or opportunity?",
-    "getInTouch": "Get In Touch"
+    "getInTouch": "Get In Touch",
+    "languageSelector": {
+      "title": "Choose Resume Language",
+      "description": "Select your preferred language for the PDF resume. The content will be automatically translated based on your selection.",
+      "selectedLanguage": "Resume will be generated in",
+      "generating": "Generating PDF...",
+      "download": "Download Resume",
+      "downloadDescription": "PDF will include all your professional experience, skills, and projects in"
+    }
   },
   "skills": {
     "title": "Technical Expertise",

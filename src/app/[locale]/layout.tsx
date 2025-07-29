@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "../globals.css";
+import "flag-icons/css/flag-icons.min.css";
 import { NextIntlClientProvider } from "next-intl";
 import { bonaNovaSC, bonaNovaSCMono } from "$/fonts";
 import ClientLayout from "&/ClientLayout/ClientLayout";
