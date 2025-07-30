@@ -33,11 +33,28 @@ export const extractResumeData = (language: string = "en"): ResumeData => {
     skills: {
       categories: {
         technical: data.skills.categories.technical,
+        soft: data.skills.categories.soft,
       },
     },
     projects: {
       projects: data.projects.projects,
     },
+    languages: {
+      programming: [
+        { name: "TypeScript", level: "Advanced" },
+        { name: "JavaScript", level: "Advanced" },
+        { name: "Java", level: "Intermediate" },
+        { name: "C#", level: "Intermediate" },
+        { name: "Python", level: "Novice" },
+      ],
+      spoken: [
+        { name: "Hebrew", level: "Native" },
+        { name: "English", level: "Professional" },
+        { name: "Spanish", level: "Novice" },
+      ],
+    },
+    additionalActivities:
+      "Founder of an online community promoting critical and rational thinking and open debates. Engaged in public speaking and live broadcasts on topics related to hard sciences, soft sciences, rational thinking, and technology. Enthusiastic hobbyist magician, using creative skills to engage audiences and encourage curiosity.",
   };
 };
 

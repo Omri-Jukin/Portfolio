@@ -210,14 +210,14 @@
     "subtitle": "A glimpse into my work",
     "projects": [
       {
-        "title": "Microservices Manager",
-        "description": "Comprehensive CLI tool for managing a microservices ecosystem. Features unified service management, automated workflows, cross-service operations, and development tooling. Built with TypeScript, Node.js, and modern CLI architecture.",
-        "link": "https://github.com/ClipWhisperer/Utils"
+        "title": "Snow HQ",
+        "description": "Enterprise-grade CRM system featuring real-time analytics, automated workflows, and advanced reporting capabilities. Built with Next.js, tRPC, Drizzle ORM, and PostgreSQL.",
+        "link": "https://github.com/Omri-Jukin/Snow"
       },
       {
-        "title": "Published Library",
-        "description": "Published library for managing a microservices ecosystem. Features unified service management, automated workflows, cross-service operations, and development tooling. Built with TypeScript, Node.js, and modern CLI architecture.",
-        "link": "https://www.npmjs.com/package/@clipwhisperer/common"
+        "title": "Clothest",
+        "description": "Wardrobe management system with personalized recommendations and inventory tracking. Built with React, Express.js, and MongoDB.",
+        "link": "https://github.com/Omri-Jukin/Clothest"
       },
       {
         "title": "Portfolio Website",
@@ -230,14 +230,14 @@
         "link": "https://github.com/ClipWhisperer"
       },
       {
-        "title": "Snow HQ",
-        "description": "Enterprise-level CRM system featuring real-time analytics, automated workflows, and advanced reporting capabilities. Built with Next.js, tRPC, Drizzle ORM, and PostgreSQL.",
-        "link": "https://github.com/Omri-Jukin/Snow"
+        "title": "Microservices Manager",
+        "description": "Comprehensive CLI tool for managing a microservices ecosystem. Features unified service management, automated workflows, cross-service operations, and development tooling. Built with TypeScript, Node.js, and modern CLI architecture.",
+        "link": "https://github.com/ClipWhisperer/Utils"
       },
       {
-        "title": "Clothest",
-        "description": "Wardrobe management system with personalized recommendations and inventory tracking. Built with React, Express.js, and MongoDB.",
-        "link": "https://github.com/Omri-Jukin/Clothest"
+        "title": "Published Library",
+        "description": "Published library for managing a microservices ecosystem. Features unified service management, automated workflows, cross-service operations, and development tooling. Built with TypeScript, Node.js, and modern CLI architecture.",
+        "link": "https://www.npmjs.com/package/@clipwhisperer/common"
       }
     ]
   },
@@ -325,44 +325,44 @@
         "time": "2024 - 2025",
         "company": "Abra Technologies, Israel",
         "details": [
-          "Developed a comprehensive platform that aggregates and processes critical market data from government entities",
-          "Designed and implemented a modular, reusable UI component library that reduced development time by 30%",
-          "Collaborated with design teams to create intuitive interfaces that increased user engagement",
-          "Developed efficient algorithms for data processing that improved system performance and reduced data processing time by 50%",
-          "Tech stack: Next.js, tRPC, PayloadCMS, Storybook, Jest, Vitest, React"
+          "Platform Development - Contributed to the development of a comprehensive platform that aggregates and processes critical market data from government agencies",
+          "Library Architecture - Designed and implemented a modular, reusable UI component library that reduced development time by 30% and improved consistency across applications",
+          "UI/UX Innovation - Collaborated with design teams to create intuitive interfaces that increased user engagement and reduced support tickets",
+          "Backend Optimization - Developed efficient data processing algorithms that improved system performance",
+          "Technical Stack: Next.js, tRPC, PayloadCMS, Storybook, Jest, Vitest, React"
         ]
       },
       {
-        "role": "Business Constitution Development Expert",
+        "role": "Business Constitution Development Specialist",
         "time": "2023 - 2024",
-        "company": "Menorah Mivtachim Insurance, Israel",
+        "company": "Menora Mivtachim Insurance Company, Israel",
         "details": [
-          "Designed and maintained business rules system, managing thousands of policy rules and regulations",
-          "Mentored and trained new developers, reducing onboarding time and improving team productivity",
-          "Led development of 12+ new insurance products, resulting in higher customer acquisition rates",
-          "Successfully migrated critical components from 40-year-old monolithic system to modern architecture"
+          "System Architecture - Architected and maintained the business constitution system, managing thousands of policy rules and regulations",
+          "Team Leadership - Mentored and trained new developers, reducing onboarding time and improving team productivity",
+          "Product Innovation - Led the development of 12+ new insurance products, resulting in a higher customer acquisition rate",
+          "Legacy System Modernization - Successfully migrated critical components from a 40-year-old monolithic system to modern architecture, improving system performance"
         ]
       },
       {
         "role": "Senior Customer Service Representative",
         "time": "2021 - 2023",
-        "company": "Menorah Mivtachim Insurance, Israel",
+        "company": "Menora Mivtachim Insurance Company, Israel",
         "details": [
-          "Achieved 95% customer satisfaction rate while handling complex insurance inquiries and complaints",
-          "Developed and implemented new workflow protocols that reduced average handling time by 25%",
-          "Trained and mentored 10+ new team members, resulting in 35% reduction in training time",
-          "Collaborated with multiple departments to resolve complex customer issues, improving resolution time by 30%"
+          "Customer Experience - Achieved 95% customer satisfaction rate while handling complex insurance inquiries and complaints",
+          "Process Improvement - Developed and implemented new workflow protocols that reduced average handling time by 25% and improved team efficiency by 35%",
+          "Team Development - Trained and mentored 10+ new team members, resulting in a 35% reduction in training time and improved service quality",
+          "Cross-functional Collaboration - Worked with multiple departments to resolve complex customer issues, improving resolution time by 30%"
         ]
       },
       {
-        "role": "Senior Public Relations Coordinator",
+        "role": "Senior Public Inquiries Coordinator",
         "time": "2020 - 2021",
-        "company": "Hot Telecom, Israel",
+        "company": "HOT Telecommunications, Israel",
         "details": [
-          "Maintained 90% customer satisfaction rate while handling high-volume inquiries",
-          "Implemented new workflow protocols that reduced response time by 35%",
-          "Successfully trained and mentored 15+ team members, improving overall team performance by 30%",
-          "Collaborated with various departments, resulting in 40% improvement in case resolution time"
+          "Customer Service Excellence - Maintained a 90% customer satisfaction rate while handling high-volume inquiries",
+          "Process Optimization - Implemented new workflow protocols that reduced response time by 35% and improved team productivity by 25%",
+          "Team Leadership - Successfully trained and mentored 15+ team members, improving overall team performance by 30%",
+          "System Integration - Collaborated with IT to implement new customer service tools, resulting in a 40% improvement in case resolution time"
         ]
       }
     ]
@@ -371,7 +371,7 @@
     "title": "Resume",
     "description": "My professional experience and skills",
     "networkingSummary": "Download my resume to learn more about my background",
-    "experience": "I am a passionate and driven full-stack developer with a strong foundation in electrical engineering and a proven track record of delivering results in high-pressure environments. My experience spans from leading the development of scalable platforms and modular UI libraries to optimizing business logic and mentoring teams in the insurance and telecommunications industries.\n\nI excel at solving complex problems, driving innovation, and collaborating across disciplines to achieve ambitious goals. My colleagues recognize me for my relentless work ethic, attention to detail, and commitment to continuous learning. Whether building robust backend systems, designing intuitive interfaces, or streamlining workflows, I always give my best to ensure quality and impact.\n\nIf you're looking for someone who combines technical expertise with leadership, creativity, and a genuine passion for making a difference, let's connect!",
+    "experience": "Innovative Full Stack Engineer with a strong background in electrical engineering and a passion for creating efficient, user-centric solutions. Proven track record in developing scalable applications and managing complex data systems. Extensive experience in the insurance industry, from customer service to core system development. Demonstrated leadership in training and mentoring teams, improving processes, and driving organizational change and growth. Strong problem-solving skills with a focus on system design and optimization. Committed to continuous learning and professional growth in the tech industry.",
     "professionalSummary": "Professional Summary",
     "viewCode": "View Code",
     "letsBuildTogether": "Let's Build Something Amazing Together",
@@ -393,8 +393,19 @@
         "title": "Technical Skills",
         "skills": [
           {
+            "name": "System Architecture",
+            "level": 100,
+            "technologies": [
+              "Microservices",
+              "Monolithic Systems",
+              "API Design",
+              "System Integration",
+              "Performance Optimization"
+            ]
+          },
+          {
             "name": "Frontend Development",
-            "level": 90,
+            "level": 100,
             "technologies": [
               "React",
               "Next.js",
@@ -403,37 +414,49 @@
               "HTML5",
               "CSS3",
               "Material-UI",
-              "Tailwind CSS"
+              "Tailwind CSS",
+              "Framer Motion"
             ]
           },
           {
             "name": "Backend Development",
-            "level": 85,
+            "level": 95,
             "technologies": [
               "Node.js",
               "Express.js",
-              "Python",
+              "tRPC",
+              "Drizzle ORM",
               "PostgreSQL",
               "MongoDB",
-              "tRPC",
-              "Drizzle ORM"
+              "API Development"
             ]
           },
           {
-            "name": "Dev Tools",
-            "level": 80,
-            "technologies": ["Git", "Docker", "AWS", "Vercel", "Jest", "Vitest"]
+            "name": "Database Management",
+            "level": 90,
+            "technologies": [
+              "PostgreSQL",
+              "MongoDB",
+              "Data Modeling",
+              "Query Optimization",
+              "Database Design"
+            ]
           },
           {
-            "name": "Design & UX",
-            "level": 75,
+            "name": "Cloud Technologies",
+            "level": 85,
+            "technologies": ["AWS", "Vercel", "Docker", "CI/CD", "Deployment"]
+          },
+          {
+            "name": "DevOps & CI/CD",
+            "level": 80,
             "technologies": [
-              "Figma",
-              "Adobe Creative Suite",
-              "Framer Motion",
-              "User Research",
-              "Prototyping",
-              "Storybook"
+              "Git",
+              "Docker",
+              "Jest",
+              "Vitest",
+              "Storybook",
+              "Testing"
             ]
           }
         ]
