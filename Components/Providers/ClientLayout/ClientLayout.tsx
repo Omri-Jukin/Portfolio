@@ -21,7 +21,6 @@ export default function ClientLayout({
   const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined);
 
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const [forceLayout, setForceLayout] = useState<TResponsiveLayout>("auto");
   const [manualOverride, setManualOverride] = useState(false); // Track if user manually overrode animation
   const locale = useLocale();
@@ -50,8 +49,6 @@ export default function ClientLayout({
       // Default mobile detection if no stored preference
       setIsMobile(window.innerWidth < 768);
     }
-
-    setMounted(true);
   }, []);
 
   // Reset manual override when user navigates to new page
@@ -125,59 +122,50 @@ export default function ClientLayout({
       <CacheProvider value={clientSideEmotionCache}>
         <ThemeProvider theme={appTheme}>
           <CssBaseline />
-          {mounted ? (
-            <Box sx={{ minHeight: "100vh" }}>
-              {/* Fixed Header */}
-              <Header
-                isDarkMode={isDarkMode}
-                onThemeToggle={handleThemeToggle}
-                isMobile={isMobile}
-                forceLayout={forceLayout}
-                onLayoutChange={handleLayoutChange}
-              />
+          <Box sx={{ minHeight: "100vh" }}>
+            {/* Fixed Header */}
+            <Header
+              isDarkMode={isDarkMode}
+              onThemeToggle={handleThemeToggle}
+              isMobile={isMobile}
+              forceLayout={forceLayout}
+              onLayoutChange={handleLayoutChange}
+            />
 
-              {/* Main Layout Container */}
+            {/* Main Layout Container */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                minHeight: "100vh",
+                pt: "4rem", // Account for fixed header height
+              }}
+            >
+              {/* Main Content Area */}
               <Box
                 sx={{
+                  flex: 1,
                   display: "flex",
                   flexDirection: "column",
-                  minHeight: "100vh",
-                  pt: "4rem", // Account for fixed header height
                 }}
               >
-                {/* Main Content Area */}
-                <Box
-                  sx={{
-                    flex: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  <ResponsiveLayout
-                    isMobile={isMobile}
-                    forceLayout={forceLayout}
+                <ResponsiveLayout isMobile={isMobile} forceLayout={forceLayout}>
+                  <Box
+                    sx={{
+                      flex: 1,
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
                   >
-                    <Box
-                      sx={{
-                        flex: 1,
-                        display: "flex",
-                        flexDirection: "column",
-                      }}
-                    >
-                      {children}
-                    </Box>
-                  </ResponsiveLayout>
-                </Box>
-
-                {/* Footer */}
-                <Footer />
+                    {children}
+                  </Box>
+                </ResponsiveLayout>
               </Box>
+
+              {/* Footer */}
+              <Footer />
             </Box>
-          ) : (
-            <Box sx={{ minHeight: "100vh", paddingTop: "4rem" }}>
-              {children}
-            </Box>
-          )}
+          </Box>
         </ThemeProvider>
       </CacheProvider>
     </TRPCProvider>

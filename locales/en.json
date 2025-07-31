@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Omri Jukin",
-    "description": "Full Stack Developer | Electrical Engineer | Data Management Expert"
+    "description": "Software Developer && Engineer | Scalable Systems · Clean Architecture · Next.js · tRPC · PostgreSQL · MongoDB · Microservices"
   },
   "login": {
     "title": "Admin Login",
@@ -39,7 +39,7 @@
     "resume": "Resume",
     "projects": "Projects",
     "skills": "Skills",
-    "description": "Innovative full-stack engineer with a strong background in electrical engineering and passion for creating efficient, user-focused solutions."
+    "description": "Software Engineer specializing in scalable systems, clean architecture, and modern technologies including Next.js, tRPC, PostgreSQL, MongoDB, and microservices."
   },
   "hero": {
     "title": "Crafting digital magic",
@@ -371,7 +371,7 @@
     "title": "Resume",
     "description": "My professional experience and skills",
     "networkingSummary": "Download my resume to learn more about my background",
-    "experience": "Innovative Full Stack Engineer with a strong background in electrical engineering and a passion for creating efficient, user-centric solutions. Proven track record in developing scalable applications and managing complex data systems. Extensive experience in the insurance industry, from customer service to core system development. Demonstrated leadership in training and mentoring teams, improving processes, and driving organizational change and growth. Strong problem-solving skills with a focus on system design and optimization. Committed to continuous learning and professional growth in the tech industry.",
+    "experience": "Innovative software engineer with expertise in scalable systems, clean architecture, and modern technologies. Proven track record in developing enterprise applications using Next.js, tRPC, PostgreSQL, MongoDB, and microservices. Extensive experience in the insurance industry, from customer service to core system development. Demonstrated leadership in training and mentoring teams, improving processes, and driving organizational change and growth. Strong problem-solving skills with a focus on system design and optimization. Committed to continuous learning and professional growth in the tech industry.",
     "professionalSummary": "Professional Summary",
     "viewCode": "View Code",
     "letsBuildTogether": "Let's Build Something Amazing Together",
@@ -393,19 +393,8 @@
         "title": "Technical Skills",
         "skills": [
           {
-            "name": "System Architecture",
-            "level": 100,
-            "technologies": [
-              "Microservices",
-              "Monolithic Systems",
-              "API Design",
-              "System Integration",
-              "Performance Optimization"
-            ]
-          },
-          {
             "name": "Frontend Development",
-            "level": 100,
+            "level": 95,
             "technologies": [
               "React",
               "Next.js",
@@ -429,6 +418,17 @@
               "PostgreSQL",
               "MongoDB",
               "API Development"
+            ]
+          },
+          {
+            "name": "System Architecture",
+            "level": 90,
+            "technologies": [
+              "Microservices",
+              "Monolithic Systems",
+              "API Design",
+              "System Integration",
+              "Performance Optimization"
             ]
           },
           {
@@ -490,7 +490,7 @@
   },
   "footer": {
     "title": "About",
-    "children": "Passionate full-stack developer creating modern web experiences. Always learning, always creating.",
+    "children": "Innovative software engineer creating scalable systems and modern web experiences with clean architecture and cutting-edge technologies.",
     "linksTitle": "Quick Links",
     "links": [
       { "label": "Home", "href": "/" },

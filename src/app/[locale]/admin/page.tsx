@@ -119,6 +119,35 @@ export default function AdminDashboard() {
           <DataGrid rows={[]} columns={[]} />
         </CardContent>
       </Card>
+      {/* Blog Management */}
+      <Card sx={{ mb: 3 }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            Blog Posts
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-evenly",
+              gap: 2,
+              alignItems: "center",
+            }}
+          >
+            <Button
+              variant="contained"
+              onClick={() => router.push("/admin/blog")}
+            >
+              View Blog Posts
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => router.push("/admin/blog/new")}
+            >
+              Create Blog Post
+            </Button>
+          </Box>
+        </CardContent>
+      </Card>
     </Box>
   );
 }

@@ -62,15 +62,25 @@ export class PDFGenerator {
   private doc: jsPDF;
   private currentY: number = 25;
   private pageWidth: number;
-  private margin: number = 25;
-  private lineHeight: number = 6;
+  private pageHeight: number;
+  private margin: number = 8;
+  private sidebarWidth: number = 65;
+  private mainContentWidth: number;
+  private lineHeight: number = 7;
   private primaryColor: [number, number, number] = [44, 62, 80]; // Dark blue-gray
   private secondaryColor: [number, number, number] = [52, 73, 94]; // Dark gray
   private accentColor: [number, number, number] = [231, 76, 60]; // Red accent
+  private sidebarColor: [number, number, number] = [48, 81, 115]; // Dark blue sidebar
+  private isRTL: boolean = false;
+  private sidebarX: number = 0;
+  private mainContentX: number = 0;
 
   constructor() {
     this.doc = new jsPDF("p", "mm", "a4");
     this.pageWidth = this.doc.internal.pageSize.getWidth();
+    this.pageHeight = this.doc.internal.pageSize.getHeight();
+    this.mainContentWidth =
+      this.pageWidth - this.sidebarWidth - 2 * this.margin;
 
     // Set document properties
     this.doc.setProperties({
@@ -82,493 +92,483 @@ export class PDFGenerator {
   }
 
   generateResume(data: ResumeData, language: string = "en"): void {
+    // Set RTL for Hebrew
+    this.isRTL = language === "he";
+
+    // Calculate layout positions based on RTL
+    if (this.isRTL) {
+      this.sidebarX = this.margin;
+      this.mainContentX = this.margin + this.sidebarWidth + 30;
+    } else {
+      this.sidebarX = this.pageWidth - this.sidebarWidth - this.margin;
+      this.mainContentX = this.margin;
+    }
+
     this.currentY = 25;
 
-    // Header with enhanced styling
-    this.addHeader(data.metadata);
+    // Draw sidebar background
+    this.drawSidebarBackground();
 
-    // Professional Summary
-    this.addSection("Professional Summary", data.resume.experience);
+    // Add sidebar content
+    this.addSidebarContent(data);
 
-    // Technical Skills
-    this.addSkillsSection(data.skills);
+    // Add main content
+    this.addMainContent(data);
 
-    // Professional Experience
-    this.addExperienceSection(data.career);
+    console.log(
+      `Resume generated in ${language} (${this.isRTL ? "RTL" : "LTR"})`
+    );
+  }
 
-    // Projects
-    this.addProjectsSection(data.projects);
+  private drawSidebarBackground(): void {
+    // Draw sidebar background
+    this.doc.setFillColor(...this.sidebarColor);
+    this.doc.rect(this.sidebarX, 0, this.sidebarWidth, this.pageHeight, "F");
+  }
 
-    // Languages
-    this.addLanguagesSection(data.languages);
-
-    // Additional Activities
-    this.addSection("Additional Activities", data.additionalActivities);
+  private addSidebarContent(data: ResumeData): void {
+    let sidebarY = 35;
 
     // Contact Information
-    this.addContactInfo();
+    sidebarY = this.addSidebarSection("Contact", sidebarY);
+    sidebarY = this.addContactInfoSidebar(sidebarY);
 
-    // Language parameter is used for future localization features
-    console.log(`Resume generated in ${language}`);
+    // Areas of Expertise
+    sidebarY = this.addSidebarSection("Areas of Expertise", sidebarY);
+    sidebarY = this.addSkillsSidebar(data.skills, sidebarY);
+
+    // Languages
+    sidebarY = this.addSidebarSection("Languages", sidebarY);
+    sidebarY = this.addLanguagesSidebar(data.languages, sidebarY);
+
+    // Certificates (placeholder for future implementation)
+    sidebarY = this.addSidebarSection("Certificates", sidebarY);
+    this.addCertificatesSidebar(sidebarY);
   }
 
-  private addHeader(metadata: ResumeData["metadata"]): void {
-    // Background color for header
-    this.doc.setFillColor(...this.primaryColor);
-    this.doc.rect(0, 0, this.pageWidth, 45, "F");
-
-    // Name with white color
+  private addSidebarSection(title: string, y: number): number {
+    // Section title in white
     this.doc.setTextColor(255, 255, 255);
-    this.doc.setFontSize(28);
+    this.doc.setFontSize(12);
     this.doc.setFont("helvetica", "bold");
-    this.doc.text(metadata.title, this.margin, this.currentY);
-    this.currentY += 10;
 
-    // Title with light color
-    this.doc.setTextColor(240, 240, 240);
-    this.doc.setFontSize(14);
-    this.doc.setFont("helvetica", "normal");
-    this.doc.text(
-      "Full Stack Developer | Electrical Engineer | Data Management Expert",
-      this.margin,
-      this.currentY
-    );
-    this.currentY += 15;
+    const titleX = this.sidebarX + 5;
+    this.doc.text(title, titleX, y);
 
-    // Reset text color for contact info
-    this.doc.setTextColor(...this.secondaryColor);
-    this.doc.setFontSize(10);
-    this.doc.setFont("helvetica", "normal");
-
-    // Contact info in two columns
-    const leftColumn = this.margin;
-    const rightColumn = this.pageWidth / 2 + 10;
-
-    this.doc.text("Email: omrijukin@gmail.com", leftColumn, this.currentY);
-    this.doc.text("Phone: +972 52-334-4064", rightColumn, this.currentY);
-    this.currentY += 6;
-
-    this.doc.text(
-      "LinkedIn: linkedin.com/in/omri-jukin",
-      leftColumn,
-      this.currentY
-    );
-    this.doc.text("GitHub: github.com/Omri-Jukin", rightColumn, this.currentY);
-    this.currentY += 6;
-
-    this.doc.text("Website: omrijukin.com", leftColumn, this.currentY);
-    this.doc.text("Location: Israel", rightColumn, this.currentY);
-    this.currentY += 20;
+    return y + 8;
   }
 
-  private addSection(title: string, content: string): void {
-    // Calculate how much space this section will need
-    const titleHeight = 12; // Section title height
-    const contentLines = this.doc.splitTextToSize(
-      content,
-      this.pageWidth - 2 * this.margin
-    );
-    const contentHeight = contentLines.length * 6 + 12; // Content height + padding
-    const totalSectionHeight = titleHeight + contentHeight;
-
-    // Check if we need a page break before adding section
-    if (this.currentY + totalSectionHeight > 270) {
-      this.doc.addPage();
-      this.currentY = 25;
-    }
-
-    // Section Title with colored background
-    this.doc.setFillColor(...this.primaryColor);
-    this.doc.rect(
-      this.margin - 5,
-      this.currentY - 3,
-      this.pageWidth - 2 * this.margin + 10,
-      8,
-      "F"
-    );
-
+  private addContactInfoSidebar(y: number): number {
     this.doc.setTextColor(255, 255, 255);
-    this.doc.setFontSize(14);
-    this.doc.setFont("helvetica", "bold");
-    this.doc.text(title, this.margin, this.currentY);
-    this.currentY += 12;
-
-    // Section Content
-    this.doc.setTextColor(...this.secondaryColor);
-    this.doc.setFontSize(10);
+    this.doc.setFontSize(9);
     this.doc.setFont("helvetica", "normal");
 
-    contentLines.forEach((line: string) => {
-      if (this.currentY > 270) {
-        this.doc.addPage();
-        this.currentY = 25;
+    const contactInfo = [
+      { text: "[E] omrijukin@gmail.com", url: "mailto:omrijukin@gmail.com" },
+      { text: "[P] +972 52-334-4064", url: "tel:+972523344064" },
+      {
+        text: "[L] LinkedIn",
+        url: "https://linkedin.com/in/omri-jukin",
+      },
+      {
+        text: "[G] GitHub",
+        url: "https://github.com/Omri-Jukin",
+      },
+      { text: "[W] omrijukin.com", url: "https://omrijukin.com" },
+      { text: "[I] Israel", url: null },
+    ];
+
+    contactInfo.forEach((info) => {
+      const textX = this.sidebarX + 5;
+
+      if (info.url) {
+        // Add clickable link
+        this.doc.setTextColor(255, 255, 255);
+        this.doc.text(info.text, textX, y);
+
+        // Add underline to indicate it's clickable
+        const textWidth = this.doc.getTextWidth(info.text);
+        this.doc.setDrawColor(255, 255, 255);
+        this.doc.setLineWidth(0.2);
+        this.doc.line(textX, y + 1, textX + textWidth, y + 1);
+
+        // Add the link annotation
+        this.doc.link(textX, y - 3, textWidth, 4, { url: info.url });
+      } else {
+        // Regular text without link
+        this.doc.text(info.text, textX, y);
       }
-      this.doc.text(line, this.margin, this.currentY);
-      this.currentY += 6;
+
+      y += 6;
     });
 
-    this.currentY += 8; // Reduced spacing after section content
+    return y + 8;
   }
 
-  private addSkillsSection(skills: ResumeData["skills"]): void {
-    // For skills section, we want to keep it on the same page as professional summary
-    // Only break if absolutely necessary (very close to page end)
-    if (this.currentY > 250) {
-      this.doc.addPage();
-      this.currentY = 25;
-    }
-
-    // Section Title with colored background
-    this.doc.setFillColor(...this.primaryColor);
-    this.doc.rect(
-      this.margin - 5,
-      this.currentY - 3,
-      this.pageWidth - 2 * this.margin + 10,
-      8,
-      "F"
-    );
-
+  private addSkillsSidebar(skills: ResumeData["skills"], y: number): number {
     this.doc.setTextColor(255, 255, 255);
-    this.doc.setFontSize(14);
-    this.doc.setFont("helvetica", "bold");
-    this.doc.text("Technical Skills", this.margin, this.currentY);
-    this.currentY += 12;
+    this.doc.setFontSize(8);
+    this.doc.setFont("helvetica", "normal");
 
-    this.doc.setTextColor(...this.secondaryColor);
-    this.doc.setFontSize(10);
+    // Create skill tags similar to the image
+    const skillTags = [
+      "Full Stack Development",
+      "React & Next.js",
+      "TypeScript",
+      "Node.js & Express",
+      "Database Design",
+      "API Development",
+      "DevOps & CI/CD",
+      "System Architecture",
+      "Data Management",
+      "Electrical Engineering",
+    ];
 
-    skills.categories.technical.skills.forEach(
-      (skill: ResumeData["skills"]["categories"]["technical"]["skills"][0]) => {
-        // For skills, we want to keep them together on the same page
-        // Only break if we're very close to the end
-        if (this.currentY > 260) {
-          this.doc.addPage();
-          this.currentY = 25;
-        }
+    let currentX = this.sidebarX + 5;
+    let currentY = y;
+    const tagHeight = 6;
 
-        // Skill name and level
-        this.doc.setFont("helvetica", "bold");
-        this.doc.text(
-          `${skill.name} (${skill.level}%)`,
-          this.margin,
-          this.currentY
-        );
-        this.currentY += 4;
+    skillTags.forEach((skill) => {
+      const tagWidth = this.doc.getTextWidth(skill) + 8;
 
-        // Progress bar
-        const barWidth = 60;
-        const barHeight = 3;
-        const progressWidth = (skill.level / 100) * barWidth;
-
-        // Background bar
-        this.doc.setFillColor(220, 220, 220);
-        this.doc.rect(this.margin, this.currentY, barWidth, barHeight, "F");
-
-        // Progress bar
-        this.doc.setFillColor(...this.primaryColor);
-        this.doc.rect(
-          this.margin,
-          this.currentY,
-          progressWidth,
-          barHeight,
-          "F"
-        );
-
-        this.currentY += 6;
-
-        // Technologies
-        this.doc.setFont("helvetica", "normal");
-        const techText = skill.technologies.join(", ");
-        const lines = this.doc.splitTextToSize(
-          techText,
-          this.pageWidth - 2 * this.margin
-        );
-        lines.forEach((line: string) => {
-          if (this.currentY > 270) {
-            this.doc.addPage();
-            this.currentY = 25;
-          }
-          this.doc.text(`  ${line}`, this.margin, this.currentY);
-          this.currentY += 5;
-        });
-        this.currentY += 3; // Reduced spacing between skills
+      // Check if we need to wrap to next line
+      if (currentX + tagWidth > this.sidebarX + this.sidebarWidth - 5) {
+        currentX = this.sidebarX + 5;
+        currentY += tagHeight + 2;
       }
-    );
 
-    this.currentY += 6; // Reduced final padding
-  }
+      // Draw tag background
+      this.doc.setFillColor(70, 130, 180);
+      this.doc.rect(currentX, currentY - 4, tagWidth, tagHeight, "F");
 
-  private addExperienceSection(career: ResumeData["career"]): void {
-    // Always start experience section on a new page for better organization
-    this.doc.addPage();
-    this.currentY = 25;
+      // Draw tag text
+      this.doc.setTextColor(255, 255, 255);
+      this.doc.text(skill, currentX + 4, currentY);
 
-    // Section Title with colored background
-    this.doc.setFillColor(...this.primaryColor);
-    this.doc.rect(
-      this.margin - 5,
-      this.currentY - 3,
-      this.pageWidth - 2 * this.margin + 10,
-      8,
-      "F"
-    );
-
-    this.doc.setTextColor(255, 255, 255);
-    this.doc.setFontSize(14);
-    this.doc.setFont("helvetica", "bold");
-    this.doc.text("Professional Experience", this.margin, this.currentY);
-    this.currentY += 12;
-
-    this.doc.setTextColor(...this.secondaryColor);
-
-    career.experiences.forEach(
-      (experience: ResumeData["career"]["experiences"][0]) => {
-        // For experience, we want to keep each job together
-        // Only break if we're very close to the end
-        if (this.currentY > 260) {
-          this.doc.addPage();
-          this.currentY = 25;
-        }
-
-        // Role and Company
-        this.doc.setFontSize(12);
-        this.doc.setFont("helvetica", "bold");
-        this.doc.setTextColor(...this.primaryColor);
-        this.doc.text(experience.role, this.margin, this.currentY);
-        this.currentY += 4; // Reduced spacing
-
-        this.doc.setFontSize(10);
-        this.doc.setFont("helvetica", "normal");
-        this.doc.setTextColor(...this.accentColor);
-        this.doc.text(
-          `${experience.company} | ${experience.time}`,
-          this.margin,
-          this.currentY
-        );
-        this.currentY += 6; // Reduced spacing
-
-        // Details
-        this.doc.setTextColor(...this.secondaryColor);
-        experience.details.forEach((detail: string) => {
-          if (this.currentY > 270) {
-            this.doc.addPage();
-            this.currentY = 25;
-          }
-
-          const lines = this.doc.splitTextToSize(
-            `• ${detail}`,
-            this.pageWidth - 2 * this.margin
-          );
-          lines.forEach((line: string) => {
-            if (this.currentY > 270) {
-              this.doc.addPage();
-              this.currentY = 25;
-            }
-            this.doc.text(line, this.margin, this.currentY);
-            this.currentY += 5;
-          });
-          this.currentY += 1; // Reduced spacing between detail bullets
-        });
-
-        this.currentY += 4; // Reduced spacing between experiences
-      }
-    );
-  }
-
-  private addProjectsSection(projects: ResumeData["projects"]): void {
-    // Calculate approximate space needed for projects section
-    let estimatedHeight = 12; // Section title
-    projects.projects.forEach((project) => {
-      estimatedHeight += 5; // Project title
-      const descLines = this.doc.splitTextToSize(
-        project.description,
-        this.pageWidth - 2 * this.margin
-      );
-      estimatedHeight += descLines.length * 5 + 8; // Description + padding
+      currentX += tagWidth + 3;
     });
 
-    // Check if we need a page break before adding section
-    if (this.currentY + estimatedHeight > 270) {
-      this.doc.addPage();
-      this.currentY = 25;
-    }
-
-    // Section Title with colored background
-    this.doc.setFillColor(...this.primaryColor);
-    this.doc.rect(
-      this.margin - 5,
-      this.currentY - 3,
-      this.pageWidth - 2 * this.margin + 10,
-      8,
-      "F"
-    );
-
-    this.doc.setTextColor(255, 255, 255);
-    this.doc.setFontSize(14);
-    this.doc.setFont("helvetica", "bold");
-    this.doc.text("Featured Projects", this.margin, this.currentY);
-    this.currentY += 12;
-
-    this.doc.setTextColor(...this.secondaryColor);
-
-    projects.projects.forEach(
-      (project: ResumeData["projects"]["projects"][0]) => {
-        // Calculate space needed for this project
-        const descLines = this.doc.splitTextToSize(
-          project.description,
-          this.pageWidth - 2 * this.margin
-        );
-        const projectHeight = 5 + descLines.length * 5 + 8; // Title + description + padding
-
-        // Check if we need a page break before adding project
-        if (this.currentY + projectHeight > 270) {
-          this.doc.addPage();
-          this.currentY = 25;
-        }
-
-        // Project Title
-        this.doc.setFontSize(12);
-        this.doc.setFont("helvetica", "bold");
-        this.doc.setTextColor(...this.primaryColor);
-        this.doc.text(project.title, this.margin, this.currentY);
-        this.currentY += 5;
-
-        // Project Description
-        this.doc.setFontSize(10);
-        this.doc.setFont("helvetica", "normal");
-        this.doc.setTextColor(...this.secondaryColor);
-        const lines = this.doc.splitTextToSize(
-          project.description,
-          this.pageWidth - 2 * this.margin
-        );
-        lines.forEach((line: string) => {
-          if (this.currentY > 270) {
-            this.doc.addPage();
-            this.currentY = 25;
-          }
-          this.doc.text(line, this.margin, this.currentY);
-          this.currentY += 5;
-        });
-
-        this.currentY += 8;
-      }
-    );
+    return currentY + tagHeight + 8;
   }
 
-  private addLanguagesSection(languages: ResumeData["languages"]): void {
-    // Calculate approximate space needed for languages section
-    const progLanguages = languages.programming
-      .map((lang) => `${lang.name} (${lang.level})`)
-      .join(", ");
-    const progLines = this.doc.splitTextToSize(
-      progLanguages,
-      this.pageWidth - 2 * this.margin
-    );
-
-    const spokenLanguages = languages.spoken
-      .map((lang) => `${lang.name} (${lang.level})`)
-      .join(", ");
-    const spokenLines = this.doc.splitTextToSize(
-      spokenLanguages,
-      this.pageWidth - 2 * this.margin
-    );
-
-    const estimatedHeight =
-      12 + // Section title
-      5 + // Programming Languages subtitle
-      progLines.length * 5 + // Programming languages
-      6 + // Spacing
-      5 + // Spoken Languages subtitle
-      spokenLines.length * 5 + // Spoken languages
-      12; // Final padding
-
-    // Check if we need a page break before adding section
-    if (this.currentY + estimatedHeight > 270) {
-      this.doc.addPage();
-      this.currentY = 25;
-    }
-
-    // Section Title with colored background
-    this.doc.setFillColor(...this.primaryColor);
-    this.doc.rect(
-      this.margin - 5,
-      this.currentY - 3,
-      this.pageWidth - 2 * this.margin + 10,
-      8,
-      "F"
-    );
-
+  private addLanguagesSidebar(
+    languages: ResumeData["languages"],
+    y: number
+  ): number {
     this.doc.setTextColor(255, 255, 255);
-    this.doc.setFontSize(14);
-    this.doc.setFont("helvetica", "bold");
-    this.doc.text("Languages", this.margin, this.currentY);
-    this.currentY += 12;
-
-    this.doc.setTextColor(...this.secondaryColor);
-    this.doc.setFontSize(10);
+    this.doc.setFontSize(8);
+    this.doc.setFont("helvetica", "normal");
 
     // Programming Languages
     this.doc.setFont("helvetica", "bold");
-    this.doc.setTextColor(...this.primaryColor);
-    this.doc.text("Programming Languages:", this.margin, this.currentY);
-    this.currentY += 5;
+    this.doc.text("Programming:", this.sidebarX + 5, y);
+    y += 4;
 
     this.doc.setFont("helvetica", "normal");
-    this.doc.setTextColor(...this.secondaryColor);
-    progLines.forEach((line: string) => {
-      if (this.currentY > 270) {
-        this.doc.addPage();
-        this.currentY = 25;
-      }
-      this.doc.text(`  ${line}`, this.margin, this.currentY);
-      this.currentY += 5;
+    languages.programming.forEach((lang) => {
+      this.doc.text(`${lang.name} (${lang.level})`, this.sidebarX + 5, y);
+      y += 3;
     });
 
-    this.currentY += 6;
+    y += 3;
 
     // Spoken Languages
     this.doc.setFont("helvetica", "bold");
-    this.doc.setTextColor(...this.primaryColor);
-    this.doc.text("Spoken Languages:", this.margin, this.currentY);
-    this.currentY += 5;
+    this.doc.text("Spoken:", this.sidebarX + 5, y);
+    y += 4;
 
     this.doc.setFont("helvetica", "normal");
-    this.doc.setTextColor(...this.secondaryColor);
-    spokenLines.forEach((line: string) => {
-      if (this.currentY > 270) {
-        this.doc.addPage();
-        this.currentY = 25;
-      }
-      this.doc.text(`  ${line}`, this.margin, this.currentY);
-      this.currentY += 5;
+    languages.spoken.forEach((lang) => {
+      this.doc.text(`${lang.name} (${lang.level})`, this.sidebarX + 5, y);
+      y += 3;
     });
 
-    this.currentY += 12;
+    return y + 8;
   }
 
-  private addContactInfo(): void {
-    this.currentY += 15;
-
-    // Footer line
-    this.doc.setDrawColor(...this.primaryColor);
-    this.doc.setLineWidth(0.5);
-    this.doc.line(
-      this.margin,
-      this.currentY,
-      this.pageWidth - this.margin,
-      this.currentY
-    );
-    this.currentY += 8;
-
-    // Footer text
-    this.doc.setTextColor(...this.secondaryColor);
-    this.doc.setFontSize(9);
+  private addCertificatesSidebar(y: number): number {
+    this.doc.setTextColor(255, 255, 255);
+    this.doc.setFontSize(8);
     this.doc.setFont("helvetica", "normal");
-    this.doc.text(
-      "Generated from omrijukin.com - Professional Portfolio",
-      this.margin,
-      this.currentY
+
+    const certificates = [
+      "FullStack Engineer",
+      "C# Developer",
+      "TypeScript Developer",
+      "Python Developer",
+      "Next.js Developer",
+      "Node.js Developer",
+      "React Developer",
+      "Electrical Engineer",
+    ];
+
+    certificates.forEach((cert) => {
+      this.doc.text(`• ${cert}`, this.sidebarX + 5, y);
+      y += 3;
+    });
+
+    return y + 8;
+  }
+
+  private addMainContent(data: ResumeData): void {
+    let mainY = 35;
+
+    // Header with name and title
+    mainY = this.addMainHeader(data.metadata, mainY);
+
+    // Professional Summary
+    mainY = this.addMainSection(
+      "Professional Summary",
+      data.resume.experience,
+      mainY
     );
+
+    // Professional Experience
+    mainY = this.addExperienceSection(data.career, mainY);
+
+    // Projects
+    mainY = this.addProjectsSection(data.projects, mainY);
+
+    // Additional Activities
+    this.addMainSection(
+      "Additional Activities",
+      data.additionalActivities,
+      mainY
+    );
+  }
+
+  private addMainHeader(metadata: ResumeData["metadata"], y: number): number {
+    // Name
+    this.doc.setTextColor(...this.primaryColor);
+    this.doc.setFontSize(24);
+    this.doc.setFont("helvetica", "bold");
+    this.doc.text(metadata.title, this.mainContentX, y);
+    y += 10;
+
+    // Title - check if it fits within the main content area
+    this.doc.setTextColor(...this.accentColor);
+    this.doc.setFontSize(14);
+    this.doc.setFont("helvetica", "normal");
+
+    const titleText =
+      "Software Engineer | Electrical Engineer | Data Management Expert";
+    const titleWidth = this.doc.getTextWidth(titleText);
+
+    // If title is too wide, split it into multiple lines
+    if (titleWidth > this.mainContentWidth) {
+      const words = titleText.split(" | ");
+      let currentLine = "";
+      let lineY = y;
+
+      words.forEach((word) => {
+        const testLine = currentLine + (currentLine ? " | " : "") + word;
+        if (
+          this.doc.getTextWidth(testLine) > this.mainContentWidth &&
+          currentLine
+        ) {
+          this.doc.text(currentLine, this.mainContentX, lineY);
+          lineY += 6;
+          currentLine = word;
+        } else {
+          currentLine = testLine;
+        }
+      });
+
+      if (currentLine) {
+        this.doc.text(currentLine, this.mainContentX, lineY);
+        lineY += 6;
+      }
+
+      y = lineY + 10;
+    } else {
+      this.doc.text(titleText, this.mainContentX, y);
+      y += 15;
+    }
+
+    return y;
+  }
+
+  private addMainSection(title: string, content: string, y: number): number {
+    // Check if we need a page break
+    if (y > this.pageHeight - 50) {
+      this.doc.addPage();
+      this.drawSidebarBackground();
+      y = 35;
+    }
+
+    // Section title
+    this.doc.setTextColor(...this.primaryColor);
+    this.doc.setFontSize(16);
+    this.doc.setFont("helvetica", "bold");
+    this.doc.text(title, this.mainContentX, y);
+    y += 10;
+
+    // Section content
+    this.doc.setTextColor(...this.secondaryColor);
+    this.doc.setFontSize(10);
+    this.doc.setFont("helvetica", "normal");
+
+    const lines = this.doc.splitTextToSize(content, this.mainContentWidth);
+    lines.forEach((line: string) => {
+      if (y > this.pageHeight - 30) {
+        this.doc.addPage();
+        this.drawSidebarBackground();
+        y = 35;
+      }
+      this.doc.text(line, this.mainContentX, y);
+      y += 6;
+    });
+
+    return y + 10;
+  }
+
+  private addExperienceSection(
+    career: ResumeData["career"],
+    y: number
+  ): number {
+    // Check if we need a page break
+    if (y > this.pageHeight - 80) {
+      this.doc.addPage();
+      this.drawSidebarBackground();
+      y = 35;
+    }
+
+    // Section title
+    this.doc.setTextColor(...this.primaryColor);
+    this.doc.setFontSize(16);
+    this.doc.setFont("helvetica", "bold");
+    this.doc.text("Professional Experience", this.mainContentX, y);
+    y += 8;
+
+    career.experiences.forEach((experience) => {
+      // Check if we need a page break before adding experience
+      if (y > this.pageHeight - 60) {
+        this.doc.addPage();
+        this.drawSidebarBackground();
+        y = 35;
+      }
+
+      // Role
+      this.doc.setTextColor(...this.primaryColor);
+      this.doc.setFontSize(12);
+      this.doc.setFont("helvetica", "bold");
+      this.doc.text(experience.role, this.mainContentX, y);
+      y += 6;
+
+      // Company and time
+      this.doc.setTextColor(...this.accentColor);
+      this.doc.setFontSize(10);
+      this.doc.setFont("helvetica", "normal");
+      this.doc.text(
+        `${experience.company} | ${experience.time}`,
+        this.mainContentX,
+        y
+      );
+      y += 8;
+
+      // Details
+      this.doc.setTextColor(...this.secondaryColor);
+      experience.details.forEach((detail) => {
+        if (y > this.pageHeight - 30) {
+          this.doc.addPage();
+          this.drawSidebarBackground();
+          y = 35;
+        }
+
+        const lines = this.doc.splitTextToSize(
+          `• ${detail}`,
+          this.mainContentWidth
+        );
+        lines.forEach((line: string) => {
+          if (y > this.pageHeight - 30) {
+            this.doc.addPage();
+            this.drawSidebarBackground();
+            y = 35;
+          }
+          this.doc.text(line, this.mainContentX, y);
+          y += 5;
+        });
+        y += 3;
+      });
+
+      y += 6;
+    });
+
+    return y;
+  }
+
+  private addProjectsSection(
+    projects: ResumeData["projects"],
+    y: number
+  ): number {
+    // Check if we need a page break
+    if (y > this.pageHeight - 80) {
+      this.doc.addPage();
+      this.drawSidebarBackground();
+      y = 35;
+    }
+
+    // Section title
+    this.doc.setTextColor(...this.primaryColor);
+    this.doc.setFontSize(16);
+    this.doc.setFont("helvetica", "bold");
+    this.doc.text("Featured Projects", this.mainContentX, y);
+    y += 8;
+
+    projects.projects.forEach((project) => {
+      // Check if we need a page break before adding project
+      if (y > this.pageHeight - 60) {
+        this.doc.addPage();
+        this.drawSidebarBackground();
+        y = 35;
+      }
+
+      // Project title
+      this.doc.setTextColor(...this.primaryColor);
+      this.doc.setFontSize(12);
+      this.doc.setFont("helvetica", "bold");
+      this.doc.text(project.title, this.mainContentX, y);
+
+      // Add clickable link if project has a link
+      if (project.link) {
+        const titleWidth = this.doc.getTextWidth(project.title);
+        this.doc.setDrawColor(...this.primaryColor);
+        this.doc.setLineWidth(0.3);
+        this.doc.line(
+          this.mainContentX,
+          y + 1,
+          this.mainContentX + titleWidth,
+          y + 1
+        );
+        this.doc.link(this.mainContentX, y - 3, titleWidth, 4, {
+          url: project.link,
+        });
+      }
+
+      y += 5;
+
+      // Project description
+      this.doc.setTextColor(...this.secondaryColor);
+      this.doc.setFontSize(10);
+      this.doc.setFont("helvetica", "normal");
+      const lines = this.doc.splitTextToSize(
+        project.description,
+        this.mainContentWidth
+      );
+      lines.forEach((line: string) => {
+        if (y > this.pageHeight - 30) {
+          this.doc.addPage();
+          this.drawSidebarBackground();
+          y = 35;
+        }
+        this.doc.text(line, this.mainContentX, y);
+        y += 4;
+      });
+
+      y += 6;
+    });
+
+    return y;
   }
 
   getPDF(): jsPDF {

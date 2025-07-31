@@ -16,13 +16,13 @@ export const StyledButtonText = styled("span")(({ theme }) => ({
   marginRight: theme.spacing(1),
 }));
 
-export const CTA1Button = styled(StyledButton)(() => ({
+export const CTA1Button = styled(StyledButton)(({ theme }) => ({
   width: "220px",
   height: "50px",
   border: "none",
   outline: "none",
-  color: "#fff",
-  background: "#111",
+  color: theme.palette.text.primary,
+  background: theme.palette.background.paper,
   cursor: "pointer",
   position: "relative",
   zIndex: 0,
@@ -45,7 +45,7 @@ export const CTA1Button = styled(StyledButton)(() => ({
     borderRadius: "10px",
   },
   "&:active": {
-    color: "#000",
+    color: theme.palette.text.primary,
     "&:after": {
       background: "transparent",
     },
@@ -62,7 +62,7 @@ export const CTA1Button = styled(StyledButton)(() => ({
     position: "absolute",
     width: "100%",
     height: "100%",
-    background: "#111",
+    background: theme.palette.background.paper,
     left: "0",
     top: "0",
     borderRadius: "10px",
