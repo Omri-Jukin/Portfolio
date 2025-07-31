@@ -25,10 +25,34 @@ import { ResumeLanguageSelectorStyle } from "./ResumeLanguageSelector.style";
 import "flag-icons/css/flag-icons.min.css";
 
 const languages = [
-  { code: "en", name: "English", flag: "us", nativeName: "English" },
-  { code: "es", name: "Spanish", flag: "es", nativeName: "Español" },
-  { code: "fr", name: "French", flag: "fr", nativeName: "Français" },
-  { code: "he", name: "Hebrew", flag: "il", nativeName: "עברית" },
+  {
+    code: "en",
+    name: "English",
+    flag: "us",
+    nativeName: "English",
+    available: true,
+  },
+  {
+    code: "es",
+    name: "Spanish",
+    flag: "es",
+    nativeName: "Español",
+    available: false,
+  },
+  {
+    code: "fr",
+    name: "French",
+    flag: "fr",
+    nativeName: "Français",
+    available: false,
+  },
+  {
+    code: "he",
+    name: "Hebrew",
+    flag: "il",
+    nativeName: "עברית",
+    available: false,
+  },
 ];
 
 const ResumeLanguageSelector: React.FC<ResumeLanguageSelectorProps> = ({
@@ -42,8 +66,11 @@ const ResumeLanguageSelector: React.FC<ResumeLanguageSelectorProps> = ({
     useState(selectedLanguage);
 
   const handleLanguageClick = (languageCode: string) => {
-    setLocalSelectedLanguage(languageCode);
-    onLanguageSelect?.(languageCode);
+    const language = languages.find((lang) => lang.code === languageCode);
+    if (language?.available) {
+      setLocalSelectedLanguage(languageCode);
+      onLanguageSelect?.(languageCode);
+    }
   };
 
   const handleDownload = () => {
@@ -100,10 +127,26 @@ const ResumeLanguageSelector: React.FC<ResumeLanguageSelectorProps> = ({
                         </Typography>
                         <Typography
                           variant="caption"
-                          sx={{ color: "text.secondary" }}
+                          sx={{
+                            color: "text.secondary",
+                            display: "block",
+                          }}
                         >
                           {language.nativeName}
                         </Typography>
+                        {!language.available && (
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              display: "block",
+                              color: "warning.main",
+                              fontWeight: "bold",
+                              fontSize: "0.7rem",
+                            }}
+                          >
+                            Coming Soon
+                          </Typography>
+                        )}
                       </Box>
                     </Box>
                   }
@@ -118,19 +161,26 @@ const ResumeLanguageSelector: React.FC<ResumeLanguageSelectorProps> = ({
                       ? "primary"
                       : "default"
                   }
+                  disabled={!language.available}
                   sx={{
                     minHeight: 60,
                     px: 2,
                     py: 1,
-                    cursor: "pointer",
+                    cursor: language.available ? "pointer" : "not-allowed",
                     transition: "all 0.3s ease",
+                    opacity: language.available ? 1 : 0.6,
                     "&:hover": {
-                      transform: "translateY(-2px)",
-                      boxShadow: 2,
+                      transform: language.available
+                        ? "translateY(-2px)"
+                        : "none",
+                      boxShadow: language.available ? 2 : 0,
                     },
                     "&.MuiChip-filled": {
                       backgroundColor: "primary.main",
                       color: "primary.contrastText",
+                    },
+                    "&.Mui-disabled": {
+                      opacity: 0.6,
                     },
                   }}
                 />
