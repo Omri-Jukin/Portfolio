@@ -93,8 +93,8 @@ function TabPanel(props: TabPanelProps) {
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`examples-tabpanel-${index}`}
-      aria-labelledby={`examples-tab-${index}`}
+      id={`tabpanel-${index}`}
+      aria-labelledby={`tab-${index}`}
       {...other}
     >
       {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
@@ -121,29 +121,7 @@ const ExamplesPage: React.FC = () => {
     setTabValue(newValue);
   };
 
-  const animationTypes = [
-    "torusKnot",
-    "stars",
-    "polyhedron",
-    "box",
-    "circle",
-    "cone",
-    "cylinder",
-    "sphere",
-    "plane",
-    "tube",
-    "torus",
-    "tetrahedron",
-    "ring",
-    "icosahedron",
-    "octahedron",
-    "dodecahedron",
-    "extrude",
-    "lathe",
-    "capsule",
-    "shape",
-    "dna",
-  ];
+  const animationTypes = ["torusKnot", "stars", "polyhedron", "dna"];
 
   const backgroundVariants = [
     "floating",
