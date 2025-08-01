@@ -7,6 +7,7 @@ import {
   Alert,
   Paper,
 } from "@mui/material";
+import { ContactCardType } from "./page.type";
 
 export const FormContainer = styled(Paper, {
   shouldForwardProp: (prop) => prop !== "transparent",
@@ -15,6 +16,7 @@ export const FormContainer = styled(Paper, {
   maxWidth: "700px",
   margin: "0 auto",
   marginTop: theme.spacing(8),
+  marginBottom: theme.spacing(12),
   background: transparent
     ? "transparent"
     : theme.palette.mode === "dark"
@@ -297,98 +299,153 @@ export const ContactCardsContainer = styled(Box)(({ theme }) => ({
 }));
 
 export const ContactCard = styled(Box, {
-  shouldForwardProp: (prop) => !["clickable"].includes(prop as string),
-})<{ clickable?: boolean }>(({ theme, clickable = false }) => ({
-  padding: theme.spacing(3),
-  borderRadius: theme.spacing(2),
-  backgroundColor:
-    theme.palette.mode === "dark"
-      ? "rgba(255, 255, 255, 0.05)"
-      : "rgba(255, 255, 255, 0.8)",
-  border: `2px solid ${
-    theme.palette.mode === "dark"
-      ? "rgba(255, 255, 255, 0.1)"
-      : "rgba(78, 205, 196, 0.2)"
-  }`,
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  gap: theme.spacing(2),
-  cursor: clickable ? "pointer" : "default",
-  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-  position: "relative",
-  overflow: "hidden",
-  "&::before": {
-    content: '""',
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background:
-      theme.palette.mode === "dark"
-        ? "linear-gradient(135deg, rgba(150, 206, 180, 0.1) 0%, rgba(255, 107, 107, 0.05) 100%)"
-        : "linear-gradient(135deg, rgba(78, 205, 196, 0.1) 0%, rgba(100, 181, 246, 0.05) 100%)",
-    zIndex: -1,
-  },
-  "&:hover": clickable
-    ? {
-        transform: "translateY(-6px)",
-        boxShadow:
-          theme.palette.mode === "dark"
-            ? "0 12px 32px rgba(150, 206, 180, 0.3), 0 6px 16px rgba(0, 0, 0, 0.3)"
-            : "0 12px 32px rgba(78, 205, 196, 0.25), 0 6px 16px rgba(0, 0, 0, 0.1)",
-        borderColor: theme.palette.primary.main,
+  shouldForwardProp: (prop) => !["clickable", "type"].includes(prop as string),
+})<{ clickable?: boolean; type?: ContactCardType }>(
+  ({ theme, clickable = false, type = "email" }) => {
+    const getCardGradient = (cardType: ContactCardType) => {
+      switch (cardType) {
+        case "email":
+          return theme.conicGradients.email;
+        case "phone":
+          return theme.conicGradients.phone;
+        case "github":
+          return theme.conicGradients.github;
+        case "linkedin":
+          return theme.conicGradients.linkedin;
+        case "whatsapp":
+          return theme.conicGradients.whatsapp;
+        case "telegram":
+          return theme.conicGradients.telegram;
+        case "aurora":
+          return theme.conicGradients.aurora;
+        case "fire":
+          return theme.conicGradients.fire;
+        case "spring":
+          return theme.conicGradients.spring;
+        case "ocean":
+          return theme.conicGradients.ocean;
+        case "forest":
+          return theme.conicGradients.forest;
+        case "galaxy":
+          return theme.conicGradients.galaxy;
+        case "warm":
+          return theme.conicGradients.warm;
+        case "coolWarm":
+          return theme.conicGradients.coolWarm;
+        case "cool":
+          return theme.conicGradients.cool;
+        case "neutral":
+          return theme.conicGradients.neutral;
+        case "dark":
+          return theme.conicGradients.dark;
+        case "sunset":
+          return theme.conicGradients.sunset;
+        default:
+          return theme.conicGradients.galaxy;
       }
-    : {},
-}));
+    };
+
+    return {
+      color: theme.palette.text.primary,
+      padding: theme.spacing(3),
+      borderRadius: theme.spacing(2),
+      background: getCardGradient(type),
+      backgroundSize: getCardGradient(type)?.includes("repeating")
+        ? "100% 100%"
+        : "auto",
+      backgroundPosition: getCardGradient(type)?.includes("repeating")
+        ? "0px 0px,0px 0px,0px 0px,0px 0px,0px 0px"
+        : "auto",
+      border: `2px solid ${
+        theme.palette.mode === "dark"
+          ? "rgba(255, 255, 255, 0.1)"
+          : "rgba(78, 205, 196, 0.2)"
+      }`,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      gap: theme.spacing(2),
+      cursor: clickable ? "pointer" : "default",
+      transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+      position: "relative",
+      overflow: "hidden",
+      "&::before": {
+        content: '""',
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background:
+          theme.palette.mode === "dark"
+            ? "linear-gradient(135deg, rgba(150, 206, 180, 0.1) 0%, rgba(255, 107, 107, 0.05) 100%)"
+            : "linear-gradient(135deg, rgba(78, 205, 196, 0.1) 0%, rgba(100, 181, 246, 0.05) 100%)",
+        zIndex: -1,
+      },
+      "&:hover": clickable
+        ? {
+            transform: "translateY(-6px)",
+            boxShadow:
+              theme.palette.mode === "dark"
+                ? "0 12px 32px rgba(150, 206, 180, 0.3), 0 6px 16px rgba(0, 0, 0, 0.3)"
+                : "0 12px 32px rgba(78, 205, 196, 0.25), 0 6px 16px rgba(0, 0, 0, 0.1)",
+            borderColor: theme.palette.primary.main,
+          }
+        : {},
+    };
+  }
+);
 
 export const ContactCardIcon = styled(Box, {
-  shouldForwardProp: (prop) => prop !== "color",
-})<{ color?: string }>(({ theme, color }) => ({
+  shouldForwardProp: (prop) => prop !== "gradientType",
+})<{ gradientType?: ContactCardType }>({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   width: "60px",
   height: "60px",
   borderRadius: "50%",
-  background: color || theme.palette.primary.main,
+  background: "rgba(255, 255, 255, 0.2)",
+  backdropFilter: "blur(10px)",
+  border: "2px solid rgba(255, 255, 255, 0.3)",
   "& .MuiSvgIcon-root": {
     fontSize: "2rem",
     color: "#FFFFFF",
   },
-}));
+});
 
-export const ContactCardTitle = styled(Typography)(({ theme }) => ({
+export const ContactCardTitle = styled(Typography)({
   fontWeight: 700,
-  color: theme.palette.text.primary,
+  color: "#FFFFFF",
   textAlign: "center",
   fontSize: "1.1rem",
-}));
+  textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
+});
 
-export const ContactCardSubtitle = styled(Typography)(({ theme }) => ({
-  color: theme.palette.text.secondary,
+export const ContactCardSubtitle = styled(Typography)({
+  color: "rgba(255, 255, 255, 0.9)",
   textAlign: "center",
   fontSize: "0.9rem",
-}));
+  textShadow: "0 1px 2px rgba(0, 0, 0, 0.3)",
+});
 
 export const ContactCardButton = styled(Button, {
-  shouldForwardProp: (prop) => prop !== "brandColor",
-})<{ brandColor?: string }>(({ theme, brandColor }) => ({
+  shouldForwardProp: (prop) => prop !== "gradientType",
+})<{ gradientType?: ContactCardType }>(({ theme }) => ({
   marginTop: theme.spacing(1),
-  borderColor: brandColor || theme.palette.primary.main,
-  color: brandColor || theme.palette.primary.main,
+  border: "2px solid rgba(255, 255, 255, 0.3)",
+  background: "rgba(255, 255, 255, 0.2)",
+  backdropFilter: "blur(10px)",
+  color: "#FFFFFF",
   fontWeight: 600,
   borderRadius: theme.spacing(2),
   transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
   "&:hover": {
-    borderColor: brandColor || theme.palette.primary.main,
-    backgroundColor: brandColor
-      ? `${brandColor}15`
-      : theme.palette.primary.main,
-    color: theme.palette.mode === "dark" ? "#FFFFFF" : "#000000",
+    background: "rgba(255, 255, 255, 0.3)",
+    borderColor: "rgba(255, 255, 255, 0.5)",
+    color: "#FFFFFF",
     transform: "translateY(-2px)",
-    boxShadow: `0 4px 12px ${brandColor || theme.palette.primary.main}40`,
+    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
   },
 }));
 

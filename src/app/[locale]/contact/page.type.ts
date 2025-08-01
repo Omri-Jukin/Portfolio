@@ -20,3 +20,23 @@ export interface ContactFormState {
   isSubmitted: boolean;
   error: string | null;
 }
+
+export type ContactCardType =
+  | "email"
+  | "phone"
+  | "github"
+  | "linkedin"
+  | "whatsapp"
+  | "telegram"
+  | "aurora"
+  | "fire"
+  | "spring"
+  | "ocean"
+  | "forest"
+  | "galaxy"
+  | "warm"
+  | "coolWarm"
+  | "cool"
+  | "neutral"
+  | "dark"
+  | "sunset";

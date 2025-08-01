@@ -26,7 +26,17 @@ export const WaveText = ({
 
   if (type === "dots") {
     return (
-      <motion.div className="floating-elements">
+      <motion.div
+        className="floating-elements"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+          position: "relative",
+        }}
+      >
         {[0, 1, 2, 3, 4].map((index) => (
           <motion.div
             key={index}
@@ -70,6 +80,10 @@ export const WaveText = ({
         gap: "12px",
         flexWrap: "wrap",
         justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+        height: "100%",
+        position: "relative",
         ...style,
       }}
     >

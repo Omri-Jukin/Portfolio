@@ -23,15 +23,17 @@ const AnimatedText = ({
     typeof children === "string" ? children : children?.toString() || "";
   const shouldSplitChars = length && length > 1;
 
-  // Generate colors once and memoize them
+  // Generate colors once and memoize them - use deterministic generation
   const letterColors = useMemo(() => {
     if (shouldSplitChars) {
       return textContent
         .split("")
         .slice(0, length)
-        .map(() => generateFromColorPalette());
+        .map((char, index) =>
+          generateFromColorPalette(`${textContent}-${index}`)
+        );
     }
-    return [generateFromColorPalette()];
+    return [generateFromColorPalette(textContent)];
   }, [textContent, length, shouldSplitChars]);
 
   return (

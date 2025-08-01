@@ -1,5 +1,5 @@
 "use client";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import { useState, useEffect } from "react";
 import DarkModeToggle from "~/DarkModeToggle/DarkModeToggle";
 import LanguageSwitcher from "~/LanguageSwitcher/LanguageSwitcher";
@@ -24,6 +24,10 @@ export default function Header({
     window.location.href = "/";
   };
 
+  const handleExamplesClick = () => {
+    window.location.href = "/examples";
+  };
+
   if (!mounted || !isClient) return null;
 
   return (
@@ -42,6 +46,19 @@ export default function Header({
           </Typography>
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Button
+            color="inherit"
+            onClick={handleExamplesClick}
+            sx={{
+              textTransform: "none",
+              fontWeight: 500,
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.1)",
+              },
+            }}
+          >
+            Examples
+          </Button>
           <DarkModeToggle onToggle={onThemeToggle} isDark={isDarkMode} />
           {/* <AnimationSwitcher
             animationType={animationType!}

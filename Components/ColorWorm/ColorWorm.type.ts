@@ -18,10 +18,4 @@ export type ColorWormProps = {
     | "backOut"
     | "backInOut"
     | "anticipate";
-  margins?: {
-    top: number | string;
-    bottom: number | string;
-    left: number | string;
-    right: number | string;
-  };
 };

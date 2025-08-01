@@ -19,7 +19,7 @@ export const ParticleBridge = ({
         justifyContent: "center",
         alignItems: "center",
         width: "100%",
-        height: "60px",
+        height: "100%",
         position: "relative",
       }}
     >

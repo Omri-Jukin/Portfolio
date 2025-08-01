@@ -11,7 +11,6 @@ export const ColorWorm = ({
   speed = 4,
   delay = 0.2,
   ease = "easeInOut",
-  margins = { top: "2vh", bottom: "2vh", left: 0, right: 0 },
 }: ColorWormProps) => {
   const theme = useTheme();
 
@@ -22,7 +21,12 @@ export const ColorWorm = ({
         scale,
         y,
         color: theme.palette.primary.main,
-        margin: `${margins.top} ${margins.right} ${margins.bottom} ${margins.left}`,
+        width: "100%",
+        height: "100%",
+        position: "relative",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
       className="gap-content"
     >

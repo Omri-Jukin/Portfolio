@@ -22,7 +22,10 @@ export const CTA1Button = styled(StyledButton)(({ theme }) => ({
   border: "none",
   outline: "none",
   color: theme.palette.text.primary,
-  background: theme.palette.background.paper,
+  background:
+    theme.palette.mode === "dark"
+      ? theme.palette.background.paper
+      : theme.palette.background.default,
   cursor: "pointer",
   position: "relative",
   zIndex: 0,

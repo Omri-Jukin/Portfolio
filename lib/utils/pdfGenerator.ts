@@ -1,7 +1,6 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import {
-  RTLTextProcessor,
   processRTLLine,
   processRTLTitle,
   processRTLMixedContent,

@@ -14,9 +14,11 @@ export const VisionRealityBridge = ({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        justifyContent: "center",
         gap: "1rem",
-        marginTop: "-1rem",
-        marginBottom: "-1rem",
+        width: "100%",
+        height: "100%",
+        position: "relative",
       }}
     >
       <motion.div

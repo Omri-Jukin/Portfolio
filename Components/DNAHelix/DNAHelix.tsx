@@ -1,12 +1,12 @@
 import React, { useRef, useMemo, useState, useEffect } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, Canvas } from "@react-three/fiber";
 import { useTheme } from "@mui/material/styles";
 import * as THREE from "three";
 
-const DNAHelix: React.FC<{ spinning: boolean; isMobile: boolean }> = ({
-  spinning,
-  isMobile,
-}) => {
+const DNAHelix: React.FC<{
+  spinning: boolean;
+  position?: [number, number, number];
+}> = ({ spinning, position }) => {
   const positionGroupRef = useRef<THREE.Group>(null); // For positioning and orientation
   const rotationGroupRef = useRef<THREE.Group>(null); // For tube rolling around DNA's natural axis
   const rotationState = useRef({ y: 0 }); // Persistent rotation state
@@ -149,9 +149,9 @@ const DNAHelix: React.FC<{ spinning: boolean; isMobile: boolean }> = ({
     });
 
     // Create DNA double helix with enhanced detail for textured appearance
-    const segments = 150; // More segments for ultra-smooth, detailed helix
+    const segments = 200; // More segments for longer, more detailed helix
     const helixRadius = 1.1; // Slightly tighter for more detail
-    const segmentHeight = 0.25; // Closer segments for smoother surface
+    const segmentHeight = 0.3; // Slightly larger segments for better visibility
     const basePairSpacing = 3; // More frequent base pairs for richer detail
 
     // Store positions for backbone connections
@@ -338,10 +338,10 @@ const DNAHelix: React.FC<{ spinning: boolean; isMobile: boolean }> = ({
     // Outer group for positioning and diagonal orientation
     <group
       ref={positionGroupRef}
-      // Position further to the right for desktop, closer for mobile
-      position={[isMobile ? 4 : 12, 2, isMobile ? -6 : -5]} // Moved further right (was 4), closer Z for better visibility
+      // Position to start from very bottom of card
+      position={position || [0, -25, 0]} // Moved much lower to start from bottom edge
       rotation={[0, Math.PI / 6, 0]} // Slightly angled toward center for better view
-      scale={[0.7, 1.1, 0.7]} // Slightly smaller scale for desktop positioning
+      scale={[5, 5, 5]} // Much larger scale to fill the card
     >
       {/* Inner group that rotates around DNA's natural Y-axis (helix length) */}
       <group ref={rotationGroupRef}>
@@ -351,4 +351,83 @@ const DNAHelix: React.FC<{ spinning: boolean; isMobile: boolean }> = ({
   );
 };
 
+// Wrapper component that provides Canvas context
+const DNAHelixWrapper: React.FC<{
+  spinning: boolean;
+  position?: [number, number, number];
+}> = ({ spinning, position }) => {
+  const [mounted, setMounted] = useState(false);
+
+  // Prevent hydration issues
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
+  return (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        position: "absolute",
+        top: 0,
+        left: 0,
+      }}
+    >
+      <Canvas
+        camera={{
+          position: [0, 0, 15], // Moved camera further back to accommodate larger helix
+          fov: 60, // Reduced field of view for better framing
+        }}
+        style={{ background: "transparent", width: "100%", height: "100%" }}
+        gl={{
+          antialias: true,
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: 1.5,
+        }}
+      >
+        <ambientLight intensity={0.2} color="#001122" />
+        <directionalLight
+          position={[20, 8, 10]}
+          intensity={2.0}
+          color="#00BFFF"
+        />
+        <pointLight
+          position={[15, 5, 5]}
+          intensity={2.5}
+          color="#FF1493"
+          distance={25}
+          decay={2}
+        />
+        <pointLight
+          position={[12, -3, 8]}
+          intensity={1.8}
+          color="#00FFFF"
+          distance={20}
+          decay={2}
+        />
+        <pointLight
+          position={[8, 8, -5]}
+          intensity={1.5}
+          color="#9370DB"
+          distance={30}
+          decay={2}
+        />
+        <pointLight
+          position={[10, -8, 0]}
+          intensity={1.0}
+          color="#FF4500"
+          distance={35}
+          decay={2}
+        />
+        <DNAHelix spinning={spinning} position={position || [0, 0, 5]} />
+      </Canvas>
+    </div>
+  );
+};
+
 export default DNAHelix;
+export { DNAHelixWrapper };

@@ -15,7 +15,6 @@ import * as Constants from "./page.const";
 import {
   CheckCircle as CheckCircleIcon,
   Send as SendIcon,
-  Language as LanguageIcon,
   AccessTime as AccessTimeIcon,
   Flag as FlagIcon,
 } from "@mui/icons-material";
@@ -34,12 +33,6 @@ export default function ContactPage() {
       }));
     },
   });
-
-  const getBrandBgColor = (
-    platform: keyof typeof Constants.SOCIALS_BG_COLORS
-  ) => {
-    return Constants.SOCIALS_BG_COLORS[platform];
-  };
 
   const t = useTranslations("contact");
   const [formData, setFormData] = useState<ContactFormData>({
@@ -256,8 +249,15 @@ export default function ContactPage() {
           </Styled.ContactSectionTitle>
           <Styled.ContactCardsContainer>
             {/* Email Card */}
-            <Styled.ContactCard clickable id="contact-card-email">
-              <Styled.ContactCardIcon color={getBrandBgColor("EMAIL")}>
+            <Styled.ContactCard
+              clickable
+              type="email"
+              id="contact-card-email"
+              onClick={() => {
+                window.open(Constants.SOCIAL_LINKS.EMAIL, "_blank");
+              }}
+            >
+              <Styled.ContactCardIcon>
                 {Constants.SOCIAL_ICONS.EMAIL}
               </Styled.ContactCardIcon>
               <Styled.ContactCardTitle
@@ -274,18 +274,22 @@ export default function ContactPage() {
                 id="contact-card-email-button"
                 variant="outlined"
                 size="small"
-                brandColor={"#FFFFFF"}
-                onClick={() =>
-                  window.open(Constants.SOCIAL_LINKS.EMAIL, "_blank")
-                }
+                gradientType="email"
               >
                 {t("social.email.button")}
               </Styled.ContactCardButton>
             </Styled.ContactCard>
 
             {/* Phone Card */}
-            <Styled.ContactCard clickable id="contact-card-phone">
-              <Styled.ContactCardIcon color={getBrandBgColor("PHONE")}>
+            <Styled.ContactCard
+              clickable
+              type="phone"
+              id="contact-card-phone"
+              onClick={() => {
+                window.open(Constants.SOCIAL_LINKS.PHONE, "_blank");
+              }}
+            >
+              <Styled.ContactCardIcon>
                 {Constants.SOCIAL_ICONS.PHONE}
               </Styled.ContactCardIcon>
               <Styled.ContactCardTitle
@@ -302,10 +306,6 @@ export default function ContactPage() {
                 id="contact-card-phone-button"
                 variant="outlined"
                 size="small"
-                brandColor={"#FFFFFF"}
-                onClick={() =>
-                  window.open(Constants.SOCIAL_LINKS.PHONE, "_blank")
-                }
               >
                 {t("social.phone.button")}
               </Styled.ContactCardButton>
@@ -320,8 +320,15 @@ export default function ContactPage() {
           </Styled.ContactSectionTitle>
           <Styled.ContactCardsContainer>
             {/* GitHub Card */}
-            <Styled.ContactCard clickable id="contact-card-github">
-              <Styled.ContactCardIcon color={getBrandBgColor("GITHUB")}>
+            <Styled.ContactCard
+              clickable
+              type="github"
+              id="contact-card-github"
+              onClick={() => {
+                window.open(Constants.SOCIAL_LINKS.GITHUB, "_blank");
+              }}
+            >
+              <Styled.ContactCardIcon>
                 {Constants.SOCIAL_ICONS.GITHUB}
               </Styled.ContactCardIcon>
               <Styled.ContactCardTitle
@@ -340,21 +347,21 @@ export default function ContactPage() {
                 id="contact-card-github-button"
                 variant="outlined"
                 size="small"
-                brandColor={"#FFFFFF"}
-                onClick={() =>
-                  window.open(Constants.SOCIAL_LINKS.GITHUB, "_blank")
-                }
               >
                 {t("social.github.button")}
               </Styled.ContactCardButton>
             </Styled.ContactCard>
 
             {/* LinkedIn Card */}
-            <Styled.ContactCard clickable id="contact-card-linkedin">
-              <Styled.ContactCardIcon
-                color={getBrandBgColor("LINKEDIN")}
-                id="contact-card-linkedin-icon"
-              >
+            <Styled.ContactCard
+              clickable
+              type="linkedin"
+              id="contact-card-linkedin"
+              onClick={() => {
+                window.open(Constants.SOCIAL_LINKS.LINKEDIN, "_blank");
+              }}
+            >
+              <Styled.ContactCardIcon id="contact-card-linkedin-icon">
                 {Constants.SOCIAL_ICONS.LINKEDIN}
               </Styled.ContactCardIcon>
               <Styled.ContactCardTitle
@@ -369,21 +376,21 @@ export default function ContactPage() {
               >
                 {t("social.linkedin.username")}
               </Styled.ContactCardSubtitle>
-              <Styled.ContactCardButton
-                variant="outlined"
-                size="small"
-                brandColor={"#FFFFFF"}
-                onClick={() =>
-                  window.open(Constants.SOCIAL_LINKS.LINKEDIN, "_blank")
-                }
-              >
+              <Styled.ContactCardButton variant="outlined" size="small">
                 {t("social.linkedin.button")}
               </Styled.ContactCardButton>
             </Styled.ContactCard>
 
             {/* WhatsApp Card */}
-            <Styled.ContactCard clickable id="contact-card-whatsapp">
-              <Styled.ContactCardIcon color={getBrandBgColor("WHATSAPP")}>
+            <Styled.ContactCard
+              clickable
+              type="whatsapp"
+              id="contact-card-whatsapp"
+              onClick={() => {
+                window.open(Constants.SOCIAL_LINKS.WHATSAPP, "_blank");
+              }}
+            >
+              <Styled.ContactCardIcon>
                 {Constants.SOCIAL_ICONS.WHATSAPP}
               </Styled.ContactCardIcon>
               <Styled.ContactCardTitle
@@ -402,18 +409,21 @@ export default function ContactPage() {
                 id="contact-card-whatsapp-button"
                 variant="outlined"
                 size="small"
-                brandColor={"#FFFFFF"}
-                onClick={() =>
-                  window.open(Constants.SOCIAL_LINKS.WHATSAPP, "_blank")
-                }
               >
                 {t("social.whatsapp.button")}
               </Styled.ContactCardButton>
             </Styled.ContactCard>
 
             {/* Telegram Card */}
-            <Styled.ContactCard clickable id="contact-card-telegram">
-              <Styled.ContactCardIcon color={getBrandBgColor("TELEGRAM")}>
+            <Styled.ContactCard
+              clickable
+              type="telegram"
+              id="contact-card-telegram"
+              onClick={() => {
+                window.open(Constants.SOCIAL_LINKS.TELEGRAM, "_blank");
+              }}
+            >
+              <Styled.ContactCardIcon>
                 {Constants.SOCIAL_ICONS.TELEGRAM}
               </Styled.ContactCardIcon>
               <Styled.ContactCardTitle
@@ -432,10 +442,6 @@ export default function ContactPage() {
                 id="contact-card-telegram-button"
                 variant="outlined"
                 size="small"
-                brandColor={"#FFFFFF"}
-                onClick={() =>
-                  window.open(Constants.SOCIAL_LINKS.TELEGRAM, "_blank")
-                }
               >
                 {t("social.telegram.button")}
               </Styled.ContactCardButton>
@@ -449,7 +455,7 @@ export default function ContactPage() {
             {t("additional.title")}
           </Styled.AdditionalInfoTitle>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            <Styled.AdditionalInfoItem id="additional-info-item-website">
+            {/* <Styled.AdditionalInfoItem id="additional-info-item-website">
               <LanguageIcon color="action" />
               <Typography
                 variant="body1"
@@ -457,7 +463,7 @@ export default function ContactPage() {
               >
                 {t("additional.website")}
               </Typography>
-            </Styled.AdditionalInfoItem>
+            </Styled.AdditionalInfoItem> */}
             <Styled.AdditionalInfoItem id="additional-info-item-timezone">
               <AccessTimeIcon color="action" />
               <Typography

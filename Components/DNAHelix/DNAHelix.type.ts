@@ -3,4 +3,5 @@ export interface DNAModelProps {
   rotationSpeed?: number;
   zoom?: number;
   showControls?: boolean;
+  position?: [number, number, number];
 }

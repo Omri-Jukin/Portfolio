@@ -47,7 +47,7 @@ export const generateRandomFontSize = () => {
 };
 
 // Alternative: Generate from predefined vibrant color palette
-export const generateFromColorPalette = () => {
+export const generateFromColorPalette = (seed?: string | number) => {
   const vibrantColors = [
     "#FF6B6B", // Red
     "#4ECDC4", // Teal
@@ -63,5 +63,21 @@ export const generateFromColorPalette = () => {
     "#9575CD", // Deep Purple
   ];
 
-  return vibrantColors[Math.floor(Math.random() * vibrantColors.length)];
+  // If no seed provided, use a default index to ensure consistency
+  if (seed === undefined) {
+    return vibrantColors[0]; // Default to first color for consistency
+  }
+
+  // Create a deterministic hash from the seed
+  let hash = 0;
+  const seedStr = String(seed);
+  for (let i = 0; i < seedStr.length; i++) {
+    const char = seedStr.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+
+  // Use the hash to select a color
+  const index = Math.abs(hash) % vibrantColors.length;
+  return vibrantColors[index];
 };

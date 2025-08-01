@@ -12,6 +12,9 @@ import { HERO_CONSTANTS } from "./Hero.const";
 import type { HeroProps } from "./Hero.type";
 
 const Hero: React.FC<HeroProps> = ({ onExploreClick, onAboutClick }) => {
+  const handleExamplesClick = () => {
+    window.location.href = "/examples";
+  };
   const t = useTranslations("hero");
 
   return (
@@ -52,6 +55,13 @@ const Hero: React.FC<HeroProps> = ({ onExploreClick, onAboutClick }) => {
             onClick={onAboutClick}
           >
             {t("aboutButton")}
+          </HeroButton>
+          <HeroButton
+            className={HERO_CONSTANTS.BUTTONS.SECONDARY_CLASS}
+            aria-label="View Examples"
+            onClick={handleExamplesClick}
+          >
+            Examples
           </HeroButton>
         </HeroButtonsContainer>
       </MotionWrapper>

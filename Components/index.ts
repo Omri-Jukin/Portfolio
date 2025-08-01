@@ -2,10 +2,17 @@
 export { default as AnimatedBackground } from "./AnimatedBackground";
 export { default as AnimatedText } from "./AnimatedText";
 export { default as AnimationSwitcher } from "./AnimationSwitcher";
+export { default as Background } from "./Background";
+export { default as BackgroundCard } from "./Background/BackgroundCard";
+export { default as ThreeGalaxy } from "./Background/ThreeGalaxy";
+export { default as ThreeGalaxyCard } from "./Background/ThreeGalaxyCard";
+export { Button } from "./Button";
+export { default as BrokenGlass } from "./BrokenGlass";
 export { default as Card } from "./Card";
 export { default as ContactForm } from "../src/app/[locale]/contact";
 export { default as DarkModeToggle } from "./DarkModeToggle";
 export { default as DNAHelix } from "./DNAHelix";
+export { DNAHelixWrapper } from "./DNAHelix";
 export { default as Footer } from "./Footer";
 export { default as Header } from "./Header";
 export { default as LanguageSwitcher } from "./LanguageSwitcher";
@@ -16,6 +23,12 @@ export { default as TagChip } from "./TagChip";
 export { default as Typography } from "./Typography";
 export { default as DataGrid } from "./DataGrid";
 export { default as Snackbar } from "./Snackbar";
+export { WaveText } from "./WaveText/WaveText";
+export { FloatingEmojis } from "./FloatingEmojis/FloatingEmojis";
+export { InnovationFlow } from "./InnovationFlow/InnovationFlow";
+export { ParticleBridge } from "./ParticleBridge/ParticleBridge";
+export { VisionRealityBridge } from "./VisionRealityBridge/VisionRealityBridge";
+export { ColorWorm } from "./ColorWorm/ColorWorm";
 
 // New section components
 export { default as Hero } from "./Hero";
@@ -36,7 +49,18 @@ export * from "./Common";
 // Type exports
 export type { AnimationType } from "./AnimatedBackground";
 export type { AnimatedTextProps, AnimatedTextType } from "./AnimatedText";
+export type {
+  BackgroundProps,
+  BackgroundVariant,
+  BackgroundIntensity,
+  BackgroundSpeed,
+  BackgroundColor,
+  FloatingElement,
+  Particle,
+  Wave,
+} from "./Background/Background.type";
 export type { CardProps } from "./Card";
+export type { BrokenGlassProps } from "./BrokenGlass";
 export type {
   ContactFormProps,
   ContactFormData,

@@ -3,8 +3,11 @@ import { Box } from "@mui/material";
 
 export const StyledTagChip = styled(Box)(({ theme }) => ({
   display: "inline-block",
-  backgroundColor: theme.palette.primary.main,
-  color: theme.palette.primary.contrastText,
+  backgroundColor:
+    theme.palette.mode === "dark"
+      ? theme.palette.background.paper
+      : theme.palette.background.default,
+  color: theme.palette.text.primary,
   padding: theme.spacing(0.5, 1),
   borderRadius: theme.spacing(1),
   fontSize: "0.875rem",

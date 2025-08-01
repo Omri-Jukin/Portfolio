@@ -1,8 +1,15 @@
 import { ButtonProps as MuiButtonProps } from "@mui/material";
 
-export type ButtonProps = MuiButtonProps & {
+export type ButtonProps = Omit<MuiButtonProps, "variant"> & {
   children?: React.ReactNode;
-  variant?: "contained" | "outlined" | "text" | "ghost" | "";
+  variant?:
+    | "contained"
+    | "outlined"
+    | "text"
+    | "ghost"
+    | "gradient"
+    | "neon"
+    | "glass";
   color?: "primary" | "secondary" | "error" | "warning" | "info" | "success";
   size?: "small" | "medium" | "large";
   center?: boolean;

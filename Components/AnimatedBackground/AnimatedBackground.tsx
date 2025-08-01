@@ -53,8 +53,7 @@ export const getAnimationForPath = (path: string): AnimationType => {
 export const AnimatedObject: React.FC<{
   type: AnimationType;
   spinning: boolean;
-  isMobile: boolean;
-}> = ({ type, spinning, isMobile }) => {
+}> = ({ type, spinning }) => {
   const meshRef = useRef<THREE.Mesh>(null);
   const themeMode = useTheme().palette.mode;
   const darkColor = "#325663";
@@ -70,7 +69,7 @@ export const AnimatedObject: React.FC<{
 
   switch (type) {
     case "dna":
-      return <DNAHelix spinning={spinning} isMobile={isMobile} />;
+      return <DNAHelix spinning={spinning} position={[0, 0, 5]} />;
     case "torusKnot":
       return (
         <TorusKnot ref={meshRef} args={[5.5, 0.2, 200, 100]}>
@@ -123,7 +122,6 @@ export const AnimatedObject: React.FC<{
 
 export const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
   animationType,
-  isMobile,
   path,
   manualOverride = false,
 }) => {
@@ -133,18 +131,6 @@ export const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
   const currentPath = usePathname();
-
-  // Fallback mobile detection if isMobile is undefined
-  const [detectedMobile, setDetectedMobile] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setDetectedMobile(window.innerWidth < 768);
-    }
-  }, []);
-
-  // Use passed isMobile prop, fallback to detection, or default to false
-  const isActuallyMobile = isMobile ?? detectedMobile ?? false;
 
   // Determine which animation to use based on path or fallback to provided animationType
   // If user manually overrode, use their choice; otherwise use path-based animation
@@ -228,11 +214,7 @@ export const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
               distance={35}
               decay={2}
             />
-            <AnimatedObject
-              type={effectiveAnimationType}
-              spinning={spinning}
-              isMobile={isActuallyMobile}
-            />
+            <AnimatedObject type={effectiveAnimationType} spinning={spinning} />
           </>
         ) : (
           <PresentationControls
@@ -262,7 +244,6 @@ export const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
               <AnimatedObject
                 type={effectiveAnimationType}
                 spinning={spinning}
-                isMobile={isActuallyMobile}
               />
             </group>
           </PresentationControls>

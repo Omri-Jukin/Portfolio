@@ -19,7 +19,7 @@ export default function ClientLayout({
   children: React.ReactNode;
 }) {
   const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined);
-
+  const [mounted, setMounted] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [forceLayout, setForceLayout] = useState<TResponsiveLayout>("auto");
   const [manualOverride, setManualOverride] = useState(false); // Track if user manually overrode animation
@@ -27,6 +27,9 @@ export default function ClientLayout({
   const isRTL = locale === "he";
 
   useEffect(() => {
+    // Set mounted to true after hydration
+    setMounted(true);
+
     // Load theme preferences
     const stored = localStorage.getItem("theme");
     const prefersDark = window.matchMedia(
@@ -82,33 +85,34 @@ export default function ClientLayout({
   };
 
   // Create app theme with dark mode and RTL support
+  // Use a consistent theme for SSR to prevent hydration issues
   const appTheme = createTheme({
     ...baseTheme,
     direction: isRTL ? "rtl" : "ltr",
     palette: {
       ...baseTheme.palette,
-      mode: isDarkMode ? "dark" : "light",
+      mode: mounted ? (isDarkMode ? "dark" : "light") : "dark", // Default to dark mode for SSR
       background: {
         ...baseTheme.palette.background,
-        default: isDarkMode ? "#0a0a0a" : "#fafafa",
-        paper: isDarkMode ? "#1a1a1a" : "#ffffff",
+        default: mounted && isDarkMode ? "#0a0a0a" : "#fafafa",
+        paper: mounted && isDarkMode ? "#1a1a1a" : "#ffffff",
       },
       text: {
         ...baseTheme.palette.text,
-        primary: isDarkMode ? "#FFEAA7" : "#2C3E50", // Yellow in dark, Dark blue-gray in light
-        secondary: isDarkMode ? "#FFFFFF" : "#34495E", // White in dark, Dark gray in light
+        primary: mounted && isDarkMode ? "#FFEAA7" : "#2C3E50", // Yellow in dark, Dark blue-gray in light
+        secondary: mounted && isDarkMode ? "#FFFFFF" : "#34495E", // White in dark, Dark gray in light
       },
       primary: {
         ...baseTheme.palette.primary,
-        main: isDarkMode ? "#64B5F6" : "#4ECDC4", // Light blue in dark, Teal in light
-        light: isDarkMode ? "#45B7D1" : "#64B5F6", // Blue in dark, Light blue in light
-        dark: isDarkMode ? "#4ECDC4" : "#45B7D1", // Teal in dark, Blue in light
+        main: mounted && isDarkMode ? "#64B5F6" : "#4ECDC4", // Light blue in dark, Teal in light
+        light: mounted && isDarkMode ? "#45B7D1" : "#64B5F6", // Blue in dark, Light blue in light
+        dark: mounted && isDarkMode ? "#4ECDC4" : "#45B7D1", // Teal in dark, Blue in light
       },
       secondary: {
         ...baseTheme.palette.secondary,
-        main: isDarkMode ? "#FF6B6B" : "#FF6B6B", // Red in both modes
-        light: isDarkMode ? "#F06292" : "#F06292", // Pink in both modes
-        dark: isDarkMode ? "#9575CD" : "#9575CD", // Purple in both modes
+        main: mounted && isDarkMode ? "#FF6B6B" : "#FF6B6B", // Red in both modes
+        light: mounted && isDarkMode ? "#F06292" : "#F06292", // Pink in both modes
+        dark: mounted && isDarkMode ? "#9575CD" : "#9575CD", // Purple in both modes
       },
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -15,6 +15,9 @@ export const FloatingEmojis = ({
         gap: "1rem",
         justifyContent: "center",
         alignItems: "center",
+        width: "100%",
+        height: "100%",
+        position: "relative",
       }}
     >
       {emojis.map((icon, index) => (

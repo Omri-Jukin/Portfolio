@@ -9,6 +9,7 @@ export type AnimatedTextType =
 export interface AnimatedTextProps {
   type?: AnimatedTextType;
   children: React.ReactNode;
+  delay?: number;
   length?: number;
   hoverColor?: string;
   fontSize?: string | number;

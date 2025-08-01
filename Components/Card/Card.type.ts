@@ -14,4 +14,5 @@ export interface CardProps {
   animation?: "fade" | "slide" | "scale" | "bounce";
   gradient?: boolean;
   glow?: boolean;
+  style?: React.CSSProperties;
 }
