@@ -524,6 +524,7 @@ const Galaxy: React.FC<GalaxyProps> = ({
     };
   }, [
     generateGalaxy,
+    generateAmbientStars,
     generateCenter,
     createShootingStar,
     adjustedRotationSpeed,
