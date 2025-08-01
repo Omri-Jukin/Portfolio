@@ -11,7 +11,7 @@ import type {
   Wave,
   GradientOrb,
 } from "./Background.type";
-import ThreeGalaxy from "./ThreeGalaxy";
+import Galaxy from "../GalaxyCard/Galaxy";
 
 const Background: React.FC<BackgroundProps> = ({
   variant = "floating",
@@ -461,7 +461,7 @@ const Background: React.FC<BackgroundProps> = ({
         return renderGradientOrbs();
       case "three-galaxy":
         return (
-          <ThreeGalaxy
+          <Galaxy
             count={50000}
             branches={6}
             spin={1}

@@ -1,9 +1,10 @@
 import React from "react";
 import { Card, CardProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import ThreeGalaxy, { ThreeGalaxyProps } from "./ThreeGalaxy";
+import Galaxy from "./Galaxy";
+import { GalaxyProps } from "./Galaxy.type";
 
-interface ThreeGalaxyCardProps extends ThreeGalaxyProps {
+interface GalaxyCardProps extends GalaxyProps {
   cardProps?: CardProps;
   children?: React.ReactNode;
 }
@@ -22,16 +23,16 @@ const TransparentCard = styled(Card)({
   },
 });
 
-const ThreeGalaxyCard: React.FC<ThreeGalaxyCardProps> = ({
+const GalaxyCard: React.FC<GalaxyCardProps> = ({
   cardProps,
   children,
   ...galaxyProps
 }) => {
   return (
-    <ThreeGalaxy {...galaxyProps}>
+    <Galaxy {...galaxyProps}>
       <TransparentCard {...cardProps}>{children}</TransparentCard>
-    </ThreeGalaxy>
+    </Galaxy>
   );
 };
 
-export default ThreeGalaxyCard;
+export default GalaxyCard;

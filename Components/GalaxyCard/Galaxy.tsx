@@ -1,62 +1,19 @@
 import React, { useRef, useEffect, useCallback } from "react";
 import * as THREE from "three";
-import { styled } from "@mui/material/styles";
+import { GalaxyProps } from "./Galaxy.type";
+import { GalaxyContainer, Canvas, ContentContainer } from "./Galaxy.style";
 
-export interface ThreeGalaxyProps {
-  count?: number;
-  size?: number;
-  radius?: number;
-  branches?: number;
-  spin?: number;
-  randomness?: number;
-  randomnessPower?: number;
-  insideColor?: string;
-  outsideColor?: string;
-  rotationSpeed?: number;
-  pulseSpeed?: number;
-  pulseIntensity?: number;
-  animateColors?: boolean;
-  animateSpin?: boolean;
-  intensity?: "low" | "medium" | "high";
-  speed?: "slow" | "normal" | "fast";
-  className?: string;
-  children?: React.ReactNode;
-}
-
-const GalaxyContainer = styled("div")({
-  position: "relative",
-  width: "100%",
-  height: "100%",
-  overflow: "hidden",
-});
-
-const Canvas = styled("canvas")({
-  position: "absolute",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "100%",
-  zIndex: 0,
-});
-
-const ContentContainer = styled("div")({
-  position: "relative",
-  zIndex: 1,
-  width: "100%",
-  height: "100%",
-});
-
-const ThreeGalaxy: React.FC<ThreeGalaxyProps> = ({
-  count = 50000,
+const Galaxy: React.FC<GalaxyProps> = ({
+  count = 30000,
   size = 0.01,
   radius = 5,
-  branches = 6,
-  spin = 1,
+  branches = 4,
+  spin = 1.5,
   randomness = 0.2,
   randomnessPower = 2.2,
   insideColor = "#ffff00",
   outsideColor = "#0000ff",
-  rotationSpeed = 0.2,
+  rotationSpeed = 0.3,
   pulseSpeed = 0.5,
   pulseIntensity = 0.1,
   animateColors = false,
@@ -146,13 +103,13 @@ const ThreeGalaxy: React.FC<ThreeGalaxyProps> = ({
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;
 
-      // Random position on a sphere
+      // Random position on a sphere, adjusted to match galaxy position
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
       const r = radius;
 
       starsPositions[i3] = r * Math.sin(phi) * Math.cos(theta);
-      starsPositions[i3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      starsPositions[i3 + 1] = r * Math.sin(phi) * Math.sin(theta) + 4; // Offset to match galaxy Y position
       starsPositions[i3 + 2] = r * Math.cos(phi);
     }
 
@@ -170,7 +127,8 @@ const ThreeGalaxy: React.FC<ThreeGalaxyProps> = ({
     });
 
     ambientStarsRef.current = new THREE.Points(starsGeometry, starsMaterial);
-    galaxyGroupRef.current.add(ambientStarsRef.current);
+    // Add stars directly to scene so they remain stationary (not affected by galaxy rotation)
+    sceneRef.current.add(ambientStarsRef.current);
   }, [sceneRef, galaxyGroupRef]);
 
   const generateGalaxy = useCallback(() => {
@@ -354,8 +312,8 @@ const ThreeGalaxy: React.FC<ThreeGalaxyProps> = ({
 
     // Galaxy group
     galaxyGroupRef.current = new THREE.Group();
-    // Move galaxy higher in the container
-    galaxyGroupRef.current.position.y = 2;
+    // Move galaxy higher in the container to show the center
+    galaxyGroupRef.current.position.y = 4;
     sceneRef.current.add(galaxyGroupRef.current);
 
     // Camera
@@ -387,6 +345,9 @@ const ThreeGalaxy: React.FC<ThreeGalaxyProps> = ({
     // Generate center and initial galaxy
     generateCenter();
     generateGalaxy();
+
+    // Generate ambient stars
+    generateAmbientStars();
 
     // Handle resize
     const handleResize = () => {
@@ -584,4 +545,4 @@ const ThreeGalaxy: React.FC<ThreeGalaxyProps> = ({
   );
 };
 
-export default ThreeGalaxy;
+export default Galaxy;
