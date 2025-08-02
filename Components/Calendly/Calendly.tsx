@@ -29,6 +29,29 @@ const CalendlyBadge = ({
   const pageBackground = theme.palette.calendly.background;
   const pageTextColor = theme.palette.text.primary;
 
+  // Theme-aware gradient styles
+  const isDarkMode = theme.palette.mode === "dark";
+
+  const getGradientStyles = () => {
+    if (isDarkMode) {
+      return {
+        background: "linear-gradient(135deg, #FF6B6B, #FF8E53)",
+        hoverBackground: "linear-gradient(135deg, #FF5252, #FF7043)",
+        shadow: "0 4px 12px rgba(255, 107, 107, 0.3)",
+        hoverShadow: "0 6px 16px rgba(255, 107, 107, 0.4)",
+      };
+    } else {
+      return {
+        background: "linear-gradient(135deg, #4ECDC4, #44A08D)",
+        hoverBackground: "linear-gradient(135deg, #3DB5AC, #3A8F7A)",
+        shadow: "0 4px 12px rgba(78, 205, 196, 0.3)",
+        hoverShadow: "0 6px 16px rgba(78, 205, 196, 0.4)",
+      };
+    }
+  };
+
+  const gradientStyles = getGradientStyles();
+
   // Generate positioning styles based on position prop
   const getPositionStyles = () => {
     if (!position) return {};
@@ -100,8 +123,8 @@ const CalendlyBadge = ({
       >
         <button
           style={{
-            background: buttonBackground,
-            color: buttonTextColor,
+            background: gradientStyles.background,
+            color: "#ffffff",
             border: "none",
             borderRadius: "0.5rem",
             padding: "0.75rem 1.5rem",
@@ -109,7 +132,18 @@ const CalendlyBadge = ({
             fontWeight: "600",
             cursor: "pointer",
             transition: "all 0.2s ease-in-out",
-            boxShadow: "0 0.125rem 0.25rem rgba(0, 0, 0, 0.1)",
+            boxShadow: gradientStyles.shadow,
+            transform: "translateY(0)",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = gradientStyles.hoverBackground;
+            e.currentTarget.style.transform = "translateY(-2px)";
+            e.currentTarget.style.boxShadow = gradientStyles.hoverShadow;
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = gradientStyles.background;
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = gradientStyles.shadow;
           }}
         >
           {text}
@@ -135,12 +169,13 @@ const CalendlyBadge = ({
           hideLandingPageDetails: false,
           primaryColor: buttonBackground.replace("#", ""),
           textColor: pageTextColor.replace("#", ""),
+          hideGdprBanner: true,
         }}
         rootElement={document.getElementById("root") || document.body}
         text={text}
         styles={{
-          background: buttonBackground,
-          color: buttonTextColor,
+          background: gradientStyles.background,
+          color: "#ffffff",
           border: "none",
           borderRadius: "0.5rem",
           padding: "0.75rem 1.5rem",
@@ -148,7 +183,8 @@ const CalendlyBadge = ({
           fontWeight: "600",
           cursor: "pointer",
           transition: "all 0.2s ease-in-out",
-          boxShadow: "0 0.125rem 0.25rem rgba(0, 0, 0, 0.1)",
+          boxShadow: gradientStyles.shadow,
+          transform: "translateY(0)",
           width: "fit-content",
           height: "fit-content",
         }}
