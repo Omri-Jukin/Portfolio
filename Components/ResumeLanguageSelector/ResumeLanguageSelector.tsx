@@ -37,7 +37,7 @@ const languages = [
     name: "Spanish",
     flag: "es",
     nativeName: "Español",
-    available: false,
+    available: true,
   },
   {
     code: "fr",

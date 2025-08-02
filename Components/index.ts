@@ -29,6 +29,9 @@ export { InnovationFlow } from "./InnovationFlow/InnovationFlow";
 export { ParticleBridge } from "./ParticleBridge/ParticleBridge";
 export { VisionRealityBridge } from "./VisionRealityBridge/VisionRealityBridge";
 export { ColorWorm } from "./ColorWorm/ColorWorm";
+export { ConnectionLine } from "./ConnectionLine";
+export { default as ScrollGapAnimator } from "./ScrollGapAnimator";
+export { CollaborationHub } from "./CollaborationHub";
 
 // New section components
 export { default as Hero } from "./Hero";
@@ -89,3 +92,8 @@ export type { CareerProps, Experience } from "./Career";
 export type { ProjectsProps, Project } from "./Projects";
 export type { ContactProps, ContactData } from "./Contact";
 export type { ResumeLanguageSelectorProps } from "./ResumeLanguageSelector";
+
+// Additional type exports for newly added components
+export type { ConnectionLineProps } from "./ConnectionLine";
+export type { ScrollGapAnimatorProps } from "./ScrollGapAnimator";
+export type { CollaborationHubProps } from "./CollaborationHub";
