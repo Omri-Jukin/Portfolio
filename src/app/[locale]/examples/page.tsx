@@ -536,12 +536,63 @@ const ExamplesPage: React.FC = () => {
                   Interactive buttons with various effects
                 </Typography>
 
-                <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+                <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 3 }}>
                   <CustomButton variant="gradient">
                     Gradient Button
                   </CustomButton>
                   <CustomButton variant="neon">Neon Button</CustomButton>
-                  <CustomButton variant="glass">Glass Button</CustomButton>
+                  <CustomButton variant="glass" intensity="medium">
+                    Glass Button
+                  </CustomButton>
+                  <CustomButton
+                    variant="broken-glass"
+                    intensity="high"
+                    animation={true}
+                  >
+                    Broken Glass
+                  </CustomButton>
+                </Box>
+
+                <Typography variant="subtitle1" gutterBottom sx={{ mt: 3 }}>
+                  Glass Button Intensity Levels
+                </Typography>
+                <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 3 }}>
+                  <CustomButton variant="glass" intensity="low">
+                    Low Intensity
+                  </CustomButton>
+                  <CustomButton variant="glass" intensity="medium">
+                    Medium Intensity
+                  </CustomButton>
+                  <CustomButton variant="glass" intensity="high">
+                    High Intensity
+                  </CustomButton>
+                </Box>
+
+                <Typography variant="subtitle1" gutterBottom>
+                  Broken Glass Variants
+                </Typography>
+                <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+                  <CustomButton
+                    variant="broken-glass"
+                    intensity="low"
+                    animation={true}
+                  >
+                    Low Intensity
+                  </CustomButton>
+                  <CustomButton
+                    variant="broken-glass"
+                    intensity="medium"
+                    animation={true}
+                  >
+                    Medium Intensity
+                  </CustomButton>
+                  <CustomButton
+                    variant="broken-glass"
+                    intensity="high"
+                    animation={false}
+                  >
+                    No Animation
+                  </CustomButton>
                 </Box>
               </CardContent>
             </SectionCard>

@@ -9,11 +9,14 @@ export type ButtonProps = Omit<MuiButtonProps, "variant"> & {
     | "ghost"
     | "gradient"
     | "neon"
-    | "glass";
+    | "glass"
+    | "broken-glass";
   color?: "primary" | "secondary" | "error" | "warning" | "info" | "success";
   gradient?: string; // Custom gradient string for gradient variant
   neonColor?: string; // Custom color for neon variant
   opacity?: string; // Custom opacity for neon variant
+  intensity?: "low" | "medium" | "high"; // Intensity for glass and broken-glass variants
+  animation?: boolean; // Animation toggle for broken-glass variant
   size?: "small" | "medium" | "large";
   center?: boolean;
   fullWidth?: boolean;
