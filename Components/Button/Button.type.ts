@@ -11,6 +11,9 @@ export type ButtonProps = Omit<MuiButtonProps, "variant"> & {
     | "neon"
     | "glass";
   color?: "primary" | "secondary" | "error" | "warning" | "info" | "success";
+  gradient?: string; // Custom gradient string for gradient variant
+  neonColor?: string; // Custom color for neon variant
+  opacity?: string; // Custom opacity for neon variant
   size?: "small" | "medium" | "large";
   center?: boolean;
   fullWidth?: boolean;

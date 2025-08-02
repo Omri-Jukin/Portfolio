@@ -106,6 +106,13 @@ declare module "@mui/material/styles" {
   }
   // Palette and PaletteOptions augmentation as you already have
   interface Palette {
+    calendly: {
+      primary: string;
+      secondary: string;
+      accent: string;
+      contrastText: string;
+      background: string;
+    };
     warm: {
       primary: string;
       secondary: string;
@@ -168,6 +175,13 @@ declare module "@mui/material/styles" {
     };
   }
   interface PaletteOptions {
+    calendly?: {
+      primary?: string;
+      secondary?: string;
+      accent?: string;
+      contrastText?: string;
+      background?: string;
+    };
     warm?: {
       primary?: string;
       secondary?: string;
@@ -317,6 +331,13 @@ export const baseTheme = createTheme({
     text: {
       primary: "#2C3E50", // Dark blue-gray for better contrast
       secondary: "#34495E", // Dark gray for better contrast
+    },
+    calendly: {
+      primary: "#4ECDC4", // Teal - matches your cool palette and info colors
+      secondary: "#64B5F6", // Light blue - complements the primary
+      accent: "#FF6B6B", // Red accent - adds warmth and matches warm palette
+      contrastText: "#ffffff", // White text for good contrast
+      background: "#f8f9fa", // Light background that works with both light/dark themes
     },
     warm: {
       primary: "#FF6B6B", // Red from vibrant palette
