@@ -22,7 +22,6 @@ export const HoverWrapper = styled(Box)(({ theme }) => ({
   cursor: "pointer",
   "&:hover": {
     "& > *": {
-      transform: "scale(1.5)",
       color: "var(--hover-color, #fff)", // Fill the inside
       WebkitTextStroke: "2px var(--hover-color, #fff)", // Stroke the outline
       WebkitTextFillColor: "var(--hover-color, #fff)", // Ensure fill color
@@ -124,21 +123,23 @@ export const StyledAnimatedText = styled(Typography, {
       const fadeIn = (o: number) => ({
         "&:hover": {
           opacity: o,
+          transform: "scale(1.5)",
         },
       });
       const fadeOut = (o: number) => ({
         "&:hover": {
           opacity: o,
+          transform: "scale(1.5)",
         },
       });
       const slideUp = (y: number) => ({
         "&:hover": {
-          transform: `translateY(${y}px)`,
+          transform: `translateY(-${Math.abs(y) || 20}px)`,
         },
       });
       const slideDown = (y: number) => ({
         "&:hover": {
-          transform: `translateY(${y}px)`,
+          transform: `translateY(${Math.abs(y) || 20}px) scale(1.2)`,
         },
       });
 

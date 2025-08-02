@@ -164,7 +164,7 @@ const ExamplesPage: React.FC = () => {
         >
           Explore my full-stack development capabilities through interactive
           examples, showcasing React, TypeScript, Three.js, animations, and
-          modern web technologies.
+          modern web technologies using components I have built.
         </Typography>
 
         <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
@@ -262,15 +262,21 @@ const ExamplesPage: React.FC = () => {
                     display: "grid",
                     gridTemplateColumns: { xs: "1fr", sm: "repeat(3, 1fr)" },
                     gap: 2,
+                    minHeight: 200,
                   }}
                 >
-                  <AnimatedText type="fadeIn" delay={0}>
+                  <AnimatedText type="fadeIn" delay={0} fontSize={32}>
                     Fade In Effect
                   </AnimatedText>
-                  <AnimatedText type="slideUp" delay={0.2}>
+                  <AnimatedText type="slideUp" delay={0.2} fontSize={32}>
                     Slide Up Effect
                   </AnimatedText>
-                  <AnimatedText type="scaleUp" delay={0.4}>
+                  <AnimatedText
+                    type="scaleUp"
+                    delay={0.4}
+                    fontSize={32}
+                    scale={1.5}
+                  >
                     Scale Up Effect
                   </AnimatedText>
                 </Box>
