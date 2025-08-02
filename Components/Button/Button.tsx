@@ -78,7 +78,7 @@ export default function Button({
       );
     default:
       return (
-        <MuiButton variant={variant} {...props}>
+        <MuiButton variant="contained" {...props}>
           {children}
         </MuiButton>
       );

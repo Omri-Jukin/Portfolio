@@ -69,7 +69,7 @@ export const AnimatedObject: React.FC<{
 
   switch (type) {
     case "dna":
-      return <DNAHelix spinning={spinning} position={[0, 0, 5]} />;
+      return <DNAHelix spinning={spinning} position={[0, 0, 0]} />;
     case "torusKnot":
       return (
         <TorusKnot ref={meshRef} args={[5.5, 0.2, 200, 100]}>
@@ -86,32 +86,72 @@ export const AnimatedObject: React.FC<{
       );
     case "polyhedron":
       return (
-        <Polyhedron
-          ref={meshRef}
-          args={[
-            // vertices array
-            [
-              -1, 0, 1, 0, -1, -1, 0, 1, -1, 0, 0, -1, 0, 1, 1, 0, -1, -1, 0, 1,
-              -1, 1, 0, -1, 1, 0, 1, -1, 0, -1, -1, 0, 1,
-            ],
-            // indices array
-            [
-              0, 11, 5, 0, 5, 1, 0, 1, 7, 0, 7, 10, 0, 10, 11, 1, 5, 9, 5, 11,
-              4, 11, 10, 2, 10, 7, 6, 7, 1, 8, 3, 9, 4, 3, 4, 2, 3, 2, 6, 3, 6,
-              8, 3, 8, 9, 4, 9, 5, 2, 4, 11, 6, 2, 10, 8, 6, 7, 9, 8, 1,
-            ],
-          ]}
-        >
-          <meshStandardMaterial
-            color={themeMode === "dark" ? darkColor : lightColor}
-            emissive={themeMode === "dark" ? darkColor : lightColor}
-            emissiveIntensity={0.8}
-            metalness={0.8}
-            roughness={0.2}
-            transparent
-            opacity={1}
-          />
-        </Polyhedron>
+        <group scale={0.6} position={[0, 0, 0]}>
+          <Polyhedron
+            ref={meshRef}
+            position={[0, 0, 0]}
+            args={[
+              // vertices array - octahedron
+              [
+                1,
+                0,
+                0, // 0
+                -1,
+                0,
+                0, // 1
+                0,
+                1,
+                0, // 2
+                0,
+                -1,
+                0, // 3
+                0,
+                0,
+                1, // 4
+                0,
+                0,
+                -1, // 5
+              ],
+              // indices array - octahedron faces
+              [
+                0,
+                2,
+                4, // front face
+                0,
+                4,
+                3, // bottom face
+                0,
+                3,
+                5, // back face
+                0,
+                5,
+                2, // top face
+                1,
+                2,
+                5, // left face
+                1,
+                5,
+                3, // bottom face
+                1,
+                3,
+                4, // right face
+                1,
+                4,
+                2, // top face
+              ],
+            ]}
+          >
+            <meshStandardMaterial
+              color={themeMode === "dark" ? darkColor : lightColor}
+              emissive={themeMode === "dark" ? darkColor : lightColor}
+              emissiveIntensity={1.5}
+              metalness={0.8}
+              roughness={0.2}
+              transparent
+              opacity={1}
+            />
+          </Polyhedron>
+        </group>
       );
     case "stars":
       return <Stars />;

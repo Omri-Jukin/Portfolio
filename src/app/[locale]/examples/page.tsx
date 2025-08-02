@@ -26,8 +26,8 @@ import {
   BackgroundCard,
   WaveText,
   TagChip,
-  ThreeGalaxy,
-  ThreeGalaxyCard,
+  Galaxy,
+  GalaxyCard,
   MotionWrapper,
   Typography as CustomTypography,
   Card as CustomCard,
@@ -93,8 +93,8 @@ function TabPanel(props: TabPanelProps) {
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`examples-tabpanel-${index}`}
-      aria-labelledby={`examples-tab-${index}`}
+      id={`tabpanel-${index}`}
+      aria-labelledby={`tab-${index}`}
       {...other}
     >
       {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
@@ -109,41 +109,19 @@ const ExamplesPage: React.FC = () => {
   const [backgroundVariant, setBackgroundVariant] =
     useState<BackgroundVariant>("floating");
   const [galaxyConfig, setGalaxyConfig] = useState({
-    count: 50000,
-    branches: 6,
-    spin: 1,
-    insideColor: "#ffff00",
-    outsideColor: "#0000ff",
-    rotationSpeed: 0.1,
+    count: 30000,
+    branches: 4,
+    spin: 1.5,
+    insideColor: "#ff6b6b",
+    outsideColor: "#4ecdc4",
+    rotationSpeed: 0.3,
   });
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 
-  const animationTypes = [
-    "torusKnot",
-    "stars",
-    "polyhedron",
-    "box",
-    "circle",
-    "cone",
-    "cylinder",
-    "sphere",
-    "plane",
-    "tube",
-    "torus",
-    "tetrahedron",
-    "ring",
-    "icosahedron",
-    "octahedron",
-    "dodecahedron",
-    "extrude",
-    "lathe",
-    "capsule",
-    "shape",
-    "dna",
-  ];
+  const animationTypes = ["torusKnot", "stars", "polyhedron", "dna"];
 
   const backgroundVariants = [
     "floating",
@@ -768,11 +746,11 @@ const ExamplesPage: React.FC = () => {
                 </Box>
 
                 <DemoContainer sx={{ height: 400 }}>
-                  <ThreeGalaxy
+                  <Galaxy
                     {...galaxyConfig}
                     intensity="high"
                     speed="normal"
-                    animateColors={true}
+                    // animateColors={true}
                     animateSpin={true}
                   >
                     <Box
@@ -796,7 +774,7 @@ const ExamplesPage: React.FC = () => {
                         {galaxyConfig.branches} branches
                       </Typography>
                     </Box>
-                  </ThreeGalaxy>
+                  </Galaxy>
                 </DemoContainer>
               </CardContent>
             </SectionCard>
@@ -810,7 +788,7 @@ const ExamplesPage: React.FC = () => {
                   Cards with Three.js galaxy backgrounds
                 </Typography>
 
-                <ThreeGalaxyCard
+                <GalaxyCard
                   count={30000}
                   branches={4}
                   spin={1.5}
@@ -829,7 +807,7 @@ const ExamplesPage: React.FC = () => {
                       Beautiful 3D galaxy background with 30,000 particles.
                     </Typography>
                   </CardContent>
-                </ThreeGalaxyCard>
+                </GalaxyCard>
               </CardContent>
             </SectionCard>
 
@@ -842,7 +820,7 @@ const ExamplesPage: React.FC = () => {
                   Different performance levels for various devices
                 </Typography>
 
-                <ThreeGalaxyCard
+                <GalaxyCard
                   count={80000}
                   branches={8}
                   spin={0.8}
@@ -850,7 +828,7 @@ const ExamplesPage: React.FC = () => {
                   outsideColor="#8a2be2"
                   intensity="high"
                   speed="fast"
-                  animateColors={true}
+                  // animateColors={true}
                   animateSpin={true}
                   cardProps={{ sx: { height: 200 } }}
                 >
@@ -865,7 +843,7 @@ const ExamplesPage: React.FC = () => {
                       80,000 particles with full animation effects.
                     </Typography>
                   </CardContent>
-                </ThreeGalaxyCard>
+                </GalaxyCard>
               </CardContent>
             </SectionCard>
           </Box>
