@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { CssBaseline, Box } from "@mui/material";
+import { baseTheme } from "!/theme";
+import { createTheme, ThemeProvider, CssBaseline, Box } from "@mui/material";
 import Header, { TLayout } from "~/Header";
 
 import Footer from "~/Footer";
@@ -13,7 +14,6 @@ import { ResponsiveLayout as TResponsiveLayout } from "&/ResponsiveLayout";
 import { TRPCProvider } from "$/trpc/provider";
 import Calendly from "#/Components/Calendly";
 import Cookies from "#/Components/Cookies";
-import DynamicThemeProvider from "./DynamicThemeProvider";
 
 export default function ClientLayout({
   children,
@@ -30,7 +30,9 @@ export default function ClientLayout({
 
   useEffect(() => {
     // Set mounted to true after hydration
-    setMounted(true);
+    if (typeof window !== "undefined" && !mounted) {
+      setMounted(true);
+    }
 
     // Load theme preferences
     const stored = localStorage.getItem("theme");
@@ -54,7 +56,7 @@ export default function ClientLayout({
       // Default mobile detection if no stored preference
       setIsMobile(window.innerWidth < 768);
     }
-  }, []);
+  }, [mounted]);
 
   // Reset manual override when user navigates to new page
   useEffect(() => {
@@ -86,17 +88,59 @@ export default function ClientLayout({
     localStorage.setItem("layout", layout);
   };
 
+  // Create app theme with dark mode and RTL support
+  const appTheme = createTheme({
+    ...baseTheme,
+    direction: isRTL ? "rtl" : "ltr",
+    palette: {
+      ...baseTheme.palette,
+      mode: isDarkMode ? "dark" : "light",
+      background: {
+        ...baseTheme.palette.background,
+        default: isDarkMode ? "#0a0a0a" : "#fafafa",
+        paper: isDarkMode ? "#1a1a1a" : "#ffffff",
+      },
+      text: {
+        ...baseTheme.palette.text,
+        primary: isDarkMode ? "#FFEAA7" : "#2C3E50",
+        secondary: isDarkMode ? "#FFFFFF" : "#34495E",
+      },
+      primary: {
+        ...baseTheme.palette.primary,
+        main: isDarkMode ? "#64B5F6" : "#4ECDC4",
+        light: isDarkMode ? "#45B7D1" : "#64B5F6",
+        dark: isDarkMode ? "#4ECDC4" : "#45B7D1",
+      },
+      secondary: {
+        ...baseTheme.palette.secondary,
+        main: "#FF6B6B",
+        light: "#F06292",
+        dark: "#9575CD",
+      },
+    },
+    breakpoints: {
+      ...baseTheme.breakpoints,
+      values: {
+        xs: 0,
+        sm: 600,
+        md: 900,
+        lg: 1200,
+        xl: 1536,
+        ml: 1920,
+        xxl: 2560,
+        xxxl: 3840,
+        xxxxl: 5120,
+      },
+    },
+  });
+
   const clientSideEmotionCache = createEmotionCache();
 
   // Always render the providers, but conditionally render the content
   return (
     <TRPCProvider>
       <CacheProvider value={clientSideEmotionCache}>
-        <DynamicThemeProvider
-          isRTL={isRTL}
-          isDarkMode={isDarkMode}
-          mounted={mounted}
-        >
+        <ThemeProvider theme={appTheme}>
           <CssBaseline />
           <Box sx={{ minHeight: "100vh" }}>
             {/* Fixed Header */}
@@ -148,7 +192,7 @@ export default function ClientLayout({
               <Cookies />
             </Box>
           </Box>
-        </DynamicThemeProvider>
+        </ThemeProvider>
       </CacheProvider>
     </TRPCProvider>
   );
