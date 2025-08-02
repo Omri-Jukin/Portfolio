@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import {
   CookiesContainer,
   CookiesContent,
@@ -108,11 +108,6 @@ const Cookies: React.FC<CookiesProps> = ({
       }));
     }
   }, [isVisible, mounted]);
-
-  function hasStoredPreferences(): boolean {
-    if (typeof window === "undefined") return false;
-    return localStorage.getItem(STORAGE_KEY) !== null;
-  }
 
   function getStoredPreferences(): CookiePreferences | null {
     if (typeof window === "undefined") return null;
@@ -228,7 +223,7 @@ const Cookies: React.FC<CookiesProps> = ({
               <p>
                 We use cookies to enhance your browsing experience, serve
                 personalized content, and analyze our traffic. By clicking
-                "Accept All", you consent to our use of cookies.
+                &ldquo;Accept All&rdquo;, you consent to our use of cookies.
               </p>
             </CookiesText>
 

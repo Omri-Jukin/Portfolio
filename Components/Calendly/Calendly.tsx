@@ -124,7 +124,7 @@ const CalendlyBadge = ({
         <button
           style={{
             background: gradientStyles.background,
-            color: "#ffffff",
+            color: buttonTextColor,
             border: "none",
             borderRadius: "0.5rem",
             padding: "0.75rem 1.5rem",
@@ -175,7 +175,7 @@ const CalendlyBadge = ({
         text={text}
         styles={{
           background: gradientStyles.background,
-          color: "#ffffff",
+          color: buttonTextColor,
           border: "none",
           borderRadius: "0.5rem",
           padding: "0.75rem 1.5rem",
