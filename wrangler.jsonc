@@ -3,7 +3,7 @@
  * https://developers.cloudflare.com/workers/wrangler/configuration/
  */ {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "portfolio-new",
+  "name": "homepage",
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-04-18",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
