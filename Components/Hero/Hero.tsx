@@ -14,7 +14,7 @@ import type { HeroProps } from "./Hero.type";
 const Hero: React.FC<HeroProps> = ({
   onExploreClick,
   onAboutClick,
-  onExamplesClick,
+  onCareerClick: onExamplesClick,
 }) => {
   const t = useTranslations("hero");
 

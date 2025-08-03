@@ -1,7 +1,7 @@
 export interface HeroProps {
   onExploreClick?: () => void;
   onAboutClick?: () => void;
-  onExamplesClick?: () => void;
+  onCareerClick?: () => void;
 }
 
 export interface HeroData {

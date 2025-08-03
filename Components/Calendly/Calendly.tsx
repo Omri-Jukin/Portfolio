@@ -84,8 +84,8 @@ const CalendlyBadge = ({
           transition: "all 0.2s ease-in-out",
           boxShadow: gradientStyles.shadow,
           transform: "translateY(0)",
-          width: "fit-content",
-          height: "fit-content",
+          width: "90vw",
+          height: "90vh",
         }}
         prefill={{
           name: "",

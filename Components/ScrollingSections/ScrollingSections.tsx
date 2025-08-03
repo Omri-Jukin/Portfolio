@@ -75,7 +75,6 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
   const handleExploreClick = () => scrollToSection("projects-section");
   const handleResumeClick = () => navigateToPage("/resume");
   const handleCareerClick = () => navigateToPage("/career");
-  const handleExamplesClick = () => navigateToPage("/examples");
 
   const handleServiceClick = (serviceIndex: number) => {
     if (serviceIndex === 0) {
@@ -97,7 +96,7 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
       <Hero
         onExploreClick={handleExploreClick}
         onAboutClick={handleResumeClick}
-        onExamplesClick={handleCareerClick}
+        onCareerClick={handleCareerClick}
       />
 
       {/* Gap Animation: Hero to About */}
