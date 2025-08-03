@@ -4,8 +4,7 @@ import React, { useEffect, useState } from "react";
 import { PopupButton } from "react-calendly";
 import { CalendlyProps } from ".";
 import { useTheme } from "@mui/material/styles";
-import "./Calendly.css";
-import { Box } from "@mui/system";
+import { CalendlyContainer } from "./Calendly.style";
 
 const CalendlyBadge = ({
   url,
@@ -52,115 +51,15 @@ const CalendlyBadge = ({
 
   const gradientStyles = getGradientStyles();
 
-  // Generate positioning styles based on position prop
-  const getPositionStyles = () => {
-    if (!position) return {};
-
-    const baseStyles = {
-      position: "fixed" as const,
-      zIndex: 1000,
-    };
-
-    switch (position) {
-      case "top-left":
-        return { ...baseStyles, top: "1.25rem", left: "1.25rem" };
-      case "top-center":
-        return {
-          ...baseStyles,
-          top: "1.25rem",
-          left: "50%",
-          transform: "translateX(-50%)",
-        };
-      case "top-right":
-        return { ...baseStyles, top: "1.25rem", right: "1.25rem" };
-      case "center-left":
-        return {
-          ...baseStyles,
-          top: "50%",
-          left: "1.25rem",
-          transform: "translateY(-50%)",
-        };
-      case "center":
-        return {
-          ...baseStyles,
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-        };
-      case "center-right":
-        return {
-          ...baseStyles,
-          top: "50%",
-          right: "1.25rem",
-          transform: "translateY(-50%)",
-        };
-      case "bottom-left":
-        return { ...baseStyles, bottom: "1.25rem", left: "1.25rem" };
-      case "bottom-center":
-        return {
-          ...baseStyles,
-          bottom: "1.25rem",
-          left: "50%",
-          transform: "translateX(-50%)",
-        };
-      case "bottom-right":
-        return { ...baseStyles, bottom: "1.25rem", right: "1.25rem" };
-      default:
-        return {};
-    }
-  };
+  // No need for complex positioning logic - handled by styled component
 
   // Don't render until we're on the client side
   if (!isClient) {
-    return (
-      <Box
-        className={`calendly-container ${className}`}
-        style={getPositionStyles()}
-        sx={{
-          width: "fit-content",
-          height: "fit-content",
-        }}
-      >
-        <button
-          style={{
-            background: gradientStyles.background,
-            color: buttonTextColor,
-            border: "none",
-            borderRadius: "0.5rem",
-            padding: "0.75rem 1.5rem",
-            fontSize: "1rem",
-            fontWeight: "600",
-            cursor: "pointer",
-            transition: "all 0.2s ease-in-out",
-            boxShadow: gradientStyles.shadow,
-            transform: "translateY(0)",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = gradientStyles.hoverBackground;
-            e.currentTarget.style.transform = "translateY(-2px)";
-            e.currentTarget.style.boxShadow = gradientStyles.hoverShadow;
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = gradientStyles.background;
-            e.currentTarget.style.transform = "translateY(0)";
-            e.currentTarget.style.boxShadow = gradientStyles.shadow;
-          }}
-        >
-          {text}
-        </button>
-      </Box>
-    );
+    return null;
   }
 
   return (
-    <Box
-      className={`calendly-container ${className}`}
-      style={getPositionStyles()}
-      sx={{
-        width: "fit-content",
-        height: "fit-content",
-      }}
-    >
+    <CalendlyContainer className={className} calendlyPosition={position}>
       <PopupButton
         url={url}
         pageSettings={{
@@ -195,7 +94,7 @@ const CalendlyBadge = ({
           lastName: "",
         }}
       />
-    </Box>
+    </CalendlyContainer>
   );
 };
 

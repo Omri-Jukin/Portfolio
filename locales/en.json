@@ -45,7 +45,14 @@
     "title": "Crafting digital magic",
     "subtitle": "Wondering how I tick? Here's the inside scoop—no fluff, just facts, with a dash of flair.",
     "exploreButton": "Explore work",
-    "aboutButton": "About me"
+    "resumeButton": "Resume",
+    "careerButton": "Career"
+  },
+  "examples": {
+    "title": "Interactive Examples",
+    "subtitle": "Explore my full-stack development capabilities through interactive examples, showcasing React, TypeScript, Three.js, animations, and modern web technologies.",
+    "cta": "Want to see more interactive examples?",
+    "viewMoreButton": "View Full Examples"
   },
   "scrollGaps": {
     "heroAbout": {
@@ -494,10 +501,11 @@
     "linksTitle": "Quick Links",
     "links": [
       { "label": "Home", "href": "/" },
-      { "label": "Blog", "href": "/blog" },
       { "label": "Career", "href": "/career" },
+      { "label": "Resume", "href": "/resume" },
+      { "label": "Blog", "href": "/blog" },
       { "label": "Contact", "href": "/contact" },
-      { "label": "Resume", "href": "/resume" }
+      { "label": "Examples", "href": "/examples" }
     ],
     "socialTitle": "Social",
     "social": [

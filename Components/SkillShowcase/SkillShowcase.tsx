@@ -43,13 +43,15 @@ const SkillShowcase: React.FC<SkillShowcaseProps> = ({
       onClose={handleClose}
       maxWidth="md"
       fullWidth
-      TransitionProps={{
-        timeout: 500,
-        onEntered: () => setIsAnimating(true),
-        onExit: () => setIsAnimating(false),
-      }}
-      PaperProps={{
-        className: isAnimating ? "MuiDialog-paperOpen" : "",
+      slotProps={{
+        backdrop: {
+          timeout: 500,
+          onEnter: () => setIsAnimating(true),
+          onExit: () => setIsAnimating(false),
+        },
+        paper: {
+          className: isAnimating ? "MuiDialog-paperOpen" : "",
+        },
       }}
     >
       <StyledDialogTitle>

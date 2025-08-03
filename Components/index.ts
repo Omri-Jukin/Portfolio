@@ -7,6 +7,8 @@ export { default as BackgroundCard } from "./Background/BackgroundCard";
 export { default as Galaxy } from "./GalaxyCard/Galaxy";
 export { default as GalaxyCard } from "./GalaxyCard/GalaxyCard";
 export { Button } from "./Button";
+export { BoxShadowDemo } from "./BoxShadowDemo";
+export { GlassPane, GlassPaneDemo } from "./GlassPane";
 export { default as BrokenGlass } from "./BrokenGlass";
 export { default as Card } from "./Card";
 export { default as ContactForm } from "../src/app/[locale]/contact";

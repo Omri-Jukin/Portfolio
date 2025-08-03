@@ -45,7 +45,14 @@
     "title": "יוצר קסם דיגיטלי",
     "subtitle": "תוהה איך אני עובד? הנה הסקופ הפנימי — ללא קישוטים, רק עובדות, עם נגיעה של סגנון.",
     "exploreButton": "חקור עבודה",
-    "aboutButton": "אודותיי"
+    "resumeButton": "קורות חיים",
+    "careerButton": "קריירה"
+  },
+  "examples": {
+    "title": "דוגמאות אינטראקטיביות",
+    "subtitle": "חקור את יכולות הפיתוח full-stack שלי באמצעות דוגמאות אינטראקטיביות, המציגות React, TypeScript, Three.js, אנימציות וטכנולוגיות אינטרנט מודרניות.",
+    "cta": "רוצה לראות עוד דוגמאות אינטראקטיביות?",
+    "viewMoreButton": "צפה בדוגמאות המלאות"
   },
   "scrollGaps": {
     "heroAbout": {
@@ -494,10 +501,11 @@
     "linksTitle": "קישורים מהירים",
     "links": [
       { "label": "בית", "href": "/" },
-      { "label": "בלוג", "href": "/blog" },
       { "label": "קריירה", "href": "/career" },
+      { "label": "קורות חיים", "href": "/resume" },
+      { "label": "בלוג", "href": "/blog" },
       { "label": "צור קשר", "href": "/contact" },
-      { "label": "קורות חיים", "href": "/resume" }
+      { "label": "דוגמאות", "href": "/examples" }
     ],
     "socialTitle": "חברתי",
     "social": [

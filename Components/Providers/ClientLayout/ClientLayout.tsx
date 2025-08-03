@@ -12,7 +12,6 @@ import { CacheProvider } from "@emotion/react";
 import ResponsiveLayout from "&/ResponsiveLayout";
 import { ResponsiveLayout as TResponsiveLayout } from "&/ResponsiveLayout";
 import { TRPCProvider } from "$/trpc/provider";
-import Calendly from "#/Components/Calendly";
 import Cookies from "#/Components/Cookies";
 
 export default function ClientLayout({
@@ -184,11 +183,6 @@ export default function ClientLayout({
 
               {/* Footer */}
               <Footer />
-              <Calendly
-                url="https://calendly.com/omrijukin/30min"
-                text="Let's Talk!"
-                position="bottom-right"
-              />
               <Cookies />
             </Box>
           </Box>

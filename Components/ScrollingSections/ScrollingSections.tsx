@@ -73,7 +73,10 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
 
   // Event handlers for components
   const handleExploreClick = () => scrollToSection("projects-section");
-  const handleAboutClick = () => scrollToSection("about-section");
+  const handleResumeClick = () => navigateToPage("/resume");
+  const handleCareerClick = () => navigateToPage("/career");
+  const handleExamplesClick = () => navigateToPage("/examples");
+
   const handleServiceClick = (serviceIndex: number) => {
     if (serviceIndex === 0) {
       scrollToSection("projects-section");
@@ -85,10 +88,7 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
   };
   const handleContactClick = () => {
     // Additional contact logic if needed
-  };
-
-  const handleCareerClick = () => {
-    navigateToPage("/career");
+    navigateToPage("/contact");
   };
 
   return (
@@ -96,7 +96,8 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
       {/* Hero Section */}
       <Hero
         onExploreClick={handleExploreClick}
-        onAboutClick={handleAboutClick}
+        onAboutClick={handleResumeClick}
+        onExamplesClick={handleCareerClick}
       />
 
       {/* Gap Animation: Hero to About */}
@@ -116,12 +117,6 @@ const ScrollingSections: React.FC<ScrollingSectionsProps> = ({
 
       {/* Services Section */}
       <Services onServiceClick={handleServiceClick} />
-
-      {/* Gap Animation: Services to Career */}
-      <ScrollGapAnimator
-        sectionId="services-career-gap"
-        gapType="services-career"
-      />
 
       {/* Career Section */}
       <Career onCareerClick={handleCareerClick} />

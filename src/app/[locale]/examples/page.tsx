@@ -41,6 +41,7 @@ import { FloatingEmojis } from "#/Components/FloatingEmojis";
 import { InnovationFlow } from "#/Components/InnovationFlow";
 import { ParticleBridge } from "#/Components/ParticleBridge";
 import { VisionRealityBridge } from "#/Components/VisionRealityBridge";
+import { BoxShadowDemo, GlassPaneDemo } from "#/Components";
 
 // Styled components for the examples page
 const ExamplesContainer = styled(Box)(({ theme }) => ({
@@ -697,6 +698,21 @@ const ExamplesPage: React.FC = () => {
                     </Typography>
                   </BrokenGlass>
                 </Box>
+              </CardContent>
+            </SectionCard>
+
+            <SectionCard sx={{ gridColumn: { xs: "1", md: "1 / -1" } }}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  Dynamic Colored Box Shadows
+                </Typography>
+                <Typography variant="body2" color="text.secondary" paragraph>
+                  Box shadows dynamically generated from conic gradient colors,
+                  showcasing theme integration
+                </Typography>
+
+                <BoxShadowDemo />
+                <GlassPaneDemo />
               </CardContent>
             </SectionCard>
           </Box>

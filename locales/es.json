@@ -45,7 +45,14 @@
     "title": "Creando magia digital",
     "subtitle": "¿Te preguntas cómo funciono? Aquí tienes la información interna—sin relleno, solo hechos, con un toque de estilo.",
     "exploreButton": "Explorar trabajo",
-    "aboutButton": "Sobre mí"
+    "resumeButton": "Currículum",
+    "careerButton": "Carrera"
+  },
+  "examples": {
+    "title": "Ejemplos Interactivos",
+    "subtitle": "Explora mis capacidades de desarrollo full-stack a través de ejemplos interactivos, mostrando React, TypeScript, Three.js, animaciones y tecnologías web modernas.",
+    "cta": "¿Quieres ver más ejemplos interactivos?",
+    "viewMoreButton": "Ver Ejemplos Completos"
   },
   "scrollGaps": {
     "heroAbout": {
@@ -494,10 +501,11 @@
     "linksTitle": "Enlaces Rápidos",
     "links": [
       { "label": "Inicio", "href": "/" },
-      { "label": "Blog", "href": "/blog" },
       { "label": "Carrera", "href": "/career" },
+      { "label": "Currículum", "href": "/resume" },
+      { "label": "Blog", "href": "/blog" },
       { "label": "Contacto", "href": "/contact" },
-      { "label": "Currículum", "href": "/resume" }
+      { "label": "Ejemplos", "href": "/examples" }
     ],
     "socialTitle": "Social",
     "social": [

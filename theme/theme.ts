@@ -1,6 +1,36 @@
 import { ContactCardType } from "@/app/[locale]/contact/page.type";
 import { createTheme } from "@mui/material/styles";
 
+// Utility function to extract colors from conic gradients
+const extractColorsFromGradient = (gradient: string): string[] => {
+  // Extract hex colors from the gradient string
+  const colorRegex = /#[0-9A-Fa-f]{6}/g;
+  const colors = gradient.match(colorRegex) || [];
+  return colors;
+};
+
+// Function to create colored box shadows based on gradient colors
+const createColoredBoxShadows = (conicGradients: any) => {
+  const gradientTypes = Object.keys(conicGradients);
+
+  return gradientTypes.map((gradientType) => {
+    const gradient = conicGradients[gradientType];
+    const colors = extractColorsFromGradient(gradient);
+
+    // Use the first few colors from the gradient for shadows
+    const primaryColor = colors[0] || "#000000";
+    const secondaryColor = colors[1] || primaryColor;
+    const accentColor = colors[2] || secondaryColor;
+
+    return {
+      none: "none",
+      light: `0 1px 2px ${primaryColor}20, 0 1px 1px ${secondaryColor}15`,
+      medium: `0 2px 4px ${primaryColor}30, 1px 1px 2px ${secondaryColor}25`,
+      heavy: `0 3px 6px ${primaryColor}40, 1px 1px 3px ${accentColor}35`,
+    };
+  });
+};
+
 declare module "@mui/material/styles" {
   interface Theme {
     gradients: {
@@ -49,6 +79,12 @@ declare module "@mui/material/styles" {
       hover: string;
       shadow: string;
     };
+    boxShadows: {
+      none: string;
+      light: string;
+      medium: string;
+      heavy: string;
+    }[];
     paperLight: string;
     paperDark: string;
   }
@@ -101,6 +137,12 @@ declare module "@mui/material/styles" {
       hover?: string;
       shadow?: string;
     };
+    boxShadows?: {
+      none?: string;
+      light?: string;
+      medium?: string;
+      heavy?: string;
+    }[];
     paperLight?: string;
     paperDark?: string;
   }
@@ -583,6 +625,40 @@ export const baseTheme = createTheme({
     borderRadius: 12,
   },
   spacing: 8,
+  boxShadows: createColoredBoxShadows({
+    phone:
+      "repeating-linear-gradient(315deg, #FF6B6B2E 92%, #FF450000 100%),repeating-radial-gradient(75% 75% at 238% 218%, #FF8A6512 30%, #FFB34714 39%),radial-gradient(99% 99% at 109% 2%, #FFD700FF 0%, #FF450000 100%),radial-gradient(99% 99% at 21% 78%, #FF6B6BFF 0%, #FF450000 100%),radial-gradient(160% 154% at 711px -303px, #FF6B6BFF 0%, #FFD700FF 100%)",
+    email:
+      "repeating-linear-gradient(315deg, #FF6B6B2E 92%, #4ECDC400 100%),repeating-radial-gradient(75% 75% at 238% 218%, #FF8A6512 30%, #4ECDC414 39%),radial-gradient(99% 99% at 109% 2%, #64B5F6FF 0%, #4ECDC400 100%),radial-gradient(99% 99% at 21% 78%, #FF6B6BFF 0%, #4ECDC400 100%),radial-gradient(160% 154% at 711px -303px, #FF6B6BFF 0%, #64B5F6FF 100%)",
+    github:
+      "repeating-linear-gradient(315deg, #4ECDC42E 92%, #2C3E5000 100%),repeating-radial-gradient(75% 75% at 238% 218%, #64B5F612 30%, #45B7D114 39%),radial-gradient(99% 99% at 109% 2%, #34495EFF 0%, #2C3E5000 100%),radial-gradient(99% 99% at 21% 78%, #4ECDC4FF 0%, #2C3E5000 100%),radial-gradient(160% 154% at 711px -303px, #4ECDC4FF 0%, #34495EFF 100%)",
+    linkedin:
+      "repeating-linear-gradient(315deg, #96CEB42E 92%, #4CAF5000 100%),repeating-radial-gradient(75% 75% at 238% 218%, #81C78412 30%, #8BC34A14 39%),radial-gradient(99% 99% at 109% 2%, #DDA0DDFF 0%, #4CAF5000 100%),radial-gradient(99% 99% at 21% 78%, #96CEB4FF 0%, #4CAF5000 100%),radial-gradient(160% 154% at 711px -303px, #96CEB4FF 0%, #DDA0DDFF 100%)",
+    whatsapp:
+      "repeating-linear-gradient(315deg, #00FFFF2E 92%, #073AFF00 100%),repeating-radial-gradient(75% 75% at 238% 218%, #00FFFF12 30%, #073AFF14 39%),radial-gradient(99% 99% at 109% 2%, #00C9FFFF 0%, #073AFF00 100%),radial-gradient(99% 99% at 21% 78%, #7B00FFFF 0%, #073AFF00 100%),radial-gradient(160% 154% at 711px -303px, #FF0000FF 0%, #FFF107FF 100%)",
+    telegram:
+      "repeating-linear-gradient(315deg, #FF6B6B2E 92%, #FF69B400 100%),repeating-radial-gradient(75% 75% at 238% 218%, #FF8A6512 30%, #FFB34714 39%),radial-gradient(99% 99% at 109% 2%, #FFD700FF 0%, #FF69B400 100%),radial-gradient(99% 99% at 21% 78%, #FF6B6BFF 0%, #FF69B400 100%),radial-gradient(160% 154% at 711px -303px, #FF6B6BFF 0%, #FF69B4FF 100%)",
+    warm: "conic-gradient(from 180deg, #FF6B6B, #FF8A65, #FFB347, #FFD700, #FFEAA7)",
+    coolWarm:
+      "conic-gradient(from 180deg, #FF6B6B, #FF8A65, #4ECDC4, #64B5F6, #45B7D1)",
+    cool: "conic-gradient(from 180deg, #4ECDC4, #64B5F6, #45B7D1, #2C3E50, #34495E)",
+    neutral:
+      "conic-gradient(from 180deg, #96CEB4, #81C784, #4CAF50, #8BC34A, #DDA0DD)",
+    dark: "conic-gradient(from 180deg, #2C3E50, #34495E, #4ECDC4, #64B5F6, #45B7D1)",
+    sunset:
+      "conic-gradient(from 180deg, #FF6B6B, #FF8A65, #FFB347, #FFD700, #FFEAA7)",
+    ocean:
+      "repeating-linear-gradient(315deg, #0069942E 92%, #1E3A8A00 100%),repeating-radial-gradient(75% 75% at 238% 218%, #4ECDC412 30%, #64B5F614 39%),radial-gradient(99% 99% at 109% 2%, #64B5F6FF 0%, #1E3A8A00 100%),radial-gradient(99% 99% at 21% 78%, #006994FF 0%, #1E3A8A00 100%),radial-gradient(160% 154% at 711px -303px, #006994FF 0%, #1E3A8AFF 100%)",
+    forest:
+      "repeating-linear-gradient(315deg, #228B222E 92%, #00CED100 100%),repeating-radial-gradient(75% 75% at 238% 218%, #32CD3212 30%, #90EE9014 39%),radial-gradient(99% 99% at 109% 2%, #90EE90FF 0%, #00CED100 100%),radial-gradient(99% 99% at 21% 78%, #228B22FF 0%, #00CED100 100%),radial-gradient(160% 154% at 711px -303px, #228B22FF 0%, #00CED1FF 100%)",
+    galaxy:
+      "repeating-linear-gradient(315deg, #2C3E502E 92%, #F39C1200 100%),repeating-radial-gradient(75% 75% at 238% 218%, #8E44AD12 30%, #9B59B614 39%),radial-gradient(99% 99% at 109% 2%, #9B59B6FF 0%, #F39C1200 100%),radial-gradient(99% 99% at 21% 78%, #2C3E50FF 0%, #F39C1200 100%),radial-gradient(160% 154% at 711px -303px, #2C3E50FF 0%, #F39C12FF 100%)",
+    aurora:
+      "repeating-linear-gradient(315deg, #00CED12E 92%, #7FFFD400 100%),repeating-radial-gradient(75% 75% at 238% 218%, #20B2AA12 30%, #48D1CC14 39%),radial-gradient(99% 99% at 109% 2%, #48D1CCFF 0%, #7FFFD400 100%),radial-gradient(99% 99% at 21% 78%, #00CED1FF 0%, #7FFFD400 100%),radial-gradient(160% 154% at 711px -303px, #00CED1FF 0%, #7FFFD4FF 100%)",
+    fire: "repeating-linear-gradient(315deg, #FF45002E 92%, #FFA50000 100%),repeating-radial-gradient(75% 75% at 238% 218%, #FF634712 30%, #FF7F5014 39%),radial-gradient(99% 99% at 109% 2%, #FF7F50FF 0%, #FFA50000 100%),radial-gradient(99% 99% at 21% 78%, #FF4500FF 0%, #FFA50000 100%),radial-gradient(160% 154% at 711px -303px, #FF4500FF 0%, #FFA500FF 100%)",
+    spring:
+      "repeating-linear-gradient(315deg, #FF69B42E 92%, #E6E6FA00 100%),repeating-radial-gradient(75% 75% at 238% 218%, #FFB6C112 30%, #FFC0CB14 39%),radial-gradient(99% 99% at 109% 2%, #FFC0CBFF 0%, #E6E6FA00 100%),radial-gradient(99% 99% at 21% 78%, #FF69B4FF 0%, #E6E6FA00 100%),radial-gradient(160% 154% at 711px -303px, #FF69B4FF 0%, #E6E6FAFF 100%)",
+  }),
   shadows: [
     "none",
     "0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.08)",

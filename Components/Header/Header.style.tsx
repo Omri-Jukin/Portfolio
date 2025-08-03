@@ -22,10 +22,18 @@ export const AppBar = styled(MuiAppBar)(({ theme }) => ({
   backdropFilter: "blur(8px)", // <-- this line
 }));
 
-export const Toolbar = styled(MuiToolbar)({
+export const Toolbar = styled(MuiToolbar)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
   minHeight: 64,
   px: 2,
-});
+
+  // Mobile responsive styles for Calendly button
+  [theme.breakpoints.down("md")]: {
+    "& [data-calendly-popup-button]": {
+      fontSize: "0.75rem !important",
+      padding: "0.5rem 1rem !important",
+    },
+  },
+}));

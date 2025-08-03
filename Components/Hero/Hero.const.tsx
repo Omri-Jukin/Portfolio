@@ -13,6 +13,7 @@ export const HERO_CONSTANTS = {
   },
   ACCESSIBILITY: {
     EXPLORE_LABEL: "Explore my work and projects",
-    ABOUT_LABEL: "Learn more about me",
+    RESUME_LABEL: "View my resume",
+    CAREER_LABEL: "View my career",
   },
 } as const;

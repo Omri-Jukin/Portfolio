@@ -1,11 +1,14 @@
 "use client";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import DarkModeToggle from "~/DarkModeToggle/DarkModeToggle";
 import LanguageSwitcher from "~/LanguageSwitcher/LanguageSwitcher";
 import { HeaderProps } from "./Header.type";
 import { AppBar, Toolbar } from "./Header.style";
 import Image from "next/image";
+import { PopupButton } from "react-calendly";
+import { useTheme } from "@mui/material/styles";
+import { baseTheme } from "!/theme";
 
 export default function Header({
   isDarkMode = false,
@@ -14,6 +17,7 @@ export default function Header({
 }: HeaderProps) {
   const [isClient, setIsClient] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const theme = useTheme();
 
   useEffect(() => {
     setIsClient(true);
@@ -24,8 +28,8 @@ export default function Header({
     window.location.href = "/";
   };
 
-  const handleExamplesClick = () => {
-    window.location.href = "/examples";
+  const gradientStyles = {
+    background: baseTheme.conicGradients.galaxy,
   };
 
   if (!mounted || !isClient) return null;
@@ -46,19 +50,41 @@ export default function Header({
           </Typography>
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <Button
-            color="inherit"
-            onClick={handleExamplesClick}
-            sx={{
-              textTransform: "none",
-              fontWeight: 500,
-              "&:hover": {
-                backgroundColor: "rgba(255, 255, 255, 0.1)",
-              },
-            }}
-          >
-            Examples
-          </Button>
+          {isClient && (
+            <PopupButton
+              url="https://calendly.com/omrijukin/30min"
+              pageSettings={{
+                backgroundColor: theme.palette.calendly.background,
+                hideEventTypeDetails: false,
+                hideLandingPageDetails: false,
+                primaryColor: theme.palette.calendly.primary.replace("#", ""),
+                textColor: theme.palette.text.primary.replace("#", ""),
+                hideGdprBanner: true,
+              }}
+              rootElement={document.getElementById("root") || document.body}
+              text="Let's Talk!"
+              styles={{
+                background: gradientStyles.background,
+                color: theme.palette.calendly.contrastText,
+                border: "none",
+                borderRadius: "0.5rem",
+                padding: "0.75rem 1.5rem",
+                fontSize: "0.875rem",
+                fontWeight: "600",
+                cursor: "pointer",
+                transition: "all 0.2s ease-in-out",
+                boxShadow: "0 4px 12px rgba(255, 107, 107, 0.3)",
+                transform: "translateY(0)",
+                textTransform: "none",
+              }}
+              prefill={{
+                name: "",
+                email: "",
+                firstName: "",
+                lastName: "",
+              }}
+            />
+          )}
           <DarkModeToggle onToggle={onThemeToggle} isDark={isDarkMode} />
           {/* <AnimationSwitcher
             animationType={animationType!}

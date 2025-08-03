@@ -1,0 +1,24 @@
+export type GlassPaneProps = {
+  children?: React.ReactNode;
+  width?: string;
+  height?: string;
+  rotate?: string;
+  borderRadius?: string;
+  border?: string;
+  backdropFilter?: string;
+  WebkitBackdropFilter?: string;
+  boxShadow?: string;
+  background?: string;
+  opacity?: number;
+  zIndex?: number;
+  position?: string;
+  display?: string;
+  alignItems?: string;
+  justifyContent?: string;
+  transition?: string;
+  cursor?: string;
+  style?: React.CSSProperties;
+  onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
+  onMouseEnter?: (event: React.MouseEvent<HTMLDivElement>) => void;
+  onMouseLeave?: (event: React.MouseEvent<HTMLDivElement>) => void;
+};

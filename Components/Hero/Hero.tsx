@@ -11,10 +11,11 @@ import {
 import { HERO_CONSTANTS } from "./Hero.const";
 import type { HeroProps } from "./Hero.type";
 
-const Hero: React.FC<HeroProps> = ({ onExploreClick, onAboutClick }) => {
-  const handleExamplesClick = () => {
-    window.location.href = "/examples";
-  };
+const Hero: React.FC<HeroProps> = ({
+  onExploreClick,
+  onAboutClick,
+  onExamplesClick,
+}) => {
   const t = useTranslations("hero");
 
   return (
@@ -43,25 +44,25 @@ const Hero: React.FC<HeroProps> = ({ onExploreClick, onAboutClick }) => {
         <HeroButtonsContainer>
           <HeroButton
             className={HERO_CONSTANTS.BUTTONS.SECONDARY_CLASS}
+            aria-label={HERO_CONSTANTS.ACCESSIBILITY.RESUME_LABEL}
+            onClick={onAboutClick}
+          >
+            {t("resumeButton")}
+          </HeroButton>
+          <HeroButton
+            className={HERO_CONSTANTS.BUTTONS.SECONDARY_CLASS}
+            aria-label={HERO_CONSTANTS.ACCESSIBILITY.CAREER_LABEL}
+            onClick={onExamplesClick}
+          >
+            {t("careerButton")}
+          </HeroButton>
+          <HeroButton
+            className={HERO_CONSTANTS.BUTTONS.SECONDARY_CLASS}
             endIcon={<ArrowForwardIcon />}
             aria-label={HERO_CONSTANTS.ACCESSIBILITY.EXPLORE_LABEL}
             onClick={onExploreClick}
           >
             {t("exploreButton")}
-          </HeroButton>
-          <HeroButton
-            className={HERO_CONSTANTS.BUTTONS.SECONDARY_CLASS}
-            aria-label={HERO_CONSTANTS.ACCESSIBILITY.ABOUT_LABEL}
-            onClick={onAboutClick}
-          >
-            {t("aboutButton")}
-          </HeroButton>
-          <HeroButton
-            className={HERO_CONSTANTS.BUTTONS.SECONDARY_CLASS}
-            aria-label="View Examples"
-            onClick={handleExamplesClick}
-          >
-            Examples
           </HeroButton>
         </HeroButtonsContainer>
       </MotionWrapper>

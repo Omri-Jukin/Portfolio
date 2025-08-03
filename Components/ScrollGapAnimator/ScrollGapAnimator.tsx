@@ -217,7 +217,12 @@ const ScrollGapAnimator: React.FC<ScrollGapAnimatorProps> = ({
     <Box
       ref={containerRef}
       id={sectionId}
-      sx={ScrollGapAnimatorStyle.container(height)}
+      sx={{
+        ...ScrollGapAnimatorStyle.container(height),
+        background: "transparent",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
     >
       {renderGapContent()}
     </Box>
