@@ -1,0 +1,35 @@
+name: Deploy to Cloudflare Pages (OpenNext)
+
+# ─── Trigger ────────────────────────────────────────────────────────────
+on:
+  push:
+    branches: [ main ]        # change if you deploy from a different branch
+  workflow_dispatch:          # lets you trigger a manual deploy from the UI
+
+# ─── Job ────────────────────────────────────────────────────────────────
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1  Check out your repository
+      - name: ⏬ Checkout code
+        uses: actions/checkout@v4
+
+      # 2  Install Node (and cache node_modules)
+      - name: ⚙️  Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20          # keep in sync with your .nvmrc / package.json
+          cache: npm
+
+      # 3  Install dependencies
+      - name: 📦 Install dependencies
+        run: npm ci                 # deterministic install via package-lock.json
+
+      # 4  Build + Deploy with OpenNext
+      - name: 🚀 Build & Deploy to Cloudflare Pages
+        run: npm run deploy         # runs: opennextjs-cloudflare build && … deploy
+        env:
+          # you only need the token; account_id is already in wrangler.jsonc
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
