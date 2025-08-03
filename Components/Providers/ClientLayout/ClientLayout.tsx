@@ -183,6 +183,7 @@ export default function ClientLayout({
 
               {/* Footer */}
               <Footer />
+              {/* Cookies */}
               <Cookies />
             </Box>
           </Box>

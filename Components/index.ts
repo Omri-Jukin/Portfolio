@@ -19,7 +19,6 @@ export { default as Footer } from "./Footer";
 export { default as Header } from "./Header";
 export { default as LanguageSwitcher } from "./LanguageSwitcher";
 export { default as MotionWrapper } from "./MotionWrapper";
-export { default as ScrollingSections } from "./ScrollingSections";
 export { default as SkillShowcase } from "./SkillShowcase";
 export { default as TagChip } from "./TagChip";
 export { default as Typography } from "./Typography";
