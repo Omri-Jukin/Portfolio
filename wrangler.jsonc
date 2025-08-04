@@ -1,20 +1,27 @@
-/**
- * For more details on how to configure Wrangler, refer to:
- * https://developers.cloudflare.com/workers/wrangler/configuration/
- */ {
+{
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "homepage",
   "main": ".open-next/worker.js",
-  "compatibility_date": "2025-04-18",
+  "compatibility_date": "2025-08-03",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+
   "assets": {
     "binding": "ASSETS",
     "directory": ".open-next/assets"
   },
+
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "portfolio-new"
+    }
+  ],
+
   "observability": {
     "enabled": true
   },
   "upload_source_maps": true,
+
   "d1_databases": [
     {
       "binding": "DB",
@@ -23,6 +30,7 @@
       "migrations_dir": "drizzle"
     }
   ],
+
   "vars": {
     "NODE_ENV": "production"
   }
