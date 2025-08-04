@@ -1,8 +1,8 @@
 {
-  "name": "portfolio-new",
-  "description": "Build a full-stack web application with Next.js.",
+  "name": "homepage",
+  "description": "Homepage",
   "cloudflare": {
-    "label": "Next.js Framework Starter",
+    "label": "Homepage",
     "products": [
       "Workers"
     ],
