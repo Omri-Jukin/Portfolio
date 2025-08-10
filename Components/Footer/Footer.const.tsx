@@ -1,4 +1,7 @@
-// Footer section types
+// Footer constants
+export const FOOTER_CONSTANTS = {
+  TITLE: "About",
+} as const;
 export const FOOTER_SECTIONS = {
   LINKS: "links",
   SOCIAL: "social",

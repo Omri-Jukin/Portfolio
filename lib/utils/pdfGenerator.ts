@@ -63,29 +63,39 @@ export interface ResumeData {
   additionalActivities: string;
 }
 
+export type ResumeTemplate =
+  | "clean"
+  | "classic"
+  | "compact"
+  | "teal"
+  | "indigo"
+  | "rose"
+  | "stripe"
+  | "grid";
+
 export class PDFGenerator {
   private doc: jsPDF;
   private currentY: number = 25;
   private pageWidth: number;
   private pageHeight: number;
   private margin: number = 8;
-  private sidebarWidth: number = 65;
+  private sidebarWidth: number = 0; // Single-column layout for ATS
   private mainContentWidth: number;
   private lineHeight: number = 7;
   private primaryColor: [number, number, number] = [44, 62, 80]; // Dark blue-gray
   private secondaryColor: [number, number, number] = [52, 73, 94]; // Dark gray
   private accentColor: [number, number, number] = [127, 0, 63]; // Red accent
-  private sidebarColor: [number, number, number] = [48, 81, 115]; // Dark blue sidebar
+  private sidebarColor: [number, number, number] = [255, 255, 255]; // No sidebar color needed
   private isRTL: boolean = false;
   private sidebarX: number = 0;
   private mainContentX: number = 0;
+  private template: ResumeTemplate = "clean";
 
   constructor() {
     this.doc = new jsPDF("p", "mm", "a4");
     this.pageWidth = this.doc.internal.pageSize.getWidth();
     this.pageHeight = this.doc.internal.pageSize.getHeight();
-    this.mainContentWidth =
-      this.pageWidth - this.sidebarWidth - 2 * this.margin;
+    this.mainContentWidth = this.pageWidth - 2 * this.margin;
 
     // Set document properties
     this.doc.setProperties({
@@ -104,33 +114,189 @@ export class PDFGenerator {
     this.doc.addFont("/Bona_Nova_SC/BonaNovaSC-Bold.ttf", "bona-nova", "bold");
   }
 
-  generateResume(data: ResumeData, language: string = "en"): void {
+  generateResume(
+    data: ResumeData,
+    language: string = "en",
+    template: ResumeTemplate = "clean"
+  ): void {
     // Set RTL for Hebrew
     this.isRTL = language === "he";
+    this.template = template;
+
+    // Apply color palette by template (text prefers dark colors by default)
+    this.applyTemplatePalette(template);
 
     // Calculate layout positions based on RTL - sidebar flush with edge
-    if (this.isRTL) {
-      this.sidebarX = 0; // Flush with left edge
-      this.mainContentX = this.sidebarWidth + 30; // Match English spacing
-    } else {
-      this.sidebarX = this.pageWidth - this.sidebarWidth; // Flush with right edge
-      this.mainContentX = this.margin;
+    this.sidebarX = 0;
+    this.mainContentX = this.margin;
+
+    this.currentY = this.getTopStartY();
+
+    // Draw decorative background (CSS-like visuals) per template
+    this.drawDecorativeBackground();
+
+    // Render by selected template
+    switch (this.template) {
+      case "classic":
+        this.addMainContentClassic(data);
+        break;
+      case "compact":
+        this.addMainContentCompact(data);
+        break;
+      case "teal":
+        this.addMainContentClassic(data);
+        break;
+      case "indigo":
+        this.addMainContentClassic(data);
+        break;
+      case "rose":
+        this.addMainContentClassic(data);
+        break;
+      case "stripe":
+        this.addMainContent(data);
+        break;
+      case "grid":
+        this.addMainContent(data);
+        break;
+      case "clean":
+      default:
+        this.addMainContent(data);
+        break;
     }
 
-    this.currentY = 25;
-
-    // Draw sidebar background
-    this.drawSidebarBackground();
-
-    // Add sidebar content
-    this.addSidebarContent(data);
-
-    // Add main content
-    this.addMainContent(data);
-
     console.log(
-      `Resume generated in ${language} (${this.isRTL ? "RTL" : "LTR"})`
+      `Resume generated in ${language} (${
+        this.isRTL ? "RTL" : "LTR"
+      }) with template ${this.template}`
     );
+  }
+
+  private applyTemplatePalette(template: ResumeTemplate): void {
+    // Defaults: dark text for readability
+    const primary: [number, number, number] = [20, 20, 20];
+    const secondary: [number, number, number] = [68, 68, 68];
+    let accent: [number, number, number] = [127, 0, 63];
+
+    switch (template) {
+      case "teal":
+        // keep dark primary; set accent to template color
+        accent = [0, 121, 107];
+        break;
+      case "indigo":
+        accent = [63, 81, 181];
+        break;
+      case "rose":
+        accent = [173, 20, 87];
+        break;
+      case "stripe":
+        accent = [127, 0, 63];
+        break;
+      case "grid":
+        accent = [52, 73, 94];
+        break;
+      default:
+        // keep defaults
+        break;
+    }
+
+    this.primaryColor = primary;
+    this.secondaryColor = secondary;
+    this.accentColor = accent;
+  }
+
+  private getTopStartY(): number {
+    switch (this.template) {
+      case "teal":
+      case "indigo":
+      case "rose":
+        return 45; // header band height ~35 + padding
+      case "grid":
+        return 36; // header band ~28 + padding
+      case "stripe":
+        return 40; // below divider
+      case "classic":
+      case "compact":
+      case "clean":
+      default:
+        return 40;
+    }
+  }
+
+  private drawDecorativeBackground(): void {
+    // Clear page with white base
+    this.doc.setFillColor(255, 255, 255);
+    this.doc.rect(0, 0, this.pageWidth, this.pageHeight, "F");
+
+    switch (this.template) {
+      case "teal":
+        // Header band
+        this.doc.setFillColor(0, 121, 107);
+        this.doc.rect(0, 0, this.pageWidth, 35, "F");
+        // Soft blob bottom-right
+        this.doc.setFillColor(200, 245, 238);
+        this.doc.circle(this.pageWidth - 10, this.pageHeight - 10, 25, "F");
+        break;
+      case "indigo":
+        // Header band
+        this.doc.setFillColor(63, 81, 181);
+        this.doc.rect(0, 0, this.pageWidth, 35, "F");
+        // Subtle accent strip below
+        this.doc.setFillColor(242, 244, 252);
+        this.doc.rect(0, 35, this.pageWidth, 6, "F");
+        break;
+      case "rose":
+        // Header band
+        this.doc.setFillColor(173, 20, 87);
+        this.doc.rect(0, 0, this.pageWidth, 35, "F");
+        // Corner dots
+        this.doc.setFillColor(252, 240, 244);
+        for (let i = 0; i < 6; i++) {
+          this.doc.circle(8 + i * 10, 8, 1.2, "F");
+        }
+        for (let i = 0; i < 6; i++) {
+          this.doc.circle(
+            this.pageWidth - (8 + i * 10),
+            this.pageHeight - 8,
+            1.2,
+            "F"
+          );
+        }
+        break;
+      case "stripe":
+        // Diagonal stripes (subtle) across background
+        this.doc.setDrawColor(245, 246, 248);
+        this.doc.setLineWidth(0.4);
+        for (
+          let x = -this.pageHeight;
+          x < this.pageWidth + this.pageHeight;
+          x += 8
+        ) {
+          this.doc.line(x, 0, x + this.pageHeight, this.pageHeight);
+        }
+        // Header divider
+        this.doc.setFillColor(245, 246, 248);
+        this.doc.rect(0, 34, this.pageWidth, 1.5, "F");
+        break;
+      case "grid":
+        // Light grid pattern
+        this.doc.setDrawColor(245, 246, 248);
+        this.doc.setLineWidth(0.2);
+        for (let x = 0; x <= this.pageWidth; x += 8) {
+          this.doc.line(x, 0, x, this.pageHeight);
+        }
+        for (let y = 0; y <= this.pageHeight; y += 8) {
+          this.doc.line(0, y, this.pageWidth, y);
+        }
+        // Subtle header band
+        this.doc.setFillColor(248, 249, 250);
+        this.doc.rect(0, 0, this.pageWidth, 28, "F");
+        break;
+      default:
+        // clean/classic/compact: minimal light divider under header area
+        this.doc.setFillColor(245, 246, 248);
+        this.doc.rect(0, 34, this.pageWidth, 1.5, "F");
+        break;
+    }
   }
 
   // Helper method to handle RTL text properly using the robust RTL processor
@@ -140,30 +306,11 @@ export class PDFGenerator {
   }
 
   private drawSidebarBackground(): void {
-    // Draw sidebar background - flush with edge
-    this.doc.setFillColor(...this.sidebarColor);
-    this.doc.rect(this.sidebarX, 0, this.sidebarWidth, this.pageHeight, "F");
+    // Maintain compatibility; delegate to decorative background so it's applied on new pages
+    this.drawDecorativeBackground();
   }
 
-  private addSidebarContent(data: ResumeData): void {
-    let sidebarY = 35;
-
-    // Contact Information
-    sidebarY = this.addSidebarSection("Contact", sidebarY);
-    sidebarY = this.addContactInfoSidebar(sidebarY);
-
-    // Areas of Expertise
-    sidebarY = this.addSidebarSection("Areas of Expertise", sidebarY);
-    sidebarY = this.addSkillsSidebar(data.skills, sidebarY);
-
-    // Languages
-    sidebarY = this.addSidebarSection("Languages", sidebarY);
-    sidebarY = this.addLanguagesSidebar(data.languages, sidebarY);
-
-    // Certificates (placeholder for future implementation)
-    sidebarY = this.addSidebarSection("Certificates", sidebarY);
-    this.addCertificatesSidebar(sidebarY);
-  }
+  private addSidebarContent(): void {}
 
   private addSidebarSection(title: string, y: number): number {
     // Section title in white
@@ -425,45 +572,11 @@ export class PDFGenerator {
   }
 
   private addCertificatesSidebar(y: number): number {
-    this.doc.setTextColor(255, 255, 255);
-    this.doc.setFontSize(8);
-
-    if (this.isRTL) {
-      this.doc.setFont("bona-nova", "normal");
-    } else {
-      this.doc.setFont("helvetica", "normal");
-    }
-
-    const certificates = [
-      "FullStack Engineer",
-      "C# Developer",
-      "TypeScript Developer",
-      "Python Developer",
-      "Next.js Developer",
-      "Node.js Developer",
-      "React Developer",
-      "Electrical Engineer",
-    ];
-
-    if (this.isRTL) {
-      certificates.forEach((cert) => {
-        this.doc.text(`• ${cert}`, this.sidebarX + this.sidebarWidth - 5, y, {
-          align: "right",
-        });
-        y += 3;
-      });
-    } else {
-      certificates.forEach((cert) => {
-        this.doc.text(`• ${cert}`, this.sidebarX + 5, y);
-        y += 3;
-      });
-    }
-
-    return y + 8;
+    return y;
   }
 
   private addMainContent(data: ResumeData): void {
-    let mainY = 35;
+    let mainY = this.getTopStartY();
 
     // Header with name and title
     mainY = this.addMainHeader(data.metadata, mainY);
@@ -489,6 +602,52 @@ export class PDFGenerator {
     );
   }
 
+  // Classic template: subtle separators and larger headings
+  private addMainContentClassic(data: ResumeData): void {
+    let y = this.getTopStartY();
+    y = this.addMainHeader(data.metadata, y);
+    this.drawSeparator(y - 4);
+    y = this.addMainSection("Professional Summary", data.resume.experience, y);
+    this.drawSeparator(y - 8);
+    y = this.addExperienceSection(data.career, y);
+    this.drawSeparator(y - 8);
+    y = this.addProjectsSection(data.projects, y);
+    this.drawSeparator(y - 8);
+    this.addMainSection("Additional Activities", data.additionalActivities, y);
+  }
+
+  // Compact template: tighter spacing and smaller fonts
+  private addMainContentCompact(data: ResumeData): void {
+    const originalLineHeight = this.lineHeight;
+    const originalFontSize = this.doc.getFontSize();
+
+    this.lineHeight = 5.5;
+    this.doc.setFontSize(22);
+    let y = this.getTopStartY();
+    y = this.addMainHeader(data.metadata, y);
+
+    this.doc.setFontSize(12);
+    y = this.addMainSection("Professional Summary", data.resume.experience, y);
+    y = this.addExperienceSection(data.career, y);
+    y = this.addProjectsSection(data.projects, y);
+    this.addMainSection("Additional Activities", data.additionalActivities, y);
+
+    // Restore
+    this.lineHeight = originalLineHeight;
+    this.doc.setFontSize(originalFontSize);
+  }
+
+  private drawSeparator(y: number): void {
+    this.doc.setDrawColor(200, 200, 200);
+    this.doc.setLineWidth(0.2);
+    this.doc.line(
+      this.mainContentX,
+      y,
+      this.mainContentX + this.mainContentWidth,
+      y
+    );
+  }
+
   private addMainHeader(metadata: ResumeData["metadata"], y: number): number {
     // Name
     this.doc.setTextColor(...this.primaryColor);
@@ -509,7 +668,7 @@ export class PDFGenerator {
     }
     y += 10;
 
-    // Title - check if it fits within the main content area
+    // Title - role line
     this.doc.setTextColor(...this.accentColor);
     this.doc.setFontSize(14);
 
@@ -519,8 +678,9 @@ export class PDFGenerator {
       this.doc.setFont("helvetica", "normal");
     }
 
-    const titleText =
-      "Software Engineer | Electrical Engineer | Data Management Expert";
+    const titleText = this.isRTL
+      ? this.processRTLText("Full Stack Developer | Data Management")
+      : "Full Stack Developer | Data Management";
     const titleWidth = this.doc.getTextWidth(titleText);
 
     if (this.isRTL) {
@@ -612,7 +772,7 @@ export class PDFGenerator {
     if (y > this.pageHeight - 50) {
       this.doc.addPage();
       this.drawSidebarBackground();
-      y = 35;
+      y = this.getTopStartY();
     }
 
     // Section title
@@ -651,7 +811,7 @@ export class PDFGenerator {
       if (y > this.pageHeight - 30) {
         this.doc.addPage();
         this.drawSidebarBackground();
-        y = 35;
+        y = this.getTopStartY();
       }
 
       if (this.isRTL) {
@@ -681,7 +841,7 @@ export class PDFGenerator {
     if (y > this.pageHeight - 80) {
       this.doc.addPage();
       this.drawSidebarBackground();
-      y = 35;
+      y = this.getTopStartY();
     }
 
     // Section title
@@ -708,7 +868,7 @@ export class PDFGenerator {
       if (y > this.pageHeight - 60) {
         this.doc.addPage();
         this.drawSidebarBackground();
-        y = 35;
+        y = this.getTopStartY();
       }
 
       // Role
@@ -769,7 +929,7 @@ export class PDFGenerator {
         if (y > this.pageHeight - 30) {
           this.doc.addPage();
           this.drawSidebarBackground();
-          y = 35;
+          y = this.getTopStartY();
         }
 
         const lines = this.doc.splitTextToSize(
@@ -780,7 +940,7 @@ export class PDFGenerator {
           if (y > this.pageHeight - 30) {
             this.doc.addPage();
             this.drawSidebarBackground();
-            y = 35;
+            y = this.getTopStartY();
           }
 
           if (this.isRTL) {
@@ -815,7 +975,7 @@ export class PDFGenerator {
     if (y > this.pageHeight - 80) {
       this.doc.addPage();
       this.drawSidebarBackground();
-      y = 35;
+      y = this.getTopStartY();
     }
 
     // Section title
@@ -842,7 +1002,7 @@ export class PDFGenerator {
       if (y > this.pageHeight - 60) {
         this.doc.addPage();
         this.drawSidebarBackground();
-        y = 35;
+        y = this.getTopStartY();
       }
 
       // Project title
@@ -921,7 +1081,7 @@ export class PDFGenerator {
         if (y > this.pageHeight - 30) {
           this.doc.addPage();
           this.drawSidebarBackground();
-          y = 35;
+          y = this.getTopStartY();
         }
 
         if (this.isRTL) {
@@ -957,9 +1117,20 @@ export class PDFGenerator {
 
 export const generateResumePDF = async (
   data: ResumeData,
-  language: string = "en"
+  language: string = "en",
+  template: ResumeTemplate = "clean"
 ): Promise<jsPDF> => {
   const generator = new PDFGenerator();
-  generator.generateResume(data, language);
+  generator.generateResume(data, language, template);
   return generator.getPDF();
+};
+
+export const generateResumePreviewDataUrl = async (
+  data: ResumeData,
+  language: string = "en",
+  template: ResumeTemplate = "clean"
+): Promise<string> => {
+  const generator = new PDFGenerator();
+  generator.generateResume(data, language, template);
+  return generator.getPDF().output("datauristring");
 };

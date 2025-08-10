@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Omri Jukin",
-    "description": "Développeur de logiciels && Ingénieur | Systèmes évolutifs · Architecture propre · Next.js · tRPC · PostgreSQL · MongoDB · Microservices"
+    "description": "Développeur Full Stack | Systèmes évolutifs · Architecture propre · Next.js · tRPC · PostgreSQL · MongoDB · Microservices"
   },
   "login": {
     "title": "Connexion Administrateur",
@@ -39,7 +39,7 @@
     "resume": "CV",
     "projects": "Projets",
     "skills": "Compétences",
-    "description": "Ingénieur logiciel innovant spécialisé dans les systèmes évolutifs, l'architecture propre et les technologies modernes incluant Next.js, tRPC, PostgreSQL, MongoDB et microservices."
+    "description": "Développeur Full Stack spécialisé dans les systèmes évolutifs, l'architecture propre et les technologies modernes incluant Next.js, tRPC, PostgreSQL, MongoDB et microservices."
   },
   "hero": {
     "title": "Créer de la magie numérique",
@@ -218,7 +218,7 @@
     "projects": [
       {
         "title": "Snow HQ",
-        "description": "Système CRM de niveau entreprise avec analyses en temps réel, flux de travail automatisés et capacités de reporting avancées. Construit avec Next.js, tRPC, Drizzle ORM et PostgreSQL.",
+        "description": "Prototype de CRM avec analyses en temps réel, flux de travail automatisés et capacités de reporting. Construit avec Next.js, tRPC, Drizzle ORM et PostgreSQL.",
         "link": "https://github.com/Omri-Jukin/Snow"
       },
       {
@@ -229,7 +229,7 @@
       {
         "title": "Site Web de Portfolio",
         "description": "Site web de portfolio moderne et responsive avec internationalisation, mode sombre et animations fluides. Construit avec Next.js, TypeScript, Material-UI et Framer Motion.",
-        "link": "https://github.com/Omri-Jukin/Portfolio"
+        "link": "https://omrijukin.com"
       },
       {
         "title": "ClipWhisperer",
@@ -378,7 +378,7 @@
     "title": "CV",
     "description": "Mon expérience professionnelle et compétences",
     "networkingSummary": "Téléchargez mon CV pour en savoir plus sur mon parcours",
-    "experience": "Ingénieur logiciel innovant avec expertise en systèmes évolutifs, architecture propre et technologies modernes. Historique prouvé dans le développement d'applications d'entreprise utilisant Next.js, tRPC, PostgreSQL, MongoDB et microservices. Expérience extensive dans l'industrie de l'assurance, du service client au développement de systèmes centraux. Leadership démontré dans la formation et le mentorat d'équipes, l'amélioration des processus et la conduite du changement organisationnel et de la croissance. Solides compétences de résolution de problèmes avec un accent sur la conception de systèmes et l'optimisation. Engagé dans l'apprentissage continu et la croissance professionnelle dans l'industrie technologique.",
+    "experience": "Développeur Full Stack avec expertise en systèmes évolutifs, architecture propre et technologies modernes. Historique prouvé dans le développement d'applications utilisant Next.js, tRPC, PostgreSQL, MongoDB et microservices. Solide expérience dans l'industrie de l'assurance, du service client au développement de systèmes centraux. Expérimenté en mentorat d'équipes, amélioration des processus et accompagnement du changement organisationnel. Solides compétences en résolution de problèmes axées sur la conception de systèmes et l'optimisation. Engagé dans l'apprentissage continu et la croissance professionnelle.",
     "professionalSummary": "Résumé Professionnel",
     "viewCode": "Voir le Code",
     "letsBuildTogether": "Construisons Quelque Chose d'Incroyable Ensemble",
@@ -497,7 +497,7 @@
   },
   "footer": {
     "title": "À Propos",
-    "children": "Ingénieur logiciel innovant créant des systèmes évolutifs et des expériences web modernes avec une architecture propre et des technologies de pointe.",
+    "children": "Développeur Full Stack construisant des systèmes évolutifs et des expériences web modernes avec une architecture propre et des solutions pratiques.",
     "linksTitle": "Liens Rapides",
     "links": [
       { "label": "Accueil", "href": "/" },

@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: t("description"),
     keywords: [
       "full stack developer",
-      "software engineer",
+      "full stack developer",
       "software developer",
       "software architect",
       "web development",

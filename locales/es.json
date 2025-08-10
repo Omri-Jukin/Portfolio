@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Omri Jukin",
-    "description": "Desarrollador de software && Ingeniero | Sistemas escalables · Arquitectura limpia · Next.js · tRPC · PostgreSQL · MongoDB · Microservicios"
+    "description": "Desarrollador Full Stack | Sistemas escalables · Arquitectura limpia · Next.js · tRPC · PostgreSQL · MongoDB · Microservicios"
   },
   "login": {
     "title": "Inicio de Sesión de Administrador",
@@ -39,7 +39,7 @@
     "resume": "Currículum",
     "projects": "Proyectos",
     "skills": "Habilidades",
-    "description": "Ingeniero de software innovador especializado en sistemas escalables, arquitectura limpia y tecnologías modernas incluyendo Next.js, tRPC, PostgreSQL, MongoDB y microservicios."
+    "description": "Desarrollador Full Stack especializado en sistemas escalables, arquitectura limpia y tecnologías modernas incluyendo Next.js, tRPC, PostgreSQL, MongoDB y microservicios."
   },
   "hero": {
     "title": "Creando magia digital",
@@ -218,7 +218,7 @@
     "projects": [
       {
         "title": "Snow HQ",
-        "description": "Sistema CRM de nivel empresarial con análisis en tiempo real, flujos de trabajo automatizados y capacidades avanzadas de reportes. Construido con Next.js, tRPC, Drizzle ORM y PostgreSQL.",
+        "description": "Prototipo de CRM con análisis en tiempo real, flujos de trabajo automatizados y capacidades de reportes. Construido con Next.js, tRPC, Drizzle ORM y PostgreSQL.",
         "link": "https://github.com/Omri-Jukin/Snow"
       },
       {
@@ -229,7 +229,7 @@
       {
         "title": "Sitio Web de Portafolio",
         "description": "Sitio web de portafolio moderno y responsivo con internacionalización, modo oscuro y animaciones suaves. Construido con Next.js, TypeScript, Material-UI y Framer Motion.",
-        "link": "https://github.com/Omri-Jukin/Portfolio"
+        "link": "https://omrijukin.com"
       },
       {
         "title": "ClipWhisperer",
@@ -378,7 +378,7 @@
     "title": "Currículum",
     "description": "Mi experiencia profesional y habilidades",
     "networkingSummary": "Descarga mi currículum para aprender más sobre mi experiencia",
-    "experience": "Ingeniero de software innovador con experiencia en sistemas escalables, arquitectura limpia y tecnologías modernas. Historial comprobado en el desarrollo de aplicaciones empresariales usando Next.js, tRPC, PostgreSQL, MongoDB y microservicios. Extensa experiencia en la industria de seguros, desde servicio al cliente hasta desarrollo de sistemas centrales. Liderazgo demostrado en entrenamiento y mentoría de equipos, mejora de procesos y conducción de cambio organizacional y crecimiento. Fuertes habilidades de resolución de problemas con enfoque en diseño de sistemas y optimización. Comprometido con el aprendizaje continuo y crecimiento profesional en la industria tecnológica.",
+    "experience": "Desarrollador Full Stack con experiencia en sistemas escalables, arquitectura limpia y tecnologías modernas. Historial comprobado en el desarrollo de aplicaciones usando Next.js, tRPC, PostgreSQL, MongoDB y microservicios. Experiencia sólida en la industria de seguros, desde servicio al cliente hasta desarrollo de sistemas centrales. Experiencia en mentoría de equipos, mejora de procesos y apoyo al cambio organizacional. Fuertes habilidades de resolución de problemas enfocadas en diseño de sistemas y optimización. Comprometido con el aprendizaje continuo y el crecimiento profesional.",
     "professionalSummary": "Resumen Profesional",
     "viewCode": "Ver Código",
     "letsBuildTogether": "Construyamos Algo Increíble Juntos",
@@ -497,7 +497,7 @@
   },
   "footer": {
     "title": "Acerca de",
-    "children": "Ingeniero de software innovador creando sistemas escalables y experiencias web modernas con arquitectura limpia y tecnologías de vanguardia.",
+    "children": "Desarrollador Full Stack construyendo sistemas escalables y experiencias web modernas con arquitectura limpia y soluciones prácticas.",
     "linksTitle": "Enlaces Rápidos",
     "links": [
       { "label": "Inicio", "href": "/" },

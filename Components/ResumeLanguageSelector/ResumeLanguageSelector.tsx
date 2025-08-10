@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Card,
@@ -58,6 +58,7 @@ const languages = [
 const ResumeLanguageSelector: React.FC<ResumeLanguageSelectorProps> = ({
   onLanguageSelect,
   onDownload,
+  onGeneratePreviews,
   isLoading = false,
   selectedLanguage = "en",
 }) => {
@@ -70,8 +71,16 @@ const ResumeLanguageSelector: React.FC<ResumeLanguageSelectorProps> = ({
     if (language?.available) {
       setLocalSelectedLanguage(languageCode);
       onLanguageSelect?.(languageCode);
+      onGeneratePreviews?.(languageCode);
     }
   };
+
+  useEffect(() => {
+    // generate previews on mount for default language if supported
+    const lang = languages.find((l) => l.code === localSelectedLanguage);
+    if (lang?.available) onGeneratePreviews?.(localSelectedLanguage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleDownload = () => {
     onDownload?.(localSelectedLanguage);
