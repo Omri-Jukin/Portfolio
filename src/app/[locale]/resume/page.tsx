@@ -20,7 +20,11 @@ import { useRouter } from "next/navigation";
 import MotionWrapper from "~/MotionWrapper";
 import { GitHub as GitHubIcon } from "@mui/icons-material";
 import ResumeLanguageSelector from "#/Components/ResumeLanguageSelector";
-import { generateResumePDF } from "#/lib/utils/pdfGenerator";
+import {
+  generateResumePDF,
+  type ResumeTemplate,
+  generateResumePreviewDataUrl,
+} from "#/lib/utils/pdfGenerator";
 import { extractResumeData } from "#/lib/utils/resumeDataExtractor";
 
 export type TechnicalSkill = {
@@ -49,6 +53,18 @@ export default function ResumePage() {
 
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<ResumeTemplate>("clean");
+  const [previews, setPreviews] = useState<Record<ResumeTemplate, string>>({
+    clean: "",
+    classic: "",
+    compact: "",
+    teal: "",
+    indigo: "",
+    rose: "",
+    stripe: "",
+    grid: "",
+  });
   const [snackbar, setSnackbar] = useState<{
     open: boolean;
     message: string;
@@ -71,7 +87,11 @@ export default function ResumePage() {
       const resumeData = extractResumeData(languageCode);
 
       // Generate PDF
-      const pdf = await generateResumePDF(resumeData, languageCode);
+      const pdf = await generateResumePDF(
+        resumeData,
+        languageCode,
+        selectedTemplate
+      );
 
       // Download the PDF
       const filename = `Omri_Jukin_Resume_${languageCode.toUpperCase()}.pdf`;
@@ -91,6 +111,36 @@ export default function ResumePage() {
       });
     } finally {
       setIsGenerating(false);
+    }
+  };
+
+  // Generate previews for templates (scaled data URLs)
+  const handleGeneratePreviews = async (languageCode: string) => {
+    try {
+      const resumeData = extractResumeData(languageCode);
+      const [clean, classic, compact, teal, indigo, rose, stripe, grid] =
+        await Promise.all([
+          generateResumePreviewDataUrl(resumeData, languageCode, "clean"),
+          generateResumePreviewDataUrl(resumeData, languageCode, "classic"),
+          generateResumePreviewDataUrl(resumeData, languageCode, "compact"),
+          generateResumePreviewDataUrl(resumeData, languageCode, "teal"),
+          generateResumePreviewDataUrl(resumeData, languageCode, "indigo"),
+          generateResumePreviewDataUrl(resumeData, languageCode, "rose"),
+          generateResumePreviewDataUrl(resumeData, languageCode, "stripe"),
+          generateResumePreviewDataUrl(resumeData, languageCode, "grid"),
+        ]);
+      setPreviews({
+        clean,
+        classic,
+        compact,
+        teal,
+        indigo,
+        rose,
+        stripe,
+        grid,
+      } as Record<ResumeTemplate, string>);
+    } catch {
+      // ignore preview errors
     }
   };
 
@@ -133,9 +183,79 @@ export default function ResumePage() {
       <ResumeLanguageSelector
         onLanguageSelect={handleLanguageSelect}
         onDownload={handleDownload}
+        onGeneratePreviews={handleGeneratePreviews}
         isLoading={isGenerating}
         selectedLanguage={selectedLanguage}
       />
+
+      {/* Template selector with previews */}
+      <MotionWrapper variant="slideUp" duration={0.8} delay={0.5}>
+        <Card sx={{ mb: 6, backgroundColor: "background.paper" }}>
+          <CardContent sx={{ p: 4 }}>
+            <Typography variant="h5" sx={{ color: "primary.main", mb: 2 }}>
+              Choose a template
+            </Typography>
+            <Stack
+              direction="row"
+              spacing={2}
+              sx={{ flexWrap: "wrap", gap: 2 }}
+            >
+              {[
+                "clean",
+                "classic",
+                "compact",
+                "teal",
+                "indigo",
+                "rose",
+                "stripe",
+                "grid",
+              ].map((tpl) => (
+                <Box
+                  key={tpl}
+                  onClick={() => setSelectedTemplate(tpl as ResumeTemplate)}
+                  sx={{
+                    cursor: "pointer",
+                    border:
+                      selectedTemplate === tpl ? "2px solid" : "1px solid",
+                    borderColor:
+                      selectedTemplate === tpl ? "primary.main" : "divider",
+                    borderRadius: 2,
+                    p: 1,
+                    width: 220,
+                  }}
+                >
+                  <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                    {tpl}
+                  </Typography>
+                  {/* Scaled preview image using data URL */}
+                  {previews[tpl as ResumeTemplate] ? (
+                    <iframe
+                      title={`preview-${tpl}`}
+                      src={previews[tpl as ResumeTemplate]}
+                      style={{ width: "200px", height: "280px", border: 0 }}
+                    />
+                  ) : (
+                    <Box
+                      sx={{
+                        width: 200,
+                        height: 280,
+                        bgcolor: "grey.100",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "text.secondary",
+                        borderRadius: 1,
+                      }}
+                    >
+                      Preview loading...
+                    </Box>
+                  )}
+                </Box>
+              ))}
+            </Stack>
+          </CardContent>
+        </Card>
+      </MotionWrapper>
 
       {/* Professional Summary */}
       <MotionWrapper variant="slideUp" duration={0.8} delay={0.4}>

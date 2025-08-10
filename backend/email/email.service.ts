@@ -346,7 +346,7 @@ export class EmailService {
           <div class="email-container">
             <div class="email-header">
               <h1>Omri Jukin</h1>
-              <div class="subtitle">Full Stack Developer | Electrical Engineer | Data Management Expert</div>
+              <div class="subtitle">Full Stack Developer | Data Management</div>
             </div>
             
             <div class="email-content">
@@ -355,7 +355,7 @@ export class EmailService {
             
             <div class="email-footer">
               <p class="brand-name">Omri Jukin</p>
-              <p>Full Stack Developer | Electrical Engineer | Data Management Expert</p>
+              <p>Full Stack Developer | Data Management</p>
               <p>Building innovative solutions with cutting-edge technology</p>
               
               <div class="social-links">
@@ -516,9 +516,9 @@ In the meantime, feel free to explore my portfolio to learn more about my work a
 
 Looking forward to our conversation!
 
-Best regards,
-Omri Jukin
-Full Stack Developer | Electrical Engineer | Data Management Expert
+      Best regards,
+      Omri Jukin
+      Full Stack Developer | Data Management
     `;
 
     return this.sendEmail({

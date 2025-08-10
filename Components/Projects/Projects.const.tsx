@@ -9,7 +9,7 @@ export const PROJECTS_CONSTANTS = {
     DELAY_INCREMENT: 0.3,
   },
   BUTTONS: {
-    VIEW_CODE: "View Code",
+    VIEW_CODE: "View Project",
     LIVE_DEMO: "Live Demo",
   },
 } as const;

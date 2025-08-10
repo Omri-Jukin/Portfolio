@@ -46,7 +46,7 @@ export default function Header({
             onClick={handleLogoClick}
           />
           <Typography variant="h6">
-            {isMobile ? "Omri Jukin" : "Omri Jukin<FullStack & Rationalist>"}
+            {isMobile ? "Omri Jukin" : "Omri Jukin — Full Stack Developer"}
           </Typography>
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
