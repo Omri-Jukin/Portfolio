@@ -1,5 +1,5 @@
 import { ContactCardType } from "@/app/[locale]/contact/page.type";
-import { createTheme } from "@mui/material/styles";
+import { Theme, createTheme } from "@mui/material/styles";
 
 // Utility function to extract colors from conic gradients
 const extractColorsFromGradient = (gradient: string): string[] => {
@@ -10,7 +10,7 @@ const extractColorsFromGradient = (gradient: string): string[] => {
 };
 
 // Function to create colored box shadows based on gradient colors
-const createColoredBoxShadows = (conicGradients: any) => {
+const createColoredBoxShadows = (conicGradients: Record<string, string>) => {
   const gradientTypes = Object.keys(conicGradients);
 
   return gradientTypes.map((gradientType) => {
@@ -938,7 +938,7 @@ export const baseTheme = createTheme({
 });
 
 // Gradient utility function with switch case
-export const getGradient = (gradientType: ContactCardType, theme: any) => {
+export const getGradient = (gradientType: ContactCardType, theme: Theme) => {
   switch (gradientType) {
     case "email":
       return theme.gradients.email;
