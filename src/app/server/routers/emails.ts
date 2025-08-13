@@ -2,17 +2,12 @@ import { z } from "zod";
 import { router, procedure } from "../trpc";
 import { EmailService } from "#/backend/email/email.service";
 
-// Lazy initialization to avoid build-time errors
+// Lazy initialization of the email service
 let emailService: EmailService | null = null;
 
 const getEmailService = () => {
   if (!emailService) {
-    // Only initialize if we're in a runtime environment with AWS credentials
-    if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
-      emailService = new EmailService();
-    } else {
-      throw new Error("AWS credentials not configured for email service");
-    }
+    emailService = new EmailService();
   }
   return emailService;
 };
