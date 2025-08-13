@@ -1,6 +1,5 @@
 import {
   StyledTypography,
-  GooeyText,
   MarqueeText,
   MarqueeTextContent,
   MarqueeBlur,
@@ -12,7 +11,7 @@ const Typography = ({ children, ...props }: TypographyProps) => (
   <StyledTypography {...props}>{children}</StyledTypography>
 );
 
-interface MarqueeProps {
+export interface MarqueeProps {
   text: string;
   className?: string;
 }
@@ -31,6 +30,4 @@ const Marquee: React.FC<MarqueeProps> = ({ text, className }) => {
   );
 };
 
-export { StyledTypography, GooeyText, Marquee };
-
-export default Typography;
+export { Typography, Marquee };

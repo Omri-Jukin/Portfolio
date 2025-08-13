@@ -16,16 +16,15 @@ import {
   Alert,
 } from "@mui/material";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
 import MotionWrapper from "~/MotionWrapper";
+import GradientButton from "~/Button/Button";
+import { useRouter } from "next/navigation";
 import { GitHub as GitHubIcon } from "@mui/icons-material";
 import ResumeLanguageSelector from "#/Components/ResumeLanguageSelector";
-import {
-  generateResumePDF,
-  type ResumeTemplate,
-  generateResumePreviewDataUrl,
-} from "#/lib/utils/pdfGenerator";
+import type { ResumeTemplate } from "#/lib/utils/pdfGenerator";
 import { extractResumeData } from "#/lib/utils/resumeDataExtractor";
+import { GalaxyCard } from "#/Components";
+import { GooeyText } from "#/Components/Typography";
 
 export type TechnicalSkill = {
   name: string;
@@ -86,12 +85,13 @@ export default function ResumePage() {
       // Extract resume data for the selected language
       const resumeData = extractResumeData(languageCode);
 
-      // Generate PDF
-      const pdf = await generateResumePDF(
+      // Generate PDF (dynamically import to avoid edge bundling)
+      const { generateResumePDF } = await import("#/lib/utils/pdfGenerator");
+      const pdf = (await generateResumePDF(
         resumeData,
         languageCode,
         selectedTemplate
-      );
+      )) as { save: (filename: string) => void };
 
       // Download the PDF
       const filename = `Omri_Jukin_Resume_${languageCode.toUpperCase()}.pdf`;
@@ -118,6 +118,9 @@ export default function ResumePage() {
   const handleGeneratePreviews = async (languageCode: string) => {
     try {
       const resumeData = extractResumeData(languageCode);
+      const { generateResumePreviewDataUrl } = await import(
+        "#/lib/utils/pdfGenerator"
+      );
       const [clean, classic, compact, teal, indigo, rose, stripe, grid] =
         await Promise.all([
           generateResumePreviewDataUrl(resumeData, languageCode, "clean"),
@@ -153,6 +156,7 @@ export default function ResumePage() {
       {/* Header */}
       <MotionWrapper variant="fadeIn" duration={0.8} delay={0.2}>
         <Box sx={{ textAlign: "center", mb: 6 }}>
+          <GooeyText>Resume</GooeyText>
           <Typography
             variant="h1"
             component="h1"
@@ -507,45 +511,67 @@ export default function ResumePage() {
         ))}
       </Box>
 
-      {/* Call to Action */}
-      <MotionWrapper variant="slideUp" duration={0.8} delay={2.0}>
-        <Box
-          sx={{
-            mt: 6,
-            p: 4,
-            textAlign: "center",
-            backgroundColor: "primary.main",
-            color: "primary.contrastText",
-            borderRadius: 3,
-          }}
-        >
-          <Typography
-            variant="h4"
-            component="p"
-            sx={{ mb: 2, fontWeight: "bold" }}
-          >
-            {t("letsBuildTogether")}
-          </Typography>
-          <Typography variant="h6" sx={{ mb: 3, opacity: 0.9 }}>
-            {t("readyToDiscuss")}
-          </Typography>
-          <Button
-            variant="contained"
-            color="secondary"
-            size="large"
-            sx={{
-              px: 4,
-              py: 1.5,
-              borderRadius: 2,
-              textTransform: "none",
-              fontSize: "1.1rem",
-              fontWeight: "bold",
-            }}
-            onClick={() => router.push("/contact")}
-          >
-            {t("getInTouch")}
-          </Button>
-        </Box>
+      {/* Call to Action - Galaxy Card */}
+      <MotionWrapper variant="slideUp" duration={0.8} delay={1.8}>
+        <GalaxyCard>
+          <MotionWrapper variant="slideUp" duration={0.8} delay={2.0}>
+            <Box
+              sx={{
+                p: 4,
+                textAlign: "center",
+                borderRadius: 3,
+                position: "relative",
+                overflow: "hidden",
+                background: `transparent`,
+                color: "#fff",
+                boxShadow: "0 4px 32px 0 rgba(58,28,113,0.25)",
+                "& > *": {
+                  position: "relative",
+                  zIndex: 1,
+                },
+              }}
+            >
+              <Typography
+                variant="h4"
+                component="p"
+                sx={{
+                  mb: 2,
+                  fontWeight: "bold",
+                  textShadow: "0 2px 8px rgba(58,28,113,0.25)",
+                  letterSpacing: 1,
+                }}
+              >
+                {t("letsBuildTogether")}
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  mb: 3,
+                  opacity: 0.92,
+                  textShadow: "0 1px 4px rgba(58,28,113,0.18)",
+                }}
+              >
+                {t("readyToDiscuss")}
+              </Typography>
+              <GradientButton
+                onClick={() => router.push("/contact")}
+                variant="gradient"
+                gradient="linear-gradient(to right, #FF0000, #000000)"
+                opacity="0.8"
+                sx={{
+                  color: "white",
+                  fontWeight: "bold",
+                  position: "absolute",
+                  zIndex: 1,
+                  right: "1%",
+                  bottom: "5%",
+                }}
+              >
+                {t("getInTouch")}
+              </GradientButton>
+            </Box>
+          </MotionWrapper>
+        </GalaxyCard>
       </MotionWrapper>
 
       {/* Snackbar for notifications */}

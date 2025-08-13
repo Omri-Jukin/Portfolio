@@ -13,7 +13,7 @@ import { ABOUT_CONSTANTS } from "./About.const";
 import type { AboutProps } from "./About.type";
 import { CTA1Button } from "../Button/Button.style";
 import { useRouter } from "next/navigation";
-import Typography from "../Typography";
+import { Typography } from "../Typography";
 
 const About: React.FC<AboutProps> = ({ onSkillClick }) => {
   const t = useTranslations("about");
