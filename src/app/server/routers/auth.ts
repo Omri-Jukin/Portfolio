@@ -8,7 +8,7 @@ import {
   approveUser,
   rejectUser,
 } from "$/db/users/users";
-import jwt from "jsonwebtoken";
+import * as jose from "jose";
 import bcrypt from "bcryptjs";
 import { User } from "$/db/users/users.type";
 
@@ -168,15 +168,15 @@ export const authRouter = router({
         }
 
         // Generate JWT token
-        const token = jwt.sign(
-          {
-            userId: user.id,
-            email: user.email,
-            role: user.role,
-          },
-          JWT_SECRET,
-          { expiresIn: JWT_EXPIRES_IN }
-        );
+        const secret = new TextEncoder().encode(JWT_SECRET);
+        const token = await new jose.SignJWT({
+          userId: user.id,
+          email: user.email,
+          role: user.role,
+        })
+          .setProtectedHeader({ alg: "HS256" })
+          .setExpirationTime(JWT_EXPIRES_IN)
+          .sign(secret);
 
         // Set HTTP-only cookie
         if (ctx.resHeaders) {
@@ -391,15 +391,15 @@ export const authRouter = router({
       "development";
 
     // Generate new token
-    const newToken = jwt.sign(
-      {
-        userId: ctx.user.id,
-        email: ctx.user.email,
-        role: ctx.user.role,
-      },
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN }
-    );
+    const secret = new TextEncoder().encode(JWT_SECRET);
+    const newToken = await new jose.SignJWT({
+      userId: ctx.user.id,
+      email: ctx.user.email,
+      role: ctx.user.role,
+    })
+      .setProtectedHeader({ alg: "HS256" })
+      .setExpirationTime(JWT_EXPIRES_IN)
+      .sign(secret);
 
     // Set new cookie
     if (ctx.resHeaders) {

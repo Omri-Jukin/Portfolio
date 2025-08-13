@@ -1,10 +1,8 @@
-import dotenv from "dotenv";
-dotenv.config({ path: ".env.local" });
-dotenv.config({ path: ".env" });
+// Do not load dotenv in the Worker. Environment comes from Cloudflare.
 
 import { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 import { getDB } from "$/db/client";
-import jwt from "jsonwebtoken";
+import * as jose from "jose";
 import { getUserById } from "$/db/users/users";
 
 // User type for authentication
@@ -28,20 +26,10 @@ export async function createContext({
     db = null;
   }
 
-  // Get JWT_SECRET from Cloudflare context
-  let JWT_SECRET = (globalThis as { __env?: { JWT_SECRET?: string } }).__env
-    ?.JWT_SECRET;
-  if (!JWT_SECRET) {
-    // Fallback to process.env (for development)
-    JWT_SECRET = process.env.JWT_SECRET;
-  }
-
-  // Get NODE_ENV from environment
-  let NODE_ENV = (globalThis as { __env?: { NODE_ENV?: string } }).__env
-    ?.NODE_ENV;
-  if (!NODE_ENV) {
-    NODE_ENV = process.env.NODE_ENV || "development";
-  }
+  // Get JWT_SECRET from Cloudflare context or process.env in dev
+  const JWT_SECRET =
+    (globalThis as { __env?: { JWT_SECRET?: string } }).__env?.JWT_SECRET ||
+    process.env.JWT_SECRET;
 
   if (!JWT_SECRET || JWT_SECRET === "your-secret-key-change-in-production") {
     console.error("JWT_SECRET is not properly configured");
@@ -68,7 +56,9 @@ export async function createContext({
       }
 
       // Verify JWT token
-      const decoded = jwt.verify(token, JWT_SECRET) as {
+      const secret = new TextEncoder().encode(JWT_SECRET);
+      const { payload } = await jose.jwtVerify(token, secret);
+      const decoded = payload as {
         userId: string;
         email: string;
         role: string;
@@ -80,23 +70,6 @@ export async function createContext({
         if (db) {
           // Try with database client first
           user = await getUserById(decoded.userId, db);
-        } else if (NODE_ENV === "development") {
-          // Fallback to local D1 in development
-          const { findUserByIdLocal } = await import(
-            "../../../lib/db/remote-client"
-          );
-          user = await findUserByIdLocal(decoded.userId);
-          if (user) {
-            // Map the local user data to match the expected format
-            user = {
-              id: user.id,
-              email: user.email,
-              firstName: user.first_name,
-              lastName: user.last_name,
-              role: user.role,
-              status: user.status,
-            };
-          }
         } else {
           // In production, if no database client is available, we can't proceed
           console.error("No database client available in production");
