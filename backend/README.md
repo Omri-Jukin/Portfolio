@@ -6,7 +6,7 @@ This directory contains all backend logic and services for the portfolio applica
 
 ```
 backend/
-├── email/                 # Email services using AWS SES
+├── email/                 # Email services using Cloudflare MailChannels
 │   ├── email.service.ts   # Main email service
 │   └── README.md         # Email service documentation
 ├── utils/                 # Common utilities
@@ -21,7 +21,7 @@ backend/
 
 ### Email Service (`email/`)
 
-The email service provides functionality for sending emails using AWS SES.
+The email service provides functionality for sending emails using Cloudflare's MailChannels API.
 
 **Features:**
 - Contact form notifications to admin
@@ -47,9 +47,6 @@ const result = await emailService.sendContactFormNotification({
 ```
 
 **Required Environment Variables:**
-- `AWS_ACCESS_KEY_ID`
-- `AWS_SECRET_ACCESS_KEY`
-- `AWS_REGION`
 - `SES_FROM_EMAIL`
 - `ADMIN_EMAIL`
 
@@ -104,30 +101,17 @@ if (!rateLimiter.isAllowed(userId)) {
 Copy `config/env.example` to `.env` and fill in your values:
 
 ```bash
-# AWS Configuration
-AWS_ACCESS_KEY_ID=your_aws_access_key_id
-AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
-AWS_REGION=us-east-1
-
-# SES Configuration
 SES_FROM_EMAIL=noreply@yourdomain.com
 ADMIN_EMAIL=admin@yourdomain.com
 ```
 
-### AWS SES Setup
+### MailChannels Setup
 
-1. **Create AWS SES Identity:**
-   - Go to AWS SES Console
-   - Create a new email identity (domain or email address)
-   - Verify the identity
+1. **Configure Sending Domain:**
+   - Ensure your domain's DNS records allow MailChannels to send on your behalf.
 
-2. **Configure Sending:**
-   - If in sandbox mode, verify recipient emails
-   - Request production access if needed
-
-3. **Set Environment Variables:**
-   - Configure AWS credentials
-   - Set the verified email as `SES_FROM_EMAIL`
+2. **Set Environment Variables:**
+   - Set the `SES_FROM_EMAIL` and `ADMIN_EMAIL` values in your environment.
 
 ## Integration with tRPC
 
