@@ -47,11 +47,16 @@ export const uploadRouter = router({
         });
       }
 
-      // Return the upload endpoint URL
+      // Upload API is disabled on Worker. Return a message to use external storage.
       return {
-        uploadUrl: "/api/upload",
+        uploadUrl: null,
         maxFileSize: maxSize,
         allowedTypes,
+        note: "Uploads disabled on Cloudflare Worker. Use Pages, R2, or external storage.",
+      } as unknown as {
+        uploadUrl: string;
+        maxFileSize: number;
+        allowedTypes: string[];
       };
     }),
 

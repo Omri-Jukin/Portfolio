@@ -31,30 +31,27 @@ export class EmailService {
     emailData: EmailData
   ): Promise<{ success: boolean; messageId?: string; error?: string }> {
     try {
-      const response = await fetch(
-        "https://api.mailchannels.net/tx/v1/send",
-        {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({
-            personalizations: [
-              {
-                to: [{ email: emailData.to }],
-              },
-            ],
-            from: { email: emailData.from },
-            subject: emailData.subject,
-            content: [
-              { type: "text/html", value: emailData.htmlBody },
-              ...(emailData.textBody
-                ? [{ type: "text/plain", value: emailData.textBody }]
-                : []),
-            ],
-          }),
-        }
-      );
+      const response = await fetch("https://api.mailchannels.net/tx/v1/send", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          personalizations: [
+            {
+              to: [{ email: emailData.to }],
+            },
+          ],
+          from: { email: emailData.from },
+          subject: emailData.subject,
+          content: [
+            { type: "text/html", value: emailData.htmlBody },
+            ...(emailData.textBody
+              ? [{ type: "text/plain", value: emailData.textBody }]
+              : []),
+          ],
+        }),
+      });
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -470,7 +467,7 @@ Looking forward to our conversation!
   }
 
   /**
-   * Send a test email to verify SES configuration
+   * Send a test email to verify email configuration
    */
   async sendTestEmail(
     toEmail: string
@@ -478,12 +475,12 @@ Looking forward to our conversation!
     const content = `
       <h2>🧪 Test Email</h2>
       
-      <p>This is a test email to verify that your AWS SES configuration is working correctly.</p>
+        <p>This is a test email to verify that your mail configuration is working correctly.</p>
       
       <div class="highlight-box">
         <h3>✅ Configuration Status</h3>
         <p><strong>✅ Email Service:</strong> Initialized successfully</p>
-        <p><strong>✅ AWS SES:</strong> Connected and ready</p>
+        <p><strong>✅ Email Provider:</strong> Connected and ready</p>
         <p><strong>✅ Templates:</strong> Styled and responsive</p>
         <p><strong>🕒 Time sent:</strong> ${new Date().toLocaleString()}</p>
       </div>
@@ -501,11 +498,11 @@ Looking forward to our conversation!
       textBody: `
 🧪 Test Email
 
-This is a test email to verify that your AWS SES configuration is working correctly.
+This is a test email to verify that your mail configuration is working correctly.
 
 ✅ Configuration Status:
 - ✅ Email Service: Initialized successfully
-- ✅ AWS SES: Connected and ready
+- ✅ Email Provider: Connected and ready
 - ✅ Templates: Styled and responsive
 - 🕒 Time sent: ${new Date().toLocaleString()}
 

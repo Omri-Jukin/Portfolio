@@ -43,8 +43,8 @@
     "flag-icons": "^7.5.0",
     "framer-motion": "^12.23.3",
     "html2canvas": "^1.4.1",
+    "jose": "^6.0.12",
     "js-cookie": "^3.0.5",
-    "jsonwebtoken": "^9.0.2",
     "jspdf": "^3.0.1",
     "jspdf-autotable": "^5.0.2",
     "motion": "^12.23.3",
@@ -54,6 +54,7 @@
     "react-calendly": "^4.4.0",
     "react-dom": "^19.1.0",
     "three": "^0.159.0",
+    "wrangler": "^4.29.1",
     "zod": "^4.0.5"
   },
   "devDependencies": {
@@ -82,8 +83,7 @@
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
     "typescript": "5.8.3",
-    "vitest": "^3.2.4",
-    "wrangler": "^4.21.2"
+    "vitest": "^3.2.4"
   },
   "scripts": {
     "//": "— Dev & quality —",
@@ -96,10 +96,10 @@
     "check": "tsc -p .",
     "tail": "wrangler tail --format pretty",
     "//2": "— OpenNext (Pages) — default path —",
-    "build": "open-next build",
+    "build": "next build",
     "pages:create": "wrangler pages project create homepage --production-branch=main",
-    "deploy:pages": "wrangler pages deploy .open-next",
-    "pages:preview": "wrangler pages dev .open-next --local",
+    "deploy:pages": "npm run nbuild && wrangler pages deploy .open-next",
+    "pages:preview": "npm run nbuild && wrangler pages dev .open-next --local",
     "//3": "— Optional: single-Worker deploys using @opennextjs/cloudflare —",
     "deploy:worker": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "preview:worker": "opennextjs-cloudflare build && opennextjs-cloudflare preview",

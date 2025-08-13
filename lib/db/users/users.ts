@@ -2,10 +2,7 @@ import { eq } from "drizzle-orm";
 import { getDB } from "../client";
 import { users, UserRole, UserStatus } from "../schema/schema.tables";
 import { v4 as uuidv4 } from "uuid";
-import {
-  insertUser as insertUserRemote,
-  findUserByEmail as findUserByEmailRemote,
-} from "../remote-client";
+// Removed remote-client fallbacks to avoid Node polyfills in edge runtime
 
 // Simple types for portfolio user management
 export type CreateUserInput = {
@@ -64,39 +61,7 @@ export const createUser = async (input: CreateUserInput) => {
   } catch {
     // In development, we can use remote D1 commands as fallback
     if (process.env.NODE_ENV === "development") {
-      try {
-        // Check if user already exists
-        const existingUser = await findUserByEmailRemote(input.email);
-        if (existingUser) {
-          throw new Error("User with this email already exists.");
-        }
-
-        // Create user using remote D1
-        const userId = uuidv4();
-        await insertUserRemote({
-          id: userId,
-          email: input.email,
-          password: input.password,
-          firstName: input.firstName,
-          lastName: input.lastName,
-          role: input.role || "visitor",
-          status: input.status || "pending",
-        });
-
-        // Return the created user
-        return {
-          id: userId,
-          email: input.email,
-          password: input.password,
-          firstName: input.firstName,
-          lastName: input.lastName,
-          role: input.role || "visitor",
-          status: input.status || "pending",
-          createdAt: new Date(),
-        };
-      } catch (fallbackError) {
-        throw fallbackError;
-      }
+      // No shell fallbacks in edge runtime
     }
 
     throw new Error(
@@ -121,42 +86,8 @@ export const loginUser = async (
   }
 
   if (!client) {
-    // In development, use local D1
     if (process.env.NODE_ENV === "development") {
-      try {
-        const { findUserByEmailLocal } = await import("../remote-client");
-        const user = await findUserByEmailLocal(input.email);
-
-        if (!user) {
-          return {
-            success: false,
-            error: "User not found.",
-          };
-        }
-
-        // Map the local user data to match the expected format
-        const mappedUser = {
-          id: user.id,
-          email: user.email,
-          password: user.password,
-          firstName: user.first_name,
-          lastName: user.last_name,
-          role: user.role as UserRole,
-          status: user.status as UserStatus,
-          createdAt: new Date(parseInt(user.created_at) * 1000),
-          updatedAt: user.updated_at
-            ? new Date(parseInt(user.updated_at) * 1000)
-            : null,
-        };
-
-        return mappedUser;
-      } catch (error) {
-        console.error("Development fallback error:", error);
-        return {
-          success: false,
-          error: (error as Error).message,
-        };
-      }
+      // No local fallback; require D1 binding
     }
 
     // In production, we can't use shell commands, so we need to throw an error
@@ -198,30 +129,8 @@ export const getUserById = async (
   }
 
   if (!client) {
-    // In development, use local D1
     if (process.env.NODE_ENV === "development") {
-      try {
-        const { findUserByIdLocal } = await import("../remote-client");
-        const user = await findUserByIdLocal(id);
-        if (user) {
-          return {
-            id: user.id,
-            email: user.email,
-            password: user.password,
-            firstName: user.first_name,
-            lastName: user.last_name,
-            role: user.role as UserRole,
-            status: user.status as UserStatus,
-            createdAt: new Date(parseInt(user.created_at) * 1000),
-            updatedAt: user.updated_at
-              ? new Date(parseInt(user.updated_at) * 1000)
-              : null,
-          };
-        }
-        throw new Error("User not found.");
-      } catch (error) {
-        throw error;
-      }
+      // No local fallback; require D1 binding
     }
 
     // In production, we can't use shell commands, so we need to throw an error
@@ -250,28 +159,8 @@ export const getPendingUsers = async () => {
   }
 
   if (!dbClient) {
-    // In development, use remote D1
     if (process.env.NODE_ENV === "development") {
-      try {
-        const { getPendingUsers: getPendingUsersRemote } = await import(
-          "../remote-client"
-        );
-        const results = await getPendingUsersRemote();
-        return results.map((user) => ({
-          id: user.id,
-          email: user.email,
-          firstName: user.first_name,
-          lastName: user.last_name,
-          role: user.role as UserRole,
-          status: user.status as UserStatus,
-          createdAt: new Date(parseInt(user.created_at) * 1000),
-          updatedAt: user.updated_at
-            ? new Date(parseInt(user.updated_at) * 1000)
-            : null,
-        }));
-      } catch (error) {
-        throw error;
-      }
+      // No remote fallback; require D1 binding
     }
 
     throw new Error("Database client not available.");
@@ -294,17 +183,8 @@ export const approveUser = async (id: string) => {
   }
 
   if (!dbClient) {
-    // In development, use remote D1
     if (process.env.NODE_ENV === "development") {
-      try {
-        const { approveUser: approveUserRemote } = await import(
-          "../remote-client"
-        );
-        await approveUserRemote(id);
-        return { id, status: "approved" as UserStatus };
-      } catch (error) {
-        throw error;
-      }
+      // No remote fallback; require D1 binding
     }
 
     throw new Error("Database client not available.");
