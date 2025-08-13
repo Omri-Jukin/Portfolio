@@ -440,6 +440,7 @@ export default function ResumePage() {
         </Typography>
       </MotionWrapper>
 
+      {/* Projects */}
       <Box
         sx={{
           display: "flex",
