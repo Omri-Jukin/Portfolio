@@ -4,6 +4,7 @@
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-08-03",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "minify": true,
 
   "assets": {
     "binding": "ASSETS",
@@ -18,9 +19,9 @@
   ],
 
   "observability": {
-    "enabled": true
+    "enabled": false
   },
-  "upload_source_maps": true,
+  "upload_source_maps": false,
 
   "d1_databases": [
     {
