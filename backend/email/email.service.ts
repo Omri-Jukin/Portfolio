@@ -1,8 +1,4 @@
-import {
-  SESClient,
-  SendEmailCommand,
-  SendEmailCommandInput,
-} from "@aws-sdk/client-ses";
+// Email service implemented using MailChannels API instead of AWS SES
 
 export interface EmailData {
   to: string;
@@ -21,112 +17,55 @@ export interface ContactFormEmailData {
 }
 
 export class EmailService {
-  private sesClient: SESClient;
   private defaultFromEmail: string;
 
   constructor() {
-    // Validate required environment variables
-    if (!process.env.AWS_ACCESS_KEY_ID) {
-      throw new Error("AWS_ACCESS_KEY_ID environment variable is required");
-    }
-    if (!process.env.AWS_SECRET_ACCESS_KEY) {
-      throw new Error("AWS_SECRET_ACCESS_KEY environment variable is required");
-    }
-
-    this.sesClient = new SESClient({
-      region: process.env.AWS_REGION || "us-east-1",
-      credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-      },
-    });
-
     this.defaultFromEmail =
       process.env.SES_FROM_EMAIL || "contact@omrijukin.com";
   }
 
   /**
-   * Send a generic email using AWS SES
+   * Send a generic email using the MailChannels API
    */
   async sendEmail(
     emailData: EmailData
   ): Promise<{ success: boolean; messageId?: string; error?: string }> {
     try {
-      const params: SendEmailCommandInput = {
-        Source: emailData.from,
-        Destination: {
-          ToAddresses: [emailData.to],
-        },
-        Message: {
-          Subject: {
-            Data: emailData.subject,
-            Charset: "UTF-8",
+      const response = await fetch(
+        "https://api.mailchannels.net/tx/v1/send",
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
           },
-          Body: {
-            Html: {
-              Data: emailData.htmlBody,
-              Charset: "UTF-8",
-            },
-            ...(emailData.textBody && {
-              Text: {
-                Data: emailData.textBody,
-                Charset: "UTF-8",
+          body: JSON.stringify({
+            personalizations: [
+              {
+                to: [{ email: emailData.to }],
               },
-            }),
-          },
-        },
-      };
-
-      const command = new SendEmailCommand(params);
-      const result = await this.sesClient.send(command);
-
-      return {
-        success: true,
-        messageId: result.MessageId,
-      };
-    } catch (error) {
-      // Log AWS-specific error details
-      if (error && typeof error === "object" && "name" in error) {
-        return {
-          success: false,
-          error: (error as any).name,
-        };
-      }
-      if (error && typeof error === "object" && "code" in error) {
-        return {
-          success: false,
-          error: (error as any).code,
-        };
-      }
-
-      // Provide more specific error messages for common SES issues
-      let errorMessage = "Unknown error occurred";
-
-      if (error instanceof Error) {
-        if (error.message.includes("MessageRejected")) {
-          errorMessage =
-            "Email rejected by SES. Please check if the sender email is verified.";
-        } else if (error.message.includes("MailFromDomainNotVerified")) {
-          errorMessage =
-            "Sender domain not verified in SES. Please verify your domain.";
-        } else if (error.message.includes("MessageTooLarge")) {
-          errorMessage = "Email message is too large.";
-        } else if (error.message.includes("ConfigurationSetDoesNotExist")) {
-          errorMessage = "SES configuration set does not exist.";
-        } else if (error.message.includes("InvalidParameterValue")) {
-          errorMessage = "Invalid email parameters provided.";
-        } else if (error.message.includes("AccountSendingPausedException")) {
-          errorMessage = "SES sending is paused for this account.";
-        } else if (error.message.includes("SendingPausedException")) {
-          errorMessage = "SES sending is paused for this configuration set.";
-        } else {
-          errorMessage = error.message;
+            ],
+            from: { email: emailData.from },
+            subject: emailData.subject,
+            content: [
+              { type: "text/html", value: emailData.htmlBody },
+              ...(emailData.textBody
+                ? [{ type: "text/plain", value: emailData.textBody }]
+                : []),
+            ],
+          }),
         }
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        return { success: false, error: errorText };
       }
 
+      return { success: true };
+    } catch (error) {
       return {
         success: false,
-        error: errorMessage,
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
