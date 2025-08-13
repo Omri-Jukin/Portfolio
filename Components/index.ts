@@ -21,7 +21,7 @@ export { default as LanguageSwitcher } from "./LanguageSwitcher";
 export { default as MotionWrapper } from "./MotionWrapper";
 export { default as SkillShowcase } from "./SkillShowcase";
 export { default as TagChip } from "./TagChip";
-export { default as Typography } from "./Typography";
+export { Typography } from "./Typography";
 export { default as DataGrid } from "./DataGrid";
 export { default as Snackbar } from "./Snackbar";
 export { WaveText } from "./WaveText/WaveText";

@@ -1,5 +1,4 @@
-import jsPDF from "jspdf";
-import "jspdf-autotable";
+// jsPDF is dynamically imported in the browser to avoid bundling on Edge
 import {
   processRTLLine,
   processRTLTitle,
@@ -74,7 +73,8 @@ export type ResumeTemplate =
   | "grid";
 
 export class PDFGenerator {
-  private doc: jsPDF;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private doc: any;
   private currentY: number = 25;
   private pageWidth: number;
   private pageHeight: number;
@@ -90,14 +90,31 @@ export class PDFGenerator {
   private sidebarX: number = 0;
   private mainContentX: number = 0;
   private template: ResumeTemplate = "clean";
+  private areFontsEmbedded: boolean = false;
+  private isInitialized: boolean = false;
 
   constructor() {
-    this.doc = new jsPDF("p", "mm", "a4");
+    // Actual initialization happens in initDoc() at runtime
+    this.doc = null;
+    this.pageWidth = 0;
+    this.pageHeight = 0;
+    this.mainContentWidth = 0;
+  }
+
+  private async initDoc(): Promise<void> {
+    if (this.isInitialized) return;
+    if (typeof window === "undefined") return; // Only run on client
+
+    // @ts-expect-error: types not available at build; runtime only in browser
+    const { default: JsPDF } = await import("jspdf");
+    // @ts-expect-error: plugin extends jspdf at runtime; no types
+    await import("jspdf-autotable");
+
+    this.doc = new JsPDF("p", "mm", "a4");
     this.pageWidth = this.doc.internal.pageSize.getWidth();
     this.pageHeight = this.doc.internal.pageSize.getHeight();
     this.mainContentWidth = this.pageWidth - 2 * this.margin;
 
-    // Set document properties
     this.doc.setProperties({
       title: "Omri Jukin - Resume",
       subject: "Professional Resume",
@@ -105,26 +122,61 @@ export class PDFGenerator {
       creator: "Portfolio Website",
     });
 
-    // Add Bona Nova SC font for Hebrew support
-    this.doc.addFont(
-      "/Bona_Nova_SC/BonaNovaSC-Regular.ttf",
-      "bona-nova",
-      "normal"
-    );
-    this.doc.addFont("/Bona_Nova_SC/BonaNovaSC-Bold.ttf", "bona-nova", "bold");
+    this.isInitialized = true;
   }
 
-  generateResume(
+  private async embedFonts(): Promise<void> {
+    if (this.areFontsEmbedded) return;
+    if (typeof window === "undefined") return;
+
+    const regularUrl = "/Bona_Nova_SC/BonaNovaSC-Regular.ttf";
+    const boldUrl = "/Bona_Nova_SC/BonaNovaSC-Bold.ttf";
+
+    try {
+      const [regularB64, boldB64] = await Promise.all([
+        this.fetchAsBase64(regularUrl),
+        this.fetchAsBase64(boldUrl),
+      ]);
+
+      this.doc.addFileToVFS("BonaNovaSC-Regular.ttf", regularB64);
+      this.doc.addFont("BonaNovaSC-Regular.ttf", "bona-nova", "normal");
+      this.doc.addFileToVFS("BonaNovaSC-Bold.ttf", boldB64);
+      this.doc.addFont("BonaNovaSC-Bold.ttf", "bona-nova", "bold");
+
+      this.areFontsEmbedded = true;
+    } catch {
+      this.areFontsEmbedded = false;
+    }
+  }
+
+  private async fetchAsBase64(url: string): Promise<string> {
+    const res = await fetch(url);
+    const buf = await res.arrayBuffer();
+    let binary = "";
+    const bytes = new Uint8Array(buf);
+    const chunkSize = 0x8000;
+    for (let i = 0; i < bytes.length; i += chunkSize) {
+      const chunk = bytes.subarray(i, i + chunkSize);
+      binary += String.fromCharCode.apply(null, Array.from(chunk));
+    }
+    return btoa(binary);
+  }
+
+  async generateResume(
     data: ResumeData,
     language: string = "en",
     template: ResumeTemplate = "clean"
-  ): void {
+  ): Promise<void> {
+    await this.initDoc();
     // Set RTL for Hebrew
     this.isRTL = language === "he";
     this.template = template;
 
     // Apply color palette by template (text prefers dark colors by default)
     this.applyTemplatePalette(template);
+
+    // Ensure required fonts are embedded for browser rendering
+    await this.embedFonts();
 
     // Calculate layout positions based on RTL - sidebar flush with edge
     this.sidebarX = 0;
@@ -1106,7 +1158,8 @@ export class PDFGenerator {
     return y;
   }
 
-  getPDF(): jsPDF {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getPDF(): any {
     return this.doc;
   }
 
@@ -1119,9 +1172,9 @@ export const generateResumePDF = async (
   data: ResumeData,
   language: string = "en",
   template: ResumeTemplate = "clean"
-): Promise<jsPDF> => {
+): Promise<unknown> => {
   const generator = new PDFGenerator();
-  generator.generateResume(data, language, template);
+  await generator.generateResume(data, language, template);
   return generator.getPDF();
 };
 
@@ -1131,6 +1184,6 @@ export const generateResumePreviewDataUrl = async (
   template: ResumeTemplate = "clean"
 ): Promise<string> => {
   const generator = new PDFGenerator();
-  generator.generateResume(data, language, template);
+  await generator.generateResume(data, language, template);
   return generator.getPDF().output("datauristring");
 };
