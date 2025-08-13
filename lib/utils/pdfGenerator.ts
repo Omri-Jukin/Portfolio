@@ -1,4 +1,5 @@
-// jsPDF is dynamically imported in the browser to avoid bundling on Edge
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 import {
   processRTLLine,
   processRTLTitle,
@@ -105,12 +106,7 @@ export class PDFGenerator {
     if (this.isInitialized) return;
     if (typeof window === "undefined") return; // Only run on client
 
-    // @ts-expect-error: types not available at build; runtime only in browser
-    const { default: JsPDF } = await import("jspdf");
-    // @ts-expect-error: plugin extends jspdf at runtime; no types
-    await import("jspdf-autotable");
-
-    this.doc = new JsPDF("p", "mm", "a4");
+    this.doc = new jsPDF("p", "mm", "a4");
     this.pageWidth = this.doc.internal.pageSize.getWidth();
     this.pageHeight = this.doc.internal.pageSize.getHeight();
     this.mainContentWidth = this.pageWidth - 2 * this.margin;
