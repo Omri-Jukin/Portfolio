@@ -24,7 +24,6 @@ import ResumeLanguageSelector from "#/Components/ResumeLanguageSelector";
 import type { ResumeTemplate } from "#/lib/utils/pdfGenerator";
 import { extractResumeData } from "#/lib/utils/resumeDataExtractor";
 import { GalaxyCard } from "#/Components";
-import { GooeyText } from "#/Components/Typography";
 
 export type TechnicalSkill = {
   name: string;
@@ -54,16 +53,6 @@ export default function ResumePage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedTemplate, setSelectedTemplate] =
     useState<ResumeTemplate>("clean");
-  const [previews, setPreviews] = useState<Record<ResumeTemplate, string>>({
-    clean: "",
-    classic: "",
-    compact: "",
-    teal: "",
-    indigo: "",
-    rose: "",
-    stripe: "",
-    grid: "",
-  });
   const [snackbar, setSnackbar] = useState<{
     open: boolean;
     message: string;
@@ -114,36 +103,64 @@ export default function ResumePage() {
     }
   };
 
-  // Generate previews for templates (scaled data URLs)
-  const handleGeneratePreviews = async (languageCode: string) => {
-    try {
-      const resumeData = extractResumeData(languageCode);
-      const { generateResumePreviewDataUrl } = await import(
-        "#/lib/utils/pdfGenerator"
-      );
-      const [clean, classic, compact, teal, indigo, rose, stripe, grid] =
-        await Promise.all([
-          generateResumePreviewDataUrl(resumeData, languageCode, "clean"),
-          generateResumePreviewDataUrl(resumeData, languageCode, "classic"),
-          generateResumePreviewDataUrl(resumeData, languageCode, "compact"),
-          generateResumePreviewDataUrl(resumeData, languageCode, "teal"),
-          generateResumePreviewDataUrl(resumeData, languageCode, "indigo"),
-          generateResumePreviewDataUrl(resumeData, languageCode, "rose"),
-          generateResumePreviewDataUrl(resumeData, languageCode, "stripe"),
-          generateResumePreviewDataUrl(resumeData, languageCode, "grid"),
-        ]);
-      setPreviews({
-        clean,
-        classic,
-        compact,
-        teal,
-        indigo,
-        rose,
-        stripe,
-        grid,
-      } as Record<ResumeTemplate, string>);
-    } catch {
-      // ignore preview errors
+  // DOM-based preview style helper (no PDF data URIs)
+  const getTemplatePreviewSx = (tpl: ResumeTemplate) => {
+    const base = {
+      width: 200,
+      height: 280,
+      borderRadius: 1,
+      border: "1px solid",
+      borderColor: "divider",
+      position: "relative" as const,
+      overflow: "hidden",
+      bgcolor: "background.paper",
+    };
+    const header = {
+      position: "absolute" as const,
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: 36,
+    };
+    const accent = (color: string) => ({ backgroundColor: color });
+    switch (tpl) {
+      case "teal":
+        return {
+          ...base,
+          "&::before": { content: '""', ...header, ...accent("#00796B") },
+        };
+      case "indigo":
+        return {
+          ...base,
+          "&::before": { content: '""', ...header, ...accent("#3F51B5") },
+        };
+      case "rose":
+        return {
+          ...base,
+          "&::before": { content: '""', ...header, ...accent("#AD1457") },
+        };
+      case "stripe":
+        return {
+          ...base,
+          backgroundImage:
+            "repeating-linear-gradient(135deg, #f5f6f8 0 6px, transparent 6px 12px)",
+        };
+      case "grid":
+        return {
+          ...base,
+          backgroundImage:
+            "linear-gradient(#f5f6f8 1px, transparent 1px), linear-gradient(90deg, #f5f6f8 1px, transparent 1px)",
+          backgroundSize: "8px 8px, 8px 8px",
+          "&::before": { content: '""', ...header, backgroundColor: "#f8f9fa" },
+        };
+      case "classic":
+      case "compact":
+      case "clean":
+      default:
+        return {
+          ...base,
+          "&::before": { content: '""', ...header, backgroundColor: "#f5f6f8" },
+        };
     }
   };
 
@@ -156,7 +173,6 @@ export default function ResumePage() {
       {/* Header */}
       <MotionWrapper variant="fadeIn" duration={0.8} delay={0.2}>
         <Box sx={{ textAlign: "center", mb: 6 }}>
-          <GooeyText>Resume</GooeyText>
           <Typography
             variant="h1"
             component="h1"
@@ -187,7 +203,6 @@ export default function ResumePage() {
       <ResumeLanguageSelector
         onLanguageSelect={handleLanguageSelect}
         onDownload={handleDownload}
-        onGeneratePreviews={handleGeneratePreviews}
         isLoading={isGenerating}
         selectedLanguage={selectedLanguage}
       />
@@ -231,29 +246,51 @@ export default function ResumePage() {
                   <Typography variant="subtitle2" sx={{ mb: 1 }}>
                     {tpl}
                   </Typography>
-                  {/* Scaled preview image using data URL */}
-                  {previews[tpl as ResumeTemplate] ? (
-                    <iframe
-                      title={`preview-${tpl}`}
-                      src={previews[tpl as ResumeTemplate]}
-                      style={{ width: "200px", height: "280px", border: 0 }}
-                    />
-                  ) : (
-                    <Box
-                      sx={{
-                        width: 200,
-                        height: 280,
-                        bgcolor: "grey.100",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        color: "text.secondary",
-                        borderRadius: 1,
-                      }}
-                    >
-                      Preview loading...
+                  {/* DOM-based preview box (no PDF/iframe) */}
+                  <Box sx={getTemplatePreviewSx(tpl as ResumeTemplate)}>
+                    <Box sx={{ p: 1.5, position: "absolute", top: 36 }}>
+                      <Typography variant="caption" color="text.secondary">
+                        {t("professionalSummary")}
+                      </Typography>
+                      <Box
+                        sx={{
+                          mt: 0.5,
+                          width: 150,
+                          height: 6,
+                          bgcolor: "grey.300",
+                        }}
+                      />
+                      <Box
+                        sx={{
+                          mt: 0.5,
+                          width: 120,
+                          height: 6,
+                          bgcolor: "grey.200",
+                        }}
+                      />
+                      <Box sx={{ mt: 1.5 }}>
+                        <Typography variant="caption" color="text.secondary">
+                          {projectsT("title")}
+                        </Typography>
+                        <Box
+                          sx={{
+                            mt: 0.5,
+                            width: 160,
+                            height: 6,
+                            bgcolor: "grey.300",
+                          }}
+                        />
+                        <Box
+                          sx={{
+                            mt: 0.5,
+                            width: 110,
+                            height: 6,
+                            bgcolor: "grey.200",
+                          }}
+                        />
+                      </Box>
                     </Box>
-                  )}
+                  </Box>
                 </Box>
               ))}
             </Stack>
@@ -513,7 +550,7 @@ export default function ResumePage() {
 
       {/* Call to Action - Galaxy Card */}
       <MotionWrapper variant="slideUp" duration={0.8} delay={1.8}>
-        <GalaxyCard>
+        <GalaxyCard sx={{ minHeight: "fit-content", height: "fit-content" }}>
           <MotionWrapper variant="slideUp" duration={0.8} delay={2.0}>
             <Box
               sx={{

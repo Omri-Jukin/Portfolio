@@ -44,6 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       "portfolio",
       "omri jukin",
       "omri jukin portfolio",
+      "omri jukin fullstack developer",
       "omri jukin full stack developer",
       "omri jukin web developer",
       "omri jukin react developer",
