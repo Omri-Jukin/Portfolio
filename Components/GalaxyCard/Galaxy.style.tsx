@@ -3,7 +3,7 @@ import { styled } from "@mui/material/styles";
 export const GalaxyContainer = styled("div")({
   position: "relative",
   width: "100%",
-  height: "100%",
+  minHeight: "fit-content",
   overflow: "hidden",
 });
 

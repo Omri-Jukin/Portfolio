@@ -7,8 +7,6 @@ import Header, { TLayout } from "~/Header";
 
 import Footer from "~/Footer";
 import { useLocale } from "next-intl";
-import createEmotionCache from "@/app/mui-emotion-cache";
-import { CacheProvider } from "@emotion/react";
 import ResponsiveLayout from "&/ResponsiveLayout";
 import { ResponsiveLayout as TResponsiveLayout } from "&/ResponsiveLayout";
 import { TRPCProvider } from "$/trpc/provider";
@@ -133,62 +131,58 @@ export default function ClientLayout({
     },
   });
 
-  const clientSideEmotionCache = createEmotionCache();
-
   // Always render the providers, but conditionally render the content
   return (
     <TRPCProvider>
-      <CacheProvider value={clientSideEmotionCache}>
-        <ThemeProvider theme={appTheme}>
-          <CssBaseline />
-          <Box sx={{ minHeight: "100vh" }}>
-            {/* Fixed Header */}
-            <Header
-              isDarkMode={isDarkMode}
-              onThemeToggle={handleThemeToggle}
-              isMobile={isMobile}
-              forceLayout={forceLayout}
-              onLayoutChange={handleLayoutChange}
-            />
+      <ThemeProvider theme={appTheme}>
+        <CssBaseline />
+        <Box sx={{ minHeight: "100vh" }}>
+          {/* Fixed Header */}
+          <Header
+            isDarkMode={isDarkMode}
+            onThemeToggle={handleThemeToggle}
+            isMobile={isMobile}
+            forceLayout={forceLayout}
+            onLayoutChange={handleLayoutChange}
+          />
 
-            {/* Main Layout Container */}
+          {/* Main Layout Container */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              minHeight: "100vh",
+              pt: "4rem", // Account for fixed header height
+            }}
+          >
+            {/* Main Content Area */}
             <Box
               sx={{
+                flex: 1,
                 display: "flex",
                 flexDirection: "column",
-                minHeight: "100vh",
-                pt: "4rem", // Account for fixed header height
               }}
             >
-              {/* Main Content Area */}
-              <Box
-                sx={{
-                  flex: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <ResponsiveLayout isMobile={isMobile} forceLayout={forceLayout}>
-                  <Box
-                    sx={{
-                      flex: 1,
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    {children}
-                  </Box>
-                </ResponsiveLayout>
-              </Box>
-
-              {/* Footer */}
-              <Footer />
-              {/* Cookies */}
-              <Cookies />
+              <ResponsiveLayout isMobile={isMobile} forceLayout={forceLayout}>
+                <Box
+                  sx={{
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  {children}
+                </Box>
+              </ResponsiveLayout>
             </Box>
+
+            {/* Footer */}
+            <Footer />
+            {/* Cookies */}
+            <Cookies />
           </Box>
-        </ThemeProvider>
-      </CacheProvider>
+        </Box>
+      </ThemeProvider>
     </TRPCProvider>
   );
 }
