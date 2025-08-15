@@ -1,4 +1,4 @@
-import Link from "next/link";
+import React from "react";
 import { ArrowForward as ArrowForwardIcon } from "@mui/icons-material";
 import { useTranslations } from "next-intl";
 import MotionWrapper from "../MotionWrapper/MotionWrapper";
@@ -6,12 +6,12 @@ import {
   ContactContainer,
   ContactTitle,
   ContactSubtitle,
-  ContactForm,
   ContactDescription,
-  ContactButton,
 } from "./Contact.style";
 import { CONTACT_CONSTANTS } from "./Contact.const";
 import type { ContactProps } from "./Contact.type";
+import { Typography } from "@mui/material";
+import { GalaxyCard, NeonButton } from "..";
 
 const Contact: React.FC<ContactProps> = ({ locale = "en", onContactClick }) => {
   const t = useTranslations("contact");
@@ -26,29 +26,35 @@ const Contact: React.FC<ContactProps> = ({ locale = "en", onContactClick }) => {
         <ContactSubtitle>{t("subtitle")}</ContactSubtitle>
       </MotionWrapper>
 
-      <MotionWrapper
-        variant="fadeInUp"
-        duration={CONTACT_CONSTANTS.ANIMATION.FORM_DURATION}
-        delay={CONTACT_CONSTANTS.ANIMATION.FORM_DELAY}
-      >
-        <ContactForm id={CONTACT_CONSTANTS.FORM_ID}>
-          <ContactTitle sx={{ mb: 3, fontSize: "1.5rem" }}>
-            {t("title")}
-          </ContactTitle>
-          <ContactDescription>{t("description")}</ContactDescription>
-          <Link
-            href={`/${locale}/contact`}
-            style={{ textDecoration: "none" }}
-            id={CONTACT_CONSTANTS.FORM_BUTTON_ID}
+      <MotionWrapper variant="slideUp" duration={0.8} delay={1.4}>
+        <GalaxyCard
+          sx={{
+            width: "100%",
+            maxWidth: "100vw",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Typography
+            variant="h5"
+            component="p"
+            sx={{ color: "primary.main", mb: 2 }}
           >
-            <ContactButton
-              endIcon={<ArrowForwardIcon />}
-              onClick={onContactClick}
-            >
-              {t("button")}
-            </ContactButton>
-          </Link>
-        </ContactForm>
+            {t("title")}
+          </Typography>
+          <ContactDescription>{t("description")}</ContactDescription>
+          <NeonButton
+            href={`/${locale}/contact`}
+            variant="contained"
+            size="large"
+            endIcon={<ArrowForwardIcon />}
+            onClick={onContactClick}
+          >
+            {t("button")}
+          </NeonButton>
+        </GalaxyCard>
       </MotionWrapper>
     </ContactContainer>
   );

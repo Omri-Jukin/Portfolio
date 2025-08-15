@@ -1,17 +1,16 @@
 "use client";
 
 import React from "react";
-import {
-  Box,
-  Typography,
-  CardContent,
-  Chip,
-  Stack,
-  Divider,
-} from "@mui/material";
+import { Box, Typography, CardContent, Chip, Divider } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import MotionWrapper from "../MotionWrapper/MotionWrapper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, EffectFade } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/effect-fade";
 import {
   Business as BusinessIcon,
   CalendarToday as CalendarIcon,
@@ -26,6 +25,7 @@ import {
   ExperienceDetails,
   CallToActionBox,
   CallToActionButton,
+  CareerSwiperContainer,
 } from "./Career.style";
 import { CAREER_CONSTANTS } from "./Career.const";
 import type { CareerProps } from "./Career.type";
@@ -62,119 +62,182 @@ const Career: React.FC<CareerProps> = () => {
         </CareerDescription>
       </MotionWrapper>
 
-      {/* Experience Timeline */}
-      <Stack spacing={4}>
-        {t.raw("experiences").map((experience: Experience, index: number) => (
-          <MotionWrapper
-            key={experience.role + experience.company}
-            variant="slideUp"
-            duration={0.8}
-            delay={0.8 + index * 0.2}
+      {/* Experience Timeline - SwiperJS */}
+      <MotionWrapper variant="slideUp" duration={0.8} delay={0.8}>
+        <CareerSwiperContainer>
+          <Swiper
+            modules={[Navigation, Pagination, EffectFade]}
+            spaceBetween={20}
+            slidesPerView={1}
+            breakpoints={{
+              480: {
+                slidesPerView: 1,
+                spaceBetween: 20,
+              },
+              600: {
+                slidesPerView: 1,
+                spaceBetween: 25,
+              },
+              900: {
+                slidesPerView: 1,
+                spaceBetween: 30,
+              },
+              1200: {
+                slidesPerView: 2,
+                spaceBetween: 30,
+              },
+              1400: {
+                slidesPerView: 2,
+                spaceBetween: 40,
+              },
+            }}
+            navigation={{
+              enabled: true,
+              hideOnClick: false,
+            }}
+            pagination={{
+              clickable: true,
+              dynamicBullets: true,
+            }}
+            loop={false}
+            centeredSlides={false}
+            grabCursor={true}
+            effect="slide"
+            speed={400}
+            style={{
+              paddingBottom: "60px", // Space for pagination dots
+              width: "100%",
+              maxWidth: "100vw",
+            }}
+            className="career-swiper"
           >
-            <ExperienceCard>
-              <CardContent sx={{ p: 4 }}>
-                {/* Role and Company */}
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}
-                >
-                  <BusinessIcon
-                    sx={{ color: "primary.main", fontSize: "2rem" }}
-                  />
-                  <Box>
-                    <Typography
-                      variant="h5"
-                      component="h3"
-                      sx={{
-                        color: "primary.main",
-                        fontWeight: "bold",
-                        mb: 0.5,
-                      }}
-                    >
-                      {experience.role}
-                    </Typography>
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        color: "text.secondary",
-                        fontWeight: "medium",
-                      }}
-                    >
-                      {experience.company}
-                    </Typography>
-                  </Box>
-                </Box>
-
-                {/* Time Period */}
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 1, mb: 3 }}
-                >
-                  <CalendarIcon
-                    sx={{ color: "text.secondary", fontSize: "1.2rem" }}
-                  />
-                  <Chip
-                    label={experience.time}
-                    size="small"
-                    sx={{
-                      backgroundColor: "secondary.main",
-                      color: "secondary.contrastText",
-                      fontWeight: "medium",
-                    }}
-                  />
-                </Box>
-
-                <Divider sx={{ mb: 3 }} />
-
-                {/* Key Achievements */}
-                <Typography
-                  variant="h6"
-                  sx={{
-                    color: "text.primary",
-                    fontWeight: "semibold",
-                    mb: 2,
-                  }}
-                >
-                  {t("keyAchievements")}
-                </Typography>
-
-                <ExperienceDetails>
-                  {experience.details.map(
-                    (detail: string, detailIndex: number) => (
-                      <Box
-                        key={detailIndex}
-                        sx={{
-                          display: "flex",
-                          alignItems: "flex-start",
-                          gap: 2,
-                        }}
-                      >
+            {t
+              .raw("experiences")
+              .map((experience: Experience, index: number) => (
+                <SwiperSlide key={experience.role + experience.company}>
+                  <MotionWrapper
+                    variant="slideUp"
+                    duration={0.8}
+                    delay={0.8 + index * 0.2}
+                  >
+                    <ExperienceCard>
+                      <CardContent sx={{ p: 4 }}>
+                        {/* Role and Company */}
                         <Box
                           sx={{
-                            width: 8,
-                            height: 8,
-                            borderRadius: "50%",
-                            backgroundColor: "primary.main",
-                            mt: 1,
-                            flexShrink: 0,
-                          }}
-                        />
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            lineHeight: 1.7,
-                            fontSize: "1rem",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 2,
+                            mb: 2,
                           }}
                         >
-                          {detail}
+                          <BusinessIcon
+                            sx={{ color: "primary.main", fontSize: "2rem" }}
+                          />
+                          <Box>
+                            <Typography
+                              variant="h5"
+                              component="h3"
+                              sx={{
+                                color: "primary.main",
+                                fontWeight: "bold",
+                                mb: 0.5,
+                              }}
+                            >
+                              {experience.role}
+                            </Typography>
+                            <Typography
+                              variant="h6"
+                              sx={{
+                                color: "text.secondary",
+                                fontWeight: "medium",
+                              }}
+                            >
+                              {experience.company}
+                            </Typography>
+                          </Box>
+                        </Box>
+
+                        {/* Time Period */}
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                            mb: 3,
+                          }}
+                        >
+                          <CalendarIcon
+                            sx={{ color: "text.secondary", fontSize: "1.2rem" }}
+                          />
+                          <Chip
+                            label={experience.time}
+                            size="small"
+                            sx={{
+                              backgroundColor: "secondary.main",
+                              color: "secondary.contrastText",
+                              fontWeight: "medium",
+                            }}
+                          />
+                        </Box>
+
+                        <Divider sx={{ mb: 3 }} />
+
+                        {/* Key Achievements */}
+                        <Typography
+                          variant="h6"
+                          sx={{
+                            color: "text.primary",
+                            fontWeight: "semibold",
+                            mb: 2,
+                          }}
+                        >
+                          {t("keyAchievements")}
                         </Typography>
-                      </Box>
-                    )
-                  )}
-                </ExperienceDetails>
-              </CardContent>
-            </ExperienceCard>
-          </MotionWrapper>
-        ))}
-      </Stack>
+
+                        <ExperienceDetails>
+                          {experience.details.map(
+                            (detail: string, detailIndex: number) => (
+                              <Box
+                                key={detailIndex}
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "flex-start",
+                                  gap: 2,
+                                }}
+                              >
+                                <Box
+                                  sx={{
+                                    width: 8,
+                                    height: 8,
+                                    borderRadius: "50%",
+                                    backgroundColor: "primary.main",
+                                    mt: 1,
+                                    flexShrink: 0,
+                                  }}
+                                />
+                                <Typography
+                                  variant="body1"
+                                  className="detail-text"
+                                  sx={{
+                                    lineHeight: 1.7,
+                                    fontSize: "1rem",
+                                  }}
+                                >
+                                  {detail}
+                                </Typography>
+                              </Box>
+                            )
+                          )}
+                        </ExperienceDetails>
+                      </CardContent>
+                    </ExperienceCard>
+                  </MotionWrapper>
+                </SwiperSlide>
+              ))}
+          </Swiper>
+        </CareerSwiperContainer>
+      </MotionWrapper>
 
       {/* Call to Action */}
       <MotionWrapper variant="slideUp" duration={0.8} delay={1.4}>

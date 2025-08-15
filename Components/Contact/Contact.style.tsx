@@ -58,6 +58,15 @@ export const ContactDescription = styled(Typography)(({ theme }) => ({
   textAlign: "center",
   color: theme.palette.text.secondary,
   lineHeight: 1.6,
+  // Text truncation to 2 rows
+  wordBreak: "break-word",
+  overflowWrap: "break-word",
+  maxHeight: "3.2em", // Limit to 2 lines (1.6 * 2)
+  overflow: "hidden",
+  display: "-webkit-box",
+  WebkitLineClamp: 2,
+  WebkitBoxOrient: "vertical",
+  textOverflow: "ellipsis",
 }));
 
 export const ContactButton = styled(Button)(({ theme }) => ({

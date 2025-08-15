@@ -3,7 +3,7 @@ import { styled } from "@mui/material/styles";
 import { ButtonProps as CustomButtonProps } from "./Button.type";
 
 // Styled button variants with props
-const GradientButton = styled(MuiButton, {
+export const GradientButton = styled(MuiButton, {
   shouldForwardProp: (prop) => prop !== "gradient",
 })<{ gradient?: string }>(({ gradient }) => ({
   background: gradient || "linear-gradient(45deg, #ff6b6b, #4ecdc4)",
@@ -20,7 +20,7 @@ const GradientButton = styled(MuiButton, {
   transition: "all 0.3s ease",
 }));
 
-const NeonButton = styled(MuiButton, {
+export const NeonButton = styled(MuiButton, {
   shouldForwardProp: (prop) => prop !== "neonColor" && prop !== "opacity",
 })<{ neonColor?: string; opacity?: string }>(({ neonColor, opacity }) => {
   const baseColor = neonColor || "#00ff88";
@@ -60,7 +60,7 @@ const NeonButton = styled(MuiButton, {
   };
 });
 
-const GlassButton = styled(MuiButton, {
+export const GlassButton = styled(MuiButton, {
   shouldForwardProp: (prop) => prop !== "intensity",
 })<{ intensity?: "low" | "medium" | "high" }>(({ intensity = "medium" }) => ({
   position: "relative",
@@ -145,7 +145,7 @@ const GlassButton = styled(MuiButton, {
   transition: "all 0.3s ease",
 }));
 
-const BrokenGlassButton = styled(MuiButton, {
+export const BrokenGlassButton = styled(MuiButton, {
   shouldForwardProp: (prop) => prop !== "intensity" && prop !== "animation",
 })<{ intensity?: "low" | "medium" | "high"; animation?: boolean }>(
   ({ intensity = "medium", animation = true }) => ({

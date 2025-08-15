@@ -7,12 +7,12 @@ import { useTheme } from "@mui/material/styles";
 import { CalendlyContainer } from "./Calendly.style";
 
 const CalendlyBadge = ({
-  url,
-  text,
-  backgroundColor,
-  textColor,
-  position,
-  className = "",
+  url = "https://calendly.com/omrijukin/30min",
+  text = "Book a Call!",
+  backgroundColor = "#FF6B6B",
+  textColor = "#FFFFFF",
+  position = "bottom-right",
+  className = "calendly-badge",
 }: CalendlyProps) => {
   const theme = useTheme();
   const [isClient, setIsClient] = useState(false);
@@ -84,8 +84,8 @@ const CalendlyBadge = ({
           transition: "all 0.2s ease-in-out",
           boxShadow: gradientStyles.shadow,
           transform: "translateY(0)",
-          width: "90vw",
-          height: "90vh",
+          width: "50%",
+          height: "100%",
         }}
         prefill={{
           name: "",

@@ -16,6 +16,9 @@ export const useScrollPosition = (): ScrollPosition => {
   });
 
   useEffect(() => {
+    // Only run on client side
+    if (typeof window === "undefined") return;
+
     let ticking = false;
     let lastScrollY = 0;
     let throttleTimeout: NodeJS.Timeout;

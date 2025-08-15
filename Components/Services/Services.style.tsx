@@ -22,22 +22,71 @@ export const ServicesSubtitle = styled(Typography)(({ theme }) => ({
   letterSpacing: "1px",
 }));
 
-export const ServicesGrid = styled(Box)(({ theme }) => ({
-  display: "grid",
-  gridTemplateColumns: "1fr",
-  gap: theme.spacing(4),
+export const ServicesSwiperContainer = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(6),
-  maxWidth: "1200px",
+  maxWidth: "1400px",
   width: "100%",
   margin: "0 auto",
-  [theme.breakpoints.up("md")]: {
-    gridTemplateColumns: "repeat(3, 1fr)",
+  position: "relative",
+
+  // Custom Swiper navigation styling
+  [`& .swiper-button-next,
+    & .swiper-button-prev`]: {
+    color: theme.palette.primary.main,
+    backgroundColor: theme.palette.background.paper,
+    borderRadius: "50%",
+    width: "44px",
+    height: "44px",
+    boxShadow:
+      theme.palette.mode === "dark"
+        ? "0 4px 12px rgba(0, 0, 0, 0.3)"
+        : "0 4px 12px rgba(0, 0, 0, 0.1)",
+    "&:hover": {
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.primary.contrastText,
+    },
+    "&::after": {
+      fontSize: "18px",
+      fontWeight: "bold",
+    },
+  },
+
+  "& .swiper-button-next": {
+    right: "10px",
+  },
+
+  "& .swiper-button-prev": {
+    left: "10px",
+  },
+
+  // Custom pagination styling
+  "& .swiper-pagination": {
+    bottom: "0",
+  },
+
+  "& .swiper-pagination-bullet": {
+    backgroundColor: theme.palette.primary.main,
+    opacity: 0.3,
+    "&.swiper-pagination-bullet-active": {
+      opacity: 1,
+    },
+  },
+
+  // Responsive adjustments
+  [theme.breakpoints.down("sm")]: {
+    [`& .swiper-button-next,
+      & .swiper-button-prev`]: {
+      display: "none",
+    },
   },
 }));
 
 export const ServiceCard = styled(Card)(({ theme }) => ({
   padding: theme.spacing(3),
   borderRadius: theme.spacing(2),
+  height: "100%",
+  display: "flex",
+  flexDirection: "column",
   boxShadow:
     theme.palette.mode === "dark"
       ? "0 8px 24px rgba(150, 206, 180, 0.25), 0 4px 12px rgba(0, 0, 0, 0.3), 2px 2px 8px rgba(0, 0, 0, 0.2)"
@@ -74,12 +123,14 @@ export const ServiceDescription = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
   marginBottom: theme.spacing(2),
   lineHeight: 1.6,
+  flex: 1, // Push button to bottom
 }));
 
 export const ServiceButton = styled(Button)(({ theme }) => ({
   borderRadius: theme.spacing(1),
   textTransform: "none",
   fontWeight: 500,
+  marginTop: "auto", // Push to bottom of card
   "&.primary": {
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,

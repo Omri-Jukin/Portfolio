@@ -251,7 +251,7 @@
   "contact": {
     "title": "Let's Connect",
     "subtitle": "Ready to bring your ideas to life?",
-    "description": "I'm always excited to discuss new opportunities, collaborations, or just chat about technology. Drop me a message and let's create something amazing together.",
+    "description": "I'm always excited to discuss new opportunities, collaborations, or just chat about technology. Drop me a message and let's create something amazing together...",
     "button": "Start a conversation",
     "form": {
       "title": "Get in Touch",
@@ -332,10 +332,10 @@
         "time": "2024 - 2025",
         "company": "Abra Technologies, Israel",
         "details": [
-          "Platform Development - Contributed to the development of a comprehensive platform that aggregates and processes critical market data from government agencies",
-          "Library Architecture - Designed and implemented a modular, reusable UI component library that reduced development time by 30% and improved consistency across applications",
-          "UI/UX Innovation - Collaborated with design teams to create intuitive interfaces that increased user engagement and reduced support tickets",
-          "Backend Optimization - Developed efficient data processing algorithms that improved system performance",
+          "Platform Development - Contributed to the development of a comprehensive platform that aggregates and processes critical market data from government agencies...",
+          "Library Architecture - Designed and implemented a modular, reusable UI component library that reduced development time by 30% and improved consistency across applications...",
+          "UI/UX Innovation - Collaborated with design teams to create intuitive interfaces that increased user engagement and reduced support tickets...",
+          "Backend Optimization - Developed efficient data processing algorithms that improved system performance...",
           "Technical Stack: Next.js, tRPC, PayloadCMS, Storybook, Jest, Vitest, React"
         ]
       },
@@ -344,10 +344,10 @@
         "time": "2023 - 2024",
         "company": "Menora Mivtachim Insurance Company, Israel",
         "details": [
-          "System Architecture - Architected and maintained the business constitution system, managing thousands of policy rules and regulations",
-          "Team Leadership - Mentored and trained new developers, reducing onboarding time and improving team productivity",
-          "Product Innovation - Led the development of 12+ new insurance products, resulting in a higher customer acquisition rate",
-          "Legacy System Modernization - Successfully migrated critical components from a 40-year-old monolithic system to modern architecture, improving system performance"
+          "System Architecture - Architected and maintained the business constitution system, managing thousands of policy rules and regulations...",
+          "Team Leadership - Mentored and trained new developers, reducing onboarding time and improving team productivity...",
+          "Product Innovation - Led the development of 12+ new insurance products, resulting in a higher customer acquisition rate...",
+          "Legacy System Modernization - Successfully migrated critical components from a 40-year-old monolithic system to modern architecture, improving system performance..."
         ]
       },
       {
@@ -355,10 +355,10 @@
         "time": "2021 - 2023",
         "company": "Menora Mivtachim Insurance Company, Israel",
         "details": [
-          "Customer Experience - Achieved 95% customer satisfaction rate while handling complex insurance inquiries and complaints",
-          "Process Improvement - Developed and implemented new workflow protocols that reduced average handling time by 25% and improved team efficiency by 35%",
-          "Team Development - Trained and mentored 10+ new team members, resulting in a 35% reduction in training time and improved service quality",
-          "Cross-functional Collaboration - Worked with multiple departments to resolve complex customer issues, improving resolution time by 30%"
+          "Customer Experience - Achieved 95% customer satisfaction rate while handling complex insurance inquiries and complaints...",
+          "Process Improvement - Developed and implemented new workflow protocols that reduced average handling time by 25% and improved team efficiency by 35%...",
+          "Team Development - Trained and mentored 10+ new team members, resulting in a 35% reduction in training time and improved service quality...",
+          "Cross-functional Collaboration - Worked with multiple departments to resolve complex customer issues, improving resolution time by 30%..."
         ]
       },
       {
@@ -366,10 +366,10 @@
         "time": "2020 - 2021",
         "company": "HOT Telecommunications, Israel",
         "details": [
-          "Customer Service Excellence - Maintained a 90% customer satisfaction rate while handling high-volume inquiries",
-          "Process Optimization - Implemented new workflow protocols that reduced response time by 35% and improved team productivity by 25%",
-          "Team Leadership - Successfully trained and mentored 15+ team members, improving overall team performance by 30%",
-          "System Integration - Collaborated with IT to implement new customer service tools, resulting in a 40% improvement in case resolution time"
+          "Customer Service Excellence - Maintained a 90% customer satisfaction rate while handling high-volume inquiries...",
+          "Process Optimization - Implemented new workflow protocols that reduced response time by 35% and improved team productivity by 25%...",
+          "Team Leadership - Successfully trained and mentored 15+ team members, improving overall team performance by 30%...",
+          "System Integration - Collaborated with IT to implement new customer service tools, resulting in a 40% improvement in case resolution time..."
         ]
       }
     ]
