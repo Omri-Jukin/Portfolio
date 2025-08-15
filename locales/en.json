@@ -384,6 +384,23 @@
     "letsBuildTogether": "Let's Build Something Amazing Together",
     "readyToDiscuss": "Ready to discuss your next project or opportunity?",
     "getInTouch": "Get In Touch",
+    "templateSelector": {
+      "title": "Choose Your Resume Style",
+      "subtitle": "Select from my collection of professionally designed templates",
+      "templateNames": {
+        "modern": "Modern",
+        "elegant": "Elegant",
+        "tech": "Tech",
+        "creative": "Creative",
+        "minimal": "Minimal",
+        "teal": "Teal",
+        "indigo": "Indigo",
+        "rose": "Rose",
+        "corporate": "Corporate",
+        "startup": "Startup",
+        "academic": "Academic"
+      }
+    },
     "languageSelector": {
       "title": "Choose Resume Language",
       "description": "Select your preferred language for the PDF resume. The content will be automatically translated based on your selection.",

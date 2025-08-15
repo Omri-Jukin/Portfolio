@@ -384,6 +384,23 @@
     "letsBuildTogether": "Construyamos Algo Increíble Juntos",
     "readyToDiscuss": "¿Listo para discutir tu próximo proyecto u oportunidad?",
     "getInTouch": "Ponte en Contacto",
+    "templateSelector": {
+      "title": "Elige tu Estilo de Currículum",
+      "subtitle": "Selecciona de mi colección de plantillas diseñadas profesionalmente",
+      "templateNames": {
+        "modern": "Moderno",
+        "elegant": "Elegante",
+        "tech": "Técnico",
+        "creative": "Creativo",
+        "minimal": "Minimalista",
+        "teal": "Verde Azulado",
+        "indigo": "Índigo",
+        "rose": "Rosa",
+        "corporate": "Corporativo",
+        "startup": "Startup",
+        "academic": "Académico"
+      }
+    },
     "languageSelector": {
       "title": "Elegir Idioma del Currículum",
       "description": "Selecciona tu idioma preferido para el currículum PDF. El contenido se traducirá automáticamente según tu selección.",

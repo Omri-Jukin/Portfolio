@@ -64,14 +64,17 @@ export interface ResumeData {
 }
 
 export type ResumeTemplate =
-  | "clean"
-  | "classic"
-  | "compact"
+  | "modern"
+  | "elegant"
+  | "tech"
+  | "creative"
+  | "minimal"
   | "teal"
   | "indigo"
   | "rose"
-  | "stripe"
-  | "grid";
+  | "corporate"
+  | "startup"
+  | "academic";
 
 export class PDFGenerator {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -90,7 +93,7 @@ export class PDFGenerator {
   private isRTL: boolean = false;
   private sidebarX: number = 0;
   private mainContentX: number = 0;
-  private template: ResumeTemplate = "clean";
+  private template: ResumeTemplate = "modern";
   private areFontsEmbedded: boolean = false;
   private isInitialized: boolean = false;
 
@@ -161,7 +164,7 @@ export class PDFGenerator {
   async generateResume(
     data: ResumeData,
     language: string = "en",
-    template: ResumeTemplate = "clean"
+    template: ResumeTemplate = "modern"
   ): Promise<void> {
     await this.initDoc();
     // Set RTL for Hebrew
@@ -185,11 +188,20 @@ export class PDFGenerator {
 
     // Render by selected template
     switch (this.template) {
-      case "classic":
-        this.addMainContentClassic(data);
+      case "modern":
+        this.addMainContentModern(data);
         break;
-      case "compact":
-        this.addMainContentCompact(data);
+      case "elegant":
+        this.addMainContentElegant(data);
+        break;
+      case "tech":
+        this.addMainContentTech(data);
+        break;
+      case "creative":
+        this.addMainContentCreative(data);
+        break;
+      case "minimal":
+        this.addMainContentMinimal(data);
         break;
       case "teal":
         this.addMainContentClassic(data);
@@ -200,13 +212,15 @@ export class PDFGenerator {
       case "rose":
         this.addMainContentClassic(data);
         break;
-      case "stripe":
+      case "corporate":
         this.addMainContent(data);
         break;
-      case "grid":
+      case "startup":
         this.addMainContent(data);
         break;
-      case "clean":
+      case "academic":
+        this.addMainContent(data);
+        break;
       default:
         this.addMainContent(data);
         break;
@@ -236,11 +250,14 @@ export class PDFGenerator {
       case "rose":
         accent = [173, 20, 87];
         break;
-      case "stripe":
-        accent = [127, 0, 63];
+      case "corporate":
+        accent = [44, 62, 80]; // Dark blue-gray
         break;
-      case "grid":
-        accent = [52, 73, 94];
+      case "startup":
+        accent = [127, 0, 63]; // Red accent
+        break;
+      case "academic":
+        accent = [52, 73, 94]; // Dark gray
         break;
       default:
         // keep defaults
@@ -258,13 +275,20 @@ export class PDFGenerator {
       case "indigo":
       case "rose":
         return 45; // header band height ~35 + padding
-      case "grid":
+      case "corporate":
+      case "startup":
+      case "academic":
         return 36; // header band ~28 + padding
-      case "stripe":
-        return 40; // below divider
-      case "classic":
-      case "compact":
-      case "clean":
+      case "modern":
+        return 42; // modern header height
+      case "elegant":
+        return 44; // elegant header height
+      case "tech":
+        return 38; // tech header height
+      case "creative":
+        return 46; // creative header height
+      case "minimal":
+        return 35; // minimal header height
       default:
         return 40;
     }
@@ -310,37 +334,74 @@ export class PDFGenerator {
           );
         }
         break;
-      case "stripe":
-        // Diagonal stripes (subtle) across background
-        this.doc.setDrawColor(245, 246, 248);
-        this.doc.setLineWidth(0.4);
-        for (
-          let x = -this.pageHeight;
-          x < this.pageWidth + this.pageHeight;
-          x += 8
-        ) {
-          this.doc.line(x, 0, x + this.pageHeight, this.pageHeight);
-        }
-        // Header divider
-        this.doc.setFillColor(245, 246, 248);
+      case "corporate":
+        // Corporate professional header
+        this.doc.setFillColor(44, 62, 80);
+        this.doc.rect(0, 0, this.pageWidth, 34, "F");
+        // Subtle accent line
+        this.doc.setFillColor(200, 200, 200);
         this.doc.rect(0, 34, this.pageWidth, 1.5, "F");
         break;
-      case "grid":
-        // Light grid pattern
-        this.doc.setDrawColor(245, 246, 248);
-        this.doc.setLineWidth(0.2);
-        for (let x = 0; x <= this.pageWidth; x += 8) {
-          this.doc.line(x, 0, x, this.pageHeight);
+      case "startup":
+        // Startup modern header
+        this.doc.setFillColor(127, 0, 63);
+        this.doc.rect(0, 0, this.pageWidth, 34, "F");
+        // Startup accent
+        this.doc.setFillColor(255, 255, 255);
+        this.doc.rect(0, 34, this.pageWidth, 2, "F");
+        break;
+      case "academic":
+        // Academic formal header
+        this.doc.setFillColor(52, 73, 94);
+        this.doc.rect(0, 0, this.pageWidth, 34, "F");
+        // Academic accent
+        this.doc.setFillColor(220, 220, 220);
+        this.doc.rect(0, 34, this.pageWidth, 1.5, "F");
+        break;
+      case "modern":
+        // Modern gradient header
+        this.doc.setFillColor(25, 118, 210);
+        this.doc.rect(0, 0, this.pageWidth, 40, "F");
+        // Subtle accent line
+        this.doc.setFillColor(255, 193, 7);
+        this.doc.rect(0, 40, this.pageWidth, 2, "F");
+        break;
+      case "elegant":
+        // Elegant dark header with gold accent
+        this.doc.setFillColor(33, 33, 33);
+        this.doc.rect(0, 0, this.pageWidth, 42, "F");
+        this.doc.setFillColor(212, 175, 55);
+        this.doc.rect(0, 42, this.pageWidth, 2, "F");
+        break;
+      case "tech":
+        // Tech-inspired geometric header
+        this.doc.setFillColor(76, 175, 80);
+        this.doc.rect(0, 0, this.pageWidth, 36, "F");
+        // Tech pattern
+        this.doc.setFillColor(200, 230, 201);
+        for (let i = 0; i < 8; i++) {
+          this.doc.rect(8 + i * 12, 8, 8, 20, "F");
         }
-        for (let y = 0; y <= this.pageHeight; y += 8) {
-          this.doc.line(0, y, this.pageWidth, y);
-        }
-        // Subtle header band
-        this.doc.setFillColor(248, 249, 250);
-        this.doc.rect(0, 0, this.pageWidth, 28, "F");
+        break;
+      case "creative":
+        // Creative colorful header
+        this.doc.setFillColor(156, 39, 176);
+        this.doc.rect(0, 0, this.pageWidth, 44, "F");
+        // Creative accent shapes
+        this.doc.setFillColor(255, 235, 59);
+        this.doc.circle(20, 22, 8, "F");
+        this.doc.setFillColor(255, 87, 34);
+        this.doc.circle(this.pageWidth - 20, 22, 6, "F");
+        break;
+      case "minimal":
+        // Minimal clean header
+        this.doc.setFillColor(245, 245, 245);
+        this.doc.rect(0, 0, this.pageWidth, 33, "F");
+        this.doc.setFillColor(158, 158, 158);
+        this.doc.rect(0, 33, this.pageWidth, 2, "F");
         break;
       default:
-        // clean/classic/compact: minimal light divider under header area
+        // Default: minimal light divider under header area
         this.doc.setFillColor(245, 246, 248);
         this.doc.rect(0, 34, this.pageWidth, 1.5, "F");
         break;
@@ -664,29 +725,133 @@ export class PDFGenerator {
     this.addMainSection("Additional Activities", data.additionalActivities, y);
   }
 
-  // Compact template: tighter spacing and smaller fonts
-  private addMainContentCompact(data: ResumeData): void {
-    const originalLineHeight = this.lineHeight;
-    const originalFontSize = this.doc.getFontSize();
-
-    this.lineHeight = 5.5;
-    this.doc.setFontSize(22);
+  // Modern template: clean and contemporary
+  private addMainContentModern(data: ResumeData): void {
     let y = this.getTopStartY();
     y = this.addMainHeader(data.metadata, y);
-
-    this.doc.setFontSize(12);
+    this.drawModernSeparator(y - 4);
     y = this.addMainSection("Professional Summary", data.resume.experience, y);
+    this.drawModernSeparator(y - 8);
     y = this.addExperienceSection(data.career, y);
+    this.drawModernSeparator(y - 8);
     y = this.addProjectsSection(data.projects, y);
+    this.drawModernSeparator(y - 8);
     this.addMainSection("Additional Activities", data.additionalActivities, y);
+  }
 
-    // Restore
-    this.lineHeight = originalLineHeight;
-    this.doc.setFontSize(originalFontSize);
+  // Elegant template: sophisticated and refined
+  private addMainContentElegant(data: ResumeData): void {
+    let y = this.getTopStartY();
+    y = this.addMainHeader(data.metadata, y);
+    this.drawElegantSeparator(y - 4);
+    y = this.addMainSection("Professional Summary", data.resume.experience, y);
+    this.drawElegantSeparator(y - 8);
+    y = this.addExperienceSection(data.career, y);
+    this.drawElegantSeparator(y - 8);
+    y = this.addProjectsSection(data.projects, y);
+    this.drawElegantSeparator(y - 8);
+    this.addMainSection("Additional Activities", data.additionalActivities, y);
+  }
+
+  // Tech template: modern and technical
+  private addMainContentTech(data: ResumeData): void {
+    let y = this.getTopStartY();
+    y = this.addMainHeader(data.metadata, y);
+    this.drawTechSeparator(y - 4);
+    y = this.addMainSection("Professional Summary", data.resume.experience, y);
+    this.drawTechSeparator(y - 8);
+    y = this.addExperienceSection(data.career, y);
+    this.drawTechSeparator(y - 8);
+    y = this.addProjectsSection(data.projects, y);
+    this.drawTechSeparator(y - 8);
+    this.addMainSection("Additional Activities", data.additionalActivities, y);
+  }
+
+  // Creative template: artistic and expressive
+  private addMainContentCreative(data: ResumeData): void {
+    let y = this.getTopStartY();
+    y = this.addMainHeader(data.metadata, y);
+    this.drawCreativeSeparator(y - 4);
+    y = this.addMainSection("Professional Summary", data.resume.experience, y);
+    this.drawCreativeSeparator(y - 8);
+    y = this.addExperienceSection(data.career, y);
+    this.drawCreativeSeparator(y - 8);
+    y = this.addProjectsSection(data.projects, y);
+    this.drawCreativeSeparator(y - 8);
+    this.addMainSection("Additional Activities", data.additionalActivities, y);
+  }
+
+  // Minimal template: clean and simple
+  private addMainContentMinimal(data: ResumeData): void {
+    let y = this.getTopStartY();
+    y = this.addMainHeader(data.metadata, y);
+    this.drawMinimalSeparator(y - 4);
+    y = this.addMainSection("Professional Summary", data.resume.experience, y);
+    this.drawMinimalSeparator(y - 8);
+    y = this.addExperienceSection(data.career, y);
+    this.drawMinimalSeparator(y - 8);
+    y = this.addProjectsSection(data.projects, y);
+    this.drawMinimalSeparator(y - 8);
+    this.addMainSection("Additional Activities", data.additionalActivities, y);
   }
 
   private drawSeparator(y: number): void {
     this.doc.setDrawColor(200, 200, 200);
+    this.doc.setLineWidth(0.2);
+    this.doc.line(
+      this.mainContentX,
+      y,
+      this.mainContentX + this.mainContentWidth,
+      y
+    );
+  }
+
+  private drawModernSeparator(y: number): void {
+    this.doc.setDrawColor(25, 118, 210);
+    this.doc.setLineWidth(0.5);
+    this.doc.line(
+      this.mainContentX,
+      y,
+      this.mainContentX + this.mainContentWidth,
+      y
+    );
+  }
+
+  private drawElegantSeparator(y: number): void {
+    this.doc.setDrawColor(212, 175, 55);
+    this.doc.setLineWidth(0.3);
+    this.doc.line(
+      this.mainContentX,
+      y,
+      this.mainContentX + this.mainContentWidth,
+      y
+    );
+  }
+
+  private drawTechSeparator(y: number): void {
+    this.doc.setDrawColor(76, 175, 80);
+    this.doc.setLineWidth(0.4);
+    this.doc.line(
+      this.mainContentX,
+      y,
+      this.mainContentX + this.mainContentWidth,
+      y
+    );
+  }
+
+  private drawCreativeSeparator(y: number): void {
+    this.doc.setDrawColor(156, 39, 176);
+    this.doc.setLineWidth(0.6);
+    this.doc.line(
+      this.mainContentX,
+      y,
+      this.mainContentX + this.mainContentWidth,
+      y
+    );
+  }
+
+  private drawMinimalSeparator(y: number): void {
+    this.doc.setDrawColor(158, 158, 158);
     this.doc.setLineWidth(0.2);
     this.doc.line(
       this.mainContentX,
@@ -1167,7 +1332,7 @@ export class PDFGenerator {
 export const generateResumePDF = async (
   data: ResumeData,
   language: string = "en",
-  template: ResumeTemplate = "clean"
+  template: ResumeTemplate = "modern"
 ): Promise<unknown> => {
   const generator = new PDFGenerator();
   await generator.generateResume(data, language, template);
@@ -1177,7 +1342,7 @@ export const generateResumePDF = async (
 export const generateResumePreviewDataUrl = async (
   data: ResumeData,
   language: string = "en",
-  template: ResumeTemplate = "clean"
+  template: ResumeTemplate = "modern"
 ): Promise<string> => {
   const generator = new PDFGenerator();
   await generator.generateResume(data, language, template);

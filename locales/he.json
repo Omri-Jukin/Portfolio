@@ -384,6 +384,23 @@
     "letsBuildTogether": "בואו נבנה משהו מדהים ביחד",
     "readyToDiscuss": "מוכן לדון בפרויקט או הזדמנות הבאה שלך?",
     "getInTouch": "צור קשר",
+    "templateSelector": {
+      "title": "בחר את סגנון קורות החיים שלך",
+      "subtitle": "בחר מאוסף תבניות מעוצבות באופן מקצועי",
+      "templateNames": {
+        "modern": "מודרני",
+        "elegant": "אלגנטי",
+        "tech": "טכני",
+        "creative": "יצירתי",
+        "minimal": "מינימליסטי",
+        "teal": "טיל",
+        "indigo": "אינדיגו",
+        "rose": "ורוד",
+        "corporate": "עסקי",
+        "startup": "סטארט-אפ",
+        "academic": "אקדמי"
+      }
+    },
     "languageSelector": {
       "title": "בחר שפת קורות חיים",
       "description": "בחר את השפה המועדפת שלך לקורות חיים PDF. התוכן יתורגם אוטומטית בהתאם לבחירה שלך.",
