@@ -14,6 +14,8 @@ import {
   Divider,
   Snackbar,
   Alert,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import { useTranslations } from "next-intl";
 import MotionWrapper from "~/MotionWrapper";
@@ -24,6 +26,12 @@ import ResumeLanguageSelector from "#/Components/ResumeLanguageSelector";
 import type { ResumeTemplate } from "#/lib/utils/pdfGenerator";
 import { extractResumeData } from "#/lib/utils/resumeDataExtractor";
 import { GalaxyCard } from "#/Components";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/effect-fade";
 
 export type TechnicalSkill = {
   name: string;
@@ -48,11 +56,13 @@ export default function ResumePage() {
   const skillsT = useTranslations("skills");
   const projectsT = useTranslations("projects");
   const router = useRouter();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedTemplate, setSelectedTemplate] =
-    useState<ResumeTemplate>("clean");
+    useState<ResumeTemplate>("modern");
   const [snackbar, setSnackbar] = useState<{
     open: boolean;
     message: string;
@@ -124,6 +134,77 @@ export default function ResumePage() {
     };
     const accent = (color: string) => ({ backgroundColor: color });
     switch (tpl) {
+      case "modern":
+        return {
+          ...base,
+          "&::before": { content: '""', ...header, ...accent("#1976D2") },
+          "&::after": {
+            content: '""',
+            position: "absolute",
+            top: 36,
+            left: 0,
+            width: "100%",
+            height: 2,
+            backgroundColor: "#FFC107",
+          },
+        };
+      case "elegant":
+        return {
+          ...base,
+          "&::before": { content: '""', ...header, ...accent("#212121") },
+          "&::after": {
+            content: '""',
+            position: "absolute",
+            top: 36,
+            left: 0,
+            width: "100%",
+            height: 2,
+            backgroundColor: "#D4AF37",
+          },
+        };
+      case "tech":
+        return {
+          ...base,
+          "&::before": { content: '""', ...header, ...accent("#4CAF50") },
+          "&::after": {
+            content: '""',
+            position: "absolute",
+            top: 8,
+            left: 8,
+            width: 8,
+            height: 20,
+            backgroundColor: "#C8E6C9",
+          },
+        };
+      case "creative":
+        return {
+          ...base,
+          "&::before": { content: '""', ...header, ...accent("#9C27B0") },
+          "&::after": {
+            content: '""',
+            position: "absolute",
+            top: 14,
+            left: 20,
+            width: 16,
+            height: 16,
+            borderRadius: "50%",
+            backgroundColor: "#FFEB3B",
+          },
+        };
+      case "minimal":
+        return {
+          ...base,
+          "&::before": { content: '""', ...header, ...accent("#F5F5F5") },
+          "&::after": {
+            content: '""',
+            position: "absolute",
+            top: 33,
+            left: 0,
+            width: "100%",
+            height: 2,
+            backgroundColor: "#9E9E9E",
+          },
+        };
       case "teal":
         return {
           ...base,
@@ -139,23 +220,48 @@ export default function ResumePage() {
           ...base,
           "&::before": { content: '""', ...header, ...accent("#AD1457") },
         };
-      case "stripe":
+      case "corporate":
         return {
           ...base,
-          backgroundImage:
-            "repeating-linear-gradient(135deg, #f5f6f8 0 6px, transparent 6px 12px)",
+          "&::before": { content: '""', ...header, ...accent("#2C3E50") },
+          "&::after": {
+            content: '""',
+            position: "absolute",
+            top: 34,
+            left: 0,
+            width: "100%",
+            height: 1.5,
+            backgroundColor: "#C8C8C8",
+          },
         };
-      case "grid":
+      case "startup":
         return {
           ...base,
-          backgroundImage:
-            "linear-gradient(#f5f6f8 1px, transparent 1px), linear-gradient(90deg, #f5f6f8 1px, transparent 1px)",
-          backgroundSize: "8px 8px, 8px 8px",
-          "&::before": { content: '""', ...header, backgroundColor: "#f8f9fa" },
+          "&::before": { content: '""', ...header, ...accent("#7F003F") },
+          "&::after": {
+            content: '""',
+            position: "absolute",
+            top: 34,
+            left: 0,
+            width: "100%",
+            height: 2,
+            backgroundColor: "#FFFFFF",
+          },
         };
-      case "classic":
-      case "compact":
-      case "clean":
+      case "academic":
+        return {
+          ...base,
+          "&::before": { content: '""', ...header, ...accent("#34495E") },
+          "&::after": {
+            content: '""',
+            position: "absolute",
+            top: 34,
+            left: 0,
+            width: "100%",
+            height: 1.5,
+            backgroundColor: "#DCDCDC",
+          },
+        };
       default:
         return {
           ...base,
@@ -212,88 +318,399 @@ export default function ResumePage() {
         <Card sx={{ mb: 6, backgroundColor: "background.paper" }}>
           <CardContent sx={{ p: 4 }}>
             <Typography variant="h5" sx={{ color: "primary.main", mb: 2 }}>
-              Choose a template
+              {t("templateSelector.title")}
             </Typography>
-            <Stack
-              direction="row"
-              spacing={2}
-              sx={{ flexWrap: "wrap", gap: 2 }}
-            >
-              {[
-                "clean",
-                "classic",
-                "compact",
-                "teal",
-                "indigo",
-                "rose",
-                "stripe",
-                "grid",
-              ].map((tpl) => (
-                <Box
-                  key={tpl}
-                  onClick={() => setSelectedTemplate(tpl as ResumeTemplate)}
-                  sx={{
-                    cursor: "pointer",
-                    border:
-                      selectedTemplate === tpl ? "2px solid" : "1px solid",
-                    borderColor:
-                      selectedTemplate === tpl ? "primary.main" : "divider",
-                    borderRadius: 2,
-                    p: 1,
-                    width: 220,
+            <Typography variant="body2" sx={{ color: "text.secondary", mb: 3 }}>
+              {t("templateSelector.subtitle")}
+            </Typography>
+            {isMobile ? (
+              // Mobile SwiperJS Carousel
+              <Box
+                sx={{
+                  width: "100%",
+                  maxWidth: 400,
+                  mx: "auto",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  "& .swiper": {
+                    width: "100%",
+                    maxWidth: 320,
+                    margin: "0 auto",
+                  },
+                  "& .swiper-slide": {
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  },
+                }}
+              >
+                <Swiper
+                  modules={[Navigation, Pagination]}
+                  spaceBetween={20}
+                  slidesPerView={1}
+                  navigation
+                  pagination={{ clickable: true }}
+                  loop={true}
+                  centeredSlides={true}
+                  grabCursor={true}
+                  effect="slide"
+                  speed={400}
+                  onSlideChange={(swiper) => {
+                    const templates = [
+                      "modern",
+                      "elegant",
+                      "tech",
+                      "creative",
+                      "minimal",
+                      "teal",
+                      "indigo",
+                      "rose",
+                      "corporate",
+                      "startup",
+                      "academic",
+                    ];
+                    setSelectedTemplate(
+                      templates[swiper.realIndex] as ResumeTemplate
+                    );
                   }}
+                  style={
+                    {
+                      "--swiper-navigation-color": theme.palette.primary.main,
+                      "--swiper-pagination-color": theme.palette.primary.main,
+                      "--swiper-navigation-size": "24px",
+                      "--swiper-navigation-sides-offset": "10px",
+                    } as React.CSSProperties
+                  }
                 >
-                  <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                    {tpl}
-                  </Typography>
-                  {/* DOM-based preview box (no PDF/iframe) */}
-                  <Box sx={getTemplatePreviewSx(tpl as ResumeTemplate)}>
-                    <Box sx={{ p: 1.5, position: "absolute", top: 36 }}>
-                      <Typography variant="caption" color="text.secondary">
-                        {t("professionalSummary")}
-                      </Typography>
+                  {[
+                    "modern",
+                    "elegant",
+                    "tech",
+                    "creative",
+                    "minimal",
+                    "teal",
+                    "indigo",
+                    "rose",
+                    "corporate",
+                    "startup",
+                    "academic",
+                  ].map((tpl) => (
+                    <SwiperSlide key={tpl}>
                       <Box
+                        onClick={() =>
+                          setSelectedTemplate(tpl as ResumeTemplate)
+                        }
                         sx={{
-                          mt: 0.5,
-                          width: 150,
-                          height: 6,
-                          bgcolor: "grey.300",
+                          cursor: "pointer",
+                          border:
+                            selectedTemplate === tpl
+                              ? "3px solid"
+                              : "1px solid",
+                          borderColor:
+                            selectedTemplate === tpl
+                              ? "primary.main"
+                              : "divider",
+                          borderRadius: 3,
+                          p: 2,
+                          width: "100%",
+                          transition: "all 0.2s ease-in-out",
+                          "&:hover": {
+                            transform: "translateY(-2px)",
+                            boxShadow: 3,
+                            borderColor: "primary.light",
+                          },
                         }}
-                      />
-                      <Box
-                        sx={{
-                          mt: 0.5,
-                          width: 120,
-                          height: 6,
-                          bgcolor: "grey.200",
-                        }}
-                      />
-                      <Box sx={{ mt: 1.5 }}>
-                        <Typography variant="caption" color="text.secondary">
-                          {projectsT("title")}
+                      >
+                        <Typography
+                          variant="subtitle2"
+                          sx={{ mb: 1, textAlign: "center" }}
+                        >
+                          {t(`templateSelector.templateNames.${tpl}`)}
                         </Typography>
+                        {/* DOM-based preview box (no PDF/iframe) */}
                         <Box
                           sx={{
-                            mt: 0.5,
-                            width: 160,
-                            height: 6,
-                            bgcolor: "grey.300",
+                            display: "flex",
+                            justifyContent: "center",
+                            width: "100%",
                           }}
-                        />
-                        <Box
-                          sx={{
-                            mt: 0.5,
-                            width: 110,
-                            height: 6,
-                            bgcolor: "grey.200",
-                          }}
-                        />
+                        >
+                          <Box sx={getTemplatePreviewSx(tpl as ResumeTemplate)}>
+                            <Box
+                              sx={{
+                                p: 1.5,
+                                position: "absolute",
+                                top: 36,
+                                left: "50%",
+                                transform: "translateX(-50%)",
+                                textAlign: "center",
+                                width: "100%",
+                              }}
+                            >
+                              <Typography
+                                variant="caption"
+                                color="text.secondary"
+                              >
+                                {t("professionalSummary")}
+                              </Typography>
+                              <Box
+                                sx={{
+                                  mt: 0.5,
+                                  width: 150,
+                                  height: 6,
+                                  bgcolor: "grey.300",
+                                  mx: "auto",
+                                }}
+                              />
+                              <Box
+                                sx={{
+                                  mt: 0.5,
+                                  width: 120,
+                                  height: 6,
+                                  bgcolor: "grey.200",
+                                  mx: "auto",
+                                }}
+                              />
+                              <Box sx={{ mt: 1.5 }}>
+                                <Typography
+                                  variant="caption"
+                                  color="text.secondary"
+                                >
+                                  {projectsT("title")}
+                                </Typography>
+                                <Box
+                                  sx={{
+                                    mt: 0.5,
+                                    width: 160,
+                                    height: 6,
+                                    bgcolor: "grey.300",
+                                    mx: "auto",
+                                  }}
+                                />
+                                <Box
+                                  sx={{
+                                    mt: 0.5,
+                                    width: 110,
+                                    height: 6,
+                                    bgcolor: "grey.200",
+                                    mx: "auto",
+                                  }}
+                                />
+                              </Box>
+                            </Box>
+                          </Box>
+                        </Box>
                       </Box>
-                    </Box>
-                  </Box>
-                </Box>
-              ))}
-            </Stack>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </Box>
+            ) : (
+              // Desktop SwiperJS Carousel with 3 cards
+              <Box
+                sx={{
+                  width: "100%",
+                  maxWidth: 900,
+                  mx: "auto",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  "& .swiper": {
+                    width: "100%",
+                    margin: "0 auto",
+                    padding: "0 20px",
+                  },
+                  "& .swiper-slide": {
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "auto",
+                    width: "auto !important",
+                  },
+                  "& .swiper-wrapper": {
+                    alignItems: "center",
+                  },
+                }}
+              >
+                <Swiper
+                  modules={[Navigation, Pagination]}
+                  spaceBetween={30}
+                  slidesPerView={3}
+                  breakpoints={{
+                    1400: {
+                      slidesPerView: 4,
+                      spaceBetween: 30,
+                    },
+                    1200: {
+                      slidesPerView: 3,
+                      spaceBetween: 30,
+                    },
+                    900: {
+                      slidesPerView: 2,
+                      spaceBetween: 25,
+                    },
+                    600: {
+                      slidesPerView: 2,
+                      spaceBetween: 20,
+                    },
+                  }}
+                  navigation
+                  pagination={{ clickable: true }}
+                  loop={true}
+                  centeredSlides={false}
+                  grabCursor={true}
+                  effect="slide"
+                  speed={400}
+                  onSlideChange={(swiper) => {
+                    const templates = [
+                      "modern",
+                      "elegant",
+                      "tech",
+                      "creative",
+                      "minimal",
+                      "teal",
+                      "indigo",
+                      "rose",
+                      "corporate",
+                      "startup",
+                      "academic",
+                    ];
+                    setSelectedTemplate(
+                      templates[swiper.realIndex] as ResumeTemplate
+                    );
+                  }}
+                  style={
+                    {
+                      "--swiper-navigation-color": theme.palette.primary.main,
+                      "--swiper-pagination-color": theme.palette.primary.main,
+                      "--swiper-navigation-size": "24px",
+                      "--swiper-navigation-sides-offset": "10px",
+                    } as React.CSSProperties
+                  }
+                >
+                  {[
+                    "modern",
+                    "elegant",
+                    "tech",
+                    "creative",
+                    "minimal",
+                    "teal",
+                    "indigo",
+                    "rose",
+                    "corporate",
+                    "startup",
+                    "academic",
+                  ].map((tpl) => (
+                    <SwiperSlide key={tpl}>
+                      <Box
+                        onClick={() =>
+                          setSelectedTemplate(tpl as ResumeTemplate)
+                        }
+                        sx={{
+                          cursor: "pointer",
+                          border:
+                            selectedTemplate === tpl
+                              ? "3px solid"
+                              : "1px solid",
+                          borderColor:
+                            selectedTemplate === tpl
+                              ? "primary.main"
+                              : "divider",
+                          borderRadius: 3,
+                          p: 2,
+                          width: { xs: 200, sm: 220, md: 240 },
+                          minWidth: 200,
+                          transition: "all 0.2s ease-in-out",
+                          "&:hover": {
+                            transform: "translateY(-2px)",
+                            boxShadow: 3,
+                            borderColor: "primary.light",
+                          },
+                        }}
+                      >
+                        <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                          {t(`templateSelector.templateNames.${tpl}`)}
+                        </Typography>
+                        {/* DOM-based preview box (no PDF/iframe) */}
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            mt: 1,
+                          }}
+                        >
+                          <Box sx={getTemplatePreviewSx(tpl as ResumeTemplate)}>
+                            <Box
+                              sx={{
+                                p: 1.5,
+                                position: "absolute",
+                                top: 36,
+                                left: "50%",
+                                transform: "translateX(-50%)",
+                                textAlign: "start",
+                                width: "100%",
+                              }}
+                            >
+                              <Typography
+                                variant="caption"
+                                color="text.secondary"
+                              >
+                                {t("professionalSummary")}
+                              </Typography>
+                              <Box
+                                sx={{
+                                  mt: 0.5,
+                                  width: 150,
+                                  height: 6,
+                                  bgcolor: "grey.300",
+                                  mx: "auto",
+                                }}
+                              />
+                              <Box
+                                sx={{
+                                  mt: 0.5,
+                                  width: 120,
+                                  height: 6,
+                                  bgcolor: "grey.200",
+                                  mx: "auto",
+                                }}
+                              />
+                              <Box sx={{ mt: 1.5 }}>
+                                <Typography
+                                  variant="caption"
+                                  color="text.secondary"
+                                >
+                                  {projectsT("title")}
+                                </Typography>
+                                <Box
+                                  sx={{
+                                    mt: 0.5,
+                                    width: 160,
+                                    height: 6,
+                                    bgcolor: "grey.300",
+                                    mx: "auto",
+                                  }}
+                                />
+                                <Box
+                                  sx={{
+                                    mt: 0.5,
+                                    width: 110,
+                                    height: 6,
+                                    bgcolor: "grey.200",
+                                    mx: "auto",
+                                  }}
+                                />
+                              </Box>
+                            </Box>
+                          </Box>
+                        </Box>
+                      </Box>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </Box>
+            )}
           </CardContent>
         </Card>
       </MotionWrapper>

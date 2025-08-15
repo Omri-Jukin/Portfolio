@@ -3,10 +3,7 @@ import "../globals.css";
 import "flag-icons/css/flag-icons.min.css";
 import { NextIntlClientProvider } from "next-intl";
 import { bonaNovaSC, bonaNovaSCMono } from "$/fonts";
-import dynamic from "next/dynamic";
-const ClientLayout = dynamic(() => import("&/ClientLayout/ClientLayout"), {
-  ssr: false,
-});
+import ClientLayout from "&/ClientLayout/ClientLayout";
 import { getMessages, getTranslations } from "next-intl/server";
 import StructuredData from "./structured-data";
 

@@ -384,6 +384,22 @@
     "letsBuildTogether": "Construisons Quelque Chose d'Incroyable Ensemble",
     "readyToDiscuss": "Prêt à discuter de votre prochain projet ou opportunité ?",
     "getInTouch": "Entrer en Contact",
+    "templateSelector": {
+      "title": "Choisissez votre Style de CV",
+      "subtitle": "Sélectionnez de ma collection de modèles conçus professionnellement",
+      "templateNames": {
+        "modern": "Moderne",
+        "elegant": "Élégant",
+        "tech": "Technique",
+        "creative": "Créatif",
+        "minimal": "Minimaliste",
+        "teal": "Sarcelle",
+        "indigo": "Indigo",
+        "rose": "Rose",
+        "startup": "Startup",
+        "academic": "Académique"
+      }
+    },
     "languageSelector": {
       "title": "Choisir la Langue du CV",
       "description": "Sélectionnez votre langue préférée pour le CV PDF. Le contenu sera automatiquement traduit selon votre sélection.",
