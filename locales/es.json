@@ -251,7 +251,7 @@
   "contact": {
     "title": "Conectemos",
     "subtitle": "¿Listo para dar vida a tus ideas?",
-    "description": "Siempre estoy emocionado de discutir nuevas oportunidades, colaboraciones o simplemente charlar sobre tecnología. Envíame un mensaje y creemos algo increíble juntos.",
+    "description": "Siempre estoy emocionado de discutir nuevas oportunidades, colaboraciones o simplemente charlar sobre tecnología. Envíame un mensaje y creemos algo increíble juntos...",
     "button": "Iniciar una conversación",
     "form": {
       "title": "Ponte en Contacto",
@@ -332,10 +332,10 @@
         "time": "2024 - 2025",
         "company": "Abra Technologies, Israel",
         "details": [
-          "Desarrollo de Plataforma - Contribuí al desarrollo de una plataforma integral que agrega y procesa datos críticos del mercado de agencias gubernamentales",
-          "Arquitectura de Biblioteca - Diseñé e implementé una biblioteca de componentes UI modular y reutilizable que redujo el tiempo de desarrollo en un 30% y mejoró la consistencia entre aplicaciones",
-          "Innovación UI/UX - Colaboré con equipos de diseño para crear interfaces intuitivas que aumentaron el compromiso del usuario y redujeron tickets de soporte",
-          "Optimización Backend - Desarrollé algoritmos eficientes de procesamiento de datos que mejoraron el rendimiento del sistema",
+          "Desarrollo de Plataforma - Contribuí al desarrollo de una plataforma integral que agrega y procesa datos críticos del mercado de agencias gubernamentales...",
+          "Arquitectura de Biblioteca - Diseñé e implementé una biblioteca de componentes UI modular y reutilizable que redujo el tiempo de desarrollo en un 30% y mejoró la consistencia entre aplicaciones...",
+          "Innovación UI/UX - Colaboré con equipos de diseño para crear interfaces intuitivas que aumentaron el compromiso del usuario y redujeron tickets de soporte...",
+          "Optimización Backend - Desarrollé algoritmos eficientes de procesamiento de datos que mejoraron el rendimiento del sistema...",
           "Stack Técnico: Next.js, tRPC, PayloadCMS, Storybook, Jest, Vitest, React"
         ]
       },
@@ -344,10 +344,10 @@
         "time": "2023 - 2024",
         "company": "Menora Mivtachim Insurance Company, Israel",
         "details": [
-          "Arquitectura de Sistema - Arquitecturé y mantuve el sistema de constitución empresarial, gestionando miles de reglas de pólizas y regulaciones",
-          "Liderazgo de Equipo - Mentoré y entrené nuevos desarrolladores, reduciendo el tiempo de incorporación y mejorando la productividad del equipo",
-          "Innovación de Producto - Lideré el desarrollo de 12+ nuevos productos de seguros, resultando en una mayor tasa de adquisición de clientes",
-          "Modernización de Sistema Legacy - Migré exitosamente componentes críticos de un sistema monolítico de 40 años a arquitectura moderna, mejorando el rendimiento del sistema"
+          "Arquitectura de Sistema - Arquitecturé y mantuve el sistema de constitución empresarial, gestionando miles de reglas de pólizas y regulaciones...",
+          "Liderazgo de Equipo - Mentoré y entrené nuevos desarrolladores, reduciendo el tiempo de incorporación y mejorando la productividad del equipo...",
+          "Innovación de Producto - Lideré el desarrollo de 12+ nuevos productos de seguros, resultando en una mayor tasa de adquisición de clientes...",
+          "Modernización de Sistema Legacy - Migré exitosamente componentes críticos de un sistema monolítico de 40 años a arquitectura moderna, mejorando el rendimiento del sistema..."
         ]
       },
       {
@@ -355,10 +355,10 @@
         "time": "2021 - 2023",
         "company": "Menora Mivtachim Insurance Company, Israel",
         "details": [
-          "Experiencia del Cliente - Logré una tasa de satisfacción del cliente del 95% mientras manejaba consultas y quejas complejas de seguros",
-          "Mejora de Procesos - Desarrollé e implementé nuevos protocolos de flujo de trabajo que redujeron el tiempo promedio de manejo en un 25% y mejoraron la eficiencia del equipo en un 35%",
-          "Desarrollo de Equipo - Entrené y mentoré más de 10 nuevos miembros del equipo, resultando en una reducción del 35% en el tiempo de entrenamiento y mejor calidad de servicio",
-          "Colaboración Interfuncional - Trabajé con múltiples departamentos para resolver problemas complejos de clientes, mejorando el tiempo de resolución en un 30%"
+          "Experiencia del Cliente - Logré una tasa de satisfacción del cliente del 95% mientras manejaba consultas y quejas complejas de seguros...",
+          "Mejora de Procesos - Desarrollé e implementé nuevos protocolos de flujo de trabajo que redujeron el tiempo promedio de manejo en un 25% y mejoraron la eficiencia del equipo en un 35%...",
+          "Desarrollo de Equipo - Entrené y mentoré más de 10 nuevos miembros del equipo, resultando en una reducción del 35% en el tiempo de entrenamiento y mejor calidad de servicio...",
+          "Colaboración Interfuncional - Trabajé con múltiples departamentos para resolver problemas complejos de clientes, mejorando el tiempo de resolución en un 30%..."
         ]
       },
       {
@@ -366,10 +366,10 @@
         "time": "2020 - 2021",
         "company": "HOT Telecommunications, Israel",
         "details": [
-          "Excelencia en Servicio al Cliente - Mantuve una tasa de satisfacción del cliente del 90% mientras manejaba consultas de alto volumen",
-          "Optimización de Procesos - Implementé nuevos protocolos de flujo de trabajo que redujeron el tiempo de respuesta en un 35% y mejoraron la productividad del equipo en un 25%",
-          "Liderazgo de Equipo - Entrené y mentoré exitosamente más de 15 miembros del equipo, mejorando el rendimiento general del equipo en un 30%",
-          "Integración de Sistema - Colaboré con TI para implementar nuevas herramientas de servicio al cliente, resultando en una mejora del 40% en el tiempo de resolución de casos"
+          "Excelencia en Servicio al Cliente - Mantuve una tasa de satisfacción del cliente del 90% mientras manejaba consultas de alto volumen...",
+          "Optimización de Procesos - Implementé nuevos protocolos de flujo de trabajo que redujeron el tiempo de respuesta en un 35% y mejoraron la productividad del equipo en un 25%...",
+          "Liderazgo de Equipo - Entrené y mentoré exitosamente más de 15 miembros del equipo, mejorando el rendimiento general del equipo en un 30%...",
+          "Integración de Sistema - Colaboré con TI para implementar nuevas herramientas de servicio al cliente, resultando en una mejora del 40% en el tiempo de resolución de casos..."
         ]
       }
     ]

@@ -6,7 +6,13 @@ export { default as Background } from "./Background";
 export { default as BackgroundCard } from "./Background/BackgroundCard";
 export { default as Galaxy } from "./GalaxyCard/Galaxy";
 export { default as GalaxyCard } from "./GalaxyCard/GalaxyCard";
-export { Button } from "./Button";
+export {
+  Button,
+  NeonButton,
+  GlassButton,
+  BrokenGlassButton,
+  GradientButton,
+} from "./Button";
 export { BoxShadowDemo } from "./BoxShadowDemo";
 export { GlassPane, GlassPaneDemo } from "./GlassPane";
 export { default as BrokenGlass } from "./BrokenGlass";

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useScrollPosition } from "../../lib/hooks/useScrollPosition";
@@ -14,10 +14,13 @@ const BackgroundContainer = styled(Box, {
 }>(({ theme, scrollProgress }) => ({
   position: "relative",
   minHeight: "100vh",
-  width: "100vw",
+  width: "100%",
+  maxWidth: "100vw",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  overflow: "hidden",
+  boxSizing: "border-box",
 
   // Single continuous gradient background that spans the entire page - more intense
   background: `linear-gradient(135deg, 
@@ -79,21 +82,84 @@ const BackgroundContainer = styled(Box, {
     minHeight: "auto",
     padding: theme.spacing(8, 0),
     alignItems: "flex-start",
+    width: "100%",
+    maxWidth: "100vw",
+    overflow: "hidden",
   },
   [theme.breakpoints.down("sm")]: {
     padding: theme.spacing(6, 0),
+    width: "100%",
+    maxWidth: "100vw",
+    overflow: "hidden",
   },
 
   // Ensure content is above background effects
   "& > *": {
     position: "relative",
     zIndex: 1,
+    width: "100%",
+    maxWidth: "100vw",
+    overflow: "hidden",
+  },
+
+  // Mobile-specific viewport constraints
+  [theme.breakpoints.down("sm")]: {
+    "& .swiper": {
+      width: "100% !important",
+      maxWidth: "100vw !important",
+      overflow: "hidden !important",
+    },
+    "& .swiper-slide": {
+      width: "100% !important",
+      maxWidth: "100vw !important",
+    },
+    "& .swiper-button-next, & .swiper-button-prev": {
+      display: "none !important",
+    },
   },
 }));
 
 const ResponsiveBackground: React.FC<ResponsiveBackgroundProps> = React.memo(
   ({ children }) => {
+    const [mounted, setMounted] = useState(false);
     const { scrollProgress } = useScrollPosition();
+
+    useEffect(() => {
+      // Only set mounted to true when window is defined
+      if (typeof window !== "undefined") {
+        setMounted(true);
+      }
+    }, []);
+
+    // Don't render anything until window is defined
+    if (typeof window === "undefined" || !mounted) {
+      return (
+        <Box
+          sx={{
+            position: "relative",
+            minHeight: "100vh",
+            width: "100%",
+            maxWidth: "100vw",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            overflow: "hidden",
+            boxSizing: "border-box",
+            background: (theme) => `linear-gradient(135deg, 
+              ${theme.palette.background.default} 0%, 
+              ${theme.palette.primary.main}08 15%, 
+              ${theme.palette.secondary.main}08 30%, 
+              ${theme.palette.background.paper} 45%, 
+              ${theme.palette.primary.main}08 60%, 
+              ${theme.palette.secondary.main}08 75%, 
+              ${theme.palette.background.default} 90%, 
+              ${theme.palette.background.paper} 100%)`,
+          }}
+        >
+          {children}
+        </Box>
+      );
+    }
 
     return (
       <BackgroundContainer scrollProgress={scrollProgress}>

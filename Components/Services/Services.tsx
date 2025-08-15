@@ -6,10 +6,16 @@ import {
 } from "@mui/icons-material";
 import { useTranslations } from "next-intl";
 import MotionWrapper from "../MotionWrapper/MotionWrapper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, EffectFade } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/effect-fade";
 import {
   ServicesContainer,
   ServicesSubtitle,
-  ServicesGrid,
+  ServicesSwiperContainer,
   ServiceCard,
   ServiceIcon,
   ServiceTitle,
@@ -44,40 +50,85 @@ const Services: React.FC<ServicesProps> = ({ onServiceClick }) => {
         <ServicesSubtitle>{t("subtitle")}</ServicesSubtitle>
       </MotionWrapper>
 
-      <ServicesGrid>
-        {t.raw("services").map(
-          (
-            service: {
-              title: string;
-              description: string;
-              buttonText: string;
-              buttonVariant: string;
-            },
-            index: number
-          ) => (
-            <MotionWrapper
-              variant="bounce"
-              duration={SERVICES_CONSTANTS.ANIMATION.CARD_DURATION}
-              delay={index * SERVICES_CONSTANTS.ANIMATION.CARD_DELAY_INCREMENT}
-              key={service.title}
-            >
-              <ServiceCard>
-                <ServiceIcon>{getIcon(index)}</ServiceIcon>
-                <ServiceTitle>{service.title}</ServiceTitle>
-                <ServiceDescription>{service.description}</ServiceDescription>
-                <ServiceButton
-                  className={service.buttonVariant}
-                  variant="contained"
-                  endIcon={<ArrowForwardIcon />}
-                  onClick={() => onServiceClick?.(index)}
-                >
-                  {service.buttonText}
-                </ServiceButton>
-              </ServiceCard>
-            </MotionWrapper>
-          )
-        )}
-      </ServicesGrid>
+      <MotionWrapper
+        variant="fadeInUp"
+        duration={SERVICES_CONSTANTS.ANIMATION.CARD_DURATION}
+        delay={0.2}
+      >
+        <ServicesSwiperContainer>
+          <Swiper
+            modules={[Navigation, Pagination, EffectFade]}
+            spaceBetween={30}
+            slidesPerView={1}
+            breakpoints={{
+              600: {
+                slidesPerView: 1,
+                spaceBetween: 25,
+              },
+              900: {
+                slidesPerView: 2,
+                spaceBetween: 30,
+              },
+              1200: {
+                slidesPerView: 3,
+                spaceBetween: 30,
+              },
+              1400: {
+                slidesPerView: 3,
+                spaceBetween: 40,
+              },
+            }}
+            navigation
+            pagination={{ clickable: true }}
+            loop={true}
+            centeredSlides={false}
+            grabCursor={true}
+            effect="slide"
+            speed={400}
+            style={{
+              paddingBottom: "60px", // Space for pagination dots
+            }}
+          >
+            {t.raw("services").map(
+              (
+                service: {
+                  title: string;
+                  description: string;
+                  buttonText: string;
+                  buttonVariant: string;
+                },
+                index: number
+              ) => (
+                <SwiperSlide key={service.title}>
+                  <MotionWrapper
+                    variant="bounce"
+                    duration={SERVICES_CONSTANTS.ANIMATION.CARD_DURATION}
+                    delay={
+                      index * SERVICES_CONSTANTS.ANIMATION.CARD_DELAY_INCREMENT
+                    }
+                  >
+                    <ServiceCard>
+                      <ServiceIcon>{getIcon(index)}</ServiceIcon>
+                      <ServiceTitle>{service.title}</ServiceTitle>
+                      <ServiceDescription>
+                        {service.description}
+                      </ServiceDescription>
+                      <ServiceButton
+                        className={service.buttonVariant}
+                        variant="contained"
+                        endIcon={<ArrowForwardIcon />}
+                        onClick={() => onServiceClick?.(index)}
+                      >
+                        {service.buttonText}
+                      </ServiceButton>
+                    </ServiceCard>
+                  </MotionWrapper>
+                </SwiperSlide>
+              )
+            )}
+          </Swiper>
+        </ServicesSwiperContainer>
+      </MotionWrapper>
     </ServicesContainer>
   );
 };

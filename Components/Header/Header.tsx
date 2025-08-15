@@ -50,7 +50,7 @@ export default function Header({
           </Typography>
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          {isClient && (
+          {isClient && !isMobile && (
             <PopupButton
               url="https://calendly.com/omrijukin/30min"
               pageSettings={{

@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { Box } from "@mui/material";
 import Hero from "~/Hero";
 import About from "~/About";
-import ScrollGapAnimator from "~/ScrollGapAnimator";
 import QA from "~/QA";
 import Services from "~/Services";
 import Career from "~/Career";
@@ -103,7 +102,15 @@ export default function HomePage() {
 
   return (
     <ResponsiveBackground>
-      <Box>
+      <Box
+        sx={{
+          width: "100%",
+          maxWidth: "100vw",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         {/* Hero Section */}
         <Hero
           onExploreClick={handleExploreClick}
@@ -111,20 +118,11 @@ export default function HomePage() {
           onCareerClick={handleCareerClick}
         />
 
-        {/* Gap Animation: Hero to About */}
-        <ScrollGapAnimator sectionId="hero-about-gap" gapType="hero-about" />
-
         {/* About Section */}
         <About onSkillClick={handleSkillClick} />
 
-        {/* Gap Animation: About to QA */}
-        <ScrollGapAnimator sectionId="about-qa-gap" gapType="about-qa" />
-
         {/* Rapid Q&A Section */}
         <QA />
-
-        {/* Gap Animation: QA to Services */}
-        <ScrollGapAnimator sectionId="qa-services-gap" gapType="qa-services" />
 
         {/* Services Section */}
         <Services onServiceClick={handleServiceClick} />
@@ -132,20 +130,8 @@ export default function HomePage() {
         {/* Career Section */}
         <Career onCareerClick={handleCareerClick} />
 
-        {/* Gap Animation: Career to Projects */}
-        <ScrollGapAnimator
-          sectionId="career-projects-gap"
-          gapType="career-projects"
-        />
-
         {/* Projects Section */}
         <Projects />
-
-        {/* Gap Animation: Projects to Contact */}
-        <ScrollGapAnimator
-          sectionId="projects-contact-gap"
-          gapType="projects-contact"
-        />
 
         {/* Contact Section */}
         <Contact locale={locale} onContactClick={handleContactClick} />

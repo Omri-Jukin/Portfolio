@@ -2,7 +2,7 @@ import { styled } from "@mui/material/styles";
 import { Box, Typography, Chip } from "@mui/material";
 
 export const AboutContainer = styled(Box)(({ theme }) => ({
-  minHeight: "100vh",
+  minHeight: "fit-content",
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
@@ -52,6 +52,67 @@ export const SkillsSubtitle = styled(Typography)(({ theme }) => ({
   textTransform: "uppercase",
   letterSpacing: "1px",
   color: theme.palette.text.secondary,
+}));
+
+export const SkillsSwiperContainer = styled(Box)(({ theme }) => ({
+  marginTop: theme.spacing(4),
+  marginBottom: theme.spacing(4),
+  minHeight: "fit-content",
+  maxWidth: "1200px",
+  width: "100%",
+  margin: "0 auto",
+  position: "relative",
+
+  // Custom Swiper navigation styling
+  [`& .swiper-button-next,
+    & .swiper-button-prev`]: {
+    color: theme.palette.primary.main,
+    backgroundColor: theme.palette.background.paper,
+    borderRadius: "50%",
+    width: "44px",
+    height: "44px",
+    boxShadow:
+      theme.palette.mode === "dark"
+        ? "0 4px 12px rgba(0, 0, 0, 0.3)"
+        : "0 4px 12px rgba(0, 0, 0, 0.1)",
+    "&:hover": {
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.primary.contrastText,
+    },
+    "&::after": {
+      fontSize: "18px",
+      fontWeight: "bold",
+    },
+  },
+
+  "& .swiper-button-next": {
+    right: "10px",
+  },
+
+  "& .swiper-button-prev": {
+    left: "10px",
+  },
+
+  // Custom pagination styling
+  "& .swiper-pagination": {
+    bottom: "0",
+  },
+
+  "& .swiper-pagination-bullet": {
+    backgroundColor: theme.palette.primary.main,
+    opacity: 0.3,
+    "&.swiper-pagination-bullet-active": {
+      opacity: 1,
+    },
+  },
+
+  // Responsive adjustments
+  [theme.breakpoints.down("sm")]: {
+    [`& .swiper-button-next,
+      & .swiper-button-prev`]: {
+      display: "none",
+    },
+  },
 }));
 
 export const SkillsTagsContainer = styled(Box)(({ theme }) => ({
