@@ -1,5 +1,6 @@
 import { styled } from "@mui/material/styles";
 import { Box, Button, Card, Typography } from "@mui/material";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 export const ProjectsContainer = styled(Box)(({ theme }) => ({
   minHeight: "100vh",
@@ -9,8 +10,8 @@ export const ProjectsContainer = styled(Box)(({ theme }) => ({
   justifyContent: "center",
   padding: theme.spacing(2, 2.5, 2, 2.5),
   width: "100%",
-  maxWidth: "100vw",
-  overflow: "hidden",
+  maxWidth: "1200px",
+  overflow: "visible",
   boxSizing: "border-box",
   [theme.breakpoints.up("md")]: {
     padding: theme.spacing(2.5, 5, 2.5, 5),
@@ -18,19 +19,21 @@ export const ProjectsContainer = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     padding: theme.spacing(2, 1, 2, 1),
     width: "100%",
-    maxWidth: "100vw",
-    overflow: "hidden",
+    maxWidth: "100%",
+    overflow: "visible",
   },
 }));
 
 export const ProjectsSwiperContainer = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(6),
-  maxWidth: "1400px",
+  maxWidth: "1000px",
   width: "100%",
   margin: "0 auto",
   position: "relative",
-  overflow: "hidden",
+  overflowY: "visible",
+  overflowX: "visible",
   boxSizing: "border-box",
+  padding: theme.spacing(0, 1),
 
   // Custom Swiper navigation styling
   [`& .swiper-button-next,
@@ -75,6 +78,35 @@ export const ProjectsSwiperContainer = styled(Box)(({ theme }) => ({
     },
   },
 
+  // Fade effect for slides based on distance from center
+  "& .swiper-slide": {
+    transition: "all 0.6s ease-in-out",
+    opacity: 0.01,
+    transform: "scale(0.85)",
+    filter: "blur(1px)",
+  },
+
+  "& .swiper-slide-active": {
+    opacity: 1,
+    transform: "scale(1)",
+    filter: "blur(0px)",
+    zIndex: 2,
+  },
+
+  "& .swiper-slide-prev": {
+    opacity: 0.15,
+    transform: "scale(0.9)",
+    filter: "blur(0.5px)",
+    zIndex: 1,
+  },
+
+  "& .swiper-slide-next": {
+    opacity: 0.2,
+    transform: "scale(0.9)",
+    filter: "blur(0.5px)",
+    zIndex: 1,
+  },
+
   // Responsive adjustments
   [theme.breakpoints.down("sm")]: {
     [`& .swiper-button-next,
@@ -84,32 +116,42 @@ export const ProjectsSwiperContainer = styled(Box)(({ theme }) => ({
     marginTop: theme.spacing(4),
     padding: theme.spacing(0, 1),
     width: "100%",
-    maxWidth: "100vw",
-    overflow: "hidden",
+    maxWidth: "100%",
+    overflow: "visible",
+
+    // Mobile fade effect
+    "& .swiper-slide": {
+      opacity: 0.4,
+      transform: "scale(0.8)",
+      filter: "blur(1.5px)",
+    },
+
+    "& .swiper-slide-active": {
+      opacity: 1,
+      transform: "scale(1)",
+      filter: "blur(0px)",
+    },
+
+    "& .swiper-slide-prev, & .swiper-slide-next": {
+      opacity: 0.5,
+      transform: "scale(0.85)",
+      filter: "blur(1px)",
+    },
   },
 
   // Ensure Swiper container is properly sized
   "& .swiper": {
     width: "100%",
     maxWidth: "100%",
-    overflow: "hidden",
-  },
-
-  "& .swiper-slide": {
-    width: "100%",
-    maxWidth: "100%",
+    overflow: "visible",
   },
 
   // Mobile-specific Swiper constraints
   [theme.breakpoints.down("sm")]: {
     "& .swiper": {
       width: "100% !important",
-      maxWidth: "100vw !important",
-      overflow: "hidden !important",
-    },
-    "& .swiper-slide": {
-      width: "100% !important",
-      maxWidth: "100vw !important",
+      maxWidth: "100% !important",
+      overflow: "visible !important",
     },
   },
 }));
@@ -118,9 +160,12 @@ export const ProjectCard = styled(Card)(({ theme }) => ({
   padding: theme.spacing(3),
   borderRadius: theme.spacing(2),
   height: "100%",
+  minHeight: "200px",
   display: "flex",
   flexDirection: "column",
   boxSizing: "border-box",
+  width: "100%",
+  maxWidth: "350px",
   boxShadow:
     theme.palette.mode === "dark"
       ? "0 8px 24px rgba(150, 206, 180, 0.25), 0 4px 12px rgba(0, 0, 0, 0.3), 2px 2px 8px rgba(0, 0, 0, 0.2)"
@@ -139,6 +184,7 @@ export const ProjectCard = styled(Card)(({ theme }) => ({
     margin: theme.spacing(0, 0.5),
     width: "100%",
     maxWidth: "100%",
+    minHeight: "180px",
   },
 }));
 
@@ -158,6 +204,9 @@ export const ProjectDescription = styled(Typography)(({ theme }) => ({
   marginBottom: theme.spacing(2),
   lineHeight: 1.6,
   flex: 1, // Push button to bottom
+  wordWrap: "break-word",
+  overflowWrap: "break-word",
+  hyphens: "auto",
 
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.9rem",
@@ -192,3 +241,72 @@ export const ProjectButton = styled(Button)(({ theme }) => ({
     },
   },
 }));
+
+export const SwiperContainer = styled(Swiper)({
+  width: "100%",
+  maxWidth: "100%",
+  overflow: "visible",
+  overflowY: "visible",
+  overflowX: "visible",
+
+  // Ensure proper slide sizing and fade effect
+  "& .swiper-wrapper": {
+    display: "flex",
+    alignItems: "stretch",
+  },
+
+  "& .swiper-slide": {
+    height: "auto",
+    display: "flex",
+    width: "100%",
+    maxWidth: "100%",
+    opacity: 0.3,
+    transform: "scale(0.85)",
+    filter: "blur(1px)",
+    transition: "all 0.6s ease-in-out",
+  },
+
+  // Active slide styling
+  "& .swiper-slide-active": {
+    opacity: 1,
+    transform: "scale(1)",
+    filter: "blur(0px)",
+    zIndex: 2,
+  },
+
+  // Adjacent slides styling
+  "& .swiper-slide-prev, & .swiper-slide-next": {
+    opacity: 0.6,
+    transform: "scale(0.9)",
+    filter: "blur(0.5px)",
+    zIndex: 1,
+  },
+
+  // Mobile responsive styles
+  "@media (max-width: 600px)": {
+    "& .swiper-slide": {
+      opacity: 0.4,
+      transform: "scale(0.8)",
+      filter: "blur(1.5px)",
+    },
+
+    "& .swiper-slide-active": {
+      opacity: 1,
+      transform: "scale(1)",
+      filter: "blur(0px)",
+    },
+
+    "& .swiper-slide-prev, & .swiper-slide-next": {
+      opacity: 0.5,
+      transform: "scale(0.85)",
+      filter: "blur(1px)",
+    },
+  },
+});
+
+export const SwiperSlideContainer = styled(SwiperSlide)({
+  width: "100%",
+  maxWidth: "100%",
+  height: "auto",
+  display: "flex",
+});

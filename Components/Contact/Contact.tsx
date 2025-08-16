@@ -30,7 +30,7 @@ const Contact: React.FC<ContactProps> = ({ locale = "en", onContactClick }) => {
         <GalaxyCard
           sx={{
             width: "100%",
-            maxWidth: "100vw",
+            height: "100%",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",

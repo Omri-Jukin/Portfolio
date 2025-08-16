@@ -2,12 +2,10 @@ import { useTranslations } from "next-intl";
 import { Box, Link } from "@mui/material";
 import { GitHub as GitHubIcon } from "@mui/icons-material";
 import MotionWrapper from "../MotionWrapper/MotionWrapper";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, EffectFade } from "swiper/modules";
+import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import "swiper/css/effect-fade";
 import {
   ScrollingSectionTitle,
   SectionSubtitle,
@@ -19,6 +17,8 @@ import {
   ProjectTitle,
   ProjectDescription,
   ProjectButton,
+  SwiperContainer,
+  SwiperSlideContainer,
 } from "./Projects.style";
 import { PROJECTS_CONSTANTS } from "./Projects.const";
 import type { ProjectsProps } from "./Projects.type";
@@ -29,36 +29,57 @@ const Projects: React.FC<ProjectsProps> = () => {
   return (
     <ProjectsContainer id={PROJECTS_CONSTANTS.SECTION_ID}>
       <MotionWrapper variant="fadeInUp" duration={1.0}>
-        <ScrollingSectionTitle>{t("title")}</ScrollingSectionTitle>
-        <SectionSubtitle>{t("subtitle")}</SectionSubtitle>
+        <ScrollingSectionTitle id="projects-title">
+          {t("title")}
+        </ScrollingSectionTitle>
+        <SectionSubtitle id="projects-subtitle">
+          {t("subtitle")}
+        </SectionSubtitle>
       </MotionWrapper>
 
       <MotionWrapper variant="fadeInUp" duration={1.0} delay={0.3}>
-        <ProjectsSwiperContainer>
-          <Swiper
-            modules={[Navigation, Pagination, EffectFade]}
-            spaceBetween={20}
-            slidesPerView={1}
+        <ProjectsSwiperContainer id="projects-swiper">
+          <SwiperContainer
+            id="projects-swiper-container"
+            modules={[Navigation, Pagination]}
+            spaceBetween={30}
+            slidesPerView={3}
+            centeredSlides={true}
             breakpoints={{
               480: {
                 slidesPerView: 1,
                 spaceBetween: 20,
+                centeredSlides: true,
               },
               600: {
                 slidesPerView: 1,
                 spaceBetween: 25,
+                centeredSlides: true,
+              },
+              768: {
+                slidesPerView: 1,
+                spaceBetween: 30,
+                centeredSlides: true,
               },
               900: {
                 slidesPerView: 2,
-                spaceBetween: 30,
+                spaceBetween: 40,
+                centeredSlides: true,
               },
               1200: {
                 slidesPerView: 2,
-                spaceBetween: 30,
+                spaceBetween: 50,
+                centeredSlides: true,
               },
               1400: {
                 slidesPerView: 3,
-                spaceBetween: 40,
+                spaceBetween: 60,
+                centeredSlides: true,
+              },
+              1600: {
+                slidesPerView: 3,
+                spaceBetween: 70,
+                centeredSlides: true,
               },
             }}
             navigation={{
@@ -70,14 +91,13 @@ const Projects: React.FC<ProjectsProps> = () => {
               dynamicBullets: true,
             }}
             loop={true}
-            centeredSlides={false}
             grabCursor={true}
             effect="slide"
-            speed={400}
+            speed={600}
             style={{
               paddingBottom: "60px", // Space for pagination dots
               width: "100%",
-              maxWidth: "100vw",
+              maxWidth: "100%",
             }}
             className="projects-swiper"
           >
@@ -88,7 +108,7 @@ const Projects: React.FC<ProjectsProps> = () => {
                   project: { title: string; description: string; link: string },
                   index: number
                 ) => (
-                  <SwiperSlide key={project.title}>
+                  <SwiperSlideContainer key={project.title}>
                     <MotionWrapper
                       variant="fadeInUp"
                       duration={PROJECTS_CONSTANTS.ANIMATION.DURATION}
@@ -119,10 +139,10 @@ const Projects: React.FC<ProjectsProps> = () => {
                         </Box>
                       </ProjectCard>
                     </MotionWrapper>
-                  </SwiperSlide>
+                  </SwiperSlideContainer>
                 )
               )}
-          </Swiper>
+          </SwiperContainer>
         </ProjectsSwiperContainer>
       </MotionWrapper>
     </ProjectsContainer>

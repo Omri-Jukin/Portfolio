@@ -2,7 +2,7 @@ import { styled } from "@mui/material/styles";
 import { Box, Typography, Card, Button } from "@mui/material";
 
 export const ContactContainer = styled(Box)(({ theme }) => ({
-  minHeight: "100vh",
+  minHeight: "fit-content",
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
@@ -57,11 +57,11 @@ export const ContactDescription = styled(Typography)(({ theme }) => ({
   marginBottom: theme.spacing(3),
   textAlign: "center",
   color: theme.palette.text.secondary,
+  padding: theme.spacing(0, 2),
   lineHeight: 1.6,
-  // Text truncation to 2 rows
   wordBreak: "break-word",
+  whiteSpace: "pre-line",
   overflowWrap: "break-word",
-  maxHeight: "3.2em", // Limit to 2 lines (1.6 * 2)
   overflow: "hidden",
   display: "-webkit-box",
   WebkitLineClamp: 2,
