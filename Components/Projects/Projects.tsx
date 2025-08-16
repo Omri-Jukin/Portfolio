@@ -40,8 +40,8 @@ const Projects: React.FC<ProjectsProps> = () => {
       <MotionWrapper variant="fadeInUp" duration={1.0} delay={0.3}>
         <ProjectsSwiperContainer id="projects-swiper">
           <Swiper
-            id="projects-swiper-container"
             modules={[Navigation, Pagination, EffectCube]}
+            centeredSlides={true}
             slidesPerView={1}
             navigation={{
               enabled: true,
@@ -55,8 +55,8 @@ const Projects: React.FC<ProjectsProps> = () => {
             grabCursor={true}
             effect="cube"
             cubeEffect={{
-              shadow: true,
               slideShadows: true,
+              shadow: true,
               shadowOffset: 20,
               shadowScale: 0.94,
             }}
@@ -64,7 +64,7 @@ const Projects: React.FC<ProjectsProps> = () => {
             style={{
               paddingBottom: "60px", // Space for pagination dots
               width: "100%",
-              maxWidth: "100%",
+              maxWidth: "768px",
             }}
             className="projects-swiper"
           >
