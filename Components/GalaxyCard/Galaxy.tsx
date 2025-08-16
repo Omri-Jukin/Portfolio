@@ -11,8 +11,8 @@ const Galaxy: React.FC<GalaxyProps> = ({
   spin = 1.5,
   randomness = 0.2,
   randomnessPower = 2.2,
-  insideColor = "#ffff00",
-  outsideColor = "#0000ff",
+  insideColor = "#ff0000",
+  outsideColor = "#ffff00",
   rotationSpeed = 0.3,
   pulseSpeed = 0.5,
   pulseIntensity = 0.1,
@@ -20,6 +20,7 @@ const Galaxy: React.FC<GalaxyProps> = ({
   animateSpin = true,
   intensity = "medium",
   speed = "normal",
+  offset = { x: 0, y: 0, z: 0 },
   className,
   children,
 }) => {
@@ -108,9 +109,11 @@ const Galaxy: React.FC<GalaxyProps> = ({
       const phi = Math.acos(2 * Math.random() - 1);
       const r = radius;
 
-      starsPositions[i3] = r * Math.sin(phi) * Math.cos(theta);
-      starsPositions[i3 + 1] = r * Math.sin(phi) * Math.sin(theta) + 4; // Offset to match galaxy Y position
-      starsPositions[i3 + 2] = r * Math.cos(phi);
+      starsPositions[i3] =
+        r * Math.sin(phi) * Math.cos(theta) + (offset.x || 0);
+      starsPositions[i3 + 1] =
+        r * Math.sin(phi) * Math.sin(theta) + (offset.y || 0) + 4; // Offset to match galaxy Y position
+      starsPositions[i3 + 2] = r * Math.cos(phi) + (offset.z || 0);
     }
 
     starsGeometry.setAttribute(
@@ -129,7 +132,7 @@ const Galaxy: React.FC<GalaxyProps> = ({
     ambientStarsRef.current = new THREE.Points(starsGeometry, starsMaterial);
     // Add stars directly to scene so they remain stationary (not affected by galaxy rotation)
     sceneRef.current.add(ambientStarsRef.current);
-  }, [sceneRef, galaxyGroupRef]);
+  }, [sceneRef, galaxyGroupRef, offset]);
 
   const generateGalaxy = useCallback(() => {
     if (!sceneRef.current || !galaxyGroupRef.current) return;
@@ -312,8 +315,12 @@ const Galaxy: React.FC<GalaxyProps> = ({
 
     // Galaxy group
     galaxyGroupRef.current = new THREE.Group();
-    // Move galaxy higher in the container to show the center
-    galaxyGroupRef.current.position.y = 4;
+    // Apply offset positioning with defaults for backward compatibility
+    galaxyGroupRef.current.position.set(
+      offset.x || 0,
+      (offset.y || 0) + 4, // Add 4 to the Y offset to maintain the default height
+      offset.z || 0
+    );
     sceneRef.current.add(galaxyGroupRef.current);
 
     // Camera
@@ -536,6 +543,7 @@ const Galaxy: React.FC<GalaxyProps> = ({
     radius,
     insideColor,
     outsideColor,
+    offset,
   ]);
 
   return (
