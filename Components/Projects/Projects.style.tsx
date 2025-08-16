@@ -40,6 +40,7 @@ export const ProjectsSwiperContainer = styled(Box)(({ theme }) => ({
     width: "100%",
     height: "100%",
     paddingBottom: "60px", // Space for pagination
+    overflow: "visible", // Allow cards to extend beyond container
   },
 
   // Ensure proper slide sizing for cards effect
@@ -56,6 +57,21 @@ export const ProjectsSwiperContainer = styled(Box)(({ theme }) => ({
     alignItems: "center",
     // For cards effect - ensure slides are properly stacked
     transformOrigin: "center center",
+    background: "transparent", // Remove any background that might cause dark patches
+    boxShadow: "none", // Remove any default shadows
+  },
+
+  // Remove any default slide shadows from cards effect
+  "& .swiper-slide-shadow": {
+    display: "none !important",
+  },
+
+  "& .swiper-slide-shadow-left": {
+    display: "none !important",
+  },
+
+  "& .swiper-slide-shadow-right": {
+    display: "none !important",
   },
 
   // Custom Swiper navigation styling
@@ -138,20 +154,23 @@ export const ProjectCard = styled(Card)(({ theme }) => ({
   width: "100%",
   maxWidth: "400px", // Optimized for cards effect
   margin: "0 auto",
+  background: theme.palette.background.paper, // Ensure solid background
+  // Use custom box shadow that won't conflict with Swiper's cards effect
   boxShadow:
     theme.palette.mode === "dark"
-      ? "0 8px 24px rgba(150, 206, 180, 0.25), 0 4px 12px rgba(0, 0, 0, 0.3), 2px 2px 8px rgba(0, 0, 0, 0.2)"
-      : "0 8px 24px rgba(78, 205, 196, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1), 2px 2px 8px rgba(0, 0, 0, 0.08)",
+      ? "0 8px 24px rgba(150, 206, 180, 0.25), 0 4px 12px rgba(0, 0, 0, 0.3)"
+      : "0 8px 24px rgba(78, 205, 196, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1)",
   transition: "all 0.3s ease-in-out",
   position: "relative",
   zIndex: 1,
+  overflow: "hidden", // Prevent content overflow
   
   "&:hover": {
-    transform: "translateY(-4px) scale(1.02)",
+    transform: "translateY(-2px)", // Reduced movement to not interfere with cards effect
     boxShadow:
       theme.palette.mode === "dark"
-        ? "0 12px 36px rgba(150, 206, 180, 0.35), 0 6px 18px rgba(0, 0, 0, 0.4), 3px 3px 12px rgba(0, 0, 0, 0.25)"
-        : "0 12px 36px rgba(78, 205, 196, 0.3), 0 6px 18px rgba(0, 0, 0, 0.15), 3px 3px 12px rgba(0, 0, 0, 0.1)",
+        ? "0 12px 36px rgba(150, 206, 180, 0.35), 0 6px 18px rgba(0, 0, 0, 0.4)"
+        : "0 12px 36px rgba(78, 205, 196, 0.3), 0 6px 18px rgba(0, 0, 0, 0.15)",
     zIndex: 2,
   },
 
@@ -224,4 +243,3 @@ export const ProjectButton = styled(Button)(({ theme }) => ({
     },
   },
 }));
-
