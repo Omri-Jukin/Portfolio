@@ -55,10 +55,10 @@ const Projects: React.FC<ProjectsProps> = () => {
             grabCursor={true}
             effect="cube"
             cubeEffect={{
-              slideShadows: true,
+              slideShadows: false, // Disable to prevent gaps between faces
               shadow: true,
-              shadowOffset: 20,
-              shadowScale: 0.94,
+              shadowOffset: 40, // Increased for higher levitation
+              shadowScale: 0.85, // Smaller shadow for higher appearance
             }}
             speed={600}
             style={{
