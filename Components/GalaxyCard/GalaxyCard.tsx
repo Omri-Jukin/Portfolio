@@ -2,9 +2,9 @@ import React from "react";
 import { Card, CardProps, SxProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Galaxy from "./Galaxy";
-import { GalaxyProps } from "./Galaxy.type";
+import type { GalaxyProps } from "./Galaxy.type";
 
-interface GalaxyCardProps extends GalaxyProps {
+export interface GalaxyCardProps extends GalaxyProps {
   cardProps?: CardProps;
   children?: React.ReactNode;
   sx?: SxProps;
