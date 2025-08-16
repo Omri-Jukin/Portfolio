@@ -34,12 +34,32 @@ export const ProjectsSwiperContainer = styled(Box)(({ theme }) => ({
   boxSizing: "border-box",
   padding: theme.spacing(0, 2),
 
-  // Cube effect specific styling
+  // Cube effect specific styling - ensure clean transitions
+  "& .swiper": {
+    perspective: "1200px", // Enhanced 3D perspective
+  },
+
+  "& .swiper-wrapper": {
+    transformStyle: "preserve-3d",
+  },
+
+  "& .swiper-slide": {
+    backfaceVisibility: "hidden",
+    outline: "none", // Remove any outline that might cause gaps
+    border: "none", // Remove any border that might cause gaps
+  },
+
   "& .swiper-cube-shadow": {
     background:
       theme.palette.mode === "dark"
-        ? "rgba(0, 0, 0, 0.4)"
-        : "rgba(0, 0, 0, 0.2)",
+        ? "rgba(0, 0, 0, 0.3)"
+        : "rgba(0, 0, 0, 0.15)",
+    borderRadius: "8px", // Slightly rounded shadow for softer appearance
+  },
+
+  // Remove any slide shadows that might interfere
+  "& .swiper-slide-shadow-left, & .swiper-slide-shadow-right, & .swiper-slide-shadow-top, & .swiper-slide-shadow-bottom": {
+    display: "none !important",
   },
 
   // Custom Swiper navigation styling
@@ -121,20 +141,23 @@ export const ProjectCard = styled(Card)(({ theme }) => ({
   maxWidth: "600px",
   margin: "0 auto",
   background: theme.palette.background.paper,
+  // Minimal shadow that won't interfere with cube effect
   boxShadow:
     theme.palette.mode === "dark"
-      ? "0 8px 24px rgba(150, 206, 180, 0.25), 0 4px 12px rgba(0, 0, 0, 0.3)"
-      : "0 8px 24px rgba(78, 205, 196, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1)",
+      ? "0 4px 12px rgba(0, 0, 0, 0.2)"
+      : "0 4px 12px rgba(0, 0, 0, 0.08)",
   transition: "all 0.3s ease-in-out",
   position: "relative",
   overflow: "hidden",
-
+  border: "none", // Ensure no border that might cause gaps
+  outline: "none", // Ensure no outline that might cause gaps
+  
   "&:hover": {
-    transform: "translateY(-4px)",
+    transform: "translateY(-2px)", // Reduced to not interfere with cube
     boxShadow:
       theme.palette.mode === "dark"
-        ? "0 12px 36px rgba(150, 206, 180, 0.35), 0 6px 18px rgba(0, 0, 0, 0.4)"
-        : "0 12px 36px rgba(78, 205, 196, 0.3), 0 6px 18px rgba(0, 0, 0, 0.15)",
+        ? "0 6px 16px rgba(0, 0, 0, 0.25)"
+        : "0 6px 16px rgba(0, 0, 0, 0.12)",
   },
 
   [theme.breakpoints.down("md")]: {
