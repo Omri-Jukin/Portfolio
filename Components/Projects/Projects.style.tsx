@@ -260,7 +260,7 @@ export const SwiperContainer = styled(Swiper)({
     display: "flex",
     width: "100%",
     maxWidth: "100%",
-    opacity: 0.3,
+    opacity: 0.01,
     transform: "scale(0.85)",
     filter: "blur(1px)",
     transition: "all 0.6s ease-in-out",
@@ -276,7 +276,7 @@ export const SwiperContainer = styled(Swiper)({
 
   // Adjacent slides styling
   "& .swiper-slide-prev, & .swiper-slide-next": {
-    opacity: 0.6,
+    opacity: 0.2,
     transform: "scale(0.9)",
     filter: "blur(0.5px)",
     zIndex: 1,
