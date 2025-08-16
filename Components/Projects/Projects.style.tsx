@@ -58,9 +58,10 @@ export const ProjectsSwiperContainer = styled(Box)(({ theme }) => ({
   },
 
   // Remove any slide shadows that might interfere
-  "& .swiper-slide-shadow-left, & .swiper-slide-shadow-right, & .swiper-slide-shadow-top, & .swiper-slide-shadow-bottom": {
-    display: "none !important",
-  },
+  "& .swiper-slide-shadow-left, & .swiper-slide-shadow-right, & .swiper-slide-shadow-top, & .swiper-slide-shadow-bottom":
+    {
+      display: "none !important",
+    },
 
   // Custom Swiper navigation styling
   [`& .swiper-button-next,
@@ -151,7 +152,7 @@ export const ProjectCard = styled(Card)(({ theme }) => ({
   overflow: "hidden",
   border: "none", // Ensure no border that might cause gaps
   outline: "none", // Ensure no outline that might cause gaps
-  
+
   "&:hover": {
     transform: "translateY(-2px)", // Reduced to not interfere with cube
     boxShadow:
