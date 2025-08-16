@@ -70,6 +70,7 @@ export const CareerSwiperContainer = styled(Box)(({ theme }) => ({
   // Custom Swiper navigation styling
   [`& .swiper-button-next,
     & .swiper-button-prev`]: {
+    opacity: 0.01,
     color: theme.palette.primary.main,
     backgroundColor: theme.palette.background.paper,
     borderRadius: "50%",
@@ -110,6 +111,25 @@ export const CareerSwiperContainer = styled(Box)(({ theme }) => ({
     },
   },
 
+  // Enhanced cube effect styling
+  "& .swiper-cube-shadow": {
+    background:
+      theme.palette.mode === "dark"
+        ? "rgba(0, 0, 0, 0.4)"
+        : "rgba(0, 0, 0, 0.2)",
+    borderRadius: "50%",
+    transform: "scale(0.8)",
+  },
+
+  "& .swiper-cube": {
+    perspective: "1000px",
+  },
+
+  "& .swiper-cube .swiper-slide": {
+    transformStyle: "preserve-3d",
+    backfaceVisibility: "hidden",
+  },
+
   // Responsive adjustments
   [theme.breakpoints.down("sm")]: {
     [`& .swiper-button-next,
@@ -117,38 +137,10 @@ export const CareerSwiperContainer = styled(Box)(({ theme }) => ({
       display: "none",
     },
     marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(3),
     padding: theme.spacing(0, 1),
     width: "100%",
     maxWidth: "100vw",
-    overflow: "hidden",
-  },
-
-  // Ensure Swiper container is properly sized
-  "& .swiper": {
-    width: "100%",
-    maxWidth: "100%",
-    overflow: "visible", // Changed from hidden to visible
-  },
-
-  "& .swiper-slide": {
-    width: "100%",
-    maxWidth: "100%",
-    overflow: "visible", // Added to ensure slide content is visible
-  },
-
-  // Mobile-specific Swiper constraints
-  [theme.breakpoints.down("sm")]: {
-    "& .swiper": {
-      width: "100% !important",
-      maxWidth: "100vw !important",
-      overflow: "visible !important", // Changed to visible for mobile hover effects
-    },
-    "& .swiper-slide": {
-      width: "100% !important",
-      maxWidth: "100vw !important",
-      overflow: "visible !important", // Changed to visible for mobile hover effects
-    },
+    overflow: "visible",
   },
 }));
 

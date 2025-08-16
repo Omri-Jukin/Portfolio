@@ -51,6 +51,10 @@ const Projects: React.FC<ProjectsProps> = () => {
               clickable: true,
               dynamicBullets: true,
             }}
+            autoplay={{
+              delay: 1000,
+              disableOnInteraction: false,
+            }}
             loop={true}
             grabCursor={true}
             effect="cube"

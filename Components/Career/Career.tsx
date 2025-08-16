@@ -6,11 +6,11 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import MotionWrapper from "../MotionWrapper/MotionWrapper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, EffectFade } from "swiper/modules";
+import { Navigation, Pagination, EffectCube } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import "swiper/css/effect-fade";
+import "swiper/css/effect-cube";
 import {
   Business as BusinessIcon,
   CalendarToday as CalendarIcon,
@@ -66,8 +66,9 @@ const Career: React.FC<CareerProps> = () => {
       <MotionWrapper variant="slideUp" duration={0.8} delay={0.8}>
         <CareerSwiperContainer>
           <Swiper
-            modules={[Navigation, Pagination, EffectFade]}
+            modules={[Navigation, Pagination, EffectCube]}
             spaceBetween={20}
+            centeredSlides={true}
             slidesPerView={1}
             breakpoints={{
               480: {
@@ -83,11 +84,11 @@ const Career: React.FC<CareerProps> = () => {
                 spaceBetween: 30,
               },
               1200: {
-                slidesPerView: 2,
+                slidesPerView: 1,
                 spaceBetween: 30,
               },
               1400: {
-                slidesPerView: 2,
+                slidesPerView: 1,
                 spaceBetween: 40,
               },
             }}
@@ -99,15 +100,20 @@ const Career: React.FC<CareerProps> = () => {
               clickable: true,
               dynamicBullets: true,
             }}
-            loop={false}
-            centeredSlides={false}
+            loop={true}
             grabCursor={true}
-            effect="slide"
-            speed={400}
+            effect="cube"
+            cubeEffect={{
+              slideShadows: true,
+              shadow: true,
+              shadowOffset: 20,
+              shadowScale: 0.94,
+            }}
+            speed={600}
             style={{
               paddingBottom: "60px", // Space for pagination dots
               width: "100%",
-              maxWidth: "100vw",
+              maxWidth: "768px",
             }}
             className="career-swiper"
           >
