@@ -25,7 +25,7 @@ export const ProjectsContainer = styled(Box)(({ theme }) => ({
 
 export const ProjectsSwiperContainer = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(6),
-  maxWidth: "600px", // Reduced width for cards effect
+  maxWidth: "500px", // Optimized width for cube effect
   width: "100%",
   margin: "0 auto",
   position: "relative",
@@ -33,7 +33,7 @@ export const ProjectsSwiperContainer = styled(Box)(({ theme }) => ({
   justifyContent: "center",
   alignItems: "center",
   padding: theme.spacing(0, 4),
-  height: "500px", // Fixed height for cards effect
+  height: "450px", // Optimized height for cube effect
 
   // Swiper container specific styles
   "& .swiper": {
@@ -51,34 +51,29 @@ export const ProjectsSwiperContainer = styled(Box)(({ theme }) => ({
 
   "& .swiper-slide": {
     width: "100% !important",
-    height: "auto !important",
+    height: "100% !important",
     display: "flex !important",
     justifyContent: "center",
     alignItems: "center",
-    // For cards effect - ensure slides are properly stacked
+    // For cube effect - ensure proper 3D rendering
     transformOrigin: "center center",
-    background: "transparent !important", // Remove any background that might cause dark patches
-    boxShadow: "none !important", // Remove any default shadows
-    // Ensure consistent positioning for all cards
+    background: "transparent !important",
+    // Ensure consistent positioning for cube faces
     position: "relative",
-    // Prevent any transform interference
+    // Enable 3D transforms for cube effect
     backfaceVisibility: "hidden",
+    transformStyle: "preserve-3d",
     // Ensure consistent sizing
     flexShrink: 0,
-    minHeight: "auto",
+    boxSizing: "border-box",
   },
 
-  // Remove any default slide shadows from cards effect
-  "& .swiper-slide-shadow": {
-    display: "none !important",
-  },
-
-  "& .swiper-slide-shadow-left": {
-    display: "none !important",
-  },
-
-  "& .swiper-slide-shadow-right": {
-    display: "none !important",
+  // Cube effect specific styling
+  "& .swiper-cube-shadow": {
+    background:
+      theme.palette.mode === "dark"
+        ? "rgba(0, 0, 0, 0.6)"
+        : "rgba(0, 0, 0, 0.3)",
   },
 
   // Custom Swiper navigation styling
@@ -132,8 +127,8 @@ export const ProjectsSwiperContainer = styled(Box)(({ theme }) => ({
 
   // Responsive adjustments
   [theme.breakpoints.down("md")]: {
-    maxWidth: "500px",
-    height: "450px",
+    maxWidth: "450px",
+    height: "380px",
   },
 
   [theme.breakpoints.down("sm")]: {
@@ -145,54 +140,55 @@ export const ProjectsSwiperContainer = styled(Box)(({ theme }) => ({
     padding: theme.spacing(0, 1),
     width: "100%",
     maxWidth: "100%",
-    height: "400px",
+    height: "350px",
   },
 }));
 
 export const ProjectCard = styled(Card)(({ theme }) => ({
   padding: theme.spacing(3),
   borderRadius: theme.spacing(2),
-  height: "380px", // Fixed height for consistency
+  height: "350px", // Optimized height for cube effect
   display: "flex",
   flexDirection: "column",
   boxSizing: "border-box",
   width: "100%",
-  maxWidth: "400px", // Optimized for cards effect
+  maxWidth: "420px", // Optimized for cube effect
   margin: "0 auto",
   background: `${theme.palette.background.paper} !important`, // Ensure solid background
-  // Use custom box shadow that won't conflict with Swiper's cards effect
+  // Enhanced box shadow for cube effect
   boxShadow:
     theme.palette.mode === "dark"
-      ? "0 8px 24px rgba(150, 206, 180, 0.25), 0 4px 12px rgba(0, 0, 0, 0.3) !important"
-      : "0 8px 24px rgba(78, 205, 196, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1) !important",
+      ? "0 10px 30px rgba(150, 206, 180, 0.3), 0 6px 20px rgba(0, 0, 0, 0.4) !important"
+      : "0 10px 30px rgba(78, 205, 196, 0.25), 0 6px 20px rgba(0, 0, 0, 0.15) !important",
   transition: "all 0.3s ease-in-out",
   position: "relative",
   zIndex: 1,
   overflow: "hidden", // Prevent content overflow
-  // Ensure consistent rendering
+  // Ensure proper 3D rendering for cube effect
   backfaceVisibility: "hidden",
-  transform: "translateZ(0)", // Force hardware acceleration for consistent rendering
-  
+  transform: "translateZ(0)", // Force hardware acceleration
+  transformStyle: "preserve-3d",
+
   "&:hover": {
-    transform: "translateY(-2px) translateZ(0)", // Reduced movement with hardware acceleration
+    transform: "translateY(-4px) translateZ(0)", // Enhanced hover effect for cube
     boxShadow:
       theme.palette.mode === "dark"
-        ? "0 12px 36px rgba(150, 206, 180, 0.35), 0 6px 18px rgba(0, 0, 0, 0.4) !important"
-        : "0 12px 36px rgba(78, 205, 196, 0.3), 0 6px 18px rgba(0, 0, 0, 0.15) !important",
+        ? "0 15px 40px rgba(150, 206, 180, 0.4), 0 8px 25px rgba(0, 0, 0, 0.5) !important"
+        : "0 15px 40px rgba(78, 205, 196, 0.35), 0 8px 25px rgba(0, 0, 0, 0.2) !important",
     zIndex: 2,
   },
 
   [theme.breakpoints.down("md")]: {
-    maxWidth: "350px",
-    height: "360px",
+    maxWidth: "380px",
+    height: "330px",
   },
 
   [theme.breakpoints.down("sm")]: {
     padding: theme.spacing(2),
     margin: "0 auto",
     width: "calc(100% - 32px)",
-    maxWidth: "320px",
-    height: "320px",
+    maxWidth: "300px",
+    height: "300px",
   },
 }));
 
