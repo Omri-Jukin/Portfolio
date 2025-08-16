@@ -54,6 +54,12 @@ const Projects: React.FC<ProjectsProps> = () => {
             loop={true}
             grabCursor={true}
             effect="cards"
+            cardsEffect={{
+              perSlideOffset: 8,
+              perSlideRotate: 2,
+              rotate: true,
+              slideShadows: false, // This removes the dark patches!
+            }}
             speed={600}
             style={{
               paddingBottom: "60px", // Space for pagination dots
