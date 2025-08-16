@@ -50,15 +50,22 @@ export const ProjectsSwiperContainer = styled(Box)(({ theme }) => ({
   },
 
   "& .swiper-slide": {
-    width: "100%",
-    height: "auto",
-    display: "flex",
+    width: "100% !important",
+    height: "auto !important",
+    display: "flex !important",
     justifyContent: "center",
     alignItems: "center",
     // For cards effect - ensure slides are properly stacked
     transformOrigin: "center center",
-    background: "transparent", // Remove any background that might cause dark patches
-    boxShadow: "none", // Remove any default shadows
+    background: "transparent !important", // Remove any background that might cause dark patches
+    boxShadow: "none !important", // Remove any default shadows
+    // Ensure consistent positioning for all cards
+    position: "relative",
+    // Prevent any transform interference
+    backfaceVisibility: "hidden",
+    // Ensure consistent sizing
+    flexShrink: 0,
+    minHeight: "auto",
   },
 
   // Remove any default slide shadows from cards effect
@@ -145,39 +152,39 @@ export const ProjectsSwiperContainer = styled(Box)(({ theme }) => ({
 export const ProjectCard = styled(Card)(({ theme }) => ({
   padding: theme.spacing(3),
   borderRadius: theme.spacing(2),
-  height: "auto",
-  minHeight: "320px",
-  maxHeight: "380px",
+  height: "380px", // Fixed height for consistency
   display: "flex",
   flexDirection: "column",
   boxSizing: "border-box",
   width: "100%",
   maxWidth: "400px", // Optimized for cards effect
   margin: "0 auto",
-  background: theme.palette.background.paper, // Ensure solid background
+  background: `${theme.palette.background.paper} !important`, // Ensure solid background
   // Use custom box shadow that won't conflict with Swiper's cards effect
   boxShadow:
     theme.palette.mode === "dark"
-      ? "0 8px 24px rgba(150, 206, 180, 0.25), 0 4px 12px rgba(0, 0, 0, 0.3)"
-      : "0 8px 24px rgba(78, 205, 196, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1)",
+      ? "0 8px 24px rgba(150, 206, 180, 0.25), 0 4px 12px rgba(0, 0, 0, 0.3) !important"
+      : "0 8px 24px rgba(78, 205, 196, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1) !important",
   transition: "all 0.3s ease-in-out",
   position: "relative",
   zIndex: 1,
   overflow: "hidden", // Prevent content overflow
+  // Ensure consistent rendering
+  backfaceVisibility: "hidden",
+  transform: "translateZ(0)", // Force hardware acceleration for consistent rendering
   
   "&:hover": {
-    transform: "translateY(-2px)", // Reduced movement to not interfere with cards effect
+    transform: "translateY(-2px) translateZ(0)", // Reduced movement with hardware acceleration
     boxShadow:
       theme.palette.mode === "dark"
-        ? "0 12px 36px rgba(150, 206, 180, 0.35), 0 6px 18px rgba(0, 0, 0, 0.4)"
-        : "0 12px 36px rgba(78, 205, 196, 0.3), 0 6px 18px rgba(0, 0, 0, 0.15)",
+        ? "0 12px 36px rgba(150, 206, 180, 0.35), 0 6px 18px rgba(0, 0, 0, 0.4) !important"
+        : "0 12px 36px rgba(78, 205, 196, 0.3), 0 6px 18px rgba(0, 0, 0, 0.15) !important",
     zIndex: 2,
   },
 
   [theme.breakpoints.down("md")]: {
     maxWidth: "350px",
-    minHeight: "300px",
-    maxHeight: "360px",
+    height: "360px",
   },
 
   [theme.breakpoints.down("sm")]: {
@@ -185,8 +192,7 @@ export const ProjectCard = styled(Card)(({ theme }) => ({
     margin: "0 auto",
     width: "calc(100% - 32px)",
     maxWidth: "320px",
-    minHeight: "280px",
-    maxHeight: "320px",
+    height: "320px",
   },
 }));
 

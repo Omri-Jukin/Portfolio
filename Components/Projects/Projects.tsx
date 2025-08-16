@@ -55,11 +55,13 @@ const Projects: React.FC<ProjectsProps> = () => {
             grabCursor={true}
             effect="cards"
             cardsEffect={{
-              perSlideOffset: 8,
-              perSlideRotate: 2,
+              perSlideOffset: 6, // Reduced for more consistent stacking
+              perSlideRotate: 1, // Reduced rotation for consistency
               rotate: true,
               slideShadows: false, // This removes the dark patches!
             }}
+            centeredSlides={true}
+            watchSlidesProgress={true}
             speed={600}
             style={{
               paddingBottom: "60px", // Space for pagination dots
@@ -72,40 +74,31 @@ const Projects: React.FC<ProjectsProps> = () => {
               .raw("projects")
               .map(
                 (
-                  project: { title: string; description: string; link: string },
-                  index: number
+                  project: { title: string; description: string; link: string }
                 ) => (
                   <SwiperSlide key={project.title}>
-                    <MotionWrapper
-                      variant="fadeInUp"
-                      duration={PROJECTS_CONSTANTS.ANIMATION.DURATION}
-                      delay={
-                        index * PROJECTS_CONSTANTS.ANIMATION.DELAY_INCREMENT
-                      }
-                    >
-                      <ProjectCard>
-                        <ProjectTitle>{project.title}</ProjectTitle>
-                        <ProjectDescription>
-                          {project.description}
-                        </ProjectDescription>
-                        <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-                          <Link
-                            href={project.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{ textDecoration: "none" }}
+                    <ProjectCard>
+                      <ProjectTitle>{project.title}</ProjectTitle>
+                      <ProjectDescription>
+                        {project.description}
+                      </ProjectDescription>
+                      <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+                        <Link
+                          href={project.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ textDecoration: "none" }}
+                        >
+                          <ProjectButton
+                            className="outlined"
+                            variant="outlined"
+                            startIcon={<GitHubIcon />}
                           >
-                            <ProjectButton
-                              className="outlined"
-                              variant="outlined"
-                              startIcon={<GitHubIcon />}
-                            >
-                              {PROJECTS_CONSTANTS.BUTTONS.VIEW_CODE}
-                            </ProjectButton>
-                          </Link>
-                        </Box>
-                      </ProjectCard>
-                    </MotionWrapper>
+                            {PROJECTS_CONSTANTS.BUTTONS.VIEW_CODE}
+                          </ProjectButton>
+                        </Link>
+                      </Box>
+                    </ProjectCard>
                   </SwiperSlide>
                 )
               )}
