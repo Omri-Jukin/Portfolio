@@ -15,6 +15,7 @@ export interface GalaxyProps {
   animateSpin?: boolean;
   intensity?: "low" | "medium" | "high";
   speed?: "slow" | "normal" | "fast";
+  offset?: { x?: number; y?: number; z?: number };
   className?: string;
   children?: React.ReactNode;
 }
