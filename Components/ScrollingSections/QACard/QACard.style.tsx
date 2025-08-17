@@ -5,6 +5,7 @@ export const StyledQACard = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
   height: "100%",
   background: theme.palette.background.paper,
+  opacity: 0.75, // Make transparent to show globe through
   border: "none",
   boxShadow:
     theme.palette.mode === "dark"

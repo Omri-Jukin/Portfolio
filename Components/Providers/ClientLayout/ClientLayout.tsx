@@ -12,7 +12,7 @@ import { ResponsiveLayout as TResponsiveLayout } from "&/ResponsiveLayout";
 import { TRPCProvider } from "$/trpc/provider";
 import Cookies from "#/Components/Cookies";
 import Calendly from "#/Components/Calendly";
-import GlobeBackground, { ISRAEL_MARKERS } from "~/GlobeBackground";
+import GlobeBackground, { ALL_MARKERS } from "~/GlobeBackground";
 
 export default function ClientLayout({
   children,
@@ -192,8 +192,8 @@ export default function ClientLayout({
         <CssBaseline />
         {/* Global Globe Background with Content */}
         <GlobeBackground
-          markers={ISRAEL_MARKERS}
-          size={1400}
+          size={1920}
+          markers={ALL_MARKERS}
           opacity={0.8}
           rotationSpeed={0.002}
         >

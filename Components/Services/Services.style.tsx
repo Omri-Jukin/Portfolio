@@ -29,7 +29,6 @@ export const ServicesSwiperContainer = styled(Box)(({ theme }) => ({
   margin: "0 auto",
   position: "relative",
 
-  // Custom Swiper navigation styling
   [`& .swiper-button-next,
     & .swiper-button-prev`]: {
     color: theme.palette.primary.main,
@@ -59,7 +58,6 @@ export const ServicesSwiperContainer = styled(Box)(({ theme }) => ({
     left: "10px",
   },
 
-  // Custom pagination styling
   "& .swiper-pagination": {
     bottom: "0",
   },
@@ -72,7 +70,6 @@ export const ServicesSwiperContainer = styled(Box)(({ theme }) => ({
     },
   },
 
-  // Responsive adjustments
   [theme.breakpoints.down("sm")]: {
     [`& .swiper-button-next,
       & .swiper-button-prev`]: {
@@ -84,6 +81,7 @@ export const ServicesSwiperContainer = styled(Box)(({ theme }) => ({
 export const ServiceCard = styled(Card)(({ theme }) => ({
   padding: theme.spacing(3),
   borderRadius: theme.spacing(2),
+  opacity: 0.75,
   height: "100%",
   display: "flex",
   flexDirection: "column",
@@ -123,14 +121,14 @@ export const ServiceDescription = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
   marginBottom: theme.spacing(2),
   lineHeight: 1.6,
-  flex: 1, // Push button to bottom
+  flex: 1,
 }));
 
 export const ServiceButton = styled(Button)(({ theme }) => ({
   borderRadius: theme.spacing(1),
   textTransform: "none",
   fontWeight: 500,
-  marginTop: "auto", // Push to bottom of card
+  marginTop: "auto",
   "&.primary": {
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
@@ -138,12 +136,4 @@ export const ServiceButton = styled(Button)(({ theme }) => ({
       backgroundColor: theme.palette.primary.dark,
     },
   },
-  // "&.secondary": {
-  //   borderColor: theme.palette.primary.main,
-  //   color: theme.palette.primary.main,
-  //   "&:hover": {
-  //     backgroundColor: theme.palette.primary.main,
-  //     color: theme.palette.primary.contrastText,
-  //   },
-  // },
 }));

@@ -7,39 +7,48 @@ export const StyledGlobeContainer = styled(Box, {
 })<{
   opacity: number;
   scrollProgress: number;
-}>(({ opacity }) => ({
+}>(({ opacity, theme }) => ({
   position: "relative",
   width: "100%",
   minHeight: "100vh",
   display: "flex",
   flexDirection: "column",
-  overflow: "hidden", // Ensure content is contained
+  justifyContent: "center",
+  alignItems: "center",
 
-  // Fixed globe canvas container - covers entire viewport
   "& .globe-canvas-container": {
     position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100vw",
+    top: "45%",
+    left: "67.5%",
+    transform: "translate(-50%, -50%)",
     height: "100vh",
+    width: "100vw",
     display: "flex",
-    alignItems: "center",
+    // Tablet ONLY (between md and lg breakpoints)
+    [theme.breakpoints.between("md", "lg")]: {
+      top: "55%",
+      left: "61.25%",
+      transform: "translate(-50%, -50%) scale(1.5)",
+    },
+    // Mobile only (below md)
+    [theme.breakpoints.down("md")]: {
+      top: "100%",
+      left: "50%",
+      transform: "translate(-50%, -50%) scale(1.75)",
+    },
+
     justifyContent: "center",
-    zIndex: -1, // Behind all content
+    zIndex: -1,
     pointerEvents: "none",
 
-    // Fixed opacity - always visible in background
+    overflow: "visible",
+
     opacity: opacity,
 
-    // No scroll-based transforms - let globe animate independently
-    transform: "none",
-
-    // Remove transitions that interfere with globe animation
     transition: "none",
     willChange: "auto",
   },
 
-  // Content container - positioned relatively above globe
   "& .content-container": {
     position: "relative",
     zIndex: 1,
@@ -57,34 +66,30 @@ export const StyledCanvas = styled("canvas", {
 })<{
   size: number;
   isDark: boolean;
-}>(({ theme, size, isDark }) => ({
-  width: size,
-  height: size,
-  aspectRatio: "1",
-
-  // Enhanced glow effect for better visibility
-  filter: isDark
-    ? "drop-shadow(0 0 40px rgba(16, 185, 129, 0.4)) brightness(1.2)"
-    : "drop-shadow(0 0 30px rgba(59, 130, 246, 0.3)) brightness(1.1)",
-
-  // Responsive sizing - maintain full globe visibility
-  [theme.breakpoints.up("xl")]: {
-    width: size * 1.2,
-    height: size * 1.2,
-  },
-
-  [theme.breakpoints.down("lg")]: {
-    width: size * 0.9,
-    height: size * 0.9,
-  },
-
-  [theme.breakpoints.down("md")]: {
-    width: size * 0.7,
-    height: size * 0.7,
-  },
-
-  [theme.breakpoints.down("sm")]: {
-    width: size * 0.6,
-    height: size * 0.6,
-  },
-}));
+}>(({ theme, size, isDark }) => {
+  return {
+    aspectRatio: "1 / 1",
+    width: `min(${size}px, 100vw)`,
+    height: `min(${size}px, 100vw)`,
+    maxWidth: "100vw",
+    maxHeight: "100vh",
+    objectFit: "contain",
+    filter: isDark
+      ? "drop-shadow(0 0 40px rgba(16, 185, 129, 0.4)) brightness(1.2)"
+      : "drop-shadow(0 0 30px rgba(59, 130, 246, 0.3)) brightness(1.1)",
+    // Tablet only (between md and lg)
+    [theme.breakpoints.between("md", "lg")]: {
+      width: `min(${size}px, 95vw)`,
+      height: `min(${size}px, 95vw)`,
+      maxWidth: "95vw",
+      maxHeight: "95vw",
+    },
+    // Mobile only (below md)
+    [theme.breakpoints.down("md")]: {
+      width: `min(${size}px, 100vw)`,
+      height: `min(${size}px, 100vw)`,
+      maxWidth: "100vw",
+      maxHeight: "100vw",
+    },
+  };
+});

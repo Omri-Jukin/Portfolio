@@ -2,14 +2,28 @@ import { styled } from "@mui/material/styles";
 import { Box, Typography, Chip } from "@mui/material";
 
 export const AboutContainer = styled(Box)(({ theme }) => ({
-  minHeight: "fit-content",
+  minHeight: "100vh",
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "center",
-  padding: theme.spacing(2, 2.5, 2, 2.5),
+  padding: theme.spacing(4, 2.5, 4, 2.5),
+  width: "100%",
+  maxWidth: "100vw",
+  boxSizing: "border-box",
+
   [theme.breakpoints.up("md")]: {
-    padding: theme.spacing(2.5, 5, 2.5, 5),
+    padding: theme.spacing(6, 5, 6, 5),
+  },
+
+  [theme.breakpoints.down("md")]: {
+    minHeight: "auto",
+    padding: theme.spacing(4, 2, 4, 2),
+    justifyContent: "flex-start",
+  },
+
+  [theme.breakpoints.down("sm")]: {
+    padding: theme.spacing(3, 1.5, 3, 1.5),
   },
 }));
 
@@ -124,6 +138,7 @@ export const SkillsTagsContainer = styled(Box)(({ theme }) => ({
 
 export const SkillTag = styled(Chip)(({ theme }) => ({
   cursor: "pointer",
+  opacity: 0.75,
   transition: "all 0.3s ease-in-out",
   "&:hover": {
     transform: "translateY(-2px)",
