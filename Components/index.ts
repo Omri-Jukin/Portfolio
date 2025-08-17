@@ -51,6 +51,8 @@ export { default as Career } from "./Career";
 export { default as Projects } from "./Projects";
 export { default as Contact } from "./Contact";
 export { default as ResumeLanguageSelector } from "./ResumeLanguageSelector";
+export { default as CondensedResume } from "./Resume";
+export { default as Portfolio } from "./Portfolio";
 
 // Provider exports
 export * from "./Providers";
@@ -101,6 +103,8 @@ export type { CareerProps, Experience } from "./Career";
 export type { ProjectsProps, Project } from "./Projects";
 export type { ContactProps, ContactData } from "./Contact";
 export type { ResumeLanguageSelectorProps } from "./ResumeLanguageSelector";
+export type { CondensedResumeProps } from "./Resume";
+export type { PortfolioProps, Project as PortfolioProject } from "./Portfolio";
 
 // Additional type exports for newly added components
 export type { ConnectionLineProps } from "./ConnectionLine";

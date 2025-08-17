@@ -89,7 +89,7 @@
     "technologies": "Tecnologías:",
     "examples": "Ejemplos:",
     "readyToWork": "¿Listo para Trabajar Juntos?",
-    "letsDiscuss": "Discutamos cómo mis habilidades y experiencia pueden ayudar a dar vida a tu proyecto.",
+    "letsDiscuss": "Discutamos cómo mis habilidades y experiencia pueden ayudar a dar vida a mi proyecto.",
     "cta": "Ver Mi Currículum",
     "skills": {
       "codeConjurer": "HECHICERO DEL CÓDIGO",
@@ -248,6 +248,21 @@
       }
     ]
   },
+  "portfolio": {
+    "title": "Portafolio Técnico",
+    "subtitle": "Muestra detallada de proyectos con implementaciones técnicas, enfoques de resolución de problemas y ejemplos de código",
+    "viewCode": "Ver Código",
+    "liveDemo": "Demo en Vivo",
+    "technicalDetails": "Detalles Técnicos e Implementación",
+    "problemSolution": "Problema y Solución",
+    "architecture": "Arquitectura y Diseño",
+    "codeExamples": "Ejemplos de Código",
+    "technicalChallenges": "Desafíos Técnicos y Soluciones",
+    "challenge": "Desafío:",
+    "approach": "Enfoque:",
+    "keyFeatures": "Características Clave:",
+    "solution": "Solución:"
+  },
   "contact": {
     "title": "Conectemos",
     "subtitle": "¿Listo para dar vida a tus ideas?",
@@ -382,7 +397,7 @@
     "professionalSummary": "Resumen Profesional",
     "viewCode": "Ver Código",
     "letsBuildTogether": "Construyamos Algo Increíble Juntos",
-    "readyToDiscuss": "¿Listo para discutir tu próximo proyecto u oportunidad?",
+    "readyToDiscuss": "¿Listo para discutir mi próximo proyecto u oportunidad?",
     "getInTouch": "Ponte en Contacto",
     "templateSelector": {
       "title": "Elige tu Estilo de Currículum",
@@ -403,11 +418,11 @@
     },
     "languageSelector": {
       "title": "Elegir Idioma del Currículum",
-      "description": "Selecciona tu idioma preferido para el currículum PDF. El contenido se traducirá automáticamente según tu selección.",
+      "description": "Selecciona mi idioma preferido para el currículum PDF. El contenido se traducirá automáticamente según mi selección.",
       "selectedLanguage": "El currículum se generará en",
       "generating": "Generando PDF...",
       "download": "Descargar Currículum",
-      "downloadDescription": "El PDF incluirá toda tu experiencia profesional, habilidades y proyectos en"
+      "downloadDescription": "El PDF incluirá toda mi experiencia profesional, habilidades y proyectos en"
     }
   },
   "skills": {
