@@ -2,14 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import createGlobe from "cobe";
 import { useTheme } from "@mui/material/styles";
 import { Box } from "@mui/material";
-import { useScrollPosition } from "../../lib/hooks/useScrollPosition";
 import { GlobeBackgroundProps } from "./GlobeBackground.type";
 import { StyledGlobeContainer, StyledCanvas } from "./GlobeBackground.style";
 
 const GlobeBackground: React.FC<GlobeBackgroundProps> = ({
   markers = [],
   className,
-  rotationSpeed = 0.005,
+  rotationSpeed = 0.0025,
   size = 800,
   opacity = 0.3,
   children,
@@ -18,7 +17,6 @@ const GlobeBackground: React.FC<GlobeBackgroundProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const globeRef = useRef<{ destroy: () => void } | null>(null);
   const [mounted, setMounted] = useState(false);
-  const { scrollProgress } = useScrollPosition();
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
 
@@ -58,10 +56,9 @@ const GlobeBackground: React.FC<GlobeBackgroundProps> = ({
       glowColor: isDark ? [0.8, 0.9, 1] : [0.3, 0.4, 0.6], // Subtle glow
       markers,
       onRender: (state) => {
-        // Slower, more stable rotation
-        const speedMultiplier = Math.max(0.3, 1 - scrollProgress * 0.5);
+        // Constant, smooth rotation independent of scroll
         state.phi = phi;
-        phi += rotationSpeed * speedMultiplier;
+        phi += rotationSpeed;
       },
     });
 
@@ -71,7 +68,7 @@ const GlobeBackground: React.FC<GlobeBackgroundProps> = ({
         globeRef.current = null;
       }
     };
-  }, [mounted, markers, rotationSpeed, size, isDark, scrollProgress]);
+  }, [mounted, markers, rotationSpeed, size, isDark]);
 
   // Don't render anything until mounted (prevents SSR issues)
   if (!mounted) {
@@ -82,7 +79,7 @@ const GlobeBackground: React.FC<GlobeBackgroundProps> = ({
     <StyledGlobeContainer
       className={className}
       opacity={opacity}
-      scrollProgress={scrollProgress}
+      scrollProgress={0}
       {...props}
     >
       {/* Globe Canvas Background */}
