@@ -77,35 +77,60 @@ export default function ResumePage() {
     setSelectedLanguage(languageCode);
   };
 
-  const handleDownload = async (languageCode: string) => {
+  const handleGenerateDocuments = async (options: {
+    language: string;
+    documentTypes: string[];
+    customization: {
+      includeCodeExamples: boolean;
+      includeTechnicalChallenges: boolean;
+      includeArchitectureDetails: boolean;
+      customTitle: string;
+      customDescription: string;
+    };
+  }) => {
     try {
       setIsGenerating(true);
 
       // Extract resume data for the selected language
-      const resumeData = extractResumeData(languageCode);
+      const resumeData = extractResumeData(options.language);
 
       // Generate PDF (dynamically import to avoid edge bundling)
       const { generateResumePDF } = await import("#/lib/utils/pdfGenerator");
-      const pdf = (await generateResumePDF(
-        resumeData,
-        languageCode,
-        selectedTemplate
-      )) as { save: (filename: string) => void };
 
-      // Download the PDF
-      const filename = `Omri_Jukin_Resume_${languageCode.toUpperCase()}.pdf`;
-      pdf.save(filename);
+      // Generate documents based on selected types
+      for (const docType of options.documentTypes) {
+        let filename: string;
+
+        if (docType === "condensedResume") {
+          filename = `Omri_Jukin_Condensed_Resume_${options.language.toUpperCase()}.pdf`;
+        } else if (docType === "technicalPortfolio") {
+          filename = `Omri_Jukin_Technical_Portfolio_${options.language.toUpperCase()}.pdf`;
+        } else {
+          filename = `Omri_Jukin_${docType}_${options.language.toUpperCase()}.pdf`;
+        }
+
+        const pdf = (await generateResumePDF(
+          resumeData,
+          options.language,
+          selectedTemplate
+        )) as { save: (filename: string) => void };
+
+        // Download the PDF
+        pdf.save(filename);
+      }
 
       setSnackbar({
         open: true,
-        message: `Resume downloaded successfully in ${languageCode.toUpperCase()}!`,
+        message: `${
+          options.documentTypes.length
+        } document(s) generated successfully in ${options.language.toUpperCase()}!`,
         severity: "success",
       });
     } catch (error) {
-      console.error("Error generating PDF:", error);
+      console.error("Error generating documents:", error);
       setSnackbar({
         open: true,
-        message: "Error generating PDF. Please try again.",
+        message: "Error generating documents. Please try again.",
         severity: "error",
       });
     } finally {
@@ -308,7 +333,7 @@ export default function ResumePage() {
       {/* Interactive Language Selector */}
       <ResumeLanguageSelector
         onLanguageSelect={handleLanguageSelect}
-        onDownload={handleDownload}
+        onGenerateDocuments={handleGenerateDocuments}
         isLoading={isGenerating}
         selectedLanguage={selectedLanguage}
       />

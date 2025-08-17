@@ -105,7 +105,7 @@ export default function AdminDashboard() {
           </Typography>
           <Typography variant="body1" color="text.secondary">
             You are logged in as an administrator. Use the tools below to manage
-            your portfolio.
+            my portfolio.
           </Typography>
         </CardContent>
       </Card>

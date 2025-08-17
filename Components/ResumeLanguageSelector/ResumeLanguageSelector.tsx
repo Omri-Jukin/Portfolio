@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Card,
@@ -12,11 +12,22 @@ import {
   Divider,
   Alert,
   CircularProgress,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  Checkbox,
+  TextField,
+  FormLabel,
+  Paper,
+  Grid,
 } from "@mui/material";
 import {
   Language as LanguageIcon,
   Download as DownloadIcon,
   CheckCircle as CheckCircleIcon,
+  Description as DescriptionIcon,
+  Code as CodeIcon,
+  Settings as SettingsIcon,
 } from "@mui/icons-material";
 import { useTranslations } from "next-intl";
 import MotionWrapper from "../MotionWrapper/MotionWrapper";
@@ -57,33 +68,71 @@ const languages = [
 
 const ResumeLanguageSelector: React.FC<ResumeLanguageSelectorProps> = ({
   onLanguageSelect,
-  onDownload,
-  onGeneratePreviews,
+  onGenerateDocuments,
   isLoading = false,
   selectedLanguage = "en",
 }) => {
   const t = useTranslations("resume");
   const [localSelectedLanguage, setLocalSelectedLanguage] =
     useState(selectedLanguage);
+  const [documentTypes, setDocumentTypes] = useState({
+    condensedResume: true,
+    technicalPortfolio: false,
+  });
+  const [customization, setCustomization] = useState({
+    includeCodeExamples: true,
+    includeTechnicalChallenges: true,
+    includeArchitectureDetails: true,
+    customTitle: "",
+    customDescription: "",
+  });
 
   const handleLanguageClick = (languageCode: string) => {
     const language = languages.find((lang) => lang.code === languageCode);
     if (language?.available) {
       setLocalSelectedLanguage(languageCode);
       onLanguageSelect?.(languageCode);
-      onGeneratePreviews?.(languageCode);
     }
   };
 
-  useEffect(() => {
-    // generate previews on mount for default language if supported
-    const lang = languages.find((l) => l.code === localSelectedLanguage);
-    if (lang?.available) onGeneratePreviews?.(localSelectedLanguage);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleDocumentTypeChange = (type: keyof typeof documentTypes) => {
+    setDocumentTypes((prev) => ({
+      ...prev,
+      [type]: !prev[type],
+    }));
+  };
 
-  const handleDownload = () => {
-    onDownload?.(localSelectedLanguage);
+  const handleCustomizationChange = (
+    field: keyof typeof customization,
+    value: string | boolean
+  ) => {
+    setCustomization((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleGenerateDocuments = () => {
+    const selectedTypes = Object.entries(documentTypes)
+      .filter(([, selected]) => selected)
+      .map(([type]) => type);
+
+    if (selectedTypes.length === 0) {
+      alert("Please select at least one document type");
+      return;
+    }
+
+    onGenerateDocuments?.({
+      language: localSelectedLanguage,
+      documentTypes: selectedTypes,
+      customization,
+    });
+  };
+
+  const getSelectedDocumentTypes = () => {
+    return Object.entries(documentTypes)
+      .filter(([, selected]) => selected)
+      .map(([type]) => type);
   };
 
   const getSelectedLanguage = () => {
@@ -224,7 +273,216 @@ const ResumeLanguageSelector: React.FC<ResumeLanguageSelectorProps> = ({
 
             <Divider sx={{ my: 3 }} />
 
-            {/* Download Button */}
+            {/* Document Type Selection */}
+            <Box sx={{ mb: 4 }}>
+              <Typography
+                variant="h6"
+                sx={{
+                  mb: 2,
+                  color: "primary.main",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <SettingsIcon sx={{ mr: 1 }} />
+                {t("languageSelector.documentGeneration.title")}
+              </Typography>
+
+              <FormControl component="fieldset" sx={{ mb: 3 }}>
+                <FormLabel component="legend">
+                  {t("languageSelector.documentGeneration.selectTypes")}
+                </FormLabel>
+                <FormGroup>
+                  <Grid container spacing={2}>
+                    <Grid component="div">
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={documentTypes.condensedResume}
+                            onChange={() =>
+                              handleDocumentTypeChange("condensedResume")
+                            }
+                            color="primary"
+                          />
+                        }
+                        label={
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                            }}
+                          >
+                            <DescriptionIcon color="primary" />
+                            <Typography>
+                              {t(
+                                "languageSelector.documentGeneration.condensedResume"
+                              )}
+                            </Typography>
+                          </Box>
+                        }
+                      />
+                    </Grid>
+                    <Grid component="div">
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={documentTypes.technicalPortfolio}
+                            onChange={() =>
+                              handleDocumentTypeChange("technicalPortfolio")
+                            }
+                            color="primary"
+                          />
+                        }
+                        label={
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                            }}
+                          >
+                            <CodeIcon color="primary" />
+                            <Typography>
+                              {t(
+                                "languageSelector.documentGeneration.technicalPortfolio"
+                              )}
+                            </Typography>
+                          </Box>
+                        }
+                      />
+                    </Grid>
+                  </Grid>
+                </FormGroup>
+              </FormControl>
+
+              {/* Customization Options */}
+              {documentTypes.technicalPortfolio && (
+                <Paper variant="outlined" sx={{ p: 3, mb: 3 }}>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ mb: 2, fontWeight: "bold" }}
+                  >
+                    {t(
+                      "languageSelector.documentGeneration.portfolioCustomization"
+                    )}
+                  </Typography>
+                  <Grid container spacing={2}>
+                    <Grid component="div">
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={customization.includeCodeExamples}
+                            onChange={(e) =>
+                              handleCustomizationChange(
+                                "includeCodeExamples",
+                                e.target.checked
+                              )
+                            }
+                            color="primary"
+                          />
+                        }
+                        label={t(
+                          "languageSelector.documentGeneration.includeCodeExamples"
+                        )}
+                      />
+                    </Grid>
+                    <Grid component="div">
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={customization.includeTechnicalChallenges}
+                            onChange={(e) =>
+                              handleCustomizationChange(
+                                "includeTechnicalChallenges",
+                                e.target.checked
+                              )
+                            }
+                            color="primary"
+                          />
+                        }
+                        label={t(
+                          "languageSelector.documentGeneration.includeTechnicalChallenges"
+                        )}
+                      />
+                    </Grid>
+                    <Grid component="div">
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={customization.includeArchitectureDetails}
+                            onChange={(e) =>
+                              handleCustomizationChange(
+                                "includeArchitectureDetails",
+                                e.target.checked
+                              )
+                            }
+                            color="primary"
+                          />
+                        }
+                        label={t(
+                          "languageSelector.documentGeneration.includeArchitectureDetails"
+                        )}
+                      />
+                    </Grid>
+                  </Grid>
+
+                  <TextField
+                    fullWidth
+                    label={t("languageSelector.documentGeneration.customTitle")}
+                    value={customization.customTitle}
+                    onChange={(e) =>
+                      handleCustomizationChange("customTitle", e.target.value)
+                    }
+                    sx={{ mt: 2 }}
+                    placeholder="e.g., 'Omri Jukin - Senior Developer Portfolio'"
+                  />
+
+                  <TextField
+                    fullWidth
+                    label={t(
+                      "languageSelector.documentGeneration.customDescription"
+                    )}
+                    value={customization.customDescription}
+                    onChange={(e) =>
+                      handleCustomizationChange(
+                        "customDescription",
+                        e.target.value
+                      )
+                    }
+                    sx={{ mt: 2 }}
+                    multiline
+                    rows={3}
+                    placeholder="e.g., 'Comprehensive technical portfolio showcasing full-stack development expertise'"
+                  />
+                </Paper>
+              )}
+
+              {/* Selected Options Summary */}
+              <Alert severity="info" sx={{ mb: 3 }}>
+                <Typography variant="body2">
+                  <strong>Selected:</strong>{" "}
+                  {getSelectedDocumentTypes()
+                    .map((type) =>
+                      type === "condensedResume"
+                        ? "Condensed Resume"
+                        : "Technical Portfolio"
+                    )
+                    .join(", ")}
+                </Typography>
+                <Typography variant="body2">
+                  <strong>Output:</strong> Individual PDF files for each
+                  selected document type
+                </Typography>
+                <Typography variant="body2">
+                  <strong>Language:</strong> {getSelectedLanguage().name}
+                </Typography>
+              </Alert>
+            </Box>
+
+            <Divider sx={{ my: 3 }} />
+
+            {/* Generate Documents Button */}
             <Box sx={{ textAlign: "center" }}>
               <Button
                 variant="contained"
@@ -236,8 +494,8 @@ const ResumeLanguageSelector: React.FC<ResumeLanguageSelectorProps> = ({
                     <DownloadIcon />
                   )
                 }
-                onClick={handleDownload}
-                disabled={isLoading}
+                onClick={handleGenerateDocuments}
+                disabled={isLoading || getSelectedDocumentTypes().length === 0}
                 sx={{
                   px: 4,
                   py: 1.5,
@@ -246,12 +504,18 @@ const ResumeLanguageSelector: React.FC<ResumeLanguageSelectorProps> = ({
                   fontSize: "1.1rem",
                   fontWeight: "bold",
                   minWidth: 200,
+                  backgroundColor: "success.main",
+                  "&:hover": {
+                    backgroundColor: "success.dark",
+                  },
                 }}
               >
                 {isLoading
-                  ? "Generating PDF..."
-                  : `${t("languageSelector.download")} ${
-                      getSelectedLanguage().name
+                  ? "Generating Documents..."
+                  : `Generate ${
+                      getSelectedDocumentTypes().length > 1
+                        ? "Both Documents"
+                        : "Document"
                     }`}
               </Button>
 
@@ -259,8 +523,8 @@ const ResumeLanguageSelector: React.FC<ResumeLanguageSelectorProps> = ({
                 variant="caption"
                 sx={{ display: "block", mt: 2, color: "text.secondary" }}
               >
-                {t("languageSelector.downloadDescription")}{" "}
-                {getSelectedLanguage().name}
+                Will create {getSelectedDocumentTypes().length} separate PDF
+                file{getSelectedDocumentTypes().length > 1 ? "s" : ""}
               </Typography>
             </Box>
           </CardContent>

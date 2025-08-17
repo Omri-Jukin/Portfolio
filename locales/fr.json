@@ -89,7 +89,7 @@
     "technologies": "Technologies:",
     "examples": "Exemples:",
     "readyToWork": "Prêt à Travailler Ensemble ?",
-    "letsDiscuss": "Discutons de la façon dont mes compétences et mon expérience peuvent aider à donner vie à votre projet.",
+    "letsDiscuss": "Discutons de la façon dont mes compétences et mon expérience peuvent aider à donner vie à mon projet.",
     "cta": "Voir Mon CV",
     "skills": {
       "codeConjurer": "SORCIER DU CODE",
@@ -248,6 +248,21 @@
       }
     ]
   },
+  "portfolio": {
+    "title": "Portfolio Technique",
+    "subtitle": "Présentation détaillée des projets avec implémentations techniques, approches de résolution de problèmes et exemples de code",
+    "viewCode": "Voir le Code",
+    "liveDemo": "Démo en Direct",
+    "technicalDetails": "Détails Techniques et Implémentation",
+    "problemSolution": "Problème et Solution",
+    "architecture": "Architecture et Conception",
+    "codeExamples": "Exemples de Code",
+    "technicalChallenges": "Défis Techniques et Solutions",
+    "challenge": "Défi:",
+    "approach": "Approche:",
+    "keyFeatures": "Fonctionnalités Clés:",
+    "solution": "Solution:"
+  },
   "contact": {
     "title": "Connectons-nous",
     "subtitle": "Prêt à donner vie à vos idées ?",
@@ -382,7 +397,7 @@
     "professionalSummary": "Résumé Professionnel",
     "viewCode": "Voir le Code",
     "letsBuildTogether": "Construisons Quelque Chose d'Incroyable Ensemble",
-    "readyToDiscuss": "Prêt à discuter de votre prochain projet ou opportunité ?",
+    "readyToDiscuss": "Prêt à discuter de mon prochain projet ou opportunité ?",
     "getInTouch": "Entrer en Contact",
     "templateSelector": {
       "title": "Choisissez votre Style de CV",
@@ -402,11 +417,11 @@
     },
     "languageSelector": {
       "title": "Choisir la Langue du CV",
-      "description": "Sélectionnez votre langue préférée pour le CV PDF. Le contenu sera automatiquement traduit selon votre sélection.",
+      "description": "Sélectionnez ma langue préférée pour le CV PDF. Le contenu sera automatiquement traduit selon ma sélection.",
       "selectedLanguage": "Le CV sera généré en",
       "generating": "Génération du PDF...",
       "download": "Télécharger le CV",
-      "downloadDescription": "Le PDF inclura toute votre expérience professionnelle, compétences et projets en"
+      "downloadDescription": "Le PDF inclura toute mon expérience professionnelle, compétences et projets en"
     }
   },
   "skills": {

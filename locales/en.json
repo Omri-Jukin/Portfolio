@@ -167,7 +167,7 @@
         "answer": "Solving complex problems and creating elegant solutions that make a real impact."
       },
       {
-        "question": "Your work style?",
+        "question": "My work style?",
         "answer": "Methodical yet creative, with a focus on user experience and clean code."
       },
       {
@@ -175,11 +175,11 @@
         "answer": "Leading the development of enterprise-level systems that serve thousands of users."
       },
       {
-        "question": "What excites you?",
+        "question": "What excites me?",
         "answer": "Learning new technologies and pushing the boundaries of what's possible."
       },
       {
-        "question": "Your philosophy?",
+        "question": "My philosophy?",
         "answer": "Great software should be invisible—users should focus on their goals, not the interface."
       },
       {
@@ -248,19 +248,34 @@
       }
     ]
   },
+  "portfolio": {
+    "title": "Technical Portfolio",
+    "subtitle": "Detailed project showcase with technical implementations, problem-solving approaches, and code examples",
+    "viewCode": "View Code",
+    "liveDemo": "Live Demo",
+    "technicalDetails": "Technical Details & Implementation",
+    "problemSolution": "Problem & Solution",
+    "architecture": "Architecture & Design",
+    "codeExamples": "Code Examples",
+    "technicalChallenges": "Technical Challenges & Solutions",
+    "challenge": "Challenge:",
+    "approach": "Approach:",
+    "keyFeatures": "Key Features:",
+    "solution": "Solution:"
+  },
   "contact": {
     "title": "Let's Connect",
-    "subtitle": "Ready to bring your ideas to life?",
+    "subtitle": "Ready to bring my ideas to life?",
     "description": "I'm always excited to discuss new opportunities, collaborations, or just chat about technology.\nDrop me a message and let's create something amazing together...",
     "button": "Start a conversation",
     "form": {
       "title": "Get in Touch",
-      "description": "Have a project in mind? Let's discuss how we can bring your ideas to life. Fill out the form below and I'll get back to you as soon as possible.",
-      "name": "Your Name",
-      "email": "Your Email",
-      "phone": "Your Phone",
+      "description": "Have a project in mind? Let's discuss how we can bring my ideas to life. Fill out the form below and I'll get back to you as soon as possible.",
+      "name": "My Name",
+      "email": "My Email",
+      "phone": "My Phone",
       "subject": "Subject",
-      "message": "Your Message",
+      "message": "My Message",
       "submit": "Send Message",
       "sending": "Sending...",
       "success": "Message sent successfully!",
@@ -382,10 +397,10 @@
     "professionalSummary": "Professional Summary",
     "viewCode": "View Code",
     "letsBuildTogether": "Let's Build Something Amazing Together",
-    "readyToDiscuss": "Ready to discuss your next project or opportunity?",
+    "readyToDiscuss": "Ready to discuss my next project or opportunity?",
     "getInTouch": "Get In Touch",
     "templateSelector": {
-      "title": "Choose Your Resume Style",
+      "title": "Choose My Resume Style",
       "subtitle": "Select from my collection of professionally designed templates",
       "templateNames": {
         "modern": "Modern",
@@ -403,11 +418,27 @@
     },
     "languageSelector": {
       "title": "Choose Resume Language",
-      "description": "Select your preferred language for the PDF resume. The content will be automatically translated based on your selection.",
+      "description": "Select my preferred language for the PDF resume. The content will be automatically translated based on my selection.",
       "selectedLanguage": "Resume will be generated in",
       "generating": "Generating PDF...",
       "download": "Download Resume",
-      "downloadDescription": "PDF will include all your professional experience, skills, and projects in"
+      "downloadDescription": "PDF will include all my professional experience, skills, and projects in",
+      "documentGeneration": {
+        "title": "Document Generation Options",
+        "selectTypes": "Select Document Types",
+        "condensedResume": "Condensed Resume",
+        "technicalPortfolio": "Technical Portfolio",
+
+        "portfolioCustomization": "Portfolio Customization",
+        "includeCodeExamples": "Include Code Examples",
+        "includeTechnicalChallenges": "Include Technical Challenges",
+        "includeArchitectureDetails": "Include Architecture Details",
+        "customTitle": "Custom Title (Optional)",
+        "customDescription": "Custom Description (Optional)",
+        "generateDocuments": "Generate Documents",
+        "generatingDocuments": "Generating Documents...",
+        "willCreateSeparate": "Will create separate PDF files for each document type"
+      }
     }
   },
   "skills": {
