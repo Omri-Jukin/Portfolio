@@ -6,7 +6,7 @@ export const CareerContainer = styled(Box)(({ theme }) => ({
   maxWidth: "1200px",
   margin: "0 auto",
   width: "100%",
-  overflow: "visible", // Changed from hidden to visible to allow hover transforms
+  overflow: "visible",
   boxSizing: "border-box",
   [theme.breakpoints.down("md")]: {
     padding: theme.spacing(2),
@@ -15,7 +15,7 @@ export const CareerContainer = styled(Box)(({ theme }) => ({
     padding: theme.spacing(2, 1),
     width: "100%",
     maxWidth: "100vw",
-    overflow: "visible", // Changed from hidden to visible for mobile hover effects
+    overflow: "visible",
   },
 }));
 
@@ -63,9 +63,9 @@ export const CareerSwiperContainer = styled(Box)(({ theme }) => ({
   width: "100%",
   margin: "0 auto",
   position: "relative",
-  overflow: "visible", // Changed from hidden to visible to allow hover transforms
+  overflow: "visible",
   boxSizing: "border-box",
-  padding: theme.spacing(0, 2), // Added padding to accommodate hover transforms
+  padding: theme.spacing(0, 2),
 
   // Custom Swiper navigation styling
   [`& .swiper-button-next,
@@ -111,7 +111,6 @@ export const CareerSwiperContainer = styled(Box)(({ theme }) => ({
     },
   },
 
-  // Enhanced cube effect styling
   "& .swiper-cube-shadow": {
     background:
       theme.palette.mode === "dark"
@@ -130,7 +129,6 @@ export const CareerSwiperContainer = styled(Box)(({ theme }) => ({
     backfaceVisibility: "hidden",
   },
 
-  // Responsive adjustments
   [theme.breakpoints.down("sm")]: {
     [`& .swiper-button-next,
       & .swiper-button-prev`]: {
@@ -146,25 +144,26 @@ export const CareerSwiperContainer = styled(Box)(({ theme }) => ({
 
 export const ExperienceCard = styled(Card)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
+  opacity: 0.75,
   border: `1px solid ${theme.palette.divider}`,
   height: "100%",
-  minHeight: "400px", // Ensure consistent card height
+  minHeight: "400px",
   display: "flex",
   flexDirection: "column",
   transition: "all 0.3s ease-in-out",
   boxSizing: "border-box",
-  margin: theme.spacing(1, 0), // Added margin to accommodate hover transform
+  margin: theme.spacing(1, 0),
   "&:hover": {
     borderColor: theme.palette.primary.main,
     transform: "translateY(-4px)",
-    zIndex: 1, // Ensure hovered card appears above others
+    zIndex: 1,
   },
 
   [theme.breakpoints.down("sm")]: {
-    margin: theme.spacing(1, 0.5), // Updated margin to accommodate hover transform
+    margin: theme.spacing(1, 0.5),
     width: "100%",
     maxWidth: "100%",
-    minHeight: "350px", // Slightly smaller height on mobile
+    minHeight: "350px",
   },
 }));
 
@@ -186,14 +185,13 @@ export const ExperienceDetails = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   gap: theme.spacing(2),
-  flex: 1, // Push content to fill card height
+  flex: 1,
 
-  // Text truncation and line breaks for long content
   "& .detail-text": {
     wordBreak: "break-word",
     overflowWrap: "break-word",
     lineHeight: 1.6,
-    maxHeight: "4.8em", // Limit to 3 lines (1.6 * 3)
+    maxHeight: "4.8em",
     overflow: "hidden",
     display: "-webkit-box",
     WebkitLineClamp: 3,

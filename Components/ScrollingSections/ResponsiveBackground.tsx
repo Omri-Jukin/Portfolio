@@ -17,9 +17,9 @@ const BackgroundContainer = styled(Box, {
   width: "100%",
   maxWidth: "100vw",
   display: "flex",
+  flexDirection: "column",
   alignItems: "center",
-  justifyContent: "center",
-  overflow: "hidden",
+  justifyContent: "flex-start",
   boxSizing: "border-box",
 
   // Transparent background to let globe show through
@@ -28,30 +28,13 @@ const BackgroundContainer = styled(Box, {
   // Responsive design
   [theme.breakpoints.down("md")]: {
     minHeight: "auto",
-    padding: theme.spacing(8, 0),
-    alignItems: "flex-start",
-    width: "100%",
-    maxWidth: "100vw",
-    overflow: "hidden",
-  },
-  [theme.breakpoints.down("sm")]: {
-    padding: theme.spacing(6, 0),
-    width: "100%",
-    maxWidth: "100vw",
-    overflow: "hidden",
+    padding: theme.spacing(4, 0),
   },
 
-  // Ensure content is above background effects
-  "& > *": {
-    position: "relative",
-    zIndex: 1,
-    width: "100%",
-    maxWidth: "100vw",
-    overflow: "hidden",
-  },
-
-  // Mobile-specific viewport constraints
   [theme.breakpoints.down("sm")]: {
+    padding: theme.spacing(2, 0),
+
+    // Mobile-specific Swiper constraints (consolidated here)
     "& .swiper": {
       width: "100% !important",
       maxWidth: "100vw !important",
@@ -64,6 +47,15 @@ const BackgroundContainer = styled(Box, {
     "& .swiper-button-next, & .swiper-button-prev": {
       display: "none !important",
     },
+  },
+
+  // Ensure content flows naturally above background effects
+  "& > *": {
+    position: "relative",
+    zIndex: 1,
+    width: "100%",
+    maxWidth: "100vw",
+    boxSizing: "border-box",
   },
 }));
 

@@ -56,6 +56,13 @@ export const ISRAEL_MARKERS: GlobeMarker[] = [
   { location: [32.0853, 34.7818], size: 0.06 }, // Tel Aviv
 ];
 
+export const ALL_MARKERS: GlobeMarker[] = [
+  ...DEFAULT_GLOBE_MARKERS,
+  ...TECH_CITIES_MARKERS,
+  ...BUSINESS_HUBS_MARKERS,
+  ...ISRAEL_MARKERS,
+];
+
 // Default configuration
 export const DEFAULT_GLOBE_CONFIG = {
   size: 800,

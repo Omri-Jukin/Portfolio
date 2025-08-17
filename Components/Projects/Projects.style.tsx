@@ -134,6 +134,7 @@ export const ProjectsSwiperContainer = styled(Box)(({ theme }) => ({
 export const ProjectCard = styled(Card)(({ theme }) => ({
   padding: theme.spacing(3),
   borderRadius: theme.spacing(2),
+  opacity: 0.75,
   height: "400px",
   display: "flex",
   flexDirection: "column",
