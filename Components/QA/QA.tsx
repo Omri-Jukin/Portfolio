@@ -16,6 +16,8 @@ const QA: React.FC<QAProps> = () => {
   const t = useTranslations("qa");
 
   return (
+    // <GlobeCard markers={[]}>
+    //     </GlobeCard>
     <QAContainer>
       <MotionWrapper
         variant="fadeInUp"

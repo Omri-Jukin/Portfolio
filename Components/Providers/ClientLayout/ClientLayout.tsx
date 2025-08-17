@@ -12,6 +12,7 @@ import { ResponsiveLayout as TResponsiveLayout } from "&/ResponsiveLayout";
 import { TRPCProvider } from "$/trpc/provider";
 import Cookies from "#/Components/Cookies";
 import Calendly from "#/Components/Calendly";
+import GlobeBackground, { ISRAEL_MARKERS } from "~/GlobeBackground";
 
 export default function ClientLayout({
   children,
@@ -189,7 +190,13 @@ export default function ClientLayout({
     <TRPCProvider>
       <ThemeProvider theme={appTheme}>
         <CssBaseline />
-        <Box sx={{ minHeight: "100vh", width: "100%", overflow: "hidden" }}>
+        {/* Global Globe Background with Content */}
+        <GlobeBackground
+          markers={ISRAEL_MARKERS}
+          size={1400}
+          opacity={0.6}
+          rotationSpeed={0.002}
+        >
           {/* Fixed Header */}
           <Header
             isDarkMode={isDarkMode}
@@ -209,6 +216,7 @@ export default function ClientLayout({
               width: "100%",
               maxWidth: "100vw",
               overflow: "hidden",
+              background: "transparent",
             }}
           >
             {/* Main Content Area */}
@@ -220,6 +228,7 @@ export default function ClientLayout({
                 width: "100%",
                 maxWidth: "100vw",
                 overflow: "hidden",
+                background: "transparent",
               }}
             >
               <ResponsiveLayout isMobile={isMobile} forceLayout={forceLayout}>
@@ -231,6 +240,7 @@ export default function ClientLayout({
                     width: "100%",
                     maxWidth: "100vw",
                     overflow: "hidden",
+                    background: "transparent",
                   }}
                 >
                   {children}
@@ -253,7 +263,7 @@ export default function ClientLayout({
               />
             )}
           </Box>
-        </Box>
+        </GlobeBackground>
       </ThemeProvider>
     </TRPCProvider>
   );

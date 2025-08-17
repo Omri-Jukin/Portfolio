@@ -83,8 +83,11 @@ export const blogRouter = router({
         throw new Error("Unauthorized");
       }
 
+      const author = `${user.firstName} ${user.lastName}`;
+
       return await createPost({
         ...input,
+        author,
         authorId: user.id,
       });
     }),

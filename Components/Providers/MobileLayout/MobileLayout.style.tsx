@@ -1,10 +1,10 @@
 import { Box, styled } from "@mui/material";
 
-export const MobileLayoutContainer = styled(Box)(({ theme }) => ({
+export const MobileLayoutContainer = styled(Box)(() => ({
   display: "flex",
   flexDirection: "column",
   flex: 1,
-  backgroundColor: theme.palette.background.paper,
+  backgroundColor: "transparent",
   WebkitOverflowScrolling: "touch",
 
   // Mobile-specific optimizations

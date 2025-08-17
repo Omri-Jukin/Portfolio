@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { MotionWrapperProps, animationVariants } from "./MotionWrapper.type";
 
-export default function MotionWrapper({
+const MotionWrapper: React.FC<MotionWrapperProps> = ({
   children,
   variant = "fadeIn",
   duration = 0.6,
@@ -12,7 +12,7 @@ export default function MotionWrapper({
   className,
   style,
   custom,
-}: MotionWrapperProps) {
+}) => {
   const [mounted, setMounted] = useState(false);
   const variants = custom || animationVariants[variant];
 
@@ -36,4 +36,6 @@ export default function MotionWrapper({
       {children}
     </motion.div>
   );
-}
+};
+
+export default MotionWrapper;

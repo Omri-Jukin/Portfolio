@@ -21,7 +21,7 @@ async function createBlogPosts() {
         status: "approved",
       });
       console.log("Admin user created:", adminUser.id);
-    } catch (error) {
+    } catch {
       console.log("Admin user might already exist, continuing...");
       // For now, we'll use a mock user ID - in a real scenario you'd fetch the existing user
       adminUser = { id: uuidv4() };
@@ -526,6 +526,7 @@ So, fellow MiddleEnd developers, let's embrace the AI revolution and use these t
         const createdPost = await createPost({
           ...post,
           authorId: adminUser.id,
+          author: adminUser.id, // Add author field
         });
         console.log(`Created post: ${createdPost.title}`);
       } catch (error) {

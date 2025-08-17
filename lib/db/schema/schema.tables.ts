@@ -36,6 +36,7 @@ export const blogPosts = sqliteTable("blog_posts", {
   tags: text("tags", { mode: "json" }).$type<string[]>(),
   imageUrl: text("image_url"),
   imageAlt: text("image_alt"),
+  author: text("author").notNull(),
   authorId: text("author_id")
     .notNull()
     .references(() => users.id),

@@ -61,6 +61,7 @@ export async function POST(request: NextRequest) {
       imageUrl: imageUrl || null,
       imageAlt: imageAlt || null,
       authorId: adminUser.id,
+      author: adminUser.id,
     });
 
     return NextResponse.json({
