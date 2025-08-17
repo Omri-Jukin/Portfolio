@@ -84,8 +84,6 @@ export default function ResumePage() {
       includeCodeExamples: boolean;
       includeTechnicalChallenges: boolean;
       includeArchitectureDetails: boolean;
-      customTitle: string;
-      customDescription: string;
     };
   }) => {
     try {
@@ -102,11 +100,11 @@ export default function ResumePage() {
         let filename: string;
 
         if (docType === "condensedResume") {
-          filename = `Omri_Jukin_Condensed_Resume_${options.language.toUpperCase()}.pdf`;
+          filename = `Omri_Jukin_FullStack_Developer_Resume.pdf`;
         } else if (docType === "technicalPortfolio") {
-          filename = `Omri_Jukin_Technical_Portfolio_${options.language.toUpperCase()}.pdf`;
+          filename = `Omri_Jukin_FullStack_Developer_Technical_Portfolio_${options.language.toUpperCase()}.pdf`;
         } else {
-          filename = `Omri_Jukin_${docType}_${options.language.toUpperCase()}.pdf`;
+          filename = `Omri_Jukin_FullStack_Developer_${docType}_${options.language.toUpperCase()}.pdf`;
         }
 
         const pdf = (await generateResumePDF(

@@ -862,8 +862,20 @@ export class PDFGenerator {
   }
 
   private addMainHeader(metadata: ResumeData["metadata"], y: number): number {
-    // Name
-    this.doc.setTextColor(...this.primaryColor);
+    // Name - use white text for templates with colored header backgrounds
+    const hasColoredHeader = [
+      "teal",
+      "indigo",
+      "rose",
+      "corporate",
+      "startup",
+      "academic",
+    ].includes(this.template);
+    const headerTextColor: [number, number, number] = hasColoredHeader
+      ? [255, 255, 255]
+      : this.primaryColor;
+
+    this.doc.setTextColor(...headerTextColor);
     this.doc.setFontSize(24);
 
     if (this.isRTL) {
@@ -881,8 +893,11 @@ export class PDFGenerator {
     }
     y += 10;
 
-    // Title - role line
-    this.doc.setTextColor(...this.accentColor);
+    // Title - role line - use light color for templates with colored header backgrounds
+    const subtitleTextColor: [number, number, number] = hasColoredHeader
+      ? [240, 240, 240]
+      : this.accentColor;
+    this.doc.setTextColor(...subtitleTextColor);
     this.doc.setFontSize(14);
 
     if (this.isRTL) {

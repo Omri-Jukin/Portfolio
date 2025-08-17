@@ -12,7 +12,5 @@ export interface DocumentGenerationOptions {
     includeCodeExamples: boolean;
     includeTechnicalChallenges: boolean;
     includeArchitectureDetails: boolean;
-    customTitle: string;
-    customDescription: string;
   };
 }
