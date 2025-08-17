@@ -327,7 +327,7 @@ export const baseTheme = createTheme({
       xxxxl: 3840,
     },
   },
-
+  // Palette
   palette: {
     mode: "light",
     primary: {
@@ -442,6 +442,7 @@ export const baseTheme = createTheme({
       contrastText: "#ffffff",
     },
   },
+  // Gradients
   gradients: {
     phone: "linear-gradient(to right, #FF6B6B, #FF8A65, #FFEAA7)",
     email:
@@ -470,6 +471,7 @@ export const baseTheme = createTheme({
     spring:
       "linear-gradient(to right, #FF69B4, #FFB6C1, #FFC0CB, #DDA0DD, #E6E6FA)",
   },
+  // Conic Gradients
   conicGradients: {
     phone:
       "repeating-linear-gradient(315deg, #FF6B6B2E 92%, #FF450000 100%),repeating-radial-gradient(75% 75% at 238% 218%, #FF8A6512 30%, #FFB34714 39%),radial-gradient(99% 99% at 109% 2%, #FFD700FF 0%, #FF450000 100%),radial-gradient(99% 99% at 21% 78%, #FF6B6BFF 0%, #FF450000 100%),radial-gradient(160% 154% at 711px -303px, #FF6B6BFF 0%, #FFD700FF 100%)",
@@ -504,14 +506,17 @@ export const baseTheme = createTheme({
     spring:
       "repeating-linear-gradient(315deg, #FF69B42E 92%, #E6E6FA00 100%),repeating-radial-gradient(75% 75% at 238% 218%, #FFB6C112 30%, #FFC0CB14 39%),radial-gradient(99% 99% at 109% 2%, #FFC0CBFF 0%, #E6E6FA00 100%),radial-gradient(99% 99% at 21% 78%, #FF69B4FF 0%, #E6E6FA00 100%),radial-gradient(160% 154% at 711px -303px, #FF69B4FF 0%, #E6E6FAFF 100%)",
   },
+  // Animations
   animations: {
     bobbing: "0.5s ease-in-out infinite normal",
     rotating: "0.5s linear infinite normal",
     hover: "0.2s ease-in-out normal",
     shadow: "0 4px 12px rgba(0, 0, 0, 0.15) inset normal",
   },
+  // Paper
   paperLight: "#fafafa",
   paperDark: "#2C3E50",
+  // Typography
   typography: {
     fontFamily:
       'var(--font-inter), "Inter", system-ui, -apple-system, sans-serif',
@@ -622,10 +627,13 @@ export const baseTheme = createTheme({
       fontWeight: 500,
     },
   },
+  // Shape
   shape: {
     borderRadius: 12,
   },
+  // Spacing
   spacing: 8,
+  // Box Shadows
   boxShadows: createColoredBoxShadows({
     phone:
       "repeating-linear-gradient(315deg, #FF6B6B2E 92%, #FF450000 100%),repeating-radial-gradient(75% 75% at 238% 218%, #FF8A6512 30%, #FFB34714 39%),radial-gradient(99% 99% at 109% 2%, #FFD700FF 0%, #FF450000 100%),radial-gradient(99% 99% at 21% 78%, #FF6B6BFF 0%, #FF450000 100%),radial-gradient(160% 154% at 711px -303px, #FF6B6BFF 0%, #FFD700FF 100%)",
@@ -660,6 +668,7 @@ export const baseTheme = createTheme({
     spring:
       "repeating-linear-gradient(315deg, #FF69B42E 92%, #E6E6FA00 100%),repeating-radial-gradient(75% 75% at 238% 218%, #FFB6C112 30%, #FFC0CB14 39%),radial-gradient(99% 99% at 109% 2%, #FFC0CBFF 0%, #E6E6FA00 100%),radial-gradient(99% 99% at 21% 78%, #FF69B4FF 0%, #E6E6FA00 100%),radial-gradient(160% 154% at 711px -303px, #FF69B4FF 0%, #E6E6FAFF 100%)",
   }),
+  // Shadows
   shadows: [
     "none",
     "0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.08)",
@@ -687,6 +696,7 @@ export const baseTheme = createTheme({
     "0 42px 84px rgba(0, 0, 0, 1), 21px 21px 42px rgba(0, 0, 0, 1)",
     "0 44px 88px rgba(0, 0, 0, 1), 22px 22px 44px rgba(0, 0, 0, 1)",
   ],
+  // Components
   components: {
     MuiButton: {
       variants: [

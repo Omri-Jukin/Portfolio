@@ -7,50 +7,40 @@ export const StyledGlobeContainer = styled(Box, {
 })<{
   opacity: number;
   scrollProgress: number;
-}>(({ theme, opacity, scrollProgress }) => ({
+}>(({ opacity }) => ({
   position: "relative",
   width: "100%",
   minHeight: "100vh",
   display: "flex",
   flexDirection: "column",
+  overflow: "hidden", // Ensure content is contained
 
-  // Fixed globe canvas container - always visible in viewport
+  // Absolute globe canvas container - positioned within content bounds
   "& .globe-canvas-container": {
-    position: "fixed",
+    position: "absolute",
     top: 0,
     left: 0,
-    width: "100vw",
-    height: "100vh",
+    width: "100%",
+    height: "100%",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     zIndex: -1, // Behind all content
     pointerEvents: "none",
+    overflow: "hidden", // Prevent globe from appearing outside container
 
-    // Dynamic opacity based on scroll position - higher in dark mode
-    opacity: opacity * (0.9 - scrollProgress * 0.2), // More visible, less fade on scroll
+    // Ensure globe is only visible within normal scroll bounds
+    clipPath: "inset(0)",
 
-    // Subtle movement based on scroll - reduced for better readability
-    transform: `translateY(${scrollProgress * 10}px) scale(${
-      1 + scrollProgress * 0.05
-    })`,
+    // Fixed opacity - always visible in background
+    opacity: opacity,
 
-    // Smooth transitions
-    transition: "opacity 0.3s ease-out, transform 0.3s ease-out",
-    willChange: "opacity, transform",
+    // No scroll-based transforms - let globe animate independently
+    transform: "none",
 
-    // Responsive adjustments
-    [theme.breakpoints.down("md")]: {
-      transform: `translateY(${scrollProgress * 8}px) scale(${
-        1 + scrollProgress * 0.03
-      })`,
-    },
-
-    [theme.breakpoints.down("sm")]: {
-      transform: `translateY(${scrollProgress * 5}px) scale(${
-        1 + scrollProgress * 0.02
-      })`,
-    },
+    // Remove transitions that interfere with globe animation
+    transition: "none",
+    willChange: "auto",
   },
 
   // Content container - positioned relatively above globe

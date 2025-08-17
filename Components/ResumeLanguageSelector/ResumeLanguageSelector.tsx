@@ -16,7 +16,6 @@ import {
   FormControlLabel,
   FormGroup,
   Checkbox,
-  TextField,
   FormLabel,
   Paper,
   Grid,
@@ -83,8 +82,6 @@ const ResumeLanguageSelector: React.FC<ResumeLanguageSelectorProps> = ({
     includeCodeExamples: true,
     includeTechnicalChallenges: true,
     includeArchitectureDetails: true,
-    customTitle: "",
-    customDescription: "",
   });
 
   const handleLanguageClick = (languageCode: string) => {
@@ -426,35 +423,6 @@ const ResumeLanguageSelector: React.FC<ResumeLanguageSelectorProps> = ({
                       />
                     </Grid>
                   </Grid>
-
-                  <TextField
-                    fullWidth
-                    label={t("languageSelector.documentGeneration.customTitle")}
-                    value={customization.customTitle}
-                    onChange={(e) =>
-                      handleCustomizationChange("customTitle", e.target.value)
-                    }
-                    sx={{ mt: 2 }}
-                    placeholder="e.g., 'Omri Jukin - Senior Developer Portfolio'"
-                  />
-
-                  <TextField
-                    fullWidth
-                    label={t(
-                      "languageSelector.documentGeneration.customDescription"
-                    )}
-                    value={customization.customDescription}
-                    onChange={(e) =>
-                      handleCustomizationChange(
-                        "customDescription",
-                        e.target.value
-                      )
-                    }
-                    sx={{ mt: 2 }}
-                    multiline
-                    rows={3}
-                    placeholder="e.g., 'Comprehensive technical portfolio showcasing full-stack development expertise'"
-                  />
                 </Paper>
               )}
 

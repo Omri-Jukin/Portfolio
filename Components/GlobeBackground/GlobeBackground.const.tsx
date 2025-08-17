@@ -51,7 +51,7 @@ export const BUSINESS_HUBS_MARKERS: GlobeMarker[] = [
 ];
 
 export const ISRAEL_MARKERS: GlobeMarker[] = [
-  { location: [31.7683, 35.2137], size: 0.06 }, // Be'er Sheva
+  { location: [31.2518, 34.7915], size: 0.06 }, // Be'er Sheva
   { location: [31.7683, 35.2137], size: 0.06 }, // Jerusalem
   { location: [32.0853, 34.7818], size: 0.06 }, // Tel Aviv
 ];

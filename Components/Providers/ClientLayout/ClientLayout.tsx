@@ -194,7 +194,7 @@ export default function ClientLayout({
         <GlobeBackground
           markers={ISRAEL_MARKERS}
           size={1400}
-          opacity={0.6}
+          opacity={0.8}
           rotationSpeed={0.002}
         >
           {/* Fixed Header */}

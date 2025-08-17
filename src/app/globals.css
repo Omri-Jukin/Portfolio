@@ -23,5 +23,5 @@ body {
 }
 
 html {
-  background: var(--background);
+  background: transparent;
 }
