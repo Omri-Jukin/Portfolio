@@ -1,30 +1,21 @@
-import localFont from "next/font/local";
+import { Inter, Source_Serif_4 } from "next/font/google";
 
-export const bonaNovaSC = localFont({
-  src: [
-    {
-      path: "../public/Bona_Nova_SC/BonaNovaSC-Regular.ttf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../public/Bona_Nova_SC/BonaNovaSC-Bold.ttf",
-      weight: "700",
-      style: "normal",
-    },
-    {
-      path: "../public/Bona_Nova_SC/BonaNovaSC-Italic.ttf",
-      weight: "400",
-      style: "italic",
-    },
-  ],
-  variable: "--font-bona-nova-sc",
+// Primary font - Inter (modern, professional sans-serif)
+export const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
   display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
-// Keep the mono font for code elements
-export const bonaNovaSCMono = localFont({
-  src: "../public/Bona_Nova_SC/BonaNovaSC-Regular.ttf",
-  variable: "--font-bona-nova-sc-mono",
+// Alternative professional serif font
+export const sourceSerifPro = Source_Serif_4({
+  subsets: ["latin"],
+  variable: "--font-source-serif-pro",
   display: "swap",
+  weight: ["400", "600", "700"],
 });
+
+// For backwards compatibility, alias the primary font
+export const bonaNovaSC = inter;
+export const bonaNovaSCMono = inter;

@@ -527,6 +527,7 @@ async function createBlogPosts() {
         const createdPost = await createPost({
           ...post,
           authorId: adminUser.id,
+          author: adminUser.id, // Add author field
         });
         console.log(`✅ Created post: ${createdPost.title}`);
       } catch (error) {

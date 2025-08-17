@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "../globals.css";
 import "flag-icons/css/flag-icons.min.css";
 import { NextIntlClientProvider } from "next-intl";
-import { bonaNovaSC, bonaNovaSCMono } from "$/fonts";
+import { inter } from "$/fonts";
 import ClientLayout from "&/ClientLayout/ClientLayout";
 import { getMessages, getTranslations } from "next-intl/server";
 import StructuredData from "./structured-data";
@@ -106,12 +106,13 @@ export default async function RootLayout({ children, params }: Props) {
   return (
     <html lang={locale} dir={isRTL ? "rtl" : "ltr"}>
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+        />
         <StructuredData />
       </head>
-      <body
-        className={`${bonaNovaSC.variable} ${bonaNovaSCMono.variable} antialiased`}
-      >
+      <body className={`${inter.variable} antialiased`}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ClientLayout>{children}</ClientLayout>
         </NextIntlClientProvider>

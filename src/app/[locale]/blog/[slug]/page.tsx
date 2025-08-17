@@ -40,7 +40,7 @@ export default function BlogPostPage() {
         {post.title}
       </Typography>
       <Box sx={{ color: "text.secondary", mb: 2 }}>
-        By {post.authorId} • {new Date(post.createdAt).toLocaleDateString()}
+        By {post.author} • {new Date(post.createdAt).toLocaleDateString()}
         {post.publishedAt &&
           ` • Published ${new Date(post.publishedAt).toLocaleDateString()}`}
       </Box>

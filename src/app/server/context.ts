@@ -10,6 +10,8 @@ interface AuthenticatedUser {
   id: string;
   email: string;
   name: string;
+  firstName: string;
+  lastName: string;
   role: string;
 }
 
@@ -81,6 +83,8 @@ export async function createContext({
             id: user.id,
             email: user.email,
             name: `${user.firstName} ${user.lastName}`,
+            firstName: user.firstName,
+            lastName: user.lastName,
             role: user.role,
           };
         }

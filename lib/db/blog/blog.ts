@@ -15,6 +15,7 @@ export type CreatePostInput = {
   tags?: string[];
   imageUrl?: string;
   imageAlt?: string;
+  author: string;
   authorId: string;
 };
 
@@ -64,6 +65,7 @@ export const createPost = async (input: CreatePostInput) => {
       tags: input.tags || [],
       imageUrl: input.imageUrl,
       imageAlt: input.imageAlt,
+      author: input.author,
       authorId: input.authorId,
       createdAt: now,
       publishedAt: input.status === "published" ? now : null,

@@ -513,7 +513,8 @@ export const baseTheme = createTheme({
   paperLight: "#fafafa",
   paperDark: "#2C3E50",
   typography: {
-    fontFamily: 'var(--font-bona-nova-sc), "Bona Nova SC", serif',
+    fontFamily:
+      'var(--font-inter), "Inter", system-ui, -apple-system, sans-serif',
     h1: {
       fontWeight: 700,
       fontSize: "2.5rem",

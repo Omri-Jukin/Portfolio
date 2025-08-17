@@ -6,6 +6,8 @@ export { default as Background } from "./Background";
 export { default as BackgroundCard } from "./Background/BackgroundCard";
 export { default as Galaxy } from "./GalaxyCard/Galaxy";
 export { default as GalaxyCard } from "./GalaxyCard/GalaxyCard";
+export { default as GlobeBackground } from "./GlobeBackground";
+export { default as ResponsiveBackground } from "./ScrollingSections/ResponsiveBackground";
 export {
   Button,
   NeonButton,
@@ -104,3 +106,4 @@ export type { ResumeLanguageSelectorProps } from "./ResumeLanguageSelector";
 export type { ConnectionLineProps } from "./ConnectionLine";
 export type { ScrollGapAnimatorProps } from "./ScrollGapAnimator";
 export type { CollaborationHubProps } from "./CollaborationHub";
+export type { GlobeBackgroundProps, GlobeMarker } from "./GlobeBackground";
