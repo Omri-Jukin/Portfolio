@@ -5,6 +5,9 @@ import {
   processRTLTitle,
   processRTLMixedContent,
 } from "./rtlTextProcessor";
+import { getTextColors } from "#/theme/textColors";
+import { createTheme } from "@mui/material/styles";
+import { SoftSkill, TechnicalSkill } from "@/app/[locale]/resume/page";
 
 export interface ResumeData {
   metadata: {
@@ -86,8 +89,9 @@ export class PDFGenerator {
   private sidebarWidth: number = 0; // Single-column layout for ATS
   private mainContentWidth: number;
   private lineHeight: number = 7;
-  private primaryColor: [number, number, number] = [44, 62, 80]; // Dark blue-gray
-  private secondaryColor: [number, number, number] = [52, 73, 94]; // Dark gray
+  private textColors: ReturnType<typeof getTextColors>;
+  private primaryColor: [number, number, number] = [20, 20, 20]; // Almost black for readability
+  private secondaryColor: [number, number, number] = [68, 68, 68]; // Dark gray for readability
   private accentColor: [number, number, number] = [127, 0, 63]; // Red accent
   private sidebarColor: [number, number, number] = [255, 255, 255]; // No sidebar color needed
   private isRTL: boolean = false;
@@ -103,6 +107,10 @@ export class PDFGenerator {
     this.pageWidth = 0;
     this.pageHeight = 0;
     this.mainContentWidth = 0;
+
+    // Initialize text colors with a light theme for PDF (always readable on white background)
+    const theme = createTheme({ palette: { mode: "light" } });
+    this.textColors = getTextColors(theme);
   }
 
   private async initDoc(): Promise<void> {
@@ -233,15 +241,29 @@ export class PDFGenerator {
     );
   }
 
+  private hexToRgb(hex: string): [number, number, number] {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result
+      ? [
+          parseInt(result[1], 16),
+          parseInt(result[2], 16),
+          parseInt(result[3], 16),
+        ]
+      : [0, 0, 0];
+  }
+
   private applyTemplatePalette(template: ResumeTemplate): void {
-    // Defaults: dark text for readability
-    const primary: [number, number, number] = [20, 20, 20];
-    const secondary: [number, number, number] = [68, 68, 68];
-    let accent: [number, number, number] = [127, 0, 63];
+    // Use centralized text colors for better readability and consistency
+    this.primaryColor = this.hexToRgb(this.textColors.primary);
+    this.secondaryColor = this.hexToRgb(this.textColors.secondary);
+
+    // Set accent color based on template
+    let accent: [number, number, number] = this.hexToRgb(
+      this.textColors.accent
+    );
 
     switch (template) {
       case "teal":
-        // keep dark primary; set accent to template color
         accent = [0, 121, 107];
         break;
       case "indigo":
@@ -260,12 +282,11 @@ export class PDFGenerator {
         accent = [52, 73, 94]; // Dark gray
         break;
       default:
-        // keep defaults
+        // Use centralized accent color
+        accent = this.hexToRgb(this.textColors.accent);
         break;
     }
 
-    this.primaryColor = primary;
-    this.secondaryColor = secondary;
     this.accentColor = accent;
   }
 
@@ -697,6 +718,9 @@ export class PDFGenerator {
       mainY
     );
 
+    // Technical Skills (matches resume page exactly)
+    mainY = this.addSkillsSection(data.skills, mainY);
+
     // Professional Experience
     mainY = this.addExperienceSection(data.career, mainY);
 
@@ -718,6 +742,8 @@ export class PDFGenerator {
     this.drawSeparator(y - 4);
     y = this.addMainSection("Professional Summary", data.resume.experience, y);
     this.drawSeparator(y - 8);
+    y = this.addSkillsSection(data.skills, y);
+    this.drawSeparator(y - 8);
     y = this.addExperienceSection(data.career, y);
     this.drawSeparator(y - 8);
     y = this.addProjectsSection(data.projects, y);
@@ -731,6 +757,8 @@ export class PDFGenerator {
     y = this.addMainHeader(data.metadata, y);
     this.drawModernSeparator(y - 4);
     y = this.addMainSection("Professional Summary", data.resume.experience, y);
+    this.drawModernSeparator(y - 8);
+    y = this.addSkillsSection(data.skills, y);
     this.drawModernSeparator(y - 8);
     y = this.addExperienceSection(data.career, y);
     this.drawModernSeparator(y - 8);
@@ -746,6 +774,8 @@ export class PDFGenerator {
     this.drawElegantSeparator(y - 4);
     y = this.addMainSection("Professional Summary", data.resume.experience, y);
     this.drawElegantSeparator(y - 8);
+    y = this.addSkillsSection(data.skills, y);
+    this.drawElegantSeparator(y - 8);
     y = this.addExperienceSection(data.career, y);
     this.drawElegantSeparator(y - 8);
     y = this.addProjectsSection(data.projects, y);
@@ -759,6 +789,8 @@ export class PDFGenerator {
     y = this.addMainHeader(data.metadata, y);
     this.drawTechSeparator(y - 4);
     y = this.addMainSection("Professional Summary", data.resume.experience, y);
+    this.drawTechSeparator(y - 8);
+    y = this.addSkillsSection(data.skills, y);
     this.drawTechSeparator(y - 8);
     y = this.addExperienceSection(data.career, y);
     this.drawTechSeparator(y - 8);
@@ -774,6 +806,8 @@ export class PDFGenerator {
     this.drawCreativeSeparator(y - 4);
     y = this.addMainSection("Professional Summary", data.resume.experience, y);
     this.drawCreativeSeparator(y - 8);
+    y = this.addSkillsSection(data.skills, y);
+    this.drawCreativeSeparator(y - 8);
     y = this.addExperienceSection(data.career, y);
     this.drawCreativeSeparator(y - 8);
     y = this.addProjectsSection(data.projects, y);
@@ -787,6 +821,8 @@ export class PDFGenerator {
     y = this.addMainHeader(data.metadata, y);
     this.drawMinimalSeparator(y - 4);
     y = this.addMainSection("Professional Summary", data.resume.experience, y);
+    this.drawMinimalSeparator(y - 8);
+    y = this.addSkillsSection(data.skills, y);
     this.drawMinimalSeparator(y - 8);
     y = this.addExperienceSection(data.career, y);
     this.drawMinimalSeparator(y - 8);
@@ -1059,6 +1095,205 @@ export class PDFGenerator {
     });
 
     return y + 10;
+  }
+
+  private addSkillsSection(skills: ResumeData["skills"], y: number): number {
+    // Check if we need a page break
+    if (y > this.pageHeight - 80) {
+      this.doc.addPage();
+      this.drawSidebarBackground();
+      y = this.getTopStartY();
+    }
+
+    // Section title
+    this.doc.setTextColor(...this.primaryColor);
+    this.doc.setFontSize(16);
+
+    if (this.isRTL) {
+      this.doc.setFont("bona-nova", "bold");
+      const processedTitle = this.processRTLText("Technical Expertise");
+      this.doc.text(
+        processedTitle,
+        this.mainContentX + this.mainContentWidth - 15,
+        y,
+        { align: "right" }
+      );
+    } else {
+      this.doc.setFont("helvetica", "bold");
+      this.doc.text("Technical Expertise", this.mainContentX, y);
+    }
+    y += 10;
+
+    // Technical Skills
+    this.doc.setTextColor(...this.accentColor);
+    this.doc.setFontSize(14);
+
+    if (this.isRTL) {
+      this.doc.setFont("bona-nova", "bold");
+      this.doc.text(
+        "Technical Skills",
+        this.mainContentX + this.mainContentWidth - 15,
+        y,
+        { align: "right" }
+      );
+    } else {
+      this.doc.setFont("helvetica", "bold");
+      this.doc.text("Technical Skills", this.mainContentX, y);
+    }
+    y += 8;
+
+    // Display technical skills exactly as shown on the resume page
+    skills.categories.technical.skills.forEach((skill: TechnicalSkill) => {
+      if (y > this.pageHeight - 30) {
+        this.doc.addPage();
+        this.drawSidebarBackground();
+        y = this.getTopStartY();
+      }
+
+      // Skill name and level
+      this.doc.setTextColor(...this.primaryColor);
+      this.doc.setFontSize(11);
+
+      if (this.isRTL) {
+        this.doc.setFont("bona-nova", "bold");
+        this.doc.text(
+          `${skill.name} (${skill.level}%)`,
+          this.mainContentX + this.mainContentWidth - 15,
+          y,
+          { align: "right" }
+        );
+      } else {
+        this.doc.setFont("helvetica", "bold");
+        this.doc.text(`${skill.name} (${skill.level}%)`, this.mainContentX, y);
+      }
+      y += 5;
+
+      // Technologies
+      if (skill.technologies && skill.technologies.length > 0) {
+        this.doc.setTextColor(...this.secondaryColor);
+        this.doc.setFontSize(9);
+
+        if (this.isRTL) {
+          this.doc.setFont("bona-nova", "normal");
+        } else {
+          this.doc.setFont("helvetica", "normal");
+        }
+
+        const techText = skill.technologies.join(", ");
+        const lines = this.doc.splitTextToSize(
+          techText,
+          this.mainContentWidth - 20
+        );
+
+        lines.forEach((line: string) => {
+          if (y > this.pageHeight - 25) {
+            this.doc.addPage();
+            this.drawSidebarBackground();
+            y = this.getTopStartY();
+          }
+
+          if (this.isRTL) {
+            this.doc.text(
+              line,
+              this.mainContentX + this.mainContentWidth - 35,
+              y,
+              { align: "right" }
+            );
+          } else {
+            this.doc.text(line, this.mainContentX + 20, y);
+          }
+          y += 4;
+        });
+      }
+      y += 3;
+    });
+
+    y += 8;
+
+    // Soft Skills
+    this.doc.setTextColor(...this.accentColor);
+    this.doc.setFontSize(14);
+
+    if (this.isRTL) {
+      this.doc.setFont("bona-nova", "bold");
+      this.doc.text(
+        "Soft Skills",
+        this.mainContentX + this.mainContentWidth - 15,
+        y,
+        { align: "right" }
+      );
+    } else {
+      this.doc.setFont("helvetica", "bold");
+      this.doc.text("Soft Skills", this.mainContentX, y);
+    }
+    y += 8;
+
+    // Display soft skills exactly as shown on the resume page
+    skills.categories.soft.skills.forEach((skill: SoftSkill) => {
+      if (y > this.pageHeight - 30) {
+        this.doc.addPage();
+        this.drawSidebarBackground();
+        y = this.getTopStartY();
+      }
+
+      // Skill name and level
+      this.doc.setTextColor(...this.primaryColor);
+      this.doc.setFontSize(11);
+
+      if (this.isRTL) {
+        this.doc.setFont("bona-nova", "bold");
+        this.doc.text(
+          `${skill.name} (${skill.level}%)`,
+          this.mainContentX + this.mainContentWidth - 15,
+          y,
+          { align: "right" }
+        );
+      } else {
+        this.doc.setFont("helvetica", "bold");
+        this.doc.text(`${skill.name} (${skill.level}%)`, this.mainContentX, y);
+      }
+      y += 5;
+
+      // Description
+      if (skill.description) {
+        this.doc.setTextColor(...this.secondaryColor);
+        this.doc.setFontSize(9);
+
+        if (this.isRTL) {
+          this.doc.setFont("bona-nova", "normal");
+        } else {
+          this.doc.setFont("helvetica", "normal");
+        }
+
+        const lines = this.doc.splitTextToSize(
+          skill.description,
+          this.mainContentWidth - 20
+        );
+
+        lines.forEach((line: string) => {
+          if (y > this.pageHeight - 25) {
+            this.doc.addPage();
+            this.drawSidebarBackground();
+            y = this.getTopStartY();
+          }
+
+          if (this.isRTL) {
+            this.doc.text(
+              line,
+              this.mainContentX + this.mainContentWidth - 35,
+              y,
+              { align: "right" }
+            );
+          } else {
+            this.doc.text(line, this.mainContentX + 20, y);
+          }
+          y += 4;
+        });
+      }
+      y += 3;
+    });
+
+    return y + 8;
   }
 
   private addExperienceSection(

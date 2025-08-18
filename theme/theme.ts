@@ -1,5 +1,6 @@
 import { ContactCardType } from "@/app/[locale]/contact/page.type";
 import { Theme, createTheme } from "@mui/material/styles";
+import { getTextColors, applyTextColorVariables } from "./textColors";
 
 // Utility function to extract colors from conic gradients
 const extractColorsFromGradient = (gradient: string): string[] => {
@@ -977,3 +978,79 @@ export const gradients = {
   telegram:
     "linear-gradient(to right, #FF6B6B, #FF8A65, #FFB347, #FFD700, #FF69B4)",
 };
+
+/**
+ * Creates a theme with integrated text color system
+ * @param mode - theme mode ('light' | 'dark')
+ * @param direction - theme direction ('ltr' | 'rtl')
+ * @returns Theme with centralized text colors
+ */
+export const createAppTheme = (
+  mode: "light" | "dark" = "light",
+  direction: "ltr" | "rtl" = "ltr"
+): Theme => {
+  // Create theme with provided mode and direction
+  const theme = createTheme({
+    ...baseTheme,
+    palette: {
+      ...baseTheme.palette,
+      mode,
+    },
+    direction,
+    breakpoints: {
+      values: {
+        xs: 0,
+        sm: 600,
+        md: 900,
+        lg: 1200,
+        xl: 1536,
+        ml: 1920,
+        xxl: 2560,
+        xxxl: 3840,
+        xxxxl: 5120,
+      },
+    },
+  });
+
+  // Get centralized text colors
+  const textColors = getTextColors(theme);
+
+  // Update theme text palette with centralized colors
+  const enhancedTheme = createTheme({
+    ...theme,
+    palette: {
+      ...theme.palette,
+      text: {
+        primary: textColors.primary,
+        secondary: textColors.secondary,
+        disabled: textColors.muted,
+      },
+    },
+    direction,
+    breakpoints: {
+      values: {
+        xs: 0,
+        sm: 600,
+        md: 900,
+        lg: 1200,
+        xl: 1536,
+        ml: 1920,
+        xxl: 2560,
+        xxxl: 3840,
+        xxxxl: 5120,
+      },
+    },
+  });
+
+  // Apply CSS variables for text colors
+  if (typeof window !== "undefined") {
+    applyTextColorVariables(enhancedTheme);
+  }
+
+  return enhancedTheme;
+};
+
+/**
+ * Default theme instance with centralized text colors
+ */
+export const defaultTheme = createAppTheme("light", "ltr");

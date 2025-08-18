@@ -16,6 +16,9 @@ const localeData = {
 export const extractResumeData = (language: string = "en"): ResumeData => {
   const data = localeData[language as keyof typeof localeData] || localeData.en;
 
+  // Extract career experiences - use the career data from locales
+  const careerExperiences = data.career?.experiences || [];
+
   return {
     metadata: {
       title: data.metadata.title,
@@ -25,10 +28,11 @@ export const extractResumeData = (language: string = "en"): ResumeData => {
       title: data.resume.title,
       description: data.resume.description,
       experience: data.resume.experience,
-      professionalSummary: data.resume.professionalSummary,
+      professionalSummary:
+        data.resume.professionalSummary || "Professional Summary",
     },
     career: {
-      experiences: data.career.experiences,
+      experiences: careerExperiences,
     },
     skills: {
       categories: {
@@ -40,20 +44,21 @@ export const extractResumeData = (language: string = "en"): ResumeData => {
       projects: data.projects.projects,
     },
     languages: {
-      programming: [
+      programming: data.languages?.programming || [
         { name: "TypeScript", level: "Advanced" },
         { name: "JavaScript", level: "Advanced" },
         { name: "Java", level: "Intermediate" },
         { name: "C#", level: "Intermediate" },
         { name: "Python", level: "Novice" },
       ],
-      spoken: [
+      spoken: data.languages?.spoken || [
         { name: "Hebrew", level: "Native" },
         { name: "English", level: "Professional" },
         { name: "Spanish", level: "Novice" },
       ],
     },
     additionalActivities:
+      data.additionalActivities ||
       "Founder of an online community promoting critical and rational thinking and open debates. Engaged in public speaking and live broadcasts on topics related to hard sciences, soft sciences, rational thinking, and technology. Enthusiastic hobbyist magician, using creative skills to engage audiences and encourage curiosity.",
   };
 };
