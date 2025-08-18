@@ -527,6 +527,23 @@
       }
     }
   },
+  "languages": {
+    "title": "Idiomas",
+    "subtitle": "Mis idiomas de programación y hablados",
+    "programming": [
+      { "name": "TypeScript", "level": "Avanzado" },
+      { "name": "JavaScript", "level": "Avanzado" },
+      { "name": "Java", "level": "Intermedio" },
+      { "name": "C#", "level": "Intermedio" },
+      { "name": "Python", "level": "Principiante" }
+    ],
+    "spoken": [
+      { "name": "Hebreo", "level": "Nativo" },
+      { "name": "Inglés", "level": "Profesional" },
+      { "name": "Español", "level": "Principiante" }
+    ]
+  },
+  "additionalActivities": "Fundador de una comunidad en línea que promueve el pensamiento crítico y racional y debates abiertos. Participa en conferencias públicas y transmisiones en vivo sobre temas relacionados con ciencias duras, ciencias blandas, pensamiento racional y tecnología. Mago aficionado entusiasta, utilizando habilidades creativas para involucrar audiencias y fomentar la curiosidad.",
   "footer": {
     "title": "Acerca de",
     "children": "Desarrollador Full Stack construyendo sistemas escalables y experiencias web modernas con arquitectura limpia y soluciones prácticas.",
