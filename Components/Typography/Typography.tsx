@@ -7,24 +7,27 @@ import {
 } from "./Typography.style";
 import { TypographyProps } from "./Typography.type";
 
-const Typography = ({ children, ...props }: TypographyProps) => (
-  <StyledTypography {...props}>{children}</StyledTypography>
+const Typography = ({ children, id, ...props }: TypographyProps) => (
+  <StyledTypography id={id} {...props}>
+    {children}
+  </StyledTypography>
 );
 
 export interface MarqueeProps {
   text: string;
   className?: string;
+  id?: string;
 }
 
-const Marquee: React.FC<MarqueeProps> = ({ text, className }) => {
+const Marquee: React.FC<MarqueeProps> = ({ text, className, id }) => {
   return (
-    <MarqueeText className={className}>
+    <MarqueeText className={className} id={id}>
       <MarqueeTextContent>{text}</MarqueeTextContent>
       <MarqueeBlur>
-        <Typography>{text}</Typography>
+        <Typography id={id}>{text}</Typography>
       </MarqueeBlur>
       <MarqueeClear>
-        <Typography>{text}</Typography>
+        <Typography id={id}>{text}</Typography>
       </MarqueeClear>
     </MarqueeText>
   );

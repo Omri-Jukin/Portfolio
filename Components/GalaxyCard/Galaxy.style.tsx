@@ -1,7 +1,7 @@
 import { styled } from "@mui/material/styles";
 import { Box } from "@mui/system";
 
-export const GalaxyContainer = styled("div")({
+export const GalaxyContainer = styled(Box)({
   position: "relative",
   width: "100%",
   minHeight: "fit-content",
