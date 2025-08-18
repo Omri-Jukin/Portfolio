@@ -102,9 +102,9 @@ export default function ResumePage() {
         if (docType === "condensedResume") {
           filename = `Omri_Jukin_FullStack_Developer_Resume.pdf`;
         } else if (docType === "technicalPortfolio") {
-          filename = `Omri_Jukin_FullStack_Developer_Technical_Portfolio_${options.language.toUpperCase()}.pdf`;
+          filename = `Omri_Jukin_FullStack_Developer_Technical_Portfolio.pdf`;
         } else {
-          filename = `Omri_Jukin_FullStack_Developer_${docType}_${options.language.toUpperCase()}.pdf`;
+          filename = `Omri_Jukin_FullStack_Developer_${docType}.pdf`;
         }
 
         const pdf = (await generateResumePDF(
