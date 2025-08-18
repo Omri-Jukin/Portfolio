@@ -21,6 +21,7 @@ export type TypographyColor =
 export type TypographyAlign = "left" | "center" | "right";
 
 export type TypographyProps = {
+  id?: string;
   children: React.ReactNode;
   theme?: Theme;
   variant?: TypographyVariant;

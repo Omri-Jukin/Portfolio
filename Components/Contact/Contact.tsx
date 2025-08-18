@@ -10,7 +10,6 @@ import {
 } from "./Contact.style";
 import { CONTACT_CONSTANTS } from "./Contact.const";
 import type { ContactProps } from "./Contact.type";
-import { Typography } from "@mui/material";
 import { GalaxyCard, NeonButton } from "..";
 import type { GalaxyCardProps } from "../GalaxyCard/GalaxyCard";
 
@@ -19,10 +18,12 @@ const Contact: React.FC<ContactProps> = ({ locale = "en", onContactClick }) => {
 
   const galaxyProps: GalaxyCardProps = {
     offset: { x: 5 },
+    id: CONTACT_CONSTANTS.SECTION_ID,
   };
 
   return (
     <GalaxyCard
+      id={CONTACT_CONSTANTS.SECTION_ID}
       sx={{
         width: "100%",
         height: "100%",
@@ -33,30 +34,29 @@ const Contact: React.FC<ContactProps> = ({ locale = "en", onContactClick }) => {
       }}
       {...galaxyProps}
     >
-      <ContactContainer id={CONTACT_CONSTANTS.SECTION_ID}>
+      <ContactContainer id={`${CONTACT_CONSTANTS.SECTION_ID}-container`}>
         <MotionWrapper
           variant="fadeInUp"
           duration={CONTACT_CONSTANTS.ANIMATION.TITLE_DURATION}
         >
-          <ContactTitle>{t("title")}</ContactTitle>
-          <ContactSubtitle>{t("subtitle")}</ContactSubtitle>
-        </MotionWrapper>
-
-        <MotionWrapper variant="slideUp" duration={0.8} delay={1.4}>
-          <Typography
-            variant="h5"
-            component="p"
-            sx={{ color: "primary.main", mb: 2 }}
-          >
+          <ContactTitle id={`${CONTACT_CONSTANTS.SECTION_ID}-title`}>
             {t("title")}
-          </Typography>
-          <ContactDescription>{t("description")}</ContactDescription>
+          </ContactTitle>
+          <ContactSubtitle id={`${CONTACT_CONSTANTS.SECTION_ID}-subtitle`}>
+            {t("subtitle")}
+          </ContactSubtitle>
+          <ContactDescription
+            id={`${CONTACT_CONSTANTS.SECTION_ID}-description`}
+          >
+            {t("description")}
+          </ContactDescription>
           <NeonButton
             href={`/${locale}/contact`}
             variant="contained"
             size="large"
             endIcon={<ArrowForwardIcon />}
             onClick={onContactClick}
+            id={`${CONTACT_CONSTANTS.SECTION_ID}-button`}
           >
             {t("button")}
           </NeonButton>
