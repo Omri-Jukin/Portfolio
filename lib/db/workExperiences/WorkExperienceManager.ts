@@ -1,6 +1,7 @@
 import { eq, asc, desc, and, isNull, isNotNull, sql, count } from "drizzle-orm";
 import { getDB } from "../client";
-import { workExperiences, type EmploymentType } from "../schema/schema.tables";
+import { workExperiences } from "../schema/schema.tables";
+import { EmploymentType } from "../schema/schema.types";
 import type {
   WorkExperience,
   WorkExperienceDB,
@@ -11,7 +12,8 @@ import type {
 } from "./WorkExperiences.type";
 import { nanoid } from "nanoid";
 
-const db = await getDB();
+// Helper function to get database client
+const getDbClient = async () => getDB();
 
 // Helper function to transform DB dates to API strings
 const transformDbToApi = (dbWorkExp: WorkExperienceDB): WorkExperience => ({
@@ -26,6 +28,7 @@ export class WorkExperienceManager {
   static async getAll(visibleOnly = false): Promise<WorkExperience[]> {
     const conditions = visibleOnly ? [eq(workExperiences.isVisible, true)] : [];
 
+    const db = await getDbClient();
     const results = await db
       .select()
       .from(workExperiences)
@@ -39,6 +42,7 @@ export class WorkExperienceManager {
   }
 
   static async getById(id: string): Promise<WorkExperience | null> {
+    const db = await getDbClient();
     const result = await db
       .select()
       .from(workExperiences)
@@ -52,6 +56,7 @@ export class WorkExperienceManager {
     employmentType: string,
     visibleOnly = false
   ): Promise<WorkExperience[]> {
+    const db = await getDbClient();
     const conditions = [
       eq(workExperiences.employmentType, employmentType as EmploymentType),
     ];
@@ -72,6 +77,7 @@ export class WorkExperienceManager {
   }
 
   static async getCurrentPosition(): Promise<WorkExperience | null> {
+    const db = await getDbClient();
     const result = await db
       .select()
       .from(workExperiences)
@@ -88,6 +94,7 @@ export class WorkExperienceManager {
   }
 
   static async getFeatured(visibleOnly = true): Promise<WorkExperience[]> {
+    const db = await getDbClient();
     const conditions = [eq(workExperiences.isFeatured, true)];
     if (visibleOnly) {
       conditions.push(eq(workExperiences.isVisible, true));
@@ -118,6 +125,7 @@ export class WorkExperienceManager {
       updatedAt: now,
     };
 
+    const db = await getDbClient();
     await db.insert(workExperiences).values(newWorkExperience);
 
     const created = await this.getById(id);
@@ -132,6 +140,7 @@ export class WorkExperienceManager {
     id: string,
     updates: Partial<Omit<NewWorkExperience, "id" | "createdAt">>
   ): Promise<WorkExperience | null> {
+    const db = await getDbClient();
     const now = new Date();
 
     await db
@@ -146,6 +155,7 @@ export class WorkExperienceManager {
   }
 
   static async delete(id: string): Promise<boolean> {
+    const db = await getDbClient();
     const result = await db
       .delete(workExperiences)
       .where(eq(workExperiences.id, id));
@@ -156,6 +166,7 @@ export class WorkExperienceManager {
   static async updateDisplayOrder(
     updates: { id: string; displayOrder: number }[]
   ): Promise<void> {
+    const db = await getDbClient();
     const now = new Date();
 
     for (const update of updates) {
@@ -188,6 +199,7 @@ export class WorkExperienceManager {
   }
 
   static async getStatistics(): Promise<WorkExperienceStatistics> {
+    const db = await getDbClient();
     // Get counts by employment type
     const employmentTypeStats = await db
       .select({
@@ -274,6 +286,7 @@ export class WorkExperienceManager {
     query: string,
     filters?: WorkExperienceFilters
   ): Promise<WorkExperience[]> {
+    const db = await getDbClient();
     const conditions = [];
 
     // Text search across role, company, description

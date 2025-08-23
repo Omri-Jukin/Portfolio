@@ -1,10 +1,7 @@
 import { eq, asc, desc, and, sql, count, inArray } from "drizzle-orm";
 import { getDB } from "../client";
-import {
-  projects,
-  type ProjectStatus,
-  type ProjectType,
-} from "../schema/schema.tables";
+import { projects } from "../schema/schema.tables";
+import { ProjectStatus, ProjectType } from "../schema/schema.types";
 import type {
   Project,
   ProjectDB,
@@ -15,7 +12,8 @@ import type {
 } from "./Projects.type";
 import { nanoid } from "nanoid";
 
-const db = await getDB();
+// Helper function to get database client
+const getDbClient = async () => getDB();
 
 // Helper function to transform DB dates to API strings
 const transformDbToApi = (dbProject: ProjectDB): Project => ({
@@ -30,6 +28,7 @@ export class ProjectManager {
   static async getAll(visibleOnly = false): Promise<Project[]> {
     const conditions = visibleOnly ? [eq(projects.isVisible, true)] : [];
 
+    const db = await getDbClient();
     const results = await db
       .select()
       .from(projects)
@@ -40,6 +39,7 @@ export class ProjectManager {
   }
 
   static async getById(id: string): Promise<Project | null> {
+    const db = await getDbClient();
     const result = await db
       .select()
       .from(projects)
@@ -58,6 +58,7 @@ export class ProjectManager {
       conditions.push(eq(projects.isVisible, true));
     }
 
+    const db = await getDbClient();
     const results = await db
       .select()
       .from(projects)
@@ -76,6 +77,7 @@ export class ProjectManager {
       conditions.push(eq(projects.isVisible, true));
     }
 
+    const db = await getDbClient();
     const results = await db
       .select()
       .from(projects)
@@ -98,6 +100,7 @@ export class ProjectManager {
       conditions.push(eq(projects.isVisible, true));
     }
 
+    const db = await getDbClient();
     const results = await db
       .select()
       .from(projects)
@@ -113,6 +116,7 @@ export class ProjectManager {
       conditions.push(eq(projects.isVisible, true));
     }
 
+    const db = await getDbClient();
     const results = await db
       .select()
       .from(projects)
@@ -128,6 +132,7 @@ export class ProjectManager {
       conditions.push(eq(projects.isVisible, true));
     }
 
+    const db = await getDbClient();
     const results = await db
       .select()
       .from(projects)
@@ -150,6 +155,7 @@ export class ProjectManager {
       updatedAt: now,
     };
 
+    const db = await getDbClient();
     await db.insert(projects).values(newProject);
 
     const created = await this.getById(id);
@@ -166,6 +172,7 @@ export class ProjectManager {
   ): Promise<Project | null> {
     const now = new Date();
 
+    const db = await getDbClient();
     await db
       .update(projects)
       .set({
@@ -178,6 +185,7 @@ export class ProjectManager {
   }
 
   static async delete(id: string): Promise<boolean> {
+    const db = await getDbClient();
     const result = await db.delete(projects).where(eq(projects.id, id));
 
     return result.changes > 0;
@@ -189,6 +197,7 @@ export class ProjectManager {
     const now = new Date();
 
     for (const update of updates) {
+      const db = await getDbClient();
       await db
         .update(projects)
         .set({
@@ -219,6 +228,7 @@ export class ProjectManager {
 
   static async getStatistics(): Promise<ProjectStatistics> {
     // Get counts by status
+    const db = await getDbClient();
     const statusStats = await db
       .select({
         status: projects.status,
@@ -372,6 +382,7 @@ export class ProjectManager {
       conditions.push(eq(projects.isOpenSource, filters.isOpenSource));
     }
 
+    const db = await getDbClient();
     const results = await db
       .select()
       .from(projects)

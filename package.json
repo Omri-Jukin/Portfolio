@@ -100,7 +100,7 @@
     "test:watch": "jest --watch",
     "check": "tsc -p .",
     "tail": "wrangler tail --format pretty",
-    "migrate": "npx tsx scripts/migrations/migrate-static-data.ts",
+    "migrate": "npx tsx scripts/migrations/migrate-sqlite.ts",
     "//2": "— OpenNext (Pages) — default path —",
     "build": "next build",
     "clean": "rimraf .next .open-next .turbo .vercel",
