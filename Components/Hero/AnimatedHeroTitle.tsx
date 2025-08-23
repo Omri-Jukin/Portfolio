@@ -6,16 +6,16 @@ const AnimatedTitleContainer = styled(Box)(({ theme }) => ({
   fontSize: "4rem",
   fontWeight: 700,
   textAlign: "center",
-  marginBottom: theme.spacing(2),
   fontFamily: 'var(--font-bona-nova-sc), "Bona Nova SC", serif',
   textTransform: "uppercase",
   letterSpacing: "0.1em",
   display: "flex",
-  flexDirection: "column",
+  flexWrap: "wrap",
   justifyContent: "center",
   alignItems: "center",
   gap: "0.5rem",
   padding: "0 1rem",
+  lineHeight: 1.1,
   [theme.breakpoints.down("md")]: {
     fontSize: "2.5rem",
     letterSpacing: "0.05em",
@@ -110,6 +110,22 @@ const AnimatedHeroTitle: React.FC<AnimatedHeroTitleProps> = ({
     "#FFB74D", // Orange
     "#9575CD", // Purple
     "#81C784", // Light Green
+    "#FF8A65", // Light Orange
+    "#4DD0E1", // Light Teal
+    "#FFD54F", // Light Yellow
+    "#FF5722", // Dark Orange
+    "#4DB6AC", // Dark Teal
+    "#FFB300", // Dark Yellow
+    "#FF7043", // Dark Red
+    "#80DEEA", // Light Cyan
+    "#FF5722", // Dark Orange
+    "#4DB6AC", // Dark Teal
+    "#FFB300", // Dark Yellow
+    "#FF7043", // Dark Red
+    "#80DEEA", // Light Cyan
+    "#FFAB40", // Light Orange
+    "#FFCC80", // peach
+    "#FFE0B2", // Light Orange
   ];
 
   const words = text.split(" ");
@@ -152,7 +168,7 @@ const AnimatedHeroTitle: React.FC<AnimatedHeroTitleProps> = ({
     const letterInterval = setInterval(() => {
       const randomIndex = Math.floor(Math.random() * allLetters.length);
       setActiveLetter(randomIndex);
-    }, 300); // Change letter every 300ms
+    }, 600); // Change letter every 600ms
 
     // Cycle through colors
     const colorInterval = setInterval(() => {
@@ -172,12 +188,15 @@ const AnimatedHeroTitle: React.FC<AnimatedHeroTitleProps> = ({
       {words.map((word, wordIndex) => (
         <Box
           key={wordIndex}
-          component="div"
+          component="span"
           sx={{
-            display: "flex",
-            justifyContent: "center",
+            display: "inline-flex",
             alignItems: "center",
             whiteSpace: "nowrap",
+            marginRight: "0.5em",
+            "&:last-child": {
+              marginRight: 0,
+            },
           }}
         >
           {word.split("").map((letter, index) => (

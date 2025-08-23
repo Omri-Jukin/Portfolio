@@ -1,4 +1,4 @@
-import { GlobeMarker } from "./GlobeBackground.type";
+import type { GlobeMarker } from "./GlobeBackground.type";
 
 // Default markers for interesting locations around the world
 export const DEFAULT_GLOBE_MARKERS: GlobeMarker[] = [
@@ -69,3 +69,72 @@ export const DEFAULT_GLOBE_CONFIG = {
   rotationSpeed: 0.005,
   opacity: 0.3,
 } as const;
+
+// Grid configuration for massive globe spanning from side to side
+export const GRID_CONFIG = {
+  // Desktop: 16x9 grid - massive globe spanning full width, positioned much lower
+  desktop: {
+    columns: 16,
+    rows: 9,
+    globe: {
+      startColumn: 0,
+      endColumn: 16,
+      startRow: 0,
+      endRow: 9, // Extends far below viewport to show only upper horizon
+    },
+  },
+  // Tablet: 9x16 grid - full width massive globe, positioned lower
+  tablet: {
+    columns: 9,
+    rows: 16,
+    globe: {
+      startColumn: 0,
+      endColumn: 9,
+      startRow: 0,
+      endRow: 16, // Extends below viewport
+    },
+  },
+  // Mobile: 9x16 grid - full width massive globe, positioned lower
+  mobile: {
+    columns: 9,
+    rows: 16,
+    globe: {
+      startColumn: 0,
+      endColumn: 9,
+      startRow: 0,
+      endRow: 16, // Extends below viewport
+    },
+  },
+} as const;
+
+// Breakpoints for device detection
+export const BREAKPOINTS = {
+  mobile: 768,
+  tablet: 1024,
+} as const;
+
+// Grid cell size calculation helpers
+export const calculateGridCellSize = (
+  viewportWidth: number,
+  viewportHeight: number,
+  columns: number,
+  rows: number
+) => ({
+  cellWidth: viewportWidth / columns,
+  cellHeight: viewportHeight / rows,
+});
+
+// Globe positioning within grid cells
+export const calculateGlobePosition = (
+  viewportWidth: number,
+  viewportHeight: number
+) => {
+  // For massive globe effect, position at bottom center of viewport
+  // The globe should appear as if it's a massive planet with only the horizon visible
+
+  return {
+    left: viewportWidth / 2, // Center horizontally
+    top: viewportHeight * 1.2, // Position below viewport to show only horizon
+    transform: "translate(-50%, -50%)", // Center the globe on its calculated position
+  };
+};
