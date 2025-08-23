@@ -39,6 +39,7 @@
     "bcryptjs": "^3.0.2",
     "better-sqlite3": "^12.2.0",
     "cobe": "^0.6.4",
+    "date-fns": "^4.1.0",
     "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.44.2",
     "flag-icons": "^7.5.0",
@@ -99,6 +100,7 @@
     "test:watch": "jest --watch",
     "check": "tsc -p .",
     "tail": "wrangler tail --format pretty",
+    "migrate": "npx tsx scripts/migrations/migrate-static-data.ts",
     "//2": "— OpenNext (Pages) — default path —",
     "build": "next build",
     "clean": "rimraf .next .open-next .turbo .vercel",
@@ -127,7 +129,9 @@
     "db:remote-update": "drizzle-kit generate --remote && drizzle-kit migrate --remote && drizzle-kit push --remote",
     "//6": "— Utilities —",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv env.d.ts",
-    "clean-install": "rm -rf node_modules package-lock.json .next && npm install"
+    "clean-install": "rm -rf node_modules package-lock.json .next && npm install",
+    "//7": "— git —",
+    "gitgraph": "git log --graph --decorate --oneline --all"
   },
   "imports": {
     "@/*": "./src/*",

@@ -36,6 +36,7 @@
     "contact": "Contact",
     "blog": "Blog",
     "career": "Career",
+    "certifications": "Certifications",
     "resume": "Resume",
     "projects": "Projects",
     "skills": "Skills",
@@ -560,6 +561,64 @@
     ]
   },
   "additionalActivities": "Founder of an online community promoting critical and rational thinking and open debates. Engaged in public speaking and live broadcasts on topics related to hard sciences, soft sciences, rational thinking, and technology. Enthusiastic hobbyist magician, using creative skills to engage audiences and encourage curiosity.",
+  "certifications": {
+    "title": "Certifications & Achievements",
+    "subtitle": "Professional credentials and technical certifications that validate my expertise",
+    "verify": "Verify Certificate",
+    "credentialId": "Credential ID",
+    "categories": {
+      "technical": "Technical",
+      "cloud": "Cloud",
+      "security": "Security",
+      "project-management": "Project Management",
+      "design": "Design",
+      "other": "Other"
+    },
+    "list": [
+      {
+        "id": "practical-electrical-engineering",
+        "name": "Practical Electrical Engineering Diploma",
+        "issuer": "Air Force Technological College",
+        "issueDate": "2017-06-01",
+        "description": "Comprehensive electrical engineering program covering electrical fundamentals, system design, and programming fundamentals.",
+        "skills": ["Electrical Engineering", "System Design", "Programming"],
+        "category": "technical",
+        "icon": "🎓"
+      },
+      {
+        "id": "full-stack-development",
+        "name": "Full Stack Development Specialization",
+        "issuer": "Self-Directed Learning & Professional Experience",
+        "issueDate": "2020-01-01",
+        "description": "Advanced expertise in full-stack development through hands-on experience building scalable applications with modern technologies and frameworks.",
+        "skills": [
+          "React",
+          "Next.js",
+          "Node.js",
+          "TypeScript",
+          "PostgreSQL",
+          "MongoDB"
+        ],
+        "category": "technical",
+        "icon": "💻"
+      },
+      {
+        "id": "microservices-architecture",
+        "name": "Microservices Architecture",
+        "issuer": "Professional Experience",
+        "issueDate": "2023-01-01",
+        "description": "Extensive experience designing and implementing microservices architectures for enterprise-level applications, including service orchestration and inter-service communication.",
+        "skills": [
+          "Microservices",
+          "API Design",
+          "System Architecture",
+          "Service Orchestration"
+        ],
+        "category": "technical",
+        "icon": "🏗️"
+      }
+    ]
+  },
   "footer": {
     "title": "About",
     "children": "Full stack developer building scalable systems and modern web experiences with clean architecture and practical solutions.",
@@ -567,6 +626,7 @@
     "links": [
       { "label": "Home", "href": "/" },
       { "label": "Career", "href": "/career" },
+      { "label": "Certifications", "href": "/certifications" },
       { "label": "Resume", "href": "/resume" },
       { "label": "Blog", "href": "/blog" },
       { "label": "Contact", "href": "/contact" },

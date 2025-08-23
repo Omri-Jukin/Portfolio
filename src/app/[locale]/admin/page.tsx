@@ -148,6 +148,119 @@ export default function AdminDashboard() {
           </Box>
         </CardContent>
       </Card>
+
+      {/* Work Experience Management */}
+      <Card sx={{ mb: 3 }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            Work Experience
+          </Typography>
+          <Typography variant="body2" color="text.secondary" gutterBottom>
+            Manage professional work experience, roles, and career history.
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              gap: 2,
+              alignItems: "center",
+              mt: 2,
+            }}
+          >
+            <Button
+              variant="contained"
+              onClick={() => router.push("/admin/work-experiences")}
+            >
+              Manage Work Experience
+            </Button>
+          </Box>
+        </CardContent>
+      </Card>
+
+      {/* Projects Management */}
+      <Card sx={{ mb: 3 }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            Projects
+          </Typography>
+          <Typography variant="body2" color="text.secondary" gutterBottom>
+            Manage portfolio projects, technical details, and showcased work.
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              gap: 2,
+              alignItems: "center",
+              mt: 2,
+            }}
+          >
+            <Button
+              variant="contained"
+              onClick={() => router.push("/admin/projects")}
+            >
+              Manage Projects
+            </Button>
+          </Box>
+        </CardContent>
+      </Card>
+
+      {/* Skills Management */}
+      <Card sx={{ mb: 3 }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            Skills
+          </Typography>
+          <Typography variant="body2" color="text.secondary" gutterBottom>
+            Manage technical skills, proficiency levels, and competencies.
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              gap: 2,
+              alignItems: "center",
+              mt: 2,
+            }}
+          >
+            <Button
+              variant="contained"
+              onClick={() => router.push("/admin/skills")}
+            >
+              Manage Skills
+            </Button>
+          </Box>
+        </CardContent>
+      </Card>
+
+      {/* Certifications Management */}
+      <Card sx={{ mb: 3 }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            Certifications
+          </Typography>
+          <Typography variant="body2" color="text.secondary" gutterBottom>
+            Manage professional certifications and credentials displayed on the
+            portfolio.
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              gap: 2,
+              alignItems: "center",
+              mt: 2,
+            }}
+          >
+            <Button
+              variant="contained"
+              onClick={() => router.push("/admin/certifications")}
+            >
+              Manage Certifications
+            </Button>
+          </Box>
+        </CardContent>
+      </Card>
     </Box>
   );
 }
