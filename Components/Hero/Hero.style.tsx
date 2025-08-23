@@ -46,6 +46,22 @@ export const HeroButtonsContainer = styled(Box)(({ theme }) => ({
   flexWrap: "wrap",
 }));
 
+export const HeroTitleContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: theme.spacing(2),
+  marginBottom: theme.spacing(2),
+  width: "100%",
+  [theme.breakpoints.down("md")]: {
+    gap: theme.spacing(1.5),
+  },
+  [theme.breakpoints.down("sm")]: {
+    gap: theme.spacing(1),
+  },
+}));
+
 export const HeroButton = styled(Button)(({ theme }) => ({
   borderRadius: theme.spacing(1),
   textTransform: "none",
