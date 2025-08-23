@@ -1,27 +1,27 @@
 {
   "metadata": {
     "title": "Omri Jukin",
-    "description": "Développeur Full Stack | Systèmes évolutifs · Architecture propre · Next.js · tRPC · PostgreSQL · MongoDB · Microservices"
+    "description": "Ingénieur FullStack | Développement Full-Stack · Développement Web Full-Stack · Ingénierie Logicielle Full-Stack · React · Node.js · TypeScript · JavaScript · Next.js · tRPC · PostgreSQL · MongoDB · Architecture de Microservices · Développement d'APIs · APIs REST · GraphQL · Déploiement Cloud · DevOps · CI/CD"
   },
   "login": {
     "title": "Connexion Administrateur",
     "subtitle": "Entrez vos identifiants pour accéder au panneau d'administration",
     "username": "Nom d'utilisateur",
     "password": "Mot de passe",
-    "signIn": "Se Connecter",
+    "signIn": "Se connecter",
     "signingIn": "Connexion en cours...",
     "invalidCredentials": "Identifiants invalides",
     "loginFailed": "Échec de la connexion. Veuillez réessayer."
   },
   "register": {
-    "title": "Créer un Compte",
+    "title": "Créer un compte",
     "subtitle": "Inscrivez-vous pour un compte. Votre inscription sera examinée par un administrateur.",
-    "name": "Nom Complet",
+    "name": "Nom complet",
     "email": "Email",
-    "password": "Mot de Passe",
-    "confirmPassword": "Confirmer le Mot de Passe",
-    "createAccount": "Créer un Compte",
-    "creatingAccount": "Création du Compte...",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "createAccount": "Créer un compte",
+    "creatingAccount": "Création du compte...",
     "registrationSuccess": "Inscription réussie ! Veuillez attendre l'approbation de l'administrateur.",
     "registrationFailed": "Échec de l'inscription. Veuillez réessayer.",
     "passwordsDontMatch": "Les mots de passe ne correspondent pas",
@@ -39,31 +39,33 @@
     "resume": "CV",
     "projects": "Projets",
     "skills": "Compétences",
-    "description": "Développeur Full Stack spécialisé dans les systèmes évolutifs, l'architecture propre et les technologies modernes incluant Next.js, tRPC, PostgreSQL, MongoDB et microservices."
+    "description": "Je suis un Ingénieur FullStack spécialisé dans le développement web full-stack, l'architecture de systèmes évolutifs et les technologies modernes incluant React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB et les microservices."
   },
   "hero": {
-    "title": "Créer de la magie numérique",
-    "subtitle": "Vous vous demandez comment je fonctionne ? Voici les détails internes—sans fioritures, juste des faits, avec une touche de style.",
+    "titleRow1": "Je Ne Vends Pas de Logiciel.",
+    "titleRow2": "J'Ingénie l'Évolution du Futur",
+    "subtitle": "Je ne suis pas qu'un développeur—je suis un visionnaire. Je ne construis pas seulement du logiciel ; j'ingénie l'évolution. Mon travail ne consiste pas à créer des produits ; il s'agit de façonner l'avenir.",
     "exploreButton": "Explorer le travail",
     "resumeButton": "CV",
-    "careerButton": "Carrière"
+    "careerButton": "Carrière",
+    "cta": "Ingénions l'avenir ensemble"
   },
   "examples": {
     "title": "Exemples Interactifs",
-    "subtitle": "Explorez mes capacités de développement full-stack à travers des exemples interactifs, présentant React, TypeScript, Three.js, animations et technologies web modernes.",
+    "subtitle": "Explorez mes capacités de développement full-stack à travers des exemples interactifs, montrant React, TypeScript, Three.js, animations et technologies web modernes.",
     "cta": "Voulez-vous voir plus d'exemples interactifs ?",
     "viewMoreButton": "Voir les Exemples Complets"
   },
   "scrollGaps": {
     "heroAbout": {
-      "text": "Découvrir le chemin à venir...",
-      "cta": "Continuez à faire défiler pour en savoir plus"
+      "text": "Découvrez le chemin qui nous attend...",
+      "cta": "Continuez à faire défiler pour en découvrir plus"
     },
     "aboutQA": {
       "text": "Construire des ponts entre idées et exécution"
     },
     "qaServices": {
-      "text": "Tournant à travers la stack technologique"
+      "text": "Tournant à travers la pile technologique"
     },
     "servicesProjects": {
       "text": "Où la vision rencontre la réalité"
@@ -81,78 +83,73 @@
   "about": {
     "title": "Qui Je Suis",
     "subtitle": "EXPLOREZ MA BOÎTE À OUTILS CRÉATIVE",
-    "description": "Je suis un développeur et designer passionné qui croit que les grandes expériences numériques naissent de la parfaite fusion entre expertise technique et vision créative. Avec des années d'expérience dans la création d'applications web, j'ai appris que les meilleures solutions sont celles qui non seulement fonctionnent parfaitement, mais qui ravissent également les utilisateurs à chaque interaction.",
+    "description": "Je suis un Ingénieur FullStack passionné et designer qui croit que les grandes expériences numériques proviennent de la parfaite combinaison d'expertise technique et de vision créative. Avec des années d'expérience dans la création d'applications web full-stack, j'ai appris que les meilleures solutions sont celles qui non seulement fonctionnent parfaitement, mais qui ravissent aussi les utilisateurs à chaque interaction.",
     "mySkills": "Mes Compétences",
     "skillDetailsTitle": "Détails des Compétences",
-    "experience": "Expérience:",
-    "years": "Années:",
-    "technologies": "Technologies:",
-    "examples": "Exemples:",
+    "experience": "Expérience :",
+    "years": "Années :",
+    "technologies": "Technologies :",
+    "examples": "Exemples :",
     "readyToWork": "Prêt à Travailler Ensemble ?",
-    "letsDiscuss": "Discutons de la façon dont mes compétences et mon expérience peuvent aider à donner vie à mon projet.",
+    "letsDiscuss": "Discutons de la façon dont mes compétences et mon expérience peuvent aider à donner vie à votre projet.",
     "cta": "Voir Mon CV",
     "skills": {
-      "codeConjurer": "SORCIER DU CODE",
+      "codeConjurer": "CONJURATEUR DE CODE",
       "brandArchitect": "ARCHITECTE DE MARQUE",
       "designDreamer": "RÊVEUR DU DESIGN"
     },
     "skillDetails": {
       "codeConjurer": {
-        "title": "SORCIER DU CODE",
-        "description": "Transformer des problèmes complexes en solutions élégantes et évolutives grâce à un code propre et une architecture innovante.",
+        "title": "CONJURATEUR DE CODE",
+        "description": "Je transforme des exigences complexes en solutions élégantes et évolutives. Mon expertise couvre toute la pile de développement, des interfaces frontend réactives aux systèmes backend robustes et architectures de base de données efficaces.",
         "experience": "Avancé",
         "technologies": [
-          "TypeScript",
-          "JavaScript",
-          "Node.js",
           "React",
+          "Node.js",
+          "TypeScript",
           "Next.js",
+          "tRPC",
           "PostgreSQL",
-          "MongoDB",
-          "Python"
+          "MongoDB"
         ],
         "examples": [
-          "Architecture de Microservices",
-          "Développement d'APIs",
-          "Conception de Bases de Données",
-          "Optimisation des Performances"
+          "Plateformes de microservices",
+          "Systèmes CRM",
+          "Solutions de commerce électronique"
         ],
-        "years": "4+ années"
+        "years": "5+ années"
       },
       "brandArchitect": {
         "title": "ARCHITECTE DE MARQUE",
-        "description": "Créer des expériences de marque convaincantes qui résonnent avec les utilisateurs et stimulent la croissance commerciale grâce à la pensée stratégique de design.",
+        "description": "Je conçois et implémente des expériences de marque complètes qui résonnent avec les utilisateurs. Mon approche combine l'excellence technique avec la pensée créative de design pour créer des interactions numériques mémorables.",
         "experience": "Avancé",
         "technologies": [
-          "Stratégie de Marque",
-          "Conception d'Expérience Utilisateur",
-          "Identité Visuelle",
-          "Automatisation Marketing"
+          "Material-UI",
+          "Tailwind CSS",
+          "Framer Motion",
+          "Systèmes de Design"
         ],
         "examples": [
-          "Guides de Marque",
-          "Cartographie du Parcours Utilisateur",
-          "Optimisation des Conversions",
-          "Tests A/B"
+          "Sites web de portfolio",
+          "Systèmes d'identité de marque",
+          "Expériences interactives"
         ],
-        "years": "4+ années"
+        "years": "3+ années"
       },
       "designDreamer": {
         "title": "RÊVEUR DU DESIGN",
-        "description": "Créer des interfaces intuitives et belles qui comblent le fossé entre fonctionnalité et esthétique.",
+        "description": "Je crée des expériences utilisateur intuitives qui comblent le fossé entre fonctionnalité et esthétique. Mes designs privilégient la facilité d'utilisation tout en maintenant l'attrait visuel et la cohérence de marque.",
         "experience": "Avancé",
         "technologies": [
-          "Figma",
-          "Adobe Creative Suite",
-          "Material-UI",
-          "Tailwind CSS",
-          "Framer Motion"
+          "Design UX/UI",
+          "Prototypage",
+          "Recherche Utilisateur",
+          "Accessibilité"
         ],
         "examples": [
-          "Design UI/UX",
-          "Prototypage",
-          "Systèmes de Design",
-          "Design d'Animation"
+          "Designs d'interface utilisateur",
+          "Prototypes interactifs",
+          "Améliorations d'accessibilité"
         ],
         "years": "4+ années"
       }
@@ -167,7 +164,7 @@
         "answer": "Résoudre des problèmes complexes et créer des solutions élégantes qui ont un impact réel."
       },
       {
-        "question": "Votre style de travail ?",
+        "question": "Mon style de travail ?",
         "answer": "Méthodique mais créatif, avec un accent sur l'expérience utilisateur et le code propre."
       },
       {
@@ -179,7 +176,7 @@
         "answer": "Apprendre de nouvelles technologies et repousser les limites du possible."
       },
       {
-        "question": "Votre philosophie ?",
+        "question": "Ma philosophie ?",
         "answer": "Un excellent logiciel devrait être invisible—les utilisateurs devraient se concentrer sur leurs objectifs, pas sur l'interface."
       },
       {
@@ -193,20 +190,20 @@
     "subtitle": "Ce que j'apporte à la table",
     "services": [
       {
-        "title": "Créez votre avenir",
-        "description": "Construire des applications évolutives et modernes qui grandissent avec les besoins de votre entreprise.",
+        "title": "Construisez votre avenir",
+        "description": "Je construis des applications évolutives et modernes qui grandissent avec les besoins de votre entreprise.",
         "buttonText": "Voir le Travail",
         "buttonVariant": "primary"
       },
       {
         "title": "Des compétences qui brillent",
-        "description": "Expertise full-stack de la finesse frontend à la brillance backend.",
+        "description": "J'offre une expertise full-stack de la finesse du frontend à la brillance du backend.",
         "buttonText": "Découvrir",
         "buttonVariant": "secondary"
       },
       {
         "title": "Le feedback alimente la croissance",
-        "description": "Amélioration continue grâce au feedback utilisateur et au développement itératif.",
+        "description": "Je fournis une amélioration continue grâce au feedback utilisateur et au développement itératif.",
         "buttonText": "Entrer en Contact",
         "buttonVariant": "primary"
       }
@@ -218,66 +215,61 @@
     "projects": [
       {
         "title": "Snow HQ",
-        "description": "Prototype de CRM avec analyses en temps réel, flux de travail automatisés et capacités de reporting. Construit avec Next.js, tRPC, Drizzle ORM et PostgreSQL.",
+        "description": "Prototype CRM d'entreprise avec analyse en temps réel, flux de travail automatisés et capacités de rapports complets. Construit avec Next.js, tRPC, Drizzle ORM et PostgreSQL, implémentant les meilleures pratiques de développement full-stack et les modèles d'architecture évolutifs.",
         "link": "https://github.com/Omri-Jukin/Snow"
       },
       {
-        "title": "Clothest",
-        "description": "Système de gestion de garde-robe avec recommandations personnalisées et suivi d'inventaire. Construit avec React, Express.js et MongoDB.",
-        "link": "https://github.com/Omri-Jukin/Clothest"
-      },
-      {
-        "title": "Site Web de Portfolio",
-        "description": "Site web de portfolio moderne et responsive avec internationalisation, mode sombre et animations fluides. Construit avec Next.js, TypeScript, Material-UI et Framer Motion.",
+        "title": "Site Web Portfolio",
+        "description": "Site web portfolio moderne et réactif avec internationalisation (i18n), mode sombre et animations fluides. Construit avec Next.js, TypeScript, Material-UI et Framer Motion, montrant les capacités de développement full-stack et les technologies web modernes.",
         "link": "https://omrijukin.com"
       },
       {
         "title": "ClipWhisperer",
-        "description": "Plateforme complète de microservices pour le traitement automatisé de vidéos et la création de contenu. Fonctionnalités de narration alimentée par IA, rendu vidéo et flux de travail orchestrés. Construit avec TypeScript, Node.js et architecture moderne de microservices.",
+        "description": "Plateforme complète de microservices pour le traitement automatisé de vidéos et la création de contenu. Construite avec narration alimentée par IA, rendu vidéo et flux de travail orchestrés utilisant TypeScript, Node.js et architecture moderne de microservices, démontrant des compétences avancées d'ingénierie full-stack.",
         "link": "https://github.com/ClipWhisperer"
       },
       {
         "title": "Gestionnaire de Microservices",
-        "description": "Outil CLI complet pour gérer un écosystème de microservices. Fonctionnalités de gestion unifiée des services, flux de travail automatisés, opérations inter-services et outils de développement. Construit avec TypeScript, Node.js et architecture CLI moderne.",
+        "description": "Outil CLI complet pour gérer un écosystème de microservices. Construit avec gestion unifiée des services, flux de travail automatisés, opérations inter-services et outils de développement utilisant TypeScript, Node.js et architecture CLI moderne, montrant l'expertise en développement full-stack.",
         "link": "https://github.com/ClipWhisperer/Utils"
       },
       {
         "title": "Bibliothèque Publiée",
-        "description": "Bibliothèque publiée pour gérer un écosystème de microservices. Fonctionnalités de gestion unifiée des services, flux de travail automatisés, opérations inter-services et outils de développement. Construit avec TypeScript, Node.js et architecture CLI moderne.",
+        "description": "Bibliothèque npm publiée pour gérer un écosystème de microservices. Construite avec gestion unifiée des services, flux de travail automatisés, opérations inter-services et outils de développement utilisant TypeScript, Node.js et architecture CLI moderne, démontrant les compétences de développement full-stack et de gestion de packages.",
         "link": "https://www.npmjs.com/package/@clipwhisperer/common"
       }
     ]
   },
   "portfolio": {
     "title": "Portfolio Technique",
-    "subtitle": "Présentation détaillée des projets avec implémentations techniques, approches de résolution de problèmes et exemples de code",
+    "subtitle": "Présentation détaillée de projets avec implémentations techniques, approches de résolution de problèmes et exemples de code",
     "viewCode": "Voir le Code",
     "liveDemo": "Démo en Direct",
     "technicalDetails": "Détails Techniques et Implémentation",
     "problemSolution": "Problème et Solution",
-    "architecture": "Architecture et Conception",
+    "architecture": "Architecture et Design",
     "codeExamples": "Exemples de Code",
     "technicalChallenges": "Défis Techniques et Solutions",
-    "challenge": "Défi:",
-    "approach": "Approche:",
-    "keyFeatures": "Fonctionnalités Clés:",
-    "solution": "Solution:"
+    "challenge": "Défi :",
+    "approach": "Approche :",
+    "keyFeatures": "Fonctionnalités Clés :",
+    "solution": "Solution :"
   },
   "contact": {
     "title": "Connectons-nous",
     "subtitle": "Prêt à donner vie à une nouvelle idée ?",
-    "description": "Je suis toujours excité de discuter de nouvelles opportunités, collaborations ou simplement de discuter de technologie.\nEnvoyez-moi un message et créons quelque chose d'incroyable ensemble...",
+    "description": "Je suis toujours excité de discuter de nouvelles opportunités, collaborations ou simplement de discuter de technologie.\nLaissez-moi un message et créons quelque chose d'incroyable ensemble...",
     "button": "Commencer une conversation",
     "form": {
       "title": "Entrer en Contact",
-      "description": "Vous avez un projet en tête ? Discutons de la façon dont nous pouvons donner vie à vos idées. Remplissez le formulaire ci-dessous et je vous répondrai dès que possible.",
-      "name": "Votre Nom",
-      "email": "Votre Email",
-      "phone": "Votre Téléphone",
+      "description": "Vous avez un projet en tête ? Discutons de la façon dont nous pouvons donner vie à vos idées. Remplissez le formulaire de contact et je vous répondrai dès que possible.",
+      "name": "Mon Nom",
+      "email": "Mon Email",
+      "phone": "Mon Téléphone",
       "subject": "Sujet",
-      "message": "Votre Message",
+      "message": "Mon Message",
       "submit": "Envoyer le Message",
-      "sending": "Envoi en cours...",
+      "sending": "Envoi...",
       "success": "Message envoyé avec succès !",
       "error": "Quelque chose s'est mal passé. Veuillez réessayer."
     },
@@ -307,84 +299,84 @@
       "github": {
         "title": "GitHub",
         "username": "@Omri-Jukin",
-        "button": "Se Connecter"
+        "button": "Se connecter"
       },
       "linkedin": {
         "title": "LinkedIn",
         "username": "@omri-jukin",
-        "button": "Se Connecter"
+        "button": "Se connecter"
       },
       "whatsapp": {
         "title": "WhatsApp",
         "username": "Agent OJ",
-        "button": "Se Connecter"
+        "button": "Se connecter"
       },
       "telegram": {
         "title": "Telegram",
         "username": "@Agent_OJ",
-        "button": "Se Connecter"
+        "button": "Se connecter"
       }
     },
     "additional": {
       "title": "Informations Supplémentaires",
       "website": "Site Web : Site Web Personnel",
-      "timezone": "Fuseau Horaire : Asia/Jerusalem",
-      "citizenship": "Nationalité : Israélien"
+      "timezone": "Fuseau Horaire : Asia/Jérusalem",
+      "citizenship": "Citoyenneté : Israélienne"
     }
   },
   "career": {
     "title": "Carrière",
     "subtitle": "Mon parcours professionnel et expérience",
     "description": "Mon parcours professionnel",
-    "experience": "Expérience pratique en développement full-stack, gestion d'équipe et amélioration des processus dans des entreprises leaders de technologie et d'assurance.",
+    "experience": "J'ai une expérience pratique dans le développement full-stack, la gestion d'équipes et l'amélioration des processus dans des entreprises technologiques et d'assurance de premier plan.",
     "keyAchievements": "Réalisations Clés et Responsabilités",
     "interestedInLearning": "Intéressé à Explorer Plus ?",
-    "checkOutResume": "Consultez mon CV détaillé ou contactez-moi pour discuter d'opportunités et de collaborations.",
+    "checkOutResume": "Consultez mon CV détaillé ou contactez-moi pour discuter des opportunités et collaborations.",
     "viewResume": "Voir le CV",
     "experiences": [
       {
-        "role": "Développeur Full Stack",
+        "role": "Ingénieur FullStack",
         "time": "2024 - 2025",
         "company": "Abra Technologies, Israël",
         "details": [
-          "Développement de Plateforme - Contribué au développement d'une plateforme complète qui agrège et traite des données critiques du marché d'agences gouvernementales...",
-          "Architecture de Bibliothèque - Conçu et implémenté une bibliothèque de composants UI modulaire et réutilisable qui a réduit le temps de développement de 30% et amélioré la cohérence entre les applications...",
-          "Innovation UI/UX - Collaboré avec les équipes de design pour créer des interfaces intuitives qui ont augmenté l'engagement utilisateur et réduit les tickets de support...",
-          "Optimisation Backend - Développé des algorithmes efficaces de traitement de données qui ont amélioré les performances du système...",
-          "Stack Technique : Next.js, tRPC, PayloadCMS, Storybook, Jest, Vitest, React"
+          "Développement de Plateforme Full-Stack - J'ai développé et maintenu une plateforme complète qui agrège et traite des données critiques du marché d'agences gouvernementales, implémentant des APIs RESTful et le traitement de données en temps réel utilisant Next.js, tRPC et PostgreSQL, résultant en 40% d'amélioration de l'efficacité de traitement des données",
+          "Architecture de Bibliothèque de Composants - J'ai conçu et implémenté une bibliothèque de composants UI modulaire et réutilisable utilisant Storybook et TypeScript, réduisant le temps de développement de 30% et améliorant la cohérence entre les applications tout en maintenant 95% de couverture de code à travers des tests complets",
+          "Innovation UI/UX - J'ai collaboré avec des équipes de design pour créer des interfaces intuitives utilisant Material-UI et Framer Motion, augmentant l'engagement utilisateur de 25% et réduisant les tickets de support de 35% grâce à une meilleure expérience utilisateur",
+          "Optimisation Backend - J'ai développé des algorithmes efficaces de traitement de données et des requêtes de base de données, améliorant les performances du système de 45% et réduisant les temps de réponse API de 800ms à 300ms en moyenne",
+          "Stack Technique : Next.js, tRPC, PayloadCMS, Storybook, Jest, Vitest, React, TypeScript, PostgreSQL, APIs REST, Microservices"
         ]
       },
       {
-        "role": "Spécialiste du Développement de Constitution d'Entreprise",
+        "role": "Spécialiste en Développement de Constitution d'Entreprise",
         "time": "2023 - 2024",
-        "company": "Menora Mivtachim Insurance Company, Israël",
+        "company": "Compagnie d'Assurance Menora Mivtachim, Israël",
         "details": [
-          "Architecture de Système - Architecturé et maintenu le système de constitution d'entreprise, gérant des milliers de règles de polices et de réglementations...",
-          "Leadership d'Équipe - Mentoré et formé de nouveaux développeurs, réduisant le temps d'intégration et améliorant la productivité de l'équipe...",
-          "Innovation Produit - Dirigé le développement de 12+ nouveaux produits d'assurance, résultant en un taux d'acquisition de clients plus élevé...",
-          "Modernisation de Système Legacy - Migré avec succès des composants critiques d'un système monolithique de 40 ans vers une architecture moderne, améliorant les performances du système..."
+          "Architecture de Système - J'ai architecturé et maintenu le système de constitution d'entreprise gérant 50,000+ règles et réglementations de polices, implémentant des stratégies d'optimisation de base de données qui ont amélioré les performances des requêtes de 60% et la fiabilité du système de 90%",
+          "Leadership d'Équipe - J'ai mentoré et formé 8+ nouveaux développeurs, réduisant le temps d'intégration de 6 semaines à 3 semaines et améliorant la productivité de l'équipe de 40% à travers des programmes de formation structurés et des processus de revue de code",
+          "Innovation de Produit - J'ai dirigé le développement de 12+ nouveaux produits d'assurance utilisant des pratiques de développement modernes, résultant en 30% de taux d'acquisition de clients plus élevé et 25% d'amélioration du temps de mise sur le marché",
+          "Modernisation de Système Legacy - J'ai migré avec succès des composants critiques d'un système monolithique de 40 ans vers une architecture moderne utilisant Java et C#, améliorant les performances du système de 70% et réduisant les coûts de maintenance de 50%"
         ]
       },
       {
         "role": "Représentant Senior du Service Client",
         "time": "2021 - 2023",
-        "company": "Menora Mivtachim Insurance Company, Israël",
+        "company": "Compagnie d'Assurance Menora Mivtachim, Israël",
         "details": [
-          "Expérience Client - Atteint un taux de satisfaction client de 95% tout en gérant des demandes et plaintes complexes d'assurance...",
-          "Amélioration des Processus - Développé et implémenté de nouveaux protocoles de flux de travail qui ont réduit le temps de traitement moyen de 25% et amélioré l'efficacité de l'équipe de 35%...",
-          "Développement d'Équipe - Formé et mentoré plus de 10 nouveaux membres d'équipe, résultant en une réduction de 35% du temps de formation et une meilleure qualité de service...",
-          "Collaboration Interfonctionnelle - Travaillé avec plusieurs départements pour résoudre des problèmes complexes de clients, améliorant le temps de résolution de 30%..."
+          "Excellence de l'Expérience Client - J'ai atteint un taux de satisfaction client de 95% tout en gérant des demandes et plaintes d'assurance complexes, implémentant des améliorations de processus qui ont réduit le temps de traitement moyen de 25% et amélioré l'efficacité de l'équipe de 35%",
+          "Amélioration des Processus - J'ai développé et implémenté de nouveaux protocoles de flux de travail utilisant l'analyse de données et le feedback client, résultant en 25% de réduction du temps de traitement moyen et 35% d'amélioration de l'efficacité de l'équipe",
+          "Développement d'Équipe - J'ai formé et mentoré 10+ nouveaux membres de l'équipe, résultant en 35% de réduction du temps de formation et une meilleure qualité de service à travers des programmes d'intégration structurés et des systèmes de feedback continu",
+          "Collaboration Interfonctionnelle - J'ai travaillé avec plusieurs départements incluant IT et développement de produits pour résoudre des problèmes clients complexes, améliorant le temps de résolution de 30% et les scores de satisfaction client de 20%"
         ]
       },
       {
         "role": "Coordinateur Senior des Demandes Publiques",
         "time": "2020 - 2021",
-        "company": "HOT Telecommunications, Israël",
+        "company": "HOT Télécommunications, Israël",
         "details": [
-          "Excellence du Service Client - Maintenu un taux de satisfaction client de 90% tout en gérant des demandes à haut volume...",
-          "Optimisation des Processus - Implémenté de nouveaux protocoles de flux de travail qui ont réduit le temps de réponse de 35% et amélioré la productivité de l'équipe de 25%...",
-          "Leadership d'Équipe - Formé et mentoré avec succès plus de 15 membres d'équipe, améliorant les performances globales de l'équipe de 30%...",
-          "Intégration Système - Collaboré avec l'IT pour implémenter de nouveaux outils de service client, résultant en une amélioration de 40% du temps de résolution des cas..."
+          "Excellence du Service Client - J'ai maintenu un taux de satisfaction client de 90% tout en gérant des demandes de haut volume (200+ quotidiennes), implémentant des optimisations de flux de travail qui ont réduit le temps de réponse de 35% et amélioré la productivité de l'équipe de 25%",
+          "Optimisation des Processus - J'ai implémenté de nouveaux protocoles de flux de travail et outils de service client, résultant en 35% de réduction du temps de réponse et 25% d'amélioration de la productivité de l'équipe à travers l'analyse systématique des processus et l'amélioration continue",
+          "Leadership d'Équipe - J'ai formé et mentoré avec succès 15+ membres de l'équipe, améliorant la performance globale de l'équipe de 30% à travers des programmes de formation structurés et des systèmes de surveillance des performances",
+          "Intégration de Système - J'ai collaboré avec le département IT pour implémenter de nouveaux outils de service client et systèmes CRM, résultant en 40% d'amélioration du temps de résolution des cas et 25% d'augmentation des scores de satisfaction client"
         ]
       }
     ]
@@ -393,15 +385,15 @@
     "title": "CV",
     "description": "Mon expérience professionnelle et compétences",
     "networkingSummary": "Téléchargez mon CV pour en savoir plus sur mon parcours",
-    "experience": "Développeur Full Stack avec expertise en systèmes évolutifs, architecture propre et technologies modernes. Historique prouvé dans le développement d'applications utilisant Next.js, tRPC, PostgreSQL, MongoDB et microservices. Solide expérience dans l'industrie de l'assurance, du service client au développement de systèmes centraux. Expérimenté en mentorat d'équipes, amélioration des processus et accompagnement du changement organisationnel. Solides compétences en résolution de problèmes axées sur la conception de systèmes et l'optimisation. Engagé dans l'apprentissage continu et la croissance professionnelle.",
+    "experience": "Je suis un Ingénieur FullStack avec 5+ années d'expertise dans le développement web full-stack, l'architecture de systèmes évolutifs et les technologies modernes. J'ai un historique prouvé dans le développement d'applications full-stack utilisant React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB et l'architecture de microservices. J'ai une solide expérience dans l'industrie de l'assurance, du service client au développement de systèmes centraux. J'ai de l'expérience dans le mentorat d'équipes, l'amélioration des processus et le soutien au changement et à la croissance organisationnelle. J'ai de solides compétences de résolution de problèmes axées sur la conception de systèmes et l'optimisation. Je suis engagé dans l'apprentissage continu et la croissance professionnelle dans le développement full-stack.",
     "professionalSummary": "Résumé Professionnel",
     "viewCode": "Voir le Code",
     "letsBuildTogether": "Construisons Quelque Chose d'Incroyable Ensemble",
     "readyToDiscuss": "Prêt à discuter de mon prochain projet ou opportunité ?",
     "getInTouch": "Entrer en Contact",
     "templateSelector": {
-      "title": "Choisissez votre Style de CV",
-      "subtitle": "Sélectionnez de ma collection de modèles conçus professionnellement",
+      "title": "Choisissez Mon Style de CV",
+      "subtitle": "Sélectionnez dans ma collection de modèles conçus professionnellement",
       "templateNames": {
         "modern": "Moderne",
         "elegant": "Élégant",
@@ -411,6 +403,7 @@
         "teal": "Sarcelle",
         "indigo": "Indigo",
         "rose": "Rose",
+        "corporate": "Corporatif",
         "startup": "Startup",
         "academic": "Académique"
       }
@@ -421,7 +414,23 @@
       "selectedLanguage": "Le CV sera généré en",
       "generating": "Génération du PDF...",
       "download": "Télécharger le CV",
-      "downloadDescription": "Le PDF inclura toute mon expérience professionnelle, compétences et projets en"
+      "downloadDescription": "Le PDF inclura toute mon expérience professionnelle, compétences et projets en",
+      "documentGeneration": {
+        "title": "Options de Génération de Documents",
+        "selectTypes": "Sélectionner les Types de Documents",
+        "condensedResume": "CV Condensé",
+        "technicalPortfolio": "Portfolio Technique",
+
+        "portfolioCustomization": "Personnalisation du Portfolio",
+        "includeCodeExamples": "Inclure des Exemples de Code",
+        "includeTechnicalChallenges": "Inclure les Défis Techniques",
+        "includeArchitectureDetails": "Inclure les Détails d'Architecture",
+        "customTitle": "Titre Personnalisé (Optionnel)",
+        "customDescription": "Description Personnalisée (Optionnel)",
+        "generateDocuments": "Générer les Documents",
+        "generatingDocuments": "Génération des Documents...",
+        "willCreateSeparate": "Créera des fichiers PDF séparés pour chaque type de document"
+      }
     }
   },
   "skills": {
@@ -431,13 +440,14 @@
         "title": "Compétences Techniques",
         "skills": [
           {
-            "name": "Développement Frontend",
+            "name": "Développement Full-Stack",
             "level": 95,
             "technologies": [
               "React",
               "Next.js",
               "TypeScript",
               "JavaScript",
+              "Node.js",
               "HTML5",
               "CSS3",
               "Material-UI",
@@ -455,35 +465,46 @@
               "Drizzle ORM",
               "PostgreSQL",
               "MongoDB",
+              "APIs REST",
+              "GraphQL",
               "Développement d'APIs"
             ]
           },
           {
-            "name": "Architecture Système",
+            "name": "Architecture de Système",
             "level": 90,
             "technologies": [
               "Microservices",
               "Systèmes Monolithiques",
               "Conception d'APIs",
-              "Intégration Système",
-              "Optimisation des Performances"
+              "Intégration de Système",
+              "Optimisation des Performances",
+              "Architecture Évolutive"
             ]
           },
           {
-            "name": "Gestion de Bases de Données",
+            "name": "Gestion de Base de Données",
             "level": 90,
             "technologies": [
               "PostgreSQL",
               "MongoDB",
               "Modélisation de Données",
-              "Optimisation de Requêtes",
-              "Conception de Bases de Données"
+              "Optimisation des Requêtes",
+              "Conception de Base de Données",
+              "Architecture de Données"
             ]
           },
           {
             "name": "Technologies Cloud",
             "level": 85,
-            "technologies": ["AWS", "Vercel", "Docker", "CI/CD", "Déploiement"]
+            "technologies": [
+              "AWS",
+              "Vercel",
+              "Docker",
+              "CI/CD",
+              "Déploiement",
+              "Infrastructure Cloud"
+            ]
           },
           {
             "name": "DevOps et CI/CD",
@@ -494,7 +515,8 @@
               "Jest",
               "Vitest",
               "Storybook",
-              "Testing"
+              "Tests",
+              "Intégration Continue"
             ]
           }
         ]
@@ -505,7 +527,7 @@
           {
             "name": "Leadership",
             "level": 90,
-            "description": "Gestion d'équipe, mentorat et coordination de projets"
+            "description": "Gestion d'équipe, mentorat et coordination de projet"
           },
           {
             "name": "Résolution de Problèmes",
@@ -539,13 +561,13 @@
     "spoken": [
       { "name": "Hébreu", "level": "Natif" },
       { "name": "Anglais", "level": "Professionnel" },
-      { "name": "Français", "level": "Débutant" }
+      { "name": "Espagnol", "level": "Débutant" }
     ]
   },
-  "additionalActivities": "Fondateur d'une communauté en ligne promouvant la pensée critique et rationnelle et les débats ouverts. Engagé dans la prise de parole en public et les diffusions en direct sur des sujets liés aux sciences dures, aux sciences molles, à la pensée rationnelle et à la technologie. Magicien amateur enthousiaste, utilisant des compétences créatives pour engager les publics et encourager la curiosité.",
+  "additionalActivities": "Je suis le fondateur d'une communauté en ligne qui promeut la pensée critique et rationnelle et les débats ouverts. Je suis engagé dans la prise de parole en public et les diffusions en direct sur des sujets liés aux sciences dures, sciences douces, pensée rationnelle et technologie. Je suis un magicien amateur enthousiaste, utilisant des compétences créatives pour engager les audiences et encourager la curiosité.",
   "footer": {
-    "title": "À Propos",
-    "children": "Développeur Full Stack construisant des systèmes évolutifs et des expériences web modernes avec une architecture propre et des solutions pratiques.",
+    "title": "À propos",
+    "children": "Je suis un Ingénieur FullStack construisant des systèmes évolutifs et des expériences web modernes avec une architecture propre et des solutions pratiques.",
     "linksTitle": "Liens Rapides",
     "links": [
       { "label": "Accueil", "href": "/" },
@@ -583,7 +605,7 @@
       {
         "label": "Téléphone",
         "href": "tel:+9720523344064",
-        "icon": "Phone"
+        "icon": "Téléphone"
       },
       {
         "label": "WhatsApp",

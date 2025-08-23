@@ -1,19 +1,47 @@
+import { ReactNode } from "react";
 export interface GlobeMarker {
   location: [number, number]; // [latitude, longitude]
   size: number;
 }
-
 export interface GlobeBackgroundProps {
-  /** Array of markers to display on the globe */
-  markers?: GlobeMarker[];
-  /** Additional CSS class name */
+  markers?: Array<GlobeMarker>;
   className?: string;
-  /** Globe rotation speed (default: 0.005) */
   rotationSpeed?: number;
-  /** Globe size in pixels (default: 800) */
   size?: number;
-  /** Globe opacity (default: 0.3) */
   opacity?: number;
-  /** Content to render on top of the globe */
-  children?: React.ReactNode;
+  children?: ReactNode;
+  // New props for grid-based positioning
+  showGrid?: boolean;
+  enableGridPositioning?: boolean;
+  customGridConfig?: {
+    columns: number;
+    rows: number;
+    globe: {
+      startColumn: number;
+      endColumn: number;
+      startRow: number;
+      endRow: number;
+    };
+  };
+}
+
+// Grid positioning result
+export interface GridPosition {
+  left: number;
+  top: number;
+  transform: string;
+}
+
+// Device type for grid configuration
+export type DeviceType = "desktop" | "tablet" | "mobile";
+
+// Grid cell information for debugging
+export interface GridCell {
+  column: number;
+  row: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  isGlobeCell: boolean;
 }
