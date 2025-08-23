@@ -1,15 +1,20 @@
 import React, { useState } from "react";
-import { Box, Typography, Grid, Button, Divider, Link, CircularProgress, Chip } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Grid,
+  Button,
+  CircularProgress,
+  Chip,
+} from "@mui/material";
 import {
   ExpandMore as ExpandMoreIcon,
   GitHub as GitHubIcon,
   Launch as LaunchIcon,
   Architecture as ArchitectureIcon,
   BugReport as BugReportIcon,
-  Demo as DemoIcon,
   CalendarToday as CalendarIcon,
   Star as StarIcon,
-  Public as PublicIcon,
   People as PeopleIcon,
 } from "@mui/icons-material";
 import MotionWrapper from "../MotionWrapper/MotionWrapper";
@@ -42,12 +47,12 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
   const [expandedProject, setExpandedProject] = useState<string | false>(false);
 
   // Fetch projects from database
-  const { 
-    data: projects = [], 
-    isLoading, 
-    error 
-  } = api.projects.getAll.useQuery({ 
-    visibleOnly: true 
+  const {
+    data: projects = [],
+    isLoading,
+    error,
+  } = api.projects.getAll.useQuery({
+    visibleOnly: true,
   });
 
   const handleAccordionChange =
@@ -58,20 +63,20 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
 
   const getStatusColor = (status: string) => {
     const colors = {
-      "completed": "success",
+      completed: "success",
       "in-progress": "warning",
-      "archived": "default",
-      "concept": "info"
+      archived: "default",
+      concept: "info",
     };
     return colors[status as keyof typeof colors] || "default";
   };
 
   const getProjectTypeColor = (type: string) => {
     const colors = {
-      "professional": "primary",
-      "personal": "secondary",
+      professional: "primary",
+      personal: "secondary",
       "open-source": "info",
-      "academic": "warning"
+      academic: "warning",
     };
     return colors[type as keyof typeof colors] || "default";
   };
@@ -85,7 +90,12 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
   if (isLoading) {
     return (
       <PortfolioContainer className={className}>
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          minHeight="400px"
+        >
           <CircularProgress />
         </Box>
       </PortfolioContainer>
@@ -93,7 +103,8 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
   }
 
   // Use database data if available, fallback to static
-  const projectsData = projects.length > 0 ? projects : PORTFOLIO_CONSTANTS.PROJECTS;
+  const projectsData =
+    projects.length > 0 ? projects : PORTFOLIO_CONSTANTS.PROJECTS;
   const isUsingDatabase = projects.length > 0;
 
   if (error) {
@@ -125,14 +136,22 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
             const liveUrl = isUsingDatabase ? project.liveUrl : project.liveUrl;
             const demoUrl = isUsingDatabase ? project.demoUrl : null;
             const status = isUsingDatabase ? project.status : "completed";
-            const projectType = isUsingDatabase ? project.projectType : "personal";
+            const projectType = isUsingDatabase
+              ? project.projectType
+              : "personal";
             const isFeatured = isUsingDatabase ? project.isFeatured : false;
             const startDate = isUsingDatabase ? project.startDate : null;
             const endDate = isUsingDatabase ? project.endDate : null;
             const teamSize = isUsingDatabase ? project.teamSize : null;
-            const keyFeatures = isUsingDatabase ? project.keyFeatures : project.keyFeatures;
-            const technicalChallenges = isUsingDatabase ? project.technicalChallenges : project.technicalChallenges;
-            const codeExamples = isUsingDatabase ? project.codeExamples : project.codeExamples;
+            const keyFeatures = isUsingDatabase
+              ? project.keyFeatures
+              : project.keyFeatures;
+            const technicalChallenges = isUsingDatabase
+              ? project.technicalChallenges
+              : project.technicalChallenges;
+            const codeExamples = isUsingDatabase
+              ? project.codeExamples
+              : project.codeExamples;
 
             return (
               <Grid key={projectId} component="div">
@@ -144,28 +163,39 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                   <ProjectCard elevation={3}>
                     <ProjectHeader>
                       <Box sx={{ flexGrow: 1 }}>
-                        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1 }}>
-                          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                            <ProjectTitle variant="h4">
-                              {title}
-                            </ProjectTitle>
-                            {isFeatured && (
-                              <StarIcon color="primary" />
-                            )}
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            mb: 1,
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                            }}
+                          >
+                            <ProjectTitle variant="h4">{title}</ProjectTitle>
+                            {isFeatured && <StarIcon color="primary" />}
                           </Box>
                           <Box sx={{ display: "flex", gap: 1 }}>
                             {isUsingDatabase && (
                               <>
                                 <Chip
-                                  label={status.replace('-', ' ')}
+                                  label={status.replace("-", " ")}
                                   size="small"
                                   color={getStatusColor(status) as any}
                                   variant="outlined"
                                 />
                                 <Chip
-                                  label={projectType.replace('-', ' ')}
+                                  label={projectType.replace("-", " ")}
                                   size="small"
-                                  color={getProjectTypeColor(projectType) as any}
+                                  color={
+                                    getProjectTypeColor(projectType) as any
+                                  }
                                   variant="filled"
                                 />
                               </>
@@ -179,18 +209,44 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
 
                         {/* Project metadata */}
                         {isUsingDatabase && startDate && (
-                          <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
-                            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 2,
+                              mb: 2,
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 0.5,
+                              }}
+                            >
                               <CalendarIcon fontSize="small" color="action" />
-                              <Typography variant="body2" color="text.secondary">
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                              >
                                 {formatDateRange(startDate, endDate)}
                               </Typography>
                             </Box>
                             {teamSize && (
-                              <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 0.5,
+                                }}
+                              >
                                 <PeopleIcon fontSize="small" color="action" />
-                                <Typography variant="body2" color="text.secondary">
-                                  {teamSize} {teamSize === 1 ? "person" : "people"}
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                >
+                                  {teamSize}{" "}
+                                  {teamSize === 1 ? "person" : "people"}
                                 </Typography>
                               </Box>
                             )}
@@ -202,15 +258,17 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                         </ProjectDescription>
 
                         <ProjectTech sx={{ mb: 3 }}>
-                          {technologies.map((tech: string, techIndex: number) => (
-                            <TechChip
-                              key={techIndex}
-                              label={tech}
-                              variant="outlined"
-                              color="primary"
-                              size="small"
-                            />
-                          ))}
+                          {technologies.map(
+                            (tech: string, techIndex: number) => (
+                              <TechChip
+                                key={techIndex}
+                                label={tech}
+                                variant="outlined"
+                                color="primary"
+                                size="small"
+                              />
+                            )
+                          )}
                         </ProjectTech>
 
                         <ProjectActions>
@@ -241,7 +299,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                           {demoUrl && (
                             <Button
                               variant="outlined"
-                              startIcon={<DemoIcon />}
+                              startIcon={<LaunchIcon />}
                               href={demoUrl}
                               target="_blank"
                               rel="noopener noreferrer"
@@ -278,12 +336,28 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                               <StarIcon color="primary" />
                               Key Features
                             </Typography>
-                            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                              {keyFeatures.map((feature: string, featureIndex: number) => (
-                                <Typography key={featureIndex} variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                                  • {feature}
-                                </Typography>
-                              ))}
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 1,
+                              }}
+                            >
+                              {keyFeatures.map(
+                                (feature: string, featureIndex: number) => (
+                                  <Typography
+                                    key={featureIndex}
+                                    variant="body2"
+                                    sx={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: 1,
+                                    }}
+                                  >
+                                    • {feature}
+                                  </Typography>
+                                )
+                              )}
                             </Box>
                           </Box>
                         )}
@@ -347,32 +421,48 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                         )}
 
                         {/* Technical Challenges */}
-                        {technicalChallenges && technicalChallenges.length > 0 && (
-                          <Box sx={{ mb: 4 }}>
-                            <Typography
-                              variant="h6"
-                              sx={{
-                                mb: 2,
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 1,
-                              }}
-                            >
-                              <BugReportIcon color="warning" />
-                              Technical Challenges
-                            </Typography>
-                            {technicalChallenges.map((challenge: any, challengeIndex: number) => (
-                              <Box key={challengeIndex} sx={{ mb: 2, p: 2, border: 1, borderColor: "divider", borderRadius: 1 }}>
-                                <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
-                                  Challenge: {challenge.challenge}
-                                </Typography>
-                                <Typography variant="body2">
-                                  Solution: {challenge.solution}
-                                </Typography>
-                              </Box>
-                            ))}
-                          </Box>
-                        )}
+                        {technicalChallenges &&
+                          technicalChallenges.length > 0 && (
+                            <Box sx={{ mb: 4 }}>
+                              <Typography
+                                variant="h6"
+                                sx={{
+                                  mb: 2,
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 1,
+                                }}
+                              >
+                                <BugReportIcon color="warning" />
+                                Technical Challenges
+                              </Typography>
+                              {technicalChallenges.map(
+                                (challenge: any, challengeIndex: number) => (
+                                  <Box
+                                    key={challengeIndex}
+                                    sx={{
+                                      mb: 2,
+                                      p: 2,
+                                      border: 1,
+                                      borderColor: "divider",
+                                      borderRadius: 1,
+                                    }}
+                                  >
+                                    <Typography
+                                      variant="subtitle2"
+                                      fontWeight="bold"
+                                      gutterBottom
+                                    >
+                                      Challenge: {challenge.challenge}
+                                    </Typography>
+                                    <Typography variant="body2">
+                                      Solution: {challenge.solution}
+                                    </Typography>
+                                  </Box>
+                                )
+                              )}
+                            </Box>
+                          )}
 
                         {/* Code Examples */}
                         {codeExamples && codeExamples.length > 0 && (
@@ -388,35 +478,47 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                             >
                               Code Examples
                             </Typography>
-                            {codeExamples.map((example: any, exampleIndex: number) => (
-                              <CodeExampleBox key={exampleIndex} sx={{ mb: 3 }}>
-                                <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
-                                  {example.title}
-                                </Typography>
-                                <Typography variant="body2" sx={{ mb: 2 }}>
-                                  {example.description}
-                                </Typography>
-                                <Box
-                                  component="pre"
-                                  sx={{
-                                    backgroundColor: "grey.100",
-                                    p: 2,
-                                    borderRadius: 1,
-                                    overflow: "auto",
-                                    fontSize: "0.875rem",
-                                    border: 1,
-                                    borderColor: "grey.300",
-                                  }}
+                            {codeExamples.map(
+                              (example: any, exampleIndex: number) => (
+                                <CodeExampleBox
+                                  key={exampleIndex}
+                                  sx={{ mb: 3 }}
                                 >
-                                  <code>{example.code}</code>
-                                </Box>
-                                {example.explanation && (
-                                  <Typography variant="body2" sx={{ mt: 2, fontStyle: "italic" }}>
-                                    {example.explanation}
+                                  <Typography
+                                    variant="subtitle2"
+                                    fontWeight="bold"
+                                    gutterBottom
+                                  >
+                                    {example.title}
                                   </Typography>
-                                )}
-                              </CodeExampleBox>
-                            ))}
+                                  <Typography variant="body2" sx={{ mb: 2 }}>
+                                    {example.description}
+                                  </Typography>
+                                  <Box
+                                    component="pre"
+                                    sx={{
+                                      backgroundColor: "grey.100",
+                                      p: 2,
+                                      borderRadius: 1,
+                                      overflow: "auto",
+                                      fontSize: "0.875rem",
+                                      border: 1,
+                                      borderColor: "grey.300",
+                                    }}
+                                  >
+                                    <code>{example.code}</code>
+                                  </Box>
+                                  {example.explanation && (
+                                    <Typography
+                                      variant="body2"
+                                      sx={{ mt: 2, fontStyle: "italic" }}
+                                    >
+                                      {example.explanation}
+                                    </Typography>
+                                  )}
+                                </CodeExampleBox>
+                              )
+                            )}
                           </Box>
                         )}
                       </AccordionDetailsRoot>

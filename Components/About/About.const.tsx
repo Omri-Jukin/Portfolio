@@ -11,5 +11,7 @@ export const ABOUT_CONSTANTS = {
     CODE_CONJURER: "codeConjurer",
     BRAND_ARCHITECT: "brandArchitect",
     DESIGN_DREAMER: "designDreamer",
+    PROBLEM_SOLVER: "problemSolver",
+    TEAM_PLAYER: "teamPlayer",
   },
 } as const;

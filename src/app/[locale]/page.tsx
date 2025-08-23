@@ -9,6 +9,7 @@ import About from "~/About";
 import QA from "~/QA";
 import Services from "~/Services";
 import Career from "~/Career";
+import Certifications from "~/Certifications";
 import Projects from "~/Projects";
 import Contact from "~/Contact";
 import SkillShowcase from "~/SkillShowcase";
@@ -129,6 +130,9 @@ export default function HomePage() {
 
         {/* Career Section */}
         <Career onCareerClick={handleCareerClick} />
+
+        {/* Certifications Section */}
+        <Certifications />
 
         {/* Projects Section */}
         <Projects />

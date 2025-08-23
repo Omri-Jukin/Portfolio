@@ -1,4 +1,4 @@
-import { Theme } from "@mui/material/styles";
+import { SxProps, Theme } from "@mui/material/styles";
 
 export type TypographyVariant =
   | "h1"
@@ -30,6 +30,7 @@ export type TypographyProps = {
   weight?: TypographyWeight;
   color?: TypographyColor;
   align?: TypographyAlign;
+  sx?: SxProps;
   margin?: {
     bottom?: string;
     top?: string;
