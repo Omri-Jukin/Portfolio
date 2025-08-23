@@ -9,7 +9,7 @@
  * Usage: npx tsx scripts/migrations/migrate-static-data.ts
  */
 
-import { getDB } from "../../lib/db/client";
+// Note: Database connection is handled by the managers in development mode
 import { WorkExperienceManager } from "$/db/workExperiences/WorkExperienceManager";
 import { ProjectManager } from "$/db/projects/ProjectManager";
 import { SkillManager } from "$/db/skills/SkillManager";
@@ -254,9 +254,11 @@ async function main() {
       "🚀 Starting data migration from static files to database...\n"
     );
 
-    // Ensure database connection
-    const db = await getDB();
-    console.log("✅ Database connection established\n");
+    // In development mode, we'll use the managers directly
+    // The managers will handle the database connection internally
+    console.log(
+      "✅ Using development mode - database connection will be established by managers\n"
+    );
 
     // Run migrations
     await migrateWorkExperiences();

@@ -1,10 +1,7 @@
 import { eq, asc, desc, and, gte, lte, sql, count, avg } from "drizzle-orm";
 import { getDB } from "../client";
-import {
-  skills,
-  type SkillCategory,
-  type ProficiencyLevel,
-} from "../schema/schema.tables";
+import { skills } from "../schema/schema.tables";
+import { SkillCategory, ProficiencyLevel } from "../schema/schema.types";
 import type {
   Skill,
   SkillDB,
@@ -15,7 +12,8 @@ import type {
 } from "./Skills.type";
 import { nanoid } from "nanoid";
 
-const db = await getDB();
+// Helper function to get database client
+const getDbClient = async () => getDB();
 
 // Helper function to transform DB dates to API strings
 const transformDbToApi = (dbSkill: SkillDB): Skill => ({
@@ -28,6 +26,7 @@ const transformDbToApi = (dbSkill: SkillDB): Skill => ({
 export class SkillManager {
   static async getAll(visibleOnly = false): Promise<Skill[]> {
     const conditions = visibleOnly ? [eq(skills.isVisible, true)] : [];
+    const db = await getDbClient();
 
     const results = await db
       .select()
@@ -43,6 +42,7 @@ export class SkillManager {
   }
 
   static async getById(id: string): Promise<Skill | null> {
+    const db = await getDbClient();
     const result = await db
       .select()
       .from(skills)
@@ -56,6 +56,7 @@ export class SkillManager {
     category: string,
     visibleOnly = false
   ): Promise<Skill[]> {
+    const db = await getDbClient();
     const conditions = [eq(skills.category, category as SkillCategory)];
     if (visibleOnly) {
       conditions.push(eq(skills.isVisible, true));
@@ -78,6 +79,7 @@ export class SkillManager {
     proficiencyLevel: string,
     visibleOnly = false
   ): Promise<Skill[]> {
+    const db = await getDbClient();
     const conditions = [
       eq(skills.proficiencyLabel, proficiencyLevel as ProficiencyLevel),
     ];
@@ -99,6 +101,7 @@ export class SkillManager {
   }
 
   static async getTopSkills(limit = 10, visibleOnly = true): Promise<Skill[]> {
+    const db = await getDbClient();
     const conditions = visibleOnly ? [eq(skills.isVisible, true)] : [];
 
     const results = await db
@@ -119,6 +122,7 @@ export class SkillManager {
     monthsBack = 12,
     visibleOnly = true
   ): Promise<Skill[]> {
+    const db = await getDbClient();
     const cutoffDate = new Date();
     cutoffDate.setMonth(cutoffDate.getMonth() - monthsBack);
 
@@ -139,6 +143,7 @@ export class SkillManager {
   static async create(
     skill: Omit<NewSkill, "id" | "createdAt">
   ): Promise<Skill> {
+    const db = await getDbClient();
     const id = nanoid();
     const now = new Date();
 
@@ -163,6 +168,7 @@ export class SkillManager {
     id: string,
     updates: Partial<Omit<NewSkill, "id" | "createdAt">>
   ): Promise<Skill | null> {
+    const db = await getDbClient();
     const now = new Date();
 
     await db
@@ -177,6 +183,7 @@ export class SkillManager {
   }
 
   static async delete(id: string): Promise<boolean> {
+    const db = await getDbClient();
     const result = await db.delete(skills).where(eq(skills.id, id));
 
     return result.changes > 0;
@@ -185,6 +192,7 @@ export class SkillManager {
   static async updateDisplayOrder(
     updates: { id: string; displayOrder: number }[]
   ): Promise<void> {
+    const db = await getDbClient();
     const now = new Date();
 
     for (const update of updates) {
@@ -214,6 +222,7 @@ export class SkillManager {
   }
 
   static async getStatistics(): Promise<SkillStatistics> {
+    const db = await getDbClient();
     // Get counts and averages by category
     const categoryStats = await db
       .select({
@@ -226,6 +235,7 @@ export class SkillManager {
       .groupBy(skills.category);
 
     // Get counts by proficiency level
+
     const proficiencyStats = await db
       .select({
         proficiencyLabel: skills.proficiencyLabel,
@@ -294,13 +304,14 @@ export class SkillManager {
   }
 
   static async search(query: string, filters?: SkillFilters): Promise<Skill[]> {
+    const db = await getDbClient();
     const conditions = [];
 
     // Text search across name, description
     if (query.trim()) {
       conditions.push(
         sql`(
-          ${skills.name} LIKE ${"%" + query + "%"} OR 
+          ${skills.name} LIKE ${"%" + query + "%"} OR
           ${skills.description} LIKE ${"%" + query + "%"} OR
           ${skills.subCategory} LIKE ${"%" + query + "%"}
         )`
