@@ -35,7 +35,7 @@ export default function ClientLayout({
   // Create static initial theme to prevent hydration mismatches
   const initialTheme = createTheme({
     ...baseTheme,
-    direction: isRTL ? "rtl" : "ltr",
+    direction: "ltr", // Always start with LTR to prevent hydration mismatch
     palette: {
       ...baseTheme.palette,
       mode: "light", // Always start with light mode to prevent hydration mismatch
@@ -202,7 +202,7 @@ export default function ClientLayout({
             markers={ALL_MARKERS}
             opacity={0.8}
             rotationSpeed={0.002}
-            showGrid={true}
+            showGrid={false}
             enableGridPositioning={true}
           />
         )}
@@ -222,7 +222,7 @@ export default function ClientLayout({
             display: "flex",
             flexDirection: "column",
             minHeight: "100vh",
-            pt: "4rem", // Account for fixed header height
+            pt: "2rem", // Reduced from 4rem to 2rem for better hero positioning
             width: "100%",
             maxWidth: "100vw",
             overflow: "hidden",

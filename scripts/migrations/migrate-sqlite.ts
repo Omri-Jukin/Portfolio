@@ -14,10 +14,11 @@ import path from "path";
 
 // Import static data
 import enLocale from "../../locales/en.json";
-import { PORTFOLIO_CONSTANTS } from "../../Components/Portfolio/Portfolio.const";
+import { PORTFOLIO_CONSTANTS } from "~/Portfolio/Portfolio.const";
 
 const DB_PATH = path.join(process.cwd(), "portfolio.db");
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function migrateWorkExperiences(db: any) {
   console.log("🔄 Migrating Work Experiences...");
 
@@ -97,6 +98,7 @@ async function migrateWorkExperiences(db: any) {
   console.log(`✅ Work Experiences migration completed: ${migrated} records\n`);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function migrateProjects(db: any) {
   console.log("🔄 Migrating Projects...");
 
@@ -199,6 +201,7 @@ async function migrateProjects(db: any) {
   console.log(`✅ Projects migration completed: ${migrated} records\n`);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function migrateSkills(db: any) {
   console.log("🔄 Migrating Skills...");
 
@@ -320,6 +323,6 @@ async function main() {
 }
 
 // Run the migration
-if (require.main === module) {
+if (typeof require !== "undefined" && require.main === module) {
   main();
 }
