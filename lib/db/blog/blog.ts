@@ -1,7 +1,7 @@
 import { blogPosts } from "../schema/schema.tables";
 import { getDB } from "../client";
 import { v4 as uuidv4 } from "uuid";
-import { PostStatus } from "../schema/schema.tables";
+import { PostStatus } from "../schema/schema.types";
 import { eq, desc } from "drizzle-orm";
 
 export type Post = typeof blogPosts.$inferSelect;

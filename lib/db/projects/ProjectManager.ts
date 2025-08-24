@@ -1,9 +1,8 @@
-import { eq, asc, desc, and, sql, count, inArray } from "drizzle-orm";
+import { eq, asc, desc, and, sql, count } from "drizzle-orm";
 import { getDB } from "../client";
 import { projects } from "../schema/schema.tables";
 import { ProjectStatus, ProjectType } from "../schema/schema.types";
 import type {
-  Project,
   ProjectDB,
   NewProject,
   UpdateProject,
@@ -11,21 +10,27 @@ import type {
   ProjectFilters,
 } from "./Projects.type";
 import { nanoid } from "nanoid";
+import { IProject } from "#/lib";
 
 // Helper function to get database client
 const getDbClient = async () => getDB();
 
-// Helper function to transform DB dates to API strings
-const transformDbToApi = (dbProject: ProjectDB): Project => ({
+// Helper function to transform DB dates to API dates
+const transformDbToApi = (dbProject: ProjectDB): IProject => ({
   ...dbProject,
   startDate: dbProject.startDate.toISOString(),
   endDate: dbProject.endDate ? dbProject.endDate.toISOString() : null,
   createdAt: dbProject.createdAt.toISOString(),
   updatedAt: dbProject.updatedAt ? dbProject.updatedAt.toISOString() : null,
+  problem: dbProject.problem || null,
+  solution: dbProject.solution || null,
+  architecture: dbProject.architecture || null,
+  titleTranslations: dbProject.titleTranslations || null,
+  descriptionTranslations: dbProject.descriptionTranslations || null,
 });
 
 export class ProjectManager {
-  static async getAll(visibleOnly = false): Promise<Project[]> {
+  static async getAll(visibleOnly = false): Promise<IProject[]> {
     const conditions = visibleOnly ? [eq(projects.isVisible, true)] : [];
 
     const db = await getDbClient();
@@ -38,7 +43,7 @@ export class ProjectManager {
     return results.map(transformDbToApi);
   }
 
-  static async getById(id: string): Promise<Project | null> {
+  static async getById(id: string): Promise<IProject | null> {
     const db = await getDbClient();
     const result = await db
       .select()
@@ -52,7 +57,7 @@ export class ProjectManager {
   static async getByStatus(
     status: string,
     visibleOnly = false
-  ): Promise<Project[]> {
+  ): Promise<IProject[]> {
     const conditions = [eq(projects.status, status as ProjectStatus)];
     if (visibleOnly) {
       conditions.push(eq(projects.isVisible, true));
@@ -71,7 +76,7 @@ export class ProjectManager {
   static async getByType(
     projectType: string,
     visibleOnly = false
-  ): Promise<Project[]> {
+  ): Promise<IProject[]> {
     const conditions = [eq(projects.projectType, projectType as ProjectType)];
     if (visibleOnly) {
       conditions.push(eq(projects.isVisible, true));
@@ -90,7 +95,7 @@ export class ProjectManager {
   static async getByCategory(
     category: string,
     visibleOnly = false
-  ): Promise<Project[]> {
+  ): Promise<IProject[]> {
     const conditions = [
       sql`JSON_EXTRACT(${projects.categories}, '$') LIKE ${
         '%"' + category + '"%'
@@ -110,7 +115,7 @@ export class ProjectManager {
     return results.map(transformDbToApi);
   }
 
-  static async getFeatured(visibleOnly = true): Promise<Project[]> {
+  static async getFeatured(visibleOnly = true): Promise<IProject[]> {
     const conditions = [eq(projects.isFeatured, true)];
     if (visibleOnly) {
       conditions.push(eq(projects.isVisible, true));
@@ -126,7 +131,7 @@ export class ProjectManager {
     return results.map(transformDbToApi);
   }
 
-  static async getOpenSource(visibleOnly = true): Promise<Project[]> {
+  static async getOpenSource(visibleOnly = true): Promise<IProject[]> {
     const conditions = [eq(projects.isOpenSource, true)];
     if (visibleOnly) {
       conditions.push(eq(projects.isVisible, true));
@@ -144,7 +149,7 @@ export class ProjectManager {
 
   static async create(
     project: Omit<NewProject, "id" | "createdAt">
-  ): Promise<Project> {
+  ): Promise<IProject> {
     const id = nanoid();
     const now = new Date();
 
@@ -169,7 +174,7 @@ export class ProjectManager {
   static async update(
     id: string,
     updates: Partial<Omit<NewProject, "id" | "createdAt">>
-  ): Promise<Project | null> {
+  ): Promise<IProject | null> {
     const now = new Date();
 
     const db = await getDbClient();
@@ -208,7 +213,7 @@ export class ProjectManager {
     }
   }
 
-  static async toggleVisibility(id: string): Promise<Project | null> {
+  static async toggleVisibility(id: string): Promise<IProject | null> {
     const current = await this.getById(id);
     if (!current) return null;
 
@@ -217,7 +222,7 @@ export class ProjectManager {
     });
   }
 
-  static async toggleFeatured(id: string): Promise<Project | null> {
+  static async toggleFeatured(id: string): Promise<IProject | null> {
     const current = await this.getById(id);
     if (!current) return null;
 
@@ -311,11 +316,11 @@ export class ProjectManager {
   static async bulkUpdate(
     ids: string[],
     updates: UpdateProject
-  ): Promise<Project[]> {
+  ): Promise<IProject[]> {
     const results = await Promise.all(
       ids.map((id) => this.update(id, updates))
     );
-    return results.filter(Boolean) as Project[];
+    return results.filter(Boolean) as IProject[];
   }
 
   static async bulkDelete(
@@ -331,7 +336,7 @@ export class ProjectManager {
   static async search(
     query: string,
     filters?: ProjectFilters
-  ): Promise<Project[]> {
+  ): Promise<IProject[]> {
     const conditions = [];
 
     // Text search across title, description, technologies

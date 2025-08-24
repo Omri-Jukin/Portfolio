@@ -2,7 +2,7 @@ import { contactInquiries } from "../schema/schema.tables";
 import { eq, desc } from "drizzle-orm";
 import { getDB } from "../client";
 import { v4 as uuidv4 } from "uuid";
-import { InquiryStatus } from "../schema/schema.tables";
+import { InquiryStatus } from "../schema/schema.types";
 
 export type CreateContactInput = {
   name: string;

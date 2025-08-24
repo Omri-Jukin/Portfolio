@@ -12,6 +12,7 @@ import type {
   BulkEducationUpdateResult,
   BulkEducationDeleteResult,
   EducationReorderItem,
+  EducationDB,
 } from "./Education.type";
 import { DegreeType, EducationStatus } from "../schema/schema.types";
 
@@ -385,7 +386,7 @@ export class EducationManager {
   /**
    * Transform database type to API type (convert dates to strings)
    */
-  private static transformToAPIType(dbEducation: any): Education {
+  private static transformToAPIType(dbEducation: EducationDB): Education {
     return {
       ...dbEducation,
       startDate: dbEducation.startDate.toISOString(),

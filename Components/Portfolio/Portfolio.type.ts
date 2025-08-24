@@ -3,14 +3,14 @@ export interface PortfolioProps {
 }
 
 export interface CodeExample {
-  language: any;
+  language: string;
   title: string;
   code: string;
   explanation: string;
 }
 
 export interface TechnicalChallenge {
-  challenge: any;
+  challenge: string;
   title: string;
   description: string;
   solution: string;

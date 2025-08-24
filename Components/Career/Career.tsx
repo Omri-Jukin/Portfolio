@@ -46,6 +46,18 @@ export type Experience = {
   company: string;
   time: string;
   details: string[];
+  location: string;
+  startDate: string;
+  endDate: string;
+  employmentType:
+    | "full-time"
+    | "part-time"
+    | "contract"
+    | "freelance"
+    | "internship";
+  technologies: string[];
+  achievements: string[];
+  responsibilities: string[];
 };
 
 const Career: React.FC<CareerProps> = () => {
@@ -178,7 +190,7 @@ const Career: React.FC<CareerProps> = () => {
             }}
             className="career-swiper"
           >
-            {experiences.map((experience: any, index: number) => {
+            {experiences.map((experience: Experience, index: number) => {
               // Handle both static and database formats
               const role = experience.role;
               const company = experience.company;
@@ -244,9 +256,13 @@ const Career: React.FC<CareerProps> = () => {
                                   label={employmentType.replace("-", " ")}
                                   size="small"
                                   color={
-                                    getEmploymentTypeColor(
-                                      employmentType
-                                    ) as any
+                                    getEmploymentTypeColor(employmentType) as
+                                      | "primary"
+                                      | "secondary"
+                                      | "warning"
+                                      | "info"
+                                      | "success"
+                                      | "default"
                                   }
                                   variant="outlined"
                                 />

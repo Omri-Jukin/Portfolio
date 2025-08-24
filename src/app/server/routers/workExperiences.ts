@@ -1,67 +1,16 @@
 import { z } from "zod";
 import { router, procedure, protectedProcedure } from "../trpc";
+import {
+  employmentTypeSchema,
+  workExperienceCreateSchema,
+  workExperienceUpdateSchema,
+  bulkUpdateOrderSchema,
+} from "#/lib/schemas";
 
 const publicProcedure = procedure;
 import { WorkExperienceManager } from "$/db/workExperiences/WorkExperienceManager";
 
-// Validation schemas
-const EmploymentTypeSchema = z.enum([
-  "full-time",
-  "part-time",
-  "contract",
-  "freelance",
-  "internship",
-]);
-
-const CreateWorkExperienceSchema = z.object({
-  role: z.string().min(1, "Role is required").max(200, "Role too long"),
-  company: z
-    .string()
-    .min(1, "Company is required")
-    .max(200, "Company too long"),
-  location: z
-    .string()
-    .min(1, "Location is required")
-    .max(100, "Location too long"),
-  startDate: z.date(),
-  endDate: z.date().optional(),
-  description: z
-    .string()
-    .min(1, "Description is required")
-    .max(2000, "Description too long"),
-  achievements: z
-    .array(z.string().min(1).max(500))
-    .min(1, "At least one achievement is required"),
-  technologies: z
-    .array(z.string().min(1).max(50))
-    .min(1, "At least one technology is required"),
-  responsibilities: z
-    .array(z.string().min(1).max(500))
-    .min(1, "At least one responsibility is required"),
-  employmentType: EmploymentTypeSchema,
-  industry: z
-    .string()
-    .min(1, "Industry is required")
-    .max(100, "Industry too long"),
-  companyUrl: z.string().url().optional().or(z.literal("")),
-  logo: z.string().max(500).optional(),
-  displayOrder: z.number().int().min(0).default(0),
-  isVisible: z.boolean().default(true),
-  isFeatured: z.boolean().default(false),
-  roleTranslations: z.record(z.string(), z.string()).optional(),
-  companyTranslations: z.record(z.string(), z.string()).optional(),
-  descriptionTranslations: z.record(z.string(), z.string()).optional(),
-});
-
-const UpdateWorkExperienceSchema = CreateWorkExperienceSchema.partial();
-
-const ReorderWorkExperiencesSchema = z.array(
-  z.object({
-    id: z.string(),
-    displayOrder: z.number().int().min(0),
-  })
-);
-
+// Additional schemas specific to this router
 const WorkExperienceFiltersSchema = z.object({
   employmentType: z.string().optional(),
   industry: z.string().optional(),
@@ -98,7 +47,7 @@ export const workExperiencesRouter = router({
   getByEmploymentType: publicProcedure
     .input(
       z.object({
-        employmentType: EmploymentTypeSchema,
+        employmentType: employmentTypeSchema,
         visibleOnly: z.boolean().default(true),
       })
     )
@@ -144,7 +93,7 @@ export const workExperiencesRouter = router({
   }),
 
   create: protectedProcedure
-    .input(CreateWorkExperienceSchema)
+    .input(workExperienceCreateSchema)
     .mutation(async ({ input, ctx }) => {
       // Convert empty string URLs to undefined
       const cleanInput = {
@@ -160,7 +109,7 @@ export const workExperiencesRouter = router({
     .input(
       z.object({
         id: z.string(),
-        data: UpdateWorkExperienceSchema,
+        data: workExperienceUpdateSchema,
       })
     )
     .mutation(async ({ input }) => {
@@ -185,9 +134,9 @@ export const workExperiencesRouter = router({
     }),
 
   reorder: protectedProcedure
-    .input(ReorderWorkExperiencesSchema)
+    .input(bulkUpdateOrderSchema)
     .mutation(async ({ input }) => {
-      await WorkExperienceManager.updateDisplayOrder(input);
+      await WorkExperienceManager.updateDisplayOrder(input.items);
       return { success: true };
     }),
 
@@ -216,7 +165,7 @@ export const workExperiencesRouter = router({
     .input(
       z.object({
         ids: z.array(z.string()),
-        updates: UpdateWorkExperienceSchema,
+        updates: workExperienceUpdateSchema,
       })
     )
     .mutation(async ({ input }) => {

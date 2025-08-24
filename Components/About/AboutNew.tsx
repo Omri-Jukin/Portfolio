@@ -81,7 +81,7 @@ const About: React.FC<AboutProps> = ({ onSkillClick }) => {
   // Transform database skills to match static format
   const transformedSkills =
     skills.length > 0
-      ? skills.slice(0, 8).map((skill, index) => ({
+      ? skills.slice(0, 8).map((skill) => ({
           key: skill.id,
           icon: skill.icon || "⚡",
           label: skill.name,

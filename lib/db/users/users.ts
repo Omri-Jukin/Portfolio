@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import { getDB } from "../client";
-import { users, UserRole, UserStatus } from "../schema/schema.tables";
+import { users } from "../schema/schema.tables";
+import { UserRole, UserStatus } from "../schema/schema.types";
 import { v4 as uuidv4 } from "uuid";
 // Removed remote-client fallbacks to avoid Node polyfills in edge runtime
 

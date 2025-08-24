@@ -39,9 +39,14 @@ import {
   ProblemSolution,
   ArchitectureSection,
 } from "./Portfolio.style";
-import type { PortfolioProps } from "./Portfolio.type";
+import type {
+  CodeExample,
+  PortfolioProps,
+  TechnicalChallenge,
+} from "./Portfolio.type";
 import { api } from "$/trpc/client";
 import { format } from "date-fns";
+import { ProjectStatusColor, ProjectTypeColor } from "#/lib/types";
 
 const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
   const [expandedProject, setExpandedProject] = useState<string | false>(false);
@@ -125,6 +130,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
         </PortfolioHeader>
 
         <Grid container spacing={4}>
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {projectsData.map((project: any, index: number) => {
             // Handle both database and static formats
             const projectId = isUsingDatabase ? project.id : project.id;
@@ -187,14 +193,18 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                                 <Chip
                                   label={status.replace("-", " ")}
                                   size="small"
-                                  color={getStatusColor(status) as any}
+                                  color={
+                                    getStatusColor(status) as ProjectStatusColor
+                                  }
                                   variant="outlined"
                                 />
                                 <Chip
                                   label={projectType.replace("-", " ")}
                                   size="small"
                                   color={
-                                    getProjectTypeColor(projectType) as any
+                                    getProjectTypeColor(
+                                      projectType
+                                    ) as ProjectTypeColor
                                   }
                                   variant="filled"
                                 />
@@ -378,9 +388,13 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                                 <BugReportIcon color="secondary" />
                                 Problem Statement
                               </Typography>
-                              <Typography variant="body2" sx={{ mb: 3 }}>
-                                {(project as any).problem}
-                              </Typography>
+                              {project.problem && (
+                                <Typography variant="body2" sx={{ mb: 3 }}>
+                                  {typeof project.problem === "string"
+                                    ? project.problem
+                                    : JSON.stringify(project.problem)}
+                                </Typography>
+                              )}
 
                               <Typography
                                 variant="h6"
@@ -394,9 +408,13 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                                 <ArchitectureIcon color="primary" />
                                 Solution Approach
                               </Typography>
-                              <Typography variant="body2">
-                                {(project as any).solution}
-                              </Typography>
+                              {project.solution && (
+                                <Typography variant="body2" sx={{ mb: 3 }}>
+                                  {typeof project.solution === "string"
+                                    ? project.solution
+                                    : JSON.stringify(project.solution)}
+                                </Typography>
+                              )}
                             </ProblemSolution>
 
                             {/* Architecture */}
@@ -413,9 +431,13 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                                 <ArchitectureIcon color="info" />
                                 Technical Architecture
                               </Typography>
-                              <Typography variant="body2">
-                                {(project as any).architecture}
-                              </Typography>
+                              {project.architecture && (
+                                <Typography variant="body2">
+                                  {typeof project.architecture === "string"
+                                    ? project.architecture
+                                    : JSON.stringify(project.architecture)}
+                                </Typography>
+                              )}
                             </ArchitectureSection>
                           </>
                         )}
@@ -437,7 +459,10 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                                 Technical Challenges
                               </Typography>
                               {technicalChallenges.map(
-                                (challenge: any, challengeIndex: number) => (
+                                (
+                                  challenge: TechnicalChallenge,
+                                  challengeIndex: number
+                                ) => (
                                   <Box
                                     key={challengeIndex}
                                     sx={{
@@ -479,7 +504,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                               Code Examples
                             </Typography>
                             {codeExamples.map(
-                              (example: any, exampleIndex: number) => (
+                              (example: CodeExample, exampleIndex: number) => (
                                 <CodeExampleBox
                                   key={exampleIndex}
                                   sx={{ mb: 3 }}
@@ -492,7 +517,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                                     {example.title}
                                   </Typography>
                                   <Typography variant="body2" sx={{ mb: 2 }}>
-                                    {example.description}
+                                    {example.explanation}
                                   </Typography>
                                   <Box
                                     component="pre"

@@ -13,6 +13,7 @@ import { TRPCProvider } from "$/trpc/provider";
 import Cookies from "#/Components/Cookies";
 import Calendly from "#/Components/Calendly";
 import GlobeBackground, { ALL_MARKERS } from "~/GlobeBackground";
+import { usePathname } from "next/navigation";
 
 export default function ClientLayout({
   children,
@@ -25,7 +26,11 @@ export default function ClientLayout({
   const [manualOverride, setManualOverride] = useState(false);
   const [mounted, setMounted] = useState(false);
   const locale = useLocale();
+  const pathname = usePathname();
   const isRTL = locale === "he";
+
+  // Check if current page is an example page
+  const isExamplePage = pathname?.includes("/examples");
 
   // Create static initial theme to prevent hydration mismatches
   const initialTheme = createTheme({
@@ -191,81 +196,83 @@ export default function ClientLayout({
       <ThemeProvider theme={appTheme}>
         <CssBaseline />
         {/* Global Globe Background with Content */}
-        <GlobeBackground
-          size={1920}
-          markers={ALL_MARKERS}
-          opacity={0.8}
-          rotationSpeed={0.002}
-          showGrid={true}
-          enableGridPositioning={true}
-        >
-          {/* Fixed Header */}
-          <Header
-            isDarkMode={isDarkMode}
-            onThemeToggle={handleThemeToggle}
-            isMobile={isMobile}
-            forceLayout={forceLayout}
-            onLayoutChange={handleLayoutChange}
+        {!isExamplePage && (
+          <GlobeBackground
+            size={1920}
+            markers={ALL_MARKERS}
+            opacity={0.8}
+            rotationSpeed={0.002}
+            showGrid={true}
+            enableGridPositioning={true}
           />
+        )}
 
-          {/* Main Layout Container */}
+        {/* Fixed Header */}
+        <Header
+          isDarkMode={isDarkMode}
+          onThemeToggle={handleThemeToggle}
+          isMobile={isMobile}
+          forceLayout={forceLayout}
+          onLayoutChange={handleLayoutChange}
+        />
+
+        {/* Main Layout Container */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "100vh",
+            pt: "4rem", // Account for fixed header height
+            width: "100%",
+            maxWidth: "100vw",
+            overflow: "hidden",
+            background: "transparent",
+          }}
+        >
+          {/* Main Content Area */}
           <Box
             sx={{
+              flex: 1,
               display: "flex",
               flexDirection: "column",
-              minHeight: "100vh",
-              pt: "4rem", // Account for fixed header height
               width: "100%",
               maxWidth: "100vw",
               overflow: "hidden",
               background: "transparent",
             }}
           >
-            {/* Main Content Area */}
-            <Box
-              sx={{
-                flex: 1,
-                display: "flex",
-                flexDirection: "column",
-                width: "100%",
-                maxWidth: "100vw",
-                overflow: "hidden",
-                background: "transparent",
-              }}
-            >
-              <ResponsiveLayout isMobile={isMobile} forceLayout={forceLayout}>
-                <Box
-                  sx={{
-                    flex: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                    width: "100%",
-                    maxWidth: "100vw",
-                    overflow: "hidden",
-                    background: "transparent",
-                  }}
-                >
-                  {children}
-                </Box>
-              </ResponsiveLayout>
-            </Box>
-
-            {/* Footer */}
-            <Footer />
-            {/* Cookies */}
-            <Cookies />
-            {isMobile && (
-              <Calendly
-                url="https://calendly.com/omrijukin/30min"
-                text="Let's Talk!"
-                backgroundColor="#FF6B6B"
-                textColor="#FFFFFF"
-                position="bottom-right"
-                className="calendly-badge"
-              />
-            )}
+            <ResponsiveLayout isMobile={isMobile} forceLayout={forceLayout}>
+              <Box
+                sx={{
+                  flex: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "100%",
+                  maxWidth: "100vw",
+                  overflow: "hidden",
+                  background: "transparent",
+                }}
+              >
+                {children}
+              </Box>
+            </ResponsiveLayout>
           </Box>
-        </GlobeBackground>
+
+          {/* Footer */}
+          <Footer />
+          {/* Cookies */}
+          <Cookies />
+          {isMobile && (
+            <Calendly
+              url="https://calendly.com/omrijukin/30min"
+              text="Let's Talk!"
+              backgroundColor="#FF6B6B"
+              textColor="#FFFFFF"
+              position="bottom-right"
+              className="calendly-badge"
+            />
+          )}
+        </Box>
       </ThemeProvider>
     </TRPCProvider>
   );
