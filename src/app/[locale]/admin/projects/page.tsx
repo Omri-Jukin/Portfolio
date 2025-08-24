@@ -468,7 +468,8 @@ export default function ProjectsAdminPage() {
 
       {/* Projects Grid */}
       <Grid container spacing={3}>
-        {projects.map((project: Project) => (
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        {projects.map((project: any) => (
           <Grid component="div" key={project.id}>
             <Card
               sx={{
@@ -601,7 +602,7 @@ export default function ProjectsAdminPage() {
                         >
                           {project.technologies
                             .slice(0, 5)
-                            .map((tech, index) => (
+                            .map((tech: string, index: number) => (
                               <Chip
                                 key={index}
                                 label={tech}

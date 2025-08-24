@@ -9,7 +9,8 @@ import {
   inArray,
 } from "drizzle-orm";
 import { getDB } from "../client";
-import { CertificationCategory, certifications } from "../schema/schema.tables";
+import { certifications } from "../schema/schema.tables";
+import { CertificationCategory } from "../schema/schema.types";
 import type {
   Certification,
   NewCertification,

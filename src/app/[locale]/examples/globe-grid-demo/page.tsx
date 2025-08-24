@@ -8,7 +8,45 @@ import {
   Switch,
   FormControlLabel,
 } from "@mui/material";
-import { GRID_CONFIG, BREAKPOINTS } from "#/Components/GlobeBackground";
+
+// Local constants - completely isolated from main GlobeBackground
+const BREAKPOINTS = {
+  mobile: 768,
+  tablet: 1024,
+};
+
+const GRID_CONFIG = {
+  mobile: {
+    columns: 4,
+    rows: 6,
+    globe: {
+      startColumn: 1,
+      endColumn: 4,
+      startRow: 2,
+      endRow: 5,
+    },
+  },
+  tablet: {
+    columns: 8,
+    rows: 8,
+    globe: {
+      startColumn: 2,
+      endColumn: 7,
+      startRow: 2,
+      endRow: 7,
+    },
+  },
+  desktop: {
+    columns: 12,
+    rows: 10,
+    globe: {
+      startColumn: 3,
+      endColumn: 10,
+      startRow: 2,
+      endRow: 9,
+    },
+  },
+};
 
 const GlobeGridDemo: React.FC = () => {
   const [showGrid, setShowGrid] = useState(true);

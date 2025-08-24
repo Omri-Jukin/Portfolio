@@ -17,6 +17,11 @@ import {
   ServiceType,
   PricingType,
 } from "./schema.types";
+import {
+  ProjectArchitecture,
+  ProjectProblem,
+  ProjectSolution,
+} from "#/lib/types";
 
 // Users table - minimal for portfolio admin
 export const users = sqliteTable("users", {
@@ -285,6 +290,13 @@ export const projects = sqliteTable("projects", {
   isOpenSource: integer("is_open_source", { mode: "boolean" })
     .notNull()
     .default(false),
+
+  // Problem-solving details
+  problem: text("problem", { mode: "json" }).$type<ProjectProblem>(),
+  solution: text("solution", { mode: "json" }).$type<ProjectSolution>(),
+  architecture: text("architecture", {
+    mode: "json",
+  }).$type<ProjectArchitecture>(),
 
   // Multi-language support
   titleTranslations: text("title_translations", { mode: "json" }).$type<

@@ -1,7 +1,14 @@
 import { Typography } from "@mui/material";
-import { createTheme, styled } from "@mui/material/styles";
+import { createTheme, styled, keyframes } from "@mui/material/styles";
 import { TypographyProps } from "./Typography.type";
 import { Box } from "@mui/material";
+import { mixins } from "#/lib/styles";
+
+// Keyframe for marquee animation using centralized approach
+const marqueeAnimation = keyframes`
+  0% { transform: translateX(100vw); }
+  100% { transform: translateX(-100%); }
+`;
 
 export const StyledTypography = styled(Typography)<TypographyProps>(
   ({ theme, variant, weight, color, align, margin }) => {
@@ -38,27 +45,22 @@ export const MarqueeText = styled(Box)(() => ({
   width: "100%",
   height: "2em",
   fontSize: "5em",
-  display: "grid",
-  placeItems: "center",
+  ...mixins.flexCenter,
   overflow: "hidden",
 }));
 
 export const MarqueeTextContent = styled(Typography)({
   position: "absolute",
   minWidth: "100%",
+  ...mixins.textEllipsis,
   whiteSpace: "nowrap",
-  animation: "marquee 16s infinite linear",
-  "@keyframes marquee": {
-    "0%": { transform: "translateX(100vw)" },
-    "100%": { transform: "translateX(-100%)" },
-  },
+  animation: `${marqueeAnimation} 16s infinite linear`,
 });
 
 export const MarqueeBlur = styled(Box)(({ theme }) => ({
-  position: "absolute",
-  inset: 0,
-  display: "grid",
-  placeItems: "center",
+  ...mixins.absoluteCenter,
+  ...mixins.fullSize,
+  ...mixins.flexCenter,
   backgroundColor: theme.palette.background.default,
   backgroundImage: `
     linear-gradient(to right, ${theme.palette.background.default}, 1rem, transparent 50%),
@@ -70,9 +72,8 @@ export const MarqueeBlur = styled(Box)(({ theme }) => ({
   },
 }));
 
-export const MarqueeClear = styled(Box)({
-  position: "absolute",
-  inset: 0,
-  display: "grid",
-  placeItems: "center",
-});
+export const MarqueeClear = styled(Box)(() => ({
+  ...mixins.absoluteCenter,
+  ...mixins.fullSize,
+  ...mixins.flexCenter,
+}));

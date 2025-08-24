@@ -40,12 +40,20 @@ import { CAREER_CONSTANTS } from "./Career.const";
 import type { CareerProps } from "./Career.type";
 import { api } from "$/trpc/client";
 import { format } from "date-fns";
+import { EmploymentType, EmploymentTypeColor } from "#/lib";
 
 export type Experience = {
   role: string;
   company: string;
   time: string;
   details: string[];
+  location: string;
+  startDate: string;
+  endDate: string;
+  employmentType: EmploymentType;
+  technologies: string[];
+  achievements: string[];
+  responsibilities: string[];
 };
 
 const Career: React.FC<CareerProps> = () => {
@@ -71,15 +79,17 @@ const Career: React.FC<CareerProps> = () => {
     return `${start} - ${end}`;
   };
 
-  const getEmploymentTypeColor = (type: string) => {
+  const getEmploymentTypeColor = (
+    type: EmploymentType
+  ): EmploymentTypeColor => {
     const colors = {
       "full-time": "primary",
       "part-time": "secondary",
       contract: "warning",
       freelance: "info",
       internship: "success",
-    };
-    return colors[type as keyof typeof colors] || "default";
+    } as const;
+    return colors[type] || "primary";
   };
 
   if (isLoading) {
@@ -178,7 +188,7 @@ const Career: React.FC<CareerProps> = () => {
             }}
             className="career-swiper"
           >
-            {experiences.map((experience: any, index: number) => {
+            {experiences.map((experience: Experience, index: number) => {
               // Handle both static and database formats
               const role = experience.role;
               const company = experience.company;
@@ -243,11 +253,7 @@ const Career: React.FC<CareerProps> = () => {
                                 <Chip
                                   label={employmentType.replace("-", " ")}
                                   size="small"
-                                  color={
-                                    getEmploymentTypeColor(
-                                      employmentType
-                                    ) as any
-                                  }
+                                  color={getEmploymentTypeColor(employmentType)}
                                   variant="outlined"
                                 />
                               )}

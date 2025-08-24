@@ -222,6 +222,7 @@ export default function WorkExperiencesAdminPage() {
 
   const handleSubmit = () => {
     const submitData = {
+      id: editingExperience?.id || "",
       role: formData.role,
       company: formData.company,
       location: formData.location,

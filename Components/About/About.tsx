@@ -28,12 +28,12 @@ const About: React.FC<AboutProps> = ({ onSkillClick }) => {
   const router = useRouter();
 
   // Fetch skills from database
-  const { 
-    data: skills = [], 
-    isLoading, 
-    error 
-  } = api.skills.getAll.useQuery({ 
-    visibleOnly: true 
+  const {
+    data: skills = [],
+    isLoading,
+    error,
+  } = api.skills.getAll.useQuery({
+    visibleOnly: true,
   });
 
   // Static fallback skills
@@ -42,31 +42,35 @@ const About: React.FC<AboutProps> = ({ onSkillClick }) => {
       key: ABOUT_CONSTANTS.SKILLS.CODE_CONJURER,
       icon: "🧙‍♂️",
       label: "Code Conjurer",
-      description: "Transforming complex requirements into elegant solutions"
+      description: "Transforming complex requirements into elegant solutions",
     },
     {
       key: ABOUT_CONSTANTS.SKILLS.INNOVATION_ARCHITECT,
       icon: "🏗️",
       label: "Innovation Architect",
-      description: "Building scalable systems that push technological boundaries"
+      description:
+        "Building scalable systems that push technological boundaries",
     },
     {
       key: ABOUT_CONSTANTS.SKILLS.DIGITAL_STORYTELLER,
       icon: "📖",
       label: "Digital Storyteller",
-      description: "Crafting compelling user experiences through intuitive design"
+      description:
+        "Crafting compelling user experiences through intuitive design",
     },
     {
       key: ABOUT_CONSTANTS.SKILLS.PROBLEM_SOLVER,
       icon: "🔧",
       label: "Problem Solver",
-      description: "Turning challenges into opportunities for growth and learning"
+      description:
+        "Turning challenges into opportunities for growth and learning",
     },
     {
       key: ABOUT_CONSTANTS.SKILLS.TEAM_PLAYER,
       icon: "🤝",
       label: "Team Player",
-      description: "Collaborating effectively to achieve shared goals and vision"
+      description:
+        "Collaborating effectively to achieve shared goals and vision",
     },
   ];
 
@@ -75,14 +79,17 @@ const About: React.FC<AboutProps> = ({ onSkillClick }) => {
   };
 
   // Transform database skills to match static format
-  const transformedSkills = skills.length > 0 
-    ? skills.slice(0, 8).map((skill, index) => ({
-        key: skill.id,
-        icon: skill.icon || "⚡",
-        label: skill.name,
-        description: skill.description || `${skill.category} skill with ${skill.yearsOfExperience} years experience`,
-      }))
-    : staticSkills;
+  const transformedSkills =
+    skills.length > 0
+      ? skills.slice(0, 8).map((skill) => ({
+          key: skill.id,
+          icon: skill.icon || "⚡",
+          label: skill.name,
+          description:
+            skill.description ||
+            `${skill.category} skill with ${skill.yearsOfExperience} years experience`,
+        }))
+      : staticSkills;
 
   if (error) {
     console.error("Error loading skills:", error);
@@ -100,9 +107,7 @@ const About: React.FC<AboutProps> = ({ onSkillClick }) => {
       </MotionWrapper>
 
       <MotionWrapper variant="slideUp" duration={0.8} delay={0.6}>
-        <AboutDescription variant="body1">
-          {t("description")}
-        </AboutDescription>
+        <AboutDescription variant="body1">{t("description")}</AboutDescription>
       </MotionWrapper>
 
       {/* Skills Showcase */}
@@ -111,7 +116,7 @@ const About: React.FC<AboutProps> = ({ onSkillClick }) => {
           <Typography variant="h3" sx={{ mb: 4, textAlign: "center" }}>
             {t("skillsTitle")}
           </Typography>
-          
+
           {isLoading ? (
             <Box display="flex" justifyContent="center" py={4}>
               <CircularProgress />
@@ -171,7 +176,10 @@ const About: React.FC<AboutProps> = ({ onSkillClick }) => {
                         label={
                           <div style={{ textAlign: "center" }}>
                             <div
-                              style={{ fontSize: "2rem", marginBottom: "0.5rem" }}
+                              style={{
+                                fontSize: "2rem",
+                                marginBottom: "0.5rem",
+                              }}
                             >
                               {skill.icon}
                             </div>
@@ -222,8 +230,6 @@ const About: React.FC<AboutProps> = ({ onSkillClick }) => {
       {/* Call to Action */}
       <MotionWrapper variant="slideUp" duration={0.8} delay={1.0}>
         <CTA1Button
-          variant="contained"
-          size="large"
           onClick={handleContactClick}
           sx={{
             mt: 4,

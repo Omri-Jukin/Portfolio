@@ -1,35 +1,32 @@
-// Layout types
-export const LAYOUT_TYPES = {
-  MOBILE: "mobile",
-  DESKTOP: "desktop",
-  AUTO: "auto",
-} as const;
+import {
+  LAYOUT_TYPES as CENTRALIZED_LAYOUT_TYPES,
+  NAVIGATION_ITEMS as CENTRALIZED_NAVIGATION_ITEMS,
+  LAYOUT_DIMENSIONS,
+  RESPONSIVE_BREAKPOINTS,
+  ANIMATION_DURATIONS,
+  THEME_CONFIG as CENTRALIZED_THEME_CONFIG,
+  ACCESSIBILITY_LABELS,
+} from "#/lib";
 
-// Navigation items
-export const NAVIGATION_ITEMS = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Career", href: "/career" },
-  { label: "Projects", href: "/projects" },
-  { label: "Contact", href: "/contact" },
-] as const;
+// Re-export centralized layout types for backward compatibility
+export const LAYOUT_TYPES = CENTRALIZED_LAYOUT_TYPES;
 
-// Header configuration
+// Re-export centralized navigation items
+export const NAVIGATION_ITEMS = CENTRALIZED_NAVIGATION_ITEMS;
+
+// Header configuration using centralized values
 export const HEADER_CONFIG = {
-  HEIGHT: 64,
-  MOBILE_BREAKPOINT: 768,
-  ANIMATION_DURATION: 0.3,
+  HEIGHT: LAYOUT_DIMENSIONS.HEADER_HEIGHT,
+  MOBILE_BREAKPOINT: RESPONSIVE_BREAKPOINTS.MOBILE,
+  ANIMATION_DURATION: ANIMATION_DURATIONS.FAST,
 } as const;
 
 // Logo configuration
 export const LOGO_CONFIG = {
-  ALT_TEXT: "Portfolio Logo",
+  ALT_TEXT: ACCESSIBILITY_LABELS.PORTFOLIO_LOGO,
   DEFAULT_SIZE: 40,
   MOBILE_SIZE: 32,
 } as const;
 
-// Theme configuration
-export const THEME_CONFIG = {
-  STORAGE_KEY: "theme-mode",
-  DEFAULT_MODE: "light",
-} as const;
+// Re-export centralized theme config
+export const THEME_CONFIG = CENTRALIZED_THEME_CONFIG;
