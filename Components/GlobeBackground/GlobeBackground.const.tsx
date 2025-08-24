@@ -134,7 +134,7 @@ export const calculateGlobePosition = (
 
   return {
     left: viewportWidth / 2, // Center horizontally
-    top: viewportHeight * 1.2, // Position below viewport to show only horizon
+    top: viewportHeight * 0.8, // Position at 80% of viewport height to show horizon
     transform: "translate(-50%, -50%)", // Center the globe on its calculated position
   };
 };
