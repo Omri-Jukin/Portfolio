@@ -6,9 +6,9 @@ This guide will help you create an iPhone shortcut that allows you to quickly pu
 ## 🔑 API Configuration
 
 ### API Key
-Your secure API key has been generated and is available in `backend/config/env.example`:
+Create and store a secure API key in your environment (Cloudflare/Pages or local `.env`):
 ```
-BLOG_API_KEY=d82276c37b7dc2425a914cb0a96e447942465e0d3e7bf45c51188b16e716097579423e81a7497c78dbec4ba45c303cff084b20bb4c163e82db91a7c6919136e5
+BLOG_API_KEY=your_blog_api_key_here
 ```
 
 **⚠️ Important**: Copy this key to your `.env` file and keep it secure!
@@ -54,7 +54,7 @@ BLOG_API_KEY=d82276c37b7dc2425a914cb0a96e447942465e0d3e7bf45c51188b16e7160975794
 - Set **Method** to **POST**
 - Add **Request Headers**:
   - `Content-Type`: `application/json`
-  - `x-api-key`: `d82276c37b7dc2425a914cb0a96e447942465e0d3e7bf45c51188b16e716097579423e81a7497c78dbec4ba45c303cff084b20bb4c163e82db91a7c6919136e5`
+  - `x-api-key`: `YOUR_SECURE_API_KEY`
 
 #### Action 6: Set Request Body
 - In the **Get URL Contents** action, set **Request Body** to:

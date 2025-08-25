@@ -115,4 +115,3 @@ export type { CollaborationHubProps } from "./CollaborationHub";
 export type { GlobeBackgroundProps, GlobeMarker } from "./GlobeBackground";
 
 // Text Color System
-export { default as TextColorExample } from "./TextColorExample";
