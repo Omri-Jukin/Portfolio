@@ -15,6 +15,10 @@ export async function executeRemoteD1Query(
       { encoding: "utf8" }
     );
 
+    if (!result) {
+      return [];
+    }
+
     // Parse the result (this is a simplified parser)
     const lines = result.split("\n");
 

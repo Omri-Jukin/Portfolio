@@ -50,3 +50,16 @@ next-env.d.ts
 # uploaded files
 /public/uploads/*
 !/public/uploads/.gitkeep
+
+# sqlite
+.docker-compose.yml
+.docker-compose.dev.yml
+.portfolio.db
+
+# scripts
+/scripts/*
+/scripts/migrations/*
+
+# roadmap
+/roadmap/*
+!/roadmap/.gitkeep

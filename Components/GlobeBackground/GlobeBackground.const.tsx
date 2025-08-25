@@ -129,12 +129,10 @@ export const calculateGlobePosition = (
   viewportWidth: number,
   viewportHeight: number
 ) => {
-  // For massive globe effect, position at bottom center of viewport
-  // The globe should appear as if it's a massive planet with only the horizon visible
-
+  // Centered full-globe positioning (ensures full circle visible)
   return {
-    left: viewportWidth / 2, // Center horizontally
-    top: viewportHeight * 0.8, // Position at 80% of viewport height to show horizon
-    transform: "translate(-50%, -50%)", // Center the globe on its calculated position
+    left: viewportWidth / 2,
+    top: viewportHeight / 2,
+    transform: "translate(-50%, -50%)",
   };
 };

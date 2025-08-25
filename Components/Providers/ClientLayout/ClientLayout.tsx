@@ -221,42 +221,15 @@ export default function ClientLayout({
           sx={{
             display: "flex",
             flexDirection: "column",
-            minHeight: "100vh",
-            pt: "2rem", // Reduced from 4rem to 2rem for better hero positioning
             width: "100%",
             maxWidth: "100vw",
-            overflow: "hidden",
             background: "transparent",
           }}
         >
           {/* Main Content Area */}
-          <Box
-            sx={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-              width: "100%",
-              maxWidth: "100vw",
-              overflow: "hidden",
-              background: "transparent",
-            }}
-          >
-            <ResponsiveLayout isMobile={isMobile} forceLayout={forceLayout}>
-              <Box
-                sx={{
-                  flex: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                  width: "100%",
-                  maxWidth: "100vw",
-                  overflow: "hidden",
-                  background: "transparent",
-                }}
-              >
-                {children}
-              </Box>
-            </ResponsiveLayout>
-          </Box>
+          <ResponsiveLayout isMobile={isMobile} forceLayout={forceLayout}>
+            {children}
+          </ResponsiveLayout>
 
           {/* Footer */}
           <Footer />

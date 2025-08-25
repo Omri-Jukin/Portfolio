@@ -10,7 +10,6 @@ export const StyledGlobeContainer = styled(Box, {
 }>(({ opacity }) => ({
   position: "relative",
   width: "100%",
-  minHeight: "100vh",
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
@@ -19,7 +18,6 @@ export const StyledGlobeContainer = styled(Box, {
   "& .globe-canvas-container": {
     // Positioning is now handled by the component using grid system
     // This class is kept for backward compatibility and styling overrides
-    height: "100vh",
     width: "100vw",
     display: "flex",
     justifyContent: "center",
@@ -35,7 +33,6 @@ export const StyledGlobeContainer = styled(Box, {
     position: "relative",
     zIndex: 1,
     width: "100%",
-    minHeight: "100vh",
     display: "flex",
     flexDirection: "column",
     pointerEvents: "auto",
@@ -44,17 +41,17 @@ export const StyledGlobeContainer = styled(Box, {
 }));
 
 export const StyledCanvas = styled("canvas", {
-  shouldForwardProp: (prop) => !["size", "isDark"].includes(prop as string),
+  shouldForwardProp: (prop) => !["isDark"].includes(prop as string),
 })<{
-  size: number;
   isDark: boolean;
-}>(({ size, isDark }) => {
+}>(({ isDark }) => {
   return {
     aspectRatio: "1 / 1",
-    width: `min(${size}px, 100vw)`,
-    height: `min(${size}px, 100vw)`,
-    maxWidth: "100vw",
-    maxHeight: "100vh",
+    // Render a full circle that touches the smaller viewport edge
+    width: `100vmin`,
+    height: `100vmin`,
+    maxWidth: "100vmin",
+    maxHeight: "100vmin",
     objectFit: "contain",
     filter: isDark
       ? "drop-shadow(0 0 40px rgba(16, 185, 129, 0.4)) brightness(1.2)"

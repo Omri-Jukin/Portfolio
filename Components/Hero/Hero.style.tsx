@@ -2,7 +2,8 @@ import { styled } from "@mui/material/styles";
 import { Box, Button, Typography } from "@mui/material";
 
 export const HeroContainer = styled(Box)(({ theme }) => ({
-  minHeight: "50vh",
+  marginTop: "35vh",
+  marginBottom: "5vh",
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
@@ -84,3 +85,19 @@ export const HeroButton = styled(Button)(({ theme }) => ({
     },
   },
 }));
+
+export const ProfilePhotoWrapper = styled(Box)(({ theme }) => ({
+  width: "min(32vmin, 180px)",
+  height: "min(32vmin, 180px)",
+  borderRadius: "50%",
+  overflow: "hidden",
+  boxShadow: "0 20px 60px rgba(0,0,0,0.25)",
+  marginBottom: theme.spacing(3),
+}));
+
+export const ProfilePhotoImg = styled("img")({
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+  display: "block",
+});
