@@ -44,12 +44,79 @@ const Certifications: React.FC<CertificationsProps> = ({
 
   // Fetch certifications from database
   const {
-    data: certifications = [],
+    data: certificationsData = [],
     isLoading,
     error,
   } = api.certifications.getAll.useQuery({
     visibleOnly: true,
   });
+  // Static certifications data
+  const staticCertifications: Certification[] = [
+    {
+      id: "aws-certified-developer",
+      name: "AWS Certified Developer - Associate",
+      issuer: "Amazon Web Services",
+      description:
+        "Demonstrated expertise in developing and maintaining applications on AWS platform, including deployment, monitoring, and security best practices",
+      category: "cloud",
+      status: "active",
+      skills: [
+        "AWS",
+        "Cloud Infrastructure",
+        "Deployment",
+        "CI/CD",
+        "Docker",
+        "Vercel",
+      ],
+      issueDate: "2023-06-15",
+      expiryDate: "2026-06-15",
+      credentialId: "AWS-DEV-OMRI-2023",
+      verificationUrl: "https://aws.amazon.com/verification",
+      icon: "☁️",
+      color: null,
+      displayOrder: 1,
+      isVisible: true,
+      nameTranslations: {},
+      descriptionTranslations: {},
+      issuerTranslations: {},
+      createdBy: "system",
+      createdAt: "2023-06-15T00:00:00Z",
+      updatedAt: null,
+    },
+    {
+      id: "comp-tia-a-plus",
+      name: "CompTIA A+ Certification",
+      issuer: "CompTIA",
+      description:
+        "Industry-standard certification demonstrating foundational IT skills, hardware/software troubleshooting, and essential electrical/electronic knowledge",
+      category: "technical",
+      status: "active",
+      skills: [
+        "Hardware Troubleshooting",
+        "Software Installation",
+        "Network Configuration",
+        "Electrical Safety",
+        "Electronic Components",
+        "System Maintenance",
+      ],
+      issueDate: "2023-08-20",
+      expiryDate: "2026-08-20",
+      credentialId: "COMPTIA-A-PLUS-OMRI-2023",
+      verificationUrl: "https://www.comptia.org/verification",
+      icon: "🔧",
+      color: null,
+      displayOrder: 2,
+      isVisible: true,
+      nameTranslations: {},
+      descriptionTranslations: {},
+      issuerTranslations: {},
+      createdBy: "system",
+      createdAt: "2023-08-20T00:00:00Z",
+      updatedAt: null,
+    },
+  ];
+
+  const certifications = staticCertifications.filter((cert) => cert.isVisible);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -123,6 +190,11 @@ const Certifications: React.FC<CertificationsProps> = ({
     );
   }
 
+  // Sort certifications by display order
+  const sortedCertifications = [...certifications].sort(
+    (a, b) => a.displayOrder - b.displayOrder
+  );
+
   return (
     <CertificationsContainer id={CERTIFICATIONS_CONSTANTS.SECTION_ID}>
       <MotionWrapper
@@ -180,7 +252,7 @@ const Certifications: React.FC<CertificationsProps> = ({
               },
             }}
           >
-            {certifications.map(
+            {sortedCertifications.map(
               (certification: Certification, index: number) => (
                 <SwiperSlide key={certification.id}>
                   <MotionWrapper
