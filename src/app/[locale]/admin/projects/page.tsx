@@ -53,7 +53,7 @@ import { format } from "date-fns";
 import type { Project, TechnicalChallenge, CodeExample } from "$/db/projects";
 import { ClientOnly } from "~/ClientOnly";
 
-export interface ProjectFormData {
+interface ProjectFormData {
   title: string;
   subtitle: string;
   description: string;
@@ -82,7 +82,7 @@ export interface ProjectFormData {
   isOpenSource: boolean;
 }
 
-export const defaultFormData: ProjectFormData = {
+const defaultFormData: ProjectFormData = {
   title: "",
   subtitle: "",
   description: "",
@@ -111,21 +111,22 @@ export const defaultFormData: ProjectFormData = {
   isOpenSource: false,
 };
 
-export const statusOptions = [
-  { value: "completed", label: "Completed", color: "#4CAF50" },
-  { value: "in-progress", label: "In Progress", color: "#FF9800" },
-  { value: "archived", label: "Archived", color: "#607D8B" },
-  { value: "concept", label: "Concept", color: "#9C27B0" },
-];
-
-export const projectTypeOptions = [
-  { value: "professional", label: "Professional", color: "#2196F3" },
-  { value: "personal", label: "Personal", color: "#4CAF50" },
-  { value: "open-source", label: "Open Source", color: "#FF9800" },
-  { value: "academic", label: "Academic", color: "#9C27B0" },
-];
-
 export default function ProjectsAdminPage() {
+  // Constants defined locally within the component
+  const statusOptions = [
+    { value: "completed", label: "Completed", color: "#4CAF50" },
+    { value: "in-progress", label: "In Progress", color: "#FF9800" },
+    { value: "archived", label: "Archived", color: "#607D8B" },
+    { value: "concept", label: "Concept", color: "#9C27B0" },
+  ];
+
+  const projectTypeOptions = [
+    { value: "professional", label: "Professional", color: "#2196F3" },
+    { value: "personal", label: "Personal", color: "#4CAF50" },
+    { value: "open-source", label: "Open Source", color: "#FF9800" },
+    { value: "academic", label: "Academic", color: "#9C27B0" },
+  ];
+
   // State
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
