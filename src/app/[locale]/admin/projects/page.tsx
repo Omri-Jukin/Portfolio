@@ -51,8 +51,9 @@ import {
 import { api } from "$/trpc/client";
 import { format } from "date-fns";
 import type { Project, TechnicalChallenge, CodeExample } from "$/db/projects";
+import { ClientOnly } from "~/ClientOnly";
 
-interface ProjectFormData {
+export interface ProjectFormData {
   title: string;
   subtitle: string;
   description: string;
@@ -81,7 +82,7 @@ interface ProjectFormData {
   isOpenSource: boolean;
 }
 
-const defaultFormData: ProjectFormData = {
+export const defaultFormData: ProjectFormData = {
   title: "",
   subtitle: "",
   description: "",
@@ -110,14 +111,14 @@ const defaultFormData: ProjectFormData = {
   isOpenSource: false,
 };
 
-const statusOptions = [
+export const statusOptions = [
   { value: "completed", label: "Completed", color: "#4CAF50" },
   { value: "in-progress", label: "In Progress", color: "#FF9800" },
   { value: "archived", label: "Archived", color: "#607D8B" },
   { value: "concept", label: "Concept", color: "#9C27B0" },
 ];
 
-const projectTypeOptions = [
+export const projectTypeOptions = [
   { value: "professional", label: "Professional", color: "#2196F3" },
   { value: "personal", label: "Personal", color: "#4CAF50" },
   { value: "open-source", label: "Open Source", color: "#FF9800" },
@@ -325,6 +326,8 @@ export default function ProjectsAdminPage() {
       isVisible: formData.isVisible,
       isFeatured: formData.isFeatured,
       isOpenSource: formData.isOpenSource,
+      titleTranslations: {},
+      descriptionTranslations: {},
     };
 
     if (editingProject) {
@@ -390,791 +393,814 @@ export default function ProjectsAdminPage() {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      {/* Header */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 3,
-        }}
-      >
-        <Typography variant="h4" component="h1" fontWeight="bold">
-          Projects Management
-        </Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={() => handleOpenDialog()}
+    <ClientOnly skeleton>
+      <Box sx={{ p: 3 }}>
+        {/* Header */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 3,
+          }}
         >
-          Add Project
-        </Button>
-      </Box>
-
-      {/* Statistics */}
-      {!statsLoading && statistics && (
-        <Box sx={{ mb: 3 }}>
-          <Grid container spacing={2}>
-            <Grid component="div">
-              <Card>
-                <CardContent>
-                  <Typography color="textSecondary" gutterBottom>
-                    Total Visible
-                  </Typography>
-                  <Typography variant="h4">
-                    {statistics.totalVisible}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid component="div">
-              <Card>
-                <CardContent>
-                  <Typography color="textSecondary" gutterBottom>
-                    Featured
-                  </Typography>
-                  <Typography variant="h4">
-                    {statistics.totalFeatured}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid component="div">
-              <Card>
-                <CardContent>
-                  <Typography color="textSecondary" gutterBottom>
-                    Open Source
-                  </Typography>
-                  <Typography variant="h4">
-                    {statistics.totalOpenSource}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid component="div">
-              <Card>
-                <CardContent>
-                  <Typography color="textSecondary" gutterBottom>
-                    Total
-                  </Typography>
-                  <Typography variant="h4">{statistics.total}</Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
+          <Typography variant="h4" component="h1" fontWeight="bold">
+            Projects Management
+          </Typography>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={() => handleOpenDialog()}
+          >
+            Add Project
+          </Button>
         </Box>
-      )}
 
-      {/* Projects Grid */}
-      <Grid container spacing={3}>
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-        {projects.map((project: any) => (
-          <Grid component="div" key={project.id}>
-            <Card
-              sx={{
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                opacity: project.isVisible ? 1 : 0.6,
-                border: project.isVisible ? "none" : "2px dashed #ccc",
-              }}
-            >
-              <CardContent sx={{ flexGrow: 1 }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
-                    mb: 2,
-                  }}
-                >
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <CodeIcon color="action" />
+        {/* Statistics */}
+        {!statsLoading && statistics && (
+          <Box sx={{ mb: 3 }}>
+            <Grid container spacing={2}>
+              <Grid component="div">
+                <Card>
+                  <CardContent>
+                    <Typography color="textSecondary" gutterBottom>
+                      Total Visible
+                    </Typography>
+                    <Typography variant="h4">
+                      {statistics.totalVisible}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid component="div">
+                <Card>
+                  <CardContent>
+                    <Typography color="textSecondary" gutterBottom>
+                      Featured
+                    </Typography>
+                    <Typography variant="h4">
+                      {statistics.totalFeatured}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid component="div">
+                <Card>
+                  <CardContent>
+                    <Typography color="textSecondary" gutterBottom>
+                      Open Source
+                    </Typography>
+                    <Typography variant="h4">
+                      {statistics.totalOpenSource}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid component="div">
+                <Card>
+                  <CardContent>
+                    <Typography color="textSecondary" gutterBottom>
+                      Total
+                    </Typography>
+                    <Typography variant="h4">{statistics.total}</Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            </Grid>
+          </Box>
+        )}
+
+        {/* Projects Grid */}
+        <Grid container spacing={3}>
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {projects.map((project: any) => (
+            <Grid component="div" key={project.id}>
+              <Card
+                sx={{
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  opacity: project.isVisible ? 1 : 0.6,
+                  border: project.isVisible ? "none" : "2px dashed #ccc",
+                }}
+              >
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                      mb: 2,
+                    }}
+                  >
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <CodeIcon color="action" />
+                      <Chip
+                        label={
+                          projectTypeOptions.find(
+                            (type) => type.value === project.projectType
+                          )?.label
+                        }
+                        size="small"
+                        sx={{
+                          backgroundColor:
+                            getProjectTypeColor(project.projectType) + "20",
+                          color: getProjectTypeColor(project.projectType),
+                        }}
+                      />
+                      {project.isFeatured && (
+                        <StarIcon color="primary" fontSize="small" />
+                      )}
+                      {project.isOpenSource && (
+                        <GitHubIcon color="action" fontSize="small" />
+                      )}
+                    </Box>
                     <Chip
                       label={
-                        projectTypeOptions.find(
-                          (type) => type.value === project.projectType
+                        statusOptions.find(
+                          (opt) => opt.value === project.status
                         )?.label
                       }
                       size="small"
                       sx={{
-                        backgroundColor:
-                          getProjectTypeColor(project.projectType) + "20",
-                        color: getProjectTypeColor(project.projectType),
+                        backgroundColor: getStatusColor(project.status) + "20",
+                        color: getStatusColor(project.status),
                       }}
                     />
-                    {project.isFeatured && (
-                      <StarIcon color="primary" fontSize="small" />
+                  </Box>
+
+                  <Typography variant="h6" gutterBottom fontWeight="bold">
+                    {project.title}
+                  </Typography>
+
+                  <Typography
+                    variant="subtitle1"
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    {project.subtitle}
+                  </Typography>
+
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      mb: 1,
+                    }}
+                  >
+                    <CalendarIcon fontSize="small" color="action" />
+                    <Typography variant="body2" color="text.secondary">
+                      {format(new Date(project.startDate), "MMM yyyy")} -{" "}
+                      {project.endDate
+                        ? format(new Date(project.endDate), "MMM yyyy")
+                        : "Ongoing"}{" "}
+                      ({formatDuration(project.startDate, project.endDate)})
+                    </Typography>
+                  </Box>
+
+                  <Typography variant="body2" sx={{ mb: 2 }}>
+                    {project.description.length > 150
+                      ? project.description.substring(0, 150) + "..."
+                      : project.description}
+                  </Typography>
+
+                  {/* Links */}
+                  <Box
+                    sx={{ display: "flex", gap: 1, mb: 2, flexWrap: "wrap" }}
+                  >
+                    {project.githubUrl && (
+                      <Chip
+                        icon={<GitHubIcon />}
+                        label="GitHub"
+                        size="small"
+                        variant="outlined"
+                        clickable
+                      />
                     )}
-                    {project.isOpenSource && (
-                      <GitHubIcon color="action" fontSize="small" />
+                    {project.liveUrl && (
+                      <Chip
+                        icon={<LaunchIcon />}
+                        label="Live"
+                        size="small"
+                        variant="outlined"
+                        color="primary"
+                        clickable
+                      />
+                    )}
+                    {project.demoUrl && (
+                      <Chip
+                        icon={<LinkIcon />}
+                        label="Demo"
+                        size="small"
+                        variant="outlined"
+                        clickable
+                      />
                     )}
                   </Box>
-                  <Chip
-                    label={
-                      statusOptions.find((opt) => opt.value === project.status)
-                        ?.label
-                    }
-                    size="small"
-                    sx={{
-                      backgroundColor: getStatusColor(project.status) + "20",
-                      color: getStatusColor(project.status),
-                    }}
-                  />
-                </Box>
 
-                <Typography variant="h6" gutterBottom fontWeight="bold">
-                  {project.title}
-                </Typography>
-
-                <Typography
-                  variant="subtitle1"
-                  color="text.secondary"
-                  gutterBottom
-                >
-                  {project.subtitle}
-                </Typography>
-
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}
-                >
-                  <CalendarIcon fontSize="small" color="action" />
-                  <Typography variant="body2" color="text.secondary">
-                    {format(new Date(project.startDate), "MMM yyyy")} -{" "}
-                    {project.endDate
-                      ? format(new Date(project.endDate), "MMM yyyy")
-                      : "Ongoing"}{" "}
-                    ({formatDuration(project.startDate, project.endDate)})
-                  </Typography>
-                </Box>
-
-                <Typography variant="body2" sx={{ mb: 2 }}>
-                  {project.description.length > 150
-                    ? project.description.substring(0, 150) + "..."
-                    : project.description}
-                </Typography>
-
-                {/* Links */}
-                <Box sx={{ display: "flex", gap: 1, mb: 2, flexWrap: "wrap" }}>
-                  {project.githubUrl && (
-                    <Chip
-                      icon={<GitHubIcon />}
-                      label="GitHub"
-                      size="small"
-                      variant="outlined"
-                      clickable
-                    />
-                  )}
-                  {project.liveUrl && (
-                    <Chip
-                      icon={<LaunchIcon />}
-                      label="Live"
-                      size="small"
-                      variant="outlined"
-                      color="primary"
-                      clickable
-                    />
-                  )}
-                  {project.demoUrl && (
-                    <Chip
-                      icon={<LinkIcon />}
-                      label="Demo"
-                      size="small"
-                      variant="outlined"
-                      clickable
-                    />
-                  )}
-                </Box>
-
-                <Accordion sx={{ mt: 2 }}>
-                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography variant="subtitle2">Details</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Stack spacing={2}>
-                      <Box>
-                        <Typography variant="subtitle2" gutterBottom>
-                          Technologies ({project.technologies.length})
-                        </Typography>
-                        <Box
-                          sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
-                        >
-                          {project.technologies
-                            .slice(0, 5)
-                            .map((tech: string, index: number) => (
-                              <Chip
-                                key={index}
-                                label={tech}
-                                size="small"
-                                variant="outlined"
-                              />
-                            ))}
-                          {project.technologies.length > 5 && (
-                            <Chip
-                              label={`+${project.technologies.length - 5} more`}
-                              size="small"
-                              variant="outlined"
-                              color="secondary"
-                            />
-                          )}
-                        </Box>
-                      </Box>
-                      <Box>
-                        <Typography variant="subtitle2" gutterBottom>
-                          Key Features ({project.keyFeatures.length})
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {project.keyFeatures.length} features documented
-                        </Typography>
-                      </Box>
-                      {project.teamSize && (
+                  <Accordion sx={{ mt: 2 }}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                      <Typography variant="subtitle2">Details</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Stack spacing={2}>
                         <Box>
                           <Typography variant="subtitle2" gutterBottom>
-                            Team Size
+                            Technologies ({project.technologies.length})
                           </Typography>
-                          <Chip
-                            label={`${project.teamSize} ${
-                              project.teamSize === 1 ? "person" : "people"
-                            }`}
-                            size="small"
-                          />
+                          <Box
+                            sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
+                          >
+                            {project.technologies
+                              .slice(0, 5)
+                              .map((tech: string, index: number) => (
+                                <Chip
+                                  key={index}
+                                  label={tech}
+                                  size="small"
+                                  variant="outlined"
+                                />
+                              ))}
+                            {project.technologies.length > 5 && (
+                              <Chip
+                                label={`+${
+                                  project.technologies.length - 5
+                                } more`}
+                                size="small"
+                                variant="outlined"
+                                color="secondary"
+                              />
+                            )}
+                          </Box>
                         </Box>
+                        <Box>
+                          <Typography variant="subtitle2" gutterBottom>
+                            Key Features ({project.keyFeatures.length})
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {project.keyFeatures.length} features documented
+                          </Typography>
+                        </Box>
+                        {project.teamSize && (
+                          <Box>
+                            <Typography variant="subtitle2" gutterBottom>
+                              Team Size
+                            </Typography>
+                            <Chip
+                              label={`${project.teamSize} ${
+                                project.teamSize === 1 ? "person" : "people"
+                              }`}
+                              size="small"
+                            />
+                          </Box>
+                        )}
+                      </Stack>
+                    </AccordionDetails>
+                  </Accordion>
+                </CardContent>
+
+                <CardActions>
+                  <Tooltip title={project.isVisible ? "Hide" : "Show"}>
+                    <IconButton
+                      onClick={() => handleToggleVisibility(project.id)}
+                      color={project.isVisible ? "primary" : "default"}
+                    >
+                      {project.isVisible ? (
+                        <VisibilityIcon />
+                      ) : (
+                        <VisibilityOffIcon />
                       )}
-                    </Stack>
-                  </AccordionDetails>
-                </Accordion>
-              </CardContent>
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title={project.isFeatured ? "Unfeature" : "Feature"}>
+                    <IconButton
+                      onClick={() => handleToggleFeatured(project.id)}
+                      color={project.isFeatured ? "primary" : "default"}
+                    >
+                      {project.isFeatured ? <StarIcon /> : <StarBorderIcon />}
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Edit">
+                    <IconButton
+                      onClick={() => handleOpenDialog(project)}
+                      color="primary"
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Delete">
+                    <IconButton
+                      onClick={() => setDeleteConfirmOpen(project.id)}
+                      color="error"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
 
-              <CardActions>
-                <Tooltip title={project.isVisible ? "Hide" : "Show"}>
-                  <IconButton
-                    onClick={() => handleToggleVisibility(project.id)}
-                    color={project.isVisible ? "primary" : "default"}
-                  >
-                    {project.isVisible ? (
-                      <VisibilityIcon />
-                    ) : (
-                      <VisibilityOffIcon />
-                    )}
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title={project.isFeatured ? "Unfeature" : "Feature"}>
-                  <IconButton
-                    onClick={() => handleToggleFeatured(project.id)}
-                    color={project.isFeatured ? "primary" : "default"}
-                  >
-                    {project.isFeatured ? <StarIcon /> : <StarBorderIcon />}
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Edit">
-                  <IconButton
-                    onClick={() => handleOpenDialog(project)}
-                    color="primary"
-                  >
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Delete">
-                  <IconButton
-                    onClick={() => setDeleteConfirmOpen(project.id)}
-                    color="error"
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </Tooltip>
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+        {/* Add/Edit Dialog */}
+        <Dialog
+          open={dialogOpen}
+          onClose={handleCloseDialog}
+          maxWidth="lg"
+          fullWidth
+        >
+          <DialogTitle>
+            {editingProject ? "Edit Project" : "Add New Project"}
+          </DialogTitle>
+          <DialogContent>
+            <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 2 }}>
+              <Tabs
+                value={dialogTab}
+                onChange={(_, newValue) => setDialogTab(newValue)}
+              >
+                <Tab label="Basic Info" />
+                <Tab label="Details" />
+                <Tab label="Technical" />
+              </Tabs>
+            </Box>
 
-      {/* Add/Edit Dialog */}
-      <Dialog
-        open={dialogOpen}
-        onClose={handleCloseDialog}
-        maxWidth="lg"
-        fullWidth
-      >
-        <DialogTitle>
-          {editingProject ? "Edit Project" : "Add New Project"}
-        </DialogTitle>
-        <DialogContent>
-          <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 2 }}>
-            <Tabs
-              value={dialogTab}
-              onChange={(_, newValue) => setDialogTab(newValue)}
-            >
-              <Tab label="Basic Info" />
-              <Tab label="Details" />
-              <Tab label="Technical" />
-            </Tabs>
-          </Box>
-
-          {/* Tab 0: Basic Info */}
-          {dialogTab === 0 && (
-            <Box
-              sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
-            >
-              <TextField
-                label="Title"
-                value={formData.title}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, title: e.target.value }))
-                }
-                fullWidth
-                required
-              />
-
-              <TextField
-                label="Subtitle"
-                value={formData.subtitle}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, subtitle: e.target.value }))
-                }
-                fullWidth
-                required
-              />
-
-              <TextField
-                label="Description"
-                value={formData.description}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    description: e.target.value,
-                  }))
-                }
-                fullWidth
-                multiline
-                rows={3}
-                required
-              />
-
-              <TextField
-                label="Long Description"
-                value={formData.longDescription}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    longDescription: e.target.value,
-                  }))
-                }
-                fullWidth
-                multiline
-                rows={4}
-                helperText="Detailed project description for project pages"
-              />
-
-              <Box sx={{ display: "flex", gap: 2 }}>
-                <FormControl fullWidth>
-                  <InputLabel>Status</InputLabel>
-                  <Select
-                    value={formData.status}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        status: e.target.value as typeof formData.status,
-                      }))
-                    }
-                    label="Status"
-                  >
-                    {statusOptions.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-
-                <FormControl fullWidth>
-                  <InputLabel>Project Type</InputLabel>
-                  <Select
-                    value={formData.projectType}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        projectType: e.target
-                          .value as typeof formData.projectType,
-                      }))
-                    }
-                    label="Project Type"
-                  >
-                    {projectTypeOptions.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Box>
-
-              <Box sx={{ display: "flex", gap: 2 }}>
+            {/* Tab 0: Basic Info */}
+            {dialogTab === 0 && (
+              <Box
+                sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
+              >
                 <TextField
-                  label="Start Date"
-                  type="date"
-                  value={formData.startDate}
+                  label="Title"
+                  value={formData.title}
                   onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      startDate: e.target.value,
-                    }))
+                    setFormData((prev) => ({ ...prev, title: e.target.value }))
                   }
-                  InputLabelProps={{ shrink: true }}
                   fullWidth
                   required
                 />
-                <TextField
-                  label="End Date"
-                  type="date"
-                  value={formData.endDate}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      endDate: e.target.value,
-                    }))
-                  }
-                  InputLabelProps={{ shrink: true }}
-                  fullWidth
-                  helperText="Leave empty for ongoing projects"
-                />
-              </Box>
-            </Box>
-          )}
 
-          {/* Tab 1: Details */}
-          {dialogTab === 1 && (
-            <Box
-              sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
-            >
-              <Box sx={{ display: "flex", gap: 2 }}>
                 <TextField
-                  label="GitHub URL"
-                  value={formData.githubUrl}
+                  label="Subtitle"
+                  value={formData.subtitle}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      githubUrl: e.target.value,
+                      subtitle: e.target.value,
                     }))
                   }
                   fullWidth
-                  type="url"
+                  required
                 />
-                <TextField
-                  label="Live URL"
-                  value={formData.liveUrl}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      liveUrl: e.target.value,
-                    }))
-                  }
-                  fullWidth
-                  type="url"
-                />
-              </Box>
 
-              <Box sx={{ display: "flex", gap: 2 }}>
                 <TextField
-                  label="Demo URL"
-                  value={formData.demoUrl}
+                  label="Description"
+                  value={formData.description}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      demoUrl: e.target.value,
+                      description: e.target.value,
                     }))
                   }
                   fullWidth
-                  type="url"
+                  multiline
+                  rows={3}
+                  required
                 />
-                <TextField
-                  label="Documentation URL"
-                  value={formData.documentationUrl}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      documentationUrl: e.target.value,
-                    }))
-                  }
-                  fullWidth
-                  type="url"
-                />
-              </Box>
 
-              <Box sx={{ display: "flex", gap: 2 }}>
                 <TextField
-                  label="Team Size"
-                  type="number"
-                  value={formData.teamSize}
+                  label="Long Description"
+                  value={formData.longDescription}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      teamSize: parseInt(e.target.value) || 1,
+                      longDescription: e.target.value,
                     }))
                   }
                   fullWidth
-                  inputProps={{ min: 1 }}
+                  multiline
+                  rows={4}
+                  helperText="Detailed project description for project pages"
                 />
-                <TextField
-                  label="My Role"
-                  value={formData.myRole}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, myRole: e.target.value }))
-                  }
-                  fullWidth
-                />
-              </Box>
 
-              <Box sx={{ display: "flex", gap: 2 }}>
-                <TextField
-                  label="Client Name"
-                  value={formData.clientName}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      clientName: e.target.value,
-                    }))
-                  }
-                  fullWidth
-                />
-                <TextField
-                  label="Budget"
-                  value={formData.budget}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, budget: e.target.value }))
-                  }
-                  fullWidth
-                  helperText="e.g., $10,000 or Pro Bono"
-                />
-              </Box>
-
-              {/* Array fields */}
-              {(["technologies", "categories", "keyFeatures"] as const).map(
-                (field) => (
-                  <Box key={field}>
-                    <Typography
-                      variant="subtitle1"
-                      gutterBottom
-                      sx={{ textTransform: "capitalize" }}
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  <FormControl fullWidth>
+                    <InputLabel>Status</InputLabel>
+                    <Select
+                      value={formData.status}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          status: e.target.value as typeof formData.status,
+                        }))
+                      }
+                      label="Status"
                     >
-                      {field === "keyFeatures" ? "Key Features" : field}
-                    </Typography>
-                    <Box sx={{ display: "flex", gap: 1, mb: 1 }}>
+                      {statusOptions.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  <FormControl fullWidth>
+                    <InputLabel>Project Type</InputLabel>
+                    <Select
+                      value={formData.projectType}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          projectType: e.target
+                            .value as typeof formData.projectType,
+                        }))
+                      }
+                      label="Project Type"
+                    >
+                      {projectTypeOptions.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  <TextField
+                    label="Start Date"
+                    type="date"
+                    value={formData.startDate}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        startDate: e.target.value,
+                      }))
+                    }
+                    InputLabelProps={{ shrink: true }}
+                    fullWidth
+                    required
+                  />
+                  <TextField
+                    label="End Date"
+                    type="date"
+                    value={formData.endDate}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        endDate: e.target.value,
+                      }))
+                    }
+                    InputLabelProps={{ shrink: true }}
+                    fullWidth
+                    helperText="Leave empty for ongoing projects"
+                  />
+                </Box>
+              </Box>
+            )}
+
+            {/* Tab 1: Details */}
+            {dialogTab === 1 && (
+              <Box
+                sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
+              >
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  <TextField
+                    label="GitHub URL"
+                    value={formData.githubUrl}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        githubUrl: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                    type="url"
+                  />
+                  <TextField
+                    label="Live URL"
+                    value={formData.liveUrl}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        liveUrl: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                    type="url"
+                  />
+                </Box>
+
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  <TextField
+                    label="Demo URL"
+                    value={formData.demoUrl}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        demoUrl: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                    type="url"
+                  />
+                  <TextField
+                    label="Documentation URL"
+                    value={formData.documentationUrl}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        documentationUrl: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                    type="url"
+                  />
+                </Box>
+
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  <TextField
+                    label="Team Size"
+                    type="number"
+                    value={formData.teamSize}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        teamSize: parseInt(e.target.value) || 1,
+                      }))
+                    }
+                    fullWidth
+                    inputProps={{ min: 1 }}
+                  />
+                  <TextField
+                    label="My Role"
+                    value={formData.myRole}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        myRole: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                  />
+                </Box>
+
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  <TextField
+                    label="Client Name"
+                    value={formData.clientName}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        clientName: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                  />
+                  <TextField
+                    label="Budget"
+                    value={formData.budget}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        budget: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                    helperText="e.g., $10,000 or Pro Bono"
+                  />
+                </Box>
+
+                {/* Array fields */}
+                {(["technologies", "categories", "keyFeatures"] as const).map(
+                  (field) => (
+                    <Box key={field}>
+                      <Typography
+                        variant="subtitle1"
+                        gutterBottom
+                        sx={{ textTransform: "capitalize" }}
+                      >
+                        {field === "keyFeatures" ? "Key Features" : field}
+                      </Typography>
+                      <Box sx={{ display: "flex", gap: 1, mb: 1 }}>
+                        <TextField
+                          label={`Add ${
+                            field === "keyFeatures"
+                              ? "feature"
+                              : field.slice(0, -1)
+                          }`}
+                          value={arrayInput[field]}
+                          onChange={(e) =>
+                            setArrayInput((prev) => ({
+                              ...prev,
+                              [field]: e.target.value,
+                            }))
+                          }
+                          onKeyPress={(e) =>
+                            e.key === "Enter" && handleAddArrayItem(field)
+                          }
+                          size="small"
+                          fullWidth
+                        />
+                        <Button
+                          onClick={() => handleAddArrayItem(field)}
+                          variant="outlined"
+                          disabled={!arrayInput[field].trim()}
+                        >
+                          Add
+                        </Button>
+                      </Box>
+                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                        {formData[field].map((item, index) => (
+                          <Chip
+                            key={index}
+                            label={item}
+                            onDelete={() => handleRemoveArrayItem(field, item)}
+                            size="small"
+                          />
+                        ))}
+                      </Box>
+                    </Box>
+                  )
+                )}
+              </Box>
+            )}
+
+            {/* Tab 2: Technical */}
+            {dialogTab === 2 && (
+              <Box
+                sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
+              >
+                <Box>
+                  <Typography variant="subtitle1" gutterBottom>
+                    Technical Challenges
+                  </Typography>
+                  {formData.technicalChallenges.map((tc, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        mb: 2,
+                        p: 2,
+                        border: 1,
+                        borderColor: "divider",
+                        borderRadius: 1,
+                      }}
+                    >
                       <TextField
-                        label={`Add ${
-                          field === "keyFeatures"
-                            ? "feature"
-                            : field.slice(0, -1)
-                        }`}
-                        value={arrayInput[field]}
+                        label="Challenge"
+                        value={tc.challenge}
                         onChange={(e) =>
-                          setArrayInput((prev) => ({
-                            ...prev,
-                            [field]: e.target.value,
-                          }))
+                          handleUpdateTechnicalChallenge(
+                            index,
+                            "challenge",
+                            e.target.value
+                          )
                         }
-                        onKeyPress={(e) =>
-                          e.key === "Enter" && handleAddArrayItem(field)
-                        }
-                        size="small"
                         fullWidth
+                        sx={{ mb: 1 }}
+                        multiline
+                        rows={2}
+                      />
+                      <TextField
+                        label="Solution"
+                        value={tc.solution}
+                        onChange={(e) =>
+                          handleUpdateTechnicalChallenge(
+                            index,
+                            "solution",
+                            e.target.value
+                          )
+                        }
+                        fullWidth
+                        multiline
+                        rows={2}
                       />
                       <Button
-                        onClick={() => handleAddArrayItem(field)}
-                        variant="outlined"
-                        disabled={!arrayInput[field].trim()}
+                        onClick={() => handleRemoveTechnicalChallenge(index)}
+                        color="error"
+                        size="small"
+                        sx={{ mt: 1 }}
                       >
-                        Add
+                        Remove
                       </Button>
                     </Box>
-                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                      {formData[field].map((item, index) => (
-                        <Chip
-                          key={index}
-                          label={item}
-                          onDelete={() => handleRemoveArrayItem(field, item)}
-                          size="small"
-                        />
-                      ))}
-                    </Box>
-                  </Box>
-                )
-              )}
-            </Box>
-          )}
-
-          {/* Tab 2: Technical */}
-          {dialogTab === 2 && (
-            <Box
-              sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
-            >
-              <Box>
-                <Typography variant="subtitle1" gutterBottom>
-                  Technical Challenges
-                </Typography>
-                {formData.technicalChallenges.map((tc, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      mb: 2,
-                      p: 2,
-                      border: 1,
-                      borderColor: "divider",
-                      borderRadius: 1,
-                    }}
+                  ))}
+                  <Button
+                    onClick={handleAddTechnicalChallenge}
+                    variant="outlined"
+                    startIcon={<AddIcon />}
                   >
-                    <TextField
-                      label="Challenge"
-                      value={tc.challenge}
-                      onChange={(e) =>
-                        handleUpdateTechnicalChallenge(
-                          index,
-                          "challenge",
-                          e.target.value
-                        )
-                      }
-                      fullWidth
-                      sx={{ mb: 1 }}
-                      multiline
-                      rows={2}
-                    />
-                    <TextField
-                      label="Solution"
-                      value={tc.solution}
-                      onChange={(e) =>
-                        handleUpdateTechnicalChallenge(
-                          index,
-                          "solution",
-                          e.target.value
-                        )
-                      }
-                      fullWidth
-                      multiline
-                      rows={2}
-                    />
-                    <Button
-                      onClick={() => handleRemoveTechnicalChallenge(index)}
-                      color="error"
-                      size="small"
-                      sx={{ mt: 1 }}
-                    >
-                      Remove
-                    </Button>
-                  </Box>
-                ))}
-                <Button
-                  onClick={handleAddTechnicalChallenge}
-                  variant="outlined"
-                  startIcon={<AddIcon />}
-                >
-                  Add Technical Challenge
-                </Button>
+                    Add Technical Challenge
+                  </Button>
+                </Box>
+
+                <Divider />
+
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={formData.isVisible}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            isVisible: e.target.checked,
+                          }))
+                        }
+                      />
+                    }
+                    label="Visible"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={formData.isFeatured}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            isFeatured: e.target.checked,
+                          }))
+                        }
+                      />
+                    }
+                    label="Featured"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={formData.isOpenSource}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            isOpenSource: e.target.checked,
+                          }))
+                        }
+                      />
+                    }
+                    label="Open Source"
+                  />
+                </Box>
               </Box>
-
-              <Divider />
-
-              <Box sx={{ display: "flex", gap: 2 }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={formData.isVisible}
-                      onChange={(e) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          isVisible: e.target.checked,
-                        }))
-                      }
-                    />
-                  }
-                  label="Visible"
-                />
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={formData.isFeatured}
-                      onChange={(e) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          isFeatured: e.target.checked,
-                        }))
-                      }
-                    />
-                  }
-                  label="Featured"
-                />
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={formData.isOpenSource}
-                      onChange={(e) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          isOpenSource: e.target.checked,
-                        }))
-                      }
-                    />
-                  }
-                  label="Open Source"
-                />
-              </Box>
-            </Box>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button
-            onClick={handleSubmit}
-            variant="contained"
-            disabled={
-              createMutation.isPending ||
-              updateMutation.isPending ||
-              !formData.title ||
-              !formData.subtitle ||
-              !formData.description ||
-              formData.technologies.length === 0 ||
-              formData.categories.length === 0 ||
-              formData.keyFeatures.length === 0
-            }
-          >
-            {createMutation.isPending || updateMutation.isPending ? (
-              <CircularProgress size={20} />
-            ) : editingProject ? (
-              "Update"
-            ) : (
-              "Create"
             )}
-          </Button>
-        </DialogActions>
-      </Dialog>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDialog}>Cancel</Button>
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              disabled={
+                createMutation.isPending ||
+                updateMutation.isPending ||
+                !formData.title ||
+                !formData.subtitle ||
+                !formData.description ||
+                formData.technologies.length === 0 ||
+                formData.categories.length === 0 ||
+                formData.keyFeatures.length === 0
+              }
+            >
+              {createMutation.isPending || updateMutation.isPending ? (
+                <CircularProgress size={20} />
+              ) : editingProject ? (
+                "Update"
+              ) : (
+                "Create"
+              )}
+            </Button>
+          </DialogActions>
+        </Dialog>
 
-      {/* Delete Confirmation Dialog */}
-      <Dialog
-        open={!!deleteConfirmOpen}
-        onClose={() => setDeleteConfirmOpen(null)}
-      >
-        <DialogTitle>Delete Project</DialogTitle>
-        <DialogContent>
-          <Typography>
-            Are you sure you want to delete this project? This action cannot be
-            undone.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeleteConfirmOpen(null)}>Cancel</Button>
-          <Button
-            onClick={() => deleteConfirmOpen && handleDelete(deleteConfirmOpen)}
-            color="error"
-            variant="contained"
-            disabled={deleteMutation.isPending}
-          >
-            {deleteMutation.isPending ? (
-              <CircularProgress size={20} />
-            ) : (
-              "Delete"
-            )}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Box>
+        {/* Delete Confirmation Dialog */}
+        <Dialog
+          open={!!deleteConfirmOpen}
+          onClose={() => setDeleteConfirmOpen(null)}
+        >
+          <DialogTitle>Delete Project</DialogTitle>
+          <DialogContent>
+            <Typography>
+              Are you sure you want to delete this project? This action cannot
+              be undone.
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setDeleteConfirmOpen(null)}>Cancel</Button>
+            <Button
+              onClick={() =>
+                deleteConfirmOpen && handleDelete(deleteConfirmOpen)
+              }
+              color="error"
+              variant="contained"
+              disabled={deleteMutation.isPending}
+            >
+              {deleteMutation.isPending ? (
+                <CircularProgress size={20} />
+              ) : (
+                "Delete"
+              )}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Box>
+    </ClientOnly>
   );
 }

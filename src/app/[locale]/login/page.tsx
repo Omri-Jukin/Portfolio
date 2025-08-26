@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
   Box,
@@ -27,6 +27,8 @@ import { api } from "$/trpc/client";
 export default function LoginPage() {
   const t = useTranslations("login");
   const router = useRouter();
+  const params = useParams();
+  const locale = (params?.locale as string) || "en";
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
@@ -37,7 +39,7 @@ export default function LoginPage() {
   const loginMutation = api.auth.login.useMutation({
     onSuccess: () => {
       // Redirect to admin dashboard on successful login
-      router.push("/en/admin");
+      router.push(`/${locale}/admin`);
     },
     onError: (error) => {
       setError(error.message || "Login failed");

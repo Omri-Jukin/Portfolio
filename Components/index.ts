@@ -41,6 +41,9 @@ export { ColorWorm } from "./ColorWorm/ColorWorm";
 export { ConnectionLine } from "./ConnectionLine";
 export { default as ScrollGapAnimator } from "./ScrollGapAnimator";
 export { CollaborationHub } from "./CollaborationHub";
+export { default as FloatingProfile } from "./FloatingProfile";
+export { default as ClientOnly } from "./ClientOnly";
+export { default as Skeleton } from "./Skeleton";
 
 // New section components
 export { default as Hero } from "./Hero";

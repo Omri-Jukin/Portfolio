@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import GlobeBackground from "~/GlobeBackground/GlobeBackground";
-import GridDebug from "~/GlobeBackground/GridDebug";
+
 import {
   GRID_CONFIG,
   BREAKPOINTS,
@@ -45,13 +45,13 @@ const renderWithTheme = (component: React.ReactElement) => {
   return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>);
 };
 
-describe("GlobeBackground Grid System", () => {
+describe("GlobeBackground Behavior", () => {
   beforeEach(() => {
     // Reset window size to desktop
     mockWindowResize(1920, 1080);
   });
 
-  describe("Grid Configuration Constants", () => {
+  describe("Breakpoints", () => {
     test("should have correct grid configurations for all device types", () => {
       expect(GRID_CONFIG.desktop).toEqual({
         columns: 12,

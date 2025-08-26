@@ -128,28 +128,6 @@ const About: React.FC<AboutProps> = ({ onSkillClick }) => {
                 spaceBetween={20}
                 centeredSlides={true}
                 slidesPerView={1}
-                breakpoints={{
-                  480: {
-                    slidesPerView: 1,
-                    spaceBetween: 20,
-                  },
-                  600: {
-                    slidesPerView: 2,
-                    spaceBetween: 25,
-                  },
-                  900: {
-                    slidesPerView: 3,
-                    spaceBetween: 30,
-                  },
-                  1200: {
-                    slidesPerView: 4,
-                    spaceBetween: 30,
-                  },
-                  1400: {
-                    slidesPerView: 5,
-                    spaceBetween: 40,
-                  },
-                }}
                 navigation={{
                   enabled: true,
                   hideOnClick: false,

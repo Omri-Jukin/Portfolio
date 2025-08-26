@@ -1,181 +1,61 @@
-# Personal Portfolio & Blog Website
+# Portfolio & Blog
 
-A modern, full-stack personal portfolio and blog website built with Next.js and deployed on Cloudflare Workers. This project showcases professional experience, technical skills, and includes a fully functional blog with content management capabilities.
+A professional, full‑stack personal portfolio and blog built with Next.js and deployed to Cloudflare. It highlights experience, projects, and writing with a fast, visual, and reliable UX.
 
-## 🚀 Live Demo
+## Highlights
+- Visual hero with a full cobe globe and a prominent profile photo
+- Type‑safe APIs (tRPC) with Drizzle ORM on Cloudflare D1
+- Internationalization with `next-intl`; accessible, responsive UI with MUI
+- Secure secrets via Cloudflare environment bindings
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/next-starter-template)
+## Tech Stack
+- Next.js 15, React 19, TypeScript
+- MUI, Tailwind (utility where helpful)
+- tRPC, React Query, Zod
+- Drizzle ORM, Cloudflare D1
+- OpenNext, Cloudflare Workers/Pages, Wrangler
 
-## ✨ Features
-
-### Core Pages
-- **About** - Professional background and personal introduction
-- **Career** - Professional experience and career journey  
-- **Resume** - Downloadable resume and skills overview
-- **Contact** - Contact form with inquiry management system
-- **Blog** - Full-featured blog with content management
-
-### Technical Features
-- 🌙 **Dark Mode Toggle** - Seamless theme switching
-- 📝 **Blog CMS** - Full content management with drafts, publishing, tags
-- 📬 **Contact Management** - Inquiry tracking and status management
-- 🔐 **Admin System** - User authentication and role-based access
-- 📱 **Responsive Design** - Mobile-first, responsive layout
-- ⚡ **Type-Safe APIs** - End-to-end type safety with tRPC
-- 🗄️ **Database Integration** - SQLite with Drizzle ORM
-- 🎨 **Modern UI** - Material-UI components with Tailwind CSS
-
-## 🛠️ Tech Stack
-
-### Frontend
-- **Next.js 15.3.3** - React framework with App Router
-- **React 19** - Latest React with concurrent features
-- **TypeScript** - Full type safety
-- **Tailwind CSS 4.1.1** - Utility-first CSS framework
-- **Material-UI** - React component library
-- **Geist Font** - Modern typography
-
-### Backend & API
-- **tRPC** - End-to-end typesafe APIs
-- **React Query** - Data fetching and caching
-- **Zod** - Runtime schema validation
-- **Drizzle ORM** - Type-safe database operations
-- **SQLite** - Lightweight, serverless database
-
-### Deployment & Infrastructure
-- **Cloudflare Workers** - Edge computing platform
-- **OpenNext** - Next.js adapter for Cloudflare
-- **Wrangler** - Cloudflare deployment tool
-
-## 📁 Project Structure
-
+## Project Structure
 ```
 Portfolio/
-├── src/
-│   ├── app/                 # Next.js App Router pages
-│   │   ├── about/          # About page
-│   │   ├── career/         # Career page  
-│   │   ├── contact/        # Contact page
-│   │   ├── resume/         # Resume page
-│   │   ├── blog/           # Blog pages
-│   │   ├── api/            # API routes
-│   │   └── server/         # tRPC server setup
-│   └── components/         # Reusable React components
-├── lib/
-│   └── db/                 # Database configuration
-│       ├── schema/         # Database schema definitions
-│       ├── blog/           # Blog-related DB operations
-│       ├── contact/        # Contact-related DB operations
-│       └── users/          # User-related DB operations
-├── public/                 # Static assets
-├── roadmap/               # Project documentation
-└── drizzle/               # Database migrations
+├── Components/                 # Reusable UI (MUI styled components)
+├── src/app/                    # App Router pages, API routes, server code
+├── lib/                        # DB client, schema, services
+├── public/                     # Static assets
+├── roadmap/                    # Consolidated roadmap (see ROADMAP.md)
+└── drizzle/                    # Drizzle migrations
 ```
 
-## 🚦 Getting Started
+## Getting Started
+- Prerequisites: Node 18+
+- Install: `npm install`
+- Dev: `npm run dev` → http://localhost:3000
 
-### Prerequisites
-- Node.js 18+ 
-- npm/yarn/pnpm
+### Environment
+- Secrets are stored in Cloudflare (Workers/Pages) as encrypted bindings (AWS, SMTP, JWT, BLOG_API_KEY). Avoid committing secrets to the repo; keep `.env.example` placeholders if needed for local.
 
-### Installation
+## Scripts
+- `npm run dev` – Start dev server
+- `npm run build` – Next build
+- `npm run lint` – ESLint
+- `npm run check` – TypeScript check
+- `npm run deploy` – Build + deploy via OpenNext to Cloudflare
+- `npm run preview` – Preview deployment locally
 
-1. **Clone and install dependencies:**
-   ```bash
-   git clone <repository-url>
-   cd portfolio
-   npm install
-   ```
+## Testing
+- Run: `npm run test`
+- Current status: some tests failing; address gradually while keeping focus on user‑visible quality.
 
-2. **Set up environment variables:**
-   ```bash
-   cp .env.example .env.local
-   # Add your environment variables
-   ```
+## Deployment
+- Uses OpenNext to target Cloudflare. Deploy with: `npm run deploy`.
+- Ensure Cloudflare environment variables are configured for DB/SMTP/JWT/API keys.
 
-3. **Initialize the database:**
-   ```bash
-   npm run db:push
-   npm run db:seed
-   ```
+## Documentation
+- Roadmap: `roadmap/ROADMAP.md` (single, consolidated plan)
+- Project rules: `PROJECT_RULES_AND_MEMORIES.md`
 
-4. **Start development server:**
-   ```bash
-   npm run dev
-   ```
+## Notes
+- Profile photo can be refined (e.g., watercolor, transparent background) with your preferred image tool.
 
-   Open [http://localhost:3000](http://localhost:3000) to view the site.
-
-## 📋 Available Scripts
-
-| Command | Action |
-|---------|--------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run start` | Start production server |
-| `npm run lint` | Run ESLint |
-| `npm run check` | Build and type-check |
-| `npm run preview` | Preview production build locally |
-| `npm run deploy` | Deploy to Cloudflare |
-| `npm run cf-typegen` | Generate Cloudflare types |
-
-## 🗄️ Database Schema
-
-The project uses a SQLite database with the following main entities:
-
-- **Users** - Admin authentication and user management
-- **Blog Posts** - Blog content with status, tags, and metadata
-- **Contact Inquiries** - Contact form submissions and management
-
-## 🚀 Deployment
-
-### Cloudflare Workers
-
-The project is optimized for deployment on Cloudflare Workers:
-
-```bash
-# Build and deploy
-npm run deploy
-
-# Preview before deploying
-npm run preview
-```
-
-The deployment uses OpenNext to transform the Next.js build output for compatibility with Cloudflare Workers edge runtime.
-
-### Environment Configuration
-
-Ensure the following environment variables are configured in your Cloudflare dashboard:
-- Database connection strings
-- API keys and secrets
-- Third-party service configurations
-
-## 🔧 Development
-
-### Database Management
-- **Schema changes**: Update files in `lib/db/schema/`
-- **Migrations**: Run `drizzle-kit generate` and `drizzle-kit migrate`
-- **Type generation**: Database types are automatically generated
-
-### Adding New Features
-1. Create database schema if needed
-2. Add tRPC procedures in `src/app/server/routers/`
-3. Implement UI components in `src/components/`
-4. Create pages in `src/app/`
-
-## 📄 Documentation
-
-- [Roadmap](./roadmap/README.md) - Project planning and implementation details
-- [Architecture Decisions](./roadmap/) - Technical decision documentation
-
-## 🤝 Contributing
-
-This is a personal portfolio project, but suggestions and feedback are welcome through the contact form or issues.
-
-## 📝 License
-
-This project is personal and proprietary. All rights reserved.
-
----
-
-Built with ❤️ using Next.js, TypeScript, and modern web technologies.
+## License
+Personal and proprietary.

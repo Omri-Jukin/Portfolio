@@ -6,7 +6,6 @@ import { useTheme } from "@mui/material/styles";
 import { Box } from "@mui/material";
 import type { GlobeBackgroundProps, DeviceType } from "./GlobeBackground.type";
 import { StyledGlobeContainer, StyledCanvas } from "./GlobeBackground.style";
-import GridDebug from "./GridDebug";
 import { BREAKPOINTS, calculateGlobePosition } from "./GlobeBackground.const";
 
 const GlobeBackground: React.FC<GlobeBackgroundProps> = ({
@@ -15,9 +14,6 @@ const GlobeBackground: React.FC<GlobeBackgroundProps> = ({
   rotationSpeed = 0.005,
   opacity = 0.3,
   children,
-  showGrid = false,
-  enableGridPositioning = true,
-  customGridConfig,
   ...props
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -37,14 +33,10 @@ const GlobeBackground: React.FC<GlobeBackgroundProps> = ({
     return "desktop" as const;
   };
 
-  const updateGlobePosition = useCallback(
-    (width: number, height: number) => {
-      if (!enableGridPositioning) return;
-      const position = calculateGlobePosition(width, height);
-      setGlobePosition(position);
-    },
-    [enableGridPositioning]
-  );
+  const updateGlobePosition = useCallback((width: number, height: number) => {
+    const position = calculateGlobePosition(width, height);
+    setGlobePosition(position);
+  }, []);
 
   useEffect(() => {
     setMounted(true);
@@ -80,7 +72,10 @@ const GlobeBackground: React.FC<GlobeBackgroundProps> = ({
     const safeHeight = viewportHeight > 0 ? viewportHeight : window.innerHeight;
     const deviceType = getDeviceType(safeWidth);
     const vmin = Math.min(safeWidth, safeHeight);
-    const dpr = Math.min(window.devicePixelRatio || 1, deviceType === "mobile" ? 1.5 : 2);
+    const dpr = Math.min(
+      window.devicePixelRatio || 1,
+      deviceType === "mobile" ? 1.5 : 2
+    );
 
     try {
       globeRef.current = createGlobe(canvasRef.current, {
@@ -91,7 +86,12 @@ const GlobeBackground: React.FC<GlobeBackgroundProps> = ({
         theta: 0.3,
         dark: isDark ? 1 : 0,
         diffuse: isDark ? 1.5 : 1.2,
-        mapSamples: deviceType === "mobile" ? 10000 : deviceType === "tablet" ? 14000 : 18000,
+        mapSamples:
+          deviceType === "mobile"
+            ? 10000
+            : deviceType === "tablet"
+            ? 14000
+            : 18000,
         mapBrightness: isDark ? 8 : 5,
         baseColor: isDark ? [0.15, 0.15, 0.2] : [0.7, 0.75, 0.8],
         markerColor: isDark ? [0.2, 0.9, 1] : [0.1, 0.4, 0.9],
@@ -112,7 +112,7 @@ const GlobeBackground: React.FC<GlobeBackgroundProps> = ({
         globeRef.current = null;
       }
     };
-  }, [mounted, markers, rotationSpeed, isDark, windowSize, customGridConfig, enableGridPositioning]);
+  }, [mounted, markers, rotationSpeed, isDark, windowSize]);
 
   if (!mounted) return null;
 
@@ -123,14 +123,6 @@ const GlobeBackground: React.FC<GlobeBackgroundProps> = ({
       scrollProgress={0}
       {...props}
     >
-      {mounted && (
-        <GridDebug
-          showGrid={showGrid}
-          viewportWidth={windowSize.width}
-          viewportHeight={windowSize.height}
-        />
-      )}
-
       <Box
         className="globe-canvas-container"
         sx={{

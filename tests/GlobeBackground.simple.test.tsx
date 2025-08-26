@@ -15,18 +15,7 @@ describe("Basic Import Test", () => {
 
 // Test component imports
 describe("Component Import Test", () => {
-  test("should import GridDebug component", async () => {
-    try {
-      const { default: GridDebug } = await import(
-        "../Components/GlobeBackground/GridDebug"
-      );
-      expect(GridDebug).toBeDefined();
-      expect(typeof GridDebug).toBe("function");
-    } catch (error) {
-      console.error("Import error:", error);
-      throw error;
-    }
-  });
+  // GridDebug was experimental and has been removed.
 
   test("should import GlobeBackground component", async () => {
     try {

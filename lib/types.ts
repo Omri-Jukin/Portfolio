@@ -658,23 +658,6 @@ export interface BackgroundProps {
 export interface GlobeBackgroundProps extends BackgroundProps {
   size?: number;
   opacity?: number;
-  enableGridPositioning?: boolean;
-  gridConfig?: {
-    mobile: GridConfig;
-    tablet: GridConfig;
-    desktop: GridConfig;
-  };
-}
-
-export interface GridConfig {
-  columns: number;
-  rows: number;
-  globe: {
-    startColumn: number;
-    endColumn: number;
-    startRow: number;
-    endRow: number;
-  };
 }
 
 // ========================

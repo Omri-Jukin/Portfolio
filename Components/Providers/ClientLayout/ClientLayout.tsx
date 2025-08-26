@@ -202,8 +202,6 @@ export default function ClientLayout({
             markers={ALL_MARKERS}
             opacity={0.8}
             rotationSpeed={0.002}
-            showGrid={false}
-            enableGridPositioning={true}
           />
         )}
 

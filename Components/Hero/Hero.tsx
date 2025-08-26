@@ -8,20 +8,22 @@ import {
   HeroButtonsContainer,
   HeroButton,
   HeroTitleContainer,
-  ProfilePhotoWrapper,
-  ProfilePhotoImg,
+  // ProfilePhotoWrapper,
+  // ProfilePhotoImg,
 } from "./Hero.style";
 import { HERO_CONSTANTS } from "./Hero.const";
 import type { HeroProps } from "./Hero.type";
+import FloatingProfile from "../FloatingProfile/FloatingProfile";
 
 const Hero: React.FC<HeroProps> = ({
   onExploreClick,
   onAboutClick,
-  onCareerClick: onExamplesClick,
-  profileSrc = "/profile-photo.jpg",
+  onCareerClick,
+  profileSrc,
   ownerName,
 }) => {
   const t = useTranslations("hero");
+  const onExamplesClick = onCareerClick;
 
   const alt = ownerName ? `${ownerName} profile photo` : "Profile photo";
 
@@ -32,9 +34,7 @@ const Hero: React.FC<HeroProps> = ({
         duration={HERO_CONSTANTS.ANIMATION.TITLE_DURATION}
         delay={HERO_CONSTANTS.ANIMATION.TITLE_DELAY}
       >
-        <ProfilePhotoWrapper role="img" aria-label={alt}>
-          <ProfilePhotoImg src={profileSrc} alt="" />
-        </ProfilePhotoWrapper>
+        {profileSrc && <FloatingProfile imageUrl={profileSrc} altText={alt} />}
         <HeroTitleContainer>
           <AnimatedHeroTitle text={t("titleRow1")} className="hero-title-row" />
           <AnimatedHeroTitle text={t("titleRow2")} className="hero-title-row" />

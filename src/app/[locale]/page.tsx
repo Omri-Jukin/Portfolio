@@ -14,6 +14,7 @@ import Projects from "~/Projects";
 import Contact from "~/Contact";
 import SkillShowcase from "~/SkillShowcase";
 import { ResponsiveBackground } from "#/Components/ScrollingSections";
+import profileSrc from "#/public/Watercolor_Profile_Picture.png";
 
 export default function HomePage() {
   const locale = useLocale();
@@ -117,6 +118,7 @@ export default function HomePage() {
           onExploreClick={handleExploreClick}
           onAboutClick={handleResumeClick}
           onCareerClick={handleCareerClick}
+          profileSrc={profileSrc}
         />
 
         {/* About Section */}
