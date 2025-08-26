@@ -8,13 +8,8 @@ import {
   Card,
   CardContent,
   CardActions,
-  Grid,
   Chip,
   IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   TextField,
   FormControl,
   InputLabel,
@@ -24,11 +19,14 @@ import {
   FormControlLabel,
   Tooltip,
   CircularProgress,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
   Stack,
+  Divider,
 } from "@mui/material";
+import Grid from "~/Common/Grid";
 import {
   Add as AddIcon,
   Edit as EditIcon,
@@ -39,15 +37,16 @@ import {
   StarBorder as StarBorderIcon,
   Business as BusinessIcon,
   CalendarToday as CalendarIcon,
-  ExpandMore as ExpandMoreIcon,
   Link as LinkIcon,
 } from "@mui/icons-material";
 
 import { api } from "$/trpc/client";
 import { format } from "date-fns";
 import type { WorkExperience } from "$/db/workExperiences";
+import { useTranslations } from "next-intl";
+import { ClientOnly } from "~/ClientOnly";
 
-interface WorkExperienceFormData {
+export interface WorkExperienceFormData {
   role: string;
   company: string;
   location: string;
@@ -71,7 +70,7 @@ interface WorkExperienceFormData {
   isFeatured: boolean;
 }
 
-const defaultFormData: WorkExperienceFormData = {
+export const defaultFormData: WorkExperienceFormData = {
   role: "",
   company: "",
   location: "",
@@ -90,7 +89,7 @@ const defaultFormData: WorkExperienceFormData = {
   isFeatured: false,
 };
 
-const employmentTypeOptions = [
+export const employmentTypeOptions = [
   { value: "full-time", label: "Full Time", color: "#4CAF50" },
   { value: "part-time", label: "Part Time", color: "#FF9800" },
   { value: "contract", label: "Contract", color: "#2196F3" },
@@ -99,8 +98,9 @@ const employmentTypeOptions = [
 ];
 
 export default function WorkExperiencesAdminPage() {
+  const t = useTranslations("Admin");
+
   // State
-  const [dialogOpen, setDialogOpen] = useState(false);
   const [editingExperience, setEditingExperience] =
     useState<WorkExperience | null>(null);
   const [formData, setFormData] =
@@ -113,6 +113,7 @@ export default function WorkExperiencesAdminPage() {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState<string | null>(
     null
   );
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   // tRPC queries and mutations
   const {
@@ -127,14 +128,14 @@ export default function WorkExperiencesAdminPage() {
   const createMutation = api.workExperiences.create.useMutation({
     onSuccess: () => {
       refetch();
-      handleCloseDialog();
+      handleCloseForm();
     },
   });
 
   const updateMutation = api.workExperiences.update.useMutation({
     onSuccess: () => {
       refetch();
-      handleCloseDialog();
+      handleCloseForm();
     },
   });
 
@@ -161,7 +162,7 @@ export default function WorkExperiencesAdminPage() {
   );
 
   // Handlers
-  const handleOpenDialog = (experience?: WorkExperience) => {
+  const handleOpenForm = (experience?: WorkExperience) => {
     if (experience) {
       setEditingExperience(experience);
       setFormData({
@@ -192,7 +193,7 @@ export default function WorkExperiencesAdminPage() {
     setDialogOpen(true);
   };
 
-  const handleCloseDialog = () => {
+  const handleCloseForm = () => {
     setDialogOpen(false);
     setEditingExperience(null);
     setFormData(defaultFormData);
@@ -222,7 +223,6 @@ export default function WorkExperiencesAdminPage() {
 
   const handleSubmit = () => {
     const submitData = {
-      id: editingExperience?.id || "",
       role: formData.role,
       company: formData.company,
       location: formData.location,
@@ -239,12 +239,18 @@ export default function WorkExperiencesAdminPage() {
       displayOrder: formData.displayOrder,
       isVisible: formData.isVisible,
       isFeatured: formData.isFeatured,
+      roleTranslations: {},
+      companyTranslations: {},
+      descriptionTranslations: {},
     };
 
     if (editingExperience) {
       updateMutation.mutate({
         id: editingExperience.id,
-        data: submitData,
+        data: {
+          ...submitData,
+          id: editingExperience.id,
+        },
       });
     } else {
       createMutation.mutate(submitData);
@@ -298,185 +304,476 @@ export default function WorkExperiencesAdminPage() {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      {/* Header */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 3,
-        }}
-      >
-        <Typography variant="h4" component="h1" fontWeight="bold">
-          Work Experience Management
-        </Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={() => handleOpenDialog()}
+    <ClientOnly skeleton>
+      <Box sx={{ p: 3 }}>
+        {/* Header */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 3,
+          }}
         >
-          Add Experience
-        </Button>
-      </Box>
-
-      {/* Statistics */}
-      {!statsLoading && statistics && (
-        <Box sx={{ mb: 3 }}>
-          <Grid container spacing={2}>
-            <Grid component="div">
-              <Card>
-                <CardContent>
-                  <Typography color="textSecondary" gutterBottom>
-                    Total Visible
-                  </Typography>
-                  <Typography variant="h4">
-                    {statistics.totalVisible}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid component="div">
-              <Card>
-                <CardContent>
-                  <Typography color="textSecondary" gutterBottom>
-                    Featured
-                  </Typography>
-                  <Typography variant="h4">
-                    {statistics.totalFeatured}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid component="div">
-              <Card>
-                <CardContent>
-                  <Typography color="textSecondary" gutterBottom>
-                    Total Experience
-                  </Typography>
-                  <Typography variant="h4">
-                    {statistics.totalYearsExperience}y
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid component="div">
-              <Card>
-                <CardContent>
-                  <Typography color="textSecondary" gutterBottom>
-                    Total
-                  </Typography>
-                  <Typography variant="h4">{statistics.total}</Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
+          <Typography variant="h4" component="h1" fontWeight="bold">
+            {t("workExperienceManagement")}
+          </Typography>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={() => handleOpenForm()}
+          >
+            {t("addExperience")}
+          </Button>
         </Box>
-      )}
 
-      {/* Work Experiences Grid */}
-      <Grid container spacing={3}>
-        {workExperiences.map((experience: WorkExperience) => (
-          <Grid component="div" key={experience.id}>
-            <Card
-              sx={{
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                opacity: experience.isVisible ? 1 : 0.6,
-                border: experience.isVisible ? "none" : "2px dashed #ccc",
-              }}
+        {/* Statistics */}
+        {!statsLoading && statistics && (
+          <Box sx={{ mb: 3 }}>
+            <Grid container spacing={2}>
+              <Grid component="div" xs={12} sm={6} md={3}>
+                <Card>
+                  <CardContent>
+                    <Typography color="textSecondary" gutterBottom>
+                      {t("totalVisible")}
+                    </Typography>
+                    <Typography variant="h4">
+                      {statistics.totalVisible}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid component="div" xs={12} sm={6} md={3}>
+                <Card>
+                  <CardContent>
+                    <Typography color="textSecondary" gutterBottom>
+                      {t("totalFeatured")}
+                    </Typography>
+                    <Typography variant="h4">
+                      {statistics.totalFeatured}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid component="div" xs={12} sm={6} md={3}>
+                <Card>
+                  <CardContent>
+                    <Typography color="textSecondary" gutterBottom>
+                      {t("totalExperience")}
+                    </Typography>
+                    <Typography variant="h4">
+                      {statistics.totalYearsExperience}y
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid component="div" xs={12} sm={6} md={3}>
+                <Card>
+                  <CardContent>
+                    <Typography color="textSecondary" gutterBottom>
+                      {t("total")}
+                    </Typography>
+                    <Typography variant="h4">{statistics.total}</Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            </Grid>
+          </Box>
+        )}
+
+        {/* Add/Edit Form Dialog */}
+        <Dialog
+          open={dialogOpen}
+          onClose={handleCloseForm}
+          maxWidth="md"
+          fullWidth
+          PaperProps={{
+            sx: {
+              maxHeight: "90vh",
+              overflow: "auto",
+            },
+          }}
+        >
+          <DialogTitle>
+            {editingExperience
+              ? t("editWorkExperience")
+              : t("addNewWorkExperience")}
+          </DialogTitle>
+          <DialogContent>
+            <Box
+              sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
             >
-              <CardContent sx={{ flexGrow: 1 }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
-                    mb: 2,
-                  }}
+              <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+                <TextField
+                  label={t("role")}
+                  value={formData.role}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, role: e.target.value }))
+                  }
+                  fullWidth
+                  required
+                  sx={{ minWidth: 200 }}
+                />
+                <TextField
+                  label={t("company")}
+                  value={formData.company}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      company: e.target.value,
+                    }))
+                  }
+                  fullWidth
+                  required
+                  sx={{ minWidth: 200 }}
+                />
+              </Box>
+
+              <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+                <TextField
+                  label={t("location")}
+                  value={formData.location}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      location: e.target.value,
+                    }))
+                  }
+                  fullWidth
+                  required
+                  sx={{ minWidth: 200 }}
+                />
+                <TextField
+                  label={t("industry")}
+                  value={formData.industry}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      industry: e.target.value,
+                    }))
+                  }
+                  fullWidth
+                  required
+                  sx={{ minWidth: 200 }}
+                />
+              </Box>
+
+              <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+                <TextField
+                  label={t("startDate")}
+                  type="date"
+                  value={formData.startDate}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      startDate: e.target.value,
+                    }))
+                  }
+                  InputLabelProps={{ shrink: true }}
+                  fullWidth
+                  required
+                  sx={{ minWidth: 200 }}
+                />
+                <TextField
+                  label={t("endDate")}
+                  type="date"
+                  value={formData.endDate}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      endDate: e.target.value,
+                    }))
+                  }
+                  InputLabelProps={{ shrink: true }}
+                  fullWidth
+                  helperText={t("leaveEmptyForCurrent")}
+                  sx={{ minWidth: 200 }}
+                />
+              </Box>
+
+              <FormControl fullWidth>
+                <InputLabel>{t("employmentType")}</InputLabel>
+                <Select
+                  value={formData.employmentType}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      employmentType: e.target
+                        .value as typeof formData.employmentType,
+                    }))
+                  }
+                  label={t("employmentType")}
                 >
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <BusinessIcon color="action" />
-                    <Chip
-                      label={
-                        employmentTypeOptions.find(
-                          (type) => type.value === experience.employmentType
-                        )?.label
+                  {employmentTypeOptions.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <TextField
+                label={t("description")}
+                value={formData.description}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
+                fullWidth
+                multiline
+                rows={3}
+                required
+              />
+
+              <TextField
+                label={t("companyUrl")}
+                value={formData.companyUrl}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    companyUrl: e.target.value,
+                  }))
+                }
+                fullWidth
+                type="url"
+              />
+
+              {/* Array fields */}
+              {(
+                ["achievements", "technologies", "responsibilities"] as const
+              ).map((field) => (
+                <Box key={field}>
+                  <Typography
+                    variant="subtitle1"
+                    gutterBottom
+                    sx={{ textTransform: "capitalize" }}
+                  >
+                    {field}
+                  </Typography>
+                  <Box sx={{ display: "flex", gap: 1, mb: 1 }}>
+                    <TextField
+                      label={`Add ${field.slice(0, -1)}`}
+                      value={arrayInput[field]}
+                      onChange={(e) =>
+                        setArrayInput((prev) => ({
+                          ...prev,
+                          [field]: e.target.value,
+                        }))
+                      }
+                      onKeyPress={(e) =>
+                        e.key === "Enter" && handleAddArrayItem(field)
                       }
                       size="small"
-                      sx={{
-                        backgroundColor:
-                          getEmploymentTypeColor(experience.employmentType) +
-                          "20",
-                        color: getEmploymentTypeColor(
-                          experience.employmentType
-                        ),
-                      }}
+                      fullWidth
                     />
-                    {experience.isFeatured && (
-                      <StarIcon color="primary" fontSize="small" />
-                    )}
+                    <Button
+                      onClick={() => handleAddArrayItem(field)}
+                      variant="outlined"
+                      disabled={!arrayInput[field].trim()}
+                    >
+                      {t("add")}
+                    </Button>
                   </Box>
-                  <Chip
-                    label={experience.endDate ? "Past" : "Current"}
-                    size="small"
-                    color={experience.endDate ? "default" : "success"}
-                  />
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                    {formData[field].map((item, index) => (
+                      <Chip
+                        key={index}
+                        label={item}
+                        onDelete={() => handleRemoveArrayItem(field, item)}
+                        size="small"
+                      />
+                    ))}
+                  </Box>
                 </Box>
+              ))}
 
-                <Typography variant="h6" gutterBottom fontWeight="bold">
-                  {experience.role}
-                </Typography>
+              <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={formData.isVisible}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          isVisible: e.target.checked,
+                        }))
+                      }
+                    />
+                  }
+                  label={t("visible")}
+                />
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={formData.isFeatured}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          isFeatured: e.target.checked,
+                        }))
+                      }
+                    />
+                  }
+                  label={t("featured")}
+                />
+              </Box>
 
-                <Typography
-                  variant="subtitle1"
-                  color="text.secondary"
-                  gutterBottom
-                >
-                  {experience.company} • {experience.location}
-                </Typography>
+              <Divider />
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseForm} variant="outlined">
+              {t("cancel")}
+            </Button>
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              disabled={
+                createMutation.isPending ||
+                updateMutation.isPending ||
+                !formData.role ||
+                !formData.company ||
+                !formData.location ||
+                !formData.description ||
+                formData.achievements.length === 0 ||
+                formData.achievements.length === 0 ||
+                formData.technologies.length === 0 ||
+                formData.responsibilities.length === 0
+              }
+              startIcon={
+                createMutation.isPending || updateMutation.isPending ? (
+                  <CircularProgress size={20} />
+                ) : null
+              }
+            >
+              {createMutation.isPending || updateMutation.isPending
+                ? t("saving")
+                : editingExperience
+                ? t("updateExperience")
+                : t("createExperience")}
+            </Button>
+          </DialogActions>
+        </Dialog>
 
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}
-                >
-                  <CalendarIcon fontSize="small" color="action" />
-                  <Typography variant="body2" color="text.secondary">
-                    {format(new Date(experience.startDate), "MMM yyyy")} -{" "}
-                    {experience.endDate
-                      ? format(new Date(experience.endDate), "MMM yyyy")
-                      : "Present"}{" "}
-                    ({formatDuration(experience.startDate, experience.endDate)})
+        {/* Work Experiences Grid */}
+        <Grid container spacing={3}>
+          {workExperiences.map((experience: WorkExperience) => (
+            <Grid item xs={12} sm={6} md={4} key={experience.id}>
+              <Card
+                sx={{
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  opacity: experience.isVisible ? 1 : 0.6,
+                  border: experience.isVisible ? "none" : "2px dashed #ccc",
+                }}
+              >
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                      mb: 2,
+                    }}
+                  >
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <BusinessIcon color="action" />
+                      <Chip
+                        label={
+                          employmentTypeOptions.find(
+                            (type) => type.value === experience.employmentType
+                          )?.label
+                        }
+                        size="small"
+                        sx={{
+                          backgroundColor:
+                            getEmploymentTypeColor(experience.employmentType) +
+                            "20",
+                          color: getEmploymentTypeColor(
+                            experience.employmentType
+                          ),
+                        }}
+                      />
+                      {experience.isFeatured && (
+                        <StarIcon color="primary" fontSize="small" />
+                      )}
+                    </Box>
+                    <Chip
+                      label={experience.endDate ? "Past" : "Current"}
+                      size="small"
+                      color={experience.endDate ? "default" : "success"}
+                    />
+                  </Box>
+
+                  <Typography variant="h6" gutterBottom fontWeight="bold">
+                    {experience.role}
                   </Typography>
-                </Box>
 
-                <Typography variant="body2" sx={{ mb: 2 }}>
-                  {experience.description.length > 150
-                    ? experience.description.substring(0, 150) + "..."
-                    : experience.description}
-                </Typography>
+                  <Typography
+                    variant="subtitle1"
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    {experience.company} • {experience.location}
+                  </Typography>
 
-                {experience.companyUrl && (
                   <Box
                     sx={{
                       display: "flex",
                       alignItems: "center",
                       gap: 1,
-                      mb: 2,
+                      mb: 1,
                     }}
                   >
-                    <LinkIcon fontSize="small" color="action" />
-                    <Typography variant="body2" color="primary">
-                      Company Website
+                    <CalendarIcon fontSize="small" color="action" />
+                    <Typography variant="body2" color="text.secondary">
+                      {format(new Date(experience.startDate), "MMM yyyy")} -{" "}
+                      {experience.endDate
+                        ? format(new Date(experience.endDate), "MMM yyyy")
+                        : "Present"}{" "}
+                      (
+                      {formatDuration(experience.startDate, experience.endDate)}
+                      )
                     </Typography>
                   </Box>
-                )}
 
-                <Accordion sx={{ mt: 2 }}>
-                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography variant="subtitle2">Details</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
+                  <Typography variant="body2" sx={{ mb: 2 }}>
+                    {experience.description.length > 150
+                      ? experience.description.substring(0, 150) + "..."
+                      : experience.description}
+                  </Typography>
+
+                  {experience.companyUrl && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        mb: 2,
+                      }}
+                    >
+                      <LinkIcon fontSize="small" color="action" />
+                      <Typography variant="body2" color="primary">
+                        Company Website
+                      </Typography>
+                    </Box>
+                  )}
+
+                  <Box
+                    sx={{
+                      mt: 2,
+                      p: 2,
+                      border: "1px solid",
+                      borderColor: "divider",
+                      borderRadius: 1,
+                    }}
+                  >
+                    <Typography variant="subtitle2" gutterBottom>
+                      Details
+                    </Typography>
                     <Stack spacing={2}>
                       <Box>
                         <Typography variant="subtitle2" gutterBottom>
@@ -522,322 +819,113 @@ export default function WorkExperiencesAdminPage() {
                         <Chip label={experience.industry} size="small" />
                       </Box>
                     </Stack>
-                  </AccordionDetails>
-                </Accordion>
-              </CardContent>
+                  </Box>
+                </CardContent>
 
-              <CardActions>
-                <Tooltip title={experience.isVisible ? "Hide" : "Show"}>
-                  <IconButton
-                    onClick={() => handleToggleVisibility(experience.id)}
-                    color={experience.isVisible ? "primary" : "default"}
+                <CardActions>
+                  <Tooltip title={experience.isVisible ? "Hide" : "Show"}>
+                    <IconButton
+                      onClick={() => handleToggleVisibility(experience.id)}
+                      color={experience.isVisible ? "primary" : "default"}
+                    >
+                      {experience.isVisible ? (
+                        <VisibilityIcon />
+                      ) : (
+                        <VisibilityOffIcon />
+                      )}
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip
+                    title={experience.isFeatured ? "Unfeature" : "Feature"}
                   >
-                    {experience.isVisible ? (
-                      <VisibilityIcon />
-                    ) : (
-                      <VisibilityOffIcon />
-                    )}
-                  </IconButton>
-                </Tooltip>
-                <Tooltip
-                  title={experience.isFeatured ? "Unfeature" : "Feature"}
+                    <IconButton
+                      onClick={() => handleToggleFeatured(experience.id)}
+                      color={experience.isFeatured ? "primary" : "default"}
+                    >
+                      {experience.isFeatured ? (
+                        <StarIcon />
+                      ) : (
+                        <StarBorderIcon />
+                      )}
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Edit">
+                    <IconButton
+                      onClick={() => handleOpenForm(experience)}
+                      color="primary"
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Delete">
+                    <IconButton
+                      onClick={() => setDeleteConfirmOpen(experience.id)}
+                      color="error"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+
+        {/* Delete Confirmation Dialog */}
+        {deleteConfirmOpen && (
+          <Box
+            sx={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(0,0,0,0.5)",
+              zIndex: 9999,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onClick={() => setDeleteConfirmOpen(null)}
+          >
+            <Card
+              sx={{
+                maxWidth: 400,
+                width: "90%",
+                mx: 2,
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  {t("deleteWorkExperience")}
+                </Typography>
+                <Typography>{t("deleteConfirmation")}</Typography>
+              </CardContent>
+              <CardActions sx={{ justifyContent: "flex-end", p: 2 }}>
+                <Button onClick={() => setDeleteConfirmOpen(null)}>
+                  {t("cancel")}
+                </Button>
+                <Button
+                  onClick={() =>
+                    deleteConfirmOpen && handleDelete(deleteConfirmOpen)
+                  }
+                  color="error"
+                  variant="contained"
+                  disabled={deleteMutation.isPending}
+                  startIcon={
+                    deleteMutation.isPending ? (
+                      <CircularProgress size={20} />
+                    ) : null
+                  }
                 >
-                  <IconButton
-                    onClick={() => handleToggleFeatured(experience.id)}
-                    color={experience.isFeatured ? "primary" : "default"}
-                  >
-                    {experience.isFeatured ? <StarIcon /> : <StarBorderIcon />}
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Edit">
-                  <IconButton
-                    onClick={() => handleOpenDialog(experience)}
-                    color="primary"
-                  >
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Delete">
-                  <IconButton
-                    onClick={() => setDeleteConfirmOpen(experience.id)}
-                    color="error"
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </Tooltip>
+                  {deleteMutation.isPending ? t("deleting") : t("delete")}
+                </Button>
               </CardActions>
             </Card>
-          </Grid>
-        ))}
-      </Grid>
-
-      {/* Add/Edit Dialog */}
-      <Dialog
-        open={dialogOpen}
-        onClose={handleCloseDialog}
-        maxWidth="md"
-        fullWidth
-      >
-        <DialogTitle>
-          {editingExperience
-            ? "Edit Work Experience"
-            : "Add New Work Experience"}
-        </DialogTitle>
-        <DialogContent>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <TextField
-                label="Role"
-                value={formData.role}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, role: e.target.value }))
-                }
-                fullWidth
-                required
-              />
-              <TextField
-                label="Company"
-                value={formData.company}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, company: e.target.value }))
-                }
-                fullWidth
-                required
-              />
-            </Box>
-
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <TextField
-                label="Location"
-                value={formData.location}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, location: e.target.value }))
-                }
-                fullWidth
-                required
-              />
-              <TextField
-                label="Industry"
-                value={formData.industry}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, industry: e.target.value }))
-                }
-                fullWidth
-                required
-              />
-            </Box>
-
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <TextField
-                label="Start Date"
-                type="date"
-                value={formData.startDate}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    startDate: e.target.value,
-                  }))
-                }
-                InputLabelProps={{ shrink: true }}
-                fullWidth
-                required
-              />
-              <TextField
-                label="End Date"
-                type="date"
-                value={formData.endDate}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, endDate: e.target.value }))
-                }
-                InputLabelProps={{ shrink: true }}
-                fullWidth
-                helperText="Leave empty for current position"
-              />
-            </Box>
-
-            <FormControl fullWidth>
-              <InputLabel>Employment Type</InputLabel>
-              <Select
-                value={formData.employmentType}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    employmentType: e.target
-                      .value as typeof formData.employmentType,
-                  }))
-                }
-                label="Employment Type"
-              >
-                {employmentTypeOptions.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <TextField
-              label="Description"
-              value={formData.description}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  description: e.target.value,
-                }))
-              }
-              fullWidth
-              multiline
-              rows={3}
-              required
-            />
-
-            <TextField
-              label="Company URL"
-              value={formData.companyUrl}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, companyUrl: e.target.value }))
-              }
-              fullWidth
-              type="url"
-            />
-
-            {/* Array fields */}
-            {(
-              ["achievements", "technologies", "responsibilities"] as const
-            ).map((field) => (
-              <Box key={field}>
-                <Typography
-                  variant="subtitle1"
-                  gutterBottom
-                  sx={{ textTransform: "capitalize" }}
-                >
-                  {field}
-                </Typography>
-                <Box sx={{ display: "flex", gap: 1, mb: 1 }}>
-                  <TextField
-                    label={`Add ${field.slice(0, -1)}`}
-                    value={arrayInput[field]}
-                    onChange={(e) =>
-                      setArrayInput((prev) => ({
-                        ...prev,
-                        [field]: e.target.value,
-                      }))
-                    }
-                    onKeyPress={(e) =>
-                      e.key === "Enter" && handleAddArrayItem(field)
-                    }
-                    size="small"
-                    fullWidth
-                  />
-                  <Button
-                    onClick={() => handleAddArrayItem(field)}
-                    variant="outlined"
-                    disabled={!arrayInput[field].trim()}
-                  >
-                    Add
-                  </Button>
-                </Box>
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  {formData[field].map((item, index) => (
-                    <Chip
-                      key={index}
-                      label={item}
-                      onDelete={() => handleRemoveArrayItem(field, item)}
-                      size="small"
-                    />
-                  ))}
-                </Box>
-              </Box>
-            ))}
-
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={formData.isVisible}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        isVisible: e.target.checked,
-                      }))
-                    }
-                  />
-                }
-                label="Visible"
-              />
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={formData.isFeatured}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        isFeatured: e.target.checked,
-                      }))
-                    }
-                  />
-                }
-                label="Featured"
-              />
-            </Box>
           </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button
-            onClick={handleSubmit}
-            variant="contained"
-            disabled={
-              createMutation.isPending ||
-              updateMutation.isPending ||
-              !formData.role ||
-              !formData.company ||
-              !formData.location ||
-              !formData.description ||
-              formData.achievements.length === 0 ||
-              formData.technologies.length === 0 ||
-              formData.responsibilities.length === 0
-            }
-          >
-            {createMutation.isPending || updateMutation.isPending ? (
-              <CircularProgress size={20} />
-            ) : editingExperience ? (
-              "Update"
-            ) : (
-              "Create"
-            )}
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Delete Confirmation Dialog */}
-      <Dialog
-        open={!!deleteConfirmOpen}
-        onClose={() => setDeleteConfirmOpen(null)}
-      >
-        <DialogTitle>Delete Work Experience</DialogTitle>
-        <DialogContent>
-          <Typography>
-            Are you sure you want to delete this work experience? This action
-            cannot be undone.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeleteConfirmOpen(null)}>Cancel</Button>
-          <Button
-            onClick={() => deleteConfirmOpen && handleDelete(deleteConfirmOpen)}
-            color="error"
-            variant="contained"
-            disabled={deleteMutation.isPending}
-          >
-            {deleteMutation.isPending ? (
-              <CircularProgress size={20} />
-            ) : (
-              "Delete"
-            )}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Box>
+        )}
+      </Box>
+    </ClientOnly>
   );
 }

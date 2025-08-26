@@ -13,6 +13,69 @@
     "invalidCredentials": "Invalid credentials",
     "loginFailed": "Login failed. Please try again."
   },
+  "Admin": {
+    "dashboard": "Dashboard",
+    "blog": "Blog",
+    "workExperience": "Work Experience",
+    "projects": "Projects",
+    "skills": "Skills",
+    "certifications": "Certifications",
+    "new": "New",
+    "edit": "Edit",
+    "workExperienceManagement": "Work Experience Management",
+    "projectsManagement": "Projects Management",
+    "skillsManagement": "Skills Management",
+    "certificationsManagement": "Certifications Management",
+    "blogManagement": "Blog Management",
+    "addExperience": "Add Experience",
+    "editWorkExperience": "Edit Work Experience",
+    "addNewWorkExperience": "Add New Work Experience",
+    "role": "Role",
+    "company": "Company",
+    "location": "Location",
+    "industry": "Industry",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "description": "Description",
+    "achievements": "Achievements",
+    "technologies": "Technologies",
+    "responsibilities": "Responsibilities",
+    "employmentType": "Employment Type",
+    "companyUrl": "Company URL",
+    "visible": "Visible",
+    "featured": "Featured",
+    "add": "Add",
+    "cancel": "Cancel",
+    "updateExperience": "Update Experience",
+    "createExperience": "Create Experience",
+    "saving": "Saving...",
+    "leaveEmptyForCurrent": "Leave empty for current position",
+    "totalVisible": "Total Visible",
+    "totalFeatured": "Featured",
+    "totalExperience": "Total Experience",
+    "total": "Total",
+    "past": "Past",
+    "current": "Current",
+    "companyWebsite": "Company Website",
+    "details": "Details",
+    "achievementsRecorded": "achievements recorded",
+    "more": "more",
+    "hide": "Hide",
+    "show": "Show",
+    "unfeature": "Unfeature",
+    "feature": "Feature",
+    "delete": "Delete",
+    "deleting": "Deleting...",
+    "deleteWorkExperience": "Delete Work Experience",
+    "deleteConfirmation": "Are you sure you want to delete this work experience? This action cannot be undone.",
+    "fullTime": "Full Time",
+    "partTime": "Part Time",
+    "contract": "Contract",
+    "freelance": "Freelance",
+    "internship": "Internship",
+    "ongoing": "Ongoing",
+    "present": "Present"
+  },
   "register": {
     "title": "Create Account",
     "subtitle": "Register for an account. Your registration will be reviewed by an admin.",
@@ -156,6 +219,62 @@
           "Accessibility improvements"
         ],
         "years": "4+ years"
+      },
+      "problemSolver": {
+        "title": "PROBLEM SOLVER",
+        "description": "I identify and solve complex issues with a systematic approach. My expertise lies in analyzing problems, developing effective solutions, and implementing them with precision.",
+        "experience": "Advanced",
+        "technologies": ["Problem Solving", "System Design", "Debugging"],
+        "examples": [
+          "Performance optimization",
+          "Error handling",
+          "System architecture"
+        ],
+        "years": "5+ years"
+      },
+      "teamPlayer": {
+        "title": "TEAM PLAYER",
+        "description": "I collaborate effectively with cross-functional teams to deliver high-quality results. My expertise lies in communication, conflict resolution, and fostering a positive work environment.",
+        "experience": "Advanced",
+        "technologies": [
+          "Team Collaboration",
+          "Conflict Resolution",
+          "Communication"
+        ],
+        "examples": [
+          "Project management",
+          "Team building",
+          "Cross-functional collaboration"
+        ],
+        "years": "5+ years"
+      },
+      "innovationArchitect": {
+        "title": "INNOVATION ARCHITECT",
+        "description": "I design and implement innovative solutions that push the boundaries of technology. My expertise lies in identifying opportunities, developing creative ideas, and implementing them with precision.",
+        "experience": "Advanced",
+        "technologies": [
+          "Innovation",
+          "Creative Design",
+          "Product Development"
+        ],
+        "examples": [
+          "New product development",
+          "Creative solutions",
+          "Innovative design"
+        ],
+        "years": "5+ years"
+      },
+      "digitalStoryteller": {
+        "title": "DIGITAL STORYTELLER",
+        "description": "I create engaging digital experiences that tell stories and connect with users. My expertise lies in storytelling, user experience, and visual design.",
+        "experience": "Advanced",
+        "technologies": ["User Experience", "Visual Design", "Storytelling"],
+        "examples": [
+          "Interactive experiences",
+          "User interface designs",
+          "Visual storytelling"
+        ],
+        "years": "5+ years"
       }
     }
   },

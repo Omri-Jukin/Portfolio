@@ -19,9 +19,11 @@ export async function createContext({
   req,
   resHeaders,
 }: FetchCreateContextFnOptions) {
-  // Create database client using the new getDB() function
+  // Create database client
   let db: Awaited<ReturnType<typeof getDB>> | null = null;
+
   try {
+    // Use Cloudflare D1 (both local and production)
     db = await getDB();
   } catch (error) {
     console.error("Failed to create database client:", error);
@@ -70,11 +72,11 @@ export async function createContext({
       try {
         let user;
         if (db) {
-          // Try with database client first
+          // This is a D1 database, safe to pass to getUserById
           user = await getUserById(decoded.userId, db);
         } else {
-          // In production, if no database client is available, we can't proceed
-          console.error("No database client available in production");
+          // If no database client is available, we can't proceed
+          console.error("No database client available");
           return null;
         }
 
