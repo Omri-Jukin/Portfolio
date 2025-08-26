@@ -30,11 +30,11 @@ const gentleBob = keyframes`
 `;
 
 const StyledFloatingProfile = styled(Box)(({ theme }) => ({
-  position: "fixed",
+  position: "absolute",
   left: "2rem",
   top: "2rem",
   transform: "none",
-  zIndex: 1000,
+  zIndex: -1,
   width: "auto",
   height: "auto",
   animation: `${float} 6s ease-in-out infinite, ${gentleBob} 4s ease-in-out infinite`,
