@@ -50,83 +50,16 @@ import {
 
 import { api } from "$/trpc/client";
 import { format } from "date-fns";
-import type { Project, TechnicalChallenge, CodeExample } from "$/db/projects";
+import type { Project } from "$/db/projects";
 import { ClientOnly } from "~/ClientOnly";
-
-interface ProjectFormData {
-  title: string;
-  subtitle: string;
-  description: string;
-  longDescription: string;
-  technologies: string[];
-  categories: string[];
-  status: "completed" | "in-progress" | "archived" | "concept";
-  projectType: "professional" | "personal" | "open-source" | "academic";
-  startDate: string;
-  endDate: string;
-  githubUrl: string;
-  liveUrl: string;
-  demoUrl: string;
-  documentationUrl: string;
-  images: string[];
-  keyFeatures: string[];
-  technicalChallenges: TechnicalChallenge[];
-  codeExamples: CodeExample[];
-  teamSize: number;
-  myRole: string;
-  clientName: string;
-  budget: string;
-  displayOrder: number;
-  isVisible: boolean;
-  isFeatured: boolean;
-  isOpenSource: boolean;
-}
-
-const defaultFormData: ProjectFormData = {
-  title: "",
-  subtitle: "",
-  description: "",
-  longDescription: "",
-  technologies: [],
-  categories: [],
-  status: "completed",
-  projectType: "personal",
-  startDate: new Date().toISOString().split("T")[0],
-  endDate: "",
-  githubUrl: "",
-  liveUrl: "",
-  demoUrl: "",
-  documentationUrl: "",
-  images: [],
-  keyFeatures: [],
-  technicalChallenges: [],
-  codeExamples: [],
-  teamSize: 1,
-  myRole: "",
-  clientName: "",
-  budget: "",
-  displayOrder: 0,
-  isVisible: true,
-  isFeatured: false,
-  isOpenSource: false,
-};
+import {
+  ProjectFormData,
+  defaultFormData,
+  statusOptions,
+  projectTypeOptions,
+} from "./constants";
 
 export default function ProjectsAdminPage() {
-  // Constants defined locally within the component
-  const statusOptions = [
-    { value: "completed", label: "Completed", color: "#4CAF50" },
-    { value: "in-progress", label: "In Progress", color: "#FF9800" },
-    { value: "archived", label: "Archived", color: "#607D8B" },
-    { value: "concept", label: "Concept", color: "#9C27B0" },
-  ];
-
-  const projectTypeOptions = [
-    { value: "professional", label: "Professional", color: "#2196F3" },
-    { value: "personal", label: "Personal", color: "#4CAF50" },
-    { value: "open-source", label: "Open Source", color: "#FF9800" },
-    { value: "academic", label: "Academic", color: "#9C27B0" },
-  ];
-
   // State
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
@@ -209,7 +142,12 @@ export default function ProjectsAdminPage() {
         images: project.images || [],
         keyFeatures: project.keyFeatures || [],
         technicalChallenges: project.technicalChallenges || [],
-        codeExamples: project.codeExamples || [],
+        codeExamples: project.codeExamples.map((example) => ({
+          title: example.title,
+          language: example.language,
+          code: example.code,
+          explanation: example.explanation,
+        })),
         teamSize: project.teamSize || 1,
         myRole: project.myRole || "",
         clientName: project.clientName || "",

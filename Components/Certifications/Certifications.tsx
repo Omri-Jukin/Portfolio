@@ -42,15 +42,6 @@ const Certifications: React.FC<CertificationsProps> = ({
 }) => {
   const t = useTranslations("certifications");
 
-  // Fetch certifications from database
-  const {
-    data: certificationsData = [],
-    isLoading,
-    error,
-  } = api.certifications.getAll.useQuery({
-    visibleOnly: true,
-  });
-  // Static certifications data
   const staticCertifications: Certification[] = [
     {
       id: "aws-certified-developer",
@@ -116,7 +107,15 @@ const Certifications: React.FC<CertificationsProps> = ({
     },
   ];
 
-  const certifications = staticCertifications.filter((cert) => cert.isVisible);
+  const {
+    data: certificationsData = staticCertifications,
+    isLoading,
+    error,
+  } = api.certifications.getAll.useQuery({
+    visibleOnly: true,
+  });
+
+  const certifications = certificationsData.filter((cert) => cert.isVisible);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -136,7 +135,6 @@ const Certifications: React.FC<CertificationsProps> = ({
     }
   };
 
-  // Show loading state
   if (isLoading) {
     return (
       <CertificationsContainer id={CERTIFICATIONS_CONSTANTS.SECTION_ID}>
@@ -154,7 +152,6 @@ const Certifications: React.FC<CertificationsProps> = ({
     );
   }
 
-  // Show error state
   if (error) {
     return (
       <CertificationsContainer id={CERTIFICATIONS_CONSTANTS.SECTION_ID}>
@@ -172,7 +169,6 @@ const Certifications: React.FC<CertificationsProps> = ({
     );
   }
 
-  // Show empty state
   if (!certifications || certifications.length === 0) {
     return (
       <CertificationsContainer id={CERTIFICATIONS_CONSTANTS.SECTION_ID}>
@@ -190,7 +186,6 @@ const Certifications: React.FC<CertificationsProps> = ({
     );
   }
 
-  // Sort certifications by display order
   const sortedCertifications = [...certifications].sort(
     (a, b) => a.displayOrder - b.displayOrder
   );

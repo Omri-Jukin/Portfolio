@@ -175,7 +175,6 @@ export type {
   BackgroundVariant,
   BackgroundProps,
   GlobeBackgroundProps,
-  GridConfig,
 
   // Theme types
   ThemeConfig,
