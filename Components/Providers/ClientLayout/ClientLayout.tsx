@@ -198,7 +198,6 @@ export default function ClientLayout({
         {/* Global Globe Background with Content */}
         {!isExamplePage && (
           <GlobeBackground
-            size={1920}
             markers={ALL_MARKERS}
             opacity={0.8}
             rotationSpeed={0.002}
