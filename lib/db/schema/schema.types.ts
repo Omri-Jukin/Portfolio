@@ -94,6 +94,21 @@ export type UpdateService = Partial<
   Omit<typeof Tables.services.$inferSelect, "id" | "createdAt">
 >;
 
+// Testimonial types
+export type TestimonialDB = typeof Tables.testimonials.$inferSelect;
+export type Testimonial = Omit<
+  TestimonialDB,
+  "createdAt" | "updatedAt" | "verificationDate"
+> & {
+  createdAt: string;
+  updatedAt: string | null;
+  verificationDate: string | null;
+};
+export type NewTestimonial = typeof Tables.testimonials.$inferInsert;
+export type UpdateTestimonial = Partial<
+  Omit<typeof Tables.testimonials.$inferSelect, "id" | "createdAt">
+>;
+
 export type UserRole = "admin" | "visitor";
 export type UserStatus = "pending" | "approved" | "rejected";
 export type PostStatus = "draft" | "published";

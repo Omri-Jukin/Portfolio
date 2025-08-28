@@ -546,3 +546,75 @@ export const servicesPopularIdx = index("services_popular_idx").on(
 export const servicesDisplayOrderIdx = index("services_display_order_idx").on(
   services.displayOrder
 );
+
+// Testimonials table for client/colleague feedback
+export const testimonials = sqliteTable("testimonials", {
+  id: text("id").primaryKey().notNull(),
+  quote: text("quote").notNull(),
+  author: text("author").notNull(),
+  role: text("role").notNull(),
+  company: text("company").notNull(),
+
+  // Additional details
+  authorImage: text("author_image"),
+  authorLinkedIn: text("author_linkedin"),
+  companyUrl: text("company_url"),
+  companyLogo: text("company_logo"),
+
+  // Rating and verification
+  rating: integer("rating"), // 1-5 stars
+  isVerified: integer("is_verified", { mode: "boolean" })
+    .notNull()
+    .default(false),
+  verificationDate: integer("verification_date", { mode: "timestamp" }),
+
+  // Display and ordering
+  displayOrder: integer("display_order").notNull().default(0),
+  isVisible: integer("is_visible", { mode: "boolean" }).notNull().default(true),
+  isFeatured: integer("is_featured", { mode: "boolean" })
+    .notNull()
+    .default(false),
+
+  // Multi-language support
+  quoteTranslations: text("quote_translations", { mode: "json" }).$type<
+    Record<string, string>
+  >(),
+  authorTranslations: text("author_translations", { mode: "json" }).$type<
+    Record<string, string>
+  >(),
+  roleTranslations: text("role_translations", { mode: "json" }).$type<
+    Record<string, string>
+  >(),
+  companyTranslations: text("company_translations", { mode: "json" }).$type<
+    Record<string, string>
+  >(),
+
+  // Metadata
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }),
+  createdBy: text("created_by")
+    .notNull()
+    .references(() => users.id),
+});
+
+// Testimonials indexes
+export const testimonialsVisibilityIdx = index(
+  "testimonials_visibility_idx"
+).on(testimonials.isVisible);
+export const testimonialsFeaturedIdx = index("testimonials_featured_idx").on(
+  testimonials.isFeatured
+);
+export const testimonialsDisplayOrderIdx = index(
+  "testimonials_display_order_idx"
+).on(testimonials.displayOrder);
+export const testimonialsRatingIdx = index("testimonials_rating_idx").on(
+  testimonials.rating
+);
+export const testimonialsVerifiedIdx = index("testimonials_verified_idx").on(
+  testimonials.isVerified
+);
+export const testimonialsCompanyIdx = index("testimonials_company_idx").on(
+  testimonials.company
+);
