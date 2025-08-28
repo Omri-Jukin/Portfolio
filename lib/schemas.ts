@@ -614,6 +614,46 @@ export const serviceUpdateSchema = serviceCreateSchema.partial().extend({
 });
 
 // ========================
+// TESTIMONIAL SCHEMAS
+// ========================
+
+export const testimonialCreateSchema = z.object({
+  quote: z
+    .string()
+    .min(10, "Quote must be at least 10 characters")
+    .max(1000, "Quote must be less than 1000 characters"),
+  author: nameSchema,
+  role: z
+    .string()
+    .min(2, "Role must be at least 2 characters")
+    .max(100, "Role must be less than 100 characters"),
+  company: z
+    .string()
+    .min(2, "Company must be at least 2 characters")
+    .max(100, "Company must be less than 100 characters"),
+  authorImage: urlSchema.optional(),
+  authorLinkedIn: urlSchema.optional(),
+  companyUrl: urlSchema.optional(),
+  companyLogo: urlSchema.optional(),
+  rating: z.number().int().min(1).max(5).optional(),
+  isVerified: z.boolean().default(false),
+  verificationDate: dateStringSchema.optional(),
+  displayOrder: displayOrderSchema,
+  isVisible: visibilitySchema,
+  isFeatured: featuredSchema,
+  quoteTranslations: translationsSchema.optional(),
+  authorTranslations: translationsSchema.optional(),
+  roleTranslations: translationsSchema.optional(),
+  companyTranslations: translationsSchema.optional(),
+});
+
+export const testimonialUpdateSchema = testimonialCreateSchema
+  .partial()
+  .extend({
+    id: z.string().uuid(),
+  });
+
+// ========================
 // PAGINATION SCHEMAS
 // ========================
 
@@ -718,6 +758,8 @@ export type EducationCreateData = z.infer<typeof educationCreateSchema>;
 export type EducationUpdateData = z.infer<typeof educationUpdateSchema>;
 export type ServiceCreateData = z.infer<typeof serviceCreateSchema>;
 export type ServiceUpdateData = z.infer<typeof serviceUpdateSchema>;
+export type TestimonialCreateData = z.infer<typeof testimonialCreateSchema>;
+export type TestimonialUpdateData = z.infer<typeof testimonialUpdateSchema>;
 export type PaginationData = z.infer<typeof paginationSchema>;
 export type SearchQueryData = z.infer<typeof searchQuerySchema>;
 export type BulkDeleteData = z.infer<typeof bulkDeleteSchema>;
