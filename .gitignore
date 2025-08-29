@@ -62,8 +62,8 @@ next-env.d.ts
 /scripts/migrations/*
 
 # roadmap
-/roadmap/*
-!/roadmap/.gitkeep
+# /roadmap/*
+# !/roadmap/.gitkeep
 
 # cursor
 .cursor/rules/*
