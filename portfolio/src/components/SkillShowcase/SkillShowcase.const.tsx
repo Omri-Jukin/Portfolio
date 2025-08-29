@@ -1,0 +1,13 @@
+export const ANIMATION_DELAYS = {
+  TITLE: 0,
+  DESCRIPTION: 0.1,
+  EXPERIENCE: 0.2,
+  TECHNOLOGIES: 0.3,
+  EXAMPLES: 0.4,
+} as const;
+
+export const CHIP_ANIMATION_DELAY = 0.1;
+
+export const DIALOG_TRANSITION_DURATION = 1000;
+
+export const BACKDROP_TRANSITION_DURATION = 1000;
