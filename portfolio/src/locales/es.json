@@ -1,0 +1,682 @@
+{
+  "metadata": {
+    "title": "Omri Jukin",
+    "description": "Ingeniero FullStack | Desarrollo Full-Stack · Desarrollo Web Full-Stack · Ingeniería de Software Full-Stack · React · Node.js · TypeScript · JavaScript · Next.js · tRPC · PostgreSQL · MongoDB · Arquitectura de Microservicios · Desarrollo de APIs · APIs REST · GraphQL · Despliegue en la Nube · DevOps · CI/CD"
+  },
+  "login": {
+    "title": "Inicio de Sesión de Administrador",
+    "subtitle": "Ingresa tus credenciales para acceder al panel de administración",
+    "username": "Nombre de Usuario",
+    "password": "Contraseña",
+    "signIn": "Iniciar Sesión",
+    "signingIn": "Iniciando sesión...",
+    "invalidCredentials": "Credenciales inválidas",
+    "loginFailed": "Error al iniciar sesión. Por favor, inténtalo de nuevo."
+  },
+  "Admin": {
+    "dashboard": "Panel de Control",
+    "blog": "Blog",
+    "workExperience": "Experiencia Laboral",
+    "projects": "Proyectos",
+    "skills": "Habilidades",
+    "certifications": "Certificaciones",
+    "new": "Nuevo",
+    "edit": "Editar",
+    "workExperienceManagement": "Gestión de Experiencia Laboral",
+    "projectsManagement": "Gestión de Proyectos",
+    "skillsManagement": "Gestión de Habilidades",
+    "certificationsManagement": "Gestión de Certificaciones",
+    "blogManagement": "Gestión de Blog",
+    "addExperience": "Agregar Experiencia",
+    "editWorkExperience": "Editar Experiencia Laboral",
+    "addNewWorkExperience": "Agregar Nueva Experiencia Laboral",
+    "role": "Rol",
+    "company": "Empresa",
+    "location": "Ubicación",
+    "industry": "Industria",
+    "startDate": "Fecha de Inicio",
+    "endDate": "Fecha de Fin",
+    "description": "Descripción",
+    "achievements": "Logros",
+    "technologies": "Tecnologías",
+    "responsibilities": "Responsabilidades",
+    "employmentType": "Tipo de Empleo",
+    "companyUrl": "URL de la Empresa",
+    "visible": "Visible",
+    "featured": "Destacado",
+    "add": "Agregar",
+    "cancel": "Cancelar",
+    "updateExperience": "Actualizar Experiencia",
+    "createExperience": "Crear Experiencia",
+    "saving": "Guardando...",
+    "leaveEmptyForCurrent": "Dejar vacío para posición actual",
+    "totalVisible": "Total Visible",
+    "totalFeatured": "Destacados",
+    "totalExperience": "Experiencia Total",
+    "total": "Total",
+    "past": "Pasado",
+    "current": "Actual",
+    "companyWebsite": "Sitio Web de la Empresa",
+    "details": "Detalles",
+    "achievementsRecorded": "logros registrados",
+    "more": "más",
+    "hide": "Ocultar",
+    "show": "Mostrar",
+    "unfeature": "Quitar Destacado",
+    "feature": "Destacar",
+    "delete": "Eliminar",
+    "deleting": "Eliminando...",
+    "deleteWorkExperience": "Eliminar Experiencia Laboral",
+    "deleteConfirmation": "¿Estás seguro de que quieres eliminar esta experiencia laboral? Esta acción no se puede deshacer.",
+    "fullTime": "Tiempo Completo",
+    "partTime": "Tiempo Parcial",
+    "contract": "Contrato",
+    "freelance": "Freelance",
+    "internship": "Pasantía",
+    "ongoing": "En Curso",
+    "present": "Presente"
+  },
+  "register": {
+    "title": "Crear Cuenta",
+    "subtitle": "Regístrate para una cuenta. Tu registro será revisado por un administrador.",
+    "name": "Nombre Completo",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "createAccount": "Crear Cuenta",
+    "creatingAccount": "Creando Cuenta...",
+    "registrationSuccess": "¡Registro exitoso! Por favor, espera la aprobación del administrador.",
+    "registrationFailed": "Error en el registro. Por favor, inténtalo de nuevo.",
+    "passwordsDontMatch": "Las contraseñas no coinciden",
+    "passwordTooShort": "La contraseña debe tener al menos 6 caracteres",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "signInHere": "Inicia sesión aquí"
+  },
+  "common": {
+    "language": "Idioma",
+    "home": "Inicio",
+    "about": "Acerca de",
+    "contact": "Contacto",
+    "blog": "Blog",
+    "career": "Carrera",
+    "resume": "Currículum",
+    "projects": "Proyectos",
+    "skills": "Habilidades",
+    "description": "Soy un Ingeniero FullStack especializado en desarrollo web full-stack, arquitectura de sistemas escalables y tecnologías modernas incluyendo React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB y microservicios."
+  },
+  "hero": {
+    "titleRow1": "No Vendo Software.",
+    "titleRow2": "Ingeniería de la evolución del futuro",
+    "subtitle": "No soy solo un desarrollador—soy un visionario. No solo construyo software; ingeniero la evolución. Mi trabajo no se trata de crear productos; se trata de dar forma al futuro.",
+    "profileAlt": "Omri Jukin",
+    "exploreButton": "Explorar trabajo",
+    "resumeButton": "Currículum",
+    "careerButton": "Carrera",
+    "cta": "Ingeniemos el futuro juntos"
+  },
+  "examples": {
+    "title": "Ejemplos Interactivos",
+    "subtitle": "Explora mis capacidades de desarrollo full-stack a través de ejemplos interactivos, mostrando React, TypeScript, Three.js, animaciones y tecnologías web modernas.",
+    "cta": "¿Quieres ver más ejemplos interactivos?",
+    "viewMoreButton": "Ver Ejemplos Completos"
+  },
+  "scrollGaps": {
+    "heroAbout": {
+      "text": "Descubre el camino por delante...",
+      "cta": "Continúa desplazándote para descubrir más"
+    },
+    "aboutQA": {
+      "text": "Construyendo puentes entre ideas y ejecución"
+    },
+    "qaServices": {
+      "text": "Girando a través de la pila tecnológica"
+    },
+    "servicesProjects": {
+      "text": "Donde la visión se encuentra con la realidad"
+    },
+    "servicesCareer": {
+      "text": "Explorando el crecimiento profesional y la experiencia"
+    },
+    "careerProjects": {
+      "text": "De la experiencia a la innovación"
+    },
+    "projectsContact": {
+      "text": "¿Listo para crear algo increíble juntos?"
+    }
+  },
+  "about": {
+    "title": "Quién Soy",
+    "subtitle": "EXPLORA MI CAJA DE HERRAMIENTAS CREATIVA",
+    "description": "Soy un Ingeniero FullStack apasionado y diseñador que cree que las grandes experiencias digitales provienen de la perfecta combinación de experiencia técnica y visión creativa. Con años de experiencia creando aplicaciones web full-stack, he aprendido que las mejores soluciones son aquellas que no solo funcionan perfectamente, sino que también deleitan a los usuarios en cada interacción.",
+    "mySkills": "Mis Habilidades",
+    "skillDetailsTitle": "Detalles de Habilidades",
+    "experience": "Experiencia:",
+    "years": "Años:",
+    "technologies": "Tecnologías:",
+    "examples": "Ejemplos:",
+    "readyToWork": "¿Listo para Trabajar Juntos?",
+    "letsDiscuss": "Hablemos de cómo mis habilidades y experiencia pueden ayudar a dar vida a tu proyecto.",
+    "cta": "Ver Mi Currículum",
+    "skills": {
+      "codeConjurer": "CONJURADOR DE CÓDIGO",
+      "brandArchitect": "ARQUITECTO DE MARCA",
+      "designDreamer": "SOÑADOR DEL DISEÑO"
+    },
+    "skillDetails": {
+      "codeConjurer": {
+        "title": "CONJURADOR DE CÓDIGO",
+        "description": "Transformo requisitos complejos en soluciones elegantes y escalables. Mi experiencia abarca toda la pila de desarrollo, desde interfaces frontend responsivas hasta sistemas backend robustos y arquitecturas de base de datos eficientes.",
+        "experience": "Avanzado",
+        "technologies": [
+          "React",
+          "Node.js",
+          "TypeScript",
+          "Next.js",
+          "tRPC",
+          "PostgreSQL",
+          "MongoDB"
+        ],
+        "examples": [
+          "Plataformas de microservicios",
+          "Sistemas CRM",
+          "Soluciones de comercio electrónico"
+        ],
+        "years": "5+ años"
+      },
+      "brandArchitect": {
+        "title": "ARQUITECTO DE MARCA",
+        "description": "Diseño e implemento experiencias de marca integrales que resuenan con los usuarios. Mi enfoque combina la excelencia técnica con el pensamiento de diseño creativo para crear interacciones digitales memorables.",
+        "experience": "Avanzado",
+        "technologies": [
+          "Material-UI",
+          "Tailwind CSS",
+          "Framer Motion",
+          "Sistemas de Diseño"
+        ],
+        "examples": [
+          "Sitios web de portafolio",
+          "Sistemas de identidad de marca",
+          "Experiencias interactivas"
+        ],
+        "years": "3+ años"
+      },
+      "designDreamer": {
+        "title": "SOÑADOR DEL DISEÑO",
+        "description": "Creo experiencias de usuario intuitivas que conectan la funcionalidad con la estética. Mis diseños priorizan la usabilidad mientras mantienen el atractivo visual y la consistencia de marca.",
+        "experience": "Avanzado",
+        "technologies": [
+          "Diseño UX/UI",
+          "Prototipado",
+          "Investigación de Usuarios",
+          "Accesibilidad"
+        ],
+        "examples": [
+          "Diseños de interfaz de usuario",
+          "Prototipos interactivos",
+          "Mejoras de accesibilidad"
+        ],
+        "years": "4+ años"
+      }
+    }
+  },
+  "qa": {
+    "title": "Preguntas Rápidas",
+    "subtitle": "Conóceme rápidamente",
+    "questions": [
+      {
+        "question": "¿Qué te motiva?",
+        "answer": "Resolver problemas complejos y crear soluciones elegantes que tengan un impacto real."
+      },
+      {
+        "question": "¿Mi estilo de trabajo?",
+        "answer": "Metódico pero creativo, con un enfoque en la experiencia del usuario y código limpio."
+      },
+      {
+        "question": "¿Mayor logro?",
+        "answer": "Liderar el desarrollo de sistemas de nivel empresarial que sirven a miles de usuarios."
+      },
+      {
+        "question": "¿Qué me emociona?",
+        "answer": "Aprender nuevas tecnologías y empujar los límites de lo posible."
+      },
+      {
+        "question": "¿Mi filosofía?",
+        "answer": "El gran software debería ser invisible—los usuarios deberían enfocarse en sus objetivos, no en la interfaz."
+      },
+      {
+        "question": "¿Objetivos futuros?",
+        "answer": "Construir productos innovadores que resuelvan problemas del mundo real a gran escala."
+      }
+    ]
+  },
+  "services": {
+    "title": "Soluciones Innovadoras",
+    "subtitle": "Lo que aporto a la mesa",
+    "services": [
+      {
+        "title": "Construye tu futuro",
+        "description": "Construyo aplicaciones escalables y modernas que crecen con las necesidades de tu negocio.",
+        "buttonText": "Ver Trabajo",
+        "buttonVariant": "primary"
+      },
+      {
+        "title": "Habilidades que brillan",
+        "description": "Ofrezco experiencia full-stack desde la finura del frontend hasta el brillo del backend.",
+        "buttonText": "Descubrir",
+        "buttonVariant": "secondary"
+      },
+      {
+        "title": "El feedback alimenta el crecimiento",
+        "description": "Proporciono mejora continua a través del feedback del usuario y desarrollo iterativo.",
+        "buttonText": "Ponte en Contacto",
+        "buttonVariant": "primary"
+      }
+    ]
+  },
+  "projects": {
+    "title": "Proyectos Destacados",
+    "subtitle": "Un vistazo a mi trabajo",
+    "projects": [
+      {
+        "title": "Snow HQ",
+        "description": "Prototipo de CRM empresarial con análisis en tiempo real, flujos de trabajo automatizados y capacidades de reportes integrales. Construido con Next.js, tRPC, Drizzle ORM y PostgreSQL, implementando mejores prácticas de desarrollo full-stack y patrones de arquitectura escalable.",
+        "link": "https://github.com/Omri-Jukin/Snow"
+      },
+      {
+        "title": "Sitio Web de Portafolio",
+        "description": "Sitio web de portafolio moderno y responsivo con internacionalización (i18n), modo oscuro y animaciones suaves. Construido con Next.js, TypeScript, Material-UI y Framer Motion, mostrando capacidades de desarrollo full-stack y tecnologías web modernas.",
+        "link": "https://omrijukin.com"
+      },
+      {
+        "title": "ClipWhisperer",
+        "description": "Plataforma integral de microservicios para procesamiento automatizado de video y creación de contenido. Construida con narración impulsada por IA, renderizado de video y flujos de trabajo orquestados usando TypeScript, Node.js y arquitectura moderna de microservicios, demostrando habilidades avanzadas de ingeniería full-stack.",
+        "link": "https://github.com/ClipWhisperer"
+      },
+      {
+        "title": "Gestor de Microservicios",
+        "description": "Herramienta CLI integral para gestionar un ecosistema de microservicios. Construida con gestión unificada de servicios, flujos de trabajo automatizados, operaciones entre servicios y herramientas de desarrollo usando TypeScript, Node.js y arquitectura CLI moderna, mostrando experiencia en desarrollo full-stack.",
+        "link": "https://github.com/ClipWhisperer/Utils"
+      },
+      {
+        "title": "Biblioteca Publicada",
+        "description": "Biblioteca npm publicada para gestionar un ecosistema de microservicios. Construida con gestión unificada de servicios, flujos de trabajo automatizados, operaciones entre servicios y herramientas de desarrollo usando TypeScript, Node.js y arquitectura CLI moderna, demostrando habilidades de desarrollo full-stack y gestión de paquetes.",
+        "link": "https://www.npmjs.com/package/@clipwhisperer/common"
+      }
+    ]
+  },
+  "portfolio": {
+    "title": "Portafolio Técnico",
+    "subtitle": "Muestra detallada de proyectos con implementaciones técnicas, enfoques de resolución de problemas y ejemplos de código",
+    "viewCode": "Ver Código",
+    "liveDemo": "Demo en Vivo",
+    "technicalDetails": "Detalles Técnicos e Implementación",
+    "problemSolution": "Problema y Solución",
+    "architecture": "Arquitectura y Diseño",
+    "codeExamples": "Ejemplos de Código",
+    "technicalChallenges": "Desafíos Técnicos y Soluciones",
+    "challenge": "Desafío:",
+    "approach": "Enfoque:",
+    "keyFeatures": "Características Clave:",
+    "solution": "Solución:"
+  },
+  "contact": {
+    "title": "Conectemos",
+    "subtitle": "¿Listo para dar vida a una nueva idea?",
+    "description": "Siempre estoy emocionado de discutir nuevas oportunidades, colaboraciones o simplemente charlar sobre tecnología.\nDéjame un mensaje y creemos algo increíble juntos...",
+    "button": "Iniciar una conversación",
+    "form": {
+      "title": "Ponte en Contacto",
+      "description": "¿Tienes un proyecto en mente? Hablemos de cómo podemos dar vida a tus ideas. Completa el formulario de contacto y te responderé lo antes posible.",
+      "name": "Mi Nombre",
+      "email": "Mi Correo",
+      "phone": "Mi Teléfono",
+      "subject": "Asunto",
+      "message": "Mi Mensaje",
+      "submit": "Enviar Mensaje",
+      "sending": "Enviando...",
+      "success": "¡Mensaje enviado exitosamente!",
+      "error": "Algo salió mal. Por favor, inténtalo de nuevo."
+    },
+    "info": {
+      "title": "Información de Contacto",
+      "email": "Correo",
+      "emailValue": "omrijukin@gmail.com",
+      "phone": "Teléfono",
+      "phoneValue": "+972 52-334-4064",
+      "timezone": "Zona Horaria",
+      "timezoneValue": "GMT+2 (Israel)",
+      "location": "Ubicación",
+      "locationValue": "Israel"
+    },
+    "social": {
+      "title": "Conecta en Redes Sociales",
+      "email": {
+        "title": "Correo",
+        "username": "omrijukin@gmail.com",
+        "button": "¡Conectemos!"
+      },
+      "phone": {
+        "title": "Teléfono",
+        "username": "+972 52-334-4064",
+        "button": "¡Llámame!"
+      },
+      "github": {
+        "title": "GitHub",
+        "username": "@Omri-Jukin",
+        "button": "Conectar"
+      },
+      "linkedin": {
+        "title": "LinkedIn",
+        "username": "@omri-jukin",
+        "button": "Conectar"
+      },
+      "whatsapp": {
+        "title": "WhatsApp",
+        "username": "Agent OJ",
+        "button": "Conectar"
+      },
+      "telegram": {
+        "title": "Telegram",
+        "username": "@Agent_OJ",
+        "button": "Conectar"
+      }
+    },
+    "additional": {
+      "title": "Información Adicional",
+      "website": "Sitio Web: Sitio Web Personal",
+      "timezone": "Zona Horaria: Asia/Jerusalén",
+      "citizenship": "Nacionalidad: Israelí"
+    }
+  },
+  "career": {
+    "title": "Carrera",
+    "subtitle": "Mi viaje profesional y experiencia",
+    "description": "Mi viaje profesional",
+    "experience": "Tengo experiencia práctica en desarrollo full-stack, gestión de equipos y mejora de procesos en empresas líderes de tecnología y seguros.",
+    "keyAchievements": "Logros Clave y Responsabilidades",
+    "interestedInLearning": "¿Interesado en Explorar Más?",
+    "checkOutResume": "Revisa mi currículum detallado o ponte en contacto para discutir oportunidades y colaboraciones.",
+    "viewResume": "Ver Currículum",
+    "experiences": [
+      {
+        "role": "Ingeniero FullStack",
+        "time": "2024 - 2025",
+        "company": "Abra Technologies, Israel",
+        "details": [
+          "Desarrollo de Plataforma Full-Stack - Desarrollé y mantuve una plataforma integral que agrega y procesa datos críticos del mercado de agencias gubernamentales, implementando APIs RESTful y procesamiento de datos en tiempo real usando Next.js, tRPC y PostgreSQL, resultando en 40% de mejora en eficiencia de procesamiento de datos",
+          "Arquitectura de Biblioteca de Componentes - Diseñé e implementé una biblioteca de componentes UI modular y reutilizable usando Storybook y TypeScript, reduciendo el tiempo de desarrollo en 30% y mejorando la consistencia entre aplicaciones mientras mantenía 95% de cobertura de código a través de pruebas integrales",
+          "Innovación UI/UX - Colaboré con equipos de diseño para crear interfaces intuitivas usando Material-UI y Framer Motion, aumentando el compromiso del usuario en 25% y reduciendo tickets de soporte en 35% a través de mejor experiencia de usuario",
+          "Optimización Backend - Desarrollé algoritmos eficientes de procesamiento de datos y consultas de base de datos, mejorando el rendimiento del sistema en 45% y reduciendo tiempos de respuesta de API de 800ms a 300ms promedio",
+          "Stack Técnico: Next.js, tRPC, PayloadCMS, Storybook, Jest, Vitest, React, TypeScript, PostgreSQL, APIs REST, Microservicios"
+        ]
+      },
+      {
+        "role": "Especialista en Desarrollo de Constitución Empresarial",
+        "time": "2023 - 2024",
+        "company": "Compañía de Seguros Menora Mivtachim, Israel",
+        "details": [
+          "Arquitectura de Sistemas - Arquitecturé y mantuve el sistema de constitución empresarial gestionando 50,000+ reglas y regulaciones de pólizas, implementando estrategias de optimización de base de datos que mejoraron el rendimiento de consultas en 60% y la confiabilidad del sistema en 90%",
+          "Liderazgo de Equipo - Mentoré y entrené 8+ nuevos desarrolladores, reduciendo el tiempo de incorporación de 6 semanas a 3 semanas y mejorando la productividad del equipo en 40% a través de programas de entrenamiento estructurados y procesos de revisión de código",
+          "Innovación de Productos - Lideré el desarrollo de 12+ nuevos productos de seguros usando prácticas de desarrollo modernas, resultando en 30% mayor tasa de adquisición de clientes y 25% mejora en tiempo de llegada al mercado",
+          "Modernización de Sistemas Legacy - Migré exitosamente componentes críticos de un sistema monolítico de 40 años a arquitectura moderna usando Java y C#, mejorando el rendimiento del sistema en 70% y reduciendo costos de mantenimiento en 50%"
+        ]
+      },
+      {
+        "role": "Representante Senior de Servicio al Cliente",
+        "time": "2021 - 2023",
+        "company": "Compañía de Seguros Menora Mivtachim, Israel",
+        "details": [
+          "Excelencia en Experiencia del Cliente - Logré una tasa de satisfacción del cliente del 95% mientras manejaba consultas y quejas complejas de seguros, implementando mejoras de procesos que redujeron el tiempo promedio de manejo en 25% y mejoraron la eficiencia del equipo en 35%",
+          "Mejora de Procesos - Desarrollé e implementé nuevos protocolos de flujo de trabajo usando análisis de datos y feedback del cliente, resultando en 25% de reducción en tiempo promedio de manejo y 35% de mejora en eficiencia del equipo",
+          "Desarrollo de Equipo - Entrené y mentoré 10+ nuevos miembros del equipo, resultando en 35% de reducción en tiempo de entrenamiento y mejor calidad de servicio a través de programas de incorporación estructurados y sistemas de feedback continuo",
+          "Colaboración Interfuncional - Trabajé con múltiples departamentos incluyendo TI y desarrollo de productos para resolver problemas complejos de clientes, mejorando el tiempo de resolución en 30% y puntuaciones de satisfacción del cliente en 20%"
+        ]
+      },
+      {
+        "role": "Coordinador Senior de Consultas Públicas",
+        "time": "2020 - 2021",
+        "company": "HOT Telecomunicaciones, Israel",
+        "details": [
+          "Excelencia en Servicio al Cliente - Mantuve una tasa de satisfacción del cliente del 90% mientras manejaba consultas de alto volumen (200+ diarias), implementando optimizaciones de flujo de trabajo que redujeron el tiempo de respuesta en 35% y mejoraron la productividad del equipo en 25%",
+          "Optimización de Procesos - Implementé nuevos protocolos de flujo de trabajo y herramientas de servicio al cliente, resultando en 35% de reducción en tiempo de respuesta y 25% de mejora en productividad del equipo a través de análisis sistemático de procesos y mejora continua",
+          "Liderazgo de Equipo - Entrené y mentoré exitosamente 15+ miembros del equipo, mejorando el rendimiento general del equipo en 30% a través de programas de entrenamiento estructurados y sistemas de monitoreo de rendimiento",
+          "Integración de Sistemas - Colaboré con el departamento de TI para implementar nuevas herramientas de servicio al cliente y sistemas CRM, resultando en 40% de mejora en tiempo de resolución de casos y 25% de aumento en puntuaciones de satisfacción del cliente"
+        ]
+      }
+    ]
+  },
+  "resume": {
+    "title": "Currículum",
+    "description": "Mi experiencia profesional y habilidades",
+    "networkingSummary": "Descarga mi currículum para aprender más sobre mi experiencia",
+    "experience": "Soy un Ingeniero FullStack con 5+ años de experiencia en desarrollo web full-stack, arquitectura de sistemas escalables y tecnologías modernas. Tengo un historial comprobado en el desarrollo de aplicaciones full-stack usando React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB y arquitectura de microservicios. Tengo una sólida experiencia en la industria de seguros, desde servicio al cliente hasta desarrollo de sistemas centrales. Tengo experiencia en mentoría de equipos, mejora de procesos y apoyo al cambio y crecimiento organizacional. Tengo fuertes habilidades de resolución de problemas enfocadas en diseño de sistemas y optimización. Estoy comprometido con el aprendizaje continuo y crecimiento profesional en desarrollo full-stack.",
+    "professionalSummary": "Resumen Profesional",
+    "viewCode": "Ver Código",
+    "letsBuildTogether": "Construyamos Algo Increíble Juntos",
+    "readyToDiscuss": "¿Listo para discutir mi próximo proyecto u oportunidad?",
+    "getInTouch": "Ponte en Contacto",
+    "templateSelector": {
+      "title": "Elige Mi Estilo de Currículum",
+      "subtitle": "Selecciona de mi colección de plantillas diseñadas profesionalmente",
+      "templateNames": {
+        "modern": "Moderno",
+        "elegant": "Elegante",
+        "tech": "Tecnológico",
+        "creative": "Creativo",
+        "minimal": "Minimalista",
+        "teal": "Verde Azulado",
+        "indigo": "Índigo",
+        "rose": "Rosa",
+        "corporate": "Corporativo",
+        "startup": "Startup",
+        "academic": "Académico"
+      }
+    },
+    "languageSelector": {
+      "title": "Elige Idioma del Currículum",
+      "description": "Selecciona mi idioma preferido para el currículum PDF. El contenido se traducirá automáticamente según mi selección.",
+      "selectedLanguage": "El currículum se generará en",
+      "generating": "Generando PDF...",
+      "download": "Descargar Currículum",
+      "downloadDescription": "El PDF incluirá toda mi experiencia profesional, habilidades y proyectos en",
+      "documentGeneration": {
+        "title": "Opciones de Generación de Documentos",
+        "selectTypes": "Seleccionar Tipos de Documentos",
+        "condensedResume": "Currículum Condensado",
+        "technicalPortfolio": "Portafolio Técnico",
+
+        "portfolioCustomization": "Personalización del Portafolio",
+        "includeCodeExamples": "Incluir Ejemplos de Código",
+        "includeTechnicalChallenges": "Incluir Desafíos Técnicos",
+        "includeArchitectureDetails": "Incluir Detalles de Arquitectura",
+        "customTitle": "Título Personalizado (Opcional)",
+        "customDescription": "Descripción Personalizada (Opcional)",
+        "generateDocuments": "Generar Documentos",
+        "generatingDocuments": "Generando Documentos...",
+        "willCreateSeparate": "Creará archivos PDF separados para cada tipo de documento"
+      }
+    }
+  },
+  "skills": {
+    "title": "Experiencia Técnica",
+    "categories": {
+      "technical": {
+        "title": "Habilidades Técnicas",
+        "skills": [
+          {
+            "name": "Desarrollo Full-Stack",
+            "level": 95,
+            "technologies": [
+              "React",
+              "Next.js",
+              "TypeScript",
+              "JavaScript",
+              "Node.js",
+              "HTML5",
+              "CSS3",
+              "Material-UI",
+              "Tailwind CSS",
+              "Framer Motion"
+            ]
+          },
+          {
+            "name": "Desarrollo Backend",
+            "level": 95,
+            "technologies": [
+              "Node.js",
+              "Express.js",
+              "tRPC",
+              "Drizzle ORM",
+              "PostgreSQL",
+              "MongoDB",
+              "APIs REST",
+              "GraphQL",
+              "Desarrollo de APIs"
+            ]
+          },
+          {
+            "name": "Arquitectura de Sistemas",
+            "level": 90,
+            "technologies": [
+              "Microservicios",
+              "Sistemas Monolíticos",
+              "Diseño de APIs",
+              "Integración de Sistemas",
+              "Optimización de Rendimiento",
+              "Arquitectura Escalable"
+            ]
+          },
+          {
+            "name": "Gestión de Bases de Datos",
+            "level": 90,
+            "technologies": [
+              "PostgreSQL",
+              "MongoDB",
+              "Modelado de Datos",
+              "Optimización de Consultas",
+              "Diseño de Bases de Datos",
+              "Arquitectura de Datos"
+            ]
+          },
+          {
+            "name": "Tecnologías en la Nube",
+            "level": 85,
+            "technologies": [
+              "AWS",
+              "Vercel",
+              "Docker",
+              "CI/CD",
+              "Despliegue",
+              "Infraestructura en la Nube"
+            ]
+          },
+          {
+            "name": "DevOps y CI/CD",
+            "level": 80,
+            "technologies": [
+              "Git",
+              "Docker",
+              "Jest",
+              "Vitest",
+              "Storybook",
+              "Pruebas",
+              "Integración Continua"
+            ]
+          }
+        ]
+      },
+      "soft": {
+        "title": "Habilidades Blandas",
+        "skills": [
+          {
+            "name": "Liderazgo",
+            "level": 90,
+            "description": "Gestión de equipos, mentoría y coordinación de proyectos"
+          },
+          {
+            "name": "Resolución de Problemas",
+            "level": 95,
+            "description": "Pensamiento analítico y soluciones creativas"
+          },
+          {
+            "name": "Comunicación",
+            "level": 85,
+            "description": "Comunicación técnica y no técnica con partes interesadas"
+          },
+          {
+            "name": "Adaptabilidad",
+            "level": 90,
+            "description": "Aprendizaje rápido y adopción de tecnología"
+          }
+        ]
+      }
+    }
+  },
+  "languages": {
+    "title": "Idiomas",
+    "subtitle": "Mis idiomas de programación y hablados",
+    "programming": [
+      { "name": "TypeScript", "level": "Avanzado" },
+      { "name": "JavaScript", "level": "Avanzado" },
+      { "name": "Java", "level": "Intermedio" },
+      { "name": "C#", "level": "Intermedio" },
+      { "name": "Python", "level": "Novato" }
+    ],
+    "spoken": [
+      { "name": "Hebreo", "level": "Nativo" },
+      { "name": "Inglés", "level": "Profesional" },
+      { "name": "Español", "level": "Novato" }
+    ]
+  },
+  "additionalActivities": "Soy el fundador de una comunidad en línea que promueve el pensamiento crítico y racional y debates abiertos. Estoy involucrado en oratoria pública y transmisiones en vivo sobre temas relacionados con ciencias duras, ciencias blandas, pensamiento racional y tecnología. Soy un mago aficionado entusiasta, usando habilidades creativas para involucrar audiencias y fomentar la curiosidad.",
+  "footer": {
+    "title": "Acerca de",
+    "children": "Soy un Ingeniero FullStack construyendo sistemas escalables y experiencias web modernas con arquitectura limpia y soluciones prácticas.",
+    "linksTitle": "Enlaces Rápidos",
+    "links": [
+      { "label": "Inicio", "href": "/" },
+      { "label": "Carrera", "href": "/career" },
+      { "label": "Currículum", "href": "/resume" },
+      { "label": "Blog", "href": "/blog" },
+      { "label": "Contacto", "href": "/contact" },
+      { "label": "Ejemplos", "href": "/examples" }
+    ],
+    "socialTitle": "Social",
+    "social": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/Omri-Jukin",
+        "icon": "GitHub"
+      },
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/omri-jukin/",
+        "icon": "LinkedIn"
+      },
+      {
+        "label": "Telegram",
+        "href": "https://t.me/Agent_OJ",
+        "icon": "Telegram"
+      }
+    ],
+    "contactTitle": "Contacto",
+    "contact": [
+      {
+        "label": "Correo",
+        "href": "mailto:omrijukin@gmail.com",
+        "icon": "Correo"
+      },
+      {
+        "label": "Teléfono",
+        "href": "tel:+9720523344064",
+        "icon": "Teléfono"
+      },
+      {
+        "label": "WhatsApp",
+        "href": "https://wa.me/972523344064",
+        "icon": "WhatsApp"
+      }
+    ],
+    "copyright": "Omri Jukin. Todos los derechos reservados."
+  }
+}

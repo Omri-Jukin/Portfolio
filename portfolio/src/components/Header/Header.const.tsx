@@ -1,0 +1,32 @@
+import {
+  LAYOUT_TYPES as CENTRALIZED_LAYOUT_TYPES,
+  NAVIGATION_ITEMS as CENTRALIZED_NAVIGATION_ITEMS,
+  LAYOUT_DIMENSIONS,
+  RESPONSIVE_BREAKPOINTS,
+  ANIMATION_DURATIONS,
+  THEME_CONFIG as CENTRALIZED_THEME_CONFIG,
+  ACCESSIBILITY_LABELS,
+} from "#/lib";
+
+// Re-export centralized layout types for backward compatibility
+export const LAYOUT_TYPES = CENTRALIZED_LAYOUT_TYPES;
+
+// Re-export centralized navigation items
+export const NAVIGATION_ITEMS = CENTRALIZED_NAVIGATION_ITEMS;
+
+// Header configuration using centralized values
+export const HEADER_CONFIG = {
+  HEIGHT: LAYOUT_DIMENSIONS.HEADER_HEIGHT,
+  MOBILE_BREAKPOINT: RESPONSIVE_BREAKPOINTS.MOBILE,
+  ANIMATION_DURATION: ANIMATION_DURATIONS.FAST,
+} as const;
+
+// Logo configuration
+export const LOGO_CONFIG = {
+  ALT_TEXT: ACCESSIBILITY_LABELS.PORTFOLIO_LOGO,
+  DEFAULT_SIZE: 40,
+  MOBILE_SIZE: 32,
+} as const;
+
+// Re-export centralized theme config
+export const THEME_CONFIG = CENTRALIZED_THEME_CONFIG;
