@@ -2,7 +2,7 @@
 
 # dependencies
 /node_modules
-/portfolio/node_modules
+/portfolio
 /.pnp
 .pnp.js
 .yarn/install-state.gz
@@ -62,8 +62,8 @@ next-env.d.ts
 /scripts/migrations/*
 
 # roadmap
-# /roadmap/*
-# !/roadmap/.gitkeep
+/roadmap/*
+!/roadmap/.gitkeep
 
 # cursor
 .cursor/rules/*

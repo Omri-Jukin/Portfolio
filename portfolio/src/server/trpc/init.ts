@@ -1,21 +1,42 @@
-import { initTRPC, TRPCError } from "@trpc/server";
+import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
-import type { Context } from "./context";
 
-const t = initTRPC.context<Context>().create({ transformer: superjson });
+import { type createTRPCContext } from "./context";
 
-const isAuthed = t.middleware(({ ctx, next }) => {
-  if (!ctx.user || !ctx.user.approved)
-    throw new TRPCError({ code: "UNAUTHORIZED" });
-  return next({ ctx: { ...ctx, user: ctx.user! } });
+/**
+ * Initialization
+ *
+ * This is where the tRPC API is initialized, connecting the context and transformer. We also parse
+ * ZodErrors so that you get typesafety on the frontend if your procedure fails due to
+ * validation errors on the backend.
+ */
+const t = initTRPC.context<typeof createTRPCContext>().create({
+  transformer: superjson,
+  errorFormatter({ shape, error }) {
+    return {
+      ...shape,
+      data: {
+        ...shape.data,
+        zodError: error.cause instanceof Error ? error.cause : null,
+      },
+    };
+  },
 });
 
-const isAdmin = t.middleware(({ ctx, next }) => {
-  if (ctx.user?.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
-  return next();
-});
-
-export const router = t.router;
+/**
+ * Export reusable router and procedure helpers
+ * that can be used across the router
+ */
+export const createTRPCRouter = t.router;
 export const publicProcedure = t.procedure;
-export const authedProcedure = t.procedure.use(isAuthed);
-export const adminProcedure = t.procedure.use(isAuthed).use(isAdmin);
+export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
+  if (!ctx.session || !ctx.session.user) {
+    throw new Error("UNAUTHORIZED");
+  }
+  return next({
+    ctx: {
+      // infers the `session` as non-nullable
+      session: { ...ctx.session, user: ctx.session.user },
+    },
+  });
+});

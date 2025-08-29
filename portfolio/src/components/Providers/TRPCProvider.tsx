@@ -9,7 +9,7 @@ import superjson from "superjson";
 export default function TRPCProvider({
   children,
 }: {
-  children: React.JSX.Element | React.JSX.Element[];
+  children: React.ReactNode;
 }) {
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>

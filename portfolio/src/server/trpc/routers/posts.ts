@@ -1,179 +1,175 @@
 import { z } from "zod";
-import { router, publicProcedure } from "../init";
+import { createTRPCRouter, publicProcedure, protectedProcedure } from "../init";
 
-export const postsRouter = router({
-  list: publicProcedure
+const posts = [
+  {
+    id: "1",
+    title: "Building Scalable React Applications",
+    slug: "building-scalable-react-applications",
+    excerpt:
+      "Learn the best practices for building large-scale React applications that maintain performance and developer experience.",
+    content: "Full blog post content here...",
+    author: "Omri Jukin",
+    publishedAt: new Date("2024-06-15"),
+    readingTime: "8 min read",
+    category: "Development",
+    tags: ["React", "Performance", "Architecture"],
+    featured: true,
+    published: true,
+  },
+  {
+    id: "2",
+    title: "The Future of Full-Stack Development",
+    slug: "future-of-fullstack-development",
+    excerpt:
+      "Exploring emerging trends and technologies that will shape the future of full-stack development.",
+    content: "Full blog post content here...",
+    author: "Omri Jukin",
+    publishedAt: new Date("2024-05-20"),
+    readingTime: "12 min read",
+    category: "Technology",
+    tags: ["Full-Stack", "Trends", "Innovation"],
+    featured: false,
+    published: true,
+  },
+  {
+    id: "3",
+    title: "Optimizing Database Performance",
+    slug: "optimizing-database-performance",
+    excerpt:
+      "Practical strategies for improving database performance in production environments.",
+    content: "Full blog post content here...",
+    author: "Omri Jukin",
+    publishedAt: new Date("2024-04-10"),
+    readingTime: "10 min read",
+    category: "Database",
+    tags: ["Database", "Performance", "Optimization"],
+    featured: false,
+    published: true,
+  },
+];
+
+export const postsRouter = createTRPCRouter({
+  getAll: publicProcedure
     .input(
-      z
-        .object({
-          category: z.string().optional(),
-          tag: z.string().optional(),
-          published: z.boolean().optional(),
-          limit: z.number().min(1).max(50).default(12),
-          offset: z.number().min(0).default(0),
-        })
-        .optional()
+      z.object({
+        limit: z.number().min(1).max(100).default(10),
+        cursor: z.string().nullish(),
+        category: z.string().optional(),
+        published: z.boolean().default(true),
+      })
     )
     .query(async ({ input }) => {
-      // For now, return mock data
-      // Later this will integrate with Payload CMS
-      const mockPosts = [
-        {
-          id: "1",
-          title: "Building a Modern Portfolio with Next.js 15",
-          slug: "building-modern-portfolio-nextjs-15",
-          excerpt:
-            "Learn how to create a stunning portfolio website using the latest Next.js features and modern web technologies.",
-          content: "Full blog post content here...",
-          publishedAt: "2024-01-15T10:00:00Z",
-          author: "Omri Jukin",
-          category: "Web Development",
-          tags: ["Next.js", "React", "Portfolio", "Web Development"],
-          readTime: "5 min read",
-          featured: true,
-        },
-        {
-          id: "2",
-          title: "The Future of Full-Stack Development",
-          slug: "future-full-stack-development",
-          excerpt:
-            "Exploring emerging trends and technologies that will shape the future of full-stack development.",
-          content: "Full blog post content here...",
-          publishedAt: "2024-01-10T14:30:00Z",
-          author: "Omri Jukin",
-          category: "Technology",
-          tags: ["Full-Stack", "Technology", "Trends", "Development"],
-          readTime: "8 min read",
-          featured: false,
-        },
-        {
-          id: "3",
-          title: "Optimizing React Performance in 2024",
-          slug: "optimizing-react-performance-2024",
-          excerpt:
-            "Advanced techniques and best practices for optimizing React applications in the modern web landscape.",
-          content: "Full blog post content here...",
-          publishedAt: "2024-01-05T09:15:00Z",
-          author: "Omri Jukin",
-          category: "Frontend",
-          tags: ["React", "Performance", "Optimization", "Frontend"],
-          readTime: "6 min read",
-          featured: true,
-        },
-      ];
+      // TODO: Implement actual database query
 
-      let filteredPosts = mockPosts;
+      let filteredPosts = posts;
 
-      if (input?.category) {
+      if (input.published) {
+        filteredPosts = filteredPosts.filter((post) => post.published);
+      }
+
+      if (input.category) {
         filteredPosts = filteredPosts.filter(
-          (p) => p.category === input.category
+          (post) => post.category === input.category
         );
       }
-
-      if (input?.tag) {
-        filteredPosts = filteredPosts.filter((p) =>
-          p.tags.includes(input.tag!)
-        );
-      }
-
-      if (input?.published !== undefined) {
-        filteredPosts = filteredPosts.filter((p) => p.publishedAt !== null);
-      }
-
-      // Apply pagination
-      const start = input?.offset ?? 0;
-      const end = start + (input?.limit ?? 12);
 
       return {
-        posts: filteredPosts.slice(start, end),
-        total: filteredPosts.length,
-        hasMore: end < filteredPosts.length,
+        items: filteredPosts.slice(0, input.limit),
+        nextCursor: filteredPosts.length > input.limit ? "2" : null,
       };
     }),
 
-  bySlug: publicProcedure
+  getBySlug: publicProcedure
     .input(z.object({ slug: z.string() }))
     .query(async ({ input }) => {
-      // Mock data for now
-      const mockPosts = [
+      // TODO: Implement actual database query
+      const posts = [
         {
           id: "1",
-          title: "Building a Modern Portfolio with Next.js 15",
-          slug: "building-modern-portfolio-nextjs-15",
+          title: "Building Scalable React Applications",
+          slug: "building-scalable-react-applications",
           excerpt:
-            "Learn how to create a stunning portfolio website using the latest Next.js features and modern web technologies.",
+            "Learn the best practices for building large-scale React applications that maintain performance and developer experience.",
           content: "Full blog post content here...",
-          publishedAt: "2024-01-15T10:00:00Z",
           author: "Omri Jukin",
-          category: "Web Development",
-          tags: ["Next.js", "React", "Portfolio", "Web Development"],
-          readTime: "5 min read",
+          publishedAt: new Date("2024-06-15"),
+          readingTime: "8 min read",
+          category: "Development",
+          tags: ["React", "Performance", "Architecture"],
           featured: true,
-          seo: {
-            title: "Building a Modern Portfolio with Next.js 15",
-            description:
-              "Learn how to create a stunning portfolio website using the latest Next.js features and modern web technologies.",
-          },
+          published: true,
         },
       ];
 
-      return mockPosts.find((p) => p.slug === input.slug) ?? null;
+      const post = posts.find((p) => p.slug === input.slug);
+
+      if (!post) {
+        throw new Error("Post not found");
+      }
+
+      return post;
     }),
 
-  categories: publicProcedure.query(async () => {
-    // Return unique post categories
-    return [
-      "Web Development",
-      "Technology",
-      "Frontend",
-      "Backend",
-      "DevOps",
-      "Design",
-    ];
-  }),
+  create: protectedProcedure
+    .input(
+      z.object({
+        title: z.string().min(1),
+        slug: z.string().min(1),
+        excerpt: z.string().min(1),
+        content: z.string().min(1),
+        author: z.string().min(1),
+        category: z.string().min(1),
+        tags: z.array(z.string()),
+        featured: z.boolean().default(false),
+        published: z.boolean().default(false),
+      })
+    )
+    .mutation(async ({ input }) => {
+      // TODO: Implement actual database creation
+      console.log("Creating post:", input);
 
-  tags: publicProcedure.query(async () => {
-    // Return unique post tags
-    return [
-      "Next.js",
-      "React",
-      "TypeScript",
-      "Node.js",
-      "Portfolio",
-      "Web Development",
-      "Full-Stack",
-      "Technology",
-      "Trends",
-      "Development",
-      "Performance",
-      "Optimization",
-      "Frontend",
-    ];
-  }),
+      return {
+        id: Date.now().toString(),
+        ...input,
+        publishedAt: input.published ? new Date() : null,
+        readingTime: "5 min read", // TODO: Calculate actual reading time
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+    }),
 
-  featured: publicProcedure.query(async () => {
-    // Return featured posts
-    const mockPosts = [
-      {
-        id: "1",
-        title: "Building a Modern Portfolio with Next.js 15",
-        slug: "building-modern-portfolio-nextjs-15",
-        excerpt:
-          "Learn how to create a stunning portfolio website using the latest Next.js features and modern web technologies.",
-        publishedAt: "2024-01-15T10:00:00Z",
-        readTime: "5 min read",
-      },
-      {
-        id: "3",
-        title: "Optimizing React Performance in 2024",
-        slug: "optimizing-react-performance-2024",
-        excerpt:
-          "Advanced techniques and best practices for optimizing React applications in the modern web landscape.",
-        publishedAt: "2024-01-05T09:15:00Z",
-        readTime: "6 min read",
-      },
-    ];
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        title: z.string().min(1).optional(),
+        slug: z.string().min(1).optional(),
+        excerpt: z.string().min(1).optional(),
+        content: z.string().min(1).optional(),
+        author: z.string().min(1).optional(),
+        category: z.string().min(1).optional(),
+        tags: z.array(z.string()).optional(),
+        featured: z.boolean().optional(),
+        published: z.boolean().optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      // TODO: Implement actual database update
+      console.log("Updating post:", input);
 
-    return mockPosts;
-  }),
+      return {
+        ...input,
+        updatedAt: new Date(),
+      };
+    }),
+
+  delete: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input }) => {
+      // TODO: Implement actual database deletion
+      console.log("Deleting post:", input.id);
+
+      return { success: true };
+    }),
 });
