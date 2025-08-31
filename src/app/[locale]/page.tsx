@@ -13,7 +13,7 @@ import Certifications from "~/Certifications";
 import Projects from "~/Projects";
 import Contact from "~/Contact";
 import SkillShowcase from "~/SkillShowcase";
-import Testimonials from "~/Testimonials";
+// import Testimonials from "~/Testimonials";
 import { ResponsiveBackground } from "#/Components/ScrollingSections";
 import profileSrc from "#/public/Watercolor_Profile_Picture.png";
 
@@ -131,9 +131,9 @@ export default function HomePage() {
         {/* Services Section */}
         <Services onServiceClick={handleServiceClick} />
 
-        {/* Testimonials Section */}
+        {/* Testimonials Section 
         <Testimonials />
-
+*/}
         {/* Career Section */}
         <Career onCareerClick={handleCareerClick} />
 
