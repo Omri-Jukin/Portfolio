@@ -111,16 +111,29 @@ export type UpdateTestimonial = Partial<
 
 export type UserRole = "admin" | "visitor";
 export type UserStatus = "pending" | "approved" | "rejected";
-export type PostStatus = "draft" | "published";
-export type InquiryStatus = "open" | "closed";
+export type PostStatus =
+  | "draft"
+  | "published"
+  | "archived"
+  | "scheduled"
+  | "deleted";
+export type InquiryStatus = "open" | "pending" | "closed" | "deleted";
 export type CertificationCategory =
   | "technical"
+  | "programming"
   | "cloud"
   | "security"
   | "project-management"
+  | "cybersecurity"
   | "design"
   | "other";
-export type CertificationStatus = "active" | "expired" | "revoked";
+export type CertificationStatus =
+  | "active"
+  | "completed"
+  | "in-progress"
+  | "planned"
+  | "expired"
+  | "revoked";
 export type EmploymentType =
   | "full-time"
   | "part-time"
@@ -131,7 +144,9 @@ export type ProjectStatus =
   | "completed"
   | "in-progress"
   | "archived"
-  | "concept";
+  | "concept"
+  | "deleted"
+  | "cancelled";
 export type ProjectType =
   | "professional"
   | "personal"
@@ -144,7 +159,8 @@ export type SkillCategory =
   | "tool"
   | "framework"
   | "database"
-  | "cloud";
+  | "cloud"
+  | "cybersecurity";
 export type ProficiencyLevel =
   | "beginner"
   | "intermediate"
@@ -161,14 +177,42 @@ export type EducationStatus =
   | "completed"
   | "in-progress"
   | "transferred"
-  | "dropped";
+  | "dropped"
+  | "deleted";
 export type ServiceCategory =
   | "development"
   | "consulting"
   | "design"
   | "training"
-  | "maintenance";
-export type ServiceType = "hourly" | "project" | "retainer" | "subscription";
-export type PricingType = "fixed" | "hourly" | "range";
-export type PersonalInfoSection = "bio" | "contact" | "social" | "preferences";
-export type DataType = "text" | "email" | "url" | "phone" | "json";
+  | "maintenance"
+  | "deleted"
+  | "cancelled";
+export type ServiceType =
+  | "hourly"
+  | "project"
+  | "retainer"
+  | "subscription"
+  | "deleted"
+  | "cancelled";
+export type PricingType =
+  | "fixed"
+  | "hourly"
+  | "range"
+  | "monthly"
+  | "deleted"
+  | "cancelled";
+export type PersonalInfoSection =
+  | "bio"
+  | "contact"
+  | "social"
+  | "preferences"
+  | "deleted"
+  | "cancelled";
+export type DataType =
+  | "text"
+  | "email"
+  | "url"
+  | "phone"
+  | "json"
+  | "deleted"
+  | "cancelled";

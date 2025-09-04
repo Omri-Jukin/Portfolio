@@ -21,6 +21,9 @@ import {
   ProjectArchitecture,
   ProjectProblem,
   ProjectSolution,
+  TCodeExamples,
+  TTechnicalChallenges,
+  UserSocialLinks,
 } from "#/lib/types";
 
 // Users table - minimal for portfolio admin
@@ -36,11 +39,31 @@ export const users = sqliteTable("users", {
     .notNull()
     .$defaultFn(() => new Date()),
   updatedAt: integer("updated_at", { mode: "timestamp" }),
+  lastLogin: integer("last_login", { mode: "timestamp" }),
+  accessToken: text("access_token"),
+  refreshToken: text("refresh_token"),
+  sessionId: text("session_id"),
+  avatar: text("avatar"),
+  bio: text("bio"),
+  location: text("location"),
+  website: text("website"),
+  socialLinks: text("social_links", { mode: "json" }).$type<UserSocialLinks>(),
 });
 
 // Define indexes separately
 export const usersEmailIdx = index("email_idx").on(users.email);
 export const usersStatusIdx = index("status_idx").on(users.status);
+export const usersLastLoginIdx = index("last_login_idx").on(users.lastLogin);
+export const usersAccessTokenIdx = index("access_token_idx").on(
+  users.accessToken
+);
+export const usersRefreshTokenIdx = index("refresh_token_idx").on(
+  users.refreshToken
+);
+export const usersSessionIdIdx = index("session_id_idx").on(users.sessionId);
+export const usersSocialLinksIdx = index("social_links_idx").on(
+  users.socialLinks
+);
 
 // Blog posts for portfolio content
 export const blogPosts = sqliteTable("blog_posts", {
@@ -104,26 +127,20 @@ export const certifications = sqliteTable("certifications", {
     .$type<CertificationStatus>()
     .notNull()
     .default("active"),
-
   // Skills as JSON array
   skills: text("skills", { mode: "json" }).$type<string[]>().notNull(),
-
   // Dates
   issueDate: integer("issue_date", { mode: "timestamp" }).notNull(),
   expiryDate: integer("expiry_date", { mode: "timestamp" }),
-
   // Verification details
   credentialId: text("credential_id"),
   verificationUrl: text("verification_url"),
-
   // Visual
   icon: text("icon"),
   color: text("color"), // For category color override
-
   // Display order and visibility
   displayOrder: integer("display_order").notNull().default(0),
   isVisible: integer("is_visible", { mode: "boolean" }).notNull().default(true),
-
   // Multi-language support
   nameTranslations: text("name_translations", { mode: "json" }).$type<
     Record<string, string>
@@ -134,7 +151,6 @@ export const certifications = sqliteTable("certifications", {
   issuerTranslations: text("issuer_translations", { mode: "json" }).$type<
     Record<string, string>
   >(),
-
   // Metadata
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
@@ -259,23 +275,11 @@ export const projects = sqliteTable("projects", {
     .notNull()
     .default([]),
   technicalChallenges: text("technical_challenges", { mode: "json" })
-    .$type<
-      {
-        challenge: string;
-        solution: string;
-      }[]
-    >()
+    .$type<TTechnicalChallenges>()
     .notNull()
     .default([]),
   codeExamples: text("code_examples", { mode: "json" })
-    .$type<
-      {
-        title: string;
-        language: string;
-        code: string;
-        explanation: string;
-      }[]
-    >()
+    .$type<TCodeExamples>()
     .notNull()
     .default([]),
   teamSize: integer("team_size"),
@@ -290,14 +294,12 @@ export const projects = sqliteTable("projects", {
   isOpenSource: integer("is_open_source", { mode: "boolean" })
     .notNull()
     .default(false),
-
   // Problem-solving details
   problem: text("problem", { mode: "json" }).$type<ProjectProblem>(),
   solution: text("solution", { mode: "json" }).$type<ProjectSolution>(),
   architecture: text("architecture", {
     mode: "json",
   }).$type<ProjectArchitecture>(),
-
   // Multi-language support
   titleTranslations: text("title_translations", { mode: "json" }).$type<
     Record<string, string>

@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "Omri Jukin",
-    "description": "Ingeniero FullStack | Desarrollo Full-Stack · Desarrollo Web Full-Stack · Ingeniería de Software Full-Stack · React · Node.js · TypeScript · JavaScript · Next.js · tRPC · PostgreSQL · MongoDB · Arquitectura de Microservicios · Desarrollo de APIs · APIs REST · GraphQL · Despliegue en la Nube · DevOps · CI/CD"
+    "title": "Omri Jukin - Desarrollador Full Stack",
+    "description": "Desarrollador Full Stack especializado en React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB y arquitectura de microservicios"
   },
   "login": {
     "title": "Inicio de Sesión de Administrador",
@@ -628,7 +628,196 @@
       { "name": "Español", "level": "Novato" }
     ]
   },
-  "additionalActivities": "Soy el fundador de una comunidad en línea que promueve el pensamiento crítico y racional y debates abiertos. Estoy involucrado en oratoria pública y transmisiones en vivo sobre temas relacionados con ciencias duras, ciencias blandas, pensamiento racional y tecnología. Soy un mago aficionado entusiasta, usando habilidades creativas para involucrar audiencias y fomentar la curiosidad.",
+  "resume": {
+    "title": "Currículum",
+    "description": "Mi experiencia profesional y habilidades",
+    "experience": "Desarrollador Full Stack",
+    "professionalSummary": "Desarrollador Full Stack con 5+ años de experiencia en desarrollo web escalable y tecnologías modernas. Historial comprobado con React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB y microservicios. Fuerte experiencia en el sector de seguros desde servicio hasta desarrollo de sistemas centrales."
+  },
+  "career": {
+    "experiences": [
+      {
+        "role": "Ingeniero Full Stack",
+        "time": "2024–2025",
+        "company": "Abra Technologies, Israel",
+        "details": [
+          "Construí plataforma agregando datos de mercado de fuentes gubernamentales usando Next.js, tRPC y PostgreSQL, mejorando eficiencia de procesamiento en 40%",
+          "Diseñé biblioteca de componentes UI modular con Storybook y TypeScript, reduciendo tiempo de desarrollo en 30% con 95% cobertura de pruebas",
+          "Optimicé algoritmos de procesamiento de datos y consultas de base de datos, mejorando rendimiento del sistema en 45% y reduciendo tiempos de respuesta API a 300ms"
+        ]
+      },
+      {
+        "role": "Especialista en Desarrollo de Constitución Empresarial",
+        "time": "2023–2024",
+        "company": "Menora Mivtachim Insurance Company, Israel",
+        "details": [
+          "Arquitecté sistema de constitución empresarial gestionando 50,000+ reglas de pólizas, mejorando rendimiento de consultas en 60% y confiabilidad del sistema en 90%",
+          "Mentoré 8+ desarrolladores reduciendo incorporación de 6 a 3 semanas, mejorando productividad del equipo en 40% a través de programas de entrenamiento estructurados",
+          "Lideré desarrollo de 12+ productos de seguros usando prácticas modernas, logrando 30% mayor adquisición de clientes y 25% tiempo de comercialización más rápido"
+        ]
+      },
+      {
+        "role": "Representante Senior de Servicio al Cliente",
+        "time": "2021–2023",
+        "company": "Menora Mivtachim Insurance Company, Israel",
+        "details": [
+          "Logré 95% satisfacción del cliente manejando consultas complejas, reduciendo tiempo promedio de manejo en 25% y mejorando eficiencia del equipo en 35%",
+          "Desarrollé protocolos de flujo de trabajo usando análisis de datos y retroalimentación del cliente, resultando en mejoras de procesos y calidad de servicio mejorada",
+          "Entrené 10+ miembros del equipo reduciendo tiempo de entrenamiento en 35% y mejorando calidad de servicio a través de incorporación estructurada y retroalimentación continua"
+        ]
+      }
+    ]
+  },
+  "projects": {
+    "projects": [
+      {
+        "title": "Snow HQ",
+        "description": "CRM empresarial con análisis en tiempo real y flujos de trabajo automatizados - Next.js, tRPC, Drizzle ORM, PostgreSQL",
+        "link": "https://github.com/Omri-Jukin/Snow"
+      },
+      {
+        "title": "Sitio Web de Portafolio",
+        "description": "Portafolio moderno responsivo con i18n, modo oscuro, animaciones - Next.js, TypeScript, Material-UI, Framer Motion",
+        "link": "https://omrijukin.com"
+      },
+      {
+        "title": "ClipWhisperer",
+        "description": "Plataforma de microservicios para procesamiento automatizado de video con narración AI - TypeScript, Node.js, microservicios",
+        "link": "https://github.com/ClipWhisperer"
+      },
+      {
+        "title": "Gestor de Microservicios",
+        "description": "Herramienta CLI para gestión de ecosistema de microservicios con flujos de trabajo automatizados - TypeScript, Node.js, arquitectura CLI",
+        "link": "https://github.com/ClipWhisperer/Utils"
+      }
+    ]
+  },
+  "skills": {
+    "categories": {
+      "technical": {
+        "skills": [
+          {
+            "name": "Desarrollo Full Stack",
+            "level": 95,
+            "technologies": [
+              "React",
+              "Next.js",
+              "TypeScript",
+              "JavaScript",
+              "Node.js",
+              "HTML5",
+              "CSS3",
+              "Material-UI",
+              "Tailwind CSS",
+              "Framer Motion"
+            ]
+          },
+          {
+            "name": "Desarrollo Backend",
+            "level": 95,
+            "technologies": [
+              "Node.js",
+              "Express.js",
+              "tRPC",
+              "Drizzle ORM",
+              "PostgreSQL",
+              "MongoDB",
+              "APIs REST",
+              "GraphQL",
+              "Desarrollo de APIs"
+            ]
+          },
+          {
+            "name": "Arquitectura de Sistemas",
+            "level": 90,
+            "technologies": [
+              "Microservicios",
+              "Sistemas Monolíticos",
+              "Diseño de APIs",
+              "Integración de Sistemas",
+              "Optimización de Rendimiento",
+              "Arquitectura Escalable"
+            ]
+          },
+          {
+            "name": "Gestión de Bases de Datos",
+            "level": 90,
+            "technologies": [
+              "PostgreSQL",
+              "MongoDB",
+              "Modelado de Datos",
+              "Optimización de Consultas",
+              "Diseño de Bases de Datos",
+              "Arquitectura de Datos"
+            ]
+          },
+          {
+            "name": "Tecnologías en la Nube",
+            "level": 85,
+            "technologies": [
+              "AWS",
+              "Vercel",
+              "Docker",
+              "CI/CD",
+              "Despliegue",
+              "Infraestructura en la Nube"
+            ]
+          },
+          {
+            "name": "DevOps y CI/CD",
+            "level": 80,
+            "technologies": [
+              "Git",
+              "Docker",
+              "Jest",
+              "Vitest",
+              "Storybook",
+              "Pruebas",
+              "Integración Continua"
+            ]
+          }
+        ]
+      },
+      "soft": {
+        "skills": [
+          {
+            "name": "Liderazgo",
+            "level": 90,
+            "description": "Gestión de equipos, mentoría y coordinación de proyectos"
+          },
+          {
+            "name": "Resolución de Problemas",
+            "level": 95,
+            "description": "Pensamiento analítico y soluciones creativas"
+          },
+          {
+            "name": "Comunicación",
+            "level": 85,
+            "description": "Comunicación con stakeholders técnicos y no técnicos"
+          },
+          {
+            "name": "Adaptabilidad",
+            "level": 90,
+            "description": "Aprendizaje rápido y adopción de tecnologías"
+          }
+        ]
+      }
+    }
+  },
+  "languages": {
+    "programming": [
+      { "name": "TypeScript", "level": "Avanzado" },
+      { "name": "JavaScript", "level": "Avanzado" },
+      { "name": "SQL", "level": "Avanzado" },
+      { "name": "HTML/CSS", "level": "Avanzado" }
+    ],
+    "spoken": [
+      { "name": "Hebreo", "level": "Nativo" },
+      { "name": "Inglés", "level": "Fluido" },
+      { "name": "Español", "level": "Principiante" }
+    ]
+  },
+  "additionalActivities": "Aprendizaje continuo en desarrollo full stack, contribuyendo a proyectos de código abierto y manteniéndome actualizado con tecnologías web modernas y mejores prácticas.",
   "footer": {
     "title": "Acerca de",
     "children": "Soy un Ingeniero FullStack construyendo sistemas escalables y experiencias web modernas con arquitectura limpia y soluciones prácticas.",

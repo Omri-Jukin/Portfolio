@@ -15,19 +15,24 @@ import { IProject } from "#/lib";
 // Helper function to get database client
 const getDbClient = async () => getDB();
 
-// Helper function to transform DB dates to API dates
-const transformDbToApi = (dbProject: ProjectDB): IProject => ({
-  ...dbProject,
-  startDate: dbProject.startDate.toISOString(),
-  endDate: dbProject.endDate ? dbProject.endDate.toISOString() : null,
-  createdAt: dbProject.createdAt.toISOString(),
-  updatedAt: dbProject.updatedAt ? dbProject.updatedAt.toISOString() : null,
-  problem: dbProject.problem || null,
-  solution: dbProject.solution || null,
-  architecture: dbProject.architecture || null,
-  titleTranslations: dbProject.titleTranslations || null,
-  descriptionTranslations: dbProject.descriptionTranslations || null,
-});
+const transformDbToApi = (dbProject: ProjectDB): IProject => {
+  // Map status to API ProjectStatus, excluding "deleted"
+  const status = dbProject.status === "deleted" ? "archived" : dbProject.status;
+
+  return {
+    ...dbProject,
+    status,
+    startDate: dbProject.startDate.toISOString(),
+    endDate: dbProject.endDate ? dbProject.endDate.toISOString() : null,
+    createdAt: dbProject.createdAt.toISOString(),
+    updatedAt: dbProject.updatedAt ? dbProject.updatedAt.toISOString() : null,
+    problem: dbProject.problem || null,
+    solution: dbProject.solution || null,
+    architecture: dbProject.architecture || null,
+    titleTranslations: dbProject.titleTranslations || null,
+    descriptionTranslations: dbProject.descriptionTranslations || null,
+  };
+};
 
 export class ProjectManager {
   static async getAll(visibleOnly = false): Promise<IProject[]> {

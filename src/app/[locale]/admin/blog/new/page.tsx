@@ -31,7 +31,12 @@ const AdminBlogNew = () => {
     slug: "",
     content: "",
     excerpt: "",
-    status: "draft" as "draft" | "published",
+    status: "draft" as
+      | "draft"
+      | "published"
+      | "archived"
+      | "scheduled"
+      | "deleted",
     tags: [] as string[],
     imageUrl: "",
     imageAlt: "",

@@ -22,6 +22,7 @@ export const CERTIFICATIONS_CONSTANTS = {
     PROJECT_MANAGEMENT: "project-management",
     DESIGN: "design",
     OTHER: "other",
+    CYBERSECURITY: "cybersecurity",
   } as Record<string, CertificationCategory>,
   CATEGORY_COLORS: {
     technical: "#2196F3",
@@ -30,6 +31,7 @@ export const CERTIFICATIONS_CONSTANTS = {
     "project-management": "#4CAF50",
     design: "#9C27B0",
     other: "#607D8B",
+    cybersecurity: "#003366",
   } as Record<CertificationCategory, string>,
   CATEGORY_ICONS: {
     technical: "🔧",
@@ -38,5 +40,6 @@ export const CERTIFICATIONS_CONSTANTS = {
     "project-management": "📊",
     design: "🎨",
     other: "📋",
+    cybersecurity: "🛡️",
   } as Record<CertificationCategory, string>,
 };

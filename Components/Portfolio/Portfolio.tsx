@@ -76,6 +76,8 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
       "in-progress": "warning",
       archived: "default",
       concept: "info",
+      deleted: "error",
+      cancelled: "error",
     };
     return colors[status];
   };

@@ -23,7 +23,38 @@ import GradientButton from "~/Button/Button";
 import { useRouter } from "next/navigation";
 import { GitHub as GitHubIcon } from "@mui/icons-material";
 import ResumeLanguageSelector from "#/Components/ResumeLanguageSelector";
-import type { ResumeTemplate } from "#/lib/utils/pdfGenerator";
+// Define template types that map to the new PDF generator themes
+type ResumeTemplate =
+  | "modern"
+  | "elegant"
+  | "tech"
+  | "creative"
+  | "minimal"
+  | "teal"
+  | "indigo"
+  | "rose"
+  | "corporate"
+  | "startup"
+  | "academic";
+type PDFTheme = "indigo" | "teal" | "rose" | "corporate" | "modern" | "minimal";
+
+// Map ResumeTemplate to PDFTheme
+const mapTemplateToPDFTheme = (template: ResumeTemplate): PDFTheme => {
+  const mapping: Record<ResumeTemplate, PDFTheme> = {
+    modern: "modern",
+    elegant: "minimal",
+    tech: "corporate",
+    creative: "teal",
+    minimal: "minimal",
+    teal: "teal",
+    indigo: "indigo",
+    rose: "rose",
+    corporate: "corporate",
+    startup: "modern",
+    academic: "minimal",
+  };
+  return mapping[template];
+};
 import { extractResumeData } from "#/lib/utils/resumeDataExtractor";
 import { GalaxyCard } from "#/Components";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -93,7 +124,7 @@ export default function ResumePage() {
       const resumeData = extractResumeData(options.language);
 
       // Generate PDF (dynamically import to avoid edge bundling)
-      const { generateResumePDF } = await import("#/lib/utils/pdfGenerator");
+      const { renderResumePDF } = await import("#/lib/utils/pdfGenerator");
 
       // Generate documents based on selected types
       for (const docType of options.documentTypes) {
@@ -107,11 +138,15 @@ export default function ResumePage() {
           filename = `Omri_Jukin_FullStack_Developer_${docType}.pdf`;
         }
 
-        const pdf = (await generateResumePDF(
-          resumeData,
-          options.language,
-          selectedTemplate
-        )) as { save: (filename: string) => void };
+        // Configure render options based on language and template
+        const renderOptions = {
+          rtl: options.language === "he",
+          theme: mapTemplateToPDFTheme(selectedTemplate),
+          maxBulletsPerRole: 3,
+          maxProjects: 4,
+        };
+
+        const pdf = renderResumePDF(resumeData, renderOptions);
 
         // Download the PDF
         pdf.save(filename);
@@ -372,31 +407,21 @@ export default function ResumePage() {
                   modules={[Navigation, Pagination]}
                   spaceBetween={20}
                   slidesPerView={1}
-                  navigation
-                  pagination={{ clickable: true }}
+                  navigation={{
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                  }}
+                  pagination={{
+                    clickable: true,
+                    el: ".swiper-pagination",
+                  }}
                   loop={true}
+                  allowSlideNext={true}
+                  allowSlidePrev={true}
                   centeredSlides={true}
                   grabCursor={true}
                   effect="slide"
                   speed={400}
-                  onSlideChange={(swiper) => {
-                    const templates = [
-                      "modern",
-                      "elegant",
-                      "tech",
-                      "creative",
-                      "minimal",
-                      "teal",
-                      "indigo",
-                      "rose",
-                      "corporate",
-                      "startup",
-                      "academic",
-                    ];
-                    setSelectedTemplate(
-                      templates[swiper.realIndex] as ResumeTemplate
-                    );
-                  }}
                   style={
                     {
                       "--swiper-navigation-color": theme.palette.primary.main,
@@ -421,9 +446,14 @@ export default function ResumePage() {
                   ].map((tpl) => (
                     <SwiperSlide key={tpl}>
                       <Box
-                        onClick={() =>
-                          setSelectedTemplate(tpl as ResumeTemplate)
-                        }
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedTemplate(tpl as ResumeTemplate);
+                        }}
+                        onTouchEnd={(e) => {
+                          e.stopPropagation();
+                          setSelectedTemplate(tpl as ResumeTemplate);
+                        }}
                         sx={{
                           cursor: "pointer",
                           border:
@@ -578,31 +608,21 @@ export default function ResumePage() {
                       spaceBetween: 20,
                     },
                   }}
-                  navigation
-                  pagination={{ clickable: true }}
+                  navigation={{
+                    nextEl: ".swiper-button-next-desktop",
+                    prevEl: ".swiper-button-prev-desktop",
+                  }}
+                  pagination={{
+                    clickable: true,
+                    el: ".swiper-pagination-desktop",
+                  }}
                   loop={true}
                   centeredSlides={false}
                   grabCursor={true}
                   effect="slide"
+                  allowSlideNext={true}
+                  allowSlidePrev={true}
                   speed={400}
-                  onSlideChange={(swiper) => {
-                    const templates = [
-                      "modern",
-                      "elegant",
-                      "tech",
-                      "creative",
-                      "minimal",
-                      "teal",
-                      "indigo",
-                      "rose",
-                      "corporate",
-                      "startup",
-                      "academic",
-                    ];
-                    setSelectedTemplate(
-                      templates[swiper.realIndex] as ResumeTemplate
-                    );
-                  }}
                   style={
                     {
                       "--swiper-navigation-color": theme.palette.primary.main,
@@ -627,9 +647,14 @@ export default function ResumePage() {
                   ].map((tpl) => (
                     <SwiperSlide key={tpl}>
                       <Box
-                        onClick={() =>
-                          setSelectedTemplate(tpl as ResumeTemplate)
-                        }
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedTemplate(tpl as ResumeTemplate);
+                        }}
+                        onTouchEnd={(e) => {
+                          e.stopPropagation();
+                          setSelectedTemplate(tpl as ResumeTemplate);
+                        }}
                         sx={{
                           cursor: "pointer",
                           border:

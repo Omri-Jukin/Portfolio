@@ -155,8 +155,8 @@ export default function CertificationsAdminPage() {
         name: certification.name,
         issuer: certification.issuer,
         description: certification.description,
-        category: certification.category,
-        status: certification.status,
+        category: certification.category as CertificationFormData["category"],
+        status: certification.status as CertificationFormData["status"],
         skills: certification.skills || [],
         issueDate: format(new Date(certification.issueDate), "yyyy-MM-dd"),
         expiryDate: certification.expiryDate

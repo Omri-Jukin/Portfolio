@@ -276,7 +276,7 @@ const Certifications: React.FC<CertificationsProps> = ({
                             <CertificationIcon>
                               {certification.icon ||
                                 CERTIFICATIONS_CONSTANTS.CATEGORY_ICONS[
-                                  certification.category
+                                  certification.category as keyof typeof CERTIFICATIONS_CONSTANTS.CATEGORY_ICONS
                                 ]}
                             </CertificationIcon>
 
