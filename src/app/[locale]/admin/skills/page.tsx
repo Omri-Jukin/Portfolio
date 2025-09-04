@@ -49,6 +49,7 @@ import {
   categoryOptions,
   proficiencyOptions,
 } from "./constants";
+import { SkillCategory } from "#/lib";
 
 export default function SkillsAdminPage() {
   // State
@@ -113,7 +114,7 @@ export default function SkillsAdminPage() {
       setEditingSkill(skill);
       setFormData({
         name: skill.name,
-        category: skill.category,
+        category: skill.category as SkillCategory,
         subCategory: skill.subCategory || "",
         proficiencyLevel: skill.proficiencyLevel,
         proficiencyLabel: skill.proficiencyLabel,
@@ -190,7 +191,14 @@ export default function SkillsAdminPage() {
   const handleSubmit = () => {
     const submitData = {
       name: formData.name,
-      category: formData.category,
+      category: formData.category as
+        | "technical"
+        | "soft"
+        | "language"
+        | "tool"
+        | "framework"
+        | "database"
+        | "cloud",
       subCategory: formData.subCategory || undefined,
       proficiencyLevel: formData.proficiencyLevel,
       proficiencyLabel: formData.proficiencyLabel,

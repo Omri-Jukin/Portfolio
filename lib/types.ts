@@ -839,6 +839,107 @@ export interface ResponsiveValue<T> {
 export type ResponsiveProps<T> = T | ResponsiveValue<T>;
 
 // ========================
+// PDF GENERATOR TYPES
+// ========================
+
+/**
+ * Resume data structure for PDF generation
+ */
+export interface ResumeData {
+  meta?: { title?: string; author?: string };
+  person: {
+    name: string;
+    title: string;
+    contacts: {
+      phone: string;
+      email: string;
+      portfolio?: string;
+      github?: string;
+      linkedin?: string;
+      location?: string;
+    };
+  };
+  summary: string;
+  tech: {
+    frontend: string[];
+    backend: string[];
+    architecture: string[];
+    databases: string[];
+    cloudDevOps: string[];
+    softSkills?: string[];
+  };
+  experience: Array<{
+    role: string;
+    company: string;
+    location?: string;
+    period: string;
+    bullets: string[];
+    stackLine?: string;
+  }>;
+  projects: Array<{
+    name: string;
+    line: string;
+    url?: string;
+  }>;
+  additional?: string;
+}
+
+/**
+ * PDF render options
+ */
+export interface PDFRenderOptions {
+  rtl?: boolean;
+  theme?: PDFTheme;
+  maxBulletsPerRole?: number;
+  maxProjects?: number;
+}
+
+/**
+ * PDF theme types
+ */
+export type PDFTheme =
+  | "indigo"
+  | "teal"
+  | "rose"
+  | "corporate"
+  | "modern"
+  | "minimal";
+
+/**
+ * Resume template types for UI
+ */
+export type ResumeTemplate =
+  | "modern"
+  | "elegant"
+  | "tech"
+  | "creative"
+  | "minimal"
+  | "teal"
+  | "indigo"
+  | "rose"
+  | "corporate"
+  | "startup"
+  | "academic";
+
+/**
+ * PDF theme configuration structure
+ */
+export interface PDFThemeConfig {
+  headerBg: [number, number, number];
+  headerAccent?: [number, number, number];
+  name: [number, number, number];
+  title: [number, number, number];
+  contacts: [number, number, number];
+  text: [number, number, number];
+  accent: [number, number, number];
+  rule: [number, number, number];
+  // CSS equivalents for UI
+  cssHeaderBg: string;
+  cssHeaderAccent?: string;
+  cssAccent: string;
+}
+
+// ========================
 // PERFORMANCE TYPES
 // ========================
 

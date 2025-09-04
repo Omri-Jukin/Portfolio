@@ -5,7 +5,7 @@
 
 import { css, keyframes } from "@emotion/react";
 import { Theme } from "@mui/material/styles";
-import { RESPONSIVE_BREAKPOINTS } from "./constants";
+import { RESPONSIVE_BREAKPOINTS, PDF_THEMES } from "./constants";
 
 // ========================
 // BREAKPOINT UTILITIES
@@ -723,6 +723,217 @@ export const shadows = {
 };
 
 // ========================
+// PDF TEMPLATE STYLES
+// ========================
+
+/**
+ * Styles for resume template previews that match PDF output
+ */
+export const pdfTemplateStyles = {
+  // Template card base styles
+  templateCard: (themeName: keyof typeof PDF_THEMES, isSelected = false) => {
+    const theme = PDF_THEMES[themeName];
+    return css`
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: ${isSelected
+        ? `0 8px 32px ${theme.cssAccent}40, 0 0 0 3px ${theme.cssAccent}`
+        : "0 4px 20px rgba(0, 0, 0, 0.1)"};
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: white;
+      cursor: pointer;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+      }
+    `;
+  },
+
+  // Header section that matches PDF header
+  templateHeader: (themeName: keyof typeof PDF_THEMES) => {
+    const theme = PDF_THEMES[themeName];
+    return css`
+      background: ${theme.cssHeaderBg};
+      ${theme.cssHeaderAccent
+        ? `
+        background: linear-gradient(180deg, ${theme.cssHeaderBg} 0%, ${theme.cssHeaderBg} 85%, ${theme.cssHeaderAccent} 85%, ${theme.cssHeaderAccent} 100%);
+      `
+        : ""}
+      padding: 16px 20px;
+      color: white;
+      position: relative;
+      height: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    `;
+  },
+
+  // Name styling
+  templateName: css`
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 0 4px 0;
+    line-height: 1.2;
+  `,
+
+  // Title styling
+  templateTitle: css`
+    font-size: 14px;
+    font-weight: normal;
+    margin: 0;
+    opacity: 0.95;
+    line-height: 1.2;
+  `,
+
+  // Contact info styling
+  templateContacts: css`
+    font-size: 8px;
+    margin-top: 8px;
+    opacity: 0.9;
+    line-height: 1.3;
+  `,
+
+  // Body section styling
+  templateBody: css`
+    padding: 16px 20px;
+    background: white;
+    color: #000;
+  `,
+
+  // Section headers that match PDF
+  templateSectionHeader: (themeName: keyof typeof PDF_THEMES) => {
+    const theme = PDF_THEMES[themeName];
+    return css`
+      font-size: 10px;
+      font-weight: bold;
+      color: ${theme.cssAccent};
+      margin: 12px 0 4px 0;
+      position: relative;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: ${theme.cssAccent};
+      }
+    `;
+  },
+
+  // Content sections
+  templateContent: css`
+    font-size: 8px;
+    line-height: 1.4;
+    color: #333;
+    margin: 4px 0;
+  `,
+
+  // Skills section
+  templateSkills: css`
+    font-size: 7px;
+    line-height: 1.3;
+    color: #444;
+    margin: 2px 0;
+  `,
+
+  // Experience section
+  templateExperience: css`
+    margin: 6px 0;
+  `,
+
+  templateRole: css`
+    font-size: 8px;
+    font-weight: bold;
+    color: #000;
+    margin: 0 0 2px 0;
+  `,
+
+  templatePeriod: css`
+    font-size: 7px;
+    color: #666;
+    margin: 0 0 3px 0;
+  `,
+
+  templateBullets: css`
+    font-size: 6px;
+    line-height: 1.3;
+    color: #555;
+    margin-left: 8px;
+
+    &::before {
+      content: "•";
+      margin-right: 4px;
+    }
+  `,
+
+  // Template preview container
+  templatePreview: css`
+    width: 100%;
+    aspect-ratio: 210 / 297; /* A4 ratio */
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  `,
+
+  // Template list container
+  templateGrid: css`
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+
+    ${breakpoints.up("TABLET")} {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 32px;
+    }
+  `,
+};
+
+/**
+ * PDF theme-based color utilities
+ */
+export const pdfThemeColors = {
+  getThemeColors: (themeName: keyof typeof PDF_THEMES) => {
+    const theme = PDF_THEMES[themeName];
+    return {
+      headerBg: theme.cssHeaderBg,
+      headerAccent: theme.cssHeaderAccent,
+      accent: theme.cssAccent,
+      // RGB values for calculations
+      headerBgRgb: theme.headerBg,
+      accentRgb: theme.accent,
+    };
+  },
+
+  // Get contrasting text color for theme
+  getContrastColor: (themeName: keyof typeof PDF_THEMES): string => {
+    const theme = PDF_THEMES[themeName];
+    const [r, g, b] = theme.headerBg;
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    return brightness > 128 ? "#000000" : "#FFFFFF";
+  },
+
+  // Get theme-based hover color
+  getHoverColor: (themeName: keyof typeof PDF_THEMES): string => {
+    const theme = PDF_THEMES[themeName];
+    const [r, g, b] = theme.accent;
+    return `rgba(${r}, ${g}, ${b}, 0.1)`;
+  },
+
+  // Get theme-based border color
+  getBorderColor: (themeName: keyof typeof PDF_THEMES): string => {
+    const theme = PDF_THEMES[themeName];
+    const [r, g, b] = theme.accent;
+    return `rgba(${r}, ${g}, ${b}, 0.3)`;
+  },
+};
+
+// ========================
 // Z-INDEX SCALE
 // ========================
 
@@ -755,6 +966,8 @@ const styles = {
   gradients,
   shadows,
   zIndex,
+  pdfTemplateStyles,
+  pdfThemeColors,
 };
 
 export default styles;

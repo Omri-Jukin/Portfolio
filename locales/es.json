@@ -279,28 +279,23 @@
     "projects": [
       {
         "title": "Snow HQ",
-        "description": "Prototipo de CRM empresarial con análisis en tiempo real, flujos de trabajo automatizados y capacidades de reportes integrales. Construido con Next.js, tRPC, Drizzle ORM y PostgreSQL, implementando mejores prácticas de desarrollo full-stack y patrones de arquitectura escalable.",
+        "description": "CRM empresarial con análisis en tiempo real y flujos de trabajo automatizados - Next.js, tRPC, Drizzle ORM, PostgreSQL",
         "link": "https://github.com/Omri-Jukin/Snow"
       },
       {
         "title": "Sitio Web de Portafolio",
-        "description": "Sitio web de portafolio moderno y responsivo con internacionalización (i18n), modo oscuro y animaciones suaves. Construido con Next.js, TypeScript, Material-UI y Framer Motion, mostrando capacidades de desarrollo full-stack y tecnologías web modernas.",
+        "description": "Portafolio moderno responsivo con i18n, modo oscuro, animaciones - Next.js, TypeScript, Material-UI, Framer Motion",
         "link": "https://omrijukin.com"
       },
       {
         "title": "ClipWhisperer",
-        "description": "Plataforma integral de microservicios para procesamiento automatizado de video y creación de contenido. Construida con narración impulsada por IA, renderizado de video y flujos de trabajo orquestados usando TypeScript, Node.js y arquitectura moderna de microservicios, demostrando habilidades avanzadas de ingeniería full-stack.",
+        "description": "Plataforma de microservicios para procesamiento automatizado de video con narración AI - TypeScript, Node.js, microservicios",
         "link": "https://github.com/ClipWhisperer"
       },
       {
         "title": "Gestor de Microservicios",
-        "description": "Herramienta CLI integral para gestionar un ecosistema de microservicios. Construida con gestión unificada de servicios, flujos de trabajo automatizados, operaciones entre servicios y herramientas de desarrollo usando TypeScript, Node.js y arquitectura CLI moderna, mostrando experiencia en desarrollo full-stack.",
+        "description": "Herramienta CLI para gestión de ecosistema de microservicios con flujos de trabajo automatizados - TypeScript, Node.js, arquitectura CLI",
         "link": "https://github.com/ClipWhisperer/Utils"
-      },
-      {
-        "title": "Biblioteca Publicada",
-        "description": "Biblioteca npm publicada para gestionar un ecosistema de microservicios. Construida con gestión unificada de servicios, flujos de trabajo automatizados, operaciones entre servicios y herramientas de desarrollo usando TypeScript, Node.js y arquitectura CLI moderna, demostrando habilidades de desarrollo full-stack y gestión de paquetes.",
-        "link": "https://www.npmjs.com/package/@clipwhisperer/common"
       }
     ]
   },
@@ -403,11 +398,9 @@
         "time": "2024 - 2025",
         "company": "Abra Technologies, Israel",
         "details": [
-          "Desarrollo de Plataforma Full-Stack - Desarrollé y mantuve una plataforma integral que agrega y procesa datos críticos del mercado de agencias gubernamentales, implementando APIs RESTful y procesamiento de datos en tiempo real usando Next.js, tRPC y PostgreSQL, resultando en 40% de mejora en eficiencia de procesamiento de datos",
-          "Arquitectura de Biblioteca de Componentes - Diseñé e implementé una biblioteca de componentes UI modular y reutilizable usando Storybook y TypeScript, reduciendo el tiempo de desarrollo en 30% y mejorando la consistencia entre aplicaciones mientras mantenía 95% de cobertura de código a través de pruebas integrales",
-          "Innovación UI/UX - Colaboré con equipos de diseño para crear interfaces intuitivas usando Material-UI y Framer Motion, aumentando el compromiso del usuario en 25% y reduciendo tickets de soporte en 35% a través de mejor experiencia de usuario",
-          "Optimización Backend - Desarrollé algoritmos eficientes de procesamiento de datos y consultas de base de datos, mejorando el rendimiento del sistema en 45% y reduciendo tiempos de respuesta de API de 800ms a 300ms promedio",
-          "Stack Técnico: Next.js, tRPC, PayloadCMS, Storybook, Jest, Vitest, React, TypeScript, PostgreSQL, APIs REST, Microservicios"
+          "Construí plataforma agregando datos de mercado de fuentes gubernamentales usando Next.js, tRPC y PostgreSQL, mejorando eficiencia de procesamiento en 40%",
+          "Diseñé biblioteca de componentes UI modular con Storybook y TypeScript, reduciendo tiempo de desarrollo en 30% con 95% cobertura de pruebas",
+          "Optimicé algoritmos de procesamiento de datos y consultas de base de datos, mejorando rendimiento del sistema en 45% y reduciendo tiempos de respuesta API a 300ms"
         ]
       },
       {
@@ -415,10 +408,9 @@
         "time": "2023 - 2024",
         "company": "Compañía de Seguros Menora Mivtachim, Israel",
         "details": [
-          "Arquitectura de Sistemas - Arquitecturé y mantuve el sistema de constitución empresarial gestionando 50,000+ reglas y regulaciones de pólizas, implementando estrategias de optimización de base de datos que mejoraron el rendimiento de consultas en 60% y la confiabilidad del sistema en 90%",
-          "Liderazgo de Equipo - Mentoré y entrené 8+ nuevos desarrolladores, reduciendo el tiempo de incorporación de 6 semanas a 3 semanas y mejorando la productividad del equipo en 40% a través de programas de entrenamiento estructurados y procesos de revisión de código",
-          "Innovación de Productos - Lideré el desarrollo de 12+ nuevos productos de seguros usando prácticas de desarrollo modernas, resultando en 30% mayor tasa de adquisición de clientes y 25% mejora en tiempo de llegada al mercado",
-          "Modernización de Sistemas Legacy - Migré exitosamente componentes críticos de un sistema monolítico de 40 años a arquitectura moderna usando Java y C#, mejorando el rendimiento del sistema en 70% y reduciendo costos de mantenimiento en 50%"
+          "Arquitecté sistema de constitución empresarial gestionando 50,000+ reglas de pólizas, mejorando rendimiento de consultas en 60% y confiabilidad del sistema en 90%",
+          "Mentoré 8+ desarrolladores reduciendo incorporación de 6 a 3 semanas, mejorando productividad del equipo en 40% a través de programas de entrenamiento estructurados",
+          "Lideré desarrollo de 12+ productos de seguros usando prácticas modernas, logrando 30% mayor adquisición de clientes y 25% tiempo de comercialización más rápido"
         ]
       },
       {
@@ -426,21 +418,9 @@
         "time": "2021 - 2023",
         "company": "Compañía de Seguros Menora Mivtachim, Israel",
         "details": [
-          "Excelencia en Experiencia del Cliente - Logré una tasa de satisfacción del cliente del 95% mientras manejaba consultas y quejas complejas de seguros, implementando mejoras de procesos que redujeron el tiempo promedio de manejo en 25% y mejoraron la eficiencia del equipo en 35%",
-          "Mejora de Procesos - Desarrollé e implementé nuevos protocolos de flujo de trabajo usando análisis de datos y feedback del cliente, resultando en 25% de reducción en tiempo promedio de manejo y 35% de mejora en eficiencia del equipo",
-          "Desarrollo de Equipo - Entrené y mentoré 10+ nuevos miembros del equipo, resultando en 35% de reducción en tiempo de entrenamiento y mejor calidad de servicio a través de programas de incorporación estructurados y sistemas de feedback continuo",
-          "Colaboración Interfuncional - Trabajé con múltiples departamentos incluyendo TI y desarrollo de productos para resolver problemas complejos de clientes, mejorando el tiempo de resolución en 30% y puntuaciones de satisfacción del cliente en 20%"
-        ]
-      },
-      {
-        "role": "Coordinador Senior de Consultas Públicas",
-        "time": "2020 - 2021",
-        "company": "HOT Telecomunicaciones, Israel",
-        "details": [
-          "Excelencia en Servicio al Cliente - Mantuve una tasa de satisfacción del cliente del 90% mientras manejaba consultas de alto volumen (200+ diarias), implementando optimizaciones de flujo de trabajo que redujeron el tiempo de respuesta en 35% y mejoraron la productividad del equipo en 25%",
-          "Optimización de Procesos - Implementé nuevos protocolos de flujo de trabajo y herramientas de servicio al cliente, resultando en 35% de reducción en tiempo de respuesta y 25% de mejora en productividad del equipo a través de análisis sistemático de procesos y mejora continua",
-          "Liderazgo de Equipo - Entrené y mentoré exitosamente 15+ miembros del equipo, mejorando el rendimiento general del equipo en 30% a través de programas de entrenamiento estructurados y sistemas de monitoreo de rendimiento",
-          "Integración de Sistemas - Colaboré con el departamento de TI para implementar nuevas herramientas de servicio al cliente y sistemas CRM, resultando en 40% de mejora en tiempo de resolución de casos y 25% de aumento en puntuaciones de satisfacción del cliente"
+          "Logré 95% satisfacción del cliente manejando consultas complejas, reduciendo tiempo promedio de manejo en 25% y mejorando eficiencia del equipo en 35%",
+          "Desarrollé protocolos de flujo de trabajo usando análisis de datos y retroalimentación del cliente, resultando en mejoras de procesos y calidad de servicio mejorada",
+          "Entrené 10+ miembros del equipo reduciendo tiempo de entrenamiento en 35% y mejorando calidad de servicio a través de incorporación estructurada y retroalimentación continua"
         ]
       }
     ]
@@ -618,6 +598,8 @@
     "programming": [
       { "name": "TypeScript", "level": "Avanzado" },
       { "name": "JavaScript", "level": "Avanzado" },
+      { "name": "SQL", "level": "Avanzado" },
+      { "name": "HTML/CSS", "level": "Avanzado" },
       { "name": "Java", "level": "Intermedio" },
       { "name": "C#", "level": "Intermedio" },
       { "name": "Python", "level": "Novato" }
@@ -626,195 +608,6 @@
       { "name": "Hebreo", "level": "Nativo" },
       { "name": "Inglés", "level": "Profesional" },
       { "name": "Español", "level": "Novato" }
-    ]
-  },
-  "resume": {
-    "title": "Currículum",
-    "description": "Mi experiencia profesional y habilidades",
-    "experience": "Desarrollador Full Stack",
-    "professionalSummary": "Desarrollador Full Stack con 5+ años de experiencia en desarrollo web escalable y tecnologías modernas. Historial comprobado con React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB y microservicios. Fuerte experiencia en el sector de seguros desde servicio hasta desarrollo de sistemas centrales."
-  },
-  "career": {
-    "experiences": [
-      {
-        "role": "Ingeniero Full Stack",
-        "time": "2024–2025",
-        "company": "Abra Technologies, Israel",
-        "details": [
-          "Construí plataforma agregando datos de mercado de fuentes gubernamentales usando Next.js, tRPC y PostgreSQL, mejorando eficiencia de procesamiento en 40%",
-          "Diseñé biblioteca de componentes UI modular con Storybook y TypeScript, reduciendo tiempo de desarrollo en 30% con 95% cobertura de pruebas",
-          "Optimicé algoritmos de procesamiento de datos y consultas de base de datos, mejorando rendimiento del sistema en 45% y reduciendo tiempos de respuesta API a 300ms"
-        ]
-      },
-      {
-        "role": "Especialista en Desarrollo de Constitución Empresarial",
-        "time": "2023–2024",
-        "company": "Menora Mivtachim Insurance Company, Israel",
-        "details": [
-          "Arquitecté sistema de constitución empresarial gestionando 50,000+ reglas de pólizas, mejorando rendimiento de consultas en 60% y confiabilidad del sistema en 90%",
-          "Mentoré 8+ desarrolladores reduciendo incorporación de 6 a 3 semanas, mejorando productividad del equipo en 40% a través de programas de entrenamiento estructurados",
-          "Lideré desarrollo de 12+ productos de seguros usando prácticas modernas, logrando 30% mayor adquisición de clientes y 25% tiempo de comercialización más rápido"
-        ]
-      },
-      {
-        "role": "Representante Senior de Servicio al Cliente",
-        "time": "2021–2023",
-        "company": "Menora Mivtachim Insurance Company, Israel",
-        "details": [
-          "Logré 95% satisfacción del cliente manejando consultas complejas, reduciendo tiempo promedio de manejo en 25% y mejorando eficiencia del equipo en 35%",
-          "Desarrollé protocolos de flujo de trabajo usando análisis de datos y retroalimentación del cliente, resultando en mejoras de procesos y calidad de servicio mejorada",
-          "Entrené 10+ miembros del equipo reduciendo tiempo de entrenamiento en 35% y mejorando calidad de servicio a través de incorporación estructurada y retroalimentación continua"
-        ]
-      }
-    ]
-  },
-  "projects": {
-    "projects": [
-      {
-        "title": "Snow HQ",
-        "description": "CRM empresarial con análisis en tiempo real y flujos de trabajo automatizados - Next.js, tRPC, Drizzle ORM, PostgreSQL",
-        "link": "https://github.com/Omri-Jukin/Snow"
-      },
-      {
-        "title": "Sitio Web de Portafolio",
-        "description": "Portafolio moderno responsivo con i18n, modo oscuro, animaciones - Next.js, TypeScript, Material-UI, Framer Motion",
-        "link": "https://omrijukin.com"
-      },
-      {
-        "title": "ClipWhisperer",
-        "description": "Plataforma de microservicios para procesamiento automatizado de video con narración AI - TypeScript, Node.js, microservicios",
-        "link": "https://github.com/ClipWhisperer"
-      },
-      {
-        "title": "Gestor de Microservicios",
-        "description": "Herramienta CLI para gestión de ecosistema de microservicios con flujos de trabajo automatizados - TypeScript, Node.js, arquitectura CLI",
-        "link": "https://github.com/ClipWhisperer/Utils"
-      }
-    ]
-  },
-  "skills": {
-    "categories": {
-      "technical": {
-        "skills": [
-          {
-            "name": "Desarrollo Full Stack",
-            "level": 95,
-            "technologies": [
-              "React",
-              "Next.js",
-              "TypeScript",
-              "JavaScript",
-              "Node.js",
-              "HTML5",
-              "CSS3",
-              "Material-UI",
-              "Tailwind CSS",
-              "Framer Motion"
-            ]
-          },
-          {
-            "name": "Desarrollo Backend",
-            "level": 95,
-            "technologies": [
-              "Node.js",
-              "Express.js",
-              "tRPC",
-              "Drizzle ORM",
-              "PostgreSQL",
-              "MongoDB",
-              "APIs REST",
-              "GraphQL",
-              "Desarrollo de APIs"
-            ]
-          },
-          {
-            "name": "Arquitectura de Sistemas",
-            "level": 90,
-            "technologies": [
-              "Microservicios",
-              "Sistemas Monolíticos",
-              "Diseño de APIs",
-              "Integración de Sistemas",
-              "Optimización de Rendimiento",
-              "Arquitectura Escalable"
-            ]
-          },
-          {
-            "name": "Gestión de Bases de Datos",
-            "level": 90,
-            "technologies": [
-              "PostgreSQL",
-              "MongoDB",
-              "Modelado de Datos",
-              "Optimización de Consultas",
-              "Diseño de Bases de Datos",
-              "Arquitectura de Datos"
-            ]
-          },
-          {
-            "name": "Tecnologías en la Nube",
-            "level": 85,
-            "technologies": [
-              "AWS",
-              "Vercel",
-              "Docker",
-              "CI/CD",
-              "Despliegue",
-              "Infraestructura en la Nube"
-            ]
-          },
-          {
-            "name": "DevOps y CI/CD",
-            "level": 80,
-            "technologies": [
-              "Git",
-              "Docker",
-              "Jest",
-              "Vitest",
-              "Storybook",
-              "Pruebas",
-              "Integración Continua"
-            ]
-          }
-        ]
-      },
-      "soft": {
-        "skills": [
-          {
-            "name": "Liderazgo",
-            "level": 90,
-            "description": "Gestión de equipos, mentoría y coordinación de proyectos"
-          },
-          {
-            "name": "Resolución de Problemas",
-            "level": 95,
-            "description": "Pensamiento analítico y soluciones creativas"
-          },
-          {
-            "name": "Comunicación",
-            "level": 85,
-            "description": "Comunicación con stakeholders técnicos y no técnicos"
-          },
-          {
-            "name": "Adaptabilidad",
-            "level": 90,
-            "description": "Aprendizaje rápido y adopción de tecnologías"
-          }
-        ]
-      }
-    }
-  },
-  "languages": {
-    "programming": [
-      { "name": "TypeScript", "level": "Avanzado" },
-      { "name": "JavaScript", "level": "Avanzado" },
-      { "name": "SQL", "level": "Avanzado" },
-      { "name": "HTML/CSS", "level": "Avanzado" }
-    ],
-    "spoken": [
-      { "name": "Hebreo", "level": "Nativo" },
-      { "name": "Inglés", "level": "Fluido" },
-      { "name": "Español", "level": "Principiante" }
     ]
   },
   "additionalActivities": "Aprendizaje continuo en desarrollo full stack, contribuyendo a proyectos de código abierto y manteniéndome actualizado con tecnologías web modernas y mejores prácticas.",

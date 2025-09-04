@@ -1,3 +1,5 @@
+import { ProjectStatus, ProjectType } from "#/lib/db/schema/schema.types";
+
 export interface ProjectFormData {
   title: string;
   subtitle: string;
@@ -5,8 +7,8 @@ export interface ProjectFormData {
   longDescription: string;
   technologies: string[];
   categories: string[];
-  status: "completed" | "in-progress" | "archived" | "concept";
-  projectType: "professional" | "personal" | "open-source" | "academic";
+  status: ProjectStatus;
+  projectType: ProjectType;
   startDate: string;
   endDate: string;
   githubUrl: string;

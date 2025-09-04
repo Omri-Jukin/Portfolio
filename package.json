@@ -16,6 +16,7 @@
     "publish": false
   },
   "dependencies": {
+    "@aws-sdk/client-ses": "^3.882.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@jest/globals": "^30.0.4",
@@ -34,6 +35,7 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/js-cookie": "^3.0.6",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/nodemailer": "^7.0.1",
     "@types/three": "^0.178.1",
     "@typescript-eslint/parser": "^8.41.0",
     "aos": "^2.3.4",
@@ -54,6 +56,7 @@
     "motion": "^12.23.3",
     "next": "15.3.3",
     "next-intl": "^4.3.4",
+    "nodemailer": "^7.0.6",
     "react": "^19.1.0",
     "react-calendly": "^4.4.0",
     "react-dom": "^19.1.0",

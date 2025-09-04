@@ -23,38 +23,17 @@ import GradientButton from "~/Button/Button";
 import { useRouter } from "next/navigation";
 import { GitHub as GitHubIcon } from "@mui/icons-material";
 import ResumeLanguageSelector from "#/Components/ResumeLanguageSelector";
-// Define template types that map to the new PDF generator themes
-type ResumeTemplate =
-  | "modern"
-  | "elegant"
-  | "tech"
-  | "creative"
-  | "minimal"
-  | "teal"
-  | "indigo"
-  | "rose"
-  | "corporate"
-  | "startup"
-  | "academic";
-type PDFTheme = "indigo" | "teal" | "rose" | "corporate" | "modern" | "minimal";
+import { RESUME_TEMPLATE_MAPPING } from "#/lib/constants";
+import { pdfThemeColors } from "#/lib/styles";
+import type { ResumeTemplate, PDFTheme } from "#/lib/types";
 
-// Map ResumeTemplate to PDFTheme
+// Map ResumeTemplate to PDFTheme using constants
 const mapTemplateToPDFTheme = (template: ResumeTemplate): PDFTheme => {
-  const mapping: Record<ResumeTemplate, PDFTheme> = {
-    modern: "modern",
-    elegant: "minimal",
-    tech: "corporate",
-    creative: "teal",
-    minimal: "minimal",
-    teal: "teal",
-    indigo: "indigo",
-    rose: "rose",
-    corporate: "corporate",
-    startup: "modern",
-    academic: "minimal",
-  };
-  return mapping[template];
+  return RESUME_TEMPLATE_MAPPING[template];
 };
+
+// Import SxProps for proper typing
+import type { SxProps, Theme } from "@mui/material";
 import { extractResumeData } from "#/lib/utils/resumeDataExtractor";
 import { GalaxyCard } from "#/Components";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -171,161 +150,63 @@ export default function ResumePage() {
     }
   };
 
-  // DOM-based preview style helper (no PDF data URIs)
+  // DOM-based preview style helper using PDF theme constants
   const getTemplatePreviewSx = (tpl: ResumeTemplate) => {
+    const pdfTheme = mapTemplateToPDFTheme(tpl);
+    const themeColors = pdfThemeColors.getThemeColors(pdfTheme);
+    const isSelected = selectedTemplate === tpl;
     const base = {
       width: 200,
       height: 280,
       borderRadius: 1,
       border: "1px solid",
-      borderColor: "divider",
+      borderColor: isSelected ? themeColors.accent : "divider",
+      borderWidth: isSelected ? 3 : 1,
       position: "relative" as const,
       overflow: "hidden",
       bgcolor: "background.paper",
+      boxShadow: isSelected
+        ? `0 8px 32px ${themeColors.accent}40`
+        : "0 4px 20px rgba(0, 0, 0, 0.1)",
+      transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+      cursor: "pointer",
+      "&:hover": {
+        transform: "translateY(-4px)",
+        boxShadow: "0 12px 40px rgba(0, 0, 0, 0.15)",
+      },
     };
     const header = {
       position: "absolute" as const,
       top: 0,
       left: 0,
       width: "100%",
-      height: 36,
+      height: 40, // Match PDF header height ratio
+      backgroundColor: themeColors.headerBg,
     };
-    const accent = (color: string) => ({ backgroundColor: color });
-    switch (tpl) {
-      case "modern":
-        return {
-          ...base,
-          "&::before": { content: '""', ...header, ...accent("#1976D2") },
-          "&::after": {
-            content: '""',
-            position: "absolute",
-            top: 36,
-            left: 0,
-            width: "100%",
-            height: 2,
-            backgroundColor: "#FFC107",
-          },
-        };
-      case "elegant":
-        return {
-          ...base,
-          "&::before": { content: '""', ...header, ...accent("#212121") },
-          "&::after": {
-            content: '""',
-            position: "absolute",
-            top: 36,
-            left: 0,
-            width: "100%",
-            height: 2,
-            backgroundColor: "#D4AF37",
-          },
-        };
-      case "tech":
-        return {
-          ...base,
-          "&::before": { content: '""', ...header, ...accent("#4CAF50") },
-          "&::after": {
-            content: '""',
-            position: "absolute",
-            top: 8,
-            left: 8,
-            width: 8,
-            height: 20,
-            backgroundColor: "#C8E6C9",
-          },
-        };
-      case "creative":
-        return {
-          ...base,
-          "&::before": { content: '""', ...header, ...accent("#9C27B0") },
-          "&::after": {
-            content: '""',
-            position: "absolute",
-            top: 14,
-            left: 20,
-            width: 16,
-            height: 16,
-            borderRadius: "50%",
-            backgroundColor: "#FFEB3B",
-          },
-        };
-      case "minimal":
-        return {
-          ...base,
-          "&::before": { content: '""', ...header, ...accent("#F5F5F5") },
-          "&::after": {
-            content: '""',
-            position: "absolute",
-            top: 33,
-            left: 0,
-            width: "100%",
-            height: 2,
-            backgroundColor: "#9E9E9E",
-          },
-        };
-      case "teal":
-        return {
-          ...base,
-          "&::before": { content: '""', ...header, ...accent("#00796B") },
-        };
-      case "indigo":
-        return {
-          ...base,
-          "&::before": { content: '""', ...header, ...accent("#3F51B5") },
-        };
-      case "rose":
-        return {
-          ...base,
-          "&::before": { content: '""', ...header, ...accent("#AD1457") },
-        };
-      case "corporate":
-        return {
-          ...base,
-          "&::before": { content: '""', ...header, ...accent("#2C3E50") },
-          "&::after": {
-            content: '""',
-            position: "absolute",
-            top: 34,
-            left: 0,
-            width: "100%",
-            height: 1.5,
-            backgroundColor: "#C8C8C8",
-          },
-        };
-      case "startup":
-        return {
-          ...base,
-          "&::before": { content: '""', ...header, ...accent("#7F003F") },
-          "&::after": {
-            content: '""',
-            position: "absolute",
-            top: 34,
-            left: 0,
-            width: "100%",
-            height: 2,
-            backgroundColor: "#FFFFFF",
-          },
-        };
-      case "academic":
-        return {
-          ...base,
-          "&::before": { content: '""', ...header, ...accent("#34495E") },
-          "&::after": {
-            content: '""',
-            position: "absolute",
-            top: 34,
-            left: 0,
-            width: "100%",
-            height: 1.5,
-            backgroundColor: "#DCDCDC",
-          },
-        };
-      default:
-        return {
-          ...base,
-          "&::before": { content: '""', ...header, backgroundColor: "#f5f6f8" },
-        };
+
+    // Create template-specific styles using PDF theme constants
+    const result: SxProps<Theme> = {
+      ...base,
+      "&::before": {
+        content: '""',
+        ...header,
+      },
+    };
+
+    // Add accent stripe for themes that have it
+    if (themeColors.headerAccent) {
+      result["&::after"] = {
+        content: '""',
+        position: "absolute" as const,
+        top: 40,
+        left: 0,
+        width: "100%",
+        height: 2,
+        backgroundColor: themeColors.headerAccent,
+      };
     }
+
+    return result;
   };
 
   const handleCloseSnackbar = () => {
@@ -455,24 +336,8 @@ export default function ResumePage() {
                           setSelectedTemplate(tpl as ResumeTemplate);
                         }}
                         sx={{
-                          cursor: "pointer",
-                          border:
-                            selectedTemplate === tpl
-                              ? "3px solid"
-                              : "1px solid",
-                          borderColor:
-                            selectedTemplate === tpl
-                              ? "primary.main"
-                              : "divider",
-                          borderRadius: 3,
                           p: 2,
                           width: "100%",
-                          transition: "all 0.2s ease-in-out",
-                          "&:hover": {
-                            transform: "translateY(-2px)",
-                            boxShadow: 3,
-                            borderColor: "primary.light",
-                          },
                         }}
                       >
                         <Typography

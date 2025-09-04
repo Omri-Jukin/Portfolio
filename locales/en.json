@@ -582,7 +582,7 @@
               "API Design",
               "System Integration",
               "Performance Optimization",
-              "Scalable Architecture"
+              "Scalability"
             ]
           },
           {
@@ -657,6 +657,8 @@
     "programming": [
       { "name": "TypeScript", "level": "Advanced" },
       { "name": "JavaScript", "level": "Advanced" },
+      { "name": "SQL", "level": "Advanced" },
+      { "name": "HTML/CSS", "level": "Advanced" },
       { "name": "Java", "level": "Intermediate" },
       { "name": "C#", "level": "Intermediate" },
       { "name": "Python", "level": "Novice" }
@@ -726,19 +728,6 @@
       }
     ]
   },
-  "languages": {
-    "programming": [
-      { "name": "TypeScript", "level": "Advanced" },
-      { "name": "JavaScript", "level": "Advanced" },
-      { "name": "SQL", "level": "Advanced" },
-      { "name": "HTML/CSS", "level": "Advanced" }
-    ],
-    "spoken": [
-      { "name": "Hebrew", "level": "Native" },
-      { "name": "English", "level": "Fluent" }
-    ]
-  },
-  "additionalActivities": "Continuous learning in full stack development, contributing to open-source projects, and staying current with modern web technologies and best practices.",
   "footer": {
     "title": "About",
     "children": "I'm a FullStack Engineer building scalable systems and modern web experiences with clean architecture and practical solutions.",
