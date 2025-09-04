@@ -638,6 +638,7 @@ export const ACCESSIBILITY_LABELS = {
  * PDF theme configuration for resume generation
  */
 export const PDF_THEMES = {
+  // Professional Themes
   corporate: {
     headerBg: [41, 98, 255] as [number, number, number],
     headerAccent: [255, 193, 7] as [number, number, number],
@@ -652,6 +653,34 @@ export const PDF_THEMES = {
     cssHeaderAccent: "rgb(255, 193, 7)",
     cssAccent: "rgb(41, 98, 255)",
   },
+  executive: {
+    headerBg: [25, 25, 25] as [number, number, number],
+    headerAccent: [212, 175, 55] as [number, number, number],
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [25, 25, 25] as [number, number, number],
+    rule: [25, 25, 25] as [number, number, number],
+    cssHeaderBg: "rgb(25, 25, 25)",
+    cssHeaderAccent: "rgb(212, 175, 55)",
+    cssAccent: "rgb(25, 25, 25)",
+  },
+  banking: {
+    headerBg: [0, 51, 102] as [number, number, number],
+    headerAccent: [255, 215, 0] as [number, number, number],
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [0, 51, 102] as [number, number, number],
+    rule: [0, 51, 102] as [number, number, number],
+    cssHeaderBg: "rgb(0, 51, 102)",
+    cssHeaderAccent: "rgb(255, 215, 0)",
+    cssAccent: "rgb(0, 51, 102)",
+  },
+
+  // Modern Themes
   modern: {
     headerBg: [0, 150, 136] as [number, number, number],
     headerAccent: undefined,
@@ -661,11 +690,79 @@ export const PDF_THEMES = {
     text: [0, 0, 0] as [number, number, number],
     accent: [0, 150, 136] as [number, number, number],
     rule: [0, 150, 136] as [number, number, number],
-    // CSS equivalents for UI
     cssHeaderBg: "rgb(0, 150, 136)",
     cssHeaderAccent: undefined,
     cssAccent: "rgb(0, 150, 136)",
   },
+  startup: {
+    headerBg: [255, 87, 34] as [number, number, number],
+    headerAccent: [255, 193, 7] as [number, number, number],
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [255, 87, 34] as [number, number, number],
+    rule: [255, 87, 34] as [number, number, number],
+    cssHeaderBg: "rgb(255, 87, 34)",
+    cssHeaderAccent: "rgb(255, 193, 7)",
+    cssAccent: "rgb(255, 87, 34)",
+  },
+  tech: {
+    headerBg: [33, 150, 243] as [number, number, number],
+    headerAccent: [76, 175, 80] as [number, number, number],
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [33, 150, 243] as [number, number, number],
+    rule: [33, 150, 243] as [number, number, number],
+    cssHeaderBg: "rgb(33, 150, 243)",
+    cssHeaderAccent: "rgb(76, 175, 80)",
+    cssAccent: "rgb(33, 150, 243)",
+  },
+
+  // Creative Themes
+  creative: {
+    headerBg: [156, 39, 176] as [number, number, number],
+    headerAccent: [255, 193, 7] as [number, number, number],
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [156, 39, 176] as [number, number, number],
+    rule: [156, 39, 176] as [number, number, number],
+    cssHeaderBg: "rgb(156, 39, 176)",
+    cssHeaderAccent: "rgb(255, 193, 7)",
+    cssAccent: "rgb(156, 39, 176)",
+  },
+  artistic: {
+    headerBg: [255, 152, 0] as [number, number, number],
+    headerAccent: [233, 30, 99] as [number, number, number],
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [255, 152, 0] as [number, number, number],
+    rule: [255, 152, 0] as [number, number, number],
+    cssHeaderBg: "rgb(255, 152, 0)",
+    cssHeaderAccent: "rgb(233, 30, 99)",
+    cssAccent: "rgb(255, 152, 0)",
+  },
+  design: {
+    headerBg: [233, 30, 99] as [number, number, number],
+    headerAccent: [255, 193, 7] as [number, number, number],
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [233, 30, 99] as [number, number, number],
+    rule: [233, 30, 99] as [number, number, number],
+    cssHeaderBg: "rgb(233, 30, 99)",
+    cssHeaderAccent: "rgb(255, 193, 7)",
+    cssAccent: "rgb(233, 30, 99)",
+  },
+
+  // Minimalist Themes
   minimal: {
     headerBg: [96, 125, 139] as [number, number, number],
     headerAccent: undefined,
@@ -675,11 +772,38 @@ export const PDF_THEMES = {
     text: [0, 0, 0] as [number, number, number],
     accent: [96, 125, 139] as [number, number, number],
     rule: [96, 125, 139] as [number, number, number],
-    // CSS equivalents for UI
     cssHeaderBg: "rgb(96, 125, 139)",
     cssHeaderAccent: undefined,
     cssAccent: "rgb(96, 125, 139)",
   },
+  clean: {
+    headerBg: [158, 158, 158] as [number, number, number],
+    headerAccent: undefined,
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [158, 158, 158] as [number, number, number],
+    rule: [158, 158, 158] as [number, number, number],
+    cssHeaderBg: "rgb(158, 158, 158)",
+    cssHeaderAccent: undefined,
+    cssAccent: "rgb(158, 158, 158)",
+  },
+  academic: {
+    headerBg: [69, 90, 120] as [number, number, number],
+    headerAccent: [255, 193, 7] as [number, number, number],
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [69, 90, 120] as [number, number, number],
+    rule: [69, 90, 120] as [number, number, number],
+    cssHeaderBg: "rgb(69, 90, 120)",
+    cssHeaderAccent: "rgb(255, 193, 7)",
+    cssAccent: "rgb(69, 90, 120)",
+  },
+
+  // Colorful Themes
   teal: {
     headerBg: [0, 121, 107] as [number, number, number],
     headerAccent: undefined,
@@ -689,7 +813,6 @@ export const PDF_THEMES = {
     text: [0, 0, 0] as [number, number, number],
     accent: [0, 121, 107] as [number, number, number],
     rule: [0, 121, 107] as [number, number, number],
-    // CSS equivalents for UI
     cssHeaderBg: "rgb(0, 121, 107)",
     cssHeaderAccent: undefined,
     cssAccent: "rgb(0, 121, 107)",
@@ -703,7 +826,6 @@ export const PDF_THEMES = {
     text: [0, 0, 0] as [number, number, number],
     accent: [63, 81, 181] as [number, number, number],
     rule: [63, 81, 181] as [number, number, number],
-    // CSS equivalents for UI
     cssHeaderBg: "rgb(63, 81, 181)",
     cssHeaderAccent: undefined,
     cssAccent: "rgb(63, 81, 181)",
@@ -717,10 +839,126 @@ export const PDF_THEMES = {
     text: [0, 0, 0] as [number, number, number],
     accent: [233, 30, 99] as [number, number, number],
     rule: [233, 30, 99] as [number, number, number],
-    // CSS equivalents for UI
     cssHeaderBg: "rgb(233, 30, 99)",
     cssHeaderAccent: undefined,
     cssAccent: "rgb(233, 30, 99)",
+  },
+  emerald: {
+    headerBg: [0, 150, 136] as [number, number, number],
+    headerAccent: [76, 175, 80] as [number, number, number],
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [0, 150, 136] as [number, number, number],
+    rule: [0, 150, 136] as [number, number, number],
+    cssHeaderBg: "rgb(0, 150, 136)",
+    cssHeaderAccent: "rgb(76, 175, 80)",
+    cssAccent: "rgb(0, 150, 136)",
+  },
+  violet: {
+    headerBg: [103, 58, 183] as [number, number, number],
+    headerAccent: [255, 193, 7] as [number, number, number],
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [103, 58, 183] as [number, number, number],
+    rule: [103, 58, 183] as [number, number, number],
+    cssHeaderBg: "rgb(103, 58, 183)",
+    cssHeaderAccent: "rgb(255, 193, 7)",
+    cssAccent: "rgb(103, 58, 183)",
+  },
+  amber: {
+    headerBg: [255, 193, 7] as [number, number, number],
+    headerAccent: [255, 87, 34] as [number, number, number],
+    name: [0, 0, 0] as [number, number, number],
+    title: [0, 0, 0] as [number, number, number],
+    contacts: [0, 0, 0] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [255, 193, 7] as [number, number, number],
+    rule: [255, 193, 7] as [number, number, number],
+    cssHeaderBg: "rgb(255, 193, 7)",
+    cssHeaderAccent: "rgb(255, 87, 34)",
+    cssAccent: "rgb(255, 193, 7)",
+  },
+  cyan: {
+    headerBg: [0, 188, 212] as [number, number, number],
+    headerAccent: [255, 193, 7] as [number, number, number],
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [0, 188, 212] as [number, number, number],
+    rule: [0, 188, 212] as [number, number, number],
+    cssHeaderBg: "rgb(0, 188, 212)",
+    cssHeaderAccent: "rgb(255, 193, 7)",
+    cssAccent: "rgb(0, 188, 212)",
+  },
+  lime: {
+    headerBg: [139, 195, 74] as [number, number, number],
+    headerAccent: [255, 193, 7] as [number, number, number],
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [139, 195, 74] as [number, number, number],
+    rule: [139, 195, 74] as [number, number, number],
+    cssHeaderBg: "rgb(139, 195, 74)",
+    cssHeaderAccent: "rgb(255, 193, 7)",
+    cssAccent: "rgb(139, 195, 74)",
+  },
+  deepOrange: {
+    headerBg: [255, 87, 34] as [number, number, number],
+    headerAccent: [255, 193, 7] as [number, number, number],
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [255, 87, 34] as [number, number, number],
+    rule: [255, 87, 34] as [number, number, number],
+    cssHeaderBg: "rgb(255, 87, 34)",
+    cssHeaderAccent: "rgb(255, 193, 7)",
+    cssAccent: "rgb(255, 87, 34)",
+  },
+  deepPurple: {
+    headerBg: [103, 58, 183] as [number, number, number],
+    headerAccent: [255, 193, 7] as [number, number, number],
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [103, 58, 183] as [number, number, number],
+    rule: [103, 58, 183] as [number, number, number],
+    cssHeaderBg: "rgb(103, 58, 183)",
+    cssHeaderAccent: "rgb(255, 193, 7)",
+    cssAccent: "rgb(103, 58, 183)",
+  },
+  brown: {
+    headerBg: [121, 85, 72] as [number, number, number],
+    headerAccent: [255, 193, 7] as [number, number, number],
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [121, 85, 72] as [number, number, number],
+    rule: [121, 85, 72] as [number, number, number],
+    cssHeaderBg: "rgb(121, 85, 72)",
+    cssHeaderAccent: "rgb(255, 193, 7)",
+    cssAccent: "rgb(121, 85, 72)",
+  },
+  blueGrey: {
+    headerBg: [69, 90, 120] as [number, number, number],
+    headerAccent: [255, 193, 7] as [number, number, number],
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [69, 90, 120] as [number, number, number],
+    rule: [69, 90, 120] as [number, number, number],
+    cssHeaderBg: "rgb(69, 90, 120)",
+    cssHeaderAccent: "rgb(255, 193, 7)",
+    cssAccent: "rgb(69, 90, 120)",
   },
 } as const;
 
@@ -753,20 +991,147 @@ export const PDF_LAYOUT = {
 };
 
 /**
+ * PDF layout variants for different visual styles
+ */
+export const PDF_LAYOUT_VARIANTS = {
+  single: {
+    name: "Single Column",
+    description: "Traditional single-column layout",
+    columns: 1,
+    sidebarWidth: 0,
+    mainContentWidth: 180,
+  },
+  twoColumn: {
+    name: "Two Column",
+    description: "Two-column layout with sidebar",
+    columns: 2,
+    sidebarWidth: 60,
+    mainContentWidth: 120,
+  },
+  sidebar: {
+    name: "Sidebar Layout",
+    description: "Sidebar with main content area",
+    columns: 2,
+    sidebarWidth: 70,
+    mainContentWidth: 110,
+  },
+  compact: {
+    name: "Compact",
+    description: "Dense layout for maximum content",
+    columns: 1,
+    sidebarWidth: 0,
+    mainContentWidth: 180,
+    spacing: {
+      sectionGap: 2,
+      paragraphGap: 2,
+      bulletGap: 2.5,
+      experienceGap: 1,
+      ruleGap: 3,
+    },
+  },
+  spacious: {
+    name: "Spacious",
+    description: "Generous spacing for readability",
+    columns: 1,
+    sidebarWidth: 0,
+    mainContentWidth: 180,
+    spacing: {
+      sectionGap: 5,
+      paragraphGap: 4,
+      bulletGap: 4.5,
+      experienceGap: 3,
+      ruleGap: 7,
+    },
+  },
+} as const;
+
+/**
+ * PDF visual elements configuration
+ */
+export const PDF_VISUAL_ELEMENTS = {
+  icons: {
+    enabled: true,
+    size: 3, // mm
+    spacing: 2, // mm from text
+  },
+  borders: {
+    enabled: true,
+    width: 0.5, // mm
+    radius: 2, // mm
+  },
+  shadows: {
+    enabled: true,
+    offset: { x: 1, y: 1 }, // mm
+    blur: 2, // mm
+    color: [0, 0, 0, 0.1], // RGBA
+  },
+  gradients: {
+    enabled: true,
+    steps: 3,
+  },
+  patterns: {
+    enabled: true,
+    types: ["dots", "lines", "diagonal", "grid"] as const,
+  },
+} as const;
+
+/**
+ * PDF typography variants
+ */
+export const PDF_TYPOGRAPHY_VARIANTS = {
+  serif: {
+    name: "Serif",
+    font: "times",
+    description: "Classic serif font for traditional look",
+  },
+  sansSerif: {
+    name: "Sans Serif",
+    font: "helvetica",
+    description: "Modern sans-serif font",
+  },
+  monospace: {
+    name: "Monospace",
+    font: "courier",
+    description: "Fixed-width font for technical content",
+  },
+} as const;
+
+/**
  * Resume template mapping for UI to PDF themes
  */
 export const RESUME_TEMPLATE_MAPPING = {
+  // Professional Templates
   modern: "modern",
   elegant: "minimal",
-  tech: "corporate",
-  creative: "teal",
+  tech: "tech",
+  corporate: "corporate",
+  executive: "executive",
+  banking: "banking",
+  startup: "startup",
+  academic: "academic",
+
+  // Creative Templates
+  creative: "creative",
+  artistic: "artistic",
+  design: "design",
+
+  // Minimalist Templates
   minimal: "minimal",
+  clean: "clean",
+
+  // Colorful Templates
   teal: "teal",
   indigo: "indigo",
   rose: "rose",
-  corporate: "corporate",
-  startup: "modern",
-  academic: "minimal",
+  emerald: "emerald",
+  violet: "violet",
+  amber: "amber",
+  cyan: "cyan",
+  lime: "lime",
+  deepOrange: "deepOrange",
+  deepPurple: "deepPurple",
+  brown: "brown",
+  blueGrey: "blueGrey",
 } as const;
 
 // ========================
@@ -806,3 +1171,7 @@ export type TypographyWeight =
 export type TypographyAlign =
   (typeof TYPOGRAPHY_ALIGNS)[keyof typeof TYPOGRAPHY_ALIGNS];
 export type ResumeTemplateKey = keyof typeof RESUME_TEMPLATE_MAPPING;
+export type PDFThemeKey = keyof typeof PDF_THEMES;
+export type PDFLayoutVariantKey = keyof typeof PDF_LAYOUT_VARIANTS;
+export type PDFTypographyVariantKey = keyof typeof PDF_TYPOGRAPHY_VARIANTS;
+export type PDFVisualElementKey = keyof typeof PDF_VISUAL_ELEMENTS;

@@ -895,31 +895,72 @@ export interface PDFRenderOptions {
 }
 
 /**
- * PDF theme types
+ * PDF theme types - all available themes
  */
 export type PDFTheme =
-  | "indigo"
-  | "teal"
-  | "rose"
+  // Professional Themes
   | "corporate"
+  | "executive"
+  | "banking"
+  // Modern Themes
   | "modern"
-  | "minimal";
+  | "startup"
+  | "tech"
+  // Creative Themes
+  | "creative"
+  | "artistic"
+  | "design"
+  // Minimalist Themes
+  | "minimal"
+  | "clean"
+  | "academic"
+  // Colorful Themes
+  | "teal"
+  | "indigo"
+  | "rose"
+  | "emerald"
+  | "violet"
+  | "amber"
+  | "cyan"
+  | "lime"
+  | "deepOrange"
+  | "deepPurple"
+  | "brown"
+  | "blueGrey";
 
 /**
- * Resume template types for UI
+ * Resume template types for UI - all available templates
  */
 export type ResumeTemplate =
+  // Professional Templates
   | "modern"
   | "elegant"
   | "tech"
+  | "corporate"
+  | "executive"
+  | "banking"
+  | "startup"
+  | "academic"
+  // Creative Templates
   | "creative"
+  | "artistic"
+  | "design"
+  // Minimalist Templates
   | "minimal"
+  | "clean"
+  // Colorful Templates
   | "teal"
   | "indigo"
   | "rose"
-  | "corporate"
-  | "startup"
-  | "academic";
+  | "emerald"
+  | "violet"
+  | "amber"
+  | "cyan"
+  | "lime"
+  | "deepOrange"
+  | "deepPurple"
+  | "brown"
+  | "blueGrey";
 
 /**
  * PDF theme configuration structure
@@ -937,6 +978,53 @@ export interface PDFThemeConfig {
   cssHeaderBg: string;
   cssHeaderAccent?: string;
   cssAccent: string;
+}
+
+/**
+ * PDF layout variant types
+ */
+export type PDFLayoutVariant =
+  | "single"
+  | "twoColumn"
+  | "sidebar"
+  | "compact"
+  | "spacious";
+
+/**
+ * PDF typography variant types
+ */
+export type PDFTypographyVariant = "serif" | "sansSerif" | "monospace";
+
+/**
+ * PDF visual element types
+ */
+export type PDFVisualElement =
+  | "icons"
+  | "borders"
+  | "shadows"
+  | "gradients"
+  | "patterns";
+
+/**
+ * Enhanced PDF render options with new visual features
+ */
+export interface EnhancedPDFRenderOptions extends PDFRenderOptions {
+  layoutVariant?: PDFLayoutVariant;
+  typography?: PDFTypographyVariant;
+  visualElements?: {
+    icons?: boolean;
+    borders?: boolean;
+    shadows?: boolean;
+    gradients?: boolean;
+    patterns?: boolean;
+  };
+  customSpacing?: {
+    sectionGap?: number;
+    paragraphGap?: number;
+    bulletGap?: number;
+    experienceGap?: number;
+    ruleGap?: number;
+  };
 }
 
 // ========================

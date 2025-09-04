@@ -27,6 +27,20 @@ import { RESUME_TEMPLATE_MAPPING } from "#/lib/constants";
 import { pdfThemeColors } from "#/lib/styles";
 import type { ResumeTemplate, PDFTheme } from "#/lib/types";
 
+export const SkeletonText = () => {
+  return (
+    <Box
+      sx={{
+        display: "block",
+        mt: 0.5,
+        width: 160,
+        height: 6,
+        bgcolor: "grey.300",
+      }}
+    />
+  );
+};
+
 // Map ResumeTemplate to PDFTheme using constants
 const mapTemplateToPDFTheme = (template: ResumeTemplate): PDFTheme => {
   return RESUME_TEMPLATE_MAPPING[template];
@@ -366,37 +380,13 @@ export default function ResumePage() {
                                 width: "100%",
                               }}
                             >
-                              <Typography
-                                variant="caption"
-                                color="text.secondary"
-                              >
-                                {t("professionalSummary")}
-                              </Typography>
-                              <Box
-                                sx={{
-                                  mt: 0.5,
-                                  width: 150,
-                                  height: 6,
-                                  bgcolor: "grey.300",
-                                  mx: "auto",
-                                }}
-                              />
-                              <Box
-                                sx={{
-                                  mt: 0.5,
-                                  width: 120,
-                                  height: 6,
-                                  bgcolor: "grey.200",
-                                  mx: "auto",
-                                }}
-                              />
+                              <SkeletonText />
+                              <SkeletonText />
+                              <SkeletonText />
+                              <SkeletonText />
+                              <SkeletonText />
+                              <SkeletonText />
                               <Box sx={{ mt: 1.5 }}>
-                                <Typography
-                                  variant="caption"
-                                  color="text.secondary"
-                                >
-                                  {projectsT("title")}
-                                </Typography>
                                 <Box
                                   sx={{
                                     mt: 0.5,
@@ -565,55 +555,23 @@ export default function ResumePage() {
                                 width: "100%",
                               }}
                             >
-                              <Typography
-                                variant="caption"
-                                color="text.secondary"
+                              <SkeletonText />
+                              <SkeletonText />
+                              <SkeletonText />
+                              <Box
+                                sx={{
+                                  mt: 1.5,
+                                  display: "flex",
+                                  justifyContent: "flex-start",
+                                  gap: 1,
+                                  width: "100%",
+                                }}
                               >
-                                {t("professionalSummary")}
-                              </Typography>
-                              <Box
-                                sx={{
-                                  mt: 0.5,
-                                  width: 150,
-                                  height: 6,
-                                  bgcolor: "grey.300",
-                                  mx: "auto",
-                                }}
-                              />
-                              <Box
-                                sx={{
-                                  mt: 0.5,
-                                  width: 120,
-                                  height: 6,
-                                  bgcolor: "grey.200",
-                                  mx: "auto",
-                                }}
-                              />
-                              <Box sx={{ mt: 1.5 }}>
-                                <Typography
-                                  variant="caption"
-                                  color="text.secondary"
-                                >
-                                  {projectsT("title")}
-                                </Typography>
-                                <Box
-                                  sx={{
-                                    mt: 0.5,
-                                    width: 160,
-                                    height: 6,
-                                    bgcolor: "grey.300",
-                                    mx: "auto",
-                                  }}
-                                />
-                                <Box
-                                  sx={{
-                                    mt: 0.5,
-                                    width: 110,
-                                    height: 6,
-                                    bgcolor: "grey.200",
-                                    mx: "auto",
-                                  }}
-                                />
+                                <SkeletonText />
+                                <SkeletonText />
+                                <SkeletonText />
+                                <SkeletonText />
+                                <SkeletonText />
                               </Box>
                             </Box>
                           </Box>
