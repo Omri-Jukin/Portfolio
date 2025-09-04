@@ -931,6 +931,208 @@ export const pdfThemeColors = {
     const [r, g, b] = theme.accent;
     return `rgba(${r}, ${g}, ${b}, 0.3)`;
   },
+
+  // Get theme-based gradient
+  getGradient: (themeName: keyof typeof PDF_THEMES): string => {
+    const theme = PDF_THEMES[themeName];
+    if (theme.cssHeaderAccent) {
+      return `linear-gradient(135deg, ${theme.cssHeaderBg} 0%, ${theme.cssHeaderAccent} 100%)`;
+    }
+    return theme.cssHeaderBg;
+  },
+
+  // Get theme-based shadow
+  getShadow: (themeName: keyof typeof PDF_THEMES): string => {
+    const theme = PDF_THEMES[themeName];
+    const [r, g, b] = theme.accent;
+    return `0 4px 20px rgba(${r}, ${g}, ${b}, 0.2)`;
+  },
+};
+
+/**
+ * Enhanced PDF template styles with new visual features
+ */
+export const enhancedPdfTemplateStyles = {
+  // Visual element indicators
+  visualElementIndicator: css`
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 10px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  `,
+
+  // Layout variant indicators
+  layoutVariantIndicator: css`
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 10px;
+    color: #666;
+  `,
+
+  // Typography variant indicators
+  typographyIndicator: css`
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 10px;
+    color: #666;
+  `,
+
+  // Enhanced template card with visual features
+  enhancedTemplateCard: (
+    themeName: keyof typeof PDF_THEMES,
+    isSelected = false
+  ) => {
+    const theme = PDF_THEMES[themeName];
+    return css`
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: ${isSelected
+        ? `0 8px 32px ${theme.cssAccent}40, 0 0 0 3px ${theme.cssAccent}`
+        : "0 4px 20px rgba(0, 0, 0, 0.1)"};
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: white;
+      cursor: pointer;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        border-color: ${theme.cssAccent}40;
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: ${theme.cssHeaderAccent
+          ? `linear-gradient(90deg, ${theme.cssHeaderBg} 0%, ${theme.cssHeaderAccent} 100%)`
+          : theme.cssHeaderBg};
+        z-index: 1;
+      }
+    `;
+  },
+
+  // Enhanced header with gradient and visual effects
+  enhancedTemplateHeader: (themeName: keyof typeof PDF_THEMES) => {
+    const theme = PDF_THEMES[themeName];
+    return css`
+      background: ${theme.cssHeaderAccent
+        ? `linear-gradient(135deg, ${theme.cssHeaderBg} 0%, ${theme.cssHeaderAccent} 100%)`
+        : theme.cssHeaderBg};
+      padding: 16px 20px;
+      color: white;
+      position: relative;
+      height: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 60px;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent 0%,
+          rgba(255, 255, 255, 0.1) 100%
+        );
+        pointer-events: none;
+      }
+    `;
+  },
+
+  // Enhanced section headers with visual elements
+  enhancedSectionHeader: (themeName: keyof typeof PDF_THEMES) => {
+    const theme = PDF_THEMES[themeName];
+    return css`
+      font-size: 10px;
+      font-weight: bold;
+      color: ${theme.cssAccent};
+      margin: 12px 0 4px 0;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      &::before {
+        content: "▶";
+        font-size: 8px;
+        color: ${theme.cssAccent};
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 16px;
+        right: 0;
+        height: 1px;
+        background: ${theme.cssAccent};
+      }
+    `;
+  },
+
+  // Visual element badges
+  visualElementBadge: css`
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    padding: 2px 8px;
+    font-size: 9px;
+    color: #666;
+    margin: 2px;
+  `,
+
+  // Theme category styles
+  themeCategory: css`
+    margin-bottom: 24px;
+
+    h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin: 0 0 16px 0;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+  `,
+
+  // Enhanced template grid with categories
+  enhancedTemplateGrid: css`
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+
+    ${breakpoints.up("TABLET")} {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 32px;
+    }
+  `,
 };
 
 // ========================
@@ -968,6 +1170,7 @@ const styles = {
   zIndex,
   pdfTemplateStyles,
   pdfThemeColors,
+  enhancedPdfTemplateStyles,
 };
 
 export default styles;

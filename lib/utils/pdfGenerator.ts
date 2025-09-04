@@ -1,19 +1,40 @@
 import jsPDF from "jspdf";
-import { PDF_THEMES, PDF_LAYOUT } from "../constants";
-import type { ResumeData, PDFRenderOptions } from "../types";
+import {
+  PDF_THEMES,
+  PDF_LAYOUT,
+  PDF_LAYOUT_VARIANTS,
+  PDF_VISUAL_ELEMENTS,
+  PDF_TYPOGRAPHY_VARIANTS,
+} from "../constants";
+import type {
+  ResumeData,
+  PDFRenderOptions,
+  EnhancedPDFRenderOptions,
+} from "../types";
 
 // Re-export types for backward compatibility
 export type { ResumeData, PDFRenderOptions as RenderOptions };
 
 export function renderResumePDF(
   data: ResumeData,
-  opts: PDFRenderOptions = {}
+  opts: PDFRenderOptions | EnhancedPDFRenderOptions = {}
 ): jsPDF {
   const options = {
     rtl: opts.rtl || false,
     theme: opts.theme || "corporate",
     maxBulletsPerRole: opts.maxBulletsPerRole || 3,
     maxProjects: opts.maxProjects || 4,
+    // Enhanced options
+    layoutVariant: (opts as EnhancedPDFRenderOptions).layoutVariant || "single",
+    typography: (opts as EnhancedPDFRenderOptions).typography || "sansSerif",
+    visualElements: {
+      icons: false, // Disabled by default
+      borders: false, // Disabled by default
+      shadows: false, // Disabled by default
+      gradients: false, // Disabled by default
+      patterns: false, // Disabled by default
+    },
+    customSpacing: (opts as EnhancedPDFRenderOptions).customSpacing,
   };
 
   const doc = new jsPDF({ unit: "mm", format: "a4" });
@@ -26,16 +47,161 @@ export function renderResumePDF(
   }
 
   const theme = PDF_THEMES[options.theme];
+  const layoutVariant = PDF_LAYOUT_VARIANTS[options.layoutVariant];
+  const typography = PDF_TYPOGRAPHY_VARIANTS[options.typography];
   const margins = PDF_LAYOUT.MARGINS;
   const pageWidth = PDF_LAYOUT.A4.w - margins.x * 2;
   let currentY = margins.y;
 
+  // Get spacing configuration with defaults
+  const spacing = {
+    sectionGap:
+      options.customSpacing?.sectionGap ??
+      ("spacing" in layoutVariant
+        ? layoutVariant.spacing?.sectionGap
+        : undefined) ??
+      PDF_LAYOUT.SPACING.sectionGap,
+    paragraphGap:
+      options.customSpacing?.paragraphGap ??
+      ("spacing" in layoutVariant
+        ? layoutVariant.spacing?.paragraphGap
+        : undefined) ??
+      PDF_LAYOUT.SPACING.paragraphGap,
+    bulletGap:
+      options.customSpacing?.bulletGap ??
+      ("spacing" in layoutVariant
+        ? layoutVariant.spacing?.bulletGap
+        : undefined) ??
+      PDF_LAYOUT.SPACING.bulletGap,
+    experienceGap:
+      options.customSpacing?.experienceGap ??
+      ("spacing" in layoutVariant
+        ? layoutVariant.spacing?.experienceGap
+        : undefined) ??
+      PDF_LAYOUT.SPACING.experienceGap,
+    ruleGap:
+      options.customSpacing?.ruleGap ??
+      ("spacing" in layoutVariant
+        ? layoutVariant.spacing?.ruleGap
+        : undefined) ??
+      PDF_LAYOUT.SPACING.ruleGap,
+  };
+
+  // Helper functions for visual elements
+  // const drawIcon = (
+  //   x: number,
+  //   y: number,
+  //   iconType: string,
+  //   size: number = PDF_VISUAL_ELEMENTS.icons.size
+  // ) => {
+  //   if (!options.visualElements.icons) return;
+
+  //   // Simple icon drawing - in a real implementation, you'd use actual icon fonts or SVGs
+  //   doc.setFontSize(size);
+  //   doc.setTextColor(...theme.accent);
+
+  //   switch (iconType) {
+  //     case "phone":
+  //       doc.text("📞", x, y);
+  //       break;
+  //     case "email":
+  //       doc.text("✉", x, y);
+  //       break;
+  //     case "location":
+  //       doc.text("📍", x, y);
+  //       break;
+  //     case "github":
+  //       doc.text("🐙", x, y);
+  //       break;
+  //     case "linkedin":
+  //       doc.text("💼", x, y);
+  //       break;
+  //     case "portfolio":
+  //       doc.text("🌐", x, y);
+  //       break;
+  //     default:
+  //       doc.text("•", x, y);
+  //   }
+  // };
+
+  // const drawBorder = (x: number, y: number, width: number, height: number) => {
+  //   if (!options.visualElements.borders) return;
+
+  //   doc.setDrawColor(...theme.accent);
+  //   doc.setLineWidth(PDF_VISUAL_ELEMENTS.borders.width);
+  //   doc.roundedRect(
+  //     x,
+  //     y,
+  //     width,
+  //     height,
+  //     PDF_VISUAL_ELEMENTS.borders.radius,
+  //     PDF_VISUAL_ELEMENTS.borders.radius,
+  //     "S"
+  //   );
+  // };
+
+  const drawShadow = (x: number, y: number, width: number, height: number) => {
+    if (!options.visualElements.shadows) return;
+
+    const shadow = PDF_VISUAL_ELEMENTS.shadows;
+    doc.setFillColor(...shadow.color);
+    doc.roundedRect(
+      x + shadow.offset.x,
+      y + shadow.offset.y,
+      width,
+      height,
+      PDF_VISUAL_ELEMENTS.borders.radius,
+      PDF_VISUAL_ELEMENTS.borders.radius,
+      "F"
+    );
+  };
+
+  const drawGradient = (
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    color1: [number, number, number],
+    color2: [number, number, number]
+  ) => {
+    if (!options.visualElements.gradients) return;
+
+    const steps = PDF_VISUAL_ELEMENTS.gradients.steps;
+    const stepHeight = height / steps;
+
+    for (let i = 0; i < steps; i++) {
+      const ratio = i / (steps - 1);
+      const r = Math.round(color1[0] + (color2[0] - color1[0]) * ratio);
+      const g = Math.round(color1[1] + (color2[1] - color1[1]) * ratio);
+      const b = Math.round(color1[2] + (color2[2] - color1[2]) * ratio);
+
+      doc.setFillColor(r, g, b);
+      doc.rect(x, y + i * stepHeight, width, stepHeight, "F");
+    }
+  };
+
   // Calculate header height based on content
   const headerHeight = PDF_LAYOUT.HEADER_HEIGHT;
 
-  // Header background
-  doc.setFillColor(...theme.headerBg);
-  doc.rect(0, 0, PDF_LAYOUT.A4.w, headerHeight, "F");
+  // Header background with gradient if enabled
+  if (options.visualElements.gradients && theme.headerAccent) {
+    drawGradient(
+      0,
+      0,
+      PDF_LAYOUT.A4.w,
+      headerHeight,
+      theme.headerBg,
+      theme.headerAccent
+    );
+  } else {
+    doc.setFillColor(...theme.headerBg);
+    doc.rect(0, 0, PDF_LAYOUT.A4.w, headerHeight, "F");
+  }
+
+  // Add shadow to header if enabled
+  if (options.visualElements.shadows) {
+    drawShadow(0, 0, PDF_LAYOUT.A4.w, headerHeight);
+  }
 
   if (theme.headerAccent) {
     doc.setFillColor(
@@ -48,37 +214,49 @@ export function renderResumePDF(
 
   // Name
   doc.setTextColor(...theme.name);
-  doc.setFont("helvetica", "bold");
+  doc.setFont(typography.font, "bold");
   doc.setFontSize(PDF_LAYOUT.FONT_SIZES.name);
   doc.text(data.person.name, margins.x, 25);
 
   // Title
   doc.setTextColor(...theme.title);
-  doc.setFont("helvetica", "normal");
+  doc.setFont(typography.font, "normal");
   doc.setFontSize(PDF_LAYOUT.FONT_SIZES.title);
   doc.text(data.person.title, margins.x, 37);
 
   // Reset text color for contact info (black text for visibility)
   doc.setTextColor(0, 0, 0);
+  doc.setFont(typography.font, "normal");
   doc.setFontSize(PDF_LAYOUT.FONT_SIZES.contacts);
+
+  let contactY = 45;
+  // const iconSpacing = PDF_VISUAL_ELEMENTS.icons.spacing;
 
   // Phone and Email
   const contactLine1 = `Phone: ${data.person.contacts.phone} | Email: ${data.person.contacts.email}`;
-  doc.text(contactLine1, margins.x, 45);
+  doc.text(contactLine1, margins.x, contactY);
+  contactY += 5;
 
   // Portfolio
   if (data.person.contacts.portfolio) {
-    doc.text(`Portfolio: ${data.person.contacts.portfolio}`, margins.x, 50);
+    doc.text(
+      `Portfolio: ${data.person.contacts.portfolio}`,
+      margins.x,
+      contactY
+    );
+    contactY += 5;
   }
 
   // GitHub
   if (data.person.contacts.github) {
-    doc.text(`GitHub: ${data.person.contacts.github}`, margins.x, 55);
+    doc.text(`GitHub: ${data.person.contacts.github}`, margins.x, contactY);
+    contactY += 5;
   }
 
   // LinkedIn
   if (data.person.contacts.linkedin) {
-    doc.text(`LinkedIn: ${data.person.contacts.linkedin}`, margins.x, 60);
+    doc.text(`LinkedIn: ${data.person.contacts.linkedin}`, margins.x, contactY);
+    contactY += 5;
   }
 
   // Reset text color for body
@@ -87,16 +265,18 @@ export function renderResumePDF(
 
   // Professional Summary
   addSection("Professional Summary", () => {
+    doc.setFont(typography.font, "normal");
     doc.setFontSize(PDF_LAYOUT.FONT_SIZES.body);
     const summaryLines = doc.splitTextToSize(data.summary, pageWidth);
     summaryLines.forEach((line: string) => {
       doc.text(line, margins.x, currentY);
-      currentY += 4;
+      currentY += spacing.paragraphGap;
     });
   });
 
   // Technical Skills
   addSection("Technical Skills", () => {
+    doc.setFont(typography.font, "normal");
     doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
 
     // Frontend
@@ -105,7 +285,7 @@ export function renderResumePDF(
       const frontendLines = doc.splitTextToSize(frontendText, pageWidth);
       frontendLines.forEach((line: string) => {
         doc.text(line, margins.x, currentY);
-        currentY += 3.5;
+        currentY += spacing.bulletGap;
       });
     }
 
@@ -115,7 +295,7 @@ export function renderResumePDF(
       const backendLines = doc.splitTextToSize(backendText, pageWidth);
       backendLines.forEach((line: string) => {
         doc.text(line, margins.x, currentY);
-        currentY += 3.5;
+        currentY += spacing.bulletGap;
       });
     }
 
@@ -125,7 +305,7 @@ export function renderResumePDF(
       const archLines = doc.splitTextToSize(archText, pageWidth);
       archLines.forEach((line: string) => {
         doc.text(line, margins.x, currentY);
-        currentY += 3.5;
+        currentY += spacing.bulletGap;
       });
     }
 
@@ -135,7 +315,7 @@ export function renderResumePDF(
       const dbLines = doc.splitTextToSize(dbText, pageWidth);
       dbLines.forEach((line: string) => {
         doc.text(line, margins.x, currentY);
-        currentY += 3.5;
+        currentY += spacing.bulletGap;
       });
     }
 
@@ -145,7 +325,7 @@ export function renderResumePDF(
       const cloudLines = doc.splitTextToSize(cloudText, pageWidth);
       cloudLines.forEach((line: string) => {
         doc.text(line, margins.x, currentY);
-        currentY += 3.5;
+        currentY += spacing.bulletGap;
       });
     }
   });
@@ -156,16 +336,16 @@ export function renderResumePDF(
       if (index >= 3) return; // Limit to 3 experiences for space
 
       // Role and Company
-      doc.setFont("helvetica", "bold");
+      doc.setFont(typography.font, "bold");
       doc.setFontSize(PDF_LAYOUT.FONT_SIZES.body);
       doc.text(`${exp.role} - ${exp.company}`, margins.x, currentY);
-      currentY += 4;
+      currentY += spacing.paragraphGap;
 
       // Period
-      doc.setFont("helvetica", "normal");
+      doc.setFont(typography.font, "normal");
       doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
       doc.text(exp.period, margins.x, currentY);
-      currentY += 4;
+      currentY += spacing.paragraphGap;
 
       // Bullets (limited for space)
       const maxBullets = Math.min(
@@ -178,10 +358,10 @@ export function renderResumePDF(
         bulletLines.forEach((line: string, lineIndex: number) => {
           const x = lineIndex === 0 ? margins.x : margins.x + 3;
           doc.text(line, x, currentY);
-          currentY += PDF_LAYOUT.SPACING.bulletGap;
+          currentY += spacing.bulletGap;
         });
       }
-      currentY += PDF_LAYOUT.SPACING.experienceGap; // Extra space between experiences
+      currentY += spacing.experienceGap; // Extra space between experiences
     });
   });
 
@@ -193,17 +373,17 @@ export function renderResumePDF(
         const project = data.projects[i];
 
         // Project name
-        doc.setFont("helvetica", "bold");
+        doc.setFont(typography.font, "bold");
         doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
         doc.text(`• ${project.name}`, margins.x, currentY);
-        currentY += 3.5;
+        currentY += spacing.bulletGap;
 
         // Project description
-        doc.setFont("helvetica", "normal");
+        doc.setFont(typography.font, "normal");
         const projLines = doc.splitTextToSize(project.line, pageWidth - 5);
         projLines.forEach((line: string) => {
           doc.text(line, margins.x + 3, currentY);
-          currentY += 3.5;
+          currentY += spacing.bulletGap;
         });
         currentY += 1;
       }
@@ -213,29 +393,33 @@ export function renderResumePDF(
   // Additional Activities
   if (data.additional) {
     addSection("Additional Activities", () => {
+      doc.setFont(typography.font, "normal");
       doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
       const additionalLines = doc.splitTextToSize(data.additional!, pageWidth);
       additionalLines.forEach((line: string) => {
         doc.text(line, margins.x, currentY);
-        currentY += 3.5;
+        currentY += spacing.bulletGap;
       });
     });
   }
 
   function addSection(title: string, content: () => void) {
     // Section title
-    currentY += PDF_LAYOUT.SPACING.sectionGap;
+    currentY += spacing.sectionGap;
     doc.setTextColor(...theme.accent);
-    doc.setFont("helvetica", "bold");
+    doc.setFont(typography.font, "bold");
     doc.setFontSize(PDF_LAYOUT.FONT_SIZES.sectionHeader);
     doc.text(title, margins.x, currentY);
-    currentY += PDF_LAYOUT.SPACING.sectionGap;
+    currentY += spacing.sectionGap;
 
-    // Rule line
+    // Rule line with visual enhancements
     doc.setDrawColor(...theme.rule);
     doc.setLineWidth(0.3);
+
+    // Simple underline - no decorative elements
     doc.line(margins.x, currentY, margins.x + pageWidth, currentY);
-    currentY += PDF_LAYOUT.SPACING.ruleGap;
+
+    currentY += spacing.ruleGap;
 
     // Reset text color
     doc.setTextColor(...theme.text);
