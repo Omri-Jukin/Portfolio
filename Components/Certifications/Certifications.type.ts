@@ -11,4 +11,5 @@ export type CertificationCategory =
   | "security"
   | "project-management"
   | "design"
+  | "cybersecurity"
   | "other";

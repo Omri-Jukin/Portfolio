@@ -16,50 +16,105 @@ const localeData = {
 export const extractResumeData = (language: string = "en"): ResumeData => {
   const data = localeData[language as keyof typeof localeData] || localeData.en;
 
-  // Extract career experiences - use the career data from locales
-  const careerExperiences = data.career?.experiences || [];
-
+  // Transform to new PDF generator format
   return {
-    metadata: {
+    meta: {
       title: data.metadata.title,
-      description: data.metadata.description,
+      author: "Omri Jukin",
     },
-    resume: {
-      title: data.resume.title,
-      description: data.resume.description,
-      experience: data.resume.experience,
-      professionalSummary:
-        data.resume.professionalSummary || "Professional Summary",
-    },
-    career: {
-      experiences: careerExperiences,
-    },
-    skills: {
-      categories: {
-        technical: data.skills.categories.technical,
-        soft: data.skills.categories.soft,
+    person: {
+      name: "Omri Jukin",
+      title: data.resume.experience || "Full Stack Developer",
+      contacts: {
+        phone: "+972 52-334-4064",
+        email: "contact@omrijukin.com",
+        portfolio: "https://omrijukin.com",
+        github: "https://github.com/Omri-Jukin",
+        linkedin: "https://linkedin.com/in/omri-jukin",
+        location: "Israel",
       },
     },
-    projects: {
-      projects: data.projects.projects,
-    },
-    languages: {
-      programming: data.languages?.programming || [
-        { name: "TypeScript", level: "Advanced" },
-        { name: "JavaScript", level: "Advanced" },
-        { name: "Java", level: "Intermediate" },
-        { name: "C#", level: "Intermediate" },
-        { name: "Python", level: "Novice" },
+    summary:
+      data.resume.professionalSummary ||
+      "Full Stack Developer with 5+ years expertise in scalable web development and modern technologies.",
+    tech: {
+      frontend: [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "JavaScript",
+        "HTML5",
+        "CSS3",
+        "Material-UI",
+        "Tailwind CSS",
+        "Framer Motion",
       ],
-      spoken: data.languages?.spoken || [
-        { name: "Hebrew", level: "Native" },
-        { name: "English", level: "Professional" },
-        { name: "Spanish", level: "Novice" },
+      backend: [
+        "Node.js",
+        "Express.js",
+        "tRPC",
+        "Drizzle ORM",
+        "PostgreSQL",
+        "MongoDB",
+        "REST APIs",
+        "GraphQL",
+      ],
+      architecture: [
+        "Microservices",
+        "Monolithic Systems",
+        "API Design",
+        "System Integration",
+        "Performance Optimization",
+        "Scalable Architecture",
+      ],
+      databases: [
+        "PostgreSQL",
+        "MongoDB",
+        "Data Modeling",
+        "Query Optimization",
+        "Database Design",
+        "Data Architecture",
+      ],
+      cloudDevOps: [
+        "AWS",
+        "Vercel",
+        "Docker",
+        "CI/CD",
+        "Deployment",
+        "Cloud Infrastructure",
+        "Git",
+        "Jest",
+        "Vitest",
+        "Storybook",
+        "Testing",
+      ],
+      softSkills: data.skills?.categories?.soft?.skills?.map(
+        (skill) => skill.description || skill.name
+      ) || [
+        "Team management, mentoring, and project coordination",
+        "Analytical thinking and creative solutions",
+        "Technical and non-technical stakeholder communication",
+        "Quick learning and technology adoption",
       ],
     },
-    additionalActivities:
+    experience:
+      data.career?.experiences?.map((exp) => ({
+        role: exp.role,
+        company: exp.company,
+        location: "Israel",
+        period: exp.time,
+        bullets: exp.details || [],
+        stackLine: (exp as { stackLine?: string }).stackLine,
+      })) || [],
+    projects:
+      data.projects?.projects?.map((project) => ({
+        name: project.title,
+        line: project.description,
+        url: project.link,
+      })) || [],
+    additional:
       data.additionalActivities ||
-      "Founder of an online community promoting critical and rational thinking and open debates. Engaged in public speaking and live broadcasts on topics related to hard sciences, soft sciences, rational thinking, and technology. Enthusiastic hobbyist magician, using creative skills to engage audiences and encourage curiosity.",
+      "Continuous learning in full stack development, contributing to open-source projects, and staying current with modern web technologies and best practices.",
   };
 };
 

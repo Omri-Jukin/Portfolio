@@ -573,6 +573,8 @@ export const PROJECT_STATUSES = {
   IN_PROGRESS: "in-progress",
   ARCHIVED: "archived",
   CONCEPT: "concept",
+  DELETED: "deleted",
+  CANCELLED: "cancelled",
 } as const;
 
 /**

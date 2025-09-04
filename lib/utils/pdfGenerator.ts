@@ -1,1600 +1,354 @@
 import jsPDF from "jspdf";
-import "jspdf-autotable";
-import {
-  processRTLLine,
-  processRTLTitle,
-  processRTLMixedContent,
-} from "./rtlTextProcessor";
-import { getTextColors } from "#/theme/textColors";
-import { createTheme } from "@mui/material/styles";
-import { SoftSkill, TechnicalSkill } from "@/app/[locale]/resume/page";
 
-export interface ResumeData {
-  metadata: {
+export type ResumeData = {
+  meta?: { title?: string; author?: string };
+  person: {
+    name: string;
     title: string;
-    description: string;
-  };
-  resume: {
-    title: string;
-    description: string;
-    experience: string;
-    professionalSummary: string;
-  };
-  career: {
-    experiences: Array<{
-      role: string;
-      company: string;
-      time: string;
-      details: string[];
-    }>;
-  };
-  skills: {
-    categories: {
-      technical: {
-        skills: Array<{
-          name: string;
-          level: number;
-          technologies: string[];
-        }>;
-      };
-      soft: {
-        skills: Array<{
-          name: string;
-          level: number;
-          description: string;
-        }>;
-      };
+    contacts: {
+      phone: string;
+      email: string;
+      portfolio?: string;
+      github?: string;
+      linkedin?: string;
+      location?: string;
     };
   };
-  projects: {
-    projects: Array<{
-      title: string;
-      description: string;
-      link: string;
-    }>;
+  summary: string;
+  tech: {
+    frontend: string[];
+    backend: string[];
+    architecture: string[];
+    databases: string[];
+    cloudDevOps: string[];
+    softSkills?: string[];
   };
-  languages: {
-    programming: Array<{
-      name: string;
-      level: string;
-    }>;
-    spoken: Array<{
-      name: string;
-      level: string;
-    }>;
-  };
-  additionalActivities: string;
-}
-
-export type ResumeTemplate =
-  | "modern"
-  | "elegant"
-  | "tech"
-  | "creative"
-  | "minimal"
-  | "teal"
-  | "indigo"
-  | "rose"
-  | "corporate"
-  | "startup"
-  | "academic";
-
-export class PDFGenerator {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private doc: any;
-  private currentY: number = 25;
-  private pageWidth: number;
-  private pageHeight: number;
-  private margin: number = 8;
-  private sidebarWidth: number = 0; // Single-column layout for ATS
-  private mainContentWidth: number;
-  private lineHeight: number = 7;
-  private textColors: ReturnType<typeof getTextColors>;
-  private primaryColor: [number, number, number] = [20, 20, 20]; // Almost black for readability
-  private secondaryColor: [number, number, number] = [68, 68, 68]; // Dark gray for readability
-  private accentColor: [number, number, number] = [127, 0, 63]; // Red accent
-  private sidebarColor: [number, number, number] = [255, 255, 255]; // No sidebar color needed
-  private isRTL: boolean = false;
-  private sidebarX: number = 0;
-  private mainContentX: number = 0;
-  private template: ResumeTemplate = "modern";
-  private areFontsEmbedded: boolean = false;
-  private isInitialized: boolean = false;
-
-  constructor() {
-    // Actual initialization happens in initDoc() at runtime
-    this.doc = null;
-    this.pageWidth = 0;
-    this.pageHeight = 0;
-    this.mainContentWidth = 0;
-
-    // Initialize text colors with a light theme for PDF (always readable on white background)
-    const theme = createTheme({ palette: { mode: "light" } });
-    this.textColors = getTextColors(theme);
-  }
-
-  private async initDoc(): Promise<void> {
-    if (this.isInitialized) return;
-    if (typeof window === "undefined") return; // Only run on client
-
-    this.doc = new jsPDF("p", "mm", "a4");
-    this.pageWidth = this.doc.internal.pageSize.getWidth();
-    this.pageHeight = this.doc.internal.pageSize.getHeight();
-    this.mainContentWidth = this.pageWidth - 2 * this.margin;
-
-    this.doc.setProperties({
-      title: "Omri Jukin - Resume",
-      subject: "Professional Resume",
-      author: "Omri Jukin",
-      creator: "Portfolio Website",
-    });
-
-    this.isInitialized = true;
-  }
-
-  private async embedFonts(): Promise<void> {
-    if (this.areFontsEmbedded) return;
-    if (typeof window === "undefined") return;
-
-    const regularUrl = "/Bona_Nova_SC/BonaNovaSC-Regular.ttf";
-    const boldUrl = "/Bona_Nova_SC/BonaNovaSC-Bold.ttf";
-
-    try {
-      const [regularB64, boldB64] = await Promise.all([
-        this.fetchAsBase64(regularUrl),
-        this.fetchAsBase64(boldUrl),
-      ]);
-
-      this.doc.addFileToVFS("BonaNovaSC-Regular.ttf", regularB64);
-      this.doc.addFont("BonaNovaSC-Regular.ttf", "bona-nova", "normal");
-      this.doc.addFileToVFS("BonaNovaSC-Bold.ttf", boldB64);
-      this.doc.addFont("BonaNovaSC-Bold.ttf", "bona-nova", "bold");
-
-      this.areFontsEmbedded = true;
-    } catch {
-      this.areFontsEmbedded = false;
-    }
-  }
-
-  private async fetchAsBase64(url: string): Promise<string> {
-    const res = await fetch(url);
-    const buf = await res.arrayBuffer();
-    let binary = "";
-    const bytes = new Uint8Array(buf);
-    const chunkSize = 0x8000;
-    for (let i = 0; i < bytes.length; i += chunkSize) {
-      const chunk = bytes.subarray(i, i + chunkSize);
-      binary += String.fromCharCode.apply(null, Array.from(chunk));
-    }
-    return btoa(binary);
-  }
-
-  async generateResume(
-    data: ResumeData,
-    language: string = "en",
-    template: ResumeTemplate = "modern"
-  ): Promise<void> {
-    await this.initDoc();
-    // Set RTL for Hebrew
-    this.isRTL = language === "he";
-    this.template = template;
-
-    // Apply color palette by template (text prefers dark colors by default)
-    this.applyTemplatePalette(template);
-
-    // Ensure required fonts are embedded for browser rendering
-    await this.embedFonts();
-
-    // Calculate layout positions based on RTL - sidebar flush with edge
-    this.sidebarX = 0;
-    this.mainContentX = this.margin;
-
-    this.currentY = this.getTopStartY();
-
-    // Draw decorative background (CSS-like visuals) per template
-    this.drawDecorativeBackground();
-
-    // Render by selected template
-    switch (this.template) {
-      case "modern":
-        this.addMainContentModern(data);
-        break;
-      case "elegant":
-        this.addMainContentElegant(data);
-        break;
-      case "tech":
-        this.addMainContentTech(data);
-        break;
-      case "creative":
-        this.addMainContentCreative(data);
-        break;
-      case "minimal":
-        this.addMainContentMinimal(data);
-        break;
-      case "teal":
-        this.addMainContentClassic(data);
-        break;
-      case "indigo":
-        this.addMainContentClassic(data);
-        break;
-      case "rose":
-        this.addMainContentClassic(data);
-        break;
-      case "corporate":
-        this.addMainContent(data);
-        break;
-      case "startup":
-        this.addMainContent(data);
-        break;
-      case "academic":
-        this.addMainContent(data);
-        break;
-      default:
-        this.addMainContent(data);
-        break;
-    }
-
-    console.log(
-      `Resume generated in ${language} (${
-        this.isRTL ? "RTL" : "LTR"
-      }) with template ${this.template}`
-    );
-  }
-
-  private hexToRgb(hex: string): [number, number, number] {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result
-      ? [
-          parseInt(result[1], 16),
-          parseInt(result[2], 16),
-          parseInt(result[3], 16),
-        ]
-      : [0, 0, 0];
-  }
-
-  private applyTemplatePalette(template: ResumeTemplate): void {
-    // Use centralized text colors for better readability and consistency
-    this.primaryColor = this.hexToRgb(this.textColors.primary);
-    this.secondaryColor = this.hexToRgb(this.textColors.secondary);
-
-    // Set accent color based on template
-    let accent: [number, number, number] = this.hexToRgb(
-      this.textColors.accent
-    );
-
-    switch (template) {
-      case "teal":
-        accent = [0, 121, 107];
-        break;
-      case "indigo":
-        accent = [63, 81, 181];
-        break;
-      case "rose":
-        accent = [173, 20, 87];
-        break;
-      case "corporate":
-        accent = [44, 62, 80]; // Dark blue-gray
-        break;
-      case "startup":
-        accent = [127, 0, 63]; // Red accent
-        break;
-      case "academic":
-        accent = [52, 73, 94]; // Dark gray
-        break;
-      default:
-        // Use centralized accent color
-        accent = this.hexToRgb(this.textColors.accent);
-        break;
-    }
-
-    this.accentColor = accent;
-  }
-
-  private getTopStartY(): number {
-    switch (this.template) {
-      case "teal":
-      case "indigo":
-      case "rose":
-        return 45; // header band height ~35 + padding
-      case "corporate":
-      case "startup":
-      case "academic":
-        return 36; // header band ~28 + padding
-      case "modern":
-        return 42; // modern header height
-      case "elegant":
-        return 44; // elegant header height
-      case "tech":
-        return 38; // tech header height
-      case "creative":
-        return 46; // creative header height
-      case "minimal":
-        return 35; // minimal header height
-      default:
-        return 40;
-    }
-  }
-
-  private drawDecorativeBackground(): void {
-    // Clear page with white base
-    this.doc.setFillColor(255, 255, 255);
-    this.doc.rect(0, 0, this.pageWidth, this.pageHeight, "F");
-
-    switch (this.template) {
-      case "teal":
-        // Header band
-        this.doc.setFillColor(0, 121, 107);
-        this.doc.rect(0, 0, this.pageWidth, 35, "F");
-        // Soft blob bottom-right
-        this.doc.setFillColor(200, 245, 238);
-        this.doc.circle(this.pageWidth - 10, this.pageHeight - 10, 25, "F");
-        break;
-      case "indigo":
-        // Header band
-        this.doc.setFillColor(63, 81, 181);
-        this.doc.rect(0, 0, this.pageWidth, 35, "F");
-        // Subtle accent strip below
-        this.doc.setFillColor(242, 244, 252);
-        this.doc.rect(0, 35, this.pageWidth, 6, "F");
-        break;
-      case "rose":
-        // Header band
-        this.doc.setFillColor(173, 20, 87);
-        this.doc.rect(0, 0, this.pageWidth, 35, "F");
-        // Corner dots
-        this.doc.setFillColor(252, 240, 244);
-        for (let i = 0; i < 6; i++) {
-          this.doc.circle(8 + i * 10, 8, 1.2, "F");
-        }
-        for (let i = 0; i < 6; i++) {
-          this.doc.circle(
-            this.pageWidth - (8 + i * 10),
-            this.pageHeight - 8,
-            1.2,
-            "F"
-          );
-        }
-        break;
-      case "corporate":
-        // Corporate professional header
-        this.doc.setFillColor(44, 62, 80);
-        this.doc.rect(0, 0, this.pageWidth, 34, "F");
-        // Subtle accent line
-        this.doc.setFillColor(200, 200, 200);
-        this.doc.rect(0, 34, this.pageWidth, 1.5, "F");
-        break;
-      case "startup":
-        // Startup modern header
-        this.doc.setFillColor(127, 0, 63);
-        this.doc.rect(0, 0, this.pageWidth, 34, "F");
-        // Startup accent
-        this.doc.setFillColor(255, 255, 255);
-        this.doc.rect(0, 34, this.pageWidth, 2, "F");
-        break;
-      case "academic":
-        // Academic formal header
-        this.doc.setFillColor(52, 73, 94);
-        this.doc.rect(0, 0, this.pageWidth, 34, "F");
-        // Academic accent
-        this.doc.setFillColor(220, 220, 220);
-        this.doc.rect(0, 34, this.pageWidth, 1.5, "F");
-        break;
-      case "modern":
-        // Modern gradient header
-        this.doc.setFillColor(25, 118, 210);
-        this.doc.rect(0, 0, this.pageWidth, 40, "F");
-        // Subtle accent line
-        this.doc.setFillColor(255, 193, 7);
-        this.doc.rect(0, 40, this.pageWidth, 2, "F");
-        break;
-      case "elegant":
-        // Elegant dark header with gold accent
-        this.doc.setFillColor(33, 33, 33);
-        this.doc.rect(0, 0, this.pageWidth, 42, "F");
-        this.doc.setFillColor(212, 175, 55);
-        this.doc.rect(0, 42, this.pageWidth, 2, "F");
-        break;
-      case "tech":
-        // Tech-inspired geometric header
-        this.doc.setFillColor(76, 175, 80);
-        this.doc.rect(0, 0, this.pageWidth, 36, "F");
-        // Tech pattern
-        this.doc.setFillColor(200, 230, 201);
-        for (let i = 0; i < 8; i++) {
-          this.doc.rect(8 + i * 12, 8, 8, 20, "F");
-        }
-        break;
-      case "creative":
-        // Creative colorful header
-        this.doc.setFillColor(156, 39, 176);
-        this.doc.rect(0, 0, this.pageWidth, 44, "F");
-        // Creative accent shapes
-        this.doc.setFillColor(255, 235, 59);
-        this.doc.circle(20, 22, 8, "F");
-        this.doc.setFillColor(255, 87, 34);
-        this.doc.circle(this.pageWidth - 20, 22, 6, "F");
-        break;
-      case "minimal":
-        // Minimal clean header
-        this.doc.setFillColor(245, 245, 245);
-        this.doc.rect(0, 0, this.pageWidth, 33, "F");
-        this.doc.setFillColor(158, 158, 158);
-        this.doc.rect(0, 33, this.pageWidth, 2, "F");
-        break;
-      default:
-        // Default: minimal light divider under header area
-        this.doc.setFillColor(245, 246, 248);
-        this.doc.rect(0, 34, this.pageWidth, 1.5, "F");
-        break;
-    }
-  }
-
-  // Helper method to handle RTL text properly using the robust RTL processor
-  private processRTLText(text: string): string {
-    if (!this.isRTL) return text;
-    return processRTLLine(text, this.isRTL);
-  }
-
-  private drawSidebarBackground(): void {
-    // Maintain compatibility; delegate to decorative background so it's applied on new pages
-    this.drawDecorativeBackground();
-  }
-
-  private addSidebarContent(): void {}
-
-  private addSidebarSection(title: string, y: number): number {
-    // Section title in white
-    this.doc.setTextColor(255, 255, 255);
-    this.doc.setFontSize(12);
-
-    if (this.isRTL) {
-      this.doc.setFont("bona-nova", "bold");
-      const titleX = this.sidebarX + this.sidebarWidth - 5;
-      this.doc.text(title, titleX, y, { align: "right" });
-    } else {
-      this.doc.setFont("helvetica", "bold");
-      const titleX = this.sidebarX + 5;
-      this.doc.text(title, titleX, y);
-    }
-
-    return y + 8;
-  }
-
-  private addContactInfoSidebar(y: number): number {
-    this.doc.setTextColor(255, 255, 255);
-    this.doc.setFontSize(9);
-
-    if (this.isRTL) {
-      this.doc.setFont("bona-nova", "normal");
-    } else {
-      this.doc.setFont("helvetica", "normal");
-    }
-
-    const contactInfo = [
-      { text: "[E] omrijukin@gmail.com", url: "mailto:omrijukin@gmail.com" },
-      { text: "[P] +972 52-334-4064", url: "tel:+972523344064" },
-      {
-        text: "[L] LinkedIn",
-        url: "https://linkedin.com/in/omri-jukin",
-      },
-      {
-        text: "[G] GitHub",
-        url: "https://github.com/Omri-Jukin",
-      },
-      { text: "[W] omrijukin.com", url: "https://omrijukin.com" },
-      { text: "[I] Israel", url: null },
-    ];
-
-    contactInfo.forEach((info) => {
-      if (this.isRTL) {
-        const textX = this.sidebarX + this.sidebarWidth - 5;
-
-        if (info.url) {
-          // Add clickable link
-          this.doc.setTextColor(255, 255, 255);
-          this.doc.text(info.text, textX, y, { align: "right" });
-
-          // Add underline to indicate it's clickable
-          const textWidth = this.doc.getTextWidth(info.text);
-          this.doc.setDrawColor(255, 255, 255);
-          this.doc.setLineWidth(0.2);
-          this.doc.line(textX - textWidth, y + 1, textX, y + 1);
-
-          // Add the link annotation
-          this.doc.link(textX - textWidth, y - 3, textWidth, 4, {
-            url: info.url,
-          });
-        } else {
-          // Regular text without link
-          this.doc.text(info.text, textX, y, { align: "right" });
-        }
-      } else {
-        const textX = this.sidebarX + 5;
-
-        if (info.url) {
-          // Add clickable link
-          this.doc.setTextColor(255, 255, 255);
-          this.doc.text(info.text, textX, y);
-
-          // Add underline to indicate it's clickable
-          const textWidth = this.doc.getTextWidth(info.text);
-          this.doc.setDrawColor(255, 255, 255);
-          this.doc.setLineWidth(0.2);
-          this.doc.line(textX, y + 1, textX + textWidth, y + 1);
-
-          // Add the link annotation
-          this.doc.link(textX, y - 3, textWidth, 4, { url: info.url });
-        } else {
-          // Regular text without link
-          this.doc.text(info.text, textX, y);
-        }
-      }
-
-      y += 6;
-    });
-
-    return y + 8;
-  }
-
-  private addSkillsSidebar(skills: ResumeData["skills"], y: number): number {
-    this.doc.setTextColor(255, 255, 255);
-    this.doc.setFontSize(8);
-
-    if (this.isRTL) {
-      this.doc.setFont("bona-nova", "normal");
-    } else {
-      this.doc.setFont("helvetica", "normal");
-    }
-
-    // Create skill tags similar to the image
-    const skillTags = [
-      "Full Stack Development",
-      "React & Next.js",
-      "TypeScript",
-      "Node.js & Express",
-      "Database Design",
-      "API Development",
-      "DevOps & CI/CD",
-      "System Architecture",
-      "Data Management",
-      "Electrical Engineering",
-    ];
-
-    if (this.isRTL) {
-      let currentX = this.sidebarX + this.sidebarWidth - 5;
-      let currentY = y;
-      const tagHeight = 6;
-
-      skillTags.forEach((skill) => {
-        const tagWidth = this.doc.getTextWidth(skill) + 8;
-
-        // Check if we need to wrap to next line
-        if (currentX - tagWidth < this.sidebarX + 5) {
-          currentX = this.sidebarX + this.sidebarWidth - 5;
-          currentY += tagHeight + 2;
-        }
-
-        // Draw tag background
-        this.doc.setFillColor(70, 130, 180);
-        this.doc.rect(
-          currentX - tagWidth,
-          currentY - 4,
-          tagWidth,
-          tagHeight,
-          "F"
-        );
-
-        // Draw tag text
-        this.doc.setTextColor(255, 255, 255);
-        this.doc.text(skill, currentX - 4, currentY, { align: "right" });
-
-        currentX -= tagWidth + 3;
-      });
-
-      return currentY + tagHeight + 8;
-    } else {
-      let currentX = this.sidebarX + 5;
-      let currentY = y;
-      const tagHeight = 6;
-
-      skillTags.forEach((skill) => {
-        const tagWidth = this.doc.getTextWidth(skill) + 8;
-
-        // Check if we need to wrap to next line
-        if (currentX + tagWidth > this.sidebarX + this.sidebarWidth - 5) {
-          currentX = this.sidebarX + 5;
-          currentY += tagHeight + 2;
-        }
-
-        // Draw tag background
-        this.doc.setFillColor(70, 130, 180);
-        this.doc.rect(currentX, currentY - 4, tagWidth, tagHeight, "F");
-
-        // Draw tag text
-        this.doc.setTextColor(255, 255, 255);
-        this.doc.text(skill, currentX + 4, currentY);
-
-        currentX += tagWidth + 3;
-      });
-
-      return currentY + tagHeight + 8;
-    }
-  }
-
-  private addLanguagesSidebar(
-    languages: ResumeData["languages"],
-    y: number
-  ): number {
-    this.doc.setTextColor(255, 255, 255);
-    this.doc.setFontSize(8);
-
-    if (this.isRTL) {
-      this.doc.setFont("bona-nova", "normal");
-    } else {
-      this.doc.setFont("helvetica", "normal");
-    }
-
-    if (this.isRTL) {
-      // Programming Languages
-      this.doc.setFont("bona-nova", "bold");
-      this.doc.text("Programming:", this.sidebarX + this.sidebarWidth - 5, y, {
-        align: "right",
-      });
-      y += 4;
-
-      this.doc.setFont("bona-nova", "normal");
-      languages.programming.forEach((lang) => {
-        this.doc.text(
-          `${lang.name} (${lang.level})`,
-          this.sidebarX + this.sidebarWidth - 5,
-          y,
-          { align: "right" }
-        );
-        y += 3;
-      });
-
-      y += 3;
-
-      // Spoken Languages
-      this.doc.setFont("bona-nova", "bold");
-      this.doc.text("Spoken:", this.sidebarX + this.sidebarWidth - 5, y, {
-        align: "right",
-      });
-      y += 4;
-
-      this.doc.setFont("bona-nova", "normal");
-      languages.spoken.forEach((lang) => {
-        this.doc.text(
-          `${lang.name} (${lang.level})`,
-          this.sidebarX + this.sidebarWidth - 5,
-          y,
-          { align: "right" }
-        );
-        y += 3;
-      });
-    } else {
-      // Programming Languages
-      this.doc.setFont("helvetica", "bold");
-      this.doc.text("Programming:", this.sidebarX + 5, y);
-      y += 4;
-
-      this.doc.setFont("helvetica", "normal");
-      languages.programming.forEach((lang) => {
-        this.doc.text(`${lang.name} (${lang.level})`, this.sidebarX + 5, y);
-        y += 3;
-      });
-
-      y += 3;
-
-      // Spoken Languages
-      this.doc.setFont("helvetica", "bold");
-      this.doc.text("Spoken:", this.sidebarX + 5, y);
-      y += 4;
-
-      this.doc.setFont("helvetica", "normal");
-      languages.spoken.forEach((lang) => {
-        this.doc.text(`${lang.name} (${lang.level})`, this.sidebarX + 5, y);
-        y += 3;
-      });
-    }
-
-    return y + 8;
-  }
-
-  private addCertificatesSidebar(y: number): number {
-    return y;
-  }
-
-  private addMainContent(data: ResumeData): void {
-    let mainY = this.getTopStartY();
-
-    // Header with name and title
-    mainY = this.addMainHeader(data.metadata, mainY);
-
-    // Professional Summary
-    mainY = this.addMainSection(
-      "Professional Summary",
-      data.resume.experience,
-      mainY
-    );
-
-    // Technical Skills (matches resume page exactly)
-    mainY = this.addSkillsSection(data.skills, mainY);
-
-    // Professional Experience
-    mainY = this.addExperienceSection(data.career, mainY);
-
-    // Projects
-    mainY = this.addProjectsSection(data.projects, mainY);
-
-    // Additional Activities
-    this.addMainSection(
-      "Additional Activities",
-      data.additionalActivities,
-      mainY
-    );
-  }
-
-  // Classic template: subtle separators and larger headings
-  private addMainContentClassic(data: ResumeData): void {
-    let y = this.getTopStartY();
-    y = this.addMainHeader(data.metadata, y);
-    this.drawSeparator(y - 4);
-    y = this.addMainSection("Professional Summary", data.resume.experience, y);
-    this.drawSeparator(y - 8);
-    y = this.addSkillsSection(data.skills, y);
-    this.drawSeparator(y - 8);
-    y = this.addExperienceSection(data.career, y);
-    this.drawSeparator(y - 8);
-    y = this.addProjectsSection(data.projects, y);
-    this.drawSeparator(y - 8);
-    this.addMainSection("Additional Activities", data.additionalActivities, y);
-  }
-
-  // Modern template: clean and contemporary
-  private addMainContentModern(data: ResumeData): void {
-    let y = this.getTopStartY();
-    y = this.addMainHeader(data.metadata, y);
-    this.drawModernSeparator(y - 4);
-    y = this.addMainSection("Professional Summary", data.resume.experience, y);
-    this.drawModernSeparator(y - 8);
-    y = this.addSkillsSection(data.skills, y);
-    this.drawModernSeparator(y - 8);
-    y = this.addExperienceSection(data.career, y);
-    this.drawModernSeparator(y - 8);
-    y = this.addProjectsSection(data.projects, y);
-    this.drawModernSeparator(y - 8);
-    this.addMainSection("Additional Activities", data.additionalActivities, y);
-  }
-
-  // Elegant template: sophisticated and refined
-  private addMainContentElegant(data: ResumeData): void {
-    let y = this.getTopStartY();
-    y = this.addMainHeader(data.metadata, y);
-    this.drawElegantSeparator(y - 4);
-    y = this.addMainSection("Professional Summary", data.resume.experience, y);
-    this.drawElegantSeparator(y - 8);
-    y = this.addSkillsSection(data.skills, y);
-    this.drawElegantSeparator(y - 8);
-    y = this.addExperienceSection(data.career, y);
-    this.drawElegantSeparator(y - 8);
-    y = this.addProjectsSection(data.projects, y);
-    this.drawElegantSeparator(y - 8);
-    this.addMainSection("Additional Activities", data.additionalActivities, y);
-  }
-
-  // Tech template: modern and technical
-  private addMainContentTech(data: ResumeData): void {
-    let y = this.getTopStartY();
-    y = this.addMainHeader(data.metadata, y);
-    this.drawTechSeparator(y - 4);
-    y = this.addMainSection("Professional Summary", data.resume.experience, y);
-    this.drawTechSeparator(y - 8);
-    y = this.addSkillsSection(data.skills, y);
-    this.drawTechSeparator(y - 8);
-    y = this.addExperienceSection(data.career, y);
-    this.drawTechSeparator(y - 8);
-    y = this.addProjectsSection(data.projects, y);
-    this.drawTechSeparator(y - 8);
-    this.addMainSection("Additional Activities", data.additionalActivities, y);
-  }
-
-  // Creative template: artistic and expressive
-  private addMainContentCreative(data: ResumeData): void {
-    let y = this.getTopStartY();
-    y = this.addMainHeader(data.metadata, y);
-    this.drawCreativeSeparator(y - 4);
-    y = this.addMainSection("Professional Summary", data.resume.experience, y);
-    this.drawCreativeSeparator(y - 8);
-    y = this.addSkillsSection(data.skills, y);
-    this.drawCreativeSeparator(y - 8);
-    y = this.addExperienceSection(data.career, y);
-    this.drawCreativeSeparator(y - 8);
-    y = this.addProjectsSection(data.projects, y);
-    this.drawCreativeSeparator(y - 8);
-    this.addMainSection("Additional Activities", data.additionalActivities, y);
-  }
-
-  // Minimal template: clean and simple
-  private addMainContentMinimal(data: ResumeData): void {
-    let y = this.getTopStartY();
-    y = this.addMainHeader(data.metadata, y);
-    this.drawMinimalSeparator(y - 4);
-    y = this.addMainSection("Professional Summary", data.resume.experience, y);
-    this.drawMinimalSeparator(y - 8);
-    y = this.addSkillsSection(data.skills, y);
-    this.drawMinimalSeparator(y - 8);
-    y = this.addExperienceSection(data.career, y);
-    this.drawMinimalSeparator(y - 8);
-    y = this.addProjectsSection(data.projects, y);
-    this.drawMinimalSeparator(y - 8);
-    this.addMainSection("Additional Activities", data.additionalActivities, y);
-  }
-
-  private drawSeparator(y: number): void {
-    this.doc.setDrawColor(200, 200, 200);
-    this.doc.setLineWidth(0.2);
-    this.doc.line(
-      this.mainContentX,
-      y,
-      this.mainContentX + this.mainContentWidth,
-      y
-    );
-  }
-
-  private drawModernSeparator(y: number): void {
-    this.doc.setDrawColor(25, 118, 210);
-    this.doc.setLineWidth(0.5);
-    this.doc.line(
-      this.mainContentX,
-      y,
-      this.mainContentX + this.mainContentWidth,
-      y
-    );
-  }
-
-  private drawElegantSeparator(y: number): void {
-    this.doc.setDrawColor(212, 175, 55);
-    this.doc.setLineWidth(0.3);
-    this.doc.line(
-      this.mainContentX,
-      y,
-      this.mainContentX + this.mainContentWidth,
-      y
-    );
-  }
-
-  private drawTechSeparator(y: number): void {
-    this.doc.setDrawColor(76, 175, 80);
-    this.doc.setLineWidth(0.4);
-    this.doc.line(
-      this.mainContentX,
-      y,
-      this.mainContentX + this.mainContentWidth,
-      y
-    );
-  }
-
-  private drawCreativeSeparator(y: number): void {
-    this.doc.setDrawColor(156, 39, 176);
-    this.doc.setLineWidth(0.6);
-    this.doc.line(
-      this.mainContentX,
-      y,
-      this.mainContentX + this.mainContentWidth,
-      y
-    );
-  }
-
-  private drawMinimalSeparator(y: number): void {
-    this.doc.setDrawColor(158, 158, 158);
-    this.doc.setLineWidth(0.2);
-    this.doc.line(
-      this.mainContentX,
-      y,
-      this.mainContentX + this.mainContentWidth,
-      y
-    );
-  }
-
-  private addMainHeader(metadata: ResumeData["metadata"], y: number): number {
-    // Name - use white text for templates with colored header backgrounds
-    const hasColoredHeader = [
-      "teal",
-      "indigo",
-      "rose",
-      "corporate",
-      "startup",
-      "academic",
-    ].includes(this.template);
-    const headerTextColor: [number, number, number] = hasColoredHeader
-      ? [255, 255, 255]
-      : this.primaryColor;
-
-    this.doc.setTextColor(...headerTextColor);
-    this.doc.setFontSize(24);
-
-    if (this.isRTL) {
-      this.doc.setFont("bona-nova", "bold");
-      const processedTitle = processRTLTitle(metadata.title, this.isRTL);
-      this.doc.text(
-        processedTitle,
-        this.mainContentX + this.mainContentWidth - 15,
-        y,
-        { align: "right" }
-      );
-    } else {
-      this.doc.setFont("helvetica", "bold");
-      this.doc.text(metadata.title, this.mainContentX, y);
-    }
-    y += 10;
-
-    // Title - role line - use light color for templates with colored header backgrounds
-    const subtitleTextColor: [number, number, number] = hasColoredHeader
-      ? [240, 240, 240]
-      : this.accentColor;
-    this.doc.setTextColor(...subtitleTextColor);
-    this.doc.setFontSize(14);
-
-    if (this.isRTL) {
-      this.doc.setFont("bona-nova", "normal");
-    } else {
-      this.doc.setFont("helvetica", "normal");
-    }
-
-    const titleText = this.isRTL
-      ? this.processRTLText("Full Stack Developer | Data Management")
-      : "Full Stack Developer | Data Management";
-    const titleWidth = this.doc.getTextWidth(titleText);
-
-    if (this.isRTL) {
-      // If title is too wide, split it into multiple lines
-      if (titleWidth > this.mainContentWidth) {
-        const words = titleText.split(" | ");
-        let currentLine = "";
-        let lineY = y;
-
-        words.forEach((word) => {
-          const testLine = currentLine + (currentLine ? " | " : "") + word;
-          if (
-            this.doc.getTextWidth(testLine) > this.mainContentWidth &&
-            currentLine
-          ) {
-            this.doc.text(
-              currentLine,
-              this.mainContentX + this.mainContentWidth,
-              lineY,
-              { align: "right" }
-            );
-            lineY += 6;
-            currentLine = word;
-          } else {
-            currentLine = testLine;
-          }
-        });
-
-        if (currentLine) {
-          this.doc.text(
-            currentLine,
-            this.mainContentX + this.mainContentWidth - 15,
-            lineY,
-            { align: "right" }
-          );
-          lineY += 6;
-        }
-
-        y = lineY + 10;
-      } else {
-        this.doc.text(
-          titleText,
-          this.mainContentX + this.mainContentWidth - 15,
-          y,
-          {
-            align: "right",
-          }
-        );
-        y += 15;
-      }
-    } else {
-      // If title is too wide, split it into multiple lines
-      if (titleWidth > this.mainContentWidth) {
-        const words = titleText.split(" | ");
-        let currentLine = "";
-        let lineY = y;
-
-        words.forEach((word) => {
-          const testLine = currentLine + (currentLine ? " | " : "") + word;
-          if (
-            this.doc.getTextWidth(testLine) > this.mainContentWidth &&
-            currentLine
-          ) {
-            this.doc.text(currentLine, this.mainContentX, lineY);
-            lineY += 6;
-            currentLine = word;
-          } else {
-            currentLine = testLine;
-          }
-        });
-
-        if (currentLine) {
-          this.doc.text(currentLine, this.mainContentX, lineY);
-          lineY += 6;
-        }
-
-        y = lineY + 10;
-      } else {
-        this.doc.text(titleText, this.mainContentX, y);
-        y += 15;
-      }
-    }
-
-    return y;
-  }
-
-  private addMainSection(title: string, content: string, y: number): number {
-    // Check if we need a page break
-    if (y > this.pageHeight - 50) {
-      this.doc.addPage();
-      this.drawSidebarBackground();
-      y = this.getTopStartY();
-    }
-
-    // Section title
-    this.doc.setTextColor(...this.primaryColor);
-    this.doc.setFontSize(16);
-
-    if (this.isRTL) {
-      this.doc.setFont("bona-nova", "bold");
-      const processedTitle = this.processRTLText(title);
-      this.doc.text(
-        processedTitle,
-        this.mainContentX + this.mainContentWidth - 15,
-        y,
-        {
-          align: "right",
-        }
-      );
-    } else {
-      this.doc.setFont("helvetica", "bold");
-      this.doc.text(title, this.mainContentX, y);
-    }
-    y += 10;
-
-    // Section content
-    this.doc.setTextColor(...this.secondaryColor);
-    this.doc.setFontSize(10);
-
-    if (this.isRTL) {
-      this.doc.setFont("bona-nova", "normal");
-    } else {
-      this.doc.setFont("helvetica", "normal");
-    }
-
-    const lines = this.doc.splitTextToSize(content, this.mainContentWidth);
-    lines.forEach((line: string) => {
-      if (y > this.pageHeight - 30) {
-        this.doc.addPage();
-        this.drawSidebarBackground();
-        y = this.getTopStartY();
-      }
-
-      if (this.isRTL) {
-        const processedLine = this.processRTLText(line);
-        this.doc.text(
-          processedLine,
-          this.mainContentX + this.mainContentWidth - 15,
-          y,
-          {
-            align: "right",
-          }
-        );
-      } else {
-        this.doc.text(line, this.mainContentX, y);
-      }
-      y += 6;
-    });
-
-    return y + 10;
-  }
-
-  private addSkillsSection(skills: ResumeData["skills"], y: number): number {
-    // Check if we need a page break
-    if (y > this.pageHeight - 80) {
-      this.doc.addPage();
-      this.drawSidebarBackground();
-      y = this.getTopStartY();
-    }
-
-    // Section title
-    this.doc.setTextColor(...this.primaryColor);
-    this.doc.setFontSize(16);
-
-    if (this.isRTL) {
-      this.doc.setFont("bona-nova", "bold");
-      const processedTitle = this.processRTLText("Technical Expertise");
-      this.doc.text(
-        processedTitle,
-        this.mainContentX + this.mainContentWidth - 15,
-        y,
-        { align: "right" }
-      );
-    } else {
-      this.doc.setFont("helvetica", "bold");
-      this.doc.text("Technical Expertise", this.mainContentX, y);
-    }
-    y += 10;
-
-    // Technical Skills
-    this.doc.setTextColor(...this.accentColor);
-    this.doc.setFontSize(14);
-
-    if (this.isRTL) {
-      this.doc.setFont("bona-nova", "bold");
-      this.doc.text(
-        "Technical Skills",
-        this.mainContentX + this.mainContentWidth - 15,
-        y,
-        { align: "right" }
-      );
-    } else {
-      this.doc.setFont("helvetica", "bold");
-      this.doc.text("Technical Skills", this.mainContentX, y);
-    }
-    y += 8;
-
-    // Display technical skills exactly as shown on the resume page
-    skills.categories.technical.skills.forEach((skill: TechnicalSkill) => {
-      if (y > this.pageHeight - 30) {
-        this.doc.addPage();
-        this.drawSidebarBackground();
-        y = this.getTopStartY();
-      }
-
-      // Skill name and level
-      this.doc.setTextColor(...this.primaryColor);
-      this.doc.setFontSize(11);
-
-      if (this.isRTL) {
-        this.doc.setFont("bona-nova", "bold");
-        this.doc.text(
-          `${skill.name} (${skill.level}%)`,
-          this.mainContentX + this.mainContentWidth - 15,
-          y,
-          { align: "right" }
-        );
-      } else {
-        this.doc.setFont("helvetica", "bold");
-        this.doc.text(`${skill.name} (${skill.level}%)`, this.mainContentX, y);
-      }
-      y += 5;
-
-      // Technologies
-      if (skill.technologies && skill.technologies.length > 0) {
-        this.doc.setTextColor(...this.secondaryColor);
-        this.doc.setFontSize(9);
-
-        if (this.isRTL) {
-          this.doc.setFont("bona-nova", "normal");
-        } else {
-          this.doc.setFont("helvetica", "normal");
-        }
-
-        const techText = skill.technologies.join(", ");
-        const lines = this.doc.splitTextToSize(
-          techText,
-          this.mainContentWidth - 20
-        );
-
-        lines.forEach((line: string) => {
-          if (y > this.pageHeight - 25) {
-            this.doc.addPage();
-            this.drawSidebarBackground();
-            y = this.getTopStartY();
-          }
-
-          if (this.isRTL) {
-            this.doc.text(
-              line,
-              this.mainContentX + this.mainContentWidth - 35,
-              y,
-              { align: "right" }
-            );
-          } else {
-            this.doc.text(line, this.mainContentX + 20, y);
-          }
-          y += 4;
-        });
-      }
-      y += 3;
-    });
-
-    y += 8;
-
-    // Soft Skills
-    this.doc.setTextColor(...this.accentColor);
-    this.doc.setFontSize(14);
-
-    if (this.isRTL) {
-      this.doc.setFont("bona-nova", "bold");
-      this.doc.text(
-        "Soft Skills",
-        this.mainContentX + this.mainContentWidth - 15,
-        y,
-        { align: "right" }
-      );
-    } else {
-      this.doc.setFont("helvetica", "bold");
-      this.doc.text("Soft Skills", this.mainContentX, y);
-    }
-    y += 8;
-
-    // Display soft skills exactly as shown on the resume page
-    skills.categories.soft.skills.forEach((skill: SoftSkill) => {
-      if (y > this.pageHeight - 30) {
-        this.doc.addPage();
-        this.drawSidebarBackground();
-        y = this.getTopStartY();
-      }
-
-      // Skill name and level
-      this.doc.setTextColor(...this.primaryColor);
-      this.doc.setFontSize(11);
-
-      if (this.isRTL) {
-        this.doc.setFont("bona-nova", "bold");
-        this.doc.text(
-          `${skill.name} (${skill.level}%)`,
-          this.mainContentX + this.mainContentWidth - 15,
-          y,
-          { align: "right" }
-        );
-      } else {
-        this.doc.setFont("helvetica", "bold");
-        this.doc.text(`${skill.name} (${skill.level}%)`, this.mainContentX, y);
-      }
-      y += 5;
-
-      // Description
-      if (skill.description) {
-        this.doc.setTextColor(...this.secondaryColor);
-        this.doc.setFontSize(9);
-
-        if (this.isRTL) {
-          this.doc.setFont("bona-nova", "normal");
-        } else {
-          this.doc.setFont("helvetica", "normal");
-        }
-
-        const lines = this.doc.splitTextToSize(
-          skill.description,
-          this.mainContentWidth - 20
-        );
-
-        lines.forEach((line: string) => {
-          if (y > this.pageHeight - 25) {
-            this.doc.addPage();
-            this.drawSidebarBackground();
-            y = this.getTopStartY();
-          }
-
-          if (this.isRTL) {
-            this.doc.text(
-              line,
-              this.mainContentX + this.mainContentWidth - 35,
-              y,
-              { align: "right" }
-            );
-          } else {
-            this.doc.text(line, this.mainContentX + 20, y);
-          }
-          y += 4;
-        });
-      }
-      y += 3;
-    });
-
-    return y + 8;
-  }
-
-  private addExperienceSection(
-    career: ResumeData["career"],
-    y: number
-  ): number {
-    // Check if we need a page break
-    if (y > this.pageHeight - 80) {
-      this.doc.addPage();
-      this.drawSidebarBackground();
-      y = this.getTopStartY();
-    }
-
-    // Section title
-    this.doc.setTextColor(...this.primaryColor);
-    this.doc.setFontSize(16);
-
-    if (this.isRTL) {
-      this.doc.setFont("bona-nova", "bold");
-      const processedTitle = this.processRTLText("Professional Experience");
-      this.doc.text(
-        processedTitle,
-        this.mainContentX + this.mainContentWidth - 15,
-        y,
-        { align: "right" }
-      );
-    } else {
-      this.doc.setFont("helvetica", "bold");
-      this.doc.text("Professional Experience", this.mainContentX, y);
-    }
-    y += 8;
-
-    career.experiences.forEach((experience) => {
-      // Check if we need a page break before adding experience
-      if (y > this.pageHeight - 60) {
-        this.doc.addPage();
-        this.drawSidebarBackground();
-        y = this.getTopStartY();
-      }
-
-      // Role
-      this.doc.setTextColor(...this.primaryColor);
-      this.doc.setFontSize(12);
-
-      if (this.isRTL) {
-        this.doc.setFont("bona-nova", "bold");
-        const processedRole = this.processRTLText(experience.role);
-        this.doc.text(
-          processedRole,
-          this.mainContentX + this.mainContentWidth - 15,
-          y,
-          { align: "right" }
-        );
-      } else {
-        this.doc.setFont("helvetica", "bold");
-        this.doc.text(experience.role, this.mainContentX, y);
-      }
-      y += 6;
-
-      // Company and time
-      this.doc.setTextColor(...this.accentColor);
-      this.doc.setFontSize(10);
-
-      if (this.isRTL) {
-        this.doc.setFont("bona-nova", "normal");
-        const processedCompanyTime = processRTLMixedContent(
-          `${experience.company} | ${experience.time}`,
-          this.isRTL
-        );
-        this.doc.text(
-          processedCompanyTime,
-          this.mainContentX + this.mainContentWidth - 15,
-          y,
-          { align: "right" }
-        );
-      } else {
-        this.doc.setFont("helvetica", "normal");
-        this.doc.text(
-          `${experience.company} | ${experience.time}`,
-          this.mainContentX,
-          y
-        );
-      }
-      y += 8;
-
-      // Details
-      this.doc.setTextColor(...this.secondaryColor);
-
-      if (this.isRTL) {
-        this.doc.setFont("bona-nova", "normal");
-      } else {
-        this.doc.setFont("helvetica", "normal");
-      }
-
-      experience.details.forEach((detail) => {
-        if (y > this.pageHeight - 30) {
-          this.doc.addPage();
-          this.drawSidebarBackground();
-          y = this.getTopStartY();
-        }
-
-        const lines = this.doc.splitTextToSize(
-          `• ${detail}`,
-          this.mainContentWidth
-        );
-        lines.forEach((line: string) => {
-          if (y > this.pageHeight - 30) {
-            this.doc.addPage();
-            this.drawSidebarBackground();
-            y = this.getTopStartY();
-          }
-
-          if (this.isRTL) {
-            const processedLine = this.processRTLText(line);
-            this.doc.text(
-              processedLine,
-              this.mainContentX + this.mainContentWidth - 15,
-              y,
-              {
-                align: "right",
-              }
-            );
-          } else {
-            this.doc.text(line, this.mainContentX, y);
-          }
-          y += 5;
-        });
-        y += 3;
-      });
-
-      y += 6;
-    });
-
-    return y;
-  }
-
-  private addProjectsSection(
-    projects: ResumeData["projects"],
-    y: number
-  ): number {
-    // Check if we need a page break
-    if (y > this.pageHeight - 80) {
-      this.doc.addPage();
-      this.drawSidebarBackground();
-      y = this.getTopStartY();
-    }
-
-    // Section title
-    this.doc.setTextColor(...this.primaryColor);
-    this.doc.setFontSize(16);
-
-    if (this.isRTL) {
-      this.doc.setFont("bona-nova", "bold");
-      const processedTitle = this.processRTLText("Featured Projects");
-      this.doc.text(
-        processedTitle,
-        this.mainContentX + this.mainContentWidth - 15,
-        y,
-        { align: "right" }
-      );
-    } else {
-      this.doc.setFont("helvetica", "bold");
-      this.doc.text("Featured Projects", this.mainContentX, y);
-    }
-    y += 8;
-
-    projects.projects.forEach((project) => {
-      // Check if we need a page break before adding project
-      if (y > this.pageHeight - 60) {
-        this.doc.addPage();
-        this.drawSidebarBackground();
-        y = this.getTopStartY();
-      }
-
-      // Project title
-      this.doc.setTextColor(...this.primaryColor);
-      this.doc.setFontSize(12);
-
-      if (this.isRTL) {
-        this.doc.setFont("bona-nova", "bold");
-        const processedTitle = this.processRTLText(project.title);
-        this.doc.text(
-          processedTitle,
-          this.mainContentX + this.mainContentWidth - 15,
-          y,
-          { align: "right" }
-        );
-
-        // Add clickable link if project has a link
-        if (project.link) {
-          const titleWidth = this.doc.getTextWidth(project.title);
-          this.doc.setDrawColor(...this.primaryColor);
-          this.doc.setLineWidth(0.3);
-          this.doc.line(
-            this.mainContentX + this.mainContentWidth - titleWidth,
-            y + 1,
-            this.mainContentX + this.mainContentWidth,
-            y + 1
-          );
-          this.doc.link(
-            this.mainContentX + this.mainContentWidth - titleWidth,
-            y - 3,
-            titleWidth,
-            4,
-            {
-              url: project.link,
-            }
-          );
-        }
-      } else {
-        this.doc.setFont("helvetica", "bold");
-        this.doc.text(project.title, this.mainContentX, y);
-
-        // Add clickable link if project has a link
-        if (project.link) {
-          const titleWidth = this.doc.getTextWidth(project.title);
-          this.doc.setDrawColor(...this.primaryColor);
-          this.doc.setLineWidth(0.3);
-          this.doc.line(
-            this.mainContentX,
-            y + 1,
-            this.mainContentX + titleWidth,
-            y + 1
-          );
-          this.doc.link(this.mainContentX, y - 3, titleWidth, 4, {
-            url: project.link,
-          });
-        }
-      }
-
-      y += 5;
-
-      // Project description
-      this.doc.setTextColor(...this.secondaryColor);
-      this.doc.setFontSize(10);
-
-      if (this.isRTL) {
-        this.doc.setFont("bona-nova", "normal");
-      } else {
-        this.doc.setFont("helvetica", "normal");
-      }
-
-      const lines = this.doc.splitTextToSize(
-        project.description,
-        this.mainContentWidth
-      );
-      lines.forEach((line: string) => {
-        if (y > this.pageHeight - 30) {
-          this.doc.addPage();
-          this.drawSidebarBackground();
-          y = this.getTopStartY();
-        }
-
-        if (this.isRTL) {
-          const processedLine = this.processRTLText(line);
-          this.doc.text(
-            processedLine,
-            this.mainContentX + this.mainContentWidth - 15,
-            y,
-            {
-              align: "right",
-            }
-          );
-        } else {
-          this.doc.text(line, this.mainContentX, y);
-        }
-        y += 4;
-      });
-
-      y += 6;
-    });
-
-    return y;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getPDF(): any {
-    return this.doc;
-  }
-
-  save(filename: string): void {
-    this.doc.save(filename);
-  }
-}
-
-export const generateResumePDF = async (
-  data: ResumeData,
-  language: string = "en",
-  template: ResumeTemplate = "modern"
-): Promise<unknown> => {
-  const generator = new PDFGenerator();
-  await generator.generateResume(data, language, template);
-  return generator.getPDF();
+  experience: Array<{
+    role: string;
+    company: string;
+    location?: string;
+    period: string;
+    bullets: string[];
+    stackLine?: string;
+  }>;
+  projects: Array<{
+    name: string;
+    line: string;
+    url?: string;
+  }>;
+  additional?: string;
 };
 
-export const generateResumePreviewDataUrl = async (
-  data: ResumeData,
-  language: string = "en",
-  template: ResumeTemplate = "modern"
-): Promise<string> => {
-  const generator = new PDFGenerator();
-  await generator.generateResume(data, language, template);
-  return generator.getPDF().output("datauristring");
+export type RenderOptions = {
+  rtl?: boolean;
+  theme?: "indigo" | "teal" | "rose" | "corporate" | "modern" | "minimal";
+  maxBulletsPerRole?: number;
+  maxProjects?: number;
 };
+
+const A4 = { w: 210, h: 297 }; // mm
+
+const THEMES = {
+  corporate: {
+    headerBg: [41, 98, 255] as [number, number, number],
+    headerAccent: [255, 193, 7] as [number, number, number],
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [41, 98, 255] as [number, number, number],
+    rule: [41, 98, 255] as [number, number, number],
+  },
+  modern: {
+    headerBg: [0, 150, 136] as [number, number, number],
+    headerAccent: undefined,
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [0, 150, 136] as [number, number, number],
+    rule: [0, 150, 136] as [number, number, number],
+  },
+  minimal: {
+    headerBg: [96, 125, 139] as [number, number, number],
+    headerAccent: undefined,
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [96, 125, 139] as [number, number, number],
+    rule: [96, 125, 139] as [number, number, number],
+  },
+  teal: {
+    headerBg: [0, 121, 107] as [number, number, number],
+    headerAccent: undefined,
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [0, 121, 107] as [number, number, number],
+    rule: [0, 121, 107] as [number, number, number],
+  },
+  indigo: {
+    headerBg: [63, 81, 181] as [number, number, number],
+    headerAccent: undefined,
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [63, 81, 181] as [number, number, number],
+    rule: [63, 81, 181] as [number, number, number],
+  },
+  rose: {
+    headerBg: [233, 30, 99] as [number, number, number],
+    headerAccent: undefined,
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [233, 30, 99] as [number, number, number],
+    rule: [233, 30, 99] as [number, number, number],
+  },
+};
+
+export function renderResumePDF(
+  data: ResumeData,
+  opts: RenderOptions = {}
+): jsPDF {
+  const options = {
+    rtl: opts.rtl || false,
+    theme: opts.theme || "corporate",
+    maxBulletsPerRole: opts.maxBulletsPerRole || 3,
+    maxProjects: opts.maxProjects || 4,
+  };
+
+  const doc = new jsPDF({ unit: "mm", format: "a4" });
+
+  if (data.meta?.title) {
+    doc.setProperties({
+      title: data.meta.title,
+      author: data.meta?.author || "Resume",
+    });
+  }
+
+  const theme = THEMES[options.theme];
+  const margins = { x: 15, y: 10 };
+  const pageWidth = A4.w - margins.x * 2;
+  let currentY = margins.y;
+
+  // Calculate header height based on content
+  const headerHeight = 40; // Increased to properly cover name and title
+
+  // Header background
+  doc.setFillColor(...theme.headerBg);
+  doc.rect(0, 0, A4.w, headerHeight, "F");
+
+  if (theme.headerAccent) {
+    doc.setFillColor(
+      theme.headerAccent[0],
+      theme.headerAccent[1],
+      theme.headerAccent[2]
+    );
+    doc.rect(0, headerHeight, A4.w, 2, "F");
+  }
+
+  // Name
+  doc.setTextColor(...theme.name);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(24);
+  doc.text(data.person.name, margins.x, 25);
+
+  // Title
+  doc.setTextColor(...theme.title);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(16);
+  doc.text(data.person.title, margins.x, 37);
+
+  // Reset text color for contact info (black text for visibility)
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(10);
+
+  // Phone and Email
+  const contactLine1 = `Phone: ${data.person.contacts.phone} | Email: ${data.person.contacts.email}`;
+  doc.text(contactLine1, margins.x, 45);
+
+  // Portfolio
+  if (data.person.contacts.portfolio) {
+    doc.text(`Portfolio: ${data.person.contacts.portfolio}`, margins.x, 50);
+  }
+
+  // GitHub
+  if (data.person.contacts.github) {
+    doc.text(`GitHub: ${data.person.contacts.github}`, margins.x, 55);
+  }
+
+  // LinkedIn
+  if (data.person.contacts.linkedin) {
+    doc.text(`LinkedIn: ${data.person.contacts.linkedin}`, margins.x, 60);
+  }
+
+  // Reset text color for body
+  doc.setTextColor(...theme.text);
+  currentY = 65; // Start body content after contact info
+
+  // Professional Summary
+  addSection("Professional Summary", () => {
+    doc.setFontSize(10);
+    const summaryLines = doc.splitTextToSize(data.summary, pageWidth);
+    summaryLines.forEach((line: string) => {
+      doc.text(line, margins.x, currentY);
+      currentY += 4;
+    });
+  });
+
+  // Technical Skills
+  addSection("Technical Skills", () => {
+    doc.setFontSize(9);
+
+    // Frontend
+    if (data.tech.frontend.length > 0) {
+      const frontendText = `Frontend: ${data.tech.frontend.join(", ")}`;
+      const frontendLines = doc.splitTextToSize(frontendText, pageWidth);
+      frontendLines.forEach((line: string) => {
+        doc.text(line, margins.x, currentY);
+        currentY += 3.5;
+      });
+    }
+
+    // Backend
+    if (data.tech.backend.length > 0) {
+      const backendText = `Backend: ${data.tech.backend.join(", ")}`;
+      const backendLines = doc.splitTextToSize(backendText, pageWidth);
+      backendLines.forEach((line: string) => {
+        doc.text(line, margins.x, currentY);
+        currentY += 3.5;
+      });
+    }
+
+    // Architecture
+    if (data.tech.architecture.length > 0) {
+      const archText = `Architecture: ${data.tech.architecture.join(", ")}`;
+      const archLines = doc.splitTextToSize(archText, pageWidth);
+      archLines.forEach((line: string) => {
+        doc.text(line, margins.x, currentY);
+        currentY += 3.5;
+      });
+    }
+
+    // Databases
+    if (data.tech.databases.length > 0) {
+      const dbText = `Databases: ${data.tech.databases.join(", ")}`;
+      const dbLines = doc.splitTextToSize(dbText, pageWidth);
+      dbLines.forEach((line: string) => {
+        doc.text(line, margins.x, currentY);
+        currentY += 3.5;
+      });
+    }
+
+    // Cloud & DevOps
+    if (data.tech.cloudDevOps.length > 0) {
+      const cloudText = `Cloud & DevOps: ${data.tech.cloudDevOps.join(", ")}`;
+      const cloudLines = doc.splitTextToSize(cloudText, pageWidth);
+      cloudLines.forEach((line: string) => {
+        doc.text(line, margins.x, currentY);
+        currentY += 3.5;
+      });
+    }
+  });
+
+  // Professional Experience
+  addSection("Professional Experience", () => {
+    data.experience.forEach((exp, index) => {
+      if (index >= 3) return; // Limit to 3 experiences for space
+
+      // Role and Company
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.text(`${exp.role} - ${exp.company}`, margins.x, currentY);
+      currentY += 4;
+
+      // Period
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      doc.text(exp.period, margins.x, currentY);
+      currentY += 4;
+
+      // Bullets (limited for space)
+      const maxBullets = Math.min(
+        exp.bullets.length,
+        options.maxBulletsPerRole
+      );
+      for (let i = 0; i < maxBullets; i++) {
+        const bullet = `• ${exp.bullets[i]}`;
+        const bulletLines = doc.splitTextToSize(bullet, pageWidth - 5);
+        bulletLines.forEach((line: string, lineIndex: number) => {
+          const x = lineIndex === 0 ? margins.x : margins.x + 3;
+          doc.text(line, x, currentY);
+          currentY += 3.5;
+        });
+      }
+      currentY += 2; // Extra space between experiences
+    });
+  });
+
+  // Projects
+  if (data.projects.length > 0) {
+    addSection("Key Projects", () => {
+      const maxProjects = Math.min(data.projects.length, options.maxProjects);
+      for (let i = 0; i < maxProjects; i++) {
+        const project = data.projects[i];
+
+        // Project name
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(9);
+        doc.text(`• ${project.name}`, margins.x, currentY);
+        currentY += 3.5;
+
+        // Project description
+        doc.setFont("helvetica", "normal");
+        const projLines = doc.splitTextToSize(project.line, pageWidth - 5);
+        projLines.forEach((line: string) => {
+          doc.text(line, margins.x + 3, currentY);
+          currentY += 3.5;
+        });
+        currentY += 1;
+      }
+    });
+  }
+
+  // Additional Activities
+  if (data.additional) {
+    addSection("Additional Activities", () => {
+      doc.setFontSize(9);
+      const additionalLines = doc.splitTextToSize(data.additional!, pageWidth);
+      additionalLines.forEach((line: string) => {
+        doc.text(line, margins.x, currentY);
+        currentY += 3.5;
+      });
+    });
+  }
+
+  function addSection(title: string, content: () => void) {
+    // Section title
+    currentY += 3;
+    doc.setTextColor(...theme.accent);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.text(title, margins.x, currentY);
+    currentY += 3;
+
+    // Rule line
+    doc.setDrawColor(...theme.rule);
+    doc.setLineWidth(0.3);
+    doc.line(margins.x, currentY, margins.x + pageWidth, currentY);
+    currentY += 5;
+
+    // Reset text color
+    doc.setTextColor(...theme.text);
+
+    // Content
+    content();
+  }
+
+  return doc;
+}

@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "Omri Jukin",
-    "description": "FullStack Engineer | Full-Stack Development · Full-Stack Web Development · Full-Stack Software Engineering · React · Node.js · TypeScript · JavaScript · Next.js · tRPC · PostgreSQL · MongoDB · Microservices Architecture · API Development · REST APIs · GraphQL · Cloud Deployment · DevOps · CI/CD"
+    "title": "Omri Jukin - Full Stack Developer",
+    "description": "Full Stack Developer specializing in React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB, and microservices architecture"
   },
   "login": {
     "title": "Admin Login",
@@ -338,28 +338,23 @@
     "projects": [
       {
         "title": "Snow HQ",
-        "description": "Enterprise CRM prototype featuring real-time analytics, automated workflows, and comprehensive reporting capabilities. Built with Next.js, tRPC, Drizzle ORM, and PostgreSQL, implementing full-stack development best practices and scalable architecture patterns.",
+        "description": "Enterprise CRM with real-time analytics and automated workflows - Next.js, tRPC, Drizzle ORM, PostgreSQL",
         "link": "https://github.com/Omri-Jukin/Snow"
       },
       {
         "title": "Portfolio Website",
-        "description": "Modern, responsive portfolio website with internationalization (i18n), dark mode, and smooth animations. Built with Next.js, TypeScript, Material-UI, and Framer Motion, showcasing full-stack development capabilities and modern web technologies.",
+        "description": "Modern responsive portfolio with i18n, dark mode, animations - Next.js, TypeScript, Material-UI, Framer Motion",
         "link": "https://omrijukin.com"
       },
       {
         "title": "ClipWhisperer",
-        "description": "Comprehensive microservices platform for automated video processing and content creation. Built with AI-powered narration, video rendering, and orchestrated workflows using TypeScript, Node.js, and modern microservices architecture, demonstrating advanced full-stack engineering skills.",
+        "description": "Microservices platform for automated video processing with AI narration - TypeScript, Node.js, microservices",
         "link": "https://github.com/ClipWhisperer"
       },
       {
         "title": "Microservices Manager",
-        "description": "Comprehensive CLI tool for managing a microservices ecosystem. Built with unified service management, automated workflows, cross-service operations, and development tooling using TypeScript, Node.js, and modern CLI architecture, showcasing full-stack development expertise.",
+        "description": "CLI tool for microservices ecosystem management with automated workflows - TypeScript, Node.js, CLI architecture",
         "link": "https://github.com/ClipWhisperer/Utils"
-      },
-      {
-        "title": "Published Library",
-        "description": "Published npm library for managing a microservices ecosystem. Built with unified service management, automated workflows, cross-service operations, and development tooling using TypeScript, Node.js, and modern CLI architecture, demonstrating full-stack development and package management skills.",
-        "link": "https://www.npmjs.com/package/@clipwhisperer/common"
       }
     ]
   },
@@ -458,48 +453,33 @@
     "viewResume": "View Resume",
     "experiences": [
       {
-        "role": "FullStack Engineer",
-        "time": "2024 - 2025",
+        "role": "Full Stack Engineer",
+        "time": "2024–2025",
         "company": "Abra Technologies, Israel",
         "details": [
-          "Full-Stack Platform Development - Developed and maintained a comprehensive platform aggregating and processing critical market data from government agencies, implementing RESTful APIs and real-time data processing using Next.js, tRPC, and PostgreSQL, resulting in 40% improved data processing efficiency",
-          "Component Library Architecture - Designed and implemented a modular, reusable UI component library using Storybook and TypeScript, reducing development time by 30% and improving consistency across applications while maintaining 95% code coverage through comprehensive testing",
-          "UI/UX Innovation - Collaborated with design teams to create intuitive interfaces using Material-UI and Framer Motion, increasing user engagement by 25% and reducing support tickets by 35% through improved user experience",
-          "Backend Optimization - Developed efficient data processing algorithms and database queries, improving system performance by 45% and reducing API response times from 800ms to 300ms average",
-          "Technical Stack: Next.js, tRPC, PayloadCMS, Storybook, Jest, Vitest, React, TypeScript, PostgreSQL, REST APIs, Microservices"
+          "Built platform aggregating market data from government sources using Next.js, tRPC, and PostgreSQL, improving processing efficiency by 40%",
+          "Designed modular UI component library with Storybook and TypeScript, reducing development time by 30% with 95% test coverage",
+          "Optimized data processing algorithms and database queries, improving system performance by 45% and reducing API response times to 300ms"
         ]
       },
       {
         "role": "Business Constitution Development Specialist",
-        "time": "2023 - 2024",
+        "time": "2023–2024",
         "company": "Menora Mivtachim Insurance Company, Israel",
         "details": [
-          "System Architecture - Architected and maintained the business constitution system managing 50,000+ policy rules and regulations, implementing database optimization strategies that improved query performance by 60% and system reliability by 90%",
-          "Team Leadership - Mentored and trained 8+ new developers, reducing onboarding time from 6 weeks to 3 weeks and improving team productivity by 40% through structured training programs and code review processes",
-          "Product Innovation - Led the development of 12+ new insurance products using modern development practices, resulting in 30% higher customer acquisition rate and 25% improved time-to-market",
-          "Legacy System Modernization - Successfully migrated critical components from a 40-year-old monolithic system to modern architecture using Java and C#, improving system performance by 70% and reducing maintenance costs by 50%"
+          "Architected business constitution system managing 50,000+ policy rules, improving query performance by 60% and system reliability by 90%",
+          "Mentored 8+ developers reducing onboarding from 6 to 3 weeks, improving team productivity by 40% through structured training programs",
+          "Led development of 12+ insurance products using modern practices, achieving 30% higher customer acquisition and 25% faster time-to-market"
         ]
       },
       {
         "role": "Senior Customer Service Representative",
-        "time": "2021 - 2023",
+        "time": "2021–2023",
         "company": "Menora Mivtachim Insurance Company, Israel",
         "details": [
-          "Customer Experience Excellence - Achieved a 95% customer satisfaction rate while handling complex insurance inquiries and complaints, implementing process improvements that reduced average handling time by 25% and improved team efficiency by 35%",
-          "Process Improvement - Developed and implemented new workflow protocols using data analysis and customer feedback, resulting in 25% reduction in average handling time and 35% improvement in team efficiency",
-          "Team Development - Trained and mentored 10+ new team members, resulting in a 35% reduction in training time and improved service quality through structured onboarding programs and continuous feedback systems",
-          "Cross-functional Collaboration - Worked with multiple departments including IT and product development to resolve complex customer issues, improving resolution time by 30% and customer satisfaction scores by 20%"
-        ]
-      },
-      {
-        "role": "Senior Public Inquiries Coordinator",
-        "time": "2020 - 2021",
-        "company": "HOT Telecommunications, Israel",
-        "details": [
-          "Customer Service Excellence - Maintained a 90% customer satisfaction rate while handling high-volume inquiries (200+ daily), implementing workflow optimizations that reduced response time by 35% and improved team productivity by 25%",
-          "Process Optimization - Implemented new workflow protocols and customer service tools, resulting in 35% reduction in response time and 25% improvement in team productivity through systematic process analysis and continuous improvement",
-          "Team Leadership - Successfully trained and mentored 15+ team members, improving overall team performance by 30% through structured training programs and performance monitoring systems",
-          "System Integration - Collaborated with IT department to implement new customer service tools and CRM systems, resulting in a 40% improvement in case resolution time and 25% increase in customer satisfaction scores"
+          "Achieved 95% customer satisfaction while handling complex inquiries, reducing average handling time by 25% and improving team efficiency by 35%",
+          "Developed workflow protocols using data analysis and customer feedback, resulting in process improvements and enhanced service quality",
+          "Trained 10+ team members reducing training time by 35% and improving service quality through structured onboarding and continuous feedback"
         ]
       }
     ]
@@ -508,8 +488,8 @@
     "title": "Resume",
     "description": "My professional experience and skills",
     "networkingSummary": "Download my resume to learn more about my background",
-    "experience": "I'm a FullStack Engineer with 5+ years of expertise in full-stack web development, scalable systems architecture, and modern technologies. I have a proven track record in developing full-stack applications using React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB, and microservices architecture. I have a strong background in the insurance industry, from customer service to core system development. I'm experienced in mentoring teams, improving processes, and supporting organizational change and growth. I have strong problem-solving skills focused on system design and optimization. I'm committed to continuous learning and professional growth in full-stack development.",
-    "professionalSummary": "Professional Summary",
+    "experience": "Full Stack Developer",
+    "professionalSummary": "Full Stack Developer with 5+ years expertise in scalable web development and modern technologies. Proven track record with React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB, and microservices. Strong background in insurance domain from service to core systems development.",
     "viewCode": "View Code",
     "letsBuildTogether": "Let's Build Something Amazing Together",
     "readyToDiscuss": "Ready to discuss my next project or opportunity?",
@@ -746,6 +726,19 @@
       }
     ]
   },
+  "languages": {
+    "programming": [
+      { "name": "TypeScript", "level": "Advanced" },
+      { "name": "JavaScript", "level": "Advanced" },
+      { "name": "SQL", "level": "Advanced" },
+      { "name": "HTML/CSS", "level": "Advanced" }
+    ],
+    "spoken": [
+      { "name": "Hebrew", "level": "Native" },
+      { "name": "English", "level": "Fluent" }
+    ]
+  },
+  "additionalActivities": "Continuous learning in full stack development, contributing to open-source projects, and staying current with modern web technologies and best practices.",
   "footer": {
     "title": "About",
     "children": "I'm a FullStack Engineer building scalable systems and modern web experiences with clean architecture and practical solutions.",

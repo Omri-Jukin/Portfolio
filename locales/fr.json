@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "Omri Jukin",
-    "description": "Ingénieur FullStack | Développement Full-Stack · Développement Web Full-Stack · Ingénierie Logicielle Full-Stack · React · Node.js · TypeScript · JavaScript · Next.js · tRPC · PostgreSQL · MongoDB · Architecture de Microservices · Développement d'APIs · APIs REST · GraphQL · Déploiement Cloud · DevOps · CI/CD"
+    "title": "Omri Jukin - Développeur Full Stack",
+    "description": "Développeur Full Stack spécialisé en React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB et architecture de microservices"
   },
   "login": {
     "title": "Connexion Administrateur",
@@ -273,37 +273,6 @@
       }
     ]
   },
-  "projects": {
-    "title": "Projets en Vedette",
-    "subtitle": "Un aperçu de mon travail",
-    "projects": [
-      {
-        "title": "Snow HQ",
-        "description": "Prototype CRM d'entreprise avec analyse en temps réel, flux de travail automatisés et capacités de rapports complets. Construit avec Next.js, tRPC, Drizzle ORM et PostgreSQL, implémentant les meilleures pratiques de développement full-stack et les modèles d'architecture évolutifs.",
-        "link": "https://github.com/Omri-Jukin/Snow"
-      },
-      {
-        "title": "Site Web Portfolio",
-        "description": "Site web portfolio moderne et réactif avec internationalisation (i18n), mode sombre et animations fluides. Construit avec Next.js, TypeScript, Material-UI et Framer Motion, montrant les capacités de développement full-stack et les technologies web modernes.",
-        "link": "https://omrijukin.com"
-      },
-      {
-        "title": "ClipWhisperer",
-        "description": "Plateforme complète de microservices pour le traitement automatisé de vidéos et la création de contenu. Construite avec narration alimentée par IA, rendu vidéo et flux de travail orchestrés utilisant TypeScript, Node.js et architecture moderne de microservices, démontrant des compétences avancées d'ingénierie full-stack.",
-        "link": "https://github.com/ClipWhisperer"
-      },
-      {
-        "title": "Gestionnaire de Microservices",
-        "description": "Outil CLI complet pour gérer un écosystème de microservices. Construit avec gestion unifiée des services, flux de travail automatisés, opérations inter-services et outils de développement utilisant TypeScript, Node.js et architecture CLI moderne, montrant l'expertise en développement full-stack.",
-        "link": "https://github.com/ClipWhisperer/Utils"
-      },
-      {
-        "title": "Bibliothèque Publiée",
-        "description": "Bibliothèque npm publiée pour gérer un écosystème de microservices. Construite avec gestion unifiée des services, flux de travail automatisés, opérations inter-services et outils de développement utilisant TypeScript, Node.js et architecture CLI moderne, démontrant les compétences de développement full-stack et de gestion de packages.",
-        "link": "https://www.npmjs.com/package/@clipwhisperer/common"
-      }
-    ]
-  },
   "portfolio": {
     "title": "Portfolio Technique",
     "subtitle": "Présentation détaillée de projets avec implémentations techniques, approches de résolution de problèmes et exemples de code",
@@ -388,7 +357,7 @@
       "citizenship": "Citoyenneté : Israélienne"
     }
   },
-  "career": {
+  "careerOld": {
     "title": "Carrière",
     "subtitle": "Mon parcours professionnel et expérience",
     "description": "Mon parcours professionnel",
@@ -445,7 +414,7 @@
       }
     ]
   },
-  "resume": {
+  "resumeOld": {
     "title": "CV",
     "description": "Mon expérience professionnelle et compétences",
     "networkingSummary": "Téléchargez mon CV pour en savoir plus sur mon parcours",
@@ -497,7 +466,7 @@
       }
     }
   },
-  "skills": {
+  "skillsOld": {
     "title": "Expertise Technique",
     "categories": {
       "technical": {
@@ -612,7 +581,7 @@
       }
     }
   },
-  "languages": {
+  "languagesOld": {
     "title": "Langues",
     "subtitle": "Mes langues de programmation et parlées",
     "programming": [
@@ -628,7 +597,196 @@
       { "name": "Espagnol", "level": "Débutant" }
     ]
   },
-  "additionalActivities": "Je suis le fondateur d'une communauté en ligne qui promeut la pensée critique et rationnelle et les débats ouverts. Je suis engagé dans la prise de parole en public et les diffusions en direct sur des sujets liés aux sciences dures, sciences douces, pensée rationnelle et technologie. Je suis un magicien amateur enthousiaste, utilisant des compétences créatives pour engager les audiences et encourager la curiosité.",
+  "resume": {
+    "title": "CV",
+    "description": "Mon expérience professionnelle et compétences",
+    "experience": "Développeur Full Stack",
+    "professionalSummary": "Développeur Full Stack avec 5+ ans d'expertise en développement web évolutif et technologies modernes. Historique prouvé avec React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB et microservices. Forte expérience dans le secteur de l'assurance du service au développement de systèmes centraux."
+  },
+  "career": {
+    "experiences": [
+      {
+        "role": "Ingénieur Full Stack",
+        "time": "2024–2025",
+        "company": "Abra Technologies, Israël",
+        "details": [
+          "Construit plateforme agrégeant données de marché de sources gouvernementales avec Next.js, tRPC et PostgreSQL, améliorant efficacité de traitement de 40%",
+          "Conçu bibliothèque de composants UI modulaire avec Storybook et TypeScript, réduisant temps de développement de 30% avec 95% couverture de tests",
+          "Optimisé algorithmes de traitement de données et requêtes de base de données, améliorant performances système de 45% et réduisant temps de réponse API à 300ms"
+        ]
+      },
+      {
+        "role": "Spécialiste Développement Constitution d'Entreprise",
+        "time": "2023–2024",
+        "company": "Menora Mivtachim Insurance Company, Israël",
+        "details": [
+          "Architecturé système de constitution d'entreprise gérant 50,000+ règles de polices, améliorant performances des requêtes de 60% et fiabilité système de 90%",
+          "Mentoré 8+ développeurs réduisant intégration de 6 à 3 semaines, améliorant productivité équipe de 40% via programmes de formation structurés",
+          "Dirigé développement de 12+ produits d'assurance avec pratiques modernes, atteignant 30% acquisition clients supérieure et 25% délai de commercialisation plus rapide"
+        ]
+      },
+      {
+        "role": "Représentant Senior Service Client",
+        "time": "2021–2023",
+        "company": "Menora Mivtachim Insurance Company, Israël",
+        "details": [
+          "Atteint 95% satisfaction client en gérant demandes complexes, réduisant temps de traitement moyen de 25% et améliorant efficacité équipe de 35%",
+          "Développé protocoles de flux de travail utilisant analyse de données et retours clients, résultant en améliorations processus et qualité service améliorée",
+          "Formé 10+ membres équipe réduisant temps formation de 35% et améliorant qualité service via intégration structurée et retours continus"
+        ]
+      }
+    ]
+  },
+  "projects": {
+    "projects": [
+      {
+        "title": "Snow HQ",
+        "description": "CRM d'entreprise avec analytiques temps réel et flux de travail automatisés - Next.js, tRPC, Drizzle ORM, PostgreSQL",
+        "link": "https://github.com/Omri-Jukin/Snow"
+      },
+      {
+        "title": "Site Web Portfolio",
+        "description": "Portfolio moderne responsive avec i18n, mode sombre, animations - Next.js, TypeScript, Material-UI, Framer Motion",
+        "link": "https://omrijukin.com"
+      },
+      {
+        "title": "ClipWhisperer",
+        "description": "Plateforme microservices pour traitement vidéo automatisé avec narration IA - TypeScript, Node.js, microservices",
+        "link": "https://github.com/ClipWhisperer"
+      },
+      {
+        "title": "Gestionnaire Microservices",
+        "description": "Outil CLI pour gestion écosystème microservices avec flux de travail automatisés - TypeScript, Node.js, architecture CLI",
+        "link": "https://github.com/ClipWhisperer/Utils"
+      }
+    ]
+  },
+  "skills": {
+    "categories": {
+      "technical": {
+        "skills": [
+          {
+            "name": "Développement Full Stack",
+            "level": 95,
+            "technologies": [
+              "React",
+              "Next.js",
+              "TypeScript",
+              "JavaScript",
+              "Node.js",
+              "HTML5",
+              "CSS3",
+              "Material-UI",
+              "Tailwind CSS",
+              "Framer Motion"
+            ]
+          },
+          {
+            "name": "Développement Backend",
+            "level": 95,
+            "technologies": [
+              "Node.js",
+              "Express.js",
+              "tRPC",
+              "Drizzle ORM",
+              "PostgreSQL",
+              "MongoDB",
+              "APIs REST",
+              "GraphQL",
+              "Développement d'APIs"
+            ]
+          },
+          {
+            "name": "Architecture Système",
+            "level": 90,
+            "technologies": [
+              "Microservices",
+              "Systèmes Monolithiques",
+              "Conception APIs",
+              "Intégration Système",
+              "Optimisation Performance",
+              "Architecture Évolutive"
+            ]
+          },
+          {
+            "name": "Gestion Base de Données",
+            "level": 90,
+            "technologies": [
+              "PostgreSQL",
+              "MongoDB",
+              "Modélisation Données",
+              "Optimisation Requêtes",
+              "Conception Base de Données",
+              "Architecture Données"
+            ]
+          },
+          {
+            "name": "Technologies Cloud",
+            "level": 85,
+            "technologies": [
+              "AWS",
+              "Vercel",
+              "Docker",
+              "CI/CD",
+              "Déploiement",
+              "Infrastructure Cloud"
+            ]
+          },
+          {
+            "name": "DevOps et CI/CD",
+            "level": 80,
+            "technologies": [
+              "Git",
+              "Docker",
+              "Jest",
+              "Vitest",
+              "Storybook",
+              "Tests",
+              "Intégration Continue"
+            ]
+          }
+        ]
+      },
+      "soft": {
+        "skills": [
+          {
+            "name": "Leadership",
+            "level": 90,
+            "description": "Gestion d'équipe, mentorat et coordination de projets"
+          },
+          {
+            "name": "Résolution de Problèmes",
+            "level": 95,
+            "description": "Pensée analytique et solutions créatives"
+          },
+          {
+            "name": "Communication",
+            "level": 85,
+            "description": "Communication avec parties prenantes techniques et non-techniques"
+          },
+          {
+            "name": "Adaptabilité",
+            "level": 90,
+            "description": "Apprentissage rapide et adoption de technologies"
+          }
+        ]
+      }
+    }
+  },
+  "languages": {
+    "programming": [
+      { "name": "TypeScript", "level": "Avancé" },
+      { "name": "JavaScript", "level": "Avancé" },
+      { "name": "SQL", "level": "Avancé" },
+      { "name": "HTML/CSS", "level": "Avancé" }
+    ],
+    "spoken": [
+      { "name": "Hébreu", "level": "Natif" },
+      { "name": "Anglais", "level": "Courant" },
+      { "name": "Français", "level": "Débutant" }
+    ]
+  },
+  "additionalActivities": "Apprentissage continu en développement full stack, contribution à des projets open source et mise à jour avec les technologies web modernes et meilleures pratiques.",
   "footer": {
     "title": "À propos",
     "children": "Je suis un Ingénieur FullStack construisant des systèmes évolutifs et des expériences web modernes avec une architecture propre et des solutions pratiques.",

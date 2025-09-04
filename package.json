@@ -111,7 +111,6 @@
     "//2": "— OpenNext (Pages) — default path —",
     "build": "next build",
     "clean": "rimraf .next .open-next .turbo .vercel",
-    "prebuild": "npm run clean",
     "pages:create": "wrangler pages project create homepage --production-branch=main",
     "deploy:pages": "npm run nbuild && wrangler pages deploy .open-next",
     "predeploy:pages": "npm run clean",

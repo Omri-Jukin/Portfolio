@@ -2,7 +2,54 @@ import { z } from "zod";
 import { router, procedure, protectedProcedure } from "../trpc";
 
 const publicProcedure = procedure;
-import { CertificationsService } from "../../../../lib/db/certifications/certifications";
+import { CertificationsService } from "$/db/certifications/certifications";
+import { Certification } from "$/db/schema/schema.types";
+
+export const certifications: Certification[] = [
+  {
+    id: "cert-impact-cyber-diploma",
+    name: "Cyber Security Diploma – Offensive & Defensive",
+    issuer: "Impact College",
+    description:
+      "Comprehensive diploma program in cyber security covering both offensive (red team, penetration testing, ethical hacking) and defensive (blue team, network protection, system hardening, incident response) disciplines.",
+    category: "cybersecurity",
+    status: "in-progress",
+    skills: [
+      "Cybersecurity",
+      "Offensive Security",
+      "Defensive Security",
+      "Penetration Testing",
+      "Incident Response",
+      "Network Security",
+      "System Hardening",
+      "Ethical Hacking",
+    ],
+    issueDate: "2025-09-01T00:00:00.000Z",
+    expiryDate: null,
+    credentialId: null,
+    verificationUrl:
+      "https://campus.impact-college.co.il/courses/network-and-computer-fundamentals-1-4/learn/about",
+    icon: "🛡️",
+    color: "#003366",
+    displayOrder: 1,
+    isVisible: true,
+    createdAt: "2025-09-01T12:00:00.000Z",
+    updatedAt: null,
+    createdBy: "user-admin-id",
+    nameTranslations: {
+      he: "דיפלומה בסייבר – הגנה והתקפה",
+      es: "Diploma en Ciberseguridad – Ofensiva y Defensiva",
+    },
+    descriptionTranslations: {
+      he: "תוכנית דיפלומה מקיפה בסייבר הכוללת תחומי התקפה (Red Team, בדיקות חדירה, האקינג אתי) והגנה (Blue Team, הגנת רשת, הקשחת מערכות, ניהול אירועים).",
+      es: "Programa de diploma integral en ciberseguridad que cubre disciplinas ofensivas (Red Team, pruebas de penetración, hacking ético) y defensivas (Blue Team, protección de redes, endurecimiento de sistemas, respuesta a incidentes).",
+    },
+    issuerTranslations: {
+      he: "Impact College",
+      es: "Impact College",
+    },
+  },
+];
 
 // Validation schemas
 const CertificationCategorySchema = z.enum([

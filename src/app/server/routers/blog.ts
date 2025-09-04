@@ -69,7 +69,9 @@ export const blogRouter = router({
         slug: z.string().min(1),
         content: z.string().min(1),
         excerpt: z.string().optional(),
-        status: z.enum(["draft", "published"]).default("draft"),
+        status: z
+          .enum(["draft", "published", "archived", "scheduled", "deleted"])
+          .default("draft"),
         tags: z.array(z.string()).optional(),
         imageUrl: z.string().optional(),
         imageAlt: z.string().optional(),
@@ -100,7 +102,9 @@ export const blogRouter = router({
         slug: z.string().optional(),
         content: z.string().optional(),
         excerpt: z.string().optional(),
-        status: z.enum(["draft", "published"]).optional(),
+        status: z
+          .enum(["draft", "published", "archived", "scheduled", "deleted"])
+          .optional(),
         tags: z.array(z.string()).optional(),
         imageUrl: z.string().optional(),
         imageAlt: z.string().optional(),

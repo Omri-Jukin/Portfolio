@@ -373,6 +373,24 @@ export interface User extends BaseEntity {
   status: UserStatus;
   lastLogin?: string;
   avatar?: string;
+  bio?: string;
+  location?: string;
+  website?: string;
+  socialLinks?: UserSocialLinks;
+}
+
+export interface UserSocialLinks {
+  linkedin?: string;
+  twitter?: string;
+  github?: string;
+  facebook?: string;
+  instagram?: string;
+  youtube?: string;
+  tiktok?: string;
+  pinterest?: string;
+  reddit?: string;
+  telegram?: string;
+  whatsapp?: string;
 }
 
 export interface BlogPost extends BaseEntity {
@@ -478,6 +496,18 @@ export type ProjectArchitecture = {
   scalability?: string;
   security?: string;
 };
+
+export type TCodeExamples = {
+  title: string;
+  language: string;
+  code: string;
+  explanation: string;
+}[];
+
+export type TTechnicalChallenges = {
+  challenge: string;
+  solution: string;
+}[];
 
 // Union type for projects that can handle both database and static data
 export type UnifiedProject = IProject & {

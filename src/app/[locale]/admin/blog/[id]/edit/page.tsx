@@ -34,7 +34,12 @@ const AdminBlogEdit = () => {
     slug: "",
     content: "",
     excerpt: "",
-    status: "draft" as "draft" | "published",
+    status: "draft" as
+      | "draft"
+      | "published"
+      | "archived"
+      | "scheduled"
+      | "deleted",
     tags: [] as string[],
     imageUrl: "",
     imageAlt: "",
@@ -317,6 +322,9 @@ const AdminBlogEdit = () => {
             >
               <MenuItem value="draft">Draft</MenuItem>
               <MenuItem value="published">Published</MenuItem>
+              <MenuItem value="archived">Archived</MenuItem>
+              <MenuItem value="scheduled">Scheduled</MenuItem>
+              <MenuItem value="deleted">Deleted</MenuItem>
             </Select>
           </FormControl>
 
