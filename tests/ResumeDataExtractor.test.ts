@@ -9,49 +9,49 @@ describe("Resume Data Extractor", () => {
     const data = extractResumeData("en");
 
     expect(data).toBeDefined();
-    expect(data.metadata).toBeDefined();
-    expect(data.resume).toBeDefined();
-    expect(data.career).toBeDefined();
-    expect(data.skills).toBeDefined();
+    expect(data.meta).toBeDefined();
+    expect(data.person).toBeDefined();
+    expect(data.experience).toBeDefined();
+    expect(data.tech).toBeDefined();
     expect(data.projects).toBeDefined();
 
-    expect(data.metadata.title).toBe("Omri Jukin");
-    expect(data.resume.title).toBe("Resume");
-    expect(data.career.experiences).toBeInstanceOf(Array);
-    expect(data.skills.categories.technical.skills).toBeInstanceOf(Array);
-    expect(data.projects.projects).toBeInstanceOf(Array);
+    expect(data.meta?.title).toBe("Omri Jukin");
+    expect(data.person.name).toBe("Omri Jukin");
+    expect(data.experience).toBeInstanceOf(Array);
+    expect(data.tech.frontend).toBeInstanceOf(Array);
+    expect(data.projects).toBeInstanceOf(Array);
   });
 
   test("should extract resume data for Spanish", () => {
     const data = extractResumeData("es");
 
     expect(data).toBeDefined();
-    expect(data.metadata.title).toBe("Omri Jukin");
-    expect(data.resume.title).toBe("Currículum");
+    expect(data.meta?.title).toBe("Omri Jukin");
+    expect(data.person.name).toBe("Omri Jukin");
   });
 
   test("should extract resume data for French", () => {
     const data = extractResumeData("fr");
 
     expect(data).toBeDefined();
-    expect(data.metadata.title).toBe("Omri Jukin");
-    expect(data.resume.title).toBe("CV");
+    expect(data.meta?.title).toBe("Omri Jukin");
+    expect(data.person.name).toBe("Omri Jukin");
   });
 
   test("should extract resume data for Hebrew", () => {
     const data = extractResumeData("he");
 
     expect(data).toBeDefined();
-    expect(data.metadata.title).toBe("עמרי חוקין");
-    expect(data.resume.title).toBe("קורות חיים");
+    expect(data.meta?.title).toBe("עמרי חוקין");
+    expect(data.person.name).toBe("Omri Jukin");
   });
 
   test("should fallback to English for invalid language", () => {
     const data = extractResumeData("invalid");
 
     expect(data).toBeDefined();
-    expect(data.metadata.title).toBe("Omri Jukin");
-    expect(data.resume.title).toBe("Resume");
+    expect(data.meta?.title).toBe("Omri Jukin");
+    expect(data.person.name).toBe("Omri Jukin");
   });
 
   test("should get available languages", () => {
