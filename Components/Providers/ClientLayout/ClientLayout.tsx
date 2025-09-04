@@ -14,6 +14,7 @@ import Cookies from "#/Components/Cookies";
 import Calendly from "#/Components/Calendly";
 import GlobeBackground, { ALL_MARKERS } from "~/GlobeBackground";
 import { usePathname } from "next/navigation";
+import { useScrollPosition } from "$/hooks/useScrollPosition";
 
 export default function ClientLayout({
   children,
@@ -28,6 +29,10 @@ export default function ClientLayout({
   const locale = useLocale();
   const pathname = usePathname();
   const isRTL = locale === "he";
+
+  // Opacity is a percentage of scroll progress: 0.2 at top, 0.05 at bottom
+  const progress = useScrollPosition().scrollProgress;
+  const scrollProgress = 0.2 - 0.15 * progress; // 0.2 (top) -> 0.05 (bottom)
 
   // Check if current page is an example page
   const isExamplePage = pathname?.includes("/examples");
@@ -46,8 +51,8 @@ export default function ClientLayout({
       },
       text: {
         ...baseTheme.palette.text,
-        primary: "#2C3E50",
-        secondary: "#34495E",
+        primary: "#0a0a0a",
+        secondary: "#1a1a1a",
       },
       primary: {
         ...baseTheme.palette.primary,
@@ -199,7 +204,7 @@ export default function ClientLayout({
         {!isExamplePage && (
           <GlobeBackground
             markers={ALL_MARKERS}
-            opacity={0.8}
+            opacity={scrollProgress}
             rotationSpeed={0.002}
           />
         )}
