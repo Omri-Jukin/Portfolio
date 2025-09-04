@@ -805,5 +805,4 @@ export type TypographyWeight =
   (typeof TYPOGRAPHY_WEIGHTS)[keyof typeof TYPOGRAPHY_WEIGHTS];
 export type TypographyAlign =
   (typeof TYPOGRAPHY_ALIGNS)[keyof typeof TYPOGRAPHY_ALIGNS];
-export type PDFTheme = keyof typeof PDF_THEMES;
 export type ResumeTemplateKey = keyof typeof RESUME_TEMPLATE_MAPPING;
