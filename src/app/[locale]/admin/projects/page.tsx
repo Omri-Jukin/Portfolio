@@ -245,8 +245,16 @@ export default function ProjectsAdminPage() {
       longDescription: formData.longDescription || undefined,
       technologies: formData.technologies,
       categories: formData.categories,
-      status: formData.status,
-      projectType: formData.projectType,
+      status: formData.status as
+        | "completed"
+        | "in-progress"
+        | "archived"
+        | "concept",
+      projectType: formData.projectType as
+        | "professional"
+        | "personal"
+        | "open-source"
+        | "academic",
       startDate: new Date(formData.startDate),
       endDate: formData.endDate ? new Date(formData.endDate) : undefined,
       githubUrl: formData.githubUrl || undefined,

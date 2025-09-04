@@ -598,6 +598,7 @@ export const SKILL_CATEGORIES = {
   FRAMEWORK: "framework",
   DATABASE: "database",
   CLOUD: "cloud",
+  CYBERSECURITY: "cybersecurity",
 } as const;
 
 /**
@@ -627,6 +628,145 @@ export const ACCESSIBILITY_LABELS = {
   NAVIGATION_MENU: "Navigation menu",
   SKIP_TO_CONTENT: "Skip to main content",
   BACK_TO_TOP: "Back to top",
+} as const;
+
+// ========================
+// PDF GENERATOR CONSTANTS
+// ========================
+
+/**
+ * PDF theme configuration for resume generation
+ */
+export const PDF_THEMES = {
+  corporate: {
+    headerBg: [41, 98, 255] as [number, number, number],
+    headerAccent: [255, 193, 7] as [number, number, number],
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [41, 98, 255] as [number, number, number],
+    rule: [41, 98, 255] as [number, number, number],
+    // CSS equivalents for UI
+    cssHeaderBg: "rgb(41, 98, 255)",
+    cssHeaderAccent: "rgb(255, 193, 7)",
+    cssAccent: "rgb(41, 98, 255)",
+  },
+  modern: {
+    headerBg: [0, 150, 136] as [number, number, number],
+    headerAccent: undefined,
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [0, 150, 136] as [number, number, number],
+    rule: [0, 150, 136] as [number, number, number],
+    // CSS equivalents for UI
+    cssHeaderBg: "rgb(0, 150, 136)",
+    cssHeaderAccent: undefined,
+    cssAccent: "rgb(0, 150, 136)",
+  },
+  minimal: {
+    headerBg: [96, 125, 139] as [number, number, number],
+    headerAccent: undefined,
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [96, 125, 139] as [number, number, number],
+    rule: [96, 125, 139] as [number, number, number],
+    // CSS equivalents for UI
+    cssHeaderBg: "rgb(96, 125, 139)",
+    cssHeaderAccent: undefined,
+    cssAccent: "rgb(96, 125, 139)",
+  },
+  teal: {
+    headerBg: [0, 121, 107] as [number, number, number],
+    headerAccent: undefined,
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [0, 121, 107] as [number, number, number],
+    rule: [0, 121, 107] as [number, number, number],
+    // CSS equivalents for UI
+    cssHeaderBg: "rgb(0, 121, 107)",
+    cssHeaderAccent: undefined,
+    cssAccent: "rgb(0, 121, 107)",
+  },
+  indigo: {
+    headerBg: [63, 81, 181] as [number, number, number],
+    headerAccent: undefined,
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [63, 81, 181] as [number, number, number],
+    rule: [63, 81, 181] as [number, number, number],
+    // CSS equivalents for UI
+    cssHeaderBg: "rgb(63, 81, 181)",
+    cssHeaderAccent: undefined,
+    cssAccent: "rgb(63, 81, 181)",
+  },
+  rose: {
+    headerBg: [233, 30, 99] as [number, number, number],
+    headerAccent: undefined,
+    name: [255, 255, 255] as [number, number, number],
+    title: [255, 255, 255] as [number, number, number],
+    contacts: [255, 255, 255] as [number, number, number],
+    text: [0, 0, 0] as [number, number, number],
+    accent: [233, 30, 99] as [number, number, number],
+    rule: [233, 30, 99] as [number, number, number],
+    // CSS equivalents for UI
+    cssHeaderBg: "rgb(233, 30, 99)",
+    cssHeaderAccent: undefined,
+    cssAccent: "rgb(233, 30, 99)",
+  },
+} as const;
+
+/**
+ * PDF layout configuration
+ */
+export const PDF_LAYOUT = {
+  A4: { w: 210, h: 297 }, // mm
+  MARGINS: { x: 15, y: 10 },
+  HEADER_HEIGHT: 40,
+  FONT_SIZES: {
+    name: 24,
+    title: 16,
+    sectionHeader: 12,
+    body: 10,
+    small: 9,
+    contacts: 10,
+  },
+  LINE_HEIGHTS: {
+    normal: 1.2,
+    tight: 1.0,
+  },
+  SPACING: {
+    sectionGap: 3,
+    paragraphGap: 3,
+    bulletGap: 3.5,
+    experienceGap: 2,
+    ruleGap: 5,
+  },
+};
+
+/**
+ * Resume template mapping for UI to PDF themes
+ */
+export const RESUME_TEMPLATE_MAPPING = {
+  modern: "modern",
+  elegant: "minimal",
+  tech: "corporate",
+  creative: "teal",
+  minimal: "minimal",
+  teal: "teal",
+  indigo: "indigo",
+  rose: "rose",
+  corporate: "corporate",
+  startup: "modern",
+  academic: "minimal",
 } as const;
 
 // ========================
@@ -665,3 +805,5 @@ export type TypographyWeight =
   (typeof TYPOGRAPHY_WEIGHTS)[keyof typeof TYPOGRAPHY_WEIGHTS];
 export type TypographyAlign =
   (typeof TYPOGRAPHY_ALIGNS)[keyof typeof TYPOGRAPHY_ALIGNS];
+export type PDFTheme = keyof typeof PDF_THEMES;
+export type ResumeTemplateKey = keyof typeof RESUME_TEMPLATE_MAPPING;

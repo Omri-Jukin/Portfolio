@@ -1,119 +1,13 @@
 import jsPDF from "jspdf";
+import { PDF_THEMES, PDF_LAYOUT } from "../constants";
+import type { ResumeData, PDFRenderOptions } from "../types";
 
-export type ResumeData = {
-  meta?: { title?: string; author?: string };
-  person: {
-    name: string;
-    title: string;
-    contacts: {
-      phone: string;
-      email: string;
-      portfolio?: string;
-      github?: string;
-      linkedin?: string;
-      location?: string;
-    };
-  };
-  summary: string;
-  tech: {
-    frontend: string[];
-    backend: string[];
-    architecture: string[];
-    databases: string[];
-    cloudDevOps: string[];
-    softSkills?: string[];
-  };
-  experience: Array<{
-    role: string;
-    company: string;
-    location?: string;
-    period: string;
-    bullets: string[];
-    stackLine?: string;
-  }>;
-  projects: Array<{
-    name: string;
-    line: string;
-    url?: string;
-  }>;
-  additional?: string;
-};
-
-export type RenderOptions = {
-  rtl?: boolean;
-  theme?: "indigo" | "teal" | "rose" | "corporate" | "modern" | "minimal";
-  maxBulletsPerRole?: number;
-  maxProjects?: number;
-};
-
-const A4 = { w: 210, h: 297 }; // mm
-
-const THEMES = {
-  corporate: {
-    headerBg: [41, 98, 255] as [number, number, number],
-    headerAccent: [255, 193, 7] as [number, number, number],
-    name: [255, 255, 255] as [number, number, number],
-    title: [255, 255, 255] as [number, number, number],
-    contacts: [255, 255, 255] as [number, number, number],
-    text: [0, 0, 0] as [number, number, number],
-    accent: [41, 98, 255] as [number, number, number],
-    rule: [41, 98, 255] as [number, number, number],
-  },
-  modern: {
-    headerBg: [0, 150, 136] as [number, number, number],
-    headerAccent: undefined,
-    name: [255, 255, 255] as [number, number, number],
-    title: [255, 255, 255] as [number, number, number],
-    contacts: [255, 255, 255] as [number, number, number],
-    text: [0, 0, 0] as [number, number, number],
-    accent: [0, 150, 136] as [number, number, number],
-    rule: [0, 150, 136] as [number, number, number],
-  },
-  minimal: {
-    headerBg: [96, 125, 139] as [number, number, number],
-    headerAccent: undefined,
-    name: [255, 255, 255] as [number, number, number],
-    title: [255, 255, 255] as [number, number, number],
-    contacts: [255, 255, 255] as [number, number, number],
-    text: [0, 0, 0] as [number, number, number],
-    accent: [96, 125, 139] as [number, number, number],
-    rule: [96, 125, 139] as [number, number, number],
-  },
-  teal: {
-    headerBg: [0, 121, 107] as [number, number, number],
-    headerAccent: undefined,
-    name: [255, 255, 255] as [number, number, number],
-    title: [255, 255, 255] as [number, number, number],
-    contacts: [255, 255, 255] as [number, number, number],
-    text: [0, 0, 0] as [number, number, number],
-    accent: [0, 121, 107] as [number, number, number],
-    rule: [0, 121, 107] as [number, number, number],
-  },
-  indigo: {
-    headerBg: [63, 81, 181] as [number, number, number],
-    headerAccent: undefined,
-    name: [255, 255, 255] as [number, number, number],
-    title: [255, 255, 255] as [number, number, number],
-    contacts: [255, 255, 255] as [number, number, number],
-    text: [0, 0, 0] as [number, number, number],
-    accent: [63, 81, 181] as [number, number, number],
-    rule: [63, 81, 181] as [number, number, number],
-  },
-  rose: {
-    headerBg: [233, 30, 99] as [number, number, number],
-    headerAccent: undefined,
-    name: [255, 255, 255] as [number, number, number],
-    title: [255, 255, 255] as [number, number, number],
-    contacts: [255, 255, 255] as [number, number, number],
-    text: [0, 0, 0] as [number, number, number],
-    accent: [233, 30, 99] as [number, number, number],
-    rule: [233, 30, 99] as [number, number, number],
-  },
-};
+// Re-export types for backward compatibility
+export type { ResumeData, PDFRenderOptions as RenderOptions };
 
 export function renderResumePDF(
   data: ResumeData,
-  opts: RenderOptions = {}
+  opts: PDFRenderOptions = {}
 ): jsPDF {
   const options = {
     rtl: opts.rtl || false,
@@ -131,17 +25,17 @@ export function renderResumePDF(
     });
   }
 
-  const theme = THEMES[options.theme];
-  const margins = { x: 15, y: 10 };
-  const pageWidth = A4.w - margins.x * 2;
+  const theme = PDF_THEMES[options.theme];
+  const margins = PDF_LAYOUT.MARGINS;
+  const pageWidth = PDF_LAYOUT.A4.w - margins.x * 2;
   let currentY = margins.y;
 
   // Calculate header height based on content
-  const headerHeight = 40; // Increased to properly cover name and title
+  const headerHeight = PDF_LAYOUT.HEADER_HEIGHT;
 
   // Header background
   doc.setFillColor(...theme.headerBg);
-  doc.rect(0, 0, A4.w, headerHeight, "F");
+  doc.rect(0, 0, PDF_LAYOUT.A4.w, headerHeight, "F");
 
   if (theme.headerAccent) {
     doc.setFillColor(
@@ -149,24 +43,24 @@ export function renderResumePDF(
       theme.headerAccent[1],
       theme.headerAccent[2]
     );
-    doc.rect(0, headerHeight, A4.w, 2, "F");
+    doc.rect(0, headerHeight, PDF_LAYOUT.A4.w, 2, "F");
   }
 
   // Name
   doc.setTextColor(...theme.name);
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(24);
+  doc.setFontSize(PDF_LAYOUT.FONT_SIZES.name);
   doc.text(data.person.name, margins.x, 25);
 
   // Title
   doc.setTextColor(...theme.title);
   doc.setFont("helvetica", "normal");
-  doc.setFontSize(16);
+  doc.setFontSize(PDF_LAYOUT.FONT_SIZES.title);
   doc.text(data.person.title, margins.x, 37);
 
   // Reset text color for contact info (black text for visibility)
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(10);
+  doc.setFontSize(PDF_LAYOUT.FONT_SIZES.contacts);
 
   // Phone and Email
   const contactLine1 = `Phone: ${data.person.contacts.phone} | Email: ${data.person.contacts.email}`;
@@ -193,7 +87,7 @@ export function renderResumePDF(
 
   // Professional Summary
   addSection("Professional Summary", () => {
-    doc.setFontSize(10);
+    doc.setFontSize(PDF_LAYOUT.FONT_SIZES.body);
     const summaryLines = doc.splitTextToSize(data.summary, pageWidth);
     summaryLines.forEach((line: string) => {
       doc.text(line, margins.x, currentY);
@@ -203,7 +97,7 @@ export function renderResumePDF(
 
   // Technical Skills
   addSection("Technical Skills", () => {
-    doc.setFontSize(9);
+    doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
 
     // Frontend
     if (data.tech.frontend.length > 0) {
@@ -263,13 +157,13 @@ export function renderResumePDF(
 
       // Role and Company
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(10);
+      doc.setFontSize(PDF_LAYOUT.FONT_SIZES.body);
       doc.text(`${exp.role} - ${exp.company}`, margins.x, currentY);
       currentY += 4;
 
       // Period
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(9);
+      doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
       doc.text(exp.period, margins.x, currentY);
       currentY += 4;
 
@@ -284,10 +178,10 @@ export function renderResumePDF(
         bulletLines.forEach((line: string, lineIndex: number) => {
           const x = lineIndex === 0 ? margins.x : margins.x + 3;
           doc.text(line, x, currentY);
-          currentY += 3.5;
+          currentY += PDF_LAYOUT.SPACING.bulletGap;
         });
       }
-      currentY += 2; // Extra space between experiences
+      currentY += PDF_LAYOUT.SPACING.experienceGap; // Extra space between experiences
     });
   });
 
@@ -300,7 +194,7 @@ export function renderResumePDF(
 
         // Project name
         doc.setFont("helvetica", "bold");
-        doc.setFontSize(9);
+        doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
         doc.text(`• ${project.name}`, margins.x, currentY);
         currentY += 3.5;
 
@@ -319,7 +213,7 @@ export function renderResumePDF(
   // Additional Activities
   if (data.additional) {
     addSection("Additional Activities", () => {
-      doc.setFontSize(9);
+      doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
       const additionalLines = doc.splitTextToSize(data.additional!, pageWidth);
       additionalLines.forEach((line: string) => {
         doc.text(line, margins.x, currentY);
@@ -330,18 +224,18 @@ export function renderResumePDF(
 
   function addSection(title: string, content: () => void) {
     // Section title
-    currentY += 3;
+    currentY += PDF_LAYOUT.SPACING.sectionGap;
     doc.setTextColor(...theme.accent);
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(12);
+    doc.setFontSize(PDF_LAYOUT.FONT_SIZES.sectionHeader);
     doc.text(title, margins.x, currentY);
-    currentY += 3;
+    currentY += PDF_LAYOUT.SPACING.sectionGap;
 
     // Rule line
     doc.setDrawColor(...theme.rule);
     doc.setLineWidth(0.3);
     doc.line(margins.x, currentY, margins.x + pageWidth, currentY);
-    currentY += 5;
+    currentY += PDF_LAYOUT.SPACING.ruleGap;
 
     // Reset text color
     doc.setTextColor(...theme.text);

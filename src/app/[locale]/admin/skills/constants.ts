@@ -1,16 +1,11 @@
+import { ProficiencyLevel, SkillCategory } from "#/lib";
+
 export interface SkillFormData {
   name: string;
-  category:
-    | "technical"
-    | "soft"
-    | "language"
-    | "tool"
-    | "framework"
-    | "database"
-    | "cloud";
+  category: SkillCategory;
   subCategory: string;
   proficiencyLevel: number;
-  proficiencyLabel: "beginner" | "intermediate" | "advanced" | "expert";
+  proficiencyLabel: ProficiencyLevel;
   yearsOfExperience: number;
   description: string;
   icon: string;
