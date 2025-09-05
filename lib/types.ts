@@ -1090,3 +1090,90 @@ export type {
   TypographyWeight,
   TypographyAlign,
 };
+
+// ========================
+// TECHNICAL PORTFOLIO TYPES
+// ========================
+
+export interface TechnicalPortfolioData {
+  meta: {
+    title: string;
+    author: string;
+    version: string;
+    generatedAt: string;
+  };
+  projects: TechnicalProject[];
+  codeExamples: CodeExample[];
+  technicalChallenges: TechnicalChallenge[];
+  architecture: ArchitectureDecision[];
+}
+
+export interface TechnicalProject {
+  id: string;
+  name: string;
+  description: string;
+  technologies: string[];
+  architecture: {
+    overview: string;
+    patterns: string[];
+    decisions: string[];
+  };
+  technicalChallenges: {
+    title: string;
+    problem: string;
+    solution: string;
+    impact: string;
+  }[];
+  codeExamples: {
+    title: string;
+    description: string;
+    language: string;
+    code: string;
+    explanation: string;
+  }[];
+  repository?: string;
+  liveUrl?: string;
+  screenshots?: string[];
+}
+
+export interface CodeExample {
+  id: string;
+  title: string;
+  description: string;
+  language: string;
+  code: string;
+  explanation: string;
+  project: string;
+  category: string;
+}
+
+export interface TechnicalChallenge {
+  id: string;
+  title: string;
+  problem: string;
+  solution: string;
+  technologies: string[];
+  impact: string;
+  project?: string;
+}
+
+export interface ArchitectureDecision {
+  id: string;
+  title: string;
+  context: string;
+  decision: string;
+  consequences: string[];
+  alternatives: string[];
+  project: string;
+}
+
+export interface TechnicalPortfolioOptions {
+  theme?: string;
+  layout?: "single" | "multi-column";
+  includeCodeExamples?: boolean;
+  includeChallenges?: boolean;
+  includeArchitecture?: boolean;
+  maxProjects?: number;
+  maxCodeExamples?: number;
+  rtl?: boolean;
+}

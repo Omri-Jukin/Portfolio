@@ -1000,6 +1000,13 @@ export const PDF_LAYOUT_VARIANTS = {
     columns: 1,
     sidebarWidth: 0,
     mainContentWidth: 180,
+    spacing: {
+      sectionGap: 3.5,
+      paragraphGap: 3.5,
+      bulletGap: 3.5,
+      experienceGap: 2.5,
+      ruleGap: 5,
+    },
   },
   twoColumn: {
     name: "Two Column",

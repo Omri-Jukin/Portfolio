@@ -1,3 +1,5 @@
+import { SxProps } from "@mui/system";
+
 export type AnimatedTextType =
   | "scaleUp"
   | "scaleDown"
@@ -17,6 +19,7 @@ export interface AnimatedTextProps {
   scale?: number;
   opacity?: number;
   translateY?: number;
+  sx?: SxProps;
 }
 
 export type AnimationStyle = { [selector: string]: React.CSSProperties };

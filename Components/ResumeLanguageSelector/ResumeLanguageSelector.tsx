@@ -142,7 +142,13 @@ const ResumeLanguageSelector: React.FC<ResumeLanguageSelectorProps> = ({
   return (
     <MotionWrapper variant="fadeIn" duration={0.8} delay={0.4}>
       <ResumeLanguageSelectorStyle>
-        <Card sx={{ backgroundColor: "background.paper", mb: 4 }}>
+        <Card
+          sx={{
+            backgroundColor: "background.paper",
+            mb: 4,
+            opacity: isLoading ? 0.5 : 0.8,
+          }}
+        >
           <CardContent sx={{ p: 4 }}>
             <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
               <LanguageIcon

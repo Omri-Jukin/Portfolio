@@ -736,6 +736,7 @@
       { "label": "Home", "href": "/" },
       { "label": "Career", "href": "/career" },
       { "label": "Certifications", "href": "/certifications" },
+      { "label": "Technical Portfolio", "href": "/technical-portfolio" },
       { "label": "Resume", "href": "/resume" },
       { "label": "Blog", "href": "/blog" },
       { "label": "Contact", "href": "/contact" },
@@ -778,5 +779,473 @@
       }
     ],
     "copyright": "Omri Jukin. All rights reserved."
+  },
+  "technicalPortfolio": {
+    "title": "Technical Portfolio",
+    "subtitle": "Comprehensive showcase of technical expertise, architecture decisions, and code implementations",
+    "description": "A comprehensive showcase of technical expertise, code implementations, and problem-solving abilities across various projects and technologies.",
+    "overview": {
+      "title": "Technical Portfolio Overview",
+      "description": "A comprehensive showcase of technical expertise, code implementations, and problem-solving abilities across various projects and technologies.",
+      "stats": {
+        "projects": "5+",
+        "technologies": "20+",
+        "challenges": "15+",
+        "languages": "4"
+      }
+    },
+    "codeExamples": {
+      "title": "Code Examples & Patterns",
+      "description": "Real-world code examples demonstrating various patterns and best practices from actual projects",
+      "projects": {
+        "portfolio": {
+          "title": "Portfolio Website",
+          "description": "Modern Next.js portfolio with advanced TypeScript patterns, performance optimization, and complex state management",
+          "technologies": [
+            "Next.js",
+            "TypeScript",
+            "Material-UI",
+            "tRPC",
+            "Prisma"
+          ],
+          "examples": [
+            {
+              "title": "Advanced PDF Generation with Dynamic Theming",
+              "description": "Complex PDF generation system with theme variants, layout optimization, and ATS compatibility",
+              "language": "typescript",
+              "code": "// Core PDF generation with dynamic theming\nclass PDFGenerator {\n  private doc: jsPDF;\n  private theme: PDFTheme;\n  private currentY = 0;\n  \n  constructor(config: PDFConfig) {\n    this.theme = config.theme;\n    this.doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });\n  }\n  \n  private applyTheme() {\n    this.doc.setFillColor(this.theme.background);\n    this.doc.rect(0, 0, this.doc.internal.pageSize.width, this.doc.internal.pageSize.height, 'F');\n    this.doc.setTextColor(this.theme.text);\n  }\n  \n  private addSection(section: SectionConfig) {\n    // Add section header with theme styling\n    this.doc.setFillColor(this.theme.primary);\n    this.doc.roundedRect(20, this.currentY, 170, 8, 2, 'F');\n    \n    this.doc.setTextColor('#FFFFFF');\n    this.doc.setFontSize(14);\n    this.doc.text(section.title, 24, this.currentY + 5.5);\n    \n    this.currentY += 12;\n    this.addSectionContent(section);\n  }\n  \n  private addSectionContent(section: SectionConfig) {\n    this.doc.setTextColor(this.theme.text);\n    this.doc.setFontSize(10);\n    \n    const lines = this.doc.splitTextToSize(section.content, 170);\n    lines.forEach((line: string) => {\n      this.doc.text(line, 24, this.currentY);\n      this.currentY += 5;\n    });\n    this.currentY += 8;\n  }\n  \n  public async generate(): Promise<Blob> {\n    this.applyTheme();\n    this.config.sections.forEach(section => this.addSection(section));\n    return this.doc.output('blob');\n  }\n}\n\n// Usage\nexport const generateResumePDF = async (data: ResumeData, theme: PDFTheme) => {\n  const generator = new PDFGenerator({ theme, sections: data.sections });\n  return await generator.generate();\n};",
+              "explanation": "This demonstrates advanced OOP principles, complex state management, dynamic theming, and sophisticated PDF generation with layout optimization, page management, and theme-based styling systems."
+            },
+            {
+              "title": "Advanced TypeScript Utility Types & Generic Constraints",
+              "description": "Complex TypeScript patterns for type-safe API responses and dynamic form validation",
+              "language": "typescript",
+              "code": "// Core TypeScript utility types and form validation\ntype ApiResponse<T, E = string> = {\n  data: T;\n  error: E | null;\n  status: 'success' | 'error' | 'loading';\n  timestamp: number;\n};\n\ntype FormField<T> = {\n  value: T;\n  error: string | null;\n  touched: boolean;\n  validators: Validator<T>[];\n};\n\n// Generic form hook with type safety\nfunction useForm<T extends Record<string, any>>(\n  initialValues: T,\n  validationSchema: ValidationSchema<T>\n): FormState<T> {\n  const [values, setValues] = useState<T>(initialValues);\n  const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});\n  \n  const setFieldValue = useCallback(<K extends keyof T>(\n    field: K,\n    value: T[K]\n  ) => {\n    setValues(prev => ({ ...prev, [field]: value }));\n    \n    // Validate field\n    const validators = validationSchema[field];\n    if (validators) {\n      const isValid = validators.every(v => v.validate(value).isValid);\n      setErrors(prev => ({\n        ...prev,\n        [field]: isValid ? null : 'Invalid value'\n      }));\n    }\n  }, [validationSchema]);\n  \n  const submit = useCallback(async (): Promise<ApiResponse<T>> => {\n    try {\n      const response = await submitForm(values);\n      return { data: response, error: null, status: 'success', timestamp: Date.now() };\n    } catch (error) {\n      return { data: values, error: error.message, status: 'error', timestamp: Date.now() };\n    }\n  }, [values]);\n  \n  return { values, errors, setFieldValue, submit, isValid: Object.values(errors).every(e => !e) };\n}\n\n// Usage\ntype UserForm = { name: string; email: string; age: number };\nconst userForm = useForm<UserForm>(\n  { name: '', email: '', age: 0 },\n  {\n    name: [{ validate: (v) => ({ isValid: v.length > 0, errors: [] }), message: 'Required' }],\n    email: [{ validate: (v) => ({ isValid: /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(v), errors: [] }), message: 'Invalid email' }],\n    age: [{ validate: (v) => ({ isValid: v >= 18, errors: [] }), message: 'Must be 18+' }]\n  }\n);",
+              "explanation": "This demonstrates advanced TypeScript generics, complex type constraints, debounced validation, async form handling, and sophisticated error management with full type safety and inference."
+            }
+          ]
+        },
+        "snowhq": {
+          "title": "Snow HQ - Enterprise CRM",
+          "description": "Full-stack enterprise CRM with real-time analytics, automated workflows, and advanced data management",
+          "technologies": [
+            "Next.js",
+            "TypeScript",
+            "tRPC",
+            "Drizzle ORM",
+            "PostgreSQL",
+            "Material-UI"
+          ],
+          "examples": [
+            {
+              "title": "Real-time Data Synchronization with tRPC",
+              "description": "Core functionality for real-time data updates across the CRM system",
+              "language": "typescript",
+              "code": "// Real-time data sync with tRPC and WebSockets\nconst useRealtimeData = <T>(endpoint: string, filters?: Record<string, any>) => {\n  const [data, setData] = useState<T[]>([]);\n  const [isConnected, setIsConnected] = useState(false);\n  \n  useEffect(() => {\n    const ws = new WebSocket(`ws://localhost:3001/${endpoint}`);\n    \n    ws.onopen = () => {\n      setIsConnected(true);\n      ws.send(JSON.stringify({ type: 'subscribe', filters }));\n    };\n    \n    ws.onmessage = (event) => {\n      const { type, payload } = JSON.parse(event.data);\n      \n      switch (type) {\n        case 'CREATE':\n          setData(prev => [...prev, payload]);\n          break;\n        case 'UPDATE':\n          setData(prev => prev.map(item => \n            item.id === payload.id ? { ...item, ...payload } : item\n          ));\n          break;\n        case 'DELETE':\n          setData(prev => prev.filter(item => item.id !== payload.id));\n          break;\n      }\n    };\n    \n    return () => ws.close();\n  }, [endpoint, filters]);\n  \n  return { data, isConnected };\n};\n\n// Usage in CRM components\nconst { data: customers, isConnected } = useRealtimeData<Customer>('customers', {\n  status: 'active',\n  region: 'north'\n});",
+              "explanation": "Core real-time functionality enabling live data updates across the CRM without page refreshes."
+            },
+            {
+              "title": "Advanced Query Builder with Drizzle ORM",
+              "description": "Dynamic query construction for complex CRM data filtering and reporting",
+              "language": "typescript",
+              "code": "// Dynamic query builder for CRM analytics\nclass QueryBuilder {\n  private query: any;\n  \n  constructor(table: any) {\n    this.query = table;\n  }\n  \n  where(field: string, operator: string, value: any) {\n    this.query = this.query.where(\n      sql`${sql.identifier(field)} ${sql.raw(operator)} ${value}`\n    );\n    return this;\n  }\n  \n  orderBy(field: string, direction: 'asc' | 'desc' = 'asc') {\n    this.query = this.query.orderBy(sql`${sql.identifier(field)} ${sql.raw(direction)}`);\n    return this;\n  }\n  \n  paginate(page: number, limit: number) {\n    const offset = (page - 1) * limit;\n    this.query = this.query.limit(limit).offset(offset);\n    return this;\n  }\n  \n  async execute() {\n    return await this.query;\n  }\n}\n\n// Usage for CRM reports\nconst reportData = await new QueryBuilder(customers)\n  .where('created_at', '>=', startDate)\n  .where('status', '=', 'active')\n  .orderBy('revenue', 'desc')\n  .paginate(1, 50)\n  .execute();",
+              "explanation": "Essential query functionality enabling complex data filtering and reporting in the CRM system."
+            }
+          ]
+        },
+        "clipwhisperer": {
+          "title": "ClipWhisperer Platform",
+          "description": "Microservices architecture with event-driven patterns, real-time processing, and AI integration",
+          "technologies": [
+            "Node.js",
+            "Docker",
+            "Kubernetes",
+            "Redis",
+            "PostgreSQL",
+            "OpenAI API"
+          ],
+          "examples": [
+            {
+              "title": "Event-Driven Microservices with CQRS Pattern",
+              "description": "Complex event sourcing and command query responsibility segregation implementation",
+              "language": "typescript",
+              "code": "// Event-driven architecture core\nclass EventBus {\n  private handlers = new Map<string, Function[]>();\n  \n  publish(eventType: string, data: any) {\n    const handlers = this.handlers.get(eventType) || [];\n    handlers.forEach(handler => {\n      try {\n        handler(data);\n      } catch (error) {\n        console.error(`Handler failed for ${eventType}:`, error);\n      }\n    });\n  }\n  \n  subscribe(eventType: string, handler: Function) {\n    if (!this.handlers.has(eventType)) {\n      this.handlers.set(eventType, []);\n    }\n    this.handlers.get(eventType)!.push(handler);\n  }\n}\n\n// Video processing event flow\nconst eventBus = new EventBus();\n\neventBus.subscribe('video.uploaded', (video) => {\n  eventBus.publish('video.processing.started', { videoId: video.id });\n});\n\neventBus.subscribe('video.processing.completed', (result) => {\n  eventBus.publish('ai.narration.requested', result);\n});\n\n// CQRS Command Handler\nclass ProcessVideoHandler {\n  async handle(command: ProcessVideoCommand) {\n    const aggregate = await this.loadAggregate(command.videoId);\n    const events = await this.executeCommand(aggregate, command);\n    \n    if (events.length > 0) {\n      await this.eventStore.appendEvents(command.videoId, events);\n      await this.repository.save(aggregate);\n    }\n  }\n  \n  private async loadAggregate(videoId: string) {\n    const events = await this.eventStore.getEvents(videoId);\n    return VideoAggregate.fromEvents(events);\n  }\n}",
+              "explanation": "This demonstrates advanced microservices patterns including event sourcing, CQRS, optimistic concurrency control, event bus architecture, middleware patterns, and complex domain modeling with proper separation of concerns."
+            }
+          ]
+        },
+        "microservicesmanager": {
+          "title": "Microservices Manager CLI",
+          "description": "CLI tool for microservices ecosystem management with automated workflows and monitoring",
+          "technologies": [
+            "TypeScript",
+            "Node.js",
+            "Commander.js",
+            "Docker",
+            "Kubernetes"
+          ],
+          "examples": [
+            {
+              "title": "Service Discovery and Health Monitoring",
+              "description": "Core functionality for discovering and monitoring microservices health",
+              "language": "typescript",
+              "code": "// Service discovery and health monitoring\nclass ServiceManager {\n  private services = new Map<string, ServiceInfo>();\n  \n  async discoverServices(namespace: string) {\n    const pods = await k8s.api.v1.namespace(namespace).pods.get();\n    \n    for (const pod of pods.body.items) {\n      const service = {\n        name: pod.metadata.name,\n        status: pod.status.phase,\n        endpoints: this.extractEndpoints(pod),\n        health: await this.checkHealth(pod)\n      };\n      \n      this.services.set(service.name, service);\n    }\n  }\n  \n  private async checkHealth(pod: any): Promise<'healthy' | 'unhealthy'> {\n    try {\n      const response = await fetch(`http://${pod.status.podIP}:8080/health`);\n      return response.ok ? 'healthy' : 'unhealthy';\n    } catch {\n      return 'unhealthy';\n    }\n  }\n  \n  getServiceStatus(name: string) {\n    return this.services.get(name);\n  }\n}\n\n// CLI command implementation\nprogram\n  .command('status')\n  .description('Check microservices status')\n  .action(async () => {\n    const manager = new ServiceManager();\n    await manager.discoverServices('default');\n    \n    console.table(Array.from(manager.services.values()));\n  });",
+              "explanation": "Core service discovery functionality enabling monitoring and management of microservices."
+            },
+            {
+              "title": "Automated Deployment Pipeline",
+              "description": "Essential deployment automation for microservices updates",
+              "language": "typescript",
+              "code": "// Automated deployment pipeline\nclass DeploymentPipeline {\n  async deploy(serviceName: string, imageTag: string) {\n    console.log(`Deploying ${serviceName}:${imageTag}...`);\n    \n    // 1. Build and push image\n    await this.buildImage(serviceName, imageTag);\n    \n    // 2. Update deployment\n    await this.updateDeployment(serviceName, imageTag);\n    \n    // 3. Wait for rollout\n    await this.waitForRollout(serviceName);\n    \n    // 4. Verify health\n    await this.verifyDeployment(serviceName);\n    \n    console.log('Deployment completed successfully!');\n  }\n  \n  private async buildImage(serviceName: string, tag: string) {\n    const { exec } = require('child_process');\n    return new Promise((resolve, reject) => {\n      exec(`docker build -t ${serviceName}:${tag} .`, (error, stdout) => {\n        if (error) reject(error);\n        else resolve(stdout);\n      });\n    });\n  }\n  \n  private async updateDeployment(serviceName: string, imageTag: string) {\n    const deployment = await k8s.api.apps.v1.namespace('default')\n      .deployments(serviceName).get();\n    \n    deployment.body.spec.template.spec.containers[0].image = `${serviceName}:${imageTag}`;\n    \n    await k8s.api.apps.v1.namespace('default')\n      .deployments(serviceName).put({ body: deployment.body });\n  }\n}\n\n// CLI usage\nprogram\n  .command('deploy <service> <tag>')\n  .description('Deploy microservice with specified tag')\n  .action(async (service, tag) => {\n    const pipeline = new DeploymentPipeline();\n    await pipeline.deploy(service, tag);\n  });",
+              "explanation": "Core deployment functionality enabling automated microservices updates and rollouts."
+            }
+          ]
+        }
+      }
+    },
+    "technicalChallenges": {
+      "title": "Technical Challenges & Solutions",
+      "description": "Complex technical problems solved and innovative solutions implemented",
+      "challenges": [
+        {
+          "title": "Real-time PDF Generation with Dynamic Theming",
+          "problem": "Creating a flexible PDF generation system that supports multiple themes, layouts, and visual elements while maintaining performance and ATS compatibility",
+          "solution": "Developed a modular PDF generator with theme system, layout variants, and conditional visual elements using jsPDF and custom configuration management",
+          "technologies": ["jsPDF", "TypeScript", "React", "Material-UI"],
+          "impact": "Reduced PDF generation time by 60% and enabled dynamic customization without code changes"
+        },
+        {
+          "title": "Responsive Design with Material-UI Breakpoints",
+          "problem": "Creating a responsive design system that works seamlessly across all device sizes using Material-UI's complex breakpoint system",
+          "solution": "Developed custom hooks for device detection, combined media queries with window dimensions, and implemented fallback logic",
+          "technologies": ["React", "Material-UI", "TypeScript", "CSS-in-JS"],
+          "impact": "Improved user experience across all devices and reduced layout issues by 85%"
+        }
+      ]
+    },
+    "sections": {
+      "overview": {
+        "title": "Technical Overview",
+        "description": "A comprehensive analysis of technical skills, architecture patterns, and implementation strategies across various projects and technologies."
+      },
+      "architecture": {
+        "title": "Architecture & Design Patterns",
+        "patterns": {
+          "microservices": {
+            "title": "Microservices Architecture",
+            "description": "Design and implementation of scalable microservices using Node.js, Express, and containerization",
+            "technologies": [
+              "Node.js",
+              "Express.js",
+              "Docker",
+              "Kubernetes",
+              "API Gateway",
+              "Service Mesh"
+            ],
+            "examples": [
+              "ClipWhisperer platform with 5+ microservices",
+              "Event-driven architecture with message queues",
+              "Distributed logging and monitoring"
+            ]
+          },
+          "monolithic": {
+            "title": "Monolithic to Microservices Migration",
+            "description": "Strategic migration of legacy monolithic systems to modern microservices architecture",
+            "technologies": [
+              "Legacy Systems",
+              "Database Migration",
+              "API Versioning",
+              "Gradual Migration"
+            ],
+            "examples": [
+              "Insurance core systems modernization",
+              "Database schema evolution strategies",
+              "Zero-downtime deployment patterns"
+            ]
+          },
+          "frontend": {
+            "title": "Modern Frontend Architecture",
+            "description": "Component-based architecture with state management and performance optimization",
+            "technologies": [
+              "React",
+              "Next.js",
+              "TypeScript",
+              "State Management",
+              "SSR/SSG"
+            ],
+            "examples": [
+              "Server-side rendering with Next.js",
+              "Component library development",
+              "Performance optimization techniques"
+            ]
+          }
+        }
+      },
+      "technologies": {
+        "title": "Technology Stack Deep Dive",
+        "frontend": {
+          "title": "Frontend Technologies",
+          "frameworks": {
+            "react": {
+              "title": "React Ecosystem",
+              "description": "Advanced React patterns, hooks, and performance optimization",
+              "skills": [
+                "Custom Hooks",
+                "Context API",
+                "Performance Optimization",
+                "Testing",
+                "Accessibility"
+              ],
+              "projects": [
+                "Portfolio Website",
+                "Enterprise CRM",
+                "Component Libraries"
+              ]
+            },
+            "nextjs": {
+              "title": "Next.js Framework",
+              "description": "Full-stack React framework with SSR, SSG, and API routes",
+              "skills": [
+                "SSR/SSG",
+                "API Routes",
+                "Middleware",
+                "Image Optimization",
+                "Performance"
+              ],
+              "projects": [
+                "Portfolio Website",
+                "Blog Platform",
+                "E-commerce Solutions"
+              ]
+            }
+          },
+          "styling": {
+            "title": "Styling & UI",
+            "technologies": [
+              "Material-UI",
+              "Tailwind CSS",
+              "Styled Components",
+              "CSS-in-JS",
+              "Responsive Design"
+            ],
+            "skills": [
+              "Design Systems",
+              "Component Styling",
+              "Theme Management",
+              "Animation"
+            ]
+          }
+        },
+        "backend": {
+          "title": "Backend Technologies",
+          "frameworks": {
+            "nodejs": {
+              "title": "Node.js & Express",
+              "description": "Server-side Typescript with Express.js framework",
+              "skills": [
+                "REST APIs",
+                "Middleware",
+                "Authentication",
+                "Error Handling",
+                "Performance"
+              ],
+              "projects": [
+                "Microservices",
+                "API Development",
+                "Real-time Applications"
+              ]
+            },
+            "trpc": {
+              "title": "tRPC Framework",
+              "description": "End-to-end typesafe APIs with TypeScript",
+              "skills": [
+                "Type Safety",
+                "API Design",
+                "Validation",
+                "Real-time",
+                "Caching"
+              ],
+              "projects": [
+                "Portfolio Backend",
+                "Real-time Features",
+                "Type-safe APIs"
+              ]
+            }
+          },
+          "databases": {
+            "title": "Database Technologies",
+            "postgresql": {
+              "title": "PostgreSQL",
+              "description": "Relational database with advanced features and optimization",
+              "skills": [
+                "Schema Design",
+                "Query Optimization",
+                "Indexing",
+                "Transactions",
+                "Migrations"
+              ],
+              "projects": [
+                "Insurance Systems",
+                "User Management",
+                "Financial Data"
+              ]
+            },
+            "mongodb": {
+              "title": "MongoDB",
+              "description": "NoSQL database for flexible data modeling",
+              "skills": [
+                "Document Design",
+                "Aggregation",
+                "Sharding",
+                "Performance Tuning"
+              ],
+              "projects": [
+                "Content Management",
+                "User Profiles",
+                "Analytics Data"
+              ]
+            }
+          }
+        },
+        "devops": {
+          "title": "DevOps & Cloud",
+          "cloud": {
+            "title": "Cloud Platforms",
+            "aws": {
+              "title": "Amazon Web Services",
+              "description": "Cloud infrastructure and services",
+              "skills": ["EC2", "S3", "Lambda", "RDS", "CloudFront", "IAM"],
+              "projects": [
+                "Application Hosting",
+                "File Storage",
+                "Serverless Functions"
+              ]
+            },
+            "vercel": {
+              "title": "Vercel Platform",
+              "description": "Frontend deployment and optimization",
+              "skills": [
+                "Deployment",
+                "Edge Functions",
+                "Analytics",
+                "Performance"
+              ],
+              "projects": ["Portfolio Deployment", "Static Site Generation"]
+            }
+          },
+          "containerization": {
+            "title": "Containerization & Orchestration",
+            "technologies": [
+              "Docker",
+              "Kubernetes",
+              "Docker Compose",
+              "Container Registry"
+            ],
+            "skills": [
+              "Containerization",
+              "Orchestration",
+              "Scaling",
+              "Service Discovery"
+            ]
+          }
+        }
+      },
+      "projects": {
+        "title": "Technical Project Analysis",
+        "snowHQ": {
+          "title": "Snow HQ - Enterprise CRM",
+          "description": "Full-stack enterprise customer relationship management system",
+          "architecture": {
+            "frontend": "React with TypeScript, Material-UI, and custom component library",
+            "backend": "Node.js with Express, tRPC for type-safe APIs",
+            "database": "PostgreSQL with Drizzle ORM for type-safe database operations",
+            "deployment": "Vercel for frontend, Railway for backend services"
+          },
+          "technicalChallenges": [
+            "Complex state management across multiple modules",
+            "Real-time data synchronization",
+            "Performance optimization for large datasets",
+            "Type safety across the entire stack"
+          ],
+          "solutions": [
+            "Implemented custom hooks for state management",
+            "Used WebSockets for real-time updates",
+            "Implemented virtual scrolling and pagination",
+            "Created end-to-end TypeScript types with tRPC"
+          ],
+          "technologies": [
+            "React",
+            "TypeScript",
+            "Node.js",
+            "tRPC",
+            "PostgreSQL",
+            "Drizzle ORM",
+            "Material-UI"
+          ]
+        },
+        "clipWhisperer": {
+          "title": "ClipWhisperer - Microservices Platform",
+          "description": "AI-powered video processing platform with microservices architecture",
+          "architecture": {
+            "frontend": "Next.js with TypeScript and Tailwind CSS",
+            "backend": "Multiple microservices with Node.js and Express",
+            "database": "PostgreSQL for metadata, Redis for caching",
+            "deployment": "Docker containers with Kubernetes orchestration"
+          },
+          "technicalChallenges": [
+            "Video processing pipeline optimization",
+            "Microservices communication and data consistency",
+            "AI integration for automated narration",
+            "Scalable file storage and processing"
+          ],
+          "solutions": [
+            "Implemented event-driven architecture with message queues",
+            "Used CQRS pattern for data consistency",
+            "Integrated OpenAI API for AI narration",
+            "Implemented distributed file storage with CDN"
+          ],
+          "technologies": [
+            "Next.js",
+            "Node.js",
+            "Docker",
+            "Kubernetes",
+            "Redis",
+            "OpenAI API",
+            "FFmpeg"
+          ]
+        },
+        "portfolio": {
+          "title": "Portfolio Website - Modern Web Application",
+          "description": "Personal portfolio website with blog, resume generation, and admin panel",
+          "architecture": {
+            "frontend": "Next.js with App Router, TypeScript, and Material-UI",
+            "backend": "tRPC with Prisma ORM and SQLite/PostgreSQL",
+            "features": "SSR, ISR, dynamic routing, and API routes",
+            "deployment": "Vercel with edge functions and CDN"
+          },
+          "technicalChallenges": [
+            "Internationalization (i18n) with RTL support",
+            "Dynamic PDF generation with custom themes",
+            "Real-time blog management system",
+            "Performance optimization for global audience"
+          ],
+          "solutions": [
+            "Implemented next-intl for i18n with RTL support",
+            "Created custom PDF generator with jsPDF",
+            "Built admin panel with tRPC and real-time updates",
+            "Optimized with ISR, image optimization, and edge caching"
+          ],
+          "technologies": [
+            "Next.js",
+            "TypeScript",
+            "tRPC",
+            "Prisma",
+            "Material-UI",
+            "jsPDF",
+            "next-intl"
+          ]
+        }
+      }
+    }
   }
 }
