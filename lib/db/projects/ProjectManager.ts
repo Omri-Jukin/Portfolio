@@ -10,7 +10,7 @@ import type {
   ProjectFilters,
 } from "./Projects.type";
 import { nanoid } from "nanoid";
-import { IProject } from "#/lib";
+import { IProject, TechnicalChallenge, CodeExample } from "#/lib";
 
 // Helper function to get database client
 const getDbClient = async () => getDB();
@@ -18,6 +18,32 @@ const getDbClient = async () => getDB();
 const transformDbToApi = (dbProject: ProjectDB): IProject => {
   // Map status to API ProjectStatus, excluding "deleted"
   const status = dbProject.status === "deleted" ? "archived" : dbProject.status;
+
+  // Transform TTechnicalChallenges to TechnicalChallenge[]
+  const technicalChallenges: TechnicalChallenge[] =
+    dbProject.technicalChallenges.map((challenge, index) => ({
+      id: `challenge-${index}`,
+      title: challenge.challenge,
+      problem: challenge.challenge,
+      solution: challenge.solution,
+      technologies: [],
+      impact: "",
+      project: dbProject.id,
+    }));
+
+  // Transform TCodeExamples to CodeExample[]
+  const codeExamples: CodeExample[] = dbProject.codeExamples.map(
+    (example, index) => ({
+      id: `example-${index}`,
+      title: example.title,
+      description: example.explanation,
+      language: example.language,
+      code: example.code,
+      explanation: example.explanation,
+      project: dbProject.id,
+      category: "general",
+    })
+  );
 
   return {
     ...dbProject,
@@ -31,6 +57,8 @@ const transformDbToApi = (dbProject: ProjectDB): IProject => {
     architecture: dbProject.architecture || null,
     titleTranslations: dbProject.titleTranslations || null,
     descriptionTranslations: dbProject.descriptionTranslations || null,
+    technicalChallenges,
+    codeExamples,
   };
 };
 

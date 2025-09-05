@@ -158,7 +158,6 @@ export function extractTechnicalPortfolioData(
         technologies: project.technologies || [],
         impact: challenge.impact,
         project: project.name,
-        challenge: challenge.problem,
       });
     });
   });
@@ -174,7 +173,6 @@ export function extractTechnicalPortfolioData(
         technologies: challenge.technologies || [],
         impact: challenge.impact,
         project: "Portfolio Website",
-        challenge: challenge.problem,
       });
     });
   }

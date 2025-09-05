@@ -497,17 +497,9 @@ export type ProjectArchitecture = {
   security?: string;
 };
 
-export type TCodeExamples = {
-  title: string;
-  language: string;
-  code: string;
-  explanation: string;
-}[];
+export type TCodeExamples = SimpleCodeExample[];
 
-export type TTechnicalChallenges = {
-  challenge: string;
-  solution: string;
-}[];
+export type TTechnicalChallenges = SimpleTechnicalChallenge[];
 
 // Union type for projects that can handle both database and static data
 export type UnifiedProject = IProject & {
@@ -516,12 +508,12 @@ export type UnifiedProject = IProject & {
   architecture?: ProjectArchitecture;
 };
 
-export interface TechnicalChallenge {
+export interface SimpleTechnicalChallenge {
   challenge: string;
   solution: string;
 }
 
-export interface CodeExample {
+export interface SimpleCodeExample {
   title: string;
   language: string;
   code: string;
