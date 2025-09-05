@@ -564,8 +564,10 @@
     "children": "אני מהנדס FullStack שבונה מערכות מתקדמות וחוויות web מודרניות עם ארכיטקטורה נקייה ופתרונות מעשיים.",
     "linksTitle": "קישורים מהירים",
     "links": [
-      { "label": "בית", "href": "/" },
+      { "label": "דף הבית", "href": "/" },
       { "label": "קריירה", "href": "/career" },
+      { "label": "הסמכות ותעודות", "href": "/certifications" },
+      { "label": "תיק טכני", "href": "/technical-portfolio" },
       { "label": "קורות חיים", "href": "/resume" },
       { "label": "בלוג", "href": "/blog" },
       { "label": "צור קשר", "href": "/contact" },
@@ -608,5 +610,502 @@
       }
     ],
     "copyright": "עמרי יוקין. כל הזכויות שמורות."
+  },
+  "technicalPortfolio": {
+    "title": "תיק טכני",
+    "subtitle": "תצוגה מקיפה של מומחיות טכנית, החלטות ארכיטקטורה ויישומי קוד",
+    "description": "תצוגה מקיפה של מומחיות טכנית, יישומי קוד ויכולות פתרון בעיות בפרויקטים וטכנולוגיות שונות.",
+    "overview": {
+      "title": "סקירת תיק טכני",
+      "description": "תצוגה מקיפה של מומחיות טכנית, יישומי קוד ויכולות פתרון בעיות בפרויקטים וטכנולוגיות שונות.",
+      "stats": {
+        "projects": "5+",
+        "technologies": "20+",
+        "challenges": "15+",
+        "languages": "4"
+      }
+    },
+    "sections": {
+      "overview": {
+        "title": "סקירה טכנית",
+        "description": "ניתוח מקיף של כישורים טכניים, דפוסי ארכיטקטורה ואסטרטגיות יישום בפרויקטים וטכנולוגיות שונות."
+      },
+      "architecture": {
+        "title": "ארכיטקטורה ודפוסי עיצוב",
+        "patterns": {
+          "microservices": {
+            "title": "ארכיטקטורת מיקרו-שירותים",
+            "description": "עיצוב ויישום של מיקרו-שירותים מתקדמים באמצעות Node.js, Express ומיכלים",
+            "technologies": [
+              "Node.js",
+              "Express.js",
+              "Docker",
+              "Kubernetes",
+              "API Gateway",
+              "Service Mesh"
+            ],
+            "examples": [
+              "פלטפורמת ClipWhisperer עם 5+ מיקרו-שירותים",
+              "ארכיטקטורה מונעת אירועים עם תורי הודעות",
+              "לוגים וניטור מבוזרים"
+            ]
+          },
+          "monolithic": {
+            "title": "הגירה ממונוליט למיקרו-שירותים",
+            "description": "הגירה אסטרטגית של מערכות מונוליטיות ישנות לארכיטקטורת מיקרו-שירותים מודרנית",
+            "technologies": [
+              "מערכות ישנות",
+              "הגירת מסד נתונים",
+              "גרסת API",
+              "הגירה הדרגתית"
+            ],
+            "examples": [
+              "מודרניזציה של מערכות ליבה בביטוח",
+              "אסטרטגיות התפתחות סכמת מסד נתונים",
+              "דפוסי פריסה ללא השבתה"
+            ]
+          },
+          "frontend": {
+            "title": "ארכיטקטורת Frontend מודרנית",
+            "description": "ארכיטקטורה מבוססת רכיבים עם ניהול מצב ואופטימיזציה של ביצועים",
+            "technologies": [
+              "React",
+              "Next.js",
+              "TypeScript",
+              "ניהול מצב",
+              "SSR/SSG"
+            ],
+            "examples": [
+              "עיבוד בצד השרת עם Next.js",
+              "פיתוח ספריית רכיבים",
+              "טכניקות אופטימיזציה של ביצועים"
+            ]
+          }
+        }
+      },
+      "technologies": {
+        "title": "עמקות ערימת טכנולוגיות",
+        "frontend": {
+          "title": "טכנולוגיות Frontend",
+          "frameworks": {
+            "react": {
+              "title": "מערכת React",
+              "description": "דפוסי React מתקדמים, hooks ואופטימיזציה של ביצועים",
+              "skills": [
+                "Custom Hooks",
+                "Context API",
+                "אופטימיזציה של ביצועים",
+                "בדיקות",
+                "נגישות"
+              ],
+              "projects": ["אתר תיק עבודות", "CRM ארגוני", "ספריות רכיבים"]
+            },
+            "nextjs": {
+              "title": "מסגרת Next.js",
+              "description": "מסגרת React מלאה עם SSR, SSG ו-API routes",
+              "skills": [
+                "SSR/SSG",
+                "API Routes",
+                "Middleware",
+                "אופטימיזציה של תמונות",
+                "ביצועים"
+              ],
+              "projects": [
+                "אתר תיק עבודות",
+                "פלטפורמת בלוג",
+                "פתרונות מסחר אלקטרוני"
+              ]
+            }
+          },
+          "styling": {
+            "title": "עיצוב ו-UI",
+            "technologies": [
+              "Material-UI",
+              "Tailwind CSS",
+              "Styled Components",
+              "CSS-in-JS",
+              "עיצוב רספונסיבי"
+            ],
+            "skills": ["מערכות עיצוב", "עיצוב רכיבים", "ניהול תמה", "אנימציה"]
+          }
+        },
+        "backend": {
+          "title": "טכנולוגיות Backend",
+          "frameworks": {
+            "nodejs": {
+              "title": "Node.js ו-Express",
+              "description": "JavaScript בצד השרת עם מסגרת Express.js",
+              "skills": [
+                "REST APIs",
+                "Middleware",
+                "אימות",
+                "טיפול בשגיאות",
+                "ביצועים"
+              ],
+              "projects": ["מיקרו-שירותים", "פיתוח API", "אפליקציות בזמן אמת"]
+            },
+            "trpc": {
+              "title": "מסגרת tRPC",
+              "description": "APIs בטוחי סוגים מקצה לקצה עם TypeScript",
+              "skills": [
+                "בטיחות סוגים",
+                "עיצוב API",
+                "ולידציה",
+                "זמן אמת",
+                "מטמון"
+              ],
+              "projects": [
+                "Backend תיק עבודות",
+                "תכונות זמן אמת",
+                "APIs בטוחי סוגים"
+              ]
+            }
+          },
+          "databases": {
+            "title": "טכנולוגיות מסד נתונים",
+            "postgresql": {
+              "title": "PostgreSQL",
+              "description": "מסד נתונים יחסי עם תכונות מתקדמות ואופטימיזציה",
+              "skills": [
+                "עיצוב סכמה",
+                "אופטימיזציה של שאילתות",
+                "אינדקסים",
+                "טרנזקציות",
+                "הגירות"
+              ],
+              "projects": ["מערכות ביטוח", "ניהול משתמשים", "נתונים פיננסיים"]
+            },
+            "mongodb": {
+              "title": "MongoDB",
+              "description": "מסד נתונים NoSQL למודל נתונים גמיש",
+              "skills": ["עיצוב מסמכים", "איגוד", "שארדינג", "כוונון ביצועים"],
+              "projects": ["ניהול תוכן", "פרופילי משתמשים", "נתוני אנליטיקה"]
+            }
+          }
+        },
+        "devops": {
+          "title": "DevOps וענן",
+          "cloud": {
+            "title": "פלטפורמות ענן",
+            "aws": {
+              "title": "Amazon Web Services",
+              "description": "תשתית ושירותי ענן",
+              "skills": ["EC2", "S3", "Lambda", "RDS", "CloudFront", "IAM"],
+              "projects": ["אירוח אפליקציות", "אחסון קבצים", "פונקציות ללא שרת"]
+            },
+            "vercel": {
+              "title": "פלטפורמת Vercel",
+              "description": "פריסה ואופטימיזציה של Frontend",
+              "skills": ["פריסה", "פונקציות Edge", "אנליטיקה", "ביצועים"],
+              "projects": ["פריסת תיק עבודות", "יצירת אתרים סטטיים"]
+            }
+          },
+          "containerization": {
+            "title": "מיכלים ואורכיסטרציה",
+            "technologies": [
+              "Docker",
+              "Kubernetes",
+              "Docker Compose",
+              "Container Registry"
+            ],
+            "skills": ["מיכלים", "אורכיסטרציה", "הרחבה", "גילוי שירותים"]
+          }
+        }
+      },
+      "projects": {
+        "title": "ניתוח פרויקטים טכניים",
+        "snowHQ": {
+          "title": "Snow HQ - CRM ארגוני",
+          "description": "מערכת ניהול קשרי לקוחות ארגונית מלאה",
+          "architecture": {
+            "frontend": "React עם TypeScript, Material-UI וספריית רכיבים מותאמת",
+            "backend": "Node.js עם Express, tRPC ל-APIs בטוחי סוגים",
+            "database": "PostgreSQL עם Drizzle ORM לפעולות מסד נתונים בטוחי סוגים",
+            "deployment": "Vercel ל-Frontend, Railway לשירותי Backend"
+          },
+          "technicalChallenges": [
+            "ניהול מצב מורכב על פני מודולים מרובים",
+            "סנכרון נתונים בזמן אמת",
+            "אופטימיזציה של ביצועים עבור מערכי נתונים גדולים",
+            "בטיחות סוגים על פני כל הערימה"
+          ],
+          "solutions": [
+            "יישום custom hooks לניהול מצב",
+            "שימוש ב-WebSockets לעדכונים בזמן אמת",
+            "יישום גלילה וירטואלית ועמודים",
+            "יצירת סוגי TypeScript מקצה לקצה עם tRPC"
+          ],
+          "technologies": [
+            "React",
+            "TypeScript",
+            "Node.js",
+            "tRPC",
+            "PostgreSQL",
+            "Drizzle ORM",
+            "Material-UI"
+          ]
+        },
+        "clipWhisperer": {
+          "title": "ClipWhisperer - פלטפורמת מיקרו-שירותים",
+          "description": "פלטפורמת עיבוד וידאו מבוססת AI עם ארכיטקטורת מיקרו-שירותים",
+          "architecture": {
+            "frontend": "Next.js עם TypeScript ו-Tailwind CSS",
+            "backend": "מיקרו-שירותים מרובים עם Node.js ו-Express",
+            "database": "PostgreSQL למטא-נתונים, Redis למטמון",
+            "deployment": "מיכלי Docker עם אורכיסטרציה של Kubernetes"
+          },
+          "technicalChallenges": [
+            "אופטימיזציה של צינור עיבוד וידאו",
+            "תקשורת מיקרו-שירותים ועקביות נתונים",
+            "אינטגרציה של AI לקריינות אוטומטית",
+            "אחסון ועיבוד קבצים מתקדם"
+          ],
+          "solutions": [
+            "יישום ארכיטקטורה מונעת אירועים עם תורי הודעות",
+            "שימוש בדפוס CQRS לעקביות נתונים",
+            "אינטגרציה של OpenAI API לקריינות AI",
+            "יישום אחסון קבצים מבוזר עם CDN"
+          ],
+          "technologies": [
+            "Next.js",
+            "Node.js",
+            "Docker",
+            "Kubernetes",
+            "Redis",
+            "OpenAI API",
+            "FFmpeg"
+          ]
+        },
+        "portfolio": {
+          "title": "אתר תיק עבודות - אפליקציית ווב מודרנית",
+          "description": "אתר תיק עבודות אישי עם בלוג, יצירת קורות חיים ופאנל ניהול",
+          "architecture": {
+            "frontend": "Next.js עם App Router, TypeScript ו-Material-UI",
+            "backend": "tRPC עם Prisma ORM ו-SQLite/PostgreSQL",
+            "features": "SSR, ISR, ניתוב דינמי ו-API routes",
+            "deployment": "Vercel עם פונקציות edge ו-CDN"
+          },
+          "technicalChallenges": [
+            "בינאום (i18n) עם תמיכה ב-RTL",
+            "יצירת PDF דינמית עם תמות מותאמות",
+            "מערכת ניהול בלוג בזמן אמת",
+            "אופטימיזציה של ביצועים לקהל גלובלי"
+          ],
+          "solutions": [
+            "יישום next-intl ל-i18n עם תמיכה ב-RTL",
+            "יצירת מחולל PDF מותאם עם jsPDF",
+            "בניית פאנל ניהול עם tRPC ועדכונים בזמן אמת",
+            "אופטימיזציה עם ISR, אופטימיזציה של תמונות ומטמון edge"
+          ],
+          "technologies": [
+            "Next.js",
+            "TypeScript",
+            "tRPC",
+            "Prisma",
+            "Material-UI",
+            "jsPDF",
+            "next-intl"
+          ]
+        }
+      },
+      "codeExamples": {
+        "title": "דוגמאות קוד ודפוסים",
+        "reactPatterns": {
+          "title": "דפוסי React",
+          "customHooks": {
+            "title": "Custom Hooks",
+            "description": "לוגיקה לשימוש חוזר עם custom hooks",
+            "example": "useLocalStorage, useDebounce, useApi"
+          },
+          "contextPatterns": {
+            "title": "דפוסי Context",
+            "description": "ניהול מצב עם React Context",
+            "example": "Context תמה, Context משתמש, Context שפה"
+          }
+        },
+        "apiPatterns": {
+          "title": "דפוסי עיצוב API",
+          "trpc": {
+            "title": "פרוצדורות tRPC",
+            "description": "פרוצדורות API בטוחי סוגים עם ולידציה",
+            "example": "פעולות CRUD משתמשים, אימות, מנויים בזמן אמת"
+          },
+          "middleware": {
+            "title": "דפוסי Middleware",
+            "description": "עיבוד בקשות וולידציה middleware",
+            "example": "אימות, הגבלת קצב, טיפול בשגיאות"
+          }
+        },
+        "databasePatterns": {
+          "title": "דפוסי מסד נתונים",
+          "orm": {
+            "title": "דפוסי ORM",
+            "description": "פעולות מסד נתונים עם Drizzle ORM",
+            "example": "הגדרות סכמה, בוני שאילתות, הגירות"
+          },
+          "optimization": {
+            "title": "אופטימיזציה של שאילתות",
+            "description": "טכניקות אופטימיזציה של ביצועי מסד נתונים",
+            "example": "אסטרטגיות אינדקסים, אופטימיזציה של שאילתות, דפוסי מטמון"
+          }
+        }
+      },
+      "methodologies": {
+        "title": "מתודולוגיות פיתוח",
+        "agile": {
+          "title": "פיתוח Agile",
+          "description": "פיתוח איטרטיבי עם משוב רציף",
+          "practices": [
+            "תכנון ספרינט",
+            "סטנד-אפים יומיים",
+            "רטרוספקטיבות",
+            "סיפורי משתמש"
+          ]
+        },
+        "testing": {
+          "title": "אסטרטגיות בדיקה",
+          "description": "גישה מקיפה לבדיקה",
+          "types": [
+            "בדיקות יחידה",
+            "בדיקות אינטגרציה",
+            "בדיקות E2E",
+            "בדיקות ביצועים"
+          ],
+          "tools": ["Jest", "Vitest", "Testing Library", "Playwright"]
+        },
+        "codeQuality": {
+          "title": "איכות קוד ותקנים",
+          "description": "שמירה על איכות קוד גבוהה ועקביות",
+          "practices": [
+            "סקירות קוד",
+            "Linting",
+            "TypeScript",
+            "תיעוד",
+            "בקרת גרסאות"
+          ]
+        }
+      },
+      "performance": {
+        "title": "אופטימיזציה של ביצועים",
+        "frontend": {
+          "title": "ביצועי Frontend",
+          "techniques": [
+            "פיצול קוד",
+            "טעינה עצלה",
+            "אופטימיזציה של תמונות",
+            "ניתוח Bundle",
+            "אסטרטגיות מטמון"
+          ],
+          "tools": [
+            "Webpack Bundle Analyzer",
+            "Lighthouse",
+            "Core Web Vitals",
+            "React DevTools"
+          ]
+        },
+        "backend": {
+          "title": "ביצועי Backend",
+          "techniques": [
+            "אופטימיזציה של מסד נתונים",
+            "מטמון",
+            "Connection Pooling",
+            "Load Balancing",
+            "ניטור"
+          ],
+          "tools": ["PostgreSQL Query Analyzer", "Redis", "PM2", "New Relic"]
+        }
+      },
+      "security": {
+        "title": "שיטות עבודה מומלצות לאבטחה",
+        "authentication": {
+          "title": "אימות והרשאה",
+          "techniques": [
+            "JWT Tokens",
+            "OAuth 2.0",
+            "בקרת גישה מבוססת תפקידים",
+            "ניהול סשן"
+          ]
+        },
+        "dataProtection": {
+          "title": "הגנה על נתונים",
+          "techniques": [
+            "ולידציה של קלט",
+            "מניעת SQL Injection",
+            "הגנה מפני XSS",
+            "HTTPS",
+            "הצפנת נתונים"
+          ]
+        }
+      },
+
+      "technicalChallenges": {
+        "title": "אתגרים טכניים ופתרונות",
+        "description": "בעיות טכניות מורכבות שנפתרו ופתרונות חדשניים שיושמו",
+        "challenges": [
+          {
+            "title": "יצירת PDF בזמן אמת עם עיצוב דינמי",
+            "problem": "יצירת מערכת גמישה ליצירת PDF התומכת במספר ערכות נושא, פריסות ואלמנטים ויזואליים תוך שמירה על ביצועים ותאימות ATS",
+            "solution": "פיתחתי מחולל PDF מודולרי עם מערכת ערכות נושא, וריאנטים של פריסה ואלמנטים ויזואליים מותנים באמצעות jsPDF וניהול תצורה מותאם אישית",
+            "technologies": [
+              "jsPDF",
+              "TypeScript",
+              "מערכת ערכות נושא",
+              "ניהול תצורה"
+            ],
+            "impact": "הפחתתי את זמן יצירת ה-PDF ב-60% ואפשרתי התאמה אישית דינמית ללא שינויי קוד"
+          },
+          {
+            "title": "סכמת מסד נתונים מורכבת עם בטיחות טיפוסים",
+            "problem": "עיצוב סכמת מסד נתונים של CRM עם מספר ישויות, קשרים ושמירה על בטיחות טיפוסים בכל האפליקציה",
+            "solution": "יישמתי Drizzle ORM עם PostgreSQL, יצרתי סכמות מקיפות עם אינדקסים נכונים, מפתחות זרים והסקת TypeScript אוטומטית",
+            "technologies": [
+              "Drizzle ORM",
+              "PostgreSQL",
+              "TypeScript",
+              "עיצוב מסד נתונים"
+            ],
+            "impact": "השגתי 100% בטיחות טיפוסים והפחתתי שגיאות שאילתות מסד נתונים ב-90%"
+          },
+          {
+            "title": "עיצוב רספונסיבי עם נקודות שבירה של Material-UI",
+            "problem": "יצירת מערכת עיצוב רספונסיבי העובדת בצורה חלקה בכל גדלי המכשירים באמצעות מערכת נקודות השבירה המורכבת של Material-UI",
+            "solution": "פיתחתי hooks מותאמים אישית לזיהוי מכשירים, שילבתי שאילתות מדיה עם מימדי חלון ויישמתי לוגיקת גיבוי למקרי קצה",
+            "technologies": [
+              "React Hooks",
+              "Material-UI",
+              "עיצוב רספונסיבי",
+              "TypeScript"
+            ],
+            "impact": "שיפרתי את חוויית המשתמש בכל המכשירים והפחתתי בעיות פריסה ב-85%"
+          },
+          {
+            "title": "API בטוח טיפוסים עם tRPC ו-Zod Validation",
+            "problem": "בניית API בטוח טיפוסים המספק בטיחות טיפוסים מקצה לקצה ממסד הנתונים לחזית תוך שמירה על ביצועים וחוויית מפתח",
+            "solution": "יישמתי tRPC עם Zod validation, יצרתי פרוצדורות לשימוש חוזר עם טיפול נכון בשגיאות והקמתי הפרדה ברורה בין נתיבים ציבוריים ומנהליים",
+            "technologies": ["tRPC", "Zod", "TypeScript", "עיצוב API"],
+            "impact": "ביטלתי שגיאות טיפוסים בזמן ריצה ושיפרתי את פרודוקטיביות המפתחים ב-70%"
+          },
+          {
+            "title": "בינאום עם תוכן דינמי",
+            "problem": "יישום תמיכה מקיפה ב-i18n לאתר פורטפוליו עם תוכן דינמי, דוגמאות טכניות ומספר שפות",
+            "solution": "יצרתי מערכת לוקליזציה מובנית עם אובייקטים מקוננים, יישמתי טעינת תוכן דינמית והבטחתי עקביות בכל השפות הנתמכות",
+            "technologies": ["next-intl", "i18n", "תוכן דינמי", "לוקליזציה"],
+            "impact": "תמכתי בהצלחה ב-4 שפות עם 100% כיסוי תוכן ושיפרתי נגישות"
+          },
+          {
+            "title": "אופטימיזציה של ביצועים עבור מערכי נתונים גדולים",
+            "problem": "אופטימיזציה של שאילתות מסד נתונים ועיבוד חזית עבור מערכי נתונים גדולים במערכת CRM תוך שמירה על עדכונים בזמן אמת",
+            "solution": "יישמתי אינדקסים נכונים של מסד נתונים, אופטימיזציה של שאילתות, עימוד וגלילה וירטואלית עבור מערכי נתונים גדולים",
+            "technologies": [
+              "אופטימיזציה של מסד נתונים",
+              "ביצועי שאילתות",
+              "גלילה וירטואלית",
+              "מטמון"
+            ],
+            "impact": "שיפרתי את ביצועי השאילתות ב-80% והפחתתי את זמן הטעינה הראשוני ב-65%"
+          }
+        ]
+      }
+    }
   }
 }

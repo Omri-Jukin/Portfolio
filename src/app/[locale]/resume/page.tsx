@@ -268,7 +268,13 @@ export default function ResumePage() {
 
       {/* Template selector with previews */}
       <MotionWrapper variant="slideUp" duration={0.8} delay={0.5}>
-        <Card sx={{ mb: 6, backgroundColor: "background.paper" }}>
+        <Card
+          sx={{
+            mb: 6,
+            backgroundColor: "background.paper",
+            opacity: isGenerating ? 0.2 : 0.8,
+          }}
+        >
           <CardContent sx={{ p: 4 }}>
             <Typography variant="h5" sx={{ color: "primary.main", mb: 2 }}>
               {t("templateSelector.title")}
@@ -586,9 +592,15 @@ export default function ResumePage() {
         </Card>
       </MotionWrapper>
 
-      {/* Professional Summary */}
+      {/* Professional Summary
       <MotionWrapper variant="slideUp" duration={0.8} delay={0.4}>
-        <Card sx={{ mb: 6, backgroundColor: "background.paper" }}>
+        <Card
+          sx={{
+            mb: 6,
+            backgroundColor: "background.paper",
+            opacity: isGenerating ? 0.5 : 0.8,
+          }}
+        >
           <CardContent sx={{ p: 4 }}>
             <Typography
               variant="h4"
@@ -610,7 +622,7 @@ export default function ResumePage() {
             </Typography>
           </CardContent>
         </Card>
-      </MotionWrapper>
+      </MotionWrapper> */}
 
       {/* Skills Section */}
       <MotionWrapper variant="slideUp" duration={0.8} delay={0.6}>

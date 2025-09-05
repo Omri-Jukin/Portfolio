@@ -16,6 +16,7 @@ const AnimatedText = ({
   scale,
   opacity,
   translateY,
+  sx,
 }: AnimatedTextProps) => {
   // If children is a string, split it into individual characters for the grid
   // If children is already an array or other type, use as is
@@ -41,6 +42,7 @@ const AnimatedText = ({
       id="animated-text-container"
       type={type}
       length={shouldSplitChars ? length : 1}
+      sx={sx}
     >
       {shouldSplitChars ? (
         // Render each character in its own grid cell

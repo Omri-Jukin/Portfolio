@@ -1,8 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { Box, Tabs, Tab, Typography, Container } from "@mui/material";
+import { Box, Tabs, Tab, Typography, Container, Button } from "@mui/material";
 import { CondensedResume, Portfolio, MotionWrapper } from "#/Components";
+import { useRouter } from "next/navigation";
+import {
+  Code as CodeIcon,
+  Description as ResumeIcon,
+} from "@mui/icons-material";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -35,9 +40,18 @@ function a11yProps(index: number) {
 
 export default function ResumePortfolioPage() {
   const [value, setValue] = useState(0);
+  const router = useRouter();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+
+  const handleTechnicalPortfolioClick = () => {
+    router.push("/technical-portfolio");
+  };
+
+  const handleResumeClick = () => {
+    router.push("/resume");
   };
 
   return (
@@ -87,7 +101,7 @@ export default function ResumePortfolioPage() {
               }}
             />
             <Tab
-              label="Technical Portfolio"
+              label="Portfolio Overview"
               {...a11yProps(1)}
               sx={{
                 "&.Mui-selected": {
@@ -97,6 +111,36 @@ export default function ResumePortfolioPage() {
               }}
             />
           </Tabs>
+        </Box>
+
+        {/* Action Buttons */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            gap: 2,
+            mb: 4,
+            flexWrap: "wrap",
+          }}
+        >
+          <Button
+            variant="contained"
+            size="large"
+            startIcon={<ResumeIcon />}
+            onClick={handleResumeClick}
+            sx={{ minWidth: 200 }}
+          >
+            Full Resume
+          </Button>
+          <Button
+            variant="outlined"
+            size="large"
+            startIcon={<CodeIcon />}
+            onClick={handleTechnicalPortfolioClick}
+            sx={{ minWidth: 200 }}
+          >
+            Technical Portfolio
+          </Button>
         </Box>
 
         <TabPanel value={value} index={0}>

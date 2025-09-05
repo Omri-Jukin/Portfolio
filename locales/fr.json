@@ -554,7 +554,9 @@
     "links": [
       { "label": "Accueil", "href": "/" },
       { "label": "Carrière", "href": "/career" },
-      { "label": "CV", "href": "/resume" },
+      { "label": "Certifications", "href": "/certifications" },
+      { "label": "Portfolio Technique", "href": "/technical-portfolio" },
+      { "label": "Curriculum", "href": "/resume" },
       { "label": "Blog", "href": "/blog" },
       { "label": "Contact", "href": "/contact" },
       { "label": "Exemples", "href": "/examples" }
@@ -596,5 +598,540 @@
       }
     ],
     "copyright": "Omri Jukin. Tous droits réservés."
+  },
+  "technicalPortfolio": {
+    "title": "Portfolio Technique",
+    "subtitle": "Présentation complète de l'expertise technique, des décisions d'architecture et des implémentations de code",
+    "description": "Une présentation complète de l'expertise technique, des implémentations de code et des capacités de résolution de problèmes dans divers projets et technologies.",
+    "sections": {
+      "overview": {
+        "title": "Aperçu Technique",
+        "description": "Analyse complète des compétences techniques, des modèles d'architecture et des stratégies d'implémentation à travers divers projets et technologies."
+      },
+      "architecture": {
+        "title": "Architecture et Modèles de Conception",
+        "patterns": {
+          "microservices": {
+            "title": "Architecture de Microservices",
+            "description": "Conception et implémentation de microservices évolutifs utilisant Node.js, Express et la containerisation",
+            "technologies": [
+              "Node.js",
+              "Express.js",
+              "Docker",
+              "Kubernetes",
+              "API Gateway",
+              "Service Mesh"
+            ],
+            "examples": [
+              "Plateforme ClipWhisperer avec 5+ microservices",
+              "Architecture orientée événements avec files de messages",
+              "Journalisation et monitoring distribués"
+            ]
+          },
+          "monolithic": {
+            "title": "Migration Monolithe vers Microservices",
+            "description": "Migration stratégique de systèmes monolithiques legacy vers une architecture moderne de microservices",
+            "technologies": [
+              "Systèmes Legacy",
+              "Migration de Base de Données",
+              "Versioning API",
+              "Migration Graduelle"
+            ],
+            "examples": [
+              "Modernisation des systèmes core d'assurance",
+              "Stratégies d'évolution de schéma de base de données",
+              "Modèles de déploiement sans interruption"
+            ]
+          },
+          "frontend": {
+            "title": "Architecture Frontend Moderne",
+            "description": "Architecture basée sur les composants avec gestion d'état et optimisation des performances",
+            "technologies": [
+              "React",
+              "Next.js",
+              "TypeScript",
+              "Gestion d'État",
+              "SSR/SSG"
+            ],
+            "examples": [
+              "Rendu côté serveur avec Next.js",
+              "Développement de bibliothèque de composants",
+              "Techniques d'optimisation des performances"
+            ]
+          }
+        }
+      },
+      "technologies": {
+        "title": "Analyse Approfondie du Stack Technologique",
+        "frontend": {
+          "title": "Technologies Frontend",
+          "frameworks": {
+            "react": {
+              "title": "Écosystème React",
+              "description": "Modèles React avancés, hooks et optimisation des performances",
+              "skills": [
+                "Custom Hooks",
+                "Context API",
+                "Optimisation des Performances",
+                "Tests",
+                "Accessibilité"
+              ],
+              "projects": [
+                "Site Web de Portfolio",
+                "CRM Entreprise",
+                "Bibliothèques de Composants"
+              ]
+            },
+            "nextjs": {
+              "title": "Framework Next.js",
+              "description": "Framework React full-stack avec SSR, SSG et API routes",
+              "skills": [
+                "SSR/SSG",
+                "API Routes",
+                "Middleware",
+                "Optimisation d'Images",
+                "Performances"
+              ],
+              "projects": [
+                "Site Web de Portfolio",
+                "Plateforme de Blog",
+                "Solutions E-commerce"
+              ]
+            }
+          },
+          "styling": {
+            "title": "Styles et UI",
+            "technologies": [
+              "Material-UI",
+              "Tailwind CSS",
+              "Styled Components",
+              "CSS-in-JS",
+              "Design Responsive"
+            ],
+            "skills": [
+              "Systèmes de Design",
+              "Styling de Composants",
+              "Gestion de Thèmes",
+              "Animation"
+            ]
+          }
+        },
+        "backend": {
+          "title": "Technologies Backend",
+          "frameworks": {
+            "nodejs": {
+              "title": "Node.js et Express",
+              "description": "JavaScript côté serveur avec framework Express.js",
+              "skills": [
+                "REST APIs",
+                "Middleware",
+                "Authentification",
+                "Gestion d'Erreurs",
+                "Performances"
+              ],
+              "projects": [
+                "Microservices",
+                "Développement API",
+                "Applications Temps Réel"
+              ]
+            },
+            "trpc": {
+              "title": "Framework tRPC",
+              "description": "APIs type-safe de bout en bout avec TypeScript",
+              "skills": [
+                "Type Safety",
+                "Conception API",
+                "Validation",
+                "Temps Réel",
+                "Cache"
+              ],
+              "projects": [
+                "Backend Portfolio",
+                "Fonctionnalités Temps Réel",
+                "APIs Type-safe"
+              ]
+            }
+          },
+          "databases": {
+            "title": "Technologies de Base de Données",
+            "postgresql": {
+              "title": "PostgreSQL",
+              "description": "Base de données relationnelle avec fonctionnalités avancées et optimisation",
+              "skills": [
+                "Conception de Schéma",
+                "Optimisation de Requêtes",
+                "Indexation",
+                "Transactions",
+                "Migrations"
+              ],
+              "projects": [
+                "Systèmes d'Assurance",
+                "Gestion d'Utilisateurs",
+                "Données Financières"
+              ]
+            },
+            "mongodb": {
+              "title": "MongoDB",
+              "description": "Base de données NoSQL pour modélisation de données flexible",
+              "skills": [
+                "Conception de Documents",
+                "Agrégation",
+                "Sharding",
+                "Ajustement des Performances"
+              ],
+              "projects": [
+                "Gestion de Contenu",
+                "Profils Utilisateur",
+                "Données d'Analyse"
+              ]
+            }
+          }
+        },
+        "devops": {
+          "title": "DevOps et Cloud",
+          "cloud": {
+            "title": "Plateformes Cloud",
+            "aws": {
+              "title": "Amazon Web Services",
+              "description": "Infrastructure et services cloud",
+              "skills": ["EC2", "S3", "Lambda", "RDS", "CloudFront", "IAM"],
+              "projects": [
+                "Hébergement d'Applications",
+                "Stockage de Fichiers",
+                "Fonctions Serverless"
+              ]
+            },
+            "vercel": {
+              "title": "Plateforme Vercel",
+              "description": "Déploiement et optimisation Frontend",
+              "skills": [
+                "Déploiement",
+                "Edge Functions",
+                "Analytics",
+                "Performances"
+              ],
+              "projects": [
+                "Déploiement Portfolio",
+                "Génération de Sites Statiques"
+              ]
+            }
+          },
+          "containerization": {
+            "title": "Containerisation et Orchestration",
+            "technologies": [
+              "Docker",
+              "Kubernetes",
+              "Docker Compose",
+              "Container Registry"
+            ],
+            "skills": [
+              "Containerisation",
+              "Orchestration",
+              "Mise à l'Échelle",
+              "Découverte de Services"
+            ]
+          }
+        }
+      },
+      "projects": {
+        "title": "Analyse de Projets Techniques",
+        "snowHQ": {
+          "title": "Snow HQ - CRM Entreprise",
+          "description": "Système complet de gestion de la relation client entreprise",
+          "architecture": {
+            "frontend": "React avec TypeScript, Material-UI et bibliothèque de composants personnalisée",
+            "backend": "Node.js avec Express, tRPC pour APIs type-safe",
+            "database": "PostgreSQL avec Drizzle ORM pour opérations de base de données type-safe",
+            "deployment": "Vercel pour frontend, Railway pour services backend"
+          },
+          "technicalChallenges": [
+            "Gestion d'état complexe à travers plusieurs modules",
+            "Synchronisation de données en temps réel",
+            "Optimisation des performances pour de gros ensembles de données",
+            "Type safety à travers toute la stack"
+          ],
+          "solutions": [
+            "Implémentation de custom hooks pour la gestion d'état",
+            "Utilisation de WebSockets pour les mises à jour temps réel",
+            "Implémentation de scroll virtuel et pagination",
+            "Création de types TypeScript de bout en bout avec tRPC"
+          ],
+          "technologies": [
+            "React",
+            "TypeScript",
+            "Node.js",
+            "tRPC",
+            "PostgreSQL",
+            "Drizzle ORM",
+            "Material-UI"
+          ]
+        },
+        "clipWhisperer": {
+          "title": "ClipWhisperer - Plateforme de Microservices",
+          "description": "Plateforme de traitement vidéo alimentée par IA avec architecture de microservices",
+          "architecture": {
+            "frontend": "Next.js avec TypeScript et Tailwind CSS",
+            "backend": "Multiples microservices avec Node.js et Express",
+            "database": "PostgreSQL pour métadonnées, Redis pour cache",
+            "deployment": "Conteneurs Docker avec orchestration Kubernetes"
+          },
+          "technicalChallenges": [
+            "Optimisation du pipeline de traitement vidéo",
+            "Communication entre microservices et cohérence des données",
+            "Intégration IA pour narration automatisée",
+            "Stockage et traitement de fichiers évolutif"
+          ],
+          "solutions": [
+            "Implémentation d'architecture orientée événements avec files de messages",
+            "Utilisation du pattern CQRS pour la cohérence des données",
+            "Intégration de l'API OpenAI pour narration IA",
+            "Implémentation de stockage de fichiers distribué avec CDN"
+          ],
+          "technologies": [
+            "Next.js",
+            "Node.js",
+            "Docker",
+            "Kubernetes",
+            "Redis",
+            "OpenAI API",
+            "FFmpeg"
+          ]
+        },
+        "portfolio": {
+          "title": "Site Web de Portfolio - Application Web Moderne",
+          "description": "Site web de portfolio personnel avec blog, génération de CV et panneau d'administration",
+          "architecture": {
+            "frontend": "Next.js avec App Router, TypeScript et Material-UI",
+            "backend": "tRPC avec Prisma ORM et SQLite/PostgreSQL",
+            "features": "SSR, ISR, routage dynamique et API routes",
+            "deployment": "Vercel avec edge functions et CDN"
+          },
+          "technicalChallenges": [
+            "Internationalisation (i18n) avec support RTL",
+            "Génération dynamique de PDF avec thèmes personnalisés",
+            "Système de gestion de blog temps réel",
+            "Optimisation des performances pour audience globale"
+          ],
+          "solutions": [
+            "Implémentation de next-intl pour i18n avec support RTL",
+            "Création de générateur PDF personnalisé avec jsPDF",
+            "Construction de panneau d'administration avec tRPC et mises à jour temps réel",
+            "Optimisation avec ISR, optimisation d'images et cache edge"
+          ],
+          "technologies": [
+            "Next.js",
+            "TypeScript",
+            "tRPC",
+            "Prisma",
+            "Material-UI",
+            "jsPDF",
+            "next-intl"
+          ]
+        }
+      },
+      "codeExamples": {
+        "title": "Exemples de Code et Modèles",
+        "reactPatterns": {
+          "title": "Modèles React",
+          "customHooks": {
+            "title": "Custom Hooks",
+            "description": "Logique réutilisable avec custom hooks",
+            "example": "useLocalStorage, useDebounce, useApi"
+          },
+          "contextPatterns": {
+            "title": "Modèles Context",
+            "description": "Gestion d'état avec React Context",
+            "example": "Context thème, Context utilisateur, Context langue"
+          }
+        },
+        "apiPatterns": {
+          "title": "Modèles de Conception API",
+          "trpc": {
+            "title": "Procédures tRPC",
+            "description": "Procédures API type-safe avec validation",
+            "example": "Opérations CRUD utilisateur, Authentification, Abonnements temps réel"
+          },
+          "middleware": {
+            "title": "Modèles Middleware",
+            "description": "Middleware de traitement de requêtes et validation",
+            "example": "Authentification, Rate limiting, Gestion d'erreurs"
+          }
+        },
+        "databasePatterns": {
+          "title": "Modèles de Base de Données",
+          "orm": {
+            "title": "Modèles ORM",
+            "description": "Opérations de base de données avec Drizzle ORM",
+            "example": "Définitions de schéma, Constructeurs de requêtes, Migrations"
+          },
+          "optimization": {
+            "title": "Optimisation de Requêtes",
+            "description": "Techniques d'optimisation des performances de base de données",
+            "example": "Stratégies d'indexation, Optimisation de requêtes, Modèles de cache"
+          }
+        }
+      },
+      "methodologies": {
+        "title": "Méthodologies de Développement",
+        "agile": {
+          "title": "Développement Agile",
+          "description": "Développement itératif avec retour continu",
+          "practices": [
+            "Planification de Sprint",
+            "Daily Standups",
+            "Rétrospectives",
+            "Histoires d'Utilisateur"
+          ]
+        },
+        "testing": {
+          "title": "Stratégies de Test",
+          "description": "Approche complète du testing",
+          "types": [
+            "Tests Unitaires",
+            "Tests d'Intégration",
+            "Tests E2E",
+            "Tests de Performance"
+          ],
+          "tools": ["Jest", "Vitest", "Testing Library", "Playwright"]
+        },
+        "codeQuality": {
+          "title": "Qualité de Code et Standards",
+          "description": "Maintenir une haute qualité de code et cohérence",
+          "practices": [
+            "Code Reviews",
+            "Linting",
+            "TypeScript",
+            "Documentation",
+            "Contrôle de Version"
+          ]
+        }
+      },
+      "performance": {
+        "title": "Optimisation des Performances",
+        "frontend": {
+          "title": "Performances Frontend",
+          "techniques": [
+            "Code Splitting",
+            "Lazy Loading",
+            "Optimisation d'Images",
+            "Analyse de Bundle",
+            "Stratégies de Cache"
+          ],
+          "tools": [
+            "Webpack Bundle Analyzer",
+            "Lighthouse",
+            "Core Web Vitals",
+            "React DevTools"
+          ]
+        },
+        "backend": {
+          "title": "Performances Backend",
+          "techniques": [
+            "Optimisation de Base de Données",
+            "Cache",
+            "Connection Pooling",
+            "Load Balancing",
+            "Monitoring"
+          ],
+          "tools": ["PostgreSQL Query Analyzer", "Redis", "PM2", "New Relic"]
+        }
+      },
+      "security": {
+        "title": "Meilleures Pratiques de Sécurité",
+        "authentication": {
+          "title": "Authentification et Autorisation",
+          "techniques": [
+            "JWT Tokens",
+            "OAuth 2.0",
+            "Contrôle d'Accès Basé sur les Rôles",
+            "Gestion de Session"
+          ]
+        },
+        "dataProtection": {
+          "title": "Protection des Données",
+          "techniques": [
+            "Validation d'Entrée",
+            "Prévention SQL Injection",
+            "Protection XSS",
+            "HTTPS",
+            "Chiffrement des Données"
+          ]
+        }
+      },
+
+      "technicalChallenges": {
+        "title": "Défis Techniques et Solutions",
+        "description": "Problèmes techniques complexes résolus et solutions innovantes implémentées",
+        "challenges": [
+          {
+            "title": "Génération PDF en Temps Réel avec Thèmes Dynamiques",
+            "problem": "Créer un système flexible de génération PDF qui supporte plusieurs thèmes, mises en page et éléments visuels tout en maintenant les performances et la compatibilité ATS",
+            "solution": "J'ai développé un générateur PDF modulaire avec système de thèmes, variantes de mise en page et éléments visuels conditionnels en utilisant jsPDF et la gestion de configuration personnalisée",
+            "technologies": [
+              "jsPDF",
+              "TypeScript",
+              "Système de Thèmes",
+              "Gestion de Configuration"
+            ],
+            "impact": "Réduit le temps de génération PDF de 60% et permis la personnalisation dynamique sans changements de code"
+          },
+          {
+            "title": "Schéma de Base de Données Complexe avec Sécurité des Types",
+            "problem": "Concevoir un schéma de base de données CRM avec plusieurs entités, relations et maintenir la sécurité des types dans toute l'application",
+            "solution": "J'ai implémenté Drizzle ORM avec PostgreSQL, créé des schémas complets avec indexation appropriée, clés étrangères et inférence TypeScript automatique",
+            "technologies": [
+              "Drizzle ORM",
+              "PostgreSQL",
+              "TypeScript",
+              "Conception de Base de Données"
+            ],
+            "impact": "Atteint 100% de sécurité des types et réduit les erreurs de requêtes de base de données de 90%"
+          },
+          {
+            "title": "Design Responsive avec Breakpoints Material-UI",
+            "problem": "Créer un système de design responsive qui fonctionne parfaitement sur toutes les tailles d'appareils en utilisant le système complexe de breakpoints de Material-UI",
+            "solution": "J'ai développé des hooks personnalisés pour la détection d'appareils, combiné les media queries avec les dimensions de fenêtre et implémenté une logique de fallback pour les cas extrêmes",
+            "technologies": [
+              "React Hooks",
+              "Material-UI",
+              "Design Responsive",
+              "TypeScript"
+            ],
+            "impact": "Amélioré l'expérience utilisateur sur tous les appareils et réduit les problèmes de mise en page de 85%"
+          },
+          {
+            "title": "API Type-Safe avec tRPC et Validation Zod",
+            "problem": "Construire une API type-safe qui fournit la sécurité des types de bout en bout de la base de données au frontend tout en maintenant les performances et l'expérience développeur",
+            "solution": "J'ai implémenté tRPC avec validation Zod, créé des procédures réutilisables avec gestion d'erreurs appropriée et établi une séparation claire entre les routes publiques et administratives",
+            "technologies": ["tRPC", "Zod", "TypeScript", "Conception d'API"],
+            "impact": "Éliminé les erreurs de types à l'exécution et amélioré la productivité développeur de 70%"
+          },
+          {
+            "title": "Internationalisation avec Contenu Dynamique",
+            "problem": "Implémenter un support i18n complet pour un site web de portfolio avec contenu dynamique, exemples techniques et plusieurs langues",
+            "solution": "J'ai créé un système de localisation structuré avec objets imbriqués, implémenté le chargement dynamique de contenu et assuré la cohérence dans toutes les langues supportées",
+            "technologies": [
+              "next-intl",
+              "i18n",
+              "Contenu Dynamique",
+              "Localisation"
+            ],
+            "impact": "Supporté avec succès 4 langues avec 100% de couverture de contenu et amélioré l'accessibilité"
+          },
+          {
+            "title": "Optimisation des Performances pour Grands Jeux de Données",
+            "problem": "Optimiser les requêtes de base de données et le rendu frontend pour de grands jeux de données dans le système CRM tout en maintenant les mises à jour en temps réel",
+            "solution": "J'ai implémenté une indexation appropriée de base de données, l'optimisation des requêtes, la pagination et le scroll virtuel pour les grands jeux de données",
+            "technologies": [
+              "Optimisation Base de Données",
+              "Performance des Requêtes",
+              "Scroll Virtuel",
+              "Cache"
+            ],
+            "impact": "Amélioré les performances des requêtes de 80% et réduit le temps de chargement initial de 65%"
+          }
+        ]
+      }
+    }
   }
 }

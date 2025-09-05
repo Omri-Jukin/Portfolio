@@ -224,7 +224,8 @@ export default function ClientLayout({
             display: "flex",
             flexDirection: "column",
             width: "100%",
-            maxWidth: "100vw",
+            marginTop: "4rem",
+            maxWidth: "calc(100vw - 4rem)",
             background: "transparent",
           }}
         >
