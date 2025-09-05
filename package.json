@@ -147,7 +147,7 @@
     "#/*": "./*",
     "~/*": "./Components/*",
     "$/*": "./lib/*",
-    "%/*": "./locales/locale.ts",
+    "%/*": "./locales/*",
     "^/*": "./public/*",
     "!/*": "./theme/*",
     "&/*": "./Components/Providers/*"

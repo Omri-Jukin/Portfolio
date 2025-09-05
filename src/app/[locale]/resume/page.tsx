@@ -27,6 +27,7 @@ import { RESUME_TEMPLATE_MAPPING } from "#/lib/constants";
 import { pdfThemeColors } from "#/lib/styles";
 import type { ResumeTemplate, PDFTheme } from "#/lib/types";
 import { SkeletonText } from "./SkeletonText";
+import type jsPDF from "jspdf";
 
 // Map ResumeTemplate to PDFTheme using constants
 const mapTemplateToPDFTheme = (template: ResumeTemplate): PDFTheme => {
@@ -100,33 +101,68 @@ export default function ResumePage() {
     try {
       setIsGenerating(true);
 
-      // Extract resume data for the selected language
-      const resumeData = extractResumeData(options.language);
-
-      // Generate PDF (dynamically import to avoid edge bundling)
-      const { renderResumePDF } = await import("#/lib/utils/pdfGenerator");
-
       // Generate documents based on selected types
       for (const docType of options.documentTypes) {
         let filename: string;
+        let pdf: jsPDF;
 
         if (docType === "condensedResume") {
-          filename = `Omri_Jukin_FullStack_Developer_Resume.pdf`;
+          filename = `Omri Jukin - Resume.pdf`;
+
+          // Extract resume data for the selected language
+          const resumeData = extractResumeData(options.language);
+
+          // Generate PDF (dynamically import to avoid edge bundling)
+          const { renderResumePDF } = await import("#/lib/utils/pdfGenerator");
+
+          // Configure render options based on language and template
+          const renderOptions = {
+            rtl: options.language === "he",
+            theme: mapTemplateToPDFTheme(selectedTemplate),
+            maxBulletsPerRole: 3,
+            maxProjects: 4,
+          };
+
+          pdf = renderResumePDF(resumeData, renderOptions);
         } else if (docType === "technicalPortfolio") {
-          filename = `Omri_Jukin_FullStack_Developer_Technical_Portfolio.pdf`;
+          filename = `Omri Jukin - Technical Portfolio.pdf`;
+
+          // Load locale data for technical portfolio
+          const localeData = await import(
+            `../../../../locales/${options.language}.json`
+          );
+
+          // Extract technical portfolio data
+          const { extractTechnicalPortfolioData } = await import(
+            "#/lib/utils/technicalPortfolioExtractor"
+          );
+          const technicalPortfolioData = extractTechnicalPortfolioData(
+            localeData.default
+          );
+
+          // Generate technical portfolio PDF
+          const { generateTechnicalPortfolioPDF } = await import(
+            "#/lib/utils/technicalPortfolioGenerator"
+          );
+
+          const technicalOptions = {
+            theme: mapTemplateToPDFTheme(selectedTemplate),
+            includeCodeExamples: options.customization.includeCodeExamples,
+            includeChallenges: options.customization.includeTechnicalChallenges,
+            includeArchitecture:
+              options.customization.includeArchitectureDetails,
+            rtl: options.language === "he",
+          };
+
+          pdf = generateTechnicalPortfolioPDF(
+            technicalPortfolioData,
+            technicalOptions
+          );
         } else {
-          filename = `Omri_Jukin_FullStack_Developer_${docType}.pdf`;
+          filename = `Omri Jukin - ${docType}.pdf`;
+          // Handle other document types if needed
+          continue;
         }
-
-        // Configure render options based on language and template
-        const renderOptions = {
-          rtl: options.language === "he",
-          theme: mapTemplateToPDFTheme(selectedTemplate),
-          maxBulletsPerRole: 3,
-          maxProjects: 4,
-        };
-
-        const pdf = renderResumePDF(resumeData, renderOptions);
 
         // Download the PDF
         pdf.save(filename);
