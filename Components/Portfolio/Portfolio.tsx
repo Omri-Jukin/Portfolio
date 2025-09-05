@@ -554,7 +554,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                               fontWeight="bold"
                               gutterBottom
                             >
-                              Challenge: {challenge.challenge}
+                              Challenge: {challenge.problem}
                             </Typography>
                             <Typography variant="body2">
                               Solution: {challenge.solution}

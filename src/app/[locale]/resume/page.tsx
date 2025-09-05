@@ -26,20 +26,7 @@ import ResumeLanguageSelector from "#/Components/ResumeLanguageSelector";
 import { RESUME_TEMPLATE_MAPPING } from "#/lib/constants";
 import { pdfThemeColors } from "#/lib/styles";
 import type { ResumeTemplate, PDFTheme } from "#/lib/types";
-
-export const SkeletonText = () => {
-  return (
-    <Box
-      sx={{
-        display: "block",
-        mt: 0.5,
-        width: 160,
-        height: 6,
-        bgcolor: "grey.300",
-      }}
-    />
-  );
-};
+import { SkeletonText } from "./SkeletonText";
 
 // Map ResumeTemplate to PDFTheme using constants
 const mapTemplateToPDFTheme = (template: ResumeTemplate): PDFTheme => {
