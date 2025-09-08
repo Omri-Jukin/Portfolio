@@ -1,13 +1,13 @@
 import { z } from "zod";
 import { router, procedure } from "../trpc";
-import { EmailService } from "#/backend/email/email.service";
+import { EmailManager } from "#/backend/email/EmailManager";
 
 // Lazy initialization of the email service
-let emailService: EmailService | null = null;
+let emailService: EmailManager | null = null;
 
 const getEmailService = () => {
   if (!emailService) {
-    emailService = new EmailService();
+    emailService = new EmailManager();
   }
   return emailService;
 };

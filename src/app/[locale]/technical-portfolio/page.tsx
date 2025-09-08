@@ -91,7 +91,7 @@ export default function TechnicalPortfolioPage() {
               mx: "auto",
               width: "100%",
               flexDirection: "column",
-              borderRadius: 3,
+              borderRadius: "12px",
               ...centered,
             }}
           >
@@ -105,7 +105,7 @@ export default function TechnicalPortfolioPage() {
                 background: "rgba(255, 255, 255, 0.05)",
                 backdropFilter: "blur(20px)",
                 border: "1px solid rgba(255, 255, 255, 0.1)",
-                borderRadius: 4,
+                borderRadius: "12px",
                 boxShadow: "0 20px 40px rgba(0, 0, 0, 0.1)",
               }}
             >
@@ -155,14 +155,14 @@ export default function TechnicalPortfolioPage() {
                         "linear-gradient(45deg, #667eea 0%, #764ba2 100%)",
                       px: 4,
                       py: 1.5,
-                      borderRadius: 3,
+                      borderRadius: "12px",
                       textTransform: "none",
                       fontSize: "1.1rem",
                       fontWeight: 600,
-                      boxShadow: "0 8px 32px rgba(102, 126, 234, 0.3)",
+                      boxShadow: "8px 8px 32px rgba(102, 126, 234, 0.3)",
                       "&:hover": {
                         transform: "translateY(-2px)",
-                        boxShadow: "0 12px 40px rgba(102, 126, 234, 0.4)",
+                        boxShadow: "12px 12px 40px rgba(102, 126, 234, 0.4)",
                       },
                       transition: "all 0.3s ease",
                     }}
@@ -182,7 +182,7 @@ export default function TechnicalPortfolioPage() {
                       color: "text.primary",
                       px: 4,
                       py: 1.5,
-                      borderRadius: 3,
+                      borderRadius: "12px",
                       textTransform: "none",
                       fontSize: "1.1rem",
                       fontWeight: 600,
@@ -210,8 +210,8 @@ export default function TechnicalPortfolioPage() {
                     background: "rgba(255, 255, 255, 0.08)",
                     backdropFilter: "blur(20px)",
                     border: "1px solid rgba(255, 255, 255, 0.15)",
-                    borderRadius: 4,
-                    boxShadow: "0 16px 32px rgba(0, 0, 0, 0.1)",
+                    borderRadius: "12px",
+                    boxShadow: "16px 16px 32px rgba(0, 0, 0, 0.1)",
                     ...centered,
                   }}
                 >
@@ -280,12 +280,13 @@ export default function TechnicalPortfolioPage() {
                             "linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)",
                           backdropFilter: "blur(10px)",
                           border: "1px solid rgba(102, 126, 234, 0.2)",
-                          borderRadius: 3,
+                          borderRadius: "12px",
                           position: "relative",
                           overflow: "hidden",
                           "&:hover": {
                             transform: "translateY(-4px)",
-                            boxShadow: "0 20px 40px rgba(102, 126, 234, 0.2)",
+                            boxShadow:
+                              "20px 20px 40px rgba(102, 126, 234, 0.2)",
                           },
                           transition: "all 0.3s ease",
                         }}
@@ -319,12 +320,12 @@ export default function TechnicalPortfolioPage() {
                             "linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%)",
                           backdropFilter: "blur(10px)",
                           border: "1px solid rgba(34, 197, 94, 0.2)",
-                          borderRadius: 3,
+                          borderRadius: "12px",
                           position: "relative",
                           overflow: "hidden",
                           "&:hover": {
                             transform: "translateY(-4px)",
-                            boxShadow: "0 20px 40px rgba(34, 197, 94, 0.2)",
+                            boxShadow: "20px 20px 40px rgba(34, 197, 94, 0.2)",
                           },
                           transition: "all 0.3s ease",
                         }}
@@ -358,12 +359,12 @@ export default function TechnicalPortfolioPage() {
                             "linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%)",
                           backdropFilter: "blur(10px)",
                           border: "1px solid rgba(239, 68, 68, 0.2)",
-                          borderRadius: 3,
+                          borderRadius: "12px",
                           position: "relative",
                           overflow: "hidden",
                           "&:hover": {
                             transform: "translateY(-4px)",
-                            boxShadow: "0 20px 40px rgba(239, 68, 68, 0.2)",
+                            boxShadow: "20px 20px 40px rgba(239, 68, 68, 0.2)",
                           },
                           transition: "all 0.3s ease",
                         }}
@@ -397,12 +398,12 @@ export default function TechnicalPortfolioPage() {
                             "linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%)",
                           backdropFilter: "blur(10px)",
                           border: "1px solid rgba(168, 85, 247, 0.2)",
-                          borderRadius: 3,
+                          borderRadius: "12px",
                           position: "relative",
                           overflow: "hidden",
                           "&:hover": {
                             transform: "translateY(-4px)",
-                            boxShadow: "0 20px 40px rgba(168, 85, 247, 0.2)",
+                            boxShadow: "20px 20px 40px rgba(168, 85, 247, 0.2)",
                           },
                           transition: "all 0.3s ease",
                         }}
@@ -440,12 +441,12 @@ export default function TechnicalPortfolioPage() {
                     background: "rgba(255, 255, 255, 0.08)",
                     backdropFilter: "blur(20px)",
                     border: "1px solid rgba(255, 255, 255, 0.15)",
-                    borderRadius: 3,
-                    boxShadow: "0 16px 32px rgba(0, 0, 0, 0.1)",
+                    borderRadius: "12px",
+                    boxShadow: "16px 16px 32px rgba(0, 0, 0, 0.1)",
                     ...centered,
                   }}
                 >
-                  <CardContent sx={{ p: 5, borderRadius: 3 }}>
+                  <CardContent sx={{ borderRadius: "12px" }}>
                     <Box sx={{ textAlign: "center", mb: 4 }}>
                       <Stack
                         direction="row"
@@ -492,9 +493,9 @@ export default function TechnicalPortfolioPage() {
                     </Box>
 
                     {/* Professional Code Examples Accordion */}
-                    <Box sx={{ mt: 4, borderRadius: 3 }}>
+                    <Box sx={{ borderRadius: "12px", overflow: "hidden" }}>
                       {Object.entries(t.raw("codeExamples.projects") || {}).map(
-                        ([projectKey, projectData]) => {
+                        ([projectKey, projectData], index) => {
                           const project = projectData as {
                             title: string;
                             description: string;
@@ -505,13 +506,24 @@ export default function TechnicalPortfolioPage() {
                             <Accordion
                               key={projectKey}
                               sx={{
-                                mb: 3,
                                 background: "rgba(255, 255, 255, 0.03)",
                                 border: "1px solid rgba(255, 255, 255, 0.1)",
-                                borderRadius: 3,
+                                borderRadius:
+                                  index === 0
+                                    ? "12px 12px 0 0"
+                                    : index ===
+                                      Object.entries(
+                                        t.raw("codeExamples.projects") || {}
+                                      ).length -
+                                        1
+                                    ? "0 0 12px 12px"
+                                    : "0",
                                 "&:before": { display: "none" },
                                 "&.Mui-expanded": {
-                                  margin: 3,
+                                  margin: 0,
+                                },
+                                "& + .MuiAccordion-root": {
+                                  marginTop: 0,
                                 },
                               }}
                             >
@@ -524,7 +536,7 @@ export default function TechnicalPortfolioPage() {
                                 sx={{
                                   background:
                                     "linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)",
-                                  borderRadius: "12px 12px 0 0",
+                                  borderRadius: "12px",
                                   "&.Mui-expanded": {
                                     minHeight: "auto",
                                   },
@@ -584,7 +596,9 @@ export default function TechnicalPortfolioPage() {
                                   />
                                 </Stack>
                               </AccordionSummary>
-                              <AccordionDetails sx={{ p: 4, borderRadius: 3 }}>
+                              <AccordionDetails
+                                sx={{ p: 4, borderRadius: "12px" }}
+                              >
                                 <Grid container spacing={3}>
                                   {Array.isArray(project.examples) &&
                                     project.examples.map(
@@ -608,13 +622,13 @@ export default function TechnicalPortfolioPage() {
                                               backdropFilter: "blur(10px)",
                                               border:
                                                 "1px solid rgba(255, 255, 255, 0.1)",
-                                              borderRadius: 3,
+                                              borderRadius: "12px",
                                               position: "relative",
                                               overflow: "hidden",
                                               "&:hover": {
                                                 transform: "translateY(-2px)",
                                                 boxShadow:
-                                                  "0 12px 24px rgba(0, 0, 0, 0.1)",
+                                                  "12px 12px 24px rgba(0, 0, 0, 0.1)",
                                               },
                                               transition: "all 0.3s ease",
                                             }}
@@ -668,7 +682,7 @@ export default function TechnicalPortfolioPage() {
                                                   "linear-gradient(135deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.05) 100%)",
                                                 color: "text.primary",
                                                 p: 3,
-                                                borderRadius: 2,
+                                                borderRadius: "12px",
                                                 overflow: "auto",
                                                 fontSize: "0.8rem",
                                                 maxHeight: 250,
@@ -731,11 +745,11 @@ export default function TechnicalPortfolioPage() {
                     background: "rgba(255, 255, 255, 0.08)",
                     backdropFilter: "blur(20px)",
                     border: "1px solid rgba(255, 255, 255, 0.15)",
-                    borderRadius: 4,
+                    borderRadius: "12px",
                     boxShadow: "0 16px 32px rgba(0, 0, 0, 0.1)",
                   }}
                 >
-                  <CardContent sx={{ p: 5, borderRadius: 3 }}>
+                  <CardContent sx={{ p: 5, borderRadius: "12px" }}>
                     <Box sx={{ textAlign: "center", mb: 4 }}>
                       <Stack
                         direction="row"
@@ -782,7 +796,7 @@ export default function TechnicalPortfolioPage() {
                     </Box>
 
                     {/* Professional Challenges List */}
-                    <Box sx={{ mt: 4, borderRadius: 3 }}>
+                    <Box sx={{ mt: 4, borderRadius: "12px" }}>
                       {t.raw("technicalChallenges.challenges")?.map(
                         (
                           challenge: {
@@ -803,12 +817,12 @@ export default function TechnicalPortfolioPage() {
                                 "linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)",
                               backdropFilter: "blur(15px)",
                               border: "1px solid rgba(255, 255, 255, 0.15)",
-                              borderRadius: 4,
+                              borderRadius: "12px",
                               position: "relative",
                               overflow: "hidden",
                               "&:hover": {
                                 transform: "translateY(-4px)",
-                                boxShadow: "0 20px 40px rgba(0, 0, 0, 0.15)",
+                                boxShadow: "20px 20px 40px rgba(0, 0, 0, 0.15)",
                               },
                               transition: "all 0.3s ease",
                             }}
@@ -830,7 +844,8 @@ export default function TechnicalPortfolioPage() {
                                 color: "white",
                                 fontWeight: 700,
                                 fontSize: "1.1rem",
-                                boxShadow: "0 4px 12px rgba(239, 68, 68, 0.3)",
+                                boxShadow:
+                                  "4px 4px 12px rgba(239, 68, 68, 0.3)",
                               }}
                             >
                               {index + 1}
@@ -856,7 +871,7 @@ export default function TechnicalPortfolioPage() {
                                     p: 3,
                                     background:
                                       "linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%)",
-                                    borderRadius: 3,
+                                    borderRadius: "12px",
                                     border: "1px solid rgba(239, 68, 68, 0.2)",
                                   }}
                                 >
@@ -899,7 +914,7 @@ export default function TechnicalPortfolioPage() {
                                     p: 3,
                                     background:
                                       "linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%)",
-                                    borderRadius: 3,
+                                    borderRadius: "12px",
                                     border: "1px solid rgba(34, 197, 94, 0.2)",
                                   }}
                                 >
@@ -942,7 +957,7 @@ export default function TechnicalPortfolioPage() {
                                 p: 3,
                                 background:
                                   "linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.05) 100%)",
-                                borderRadius: 3,
+                                borderRadius: "12px",
                                 border: "1px solid rgba(102, 126, 234, 0.2)",
                                 mb: 3,
                               }}
