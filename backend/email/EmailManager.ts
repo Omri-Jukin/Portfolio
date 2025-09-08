@@ -16,7 +16,7 @@ export interface ContactFormEmailData {
   message: string;
 }
 
-export class EmailService {
+export class EmailManager {
   private defaultFromEmail: string;
   private emailProvider: string;
 
