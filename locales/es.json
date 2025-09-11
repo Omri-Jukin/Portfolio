@@ -1197,5 +1197,50 @@
         ]
       }
     }
+  },
+  "calendly": {
+    "title": "Programar una Reunión",
+    "description": "Hablemos de tu proyecto, exploremos oportunidades de colaboración o tengamos una conversación técnica. Estoy aquí para ayudar a dar vida a tus ideas.",
+    "booking": {
+      "title": "Detalles de la Reunión",
+      "description": "Elige un momento que te funcione mejor. Todas las reuniones se realizan por videollamada con capacidades de compartir pantalla.",
+      "details": {
+        "duration": "30 Minutos",
+        "durationDesc": "Perfecto para discusiones iniciales",
+        "format": "Videollamada",
+        "formatDesc": "Google Meet o Zoom",
+        "language": "Español/Inglés",
+        "languageDesc": "Soporte bilingüe disponible",
+        "audience": "1 a 1",
+        "audienceDesc": "Consulta personalizada"
+      }
+    },
+    "widget": {
+      "title": "Reserva tu Reunión",
+      "description": "Selecciona tu fecha y hora preferidas de los horarios disponibles a continuación.",
+      "buttonText": "Programar Reunión"
+    },
+    "expectations": {
+      "title": "Qué Esperar",
+      "description": "Esto es lo que puedes esperar de nuestra reunión para asegurar que aprovechemos al máximo nuestro tiempo juntos.",
+      "items": [
+        {
+          "title": "Discusión del Proyecto",
+          "description": "Profundizaremos en los requisitos de tu proyecto, desafíos técnicos y resultados deseados. Trae cualquier pregunta o problema específico que te gustaría resolver."
+        },
+        {
+          "title": "Consulta Técnica",
+          "description": "Proporcionaré asesoramiento experto sobre decisiones de arquitectura, recomendaciones de stack tecnológico y mejores prácticas basadas en tu caso de uso específico."
+        },
+        {
+          "title": "Oportunidades de Colaboración",
+          "description": "Explora oportunidades de asociación potenciales, proyectos freelance o posibilidades de colaboración a largo plazo que se alineen con tus objetivos."
+        },
+        {
+          "title": "Próximos Pasos",
+          "description": "Definiremos pasos claros, cronogramas y entregables para avanzar con tu proyecto o colaboración."
+        }
+      ]
+    }
   }
 }

@@ -1133,5 +1133,50 @@
         ]
       }
     }
+  },
+  "calendly": {
+    "title": "Planifier une Réunion",
+    "description": "Discutons de votre projet, explorons les opportunités de collaboration ou ayons une conversation technique. Je suis là pour aider à donner vie à vos idées.",
+    "booking": {
+      "title": "Détails de la Réunion",
+      "description": "Choisissez un moment qui vous convient le mieux. Toutes les réunions se déroulent par visioconférence avec capacités de partage d'écran.",
+      "details": {
+        "duration": "30 Minutes",
+        "durationDesc": "Parfait pour les discussions initiales",
+        "format": "Visioconférence",
+        "formatDesc": "Google Meet ou Zoom",
+        "language": "Français/Anglais",
+        "languageDesc": "Support bilingue disponible",
+        "audience": "1 à 1",
+        "audienceDesc": "Consultation personnalisée"
+      }
+    },
+    "widget": {
+      "title": "Réservez votre Réunion",
+      "description": "Sélectionnez votre date et heure préférées parmi les créneaux disponibles ci-dessous.",
+      "buttonText": "Planifier Réunion"
+    },
+    "expectations": {
+      "title": "À Quoi S'attendre",
+      "description": "Voici ce que vous pouvez attendre de notre réunion pour nous assurer de tirer le meilleur parti de notre temps ensemble.",
+      "items": [
+        {
+          "title": "Discussion du Projet",
+          "description": "Nous plongerons profondément dans les exigences de votre projet, les défis techniques et les résultats souhaités. Apportez toutes questions ou problèmes spécifiques que vous aimeriez résoudre."
+        },
+        {
+          "title": "Consultation Technique",
+          "description": "Je fournirai des conseils d'expert sur les décisions d'architecture, les recommandations de stack technologique et les meilleures pratiques basées sur votre cas d'usage spécifique."
+        },
+        {
+          "title": "Opportunités de Collaboration",
+          "description": "Explorez les opportunités de partenariat potentielles, les projets freelance ou les possibilités de collaboration à long terme qui s'alignent avec vos objectifs."
+        },
+        {
+          "title": "Prochaines Étapes",
+          "description": "Nous définirons des étapes claires, des délais et des livrables pour faire avancer votre projet ou collaboration."
+        }
+      ]
+    }
   }
 }

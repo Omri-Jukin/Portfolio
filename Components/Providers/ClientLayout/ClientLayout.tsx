@@ -14,6 +14,7 @@ import Cookies from "#/Components/Cookies";
 import Calendly from "#/Components/Calendly";
 import GlobeBackground, { ALL_MARKERS } from "~/GlobeBackground";
 import { usePathname } from "next/navigation";
+import { SnackbarProvider } from "~/SnackbarProvider";
 import { useScrollPosition } from "$/hooks/useScrollPosition";
 
 export default function ClientLayout({
@@ -200,55 +201,57 @@ export default function ClientLayout({
     <TRPCProvider>
       <ThemeProvider theme={appTheme}>
         <CssBaseline />
-        {/* Global Globe Background with Content */}
-        {!isExamplePage && (
-          <GlobeBackground
-            markers={ALL_MARKERS}
-            opacity={scrollProgress}
-            rotationSpeed={0.002}
-          />
-        )}
-
-        {/* Fixed Header */}
-        <Header
-          isDarkMode={isDarkMode}
-          onThemeToggle={handleThemeToggle}
-          isMobile={isMobile}
-          forceLayout={forceLayout}
-          onLayoutChange={handleLayoutChange}
-        />
-
-        {/* Main Layout Container */}
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            width: "100%",
-            marginTop: "4rem",
-            maxWidth: "calc(100vw - 4rem)",
-            background: "transparent",
-          }}
-        >
-          {/* Main Content Area */}
-          <ResponsiveLayout isMobile={isMobile} forceLayout={forceLayout}>
-            {children}
-          </ResponsiveLayout>
-
-          {/* Footer */}
-          <Footer />
-          {/* Cookies */}
-          <Cookies />
-          {isMobile && (
-            <Calendly
-              url="https://calendly.com/omrijukin/30min"
-              text="Let's Talk!"
-              backgroundColor="#FF6B6B"
-              textColor="#FFFFFF"
-              position="bottom-right"
-              className="calendly-badge"
+        <SnackbarProvider>
+          {/* Global Globe Background with Content */}
+          {!isExamplePage && (
+            <GlobeBackground
+              markers={ALL_MARKERS}
+              opacity={scrollProgress}
+              rotationSpeed={0.002}
             />
           )}
-        </Box>
+
+          {/* Fixed Header */}
+          <Header
+            isDarkMode={isDarkMode}
+            onThemeToggle={handleThemeToggle}
+            isMobile={isMobile}
+            forceLayout={forceLayout}
+            onLayoutChange={handleLayoutChange}
+          />
+
+          {/* Main Layout Container */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+              marginTop: "4rem",
+              maxWidth: "calc(100vw - 4rem)",
+              background: "transparent",
+            }}
+          >
+            {/* Main Content Area */}
+            <ResponsiveLayout isMobile={isMobile} forceLayout={forceLayout}>
+              {children}
+            </ResponsiveLayout>
+
+            {/* Footer */}
+            <Footer />
+            {/* Cookies */}
+            <Cookies />
+            {isMobile && (
+              <Calendly
+                url="https://calendly.com/omrijukin/30min"
+                text="Let's Talk!"
+                backgroundColor="#FF6B6B"
+                textColor="#FFFFFF"
+                position="bottom-right"
+                className="calendly-badge"
+              />
+            )}
+          </Box>
+        </SnackbarProvider>
       </ThemeProvider>
     </TRPCProvider>
   );
