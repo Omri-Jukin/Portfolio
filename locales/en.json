@@ -1247,5 +1247,50 @@
         }
       }
     }
+  },
+  "calendly": {
+    "title": "Schedule a Meeting",
+    "description": "Let's discuss your project, explore collaboration opportunities, or have a technical conversation. I'm here to help bring your ideas to life.",
+    "booking": {
+      "title": "Meeting Details",
+      "description": "Choose a time that works best for you. All meetings are conducted via video call with screen sharing capabilities.",
+      "details": {
+        "duration": "30 Minutes",
+        "durationDesc": "Perfect for initial discussions",
+        "format": "Video Call",
+        "formatDesc": "Google Meet or Zoom",
+        "language": "English/Hebrew",
+        "languageDesc": "Bilingual support available",
+        "audience": "1-on-1",
+        "audienceDesc": "Personalized consultation"
+      }
+    },
+    "widget": {
+      "title": "Book Your Meeting",
+      "description": "Select your preferred date and time from the available slots below.",
+      "buttonText": "Schedule Meeting"
+    },
+    "expectations": {
+      "title": "What to Expect",
+      "description": "Here's what you can expect from our meeting to ensure we make the most of our time together.",
+      "items": [
+        {
+          "title": "Project Discussion",
+          "description": "We'll dive deep into your project requirements, technical challenges, and desired outcomes. Bring any questions or specific problems you'd like to solve."
+        },
+        {
+          "title": "Technical Consultation",
+          "description": "I'll provide expert advice on architecture decisions, technology stack recommendations, and best practices based on your specific use case."
+        },
+        {
+          "title": "Collaboration Opportunities",
+          "description": "Explore potential partnership opportunities, freelance projects, or long-term collaboration possibilities that align with your goals."
+        },
+        {
+          "title": "Next Steps",
+          "description": "We'll outline clear next steps, timelines, and deliverables to move forward with your project or collaboration."
+        }
+      ]
+    }
   }
 }
