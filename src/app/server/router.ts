@@ -8,6 +8,7 @@ import { authRouter } from "./routers/auth";
 import { uploadRouter } from "./routers/upload";
 import { certificationsRouter } from "./routers/certifications";
 import { workExperiencesRouter } from "./routers/workExperiences";
+import { educationRouter } from "./routers/education";
 import { projectsRouter } from "./routers/projects";
 import { skillsRouter } from "./routers/skills";
 
@@ -21,6 +22,7 @@ export const appRouter = router({
   upload: uploadRouter,
   certifications: certificationsRouter,
   workExperiences: workExperiencesRouter,
+  education: educationRouter,
   projects: projectsRouter,
   skills: skillsRouter,
 });

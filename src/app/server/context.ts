@@ -27,7 +27,15 @@ export async function createContext({
     db = await getDB();
   } catch (error) {
     console.error("Failed to create database client:", error);
-    db = null;
+
+    // In development, we'll skip database operations for now
+    // This allows the app to run without D1 binding
+    if (process.env.NODE_ENV === "development") {
+      console.log("Running in development mode without D1 binding");
+      db = null;
+    } else {
+      db = null;
+    }
   }
 
   // Get JWT_SECRET from Cloudflare context or process.env in dev

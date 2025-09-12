@@ -27,7 +27,7 @@ import {
 } from "@mui/icons-material";
 import { ResponsiveBackground } from "~/ScrollingSections";
 import { Typography as CustomTypography } from "~/Typography";
-import { InlineCalendly } from "~/Calendly";
+import { CustomCalendlyWrapper } from "~/Calendly";
 
 export default function CalendlyPage() {
   const t = useTranslations("calendly");
@@ -441,18 +441,27 @@ export default function CalendlyPage() {
                       </CustomTypography>
                     </Box>
 
-                    {/* Inline Calendly Widget */}
-                    <Box
-                      sx={{
-                        width: "100%",
-                        borderRadius: "12px",
-                        overflow: "hidden",
-                        background: "rgba(255, 255, 255, 0.02)",
-                        border: "1px solid rgba(255, 255, 255, 0.1)",
-                      }}
-                    >
-                      <InlineCalendly url="https://calendly.com/omrijukin/30min" />
-                    </Box>
+                    {/* Custom Calendly Widget */}
+                    <CustomCalendlyWrapper
+                      url="https://calendly.com/omrijukin/30min"
+                      eventTitle={t("widget.title")}
+                      eventDescription={t("widget.description")}
+                      duration={t("booking.details.duration")}
+                      timezone={(() => {
+                        const now = new Date();
+                        const israelTime = new Intl.DateTimeFormat("en-US", {
+                          timeZone: "Asia/Jerusalem",
+                          timeZoneName: "longOffset",
+                        })
+                          .formatToParts(now)
+                          .find((part) => part.type === "timeZoneName")?.value;
+
+                        return israelTime?.includes("GMT+3")
+                          ? "Israel Time (GMT+3)"
+                          : "Israel Time (GMT+2)";
+                      })()}
+                      companyName="Omri Jukin"
+                    />
                   </CardContent>
                 </Card>
               </Grid>

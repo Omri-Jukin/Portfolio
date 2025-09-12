@@ -99,6 +99,7 @@
     "contact": "Contact",
     "blog": "Blog",
     "career": "Carrière",
+    "education": "Éducation",
     "resume": "CV",
     "projects": "Projets",
     "skills": "Compétences",
@@ -107,7 +108,7 @@
   "hero": {
     "titleRow1": "Je Ne Vends Pas de Logiciel.",
     "titleRow2": "J'Ingénie l'Évolution du Futur",
-    "subtitle": "Je ne suis pas qu'un développeur—je suis un visionnaire. Je ne construis pas seulement du logiciel ; j'ingénie l'évolution. Mon travail ne consiste pas à créer des produits ; il s'agit de façonner l'avenir.",
+    "subtitle": "Je ne suis pas qu'un développeur—je suis un visionnaire. Je ne construis pas seulement du logiciel ; j'ingénie l'évolution. Mon travail ne consiste pas à créer des produits ; il s'agit de façonner l'avenir. Actuellement à la recherche d'opportunités à temps plein pour avoir un impact durable.",
     "profileAlt": "Omri Jukin",
     "exploreButton": "Explorer le travail",
     "resumeButton": "CV",
@@ -1148,7 +1149,8 @@
         "language": "Français/Anglais",
         "languageDesc": "Support bilingue disponible",
         "audience": "1 à 1",
-        "audienceDesc": "Consultation personnalisée"
+        "audienceDesc": "Consultation personnalisée",
+        "timezone": "Heure d'Israël (GMT+2)"
       }
     },
     "widget": {

@@ -31,12 +31,14 @@ import {
 import { api } from "$/trpc/client";
 import { useRouter } from "next/navigation";
 import Snackbar, { SnackbarProps } from "~/Snackbar";
+import BlogPostDialog from "~/BlogPostDialog";
 
 const AdminBlogDashboard = () => {
   const router = useRouter();
   const { data: posts, isLoading, error, refetch } = api.blog.getAll.useQuery();
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
   const [postToDelete, setPostToDelete] = React.useState<string | null>(null);
+  const [createDialogOpen, setCreateDialogOpen] = React.useState(false);
   const [snackbar, setSnackbar] = React.useState<SnackbarProps>({
     open: false,
     message: "",
@@ -83,6 +85,14 @@ const AdminBlogDashboard = () => {
     setSnackbar((prev) => ({ ...prev, open: false }));
   };
 
+  const handleCreateDialogClose = () => {
+    setCreateDialogOpen(false);
+  };
+
+  const handleCreateSuccess = () => {
+    refetch();
+  };
+
   if (isLoading) {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -107,13 +117,21 @@ const AdminBlogDashboard = () => {
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
         <Typography variant="h4">Blog Management</Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={() => router.push("/admin/blog/new")}
-        >
-          Create New Post
-        </Button>
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={() => setCreateDialogOpen(true)}
+          >
+            Create New Post
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => router.push("/admin/blog/new")}
+          >
+            Advanced Editor
+          </Button>
+        </Box>
       </Box>
 
       {posts && posts.length > 0 ? (
@@ -224,7 +242,7 @@ const AdminBlogDashboard = () => {
           <Button
             variant="contained"
             startIcon={<AddIcon />}
-            onClick={() => router.push("/admin/blog/new")}
+            onClick={() => setCreateDialogOpen(true)}
           >
             Create First Post
           </Button>
@@ -267,6 +285,13 @@ const AdminBlogDashboard = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Blog Post Creation Dialog */}
+      <BlogPostDialog
+        open={createDialogOpen}
+        onClose={handleCreateDialogClose}
+        onSuccess={handleCreateSuccess}
+      />
 
       <Snackbar
         open={snackbar.open}

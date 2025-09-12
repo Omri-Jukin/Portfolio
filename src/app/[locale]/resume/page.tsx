@@ -110,7 +110,7 @@ export default function ResumePage() {
           filename = `Omri Jukin - Resume.pdf`;
 
           // Extract resume data for the selected language
-          const resumeData = extractResumeData(options.language);
+          const resumeData = await extractResumeData(options.language);
 
           // Generate PDF (dynamically import to avoid edge bundling)
           const { renderResumePDF } = await import("#/lib/utils/pdfGenerator");

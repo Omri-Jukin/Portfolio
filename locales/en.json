@@ -99,6 +99,7 @@
     "contact": "Contact",
     "blog": "Blog",
     "career": "Career",
+    "education": "Education",
     "certifications": "Certifications",
     "resume": "Resume",
     "projects": "Projects",
@@ -108,7 +109,7 @@
   "hero": {
     "titleRow1": "I Don't Sell Software.",
     "titleRow2": "I Engineer the Evolution of the Future",
-    "subtitle": "I'm not just a developer—I'm a visionary. I don't just build software; I engineer evolution. My work isn't about creating products; it's about shaping the future.",
+    "subtitle": "I'm not just a developer—I'm a visionary. I don't just build software; I engineer evolution. My work isn't about creating products; it's about shaping the future. Currently seeking full-time opportunities to make a lasting impact.",
     "profileAlt": "Omri Jukin",
     "exploreButton": "Explore work",
     "resumeButton": "Resume",
@@ -155,8 +156,8 @@
     "years": "Years:",
     "technologies": "Technologies:",
     "examples": "Examples:",
-    "readyToWork": "Ready to Work Together?",
-    "letsDiscuss": "Let's discuss how my skills and experience can help bring your project to life.",
+    "readyToWork": "Seeking New Opportunities?",
+    "letsDiscuss": "I'm actively looking for full-time positions where I can contribute my expertise and drive innovation. Let's discuss how my skills and experience can add value to your team.",
     "cta": "View My Resume",
     "ctaButton": "Get In Touch",
     "skillsTitle": "My Technical Skills",
@@ -481,6 +482,30 @@
           "Developed workflow protocols using data analysis and customer feedback, resulting in process improvements and enhanced service quality",
           "Trained 10+ team members reducing training time by 35% and improving service quality through structured onboarding and continuous feedback"
         ]
+      }
+    ]
+  },
+  "education": {
+    "title": "Education",
+    "subtitle": "My academic background and continuous learning",
+    "description": "My educational journey and ongoing professional development",
+    "academicBackground": "I have a strong foundation in computer science and continuous learning through certifications and hands-on experience.",
+    "keyAchievements": "Key Academic Achievements & Certifications",
+    "interestedInLearning": "Interested in Learning More?",
+    "checkOutResume": "Check out my detailed resume or get in touch to discuss opportunities and collaborations.",
+    "viewResume": "View Resume",
+    "certifications": [
+      {
+        "name": "AWS Certified Solutions Architect",
+        "issuer": "Amazon Web Services",
+        "date": "2023",
+        "status": "Active"
+      },
+      {
+        "name": "Google Cloud Professional Developer",
+        "issuer": "Google Cloud",
+        "date": "2023",
+        "status": "Active"
       }
     ]
   },
@@ -1262,7 +1287,8 @@
         "language": "English/Hebrew",
         "languageDesc": "Bilingual support available",
         "audience": "1-on-1",
-        "audienceDesc": "Personalized consultation"
+        "audienceDesc": "Personalized consultation",
+        "timezone": "Israel Time (GMT+2)"
       }
     },
     "widget": {

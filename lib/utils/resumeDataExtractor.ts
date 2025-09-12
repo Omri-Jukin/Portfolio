@@ -1,4 +1,5 @@
 import { ResumeData } from "./pdfGenerator";
+import { EducationManager } from "../db/Education/EducationManager";
 
 // Import locale data
 import enData from "../../locales/en.json";
@@ -13,8 +14,13 @@ const localeData = {
   he: heData,
 };
 
-export const extractResumeData = (language: string = "en"): ResumeData => {
+export const extractResumeData = async (
+  language: string = "en"
+): Promise<ResumeData> => {
   const data = localeData[language as keyof typeof localeData] || localeData.en;
+
+  // Fetch education data from database
+  const educationData = await EducationManager.getAll(true);
 
   // Transform to new PDF generator format
   return {
@@ -112,6 +118,18 @@ export const extractResumeData = (language: string = "en"): ResumeData => {
         line: project.description,
         url: project.link,
       })) || [],
+    education: educationData.map((edu) => ({
+      degree: edu.degree,
+      institution: edu.institution,
+      location: edu.location,
+      period: `${new Date(edu.startDate).getFullYear()} - ${
+        edu.endDate ? new Date(edu.endDate).getFullYear() : "Present"
+      }`,
+      gpa: edu.gpa || undefined,
+      achievements: edu.achievements || [],
+      coursework: edu.coursework || [],
+      projects: edu.projects || [],
+    })),
     additional:
       data.additionalActivities ||
       "Continuous learning in full stack development, contributing to open-source projects, and staying current with modern web technologies and best practices.",

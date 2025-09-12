@@ -376,7 +376,17 @@ export interface User extends BaseEntity {
   bio?: string;
   location?: string;
   website?: string;
-  socialLinks?: UserSocialLinks;
+  linkedin?: string;
+  twitter?: string;
+  github?: string;
+  facebook?: string;
+  instagram?: string;
+  youtube?: string;
+  tiktok?: string;
+  pinterest?: string;
+  reddit?: string;
+  telegram?: string;
+  whatsapp?: string;
 }
 
 export interface UserSocialLinks {
@@ -872,6 +882,16 @@ export interface ResumeData {
     name: string;
     line: string;
     url?: string;
+  }>;
+  education: Array<{
+    degree: string;
+    institution: string;
+    location: string;
+    period: string;
+    gpa?: string;
+    achievements: string[];
+    coursework: string[];
+    projects: string[];
   }>;
   additional?: string;
 }

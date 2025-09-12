@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { InlineWidget } from "react-calendly";
 import { useTheme } from "@mui/material/styles";
+import { Box } from "@mui/system";
 
 interface InlineCalendlyProps {
   url?: string;
@@ -27,20 +28,35 @@ const InlineCalendly = ({
   }
 
   return (
-    <div className={className} style={{ width: "100%", height: "600px" }}>
+    <Box
+      className={className}
+      sx={{
+        width: "100%",
+        height: { xs: "800px", sm: "1000px", md: "1200px" },
+        minHeight: { xs: "800px", sm: "1000px", md: "1200px" },
+        borderRadius: "16px",
+        overflow: "hidden",
+        background: "rgba(255, 255, 255, 0.95)",
+        backdropFilter: "blur(20px)",
+        border: `1px solid ${theme.palette.divider}`,
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+      }}
+    >
       <InlineWidget
         url={url}
         pageSettings={{
-          backgroundColor: theme.palette.calendly.background,
+          backgroundColor: "rgba(255, 255, 255, 0.95)",
           hideEventTypeDetails: false,
           hideLandingPageDetails: false,
-          primaryColor: theme.palette.calendly.primary.replace("#", ""),
+          primaryColor: theme.palette.primary.main.replace("#", ""),
           textColor: theme.palette.text.primary.replace("#", ""),
           hideGdprBanner: true,
         }}
         styles={{
-          height: "600px",
           width: "100%",
+          height: "100%",
+          minHeight: "fit-content",
+          border: "none",
         }}
         prefill={{
           name: "",
@@ -49,7 +65,7 @@ const InlineCalendly = ({
           lastName: "",
         }}
       />
-    </div>
+    </Box>
   );
 };
 

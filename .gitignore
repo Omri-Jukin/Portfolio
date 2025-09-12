@@ -68,3 +68,5 @@ next-env.d.ts
 # cursor
 .cursor/rules/*
 !.cursor/rules/.gitkeep
+/prompts/*
+!/prompts/.gitkeep

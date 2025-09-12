@@ -87,10 +87,6 @@ export default function Header({
             </button>
           )}
           <DarkModeToggle onToggle={onThemeToggle} isDark={isDarkMode} />
-          {/* <AnimationSwitcher
-            animationType={animationType!}
-            onChange={onAnimationTypeChange!}
-          /> */}
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <LanguageSwitcher />
           </Box>

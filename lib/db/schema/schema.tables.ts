@@ -23,7 +23,6 @@ import {
   ProjectSolution,
   TCodeExamples,
   TTechnicalChallenges,
-  UserSocialLinks,
 } from "#/lib/types";
 
 // Users table - minimal for portfolio admin
@@ -47,7 +46,17 @@ export const users = sqliteTable("users", {
   bio: text("bio"),
   location: text("location"),
   website: text("website"),
-  socialLinks: text("social_links", { mode: "json" }).$type<UserSocialLinks>(),
+  linkedin: text("linkedin"),
+  twitter: text("twitter"),
+  github: text("github"),
+  facebook: text("facebook"),
+  instagram: text("instagram"),
+  youtube: text("youtube"),
+  tiktok: text("tiktok"),
+  pinterest: text("pinterest"),
+  reddit: text("reddit"),
+  telegram: text("telegram"),
+  whatsapp: text("whatsapp"),
 });
 
 // Define indexes separately
@@ -61,9 +70,6 @@ export const usersRefreshTokenIdx = index("refresh_token_idx").on(
   users.refreshToken
 );
 export const usersSessionIdIdx = index("session_id_idx").on(users.sessionId);
-export const usersSocialLinksIdx = index("social_links_idx").on(
-  users.socialLinks
-);
 
 // Blog posts for portfolio content
 export const blogPosts = sqliteTable("blog_posts", {
@@ -295,11 +301,11 @@ export const projects = sqliteTable("projects", {
     .notNull()
     .default(false),
   // Problem-solving details
-  problem: text("problem", { mode: "json" }).$type<ProjectProblem>(),
-  solution: text("solution", { mode: "json" }).$type<ProjectSolution>(),
+  problem: text("problem", { mode: "json" }).$type<ProjectProblem | null>(),
+  solution: text("solution", { mode: "json" }).$type<ProjectSolution | null>(),
   architecture: text("architecture", {
     mode: "json",
-  }).$type<ProjectArchitecture>(),
+  }).$type<ProjectArchitecture | null>(),
   // Multi-language support
   titleTranslations: text("title_translations", { mode: "json" }).$type<
     Record<string, string>

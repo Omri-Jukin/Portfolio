@@ -390,6 +390,68 @@ export function renderResumePDF(
     });
   }
 
+  // Education
+  if (data.education && data.education.length > 0) {
+    addSection("Education", () => {
+      data.education.forEach((edu) => {
+        // Degree and Institution
+        doc.setFont(typography.font, "bold");
+        doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
+        doc.text(`${edu.degree}`, margins.x, currentY);
+        currentY += spacing.bulletGap;
+
+        // Institution and Location
+        doc.setFont(typography.font, "normal");
+        doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
+        doc.text(`${edu.institution}, ${edu.location}`, margins.x, currentY);
+        currentY += spacing.bulletGap;
+
+        // Period and GPA
+        const periodGpa = `${edu.period}${edu.gpa ? ` | GPA: ${edu.gpa}` : ""}`;
+        doc.text(periodGpa, margins.x, currentY);
+        currentY += spacing.bulletGap;
+
+        // Key Achievements
+        if (edu.achievements && edu.achievements.length > 0) {
+          doc.setFont(typography.font, "bold");
+          doc.text("Key Achievements:", margins.x, currentY);
+          currentY += spacing.bulletGap;
+
+          edu.achievements.forEach((achievement) => {
+            doc.setFont(typography.font, "normal");
+            const achievementLines = doc.splitTextToSize(
+              `• ${achievement}`,
+              pageWidth - 5
+            );
+            achievementLines.forEach((line: string) => {
+              doc.text(line, margins.x + 3, currentY);
+              currentY += spacing.bulletGap;
+            });
+          });
+        }
+
+        // Relevant Coursework
+        if (edu.coursework && edu.coursework.length > 0) {
+          doc.setFont(typography.font, "bold");
+          doc.text("Relevant Coursework:", margins.x, currentY);
+          currentY += spacing.bulletGap;
+
+          const courseworkText = edu.coursework.join(", ");
+          const courseworkLines = doc.splitTextToSize(
+            courseworkText,
+            pageWidth
+          );
+          courseworkLines.forEach((line: string) => {
+            doc.text(line, margins.x, currentY);
+            currentY += spacing.bulletGap;
+          });
+        }
+
+        currentY += spacing.experienceGap; // Extra space between education entries
+      });
+    });
+  }
+
   // Additional Activities
   if (data.additional) {
     addSection("Additional Activities", () => {
