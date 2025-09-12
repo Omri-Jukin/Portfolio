@@ -573,6 +573,24 @@ export const educationUpdateSchema = educationCreateSchema.partial().extend({
   id: z.string().uuid(),
 });
 
+// Education filters schema
+export const educationFiltersSchema = z.object({
+  degreeType: z.string().optional(),
+  status: z.string().optional(),
+  isVisible: z.boolean().optional(),
+  isFeatured: z.boolean().optional(),
+});
+
+// Bulk update order schema for education
+export const educationBulkUpdateOrderSchema = z.object({
+  updates: z.array(
+    z.object({
+      id: z.string().uuid(),
+      displayOrder: z.number().int().min(0),
+    })
+  ),
+});
+
 export const serviceCreateSchema = z.object({
   name: z
     .string()

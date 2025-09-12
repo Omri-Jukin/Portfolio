@@ -78,10 +78,21 @@ export type Education = Omit<
   createdAt: string;
   updatedAt: string | null;
 };
-export type NewEducation = typeof Tables.education.$inferInsert;
+export type NewEducation = Omit<
+  typeof Tables.education.$inferInsert,
+  "id" | "createdAt"
+>;
 export type UpdateEducation = Partial<
   Omit<typeof Tables.education.$inferSelect, "id" | "createdAt">
 >;
+
+// Education filters
+export interface EducationFilters {
+  degreeType?: string;
+  status?: string;
+  isVisible?: boolean;
+  isFeatured?: boolean;
+}
 
 // Service types
 export type ServiceDB = typeof Tables.services.$inferSelect;

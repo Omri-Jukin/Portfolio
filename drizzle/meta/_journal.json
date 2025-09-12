@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1753627626382,
-      "tag": "0000_absurd_proudstar",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1755591524520,
-      "tag": "0001_eager_rattler",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1755934139327,
-      "tag": "0002_empty_fabian_cortez",
+      "when": 1757684615754,
+      "tag": "0000_naive_invaders",
       "breakpoints": true
     }
   ]

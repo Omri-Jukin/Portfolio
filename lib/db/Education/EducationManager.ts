@@ -1,46 +1,62 @@
-import { eq, desc, asc, and, or, like, count, sql } from "drizzle-orm";
-import { nanoid } from "nanoid";
-import { getDB } from "../client";
+import { eq, and, desc, asc, sql } from "drizzle-orm";
 import { education } from "../schema/schema.tables";
+import { getDbClient } from "../client";
 import type {
   Education,
   NewEducation,
-  UpdateEducation,
   EducationFilters,
-  EducationStatistics,
-  EducationSearchResult,
-  BulkEducationUpdateResult,
-  BulkEducationDeleteResult,
-  EducationReorderItem,
-  EducationDB,
-} from "./Education.type";
-import { DegreeType, EducationStatus } from "../schema/schema.types";
+} from "../schema/schema.types";
+
+// Transform database record to API format
+const transformDbToApi = (
+  dbRecord: typeof education.$inferSelect
+): Education => ({
+  id: dbRecord.id,
+  institution: dbRecord.institution,
+  degree: dbRecord.degree,
+  degreeType: dbRecord.degreeType,
+  fieldOfStudy: dbRecord.fieldOfStudy,
+  startDate: dbRecord.startDate.toISOString(),
+  endDate: dbRecord.endDate?.toISOString() || null,
+  status: dbRecord.status,
+  gpa: dbRecord.gpa,
+  achievements: dbRecord.achievements || [],
+  coursework: dbRecord.coursework || [],
+  projects: dbRecord.projects || [],
+  extracurriculars: dbRecord.extracurriculars || [],
+  location: dbRecord.location,
+  institutionUrl: dbRecord.institutionUrl,
+  certificateUrl: dbRecord.certificateUrl,
+  transcript: dbRecord.transcript,
+  isVisible: dbRecord.isVisible,
+  displayOrder: dbRecord.displayOrder,
+  institutionTranslations: dbRecord.institutionTranslations || {},
+  degreeTranslations: dbRecord.degreeTranslations || {},
+  fieldOfStudyTranslations: dbRecord.fieldOfStudyTranslations || {},
+  createdAt: dbRecord.createdAt.toISOString(),
+  updatedAt: dbRecord.updatedAt?.toISOString() || null,
+  createdBy: dbRecord.createdBy,
+});
 
 export class EducationManager {
-  /**
-   * Get all education records
-   */
-  static async getAll(visibleOnly = true): Promise<Education[]> {
-    const db = await getDB();
+  static async getAll(visibleOnly = false): Promise<Education[]> {
+    const conditions = visibleOnly ? [eq(education.isVisible, true)] : [];
 
-    const whereCondition = visibleOnly
-      ? eq(education.isVisible, true)
-      : undefined;
+    const db = await getDbClient();
+    if (!db) throw new Error("Database connection failed");
 
     const results = await db
       .select()
       .from(education)
-      .where(whereCondition)
-      .orderBy(asc(education.displayOrder), desc(education.startDate));
+      .where(conditions.length > 0 ? and(...conditions) : undefined)
+      .orderBy(desc(education.startDate), asc(education.displayOrder));
 
-    return results.map(this.transformToAPIType);
+    return results.map(transformDbToApi);
   }
 
-  /**
-   * Get education by ID
-   */
   static async getById(id: string): Promise<Education | null> {
-    const db = await getDB();
+    const db = await getDbClient();
+    if (!db) throw new Error("Database connection failed");
 
     const result = await db
       .select()
@@ -48,353 +64,239 @@ export class EducationManager {
       .where(eq(education.id, id))
       .limit(1);
 
-    if (result.length === 0) return null;
-    return this.transformToAPIType(result[0]);
+    return result.length > 0 ? transformDbToApi(result[0]) : null;
   }
 
-  /**
-   * Get education by degree type
-   */
   static async getByDegreeType(
-    degreeType: DegreeType,
+    degreeType: string,
     visibleOnly = true
   ): Promise<Education[]> {
-    const db = await getDB();
+    const conditions = [
+      eq(
+        education.degreeType,
+        degreeType as
+          | "bachelor"
+          | "master"
+          | "phd"
+          | "diploma"
+          | "certificate"
+          | "bootcamp"
+      ),
+      ...(visibleOnly ? [eq(education.isVisible, true)] : []),
+    ];
 
-    const whereConditions = [eq(education.degreeType, degreeType)];
-    if (visibleOnly) {
-      whereConditions.push(eq(education.isVisible, true));
-    }
+    const db = await getDbClient();
+    if (!db) throw new Error("Database connection failed");
 
     const results = await db
       .select()
       .from(education)
-      .where(and(...whereConditions))
-      .orderBy(asc(education.displayOrder), desc(education.startDate));
+      .where(and(...conditions))
+      .orderBy(desc(education.startDate), asc(education.displayOrder));
 
-    return results.map(this.transformToAPIType);
+    return results.map(transformDbToApi);
   }
 
-  /**
-   * Get education by status
-   */
-  static async getByStatus(
-    status: EducationStatus,
-    visibleOnly = true
-  ): Promise<Education[]> {
-    const db = await getDB();
+  static async getFeatured(visibleOnly = true): Promise<Education[]> {
+    // Since isFeatured doesn't exist in the schema, return all visible education
+    const conditions = visibleOnly ? [eq(education.isVisible, true)] : [];
 
-    const whereConditions = [eq(education.status, status)];
-    if (visibleOnly) {
-      whereConditions.push(eq(education.isVisible, true));
-    }
+    const db = await getDbClient();
+    if (!db) throw new Error("Database connection failed");
 
     const results = await db
       .select()
       .from(education)
-      .where(and(...whereConditions))
-      .orderBy(asc(education.displayOrder), desc(education.startDate));
+      .where(conditions.length > 0 ? and(...conditions) : undefined)
+      .orderBy(desc(education.startDate), asc(education.displayOrder));
 
-    return results.map(this.transformToAPIType);
+    return results.map(transformDbToApi);
   }
 
-  /**
-   * Search education records
-   */
+  static async getStatistics(): Promise<{
+    total: number;
+    visible: number;
+    byDegreeType: Record<string, number>;
+    byStatus: Record<string, number>;
+  }> {
+    const db = await getDbClient();
+    if (!db) throw new Error("Database connection failed");
+
+    const allEducation = await db.select().from(education);
+
+    const total = allEducation.length;
+    const visible = allEducation.filter((edu) => edu.isVisible).length;
+
+    const byDegreeType = allEducation.reduce((acc, edu) => {
+      acc[edu.degreeType] = (acc[edu.degreeType] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    const byStatus = allEducation.reduce((acc, edu) => {
+      acc[edu.status] = (acc[edu.status] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    return {
+      total,
+      visible,
+      byDegreeType,
+      byStatus,
+    };
+  }
+
   static async search(
     query: string,
     filters?: EducationFilters
-  ): Promise<EducationSearchResult> {
-    const db = await getDB();
+  ): Promise<Education[]> {
+    const db = await getDbClient();
+    if (!db) throw new Error("Database connection failed");
 
-    const whereConditions = [
-      or(
-        like(education.institution, `%${query}%`),
-        like(education.degree, `%${query}%`),
-        like(education.fieldOfStudy, `%${query}%`),
-        like(education.location, `%${query}%`)
-      ),
-    ];
+    const conditions = [];
 
+    // Text search across institution, degree, fieldOfStudy
+    if (query.trim()) {
+      conditions.push(
+        sql`(
+          ${education.institution} LIKE ${"%" + query + "%"} OR 
+          ${education.degree} LIKE ${"%" + query + "%"} OR 
+          ${education.fieldOfStudy} LIKE ${"%" + query + "%"}
+        )`
+      );
+    }
+
+    // Apply filters
     if (filters?.degreeType) {
-      whereConditions.push(eq(education.degreeType, filters.degreeType));
+      conditions.push(
+        eq(
+          education.degreeType,
+          filters.degreeType as
+            | "bachelor"
+            | "master"
+            | "phd"
+            | "diploma"
+            | "certificate"
+            | "bootcamp"
+        )
+      );
     }
     if (filters?.status) {
-      whereConditions.push(eq(education.status, filters.status));
+      conditions.push(
+        eq(
+          education.status,
+          filters.status as
+            | "completed"
+            | "in-progress"
+            | "transferred"
+            | "dropped"
+            | "deleted"
+        )
+      );
     }
     if (filters?.isVisible !== undefined) {
-      whereConditions.push(eq(education.isVisible, filters.isVisible));
-    }
-    if (filters?.fieldOfStudy) {
-      whereConditions.push(
-        like(education.fieldOfStudy, `%${filters.fieldOfStudy}%`)
-      );
+      conditions.push(eq(education.isVisible, filters.isVisible));
     }
 
     const results = await db
       .select()
       .from(education)
-      .where(and(...whereConditions))
-      .orderBy(asc(education.displayOrder), desc(education.startDate));
+      .where(conditions.length > 0 ? and(...conditions) : undefined)
+      .orderBy(desc(education.startDate), asc(education.displayOrder));
 
-    return {
-      education: results.map(this.transformToAPIType),
-      total: results.length,
-    };
+    return results.map(transformDbToApi);
   }
 
-  /**
-   * Create new education record
-   */
-  static async create(data: Omit<NewEducation, "id">): Promise<Education> {
-    const db = await getDB();
+  static async create(data: NewEducation): Promise<Education> {
+    const db = await getDbClient();
+    if (!db) throw new Error("Database connection failed");
 
-    const id = nanoid();
-    const now = new Date();
-
-    const educationData = {
-      id,
+    const newEducation = {
       ...data,
-      createdAt: now,
-      updatedAt: now,
+      id: crypto.randomUUID(),
+      createdAt: new Date(),
     };
 
-    await db.insert(education).values(educationData);
-
-    const created = await this.getById(id);
-    if (!created) {
-      throw new Error("Failed to create education record");
-    }
-
-    return created;
+    const result = await db.insert(education).values(newEducation).returning();
+    return transformDbToApi(result[0]);
   }
 
-  /**
-   * Update education record
-   */
   static async update(
     id: string,
-    data: UpdateEducation
-  ): Promise<Education | null> {
-    const db = await getDB();
+    data: Partial<NewEducation>
+  ): Promise<Education> {
+    const db = await getDbClient();
+    if (!db) throw new Error("Database connection failed");
 
     const updateData = {
       ...data,
       updatedAt: new Date(),
     };
 
-    await db.update(education).set(updateData).where(eq(education.id, id));
-
-    return this.getById(id);
-  }
-
-  /**
-   * Delete education record
-   */
-  static async delete(id: string): Promise<boolean> {
-    const db = await getDB();
-
-    const result = await db.delete(education).where(eq(education.id, id));
-
-    return result.changes > 0;
-  }
-
-  /**
-   * Toggle visibility
-   */
-  static async toggleVisibility(id: string): Promise<Education | null> {
-    const db = await getDB();
-
-    const existing = await this.getById(id);
-    if (!existing) return null;
-
-    await db
+    const result = await db
       .update(education)
-      .set({
-        isVisible: !existing.isVisible,
-        updatedAt: new Date(),
-      })
-      .where(eq(education.id, id));
+      .set(updateData)
+      .where(eq(education.id, id))
+      .returning();
 
-    return this.getById(id);
+    if (result.length === 0) {
+      throw new Error("Education record not found");
+    }
+
+    return transformDbToApi(result[0]);
   }
 
-  /**
-   * Update display order for multiple education records
-   */
-  static async updateDisplayOrder(
-    reorderItems: EducationReorderItem[]
-  ): Promise<void> {
-    const db = await getDB();
+  static async delete(id: string): Promise<boolean> {
+    const db = await getDbClient();
+    if (!db) throw new Error("Database connection failed");
 
-    for (const item of reorderItems) {
-      await db
+    const result = await db
+      .delete(education)
+      .where(eq(education.id, id))
+      .returning();
+
+    return result.length > 0;
+  }
+
+  static async bulkUpdateOrder(
+    updates: Array<{ id: string; displayOrder: number }>
+  ): Promise<Education[]> {
+    const db = await getDbClient();
+    if (!db) throw new Error("Database connection failed");
+
+    const results: Education[] = [];
+
+    for (const update of updates) {
+      const result = await db
         .update(education)
         .set({
-          displayOrder: item.displayOrder,
+          displayOrder: update.displayOrder,
           updatedAt: new Date(),
         })
-        .where(eq(education.id, item.id));
-    }
-  }
+        .where(eq(education.id, update.id))
+        .returning();
 
-  /**
-   * Get education statistics
-   */
-  static async getStatistics(): Promise<EducationStatistics> {
-    const db = await getDB();
-
-    // Total counts
-    const totalResult = await db.select({ total: count() }).from(education);
-
-    const totalVisibleResult = await db
-      .select({ total: count() })
-      .from(education)
-      .where(eq(education.isVisible, true));
-
-    // By degree type
-    const byDegreeTypeResult = await db
-      .select({
-        degreeType: education.degreeType,
-        count: count(),
-      })
-      .from(education)
-      .groupBy(education.degreeType);
-
-    // By status
-    const byStatusResult = await db
-      .select({
-        status: education.status,
-        count: count(),
-      })
-      .from(education)
-      .groupBy(education.status);
-
-    // By field of study
-    const byFieldOfStudyResult = await db
-      .select({
-        fieldOfStudy: education.fieldOfStudy,
-        count: count(),
-      })
-      .from(education)
-      .groupBy(education.fieldOfStudy);
-
-    // Average GPA (only for numeric GPAs)
-    const avgGpaResult = await db
-      .select({
-        avgGpa: sql<number>`avg(CAST(${education.gpa} AS REAL))`,
-      })
-      .from(education)
-      .where(
-        sql`${education.gpa} IS NOT NULL AND ${education.gpa} REGEXP '^[0-9]+\.?[0-9]*$'`
-      );
-
-    return {
-      total: totalResult[0]?.total || 0,
-      totalVisible: totalVisibleResult[0]?.total || 0,
-      byDegreeType: byDegreeTypeResult.map((item) => ({
-        degreeType: item.degreeType as DegreeType,
-        count: item.count,
-      })),
-      byStatus: byStatusResult.map((item) => ({
-        status: item.status as EducationStatus,
-        count: item.count,
-      })),
-      byFieldOfStudy: byFieldOfStudyResult.map((item) => ({
-        fieldOfStudy: item.fieldOfStudy,
-        count: item.count,
-      })),
-      averageGpa: avgGpaResult[0]?.avgGpa || undefined,
-    };
-  }
-
-  /**
-   * Bulk update education records
-   */
-  static async bulkUpdate(
-    ids: string[],
-    updates: UpdateEducation
-  ): Promise<BulkEducationUpdateResult> {
-    const db = await getDB();
-
-    let updated = 0;
-    let failed = 0;
-    const errors: string[] = [];
-
-    for (const id of ids) {
-      try {
-        const result = await db
-          .update(education)
-          .set({
-            ...updates,
-            updatedAt: new Date(),
-          })
-          .where(eq(education.id, id));
-
-        if (result.changes > 0) {
-          updated++;
-        } else {
-          failed++;
-          errors.push(`Education record ${id} not found`);
-        }
-      } catch (error) {
-        failed++;
-        errors.push(
-          `Failed to update ${id}: ${
-            error instanceof Error ? error.message : "Unknown error"
-          }`
-        );
+      if (result.length > 0) {
+        results.push(transformDbToApi(result[0]));
       }
     }
 
-    return { updated, failed, errors };
+    return results;
   }
 
-  /**
-   * Bulk delete education records
-   */
-  static async bulkDelete(ids: string[]): Promise<BulkEducationDeleteResult> {
-    const db = await getDB();
+  static async bulkDelete(
+    ids: string[]
+  ): Promise<{ success: boolean; deletedCount: number }> {
+    const db = await getDbClient();
+    if (!db) throw new Error("Database connection failed");
 
-    let deleted = 0;
-    let failed = 0;
-    const errors: string[] = [];
+    const result = await db
+      .delete(education)
+      .where(sql`${education.id} IN (${ids.map((id) => `'${id}'`).join(",")})`)
+      .returning();
 
-    for (const id of ids) {
-      try {
-        const result = await db.delete(education).where(eq(education.id, id));
-
-        if (result.changes > 0) {
-          deleted++;
-        } else {
-          failed++;
-          errors.push(`Education record ${id} not found`);
-        }
-      } catch (error) {
-        failed++;
-        errors.push(
-          `Failed to delete ${id}: ${
-            error instanceof Error ? error.message : "Unknown error"
-          }`
-        );
-      }
-    }
-
-    return { deleted, failed, errors };
-  }
-
-  /**
-   * Transform database type to API type (convert dates to strings)
-   */
-  private static transformToAPIType(dbEducation: EducationDB): Education {
     return {
-      ...dbEducation,
-      startDate: dbEducation.startDate.toISOString(),
-      endDate: dbEducation.endDate ? dbEducation.endDate.toISOString() : null,
-      createdAt: dbEducation.createdAt.toISOString(),
-      updatedAt: dbEducation.updatedAt
-        ? dbEducation.updatedAt.toISOString()
-        : null,
+      success: true,
+      deletedCount: result.length,
     };
   }
 }

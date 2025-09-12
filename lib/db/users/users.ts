@@ -59,12 +59,8 @@ export const createUser = async (input: CreateUserInput) => {
       .returning();
 
     return newUser[0];
-  } catch {
-    // In development, we can use remote D1 commands as fallback
-    if (process.env.NODE_ENV === "development") {
-      // No shell fallbacks in edge runtime
-    }
-
+  } catch (error) {
+    console.error("Failed to create user:", error);
     throw new Error(
       "Database client not available. Please check your D1 binding configuration."
     );

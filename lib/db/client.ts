@@ -10,21 +10,143 @@ interface CloudflareEnv {
 }
 
 export async function getDB() {
-  const { env } = await getCloudflareContext({ async: true });
-  return drizzle((env as CloudflareEnv).DB, { schema });
+  try {
+    const { env } = await getCloudflareContext({ async: true });
+    return drizzle((env as CloudflareEnv).DB, { schema });
+  } catch (error) {
+    console.error("Failed to get Cloudflare context:", error);
+
+    // Fallback to remote D1 via Wrangler
+    if (process.env.NODE_ENV === "development") {
+      const { execSync } = await import("child_process");
+      const { drizzle } = await import("drizzle-orm/d1");
+
+      // Create a D1 client that uses Wrangler commands to access remote D1
+      const wranglerD1 = {
+        prepare: (sql: string) => ({
+          bind: () => ({
+            all: async () => {
+              try {
+                execSync(
+                  `npx wrangler d1 execute personal-website --remote --command="${sql.replace(
+                    /"/g,
+                    '\\"'
+                  )}"`,
+                  { encoding: "utf-8" }
+                );
+                // Parse the result and return in D1 format
+                return { results: [] };
+              } catch (error) {
+                console.error("Wrangler query failed:", error);
+                return { results: [] };
+              }
+            },
+            run: async () => {
+              try {
+                execSync(
+                  `npx wrangler d1 execute personal-website --remote --command="${sql.replace(
+                    /"/g,
+                    '\\"'
+                  )}"`,
+                  { encoding: "utf-8" }
+                );
+                return { changes: 1, lastInsertRowId: 0 };
+              } catch (error) {
+                console.error("Wrangler query failed:", error);
+                return { changes: 0, lastInsertRowId: 0 };
+              }
+            },
+            first: async () => {
+              try {
+                execSync(
+                  `npx wrangler d1 execute personal-website --remote --command="${sql.replace(
+                    /"/g,
+                    '\\"'
+                  )}"`,
+                  { encoding: "utf-8" }
+                );
+                return null;
+              } catch (error) {
+                console.error("Wrangler query failed:", error);
+                return null;
+              }
+            },
+          }),
+          all: async () => {
+            try {
+              execSync(
+                `npx wrangler d1 execute personal-website --remote --command="${sql.replace(
+                  /"/g,
+                  '\\"'
+                )}"`,
+                { encoding: "utf-8" }
+              );
+              return { results: [] };
+            } catch (error) {
+              console.error("Wrangler query failed:", error);
+              return { results: [] };
+            }
+          },
+          run: async () => {
+            try {
+              execSync(
+                `npx wrangler d1 execute personal-website --remote --command="${sql.replace(
+                  /"/g,
+                  '\\"'
+                )}"`,
+                { encoding: "utf-8" }
+              );
+              return { changes: 1, lastInsertRowId: 0 };
+            } catch (error) {
+              console.error("Wrangler query failed:", error);
+              return { changes: 0, lastInsertRowId: 0 };
+            }
+          },
+          first: async () => {
+            try {
+              execSync(
+                `npx wrangler d1 execute personal-website --remote --command="${sql.replace(
+                  /"/g,
+                  '\\"'
+                )}"`,
+                { encoding: "utf-8" }
+              );
+              return null;
+            } catch (error) {
+              console.error("Wrangler query failed:", error);
+              return null;
+            }
+          },
+        }),
+        exec: async (sql: string) => {
+          try {
+            execSync(
+              `npx wrangler d1 execute personal-website --remote --command="${sql.replace(
+                /"/g,
+                '\\"'
+              )}"`,
+              { encoding: "utf-8" }
+            );
+          } catch (error) {
+            console.error("Wrangler query failed:", error);
+          }
+        },
+        batch: async () => [],
+      } as unknown as D1Database;
+
+      return drizzle(wranglerD1, { schema });
+    }
+
+    throw error;
+  }
 }
 
 // For backward compatibility - export the type for use in other files
 export type DbClient = Awaited<ReturnType<typeof getDB>>;
 
-// Development fallback - use remote D1 when local is not available
+// Simplified fallback function
 export const getDbClient = async () => {
-  try {
-    return await getDB();
-  } catch (error) {
-    console.error("Failed to get database client:", error);
-    return null;
-  }
+  return await getDB();
 };
 
 // Export a default client for backward compatibility

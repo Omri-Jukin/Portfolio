@@ -107,7 +107,7 @@ export default function AdminDashboard() {
             </Typography>
             <Typography variant="body1" color="text.secondary">
               You are logged in as an administrator. Use the tools below to
-              manage my portfolio.
+              manage your portfolio.
             </Typography>
           </CardContent>
         </Card>
@@ -140,12 +140,6 @@ export default function AdminDashboard() {
                 onClick={() => router.push("/admin/blog")}
               >
                 View Blog Posts
-              </Button>
-              <Button
-                variant="contained"
-                onClick={() => router.push("/admin/blog/new")}
-              >
-                Create Blog Post
               </Button>
             </Box>
           </CardContent>
@@ -230,6 +224,35 @@ export default function AdminDashboard() {
                 onClick={() => router.push("/admin/skills")}
               >
                 Manage Skills
+              </Button>
+            </Box>
+          </CardContent>
+        </Card>
+
+        {/* Education Management */}
+        <Card sx={{ mb: 3 }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              Education
+            </Typography>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              Manage academic background, degrees, and educational achievements
+              displayed on the portfolio.
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                gap: 2,
+                alignItems: "center",
+                mt: 2,
+              }}
+            >
+              <Button
+                variant="contained"
+                onClick={() => router.push("/admin/education")}
+              >
+                Manage Education
               </Button>
             </Box>
           </CardContent>
