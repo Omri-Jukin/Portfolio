@@ -45,6 +45,7 @@ import { format } from "date-fns";
 import type { WorkExperience } from "$/db/workExperiences";
 import { useTranslations } from "next-intl";
 import { ClientOnly } from "~/ClientOnly";
+import { useSnackbar } from "~/SnackbarProvider";
 import {
   WorkExperienceFormData,
   defaultFormData,
@@ -53,6 +54,7 @@ import {
 
 export default function WorkExperiencesAdminPage() {
   const t = useTranslations("Admin");
+  const { showSnackbar } = useSnackbar();
 
   // State
   const [editingExperience, setEditingExperience] =
@@ -83,6 +85,14 @@ export default function WorkExperiencesAdminPage() {
     onSuccess: () => {
       refetch();
       handleCloseForm();
+      showSnackbar("Work experience created successfully!", "success");
+    },
+    onError: (error) => {
+      console.error("Failed to create work experience:", error);
+      showSnackbar(
+        `Failed to create work experience: ${error.message}`,
+        "error"
+      );
     },
   });
 
@@ -90,6 +100,14 @@ export default function WorkExperiencesAdminPage() {
     onSuccess: () => {
       refetch();
       handleCloseForm();
+      showSnackbar("Work experience updated successfully!", "success");
+    },
+    onError: (error) => {
+      console.error("Failed to update work experience:", error);
+      showSnackbar(
+        `Failed to update work experience: ${error.message}`,
+        "error"
+      );
     },
   });
 
@@ -97,6 +115,14 @@ export default function WorkExperiencesAdminPage() {
     onSuccess: () => {
       refetch();
       setDeleteConfirmOpen(null);
+      showSnackbar("Work experience deleted successfully!", "success");
+    },
+    onError: (error) => {
+      console.error("Failed to delete work experience:", error);
+      showSnackbar(
+        `Failed to delete work experience: ${error.message}`,
+        "error"
+      );
     },
   });
 
@@ -104,6 +130,11 @@ export default function WorkExperiencesAdminPage() {
     api.workExperiences.toggleVisibility.useMutation({
       onSuccess: () => {
         refetch();
+        showSnackbar("Visibility updated successfully!", "success");
+      },
+      onError: (error) => {
+        console.error("Failed to toggle visibility:", error);
+        showSnackbar(`Failed to update visibility: ${error.message}`, "error");
       },
     });
 
@@ -111,6 +142,14 @@ export default function WorkExperiencesAdminPage() {
     {
       onSuccess: () => {
         refetch();
+        showSnackbar("Featured status updated successfully!", "success");
+      },
+      onError: (error) => {
+        console.error("Failed to toggle featured status:", error);
+        showSnackbar(
+          `Failed to update featured status: ${error.message}`,
+          "error"
+        );
       },
     }
   );
@@ -341,10 +380,12 @@ export default function WorkExperiencesAdminPage() {
           onClose={handleCloseForm}
           maxWidth="md"
           fullWidth
-          PaperProps={{
-            sx: {
-              maxHeight: "90vh",
-              overflow: "auto",
+          slotProps={{
+            paper: {
+              sx: {
+                maxHeight: "90vh",
+                overflow: "auto",
+              },
             },
           }}
         >
@@ -423,7 +464,11 @@ export default function WorkExperiencesAdminPage() {
                       startDate: e.target.value,
                     }))
                   }
-                  InputLabelProps={{ shrink: true }}
+                  slotProps={{
+                    inputLabel: {
+                      shrink: true,
+                    },
+                  }}
                   fullWidth
                   required
                   sx={{ minWidth: 200 }}
@@ -438,7 +483,11 @@ export default function WorkExperiencesAdminPage() {
                       endDate: e.target.value,
                     }))
                   }
-                  InputLabelProps={{ shrink: true }}
+                  slotProps={{
+                    inputLabel: {
+                      shrink: true,
+                    },
+                  }}
                   fullWidth
                   helperText={t("leaveEmptyForCurrent")}
                   sx={{ minWidth: 200 }}
@@ -516,7 +565,7 @@ export default function WorkExperiencesAdminPage() {
                           [field]: e.target.value,
                         }))
                       }
-                      onKeyPress={(e) =>
+                      onKeyDown={(e) =>
                         e.key === "Enter" && handleAddArrayItem(field)
                       }
                       size="small"

@@ -1,4 +1,4 @@
-import { eq, asc, desc, and, isNull, isNotNull, sql, count } from "drizzle-orm";
+import { eq, asc, desc, and, isNull, isNotNull, sql } from "drizzle-orm";
 import { getDB } from "../client";
 import { workExperiences } from "../schema/schema.tables";
 import { EmploymentType } from "../schema/schema.types";
@@ -115,25 +115,35 @@ export class WorkExperienceManager {
   static async create(
     workExperience: Omit<NewWorkExperience, "id" | "createdAt">
   ): Promise<WorkExperience> {
-    const id = nanoid();
-    const now = new Date();
+    try {
+      const id = nanoid();
+      const now = new Date();
 
-    const newWorkExperience: NewWorkExperience = {
-      ...workExperience,
-      id,
-      createdAt: now,
-      updatedAt: now,
-    };
+      const newWorkExperience: NewWorkExperience = {
+        ...workExperience,
+        id,
+        createdAt: now,
+        updatedAt: now,
+      };
 
-    const db = await getDbClient();
-    await db.insert(workExperiences).values(newWorkExperience);
+      const db = await getDbClient();
+      if (!db) throw new Error("Database connection not available");
 
-    const created = await this.getById(id);
-    if (!created) {
-      throw new Error("Failed to create work experience");
+      await db.insert(workExperiences).values(newWorkExperience);
+
+      const created = await this.getById(id);
+      if (!created) {
+        throw new Error("Failed to retrieve created work experience");
+      }
+
+      return created;
+    } catch (error) {
+      console.error("Error creating work experience:", error);
+      if (error instanceof Error) {
+        throw new Error(`Failed to create work experience: ${error.message}`);
+      }
+      throw new Error("Failed to create work experience: Unknown error");
     }
-
-    return created;
   }
 
   static async update(
@@ -200,43 +210,40 @@ export class WorkExperienceManager {
 
   static async getStatistics(): Promise<WorkExperienceStatistics> {
     const db = await getDbClient();
-    // Get counts by employment type
-    const employmentTypeStats = await db
-      .select({
-        employmentType: workExperiences.employmentType,
-        count: count(),
-      })
-      .from(workExperiences)
-      .where(eq(workExperiences.isVisible, true))
-      .groupBy(workExperiences.employmentType);
 
-    // Get counts by industry
-    const industryStats = await db
-      .select({
-        industry: workExperiences.industry,
-        count: count(),
-      })
-      .from(workExperiences)
-      .where(eq(workExperiences.isVisible, true))
-      .groupBy(workExperiences.industry);
+    // Get counts by employment type using raw SQL
+    const employmentTypeStats = await db.all(sql`
+      SELECT employmentType, COUNT(*) as count 
+      FROM workExperiences 
+      WHERE isVisible = 1 
+      GROUP BY employmentType
+    `);
 
-    // Get total counts
-    const totalVisible = await db
-      .select({ count: count() })
-      .from(workExperiences)
-      .where(eq(workExperiences.isVisible, true));
+    // Get counts by industry using raw SQL
+    const industryStats = await db.all(sql`
+      SELECT industry, COUNT(*) as count 
+      FROM workExperiences 
+      WHERE isVisible = 1 
+      GROUP BY industry
+    `);
 
-    const totalFeatured = await db
-      .select({ count: count() })
-      .from(workExperiences)
-      .where(
-        and(
-          eq(workExperiences.isVisible, true),
-          eq(workExperiences.isFeatured, true)
-        )
-      );
+    // Get total counts using raw SQL
+    const totalVisible = await db.all(sql`
+      SELECT COUNT(*) as count 
+      FROM workExperiences 
+      WHERE isVisible = 1
+    `);
 
-    const total = await db.select({ count: count() }).from(workExperiences);
+    const totalFeatured = await db.all(sql`
+      SELECT COUNT(*) as count 
+      FROM workExperiences 
+      WHERE isVisible = 1 AND isFeatured = 1
+    `);
+
+    const total = await db.all(sql`
+      SELECT COUNT(*) as count 
+      FROM workExperiences
+    `);
 
     // Calculate total years of experience
     const allExperiences = await this.getAll(true);
@@ -252,11 +259,14 @@ export class WorkExperienceManager {
     const currentPosition = await this.getCurrentPosition();
 
     return {
-      total: total[0]?.count || 0,
-      totalVisible: totalVisible[0]?.count || 0,
-      totalFeatured: totalFeatured[0]?.count || 0,
-      byEmploymentType: employmentTypeStats,
-      byIndustry: industryStats,
+      total: (total[0] as { count: number })?.count || 0,
+      totalVisible: (totalVisible[0] as { count: number })?.count || 0,
+      totalFeatured: (totalFeatured[0] as { count: number })?.count || 0,
+      byEmploymentType: employmentTypeStats as {
+        employmentType: string;
+        count: number;
+      }[],
+      byIndustry: industryStats as { industry: string; count: number }[],
       totalYearsExperience: Math.round(totalYearsExperience * 10) / 10, // Round to 1 decimal
       currentPosition,
     };

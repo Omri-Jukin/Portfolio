@@ -18,4 +18,6 @@ export default withNextIntl(nextConfig);
 
 // added by create cloudflare to enable calling `getCloudflareContext()` in `next dev`
 import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+
+// Use standard local D1 bindings for development (better performance)
 initOpenNextCloudflareForDev();
