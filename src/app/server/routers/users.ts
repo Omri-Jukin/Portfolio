@@ -6,7 +6,7 @@ import {
   getUserById,
   updateUser,
   deleteUser,
-} from "../../../../lib/db/users/users";
+} from "$/db/users/users";
 import { User } from "#/lib/db/users/users.type";
 import { TRPCError } from "@trpc/server";
 
@@ -79,7 +79,7 @@ export const usersRouter = router({
         email: z.string().email(),
         password: z.string().min(6),
         name: z.string().min(1),
-        role: z.enum(["admin", "visitor"]).default("admin"),
+        role: z.enum(["admin", "visitor"]).default("visitor"),
       })
     )
     .mutation(async (opts) => {

@@ -142,7 +142,7 @@ export default function RegisterPage() {
                 margin="normal"
                 required
                 disabled={registerMutation.isPending}
-                autoComplete="firstname"
+                autoComplete="given-name"
               />
               <TextField
                 fullWidth
@@ -152,7 +152,7 @@ export default function RegisterPage() {
                 margin="normal"
                 required
                 disabled={registerMutation.isPending}
-                autoComplete="lastname"
+                autoComplete="family-name"
               />
               <TextField
                 fullWidth

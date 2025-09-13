@@ -20,22 +20,23 @@ export async function createContext({
   resHeaders,
 }: FetchCreateContextFnOptions) {
   // Create database client
-  let db: Awaited<ReturnType<typeof getDB>> | null = null;
+  let db: Awaited<ReturnType<typeof getDB>>;
 
   try {
     // Use Cloudflare D1 (both local and production)
     db = await getDB();
   } catch (error) {
     console.error("Failed to create database client:", error);
+    console.error(
+      "CRITICAL: Database connection failed - this is required for the app to function"
+    );
 
-    // In development, we'll skip database operations for now
-    // This allows the app to run without D1 binding
-    if (process.env.NODE_ENV === "development") {
-      console.log("Running in development mode without D1 binding");
-      db = null;
-    } else {
-      db = null;
-    }
+    // Database connection is mandatory - throw error to prevent app from running
+    throw new Error(
+      `Database connection failed: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
   }
 
   // Get JWT_SECRET from Cloudflare context or process.env in dev
@@ -78,15 +79,8 @@ export async function createContext({
 
       // Fetch user from database to ensure they still exist and have correct role
       try {
-        let user;
-        if (db) {
-          // This is a D1 database, safe to pass to getUserById
-          user = await getUserById(decoded.userId, db);
-        } else {
-          // If no database client is available, we can't proceed
-          console.error("No database client available");
-          return null;
-        }
+        // Database client is guaranteed to be available
+        const user = await getUserById(decoded.userId, db);
 
         if (user && user.role === "admin") {
           return {

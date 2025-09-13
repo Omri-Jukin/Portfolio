@@ -5,8 +5,8 @@ import {
 } from "../lib/utils/resumeDataExtractor";
 
 describe("Resume Data Extractor", () => {
-  test("should extract resume data for English", () => {
-    const data = extractResumeData("en");
+  test("should extract resume data for English", async () => {
+    const data = await extractResumeData("en");
 
     expect(data).toBeDefined();
     expect(data.meta).toBeDefined();
@@ -22,32 +22,32 @@ describe("Resume Data Extractor", () => {
     expect(data.projects).toBeInstanceOf(Array);
   });
 
-  test("should extract resume data for Spanish", () => {
-    const data = extractResumeData("es");
+  test("should extract resume data for Spanish", async () => {
+    const data = await extractResumeData("es");
 
     expect(data).toBeDefined();
     expect(data.meta?.title).toBe("Omri Jukin");
     expect(data.person.name).toBe("Omri Jukin");
   });
 
-  test("should extract resume data for French", () => {
-    const data = extractResumeData("fr");
+  test("should extract resume data for French", async () => {
+    const data = await extractResumeData("fr");
 
     expect(data).toBeDefined();
     expect(data.meta?.title).toBe("Omri Jukin");
     expect(data.person.name).toBe("Omri Jukin");
   });
 
-  test("should extract resume data for Hebrew", () => {
-    const data = extractResumeData("he");
+  test("should extract resume data for Hebrew", async () => {
+    const data = await extractResumeData("he");
 
     expect(data).toBeDefined();
     expect(data.meta?.title).toBe("עמרי חוקין");
     expect(data.person.name).toBe("Omri Jukin");
   });
 
-  test("should fallback to English for invalid language", () => {
-    const data = extractResumeData("invalid");
+  test("should fallback to English for invalid language", async () => {
+    const data = await extractResumeData("invalid");
 
     expect(data).toBeDefined();
     expect(data.meta?.title).toBe("Omri Jukin");

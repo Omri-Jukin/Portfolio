@@ -3,6 +3,7 @@ import { getDB } from "../client";
 import { users } from "../schema/schema.tables";
 import { UserRole, UserStatus } from "../schema/schema.types";
 import { v4 as uuidv4 } from "uuid";
+import bcrypt from "bcryptjs";
 // Removed remote-client fallbacks to avoid Node polyfills in edge runtime
 
 // Simple types for portfolio user management
@@ -43,12 +44,14 @@ export const createUser = async (input: CreateUserInput) => {
       throw new Error("User with this email already exists.");
     }
 
+    const hashedPassword = await bcrypt.hash(input.password, 12);
+
     const newUser = await dbClient
       .insert(users)
       .values({
         id: uuidv4(),
         email: input.email,
-        password: input.password, // This should be hashed before calling this function
+        password: hashedPassword,
         firstName: input.firstName,
         lastName: input.lastName,
         role: input.role || "visitor",
@@ -57,6 +60,10 @@ export const createUser = async (input: CreateUserInput) => {
         updatedAt: new Date(),
       })
       .returning();
+
+    if (!newUser[0]) {
+      throw new Error("Failed to create user.");
+    }
 
     return newUser[0];
   } catch (error) {
