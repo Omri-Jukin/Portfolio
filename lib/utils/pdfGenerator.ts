@@ -264,15 +264,23 @@ export function renderResumePDF(
   currentY = 65; // Start body content after contact info
 
   // Professional Summary
-  addSection("Professional Summary", () => {
-    doc.setFont(typography.font, "normal");
-    doc.setFontSize(PDF_LAYOUT.FONT_SIZES.body);
-    const summaryLines = doc.splitTextToSize(data.summary, pageWidth);
-    summaryLines.forEach((line: string) => {
-      doc.text(line, margins.x, currentY);
-      currentY += spacing.paragraphGap;
+  if (
+    "excludeSections" in options &&
+    Array.isArray(options.excludeSections) &&
+    options.excludeSections.includes("Professional Summary")
+  ) {
+    // Section excluded, do nothing
+  } else {
+    addSection("Professional Summary", () => {
+      doc.setFont(typography.font, "normal");
+      doc.setFontSize(PDF_LAYOUT.FONT_SIZES.body);
+      const summaryLines = doc.splitTextToSize(data.summary, pageWidth);
+      summaryLines.forEach((line: string) => {
+        doc.text(line, margins.x, currentY);
+        currentY += spacing.paragraphGap;
+      });
     });
-  });
+  }
 
   // Technical Skills
   addSection("Technical Skills", () => {
