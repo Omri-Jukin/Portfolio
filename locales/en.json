@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "Omri Jukin - Full Stack Developer",
-    "description": "Full Stack Developer specializing in React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB, and microservices architecture"
+    "title": "Omri Jukin",
+    "description": "Full-Stack Software Engineer | Next.js, Node.js & TypeScript | AWS & PostgreSQL | Clean Architecture & Scalable Systems"
   },
   "login": {
     "title": "Admin Login",
@@ -339,23 +339,27 @@
     "projects": [
       {
         "title": "Snow HQ",
-        "description": "Enterprise CRM with real-time analytics and automated workflows - Next.js, tRPC, Drizzle ORM, PostgreSQL",
-        "link": "https://github.com/Omri-Jukin/Snow"
+        "description": "Personal Project - CRM with real-time analytics and automated workflows - Next.js, tRPC, Drizzle ORM, PostgreSQL",
+        "link": "https://github.com/Omri-Jukin/Snow",
+        "type": "personal"
       },
       {
         "title": "Portfolio Website",
-        "description": "Modern responsive portfolio with i18n, dark mode, animations - Next.js, TypeScript, Material-UI, Framer Motion",
-        "link": "https://omrijukin.com"
+        "description": "Personal Project - Modern responsive portfolio with i18n, dark mode, animations - Next.js, TypeScript, Material-UI, Framer Motion",
+        "link": "https://omrijukin.com",
+        "type": "personal"
       },
       {
         "title": "ClipWhisperer",
-        "description": "Microservices platform for automated video processing with AI narration - TypeScript, Node.js, microservices",
-        "link": "https://github.com/ClipWhisperer"
+        "description": "Personal Project - Microservices platform for automated video processing with AI narration - TypeScript, Node.js, microservices",
+        "link": "https://github.com/ClipWhisperer",
+        "type": "personal"
       },
       {
         "title": "Microservices Manager",
-        "description": "CLI tool for microservices ecosystem management with automated workflows - TypeScript, Node.js, CLI architecture",
-        "link": "https://github.com/ClipWhisperer/Utils"
+        "description": "Personal Project - CLI tool for microservices ecosystem management with automated workflows - TypeScript, Node.js, CLI architecture",
+        "link": "https://github.com/ClipWhisperer/Utils",
+        "type": "personal"
       }
     ]
   },
@@ -458,19 +462,17 @@
         "time": "2024–2025",
         "company": "Abra Technologies, Israel",
         "details": [
-          "Built platform aggregating market data from government sources using Next.js, tRPC, and PostgreSQL, improving processing efficiency by 40%",
-          "Designed modular UI component library with Storybook and TypeScript, reducing development time by 30% with 95% test coverage",
-          "Optimized data processing algorithms and database queries, improving system performance by 45% and reducing API response times to 300ms"
+          "Built platform aggregating market data from government sources using Next.js, tRPC, and PostgreSQL",
+          "Designed modular UI component library with Storybook and TypeScript, achieving comprehensive test coverage",
+          "Optimized data processing algorithms and database queries, improving system latency and response times"
         ]
       },
       {
-        "role": "Business Constitution Development Specialist",
+        "role": "Business rule configurator",
         "time": "2023–2024",
         "company": "Menora Mivtachim Insurance Company, Israel",
         "details": [
-          "Architected business constitution system managing 50,000+ policy rules, improving query performance by 60% and system reliability by 90%",
-          "Mentored 8+ developers reducing onboarding from 6 to 3 weeks, improving team productivity by 40% through structured training programs",
-          "Led development of 12+ insurance products using modern practices, achieving 30% higher customer acquisition and 25% faster time-to-market"
+          "Architected business constitution system managing policy rules and configurations"
         ]
       },
       {
@@ -478,9 +480,7 @@
         "time": "2021–2023",
         "company": "Menora Mivtachim Insurance Company, Israel",
         "details": [
-          "Achieved 95% customer satisfaction while handling complex inquiries, reducing average handling time by 25% and improving team efficiency by 35%",
-          "Developed workflow protocols using data analysis and customer feedback, resulting in process improvements and enhanced service quality",
-          "Trained 10+ team members reducing training time by 35% and improving service quality through structured onboarding and continuous feedback"
+          "Trained team members and improved service quality through structured processes"
         ]
       }
     ]
@@ -514,7 +514,94 @@
     "description": "My professional experience and skills",
     "networkingSummary": "Download my resume to learn more about my background",
     "experience": "Full Stack Developer",
-    "professionalSummary": "Full Stack Developer with 5+ years expertise in scalable web development and modern technologies. Proven track record with React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB, and microservices. Strong background in insurance domain from service to core systems development.",
+    "professionalSummary": "Full-Stack Software Engineer with 2+ years of hands-on experience in modern web technologies and clean architecture. Currently seeking opportunities to contribute to innovative teams building scalable systems and exceptional user experiences.",
+    "personalInfo": {
+      "name": "Omri Jukin",
+      "title": "Full-Stack Software Engineer",
+      "contacts": {
+        "phone": "+972 52-334-4064",
+        "email": "contact@omrijukin.com",
+        "portfolio": "https://omrijukin.com",
+        "github": "https://github.com/Omri-Jukin",
+        "linkedin": "https://linkedin.com/in/omri-jukin",
+        "location": "Israel"
+      }
+    },
+    "technicalSkills": {
+      "frontend": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "JavaScript",
+        "HTML5",
+        "CSS3",
+        "Material-UI",
+        "Tailwind CSS",
+        "Framer Motion"
+      ],
+      "backend": [
+        "Node.js",
+        "Express.js",
+        "tRPC",
+        "Drizzle ORM",
+        "PostgreSQL",
+        "MongoDB",
+        "REST APIs",
+        "GraphQL"
+      ],
+      "architecture": [
+        "Microservices",
+        "Monolithic Systems",
+        "API Design",
+        "System Integration",
+        "Performance Optimization",
+        "Scalable Architecture"
+      ],
+      "databases": [
+        "PostgreSQL",
+        "MongoDB",
+        "Data Modeling",
+        "Query Optimization",
+        "Database Design",
+        "Data Architecture"
+      ],
+      "cloudDevOps": [
+        "AWS",
+        "Vercel",
+        "Docker",
+        "CI/CD",
+        "Deployment",
+        "Cloud Infrastructure",
+        "Git",
+        "Jest",
+        "Vitest",
+        "Storybook",
+        "Testing"
+      ]
+    },
+    "education": [
+      {
+        "degree": "Bachelor of Science in Electrical Engineering",
+        "institution": "Technion - Israel Institute of Technology",
+        "location": "Haifa, Israel",
+        "period": "2018-2022",
+        "gpa": "85",
+        "achievements": [
+          "Dean's List for academic excellence",
+          "Excellence in Mathematics and Physics"
+        ],
+        "coursework": [
+          "Data Structures and Algorithms",
+          "Computer Networks",
+          "Digital Signal Processing",
+          "Microprocessors and Embedded Systems"
+        ],
+        "projects": [
+          "Smart Home Automation System",
+          "Digital Image Processing Application"
+        ]
+      }
+    ],
     "viewCode": "View Code",
     "letsBuildTogether": "Let's Build Something Amazing Together",
     "readyToDiscuss": "Ready to discuss my next project or opportunity?",
@@ -694,7 +781,7 @@
       { "name": "Spanish", "level": "Novice" }
     ]
   },
-  "additionalActivities": "Founder of an online community promoting critical and rational thinking and open debates. Engaged in public speaking and live broadcasts on topics related to hard sciences, soft sciences, rational thinking, and technology. Enthusiastic hobbyist magician, using creative skills to engage audiences and encourage curiosity.",
+  "additionalActivities": "Open debates, public speaking, science communication, hobbyist magician.",
   "certifications": {
     "title": "Certifications & Achievements",
     "subtitle": "Professional credentials and technical certifications that validate my expertise",

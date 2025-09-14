@@ -362,7 +362,94 @@
     "title": "CV",
     "description": "Mon expérience professionnelle et compétences",
     "experience": "Développeur Full Stack",
-    "professionalSummary": "Développeur Full Stack avec 5+ ans d'expertise en développement web évolutif et technologies modernes. Historique prouvé avec React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB et microservices. Forte expérience dans le secteur de l'assurance du service au développement de systèmes centraux."
+    "professionalSummary": "Ingénieur Logiciel Full-Stack avec 2+ ans d'expérience pratique en technologies web modernes et architecture propre. Actuellement à la recherche d'opportunités pour contribuer à des équipes innovantes construisant des systèmes évolutifs et des expériences utilisateur exceptionnelles.",
+    "personalInfo": {
+      "name": "Omri Jukin",
+      "title": "Ingénieur Logiciel Full-Stack",
+      "contacts": {
+        "phone": "+972 52-334-4064",
+        "email": "contact@omrijukin.com",
+        "portfolio": "https://omrijukin.com",
+        "github": "https://github.com/Omri-Jukin",
+        "linkedin": "https://linkedin.com/in/omri-jukin",
+        "location": "Israël"
+      }
+    },
+    "technicalSkills": {
+      "frontend": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "JavaScript",
+        "HTML5",
+        "CSS3",
+        "Material-UI",
+        "Tailwind CSS",
+        "Framer Motion"
+      ],
+      "backend": [
+        "Node.js",
+        "Express.js",
+        "tRPC",
+        "Drizzle ORM",
+        "PostgreSQL",
+        "MongoDB",
+        "REST APIs",
+        "GraphQL"
+      ],
+      "architecture": [
+        "Microservices",
+        "Systèmes Monolithiques",
+        "Conception d'API",
+        "Intégration de Systèmes",
+        "Optimisation des Performances",
+        "Architecture Évolutive"
+      ],
+      "databases": [
+        "PostgreSQL",
+        "MongoDB",
+        "Modélisation de Données",
+        "Optimisation des Requêtes",
+        "Conception de Base de Données",
+        "Architecture de Données"
+      ],
+      "cloudDevOps": [
+        "AWS",
+        "Vercel",
+        "Docker",
+        "CI/CD",
+        "Déploiement",
+        "Infrastructure Cloud",
+        "Git",
+        "Jest",
+        "Vitest",
+        "Storybook",
+        "Tests"
+      ]
+    },
+    "education": [
+      {
+        "degree": "Licence en Sciences en Génie Électrique",
+        "institution": "Technion - Institut de Technologie d'Israël",
+        "location": "Haïfa, Israël",
+        "period": "2018-2022",
+        "gpa": "85",
+        "achievements": [
+          "Liste du Doyen pour l'excellence académique",
+          "Excellence en Mathématiques et Physique"
+        ],
+        "coursework": [
+          "Structures de Données et Algorithmes",
+          "Réseaux Informatiques",
+          "Traitement du Signal Numérique",
+          "Microprocesseurs et Systèmes Embarqués"
+        ],
+        "projects": [
+          "Système d'Automatisation de Maison Intelligente",
+          "Application de Traitement d'Images Numériques"
+        ]
+      }
+    ]
   },
   "career": {
     "experiences": [
@@ -371,29 +458,25 @@
         "time": "2024–2025",
         "company": "Abra Technologies, Israël",
         "details": [
-          "Construit plateforme agrégeant données de marché de sources gouvernementales avec Next.js, tRPC et PostgreSQL, améliorant efficacité de traitement de 40%",
-          "Conçu bibliothèque de composants UI modulaire avec Storybook et TypeScript, réduisant temps de développement de 30% avec 95% couverture de tests",
-          "Optimisé algorithmes de traitement de données et requêtes de base de données, améliorant performances système de 45% et réduisant temps de réponse API à 300ms"
+          "Construit plateforme agrégeant données de marché de sources gouvernementales avec Next.js, tRPC et PostgreSQL",
+          "Conçu bibliothèque de composants UI modulaire avec Storybook et TypeScript, atteignant une couverture de tests complète",
+          "Optimisé algorithmes de traitement de données et requêtes de base de données, améliorant la latence système et les temps de réponse"
         ]
       },
       {
-        "role": "Spécialiste Développement Constitution d'Entreprise",
+        "role": "Configurateur de règles métier",
         "time": "2023–2024",
-        "company": "Menora Mivtachim Insurance Company, Israël",
+        "company": "Compagnie d'Assurance Menora Mivtachim, Israël",
         "details": [
-          "Architecturé système de constitution d'entreprise gérant 50,000+ règles de polices, améliorant performances des requêtes de 60% et fiabilité système de 90%",
-          "Mentoré 8+ développeurs réduisant intégration de 6 à 3 semaines, améliorant productivité équipe de 40% via programmes de formation structurés",
-          "Dirigé développement de 12+ produits d'assurance avec pratiques modernes, atteignant 30% acquisition clients supérieure et 25% délai de commercialisation plus rapide"
+          "Architecturé système de constitution d'entreprise pour gérer les règles de polices et configurations"
         ]
       },
       {
         "role": "Représentant Senior Service Client",
         "time": "2021–2023",
-        "company": "Menora Mivtachim Insurance Company, Israël",
+        "company": "Compagnie d'Assurance Menora Mivtachim, Israël",
         "details": [
-          "Atteint 95% satisfaction client en gérant demandes complexes, réduisant temps de traitement moyen de 25% et améliorant efficacité équipe de 35%",
-          "Développé protocoles de flux de travail utilisant analyse de données et retours clients, résultant en améliorations processus et qualité service améliorée",
-          "Formé 10+ membres équipe réduisant temps formation de 35% et améliorant qualité service via intégration structurée et retours continus"
+          "Formé membres de l'équipe et amélioré la qualité du service grâce à des processus structurés"
         ]
       }
     ]
@@ -402,23 +485,27 @@
     "projects": [
       {
         "title": "Snow HQ",
-        "description": "CRM d'entreprise avec analytiques temps réel et flux de travail automatisés - Next.js, tRPC, Drizzle ORM, PostgreSQL",
-        "link": "https://github.com/Omri-Jukin/Snow"
+        "description": "Projet Personnel - CRM avec analytiques temps réel et flux de travail automatisés - Next.js, tRPC, Drizzle ORM, PostgreSQL",
+        "link": "https://github.com/Omri-Jukin/Snow",
+        "type": "personal"
       },
       {
         "title": "Site Web Portfolio",
-        "description": "Portfolio moderne responsive avec i18n, mode sombre, animations - Next.js, TypeScript, Material-UI, Framer Motion",
-        "link": "https://omrijukin.com"
+        "description": "Projet Personnel - Portfolio moderne responsive avec i18n, mode sombre, animations - Next.js, TypeScript, Material-UI, Framer Motion",
+        "link": "https://omrijukin.com",
+        "type": "personal"
       },
       {
         "title": "ClipWhisperer",
-        "description": "Plateforme microservices pour traitement vidéo automatisé avec narration IA - TypeScript, Node.js, microservices",
-        "link": "https://github.com/ClipWhisperer"
+        "description": "Projet Personnel - Plateforme microservices pour traitement vidéo automatisé avec narration IA - TypeScript, Node.js, microservices",
+        "link": "https://github.com/ClipWhisperer",
+        "type": "personal"
       },
       {
         "title": "Gestionnaire Microservices",
-        "description": "Outil CLI pour gestion écosystème microservices avec flux de travail automatisés - TypeScript, Node.js, architecture CLI",
-        "link": "https://github.com/ClipWhisperer/Utils"
+        "description": "Projet Personnel - Outil CLI pour gestion écosystème microservices avec flux de travail automatisés - TypeScript, Node.js, architecture CLI",
+        "link": "https://github.com/ClipWhisperer/Utils",
+        "type": "personal"
       }
     ]
   },
@@ -547,7 +634,7 @@
       { "name": "Français", "level": "Débutant" }
     ]
   },
-  "additionalActivities": "Apprentissage continu en développement full stack, contribution à des projets open source et mise à jour avec les technologies web modernes et meilleures pratiques.",
+  "additionalActivities": "Débats ouverts, prise de parole en public, communication scientifique, magicien amateur.",
   "footer": {
     "title": "À propos",
     "children": "Je suis un Ingénieur FullStack construisant des systèmes évolutifs et des expériences web modernes avec une architecture propre et des solutions pratiques.",

@@ -32,6 +32,15 @@ export type UpdatePostInput = {
 };
 
 export const createPost = async (input: CreatePostInput) => {
+  // Skip during build time
+  if (
+    process.env.NODE_ENV === "production" &&
+    !process.env.VERCEL &&
+    !process.env.DATABASE_URL
+  ) {
+    throw new Error("Blog operations not available during build");
+  }
+
   let dbClient: Awaited<ReturnType<typeof getDB>> | null = null;
   try {
     dbClient = await getDB();
@@ -44,11 +53,13 @@ export const createPost = async (input: CreatePostInput) => {
   }
 
   // Check if slug already exists
-  const existingPost = await dbClient.query.blogPosts.findFirst({
-    where: eq(blogPosts.slug, input.slug),
-  });
+  const existingPost = await dbClient
+    .select()
+    .from(blogPosts)
+    .where(eq(blogPosts.slug, input.slug))
+    .limit(1);
 
-  if (existingPost) {
+  if (existingPost.length > 0) {
     throw new Error("A post with this slug already exists.");
   }
 
@@ -91,11 +102,17 @@ export const getPostBySlug = async (slug: string) => {
     throw new Error("Database client not available.");
   }
 
-  const post = await dbClient.query.blogPosts.findFirst({
-    where: eq(blogPosts.slug, slug),
-  });
+  const post = await dbClient
+    .select()
+    .from(blogPosts)
+    .where(eq(blogPosts.slug, slug))
+    .limit(1);
 
-  return post;
+  if (post.length === 0) {
+    throw new Error("Post not found.");
+  }
+
+  return post[0];
 };
 
 export const getPostById = async (id: string) => {
@@ -110,15 +127,17 @@ export const getPostById = async (id: string) => {
     throw new Error("Database client not available.");
   }
 
-  const post = await dbClient.query.blogPosts.findFirst({
-    where: eq(blogPosts.id, id),
-  });
+  const post = await dbClient
+    .select()
+    .from(blogPosts)
+    .where(eq(blogPosts.id, id))
+    .limit(1);
 
-  if (!post) {
+  if (post.length === 0) {
     throw new Error("Post not found.");
   }
 
-  return post;
+  return post[0];
 };
 
 export const getAllPosts = async (status?: PostStatus) => {
@@ -133,10 +152,11 @@ export const getAllPosts = async (status?: PostStatus) => {
     throw new Error("Database client not available.");
   }
 
-  const posts = await dbClient.query.blogPosts.findMany({
-    where: status ? eq(blogPosts.status, status) : undefined,
-    orderBy: desc(blogPosts.createdAt),
-  });
+  const posts = await dbClient
+    .select()
+    .from(blogPosts)
+    .where(status ? eq(blogPosts.status, status) : undefined)
+    .orderBy(desc(blogPosts.createdAt));
 
   return posts;
 };

@@ -186,7 +186,7 @@ export class SkillManager {
     const db = await getDbClient();
     const result = await db.delete(skills).where(eq(skills.id, id));
 
-    return result.changes > 0;
+    return result.length > 0;
   }
 
   static async updateDisplayOrder(

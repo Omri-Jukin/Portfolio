@@ -1,8 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createPost } from "$/db/blog/blog";
-import { getDB } from "$/db/client";
-import { eq } from "drizzle-orm";
-import { users } from "$/db/schema/schema.tables";
 
 // Simple API key authentication for external clients
 const API_KEY =
@@ -10,6 +6,23 @@ const API_KEY =
 
 export async function POST(request: NextRequest) {
   try {
+    // Skip execution during build time - more aggressive check
+    if (
+      !process.env.DATABASE_URL ||
+      (process.env.NODE_ENV === "production" && !process.env.VERCEL)
+    ) {
+      return NextResponse.json(
+        { error: "Service temporarily unavailable" },
+        { status: 503 }
+      );
+    }
+
+    // Dynamic imports to prevent build-time execution
+    const { createPost } = await import("$/db/blog/blog");
+    const { getDB } = await import("$/db/client");
+    const { eq } = await import("drizzle-orm");
+    const { users } = await import("$/db/schema/schema.tables");
+
     // Get API key from headers
     const apiKey = request.headers.get("x-api-key");
 
@@ -86,6 +99,17 @@ export async function POST(request: NextRequest) {
 
 // GET method to test the endpoint
 export async function GET() {
+  // Skip execution during build time - more aggressive check
+  if (
+    !process.env.DATABASE_URL ||
+    (process.env.NODE_ENV === "production" && !process.env.VERCEL)
+  ) {
+    return NextResponse.json(
+      { error: "Service temporarily unavailable" },
+      { status: 503 }
+    );
+  }
+
   return NextResponse.json({
     message: "Blog publish API is working!",
     usage: {

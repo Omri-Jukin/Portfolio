@@ -123,7 +123,7 @@ export class CertificationsService {
       .delete(certifications)
       .where(eq(certifications.id, id));
 
-    return result.changes > 0;
+    return result.length > 0;
   }
 
   static async updateDisplayOrder(

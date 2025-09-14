@@ -280,23 +280,27 @@
     "projects": [
       {
         "title": "Snow HQ",
-        "description": "CRM empresarial con análisis en tiempo real y flujos de trabajo automatizados - Next.js, tRPC, Drizzle ORM, PostgreSQL",
-        "link": "https://github.com/Omri-Jukin/Snow"
+        "description": "Proyecto Personal - CRM con análisis en tiempo real y flujos de trabajo automatizados - Next.js, tRPC, Drizzle ORM, PostgreSQL",
+        "link": "https://github.com/Omri-Jukin/Snow",
+        "type": "personal"
       },
       {
         "title": "Sitio Web de Portafolio",
-        "description": "Portafolio moderno responsivo con i18n, modo oscuro, animaciones - Next.js, TypeScript, Material-UI, Framer Motion",
-        "link": "https://omrijukin.com"
+        "description": "Proyecto Personal - Portafolio moderno responsivo con i18n, modo oscuro, animaciones - Next.js, TypeScript, Material-UI, Framer Motion",
+        "link": "https://omrijukin.com",
+        "type": "personal"
       },
       {
         "title": "ClipWhisperer",
-        "description": "Plataforma de microservicios para procesamiento automatizado de video con narración AI - TypeScript, Node.js, microservicios",
-        "link": "https://github.com/ClipWhisperer"
+        "description": "Proyecto Personal - Plataforma de microservicios para procesamiento automatizado de video con narración AI - TypeScript, Node.js, microservicios",
+        "link": "https://github.com/ClipWhisperer",
+        "type": "personal"
       },
       {
         "title": "Gestor de Microservicios",
-        "description": "Herramienta CLI para gestión de ecosistema de microservicios con flujos de trabajo automatizados - TypeScript, Node.js, arquitectura CLI",
-        "link": "https://github.com/ClipWhisperer/Utils"
+        "description": "Proyecto Personal - Herramienta CLI para gestión de ecosistema de microservicios con flujos de trabajo automatizados - TypeScript, Node.js, arquitectura CLI",
+        "link": "https://github.com/ClipWhisperer/Utils",
+        "type": "personal"
       }
     ]
   },
@@ -395,33 +399,29 @@
     "viewResume": "Ver Currículum",
     "experiences": [
       {
-        "role": "Ingeniero FullStack",
-        "time": "2024 - 2025",
+        "role": "Ingeniero Full Stack",
+        "time": "2024–2025",
         "company": "Abra Technologies, Israel",
         "details": [
-          "Construí plataforma agregando datos de mercado de fuentes gubernamentales usando Next.js, tRPC y PostgreSQL, mejorando eficiencia de procesamiento en 40%",
-          "Diseñé biblioteca de componentes UI modular con Storybook y TypeScript, reduciendo tiempo de desarrollo en 30% con 95% cobertura de pruebas",
-          "Optimicé algoritmos de procesamiento de datos y consultas de base de datos, mejorando rendimiento del sistema en 45% y reduciendo tiempos de respuesta API a 300ms"
+          "Construí plataforma agregando datos de mercado de fuentes gubernamentales usando Next.js, tRPC y PostgreSQL",
+          "Diseñé biblioteca de componentes UI modular con Storybook y TypeScript, logrando cobertura integral de pruebas",
+          "Optimicé algoritmos de procesamiento de datos y consultas de base de datos, mejorando latencia del sistema y tiempos de respuesta"
         ]
       },
       {
-        "role": "Especialista en Desarrollo de Constitución Empresarial",
-        "time": "2023 - 2024",
+        "role": "Configurador de reglas de negocio",
+        "time": "2023–2024",
         "company": "Compañía de Seguros Menora Mivtachim, Israel",
         "details": [
-          "Arquitecté sistema de constitución empresarial gestionando 50,000+ reglas de pólizas, mejorando rendimiento de consultas en 60% y confiabilidad del sistema en 90%",
-          "Mentoré 8+ desarrolladores reduciendo incorporación de 6 a 3 semanas, mejorando productividad del equipo en 40% a través de programas de entrenamiento estructurados",
-          "Lideré desarrollo de 12+ productos de seguros usando prácticas modernas, logrando 30% mayor adquisición de clientes y 25% tiempo de comercialización más rápido"
+          "Arquitecté sistema de constitución empresarial para gestionar reglas de pólizas y configuraciones"
         ]
       },
       {
         "role": "Representante Senior de Servicio al Cliente",
-        "time": "2021 - 2023",
+        "time": "2021–2023",
         "company": "Compañía de Seguros Menora Mivtachim, Israel",
         "details": [
-          "Logré 95% satisfacción del cliente manejando consultas complejas, reduciendo tiempo promedio de manejo en 25% y mejorando eficiencia del equipo en 35%",
-          "Desarrollé protocolos de flujo de trabajo usando análisis de datos y retroalimentación del cliente, resultando en mejoras de procesos y calidad de servicio mejorada",
-          "Entrené 10+ miembros del equipo reduciendo tiempo de entrenamiento en 35% y mejorando calidad de servicio a través de incorporación estructurada y retroalimentación continua"
+          "Entrené miembros del equipo y mejoré la calidad del servicio a través de procesos estructurados"
         ]
       }
     ]
@@ -430,8 +430,95 @@
     "title": "Currículum",
     "description": "Mi experiencia profesional y habilidades",
     "networkingSummary": "Descarga mi currículum para aprender más sobre mi experiencia",
-    "experience": "Soy un Ingeniero FullStack con 5+ años de experiencia en desarrollo web full-stack, arquitectura de sistemas escalables y tecnologías modernas. Tengo un historial comprobado en el desarrollo de aplicaciones full-stack usando React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB y arquitectura de microservicios. Tengo una sólida experiencia en la industria de seguros, desde servicio al cliente hasta desarrollo de sistemas centrales. Tengo experiencia en mentoría de equipos, mejora de procesos y apoyo al cambio y crecimiento organizacional. Tengo fuertes habilidades de resolución de problemas enfocadas en diseño de sistemas y optimización. Estoy comprometido con el aprendizaje continuo y crecimiento profesional en desarrollo full-stack.",
-    "professionalSummary": "Resumen Profesional",
+    "experience": "Desarrollador Full Stack",
+    "professionalSummary": "Ingeniero de Software Full-Stack con 2+ años de experiencia práctica en tecnologías web modernas y arquitectura limpia. Actualmente busco oportunidades para contribuir a equipos innovadores que construyen sistemas escalables y experiencias de usuario excepcionales.",
+    "personalInfo": {
+      "name": "Omri Jukin",
+      "title": "Ingeniero de Software Full-Stack",
+      "contacts": {
+        "phone": "+972 52-334-4064",
+        "email": "contact@omrijukin.com",
+        "portfolio": "https://omrijukin.com",
+        "github": "https://github.com/Omri-Jukin",
+        "linkedin": "https://linkedin.com/in/omri-jukin",
+        "location": "Israel"
+      }
+    },
+    "technicalSkills": {
+      "frontend": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "JavaScript",
+        "HTML5",
+        "CSS3",
+        "Material-UI",
+        "Tailwind CSS",
+        "Framer Motion"
+      ],
+      "backend": [
+        "Node.js",
+        "Express.js",
+        "tRPC",
+        "Drizzle ORM",
+        "PostgreSQL",
+        "MongoDB",
+        "REST APIs",
+        "GraphQL"
+      ],
+      "architecture": [
+        "Microservicios",
+        "Sistemas Monolíticos",
+        "Diseño de API",
+        "Integración de Sistemas",
+        "Optimización de Rendimiento",
+        "Arquitectura Escalable"
+      ],
+      "databases": [
+        "PostgreSQL",
+        "MongoDB",
+        "Modelado de Datos",
+        "Optimización de Consultas",
+        "Diseño de Base de Datos",
+        "Arquitectura de Datos"
+      ],
+      "cloudDevOps": [
+        "AWS",
+        "Vercel",
+        "Docker",
+        "CI/CD",
+        "Despliegue",
+        "Infraestructura en la Nube",
+        "Git",
+        "Jest",
+        "Vitest",
+        "Storybook",
+        "Pruebas"
+      ]
+    },
+    "education": [
+      {
+        "degree": "Licenciatura en Ciencias en Ingeniería Eléctrica",
+        "institution": "Technion - Instituto de Tecnología de Israel",
+        "location": "Haifa, Israel",
+        "period": "2018-2022",
+        "gpa": "85",
+        "achievements": [
+          "Lista del Decano por excelencia académica",
+          "Excelencia en Matemáticas y Física"
+        ],
+        "coursework": [
+          "Estructuras de Datos y Algoritmos",
+          "Redes de Computadoras",
+          "Procesamiento Digital de Señales",
+          "Microprocesadores y Sistemas Embebidos"
+        ],
+        "projects": [
+          "Sistema de Automatización del Hogar Inteligente",
+          "Aplicación de Procesamiento de Imágenes Digitales"
+        ]
+      }
+    ],
     "viewCode": "Ver Código",
     "letsBuildTogether": "Construyamos Algo Increíble Juntos",
     "readyToDiscuss": "¿Listo para discutir mi próximo proyecto u oportunidad?",
@@ -611,7 +698,7 @@
       { "name": "Español", "level": "Novato" }
     ]
   },
-  "additionalActivities": "Aprendizaje continuo en desarrollo full stack, contribuyendo a proyectos de código abierto y manteniéndome actualizado con tecnologías web modernas y mejores prácticas.",
+  "additionalActivities": "Debates abiertos, hablar en público, comunicación científica, mago aficionado.",
   "footer": {
     "title": "Acerca de",
     "children": "Soy un Ingeniero FullStack construyendo sistemas escalables y experiencias web modernas con arquitectura limpia y soluciones prácticas.",
