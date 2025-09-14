@@ -226,7 +226,7 @@ export class ProjectManager {
     const db = await getDbClient();
     const result = await db.delete(projects).where(eq(projects.id, id));
 
-    return result.changes > 0;
+    return result.length > 0;
   }
 
   static async updateDisplayOrder(

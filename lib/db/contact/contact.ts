@@ -60,10 +60,11 @@ export const getContactInquiries = async (status?: InquiryStatus) => {
     throw new Error("Database client not available.");
   }
 
-  const inquiries = await dbClient.query.contactInquiries.findMany({
-    where: status ? eq(contactInquiries.status, status) : undefined,
-    orderBy: desc(contactInquiries.createdAt),
-  });
+  const inquiries = await dbClient
+    .select()
+    .from(contactInquiries)
+    .where(status ? eq(contactInquiries.status, status) : undefined)
+    .orderBy(desc(contactInquiries.createdAt));
 
   return inquiries;
 };
@@ -80,9 +81,11 @@ export const getContactInquiryById = async (id: string) => {
     throw new Error("Database client not available.");
   }
 
-  const inquiry = await dbClient.query.contactInquiries.findFirst({
-    where: eq(contactInquiries.id, id),
-  });
+  const inquiry = await dbClient
+    .select()
+    .from(contactInquiries)
+    .where(eq(contactInquiries.id, id))
+    .limit(1);
 
   if (!inquiry) {
     throw new Error("Contact inquiry not found.");

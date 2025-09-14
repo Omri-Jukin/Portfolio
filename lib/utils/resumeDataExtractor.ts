@@ -1,11 +1,9 @@
-import { ResumeData } from "./pdfGenerator";
-import { EducationManager } from "../db/Education/EducationManager";
-
-// Import locale data
+//! Import locale data - SINGLE SOURCE OF TRUTH
 import enData from "../../locales/en.json";
 import esData from "../../locales/es.json";
 import frData from "../../locales/fr.json";
 import heData from "../../locales/he.json";
+import type { ResumeData } from "../types";
 
 const localeData = {
   en: enData,
@@ -14,125 +12,78 @@ const localeData = {
   he: heData,
 };
 
+export type ResumeDataType = typeof localeData.en.resume;
+
+export type expType = (typeof localeData.en.career.experiences)[0];
+
+export type projectType = (typeof localeData.en.projects.projects)[0];
+
+export type eduType = (typeof localeData.en.resume.education)[0];
+
 export const extractResumeData = async (
   language: string = "en"
 ): Promise<ResumeData> => {
   const data = localeData[language as keyof typeof localeData] || localeData.en;
 
-  // Fetch education data from database
-  const educationData = await EducationManager.getAll(true);
+  //! ===================================================
+  //! SINGLE SOURCE OF TRUTH - ALL DATA FROM LOCALE FILES
+  //! ===================================================
+  //! All resume data now comes from locales/[language].json
 
-  // Transform to new PDF generator format
+  const resumeData = data.resume;
+
   return {
     meta: {
       title: data.metadata.title,
-      author: "Omri Jukin",
+      author: resumeData.personalInfo.name,
     },
     person: {
-      name: "Omri Jukin",
-      title: data.resume.experience || "Full Stack Developer",
+      name: resumeData.personalInfo.name,
+      title: resumeData.personalInfo.title,
       contacts: {
-        phone: "+972 52-334-4064",
-        email: "contact@omrijukin.com",
-        portfolio: "https://omrijukin.com",
-        github: "https://github.com/Omri-Jukin",
-        linkedin: "https://linkedin.com/in/omri-jukin",
-        location: "Israel",
+        phone: resumeData.personalInfo.contacts.phone,
+        email: resumeData.personalInfo.contacts.email,
+        portfolio: resumeData.personalInfo.contacts.portfolio,
+        github: resumeData.personalInfo.contacts.github,
+        linkedin: resumeData.personalInfo.contacts.linkedin,
+        location: resumeData.personalInfo.contacts.location,
       },
     },
-    summary:
-      data.resume.professionalSummary ||
-      "Full Stack Developer with 5+ years expertise in scalable web development and modern technologies.",
+    summary: resumeData.professionalSummary,
     tech: {
-      frontend: [
-        "React",
-        "Next.js",
-        "TypeScript",
-        "JavaScript",
-        "HTML5",
-        "CSS3",
-        "Material-UI",
-        "Tailwind CSS",
-        "Framer Motion",
-      ],
-      backend: [
-        "Node.js",
-        "Express.js",
-        "tRPC",
-        "Drizzle ORM",
-        "PostgreSQL",
-        "MongoDB",
-        "REST APIs",
-        "GraphQL",
-      ],
-      architecture: [
-        "Microservices",
-        "Monolithic Systems",
-        "API Design",
-        "System Integration",
-        "Performance Optimization",
-        "Scalable Architecture",
-      ],
-      databases: [
-        "PostgreSQL",
-        "MongoDB",
-        "Data Modeling",
-        "Query Optimization",
-        "Database Design",
-        "Data Architecture",
-      ],
-      cloudDevOps: [
-        "AWS",
-        "Vercel",
-        "Docker",
-        "CI/CD",
-        "Deployment",
-        "Cloud Infrastructure",
-        "Git",
-        "Jest",
-        "Vitest",
-        "Storybook",
-        "Testing",
-      ],
-      softSkills: data.skills?.categories?.soft?.skills?.map(
-        (skill) => skill.description || skill.name
-      ) || [
-        "Team management, mentoring, and project coordination",
-        "Analytical thinking and creative solutions",
-        "Technical and non-technical stakeholder communication",
-        "Quick learning and technology adoption",
-      ],
+      frontend: resumeData.technicalSkills.frontend,
+      backend: resumeData.technicalSkills.backend,
+      architecture: resumeData.technicalSkills.architecture,
+      databases: resumeData.technicalSkills.databases,
+      cloudDevOps: resumeData.technicalSkills.cloudDevOps,
+      softSkills: data.skills.categories.soft.skills.map(
+        (skill: { description: string; name: string }) =>
+          skill.description || skill.name
+      ),
     },
-    experience:
-      data.career?.experiences?.map((exp) => ({
-        role: exp.role,
-        company: exp.company,
-        location: "Israel",
-        period: exp.time,
-        bullets: exp.details || [],
-        stackLine: (exp as { stackLine?: string }).stackLine,
-      })) || [],
-    projects:
-      data.projects?.projects?.map((project) => ({
-        name: project.title,
-        line: project.description,
-        url: project.link,
-      })) || [],
-    education: educationData.map((edu) => ({
+    experience: data.career.experiences.map((exp: expType) => ({
+      role: exp.role,
+      company: exp.company,
+      location: "Israel",
+      period: exp.time,
+      bullets: exp.details,
+    })),
+    projects: data.projects.projects.map((project: projectType) => ({
+      name: project.title,
+      line: project.description,
+      url: project.link,
+    })),
+    education: resumeData.education.map((edu: eduType) => ({
       degree: edu.degree,
       institution: edu.institution,
       location: edu.location,
-      period: `${new Date(edu.startDate).getFullYear()} - ${
-        edu.endDate ? new Date(edu.endDate).getFullYear() : "Present"
-      }`,
-      gpa: edu.gpa || undefined,
-      achievements: edu.achievements || [],
-      coursework: edu.coursework || [],
-      projects: edu.projects || [],
+      period: edu.period,
+      gpa: edu.gpa,
+      achievements: edu.achievements,
+      coursework: edu.coursework,
+      projects: edu.projects,
     })),
-    additional:
-      data.additionalActivities ||
-      "Continuous learning in full stack development, contributing to open-source projects, and staying current with modern web technologies and best practices.",
+    additional: data.additionalActivities,
   };
 };
 

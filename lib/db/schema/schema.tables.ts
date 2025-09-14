@@ -1,4 +1,12 @@
-import { sqliteTable, text, integer, index } from "drizzle-orm/sqlite-core";
+import {
+  pgTable,
+  text,
+  timestamp,
+  integer,
+  index,
+  uuid,
+  boolean,
+} from "drizzle-orm/pg-core";
 import {
   UserRole,
   UserStatus,
@@ -26,19 +34,19 @@ import {
 } from "#/lib/types";
 
 // Users table - minimal for portfolio admin
-export const users = sqliteTable("users", {
-  id: text("id").primaryKey().notNull(),
+export const users = pgTable("users", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
   email: text("email").notNull().unique(),
   password: text("password").notNull(),
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
   role: text("role").$type<UserRole>().notNull().default("visitor"),
   status: text("status").$type<UserStatus>().notNull().default("pending"),
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
-    .$defaultFn(() => new Date()),
-  updatedAt: integer("updated_at", { mode: "timestamp" }),
-  lastLogin: integer("last_login", { mode: "timestamp" }),
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }),
+  lastLogin: timestamp("last_login", { withTimezone: true }),
   accessToken: text("access_token"),
   refreshToken: text("refresh_token"),
   sessionId: text("session_id"),
@@ -59,38 +67,29 @@ export const users = sqliteTable("users", {
   whatsapp: text("whatsapp"),
 });
 
-// Define indexes separately
-export const usersEmailIdx = index("email_idx").on(users.email);
-export const usersStatusIdx = index("status_idx").on(users.status);
-export const usersLastLoginIdx = index("last_login_idx").on(users.lastLogin);
-export const usersAccessTokenIdx = index("access_token_idx").on(
-  users.accessToken
-);
-export const usersRefreshTokenIdx = index("refresh_token_idx").on(
-  users.refreshToken
-);
-export const usersSessionIdIdx = index("session_id_idx").on(users.sessionId);
+// Define indexes separately - removed for now to fix generation
+// export const usersEmailIdx = index("email_idx").on(users.email);
 
 // Blog posts for portfolio content
-export const blogPosts = sqliteTable("blog_posts", {
+export const blogPosts = pgTable("blog_posts", {
   id: text("id").primaryKey().notNull(),
   title: text("title").notNull(),
   slug: text("slug").notNull().unique(),
   content: text("content").notNull(),
   excerpt: text("excerpt"),
   status: text("status").$type<PostStatus>().notNull().default("draft"),
-  tags: text("tags", { mode: "json" }).$type<string[]>(),
+  tags: text("tags").$type<string[]>(),
   imageUrl: text("image_url"),
   imageAlt: text("image_alt"),
   author: text("author").notNull(),
   authorId: text("author_id")
     .notNull()
     .references(() => users.id),
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .$defaultFn(() => new Date()),
-  updatedAt: integer("updated_at", { mode: "timestamp" }),
-  publishedAt: integer("published_at", { mode: "timestamp" }),
+  updatedAt: timestamp("updated_at", { withTimezone: true }),
+  publishedAt: timestamp("published_at", { withTimezone: true }),
 });
 
 // Define indexes separately
@@ -101,17 +100,17 @@ export const blogPostsPublishedAtIdx = index("published_at_idx").on(
 );
 
 // Contact inquiries for portfolio contact form
-export const contactInquiries = sqliteTable("contact_inquiries", {
+export const contactInquiries = pgTable("contact_inquiries", {
   id: text("id").primaryKey().notNull(),
   name: text("name").notNull(),
   email: text("email").notNull(),
   subject: text("subject").notNull(),
   message: text("message").notNull(),
   status: text("status").$type<InquiryStatus>().notNull().default("open"),
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .$defaultFn(() => new Date()),
-  updatedAt: integer("updated_at", { mode: "timestamp" }),
+  updatedAt: timestamp("updated_at", { withTimezone: true }),
 });
 
 // Define indexes separately
@@ -123,7 +122,7 @@ export const contactInquiriesCreatedAtIdx = index("contact_created_at_idx").on(
 );
 
 // Certifications table for professional credentials
-export const certifications = sqliteTable("certifications", {
+export const certifications = pgTable("certifications", {
   id: text("id").primaryKey().notNull(),
   name: text("name").notNull(),
   issuer: text("issuer").notNull(),
@@ -134,10 +133,10 @@ export const certifications = sqliteTable("certifications", {
     .notNull()
     .default("active"),
   // Skills as JSON array
-  skills: text("skills", { mode: "json" }).$type<string[]>().notNull(),
+  skills: text("skills").$type<string[]>().notNull(),
   // Dates
-  issueDate: integer("issue_date", { mode: "timestamp" }).notNull(),
-  expiryDate: integer("expiry_date", { mode: "timestamp" }),
+  issueDate: timestamp("issue_date", { withTimezone: true }).notNull(),
+  expiryDate: timestamp("expiry_date", { withTimezone: true }),
   // Verification details
   credentialId: text("credential_id"),
   verificationUrl: text("verification_url"),
@@ -146,22 +145,20 @@ export const certifications = sqliteTable("certifications", {
   color: text("color"), // For category color override
   // Display order and visibility
   displayOrder: integer("display_order").notNull().default(0),
-  isVisible: integer("is_visible", { mode: "boolean" }).notNull().default(true),
+  isVisible: boolean("is_visible").notNull().default(true),
   // Multi-language support
-  nameTranslations: text("name_translations", { mode: "json" }).$type<
+  nameTranslations: text("name_translations").$type<Record<string, string>>(),
+  descriptionTranslations: text("description_translations").$type<
     Record<string, string>
   >(),
-  descriptionTranslations: text("description_translations", {
-    mode: "json",
-  }).$type<Record<string, string>>(),
-  issuerTranslations: text("issuer_translations", { mode: "json" }).$type<
+  issuerTranslations: text("issuer_translations").$type<
     Record<string, string>
   >(),
   // Metadata
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .$defaultFn(() => new Date()),
-  updatedAt: integer("updated_at", { mode: "timestamp" }),
+  updatedAt: timestamp("updated_at", { withTimezone: true }),
   createdBy: text("created_by")
     .notNull()
     .references(() => users.id),
@@ -188,21 +185,24 @@ export const certificationsExpiryDateIdx = index("cert_expiry_date_idx").on(
 );
 
 // Work Experiences table for career history
-export const workExperiences = sqliteTable("work_experiences", {
+export const workExperiences = pgTable("work_experiences", {
   id: text("id").primaryKey().notNull(),
   role: text("role").notNull(),
   company: text("company").notNull(),
   location: text("location").notNull(),
-  startDate: integer("start_date", { mode: "timestamp" }).notNull(),
-  endDate: integer("end_date", { mode: "timestamp" }), // null for current position
+  startDate: timestamp("start_date", { withTimezone: true }).notNull(),
+  endDate: timestamp("end_date", { withTimezone: true }), // null for current position
   description: text("description").notNull(),
-  achievements: text("achievements", { mode: "json" })
+  achievements: text("achievements")
+    .$type<string[]>()
     .$type<string[]>()
     .notNull(),
-  technologies: text("technologies", { mode: "json" })
+  technologies: text("technologies")
+    .$type<string[]>()
     .$type<string[]>()
     .notNull(),
-  responsibilities: text("responsibilities", { mode: "json" })
+  responsibilities: text("responsibilities")
+    .$type<string[]>()
     .$type<string[]>()
     .notNull(),
   employmentType: text("employment_type").$type<EmploymentType>().notNull(),
@@ -210,27 +210,23 @@ export const workExperiences = sqliteTable("work_experiences", {
   companyUrl: text("company_url"),
   logo: text("logo"),
   displayOrder: integer("display_order").notNull().default(0),
-  isVisible: integer("is_visible", { mode: "boolean" }).notNull().default(true),
-  isFeatured: integer("is_featured", { mode: "boolean" })
-    .notNull()
-    .default(false),
+  isVisible: boolean("is_visible").notNull().default(true),
+  isFeatured: boolean("is_featured").notNull().default(false),
 
   // Multi-language support
-  roleTranslations: text("role_translations", { mode: "json" }).$type<
+  roleTranslations: text("role_translations").$type<Record<string, string>>(),
+  companyTranslations: text("company_translations").$type<
     Record<string, string>
   >(),
-  companyTranslations: text("company_translations", { mode: "json" }).$type<
+  descriptionTranslations: text("description_translations").$type<
     Record<string, string>
   >(),
-  descriptionTranslations: text("description_translations", {
-    mode: "json",
-  }).$type<Record<string, string>>(),
 
   // Metadata
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .$defaultFn(() => new Date()),
-  updatedAt: integer("updated_at", { mode: "timestamp" }),
+  updatedAt: timestamp("updated_at", { withTimezone: true }),
   createdBy: text("created_by")
     .notNull()
     .references(() => users.id),
@@ -254,37 +250,42 @@ export const workExperiencesDisplayOrderIdx = index(
 ).on(workExperiences.displayOrder);
 
 // Projects table for portfolio showcase
-export const projects = sqliteTable("projects", {
+export const projects = pgTable("projects", {
   id: text("id").primaryKey().notNull(),
   title: text("title").notNull(),
   subtitle: text("subtitle").notNull(),
   description: text("description").notNull(),
   longDescription: text("long_description"),
-  technologies: text("technologies", { mode: "json" })
+  technologies: text("technologies")
+    .$type<string[]>()
     .$type<string[]>()
     .notNull(),
-  categories: text("categories", { mode: "json" }).$type<string[]>().notNull(),
+  categories: text("categories").$type<string[]>().notNull(),
   status: text("status").$type<ProjectStatus>().notNull().default("completed"),
   projectType: text("project_type").$type<ProjectType>().notNull(),
-  startDate: integer("start_date", { mode: "timestamp" }).notNull(),
-  endDate: integer("end_date", { mode: "timestamp" }),
+  startDate: timestamp("start_date", { withTimezone: true }).notNull(),
+  endDate: timestamp("end_date", { withTimezone: true }),
   githubUrl: text("github_url"),
   liveUrl: text("live_url"),
   demoUrl: text("demo_url"),
   documentationUrl: text("documentation_url"),
-  images: text("images", { mode: "json" })
+  images: text("images")
+    .$type<string[]>()
     .$type<string[]>()
     .notNull()
     .default([]),
-  keyFeatures: text("key_features", { mode: "json" })
+  keyFeatures: text("key_features")
+    .$type<string[]>()
     .$type<string[]>()
     .notNull()
     .default([]),
-  technicalChallenges: text("technical_challenges", { mode: "json" })
+  technicalChallenges: text("technical_challenges")
+    .$type<TTechnicalChallenges>()
     .$type<TTechnicalChallenges>()
     .notNull()
     .default([]),
-  codeExamples: text("code_examples", { mode: "json" })
+  codeExamples: text("code_examples")
+    .$type<TCodeExamples>()
     .$type<TCodeExamples>()
     .notNull()
     .default([]),
@@ -293,32 +294,24 @@ export const projects = sqliteTable("projects", {
   clientName: text("client_name"),
   budget: text("budget"),
   displayOrder: integer("display_order").notNull().default(0),
-  isVisible: integer("is_visible", { mode: "boolean" }).notNull().default(true),
-  isFeatured: integer("is_featured", { mode: "boolean" })
-    .notNull()
-    .default(false),
-  isOpenSource: integer("is_open_source", { mode: "boolean" })
-    .notNull()
-    .default(false),
+  isVisible: boolean("is_visible").notNull().default(true),
+  isFeatured: boolean("is_featured").notNull().default(false),
+  isOpenSource: boolean("is_open_source").notNull().default(false),
   // Problem-solving details
-  problem: text("problem", { mode: "json" }).$type<ProjectProblem | null>(),
-  solution: text("solution", { mode: "json" }).$type<ProjectSolution | null>(),
-  architecture: text("architecture", {
-    mode: "json",
-  }).$type<ProjectArchitecture | null>(),
+  problem: text("problem").$type<ProjectProblem | null>(),
+  solution: text("solution").$type<ProjectSolution | null>(),
+  architecture: text("architecture").$type<ProjectArchitecture | null>(),
   // Multi-language support
-  titleTranslations: text("title_translations", { mode: "json" }).$type<
+  titleTranslations: text("title_translations").$type<Record<string, string>>(),
+  descriptionTranslations: text("description_translations").$type<
     Record<string, string>
   >(),
-  descriptionTranslations: text("description_translations", {
-    mode: "json",
-  }).$type<Record<string, string>>(),
 
   // Metadata
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .$defaultFn(() => new Date()),
-  updatedAt: integer("updated_at", { mode: "timestamp" }),
+  updatedAt: timestamp("updated_at", { withTimezone: true }),
   createdBy: text("created_by")
     .notNull()
     .references(() => users.id),
@@ -345,7 +338,7 @@ export const projectsFeaturedIdx = index("projects_featured_idx").on(
 );
 
 // Skills table for technical competencies
-export const skills = sqliteTable("skills", {
+export const skills = pgTable("skills", {
   id: text("id").primaryKey().notNull(),
   name: text("name").notNull(),
   category: text("category").$type<SkillCategory>().notNull(),
@@ -358,35 +351,36 @@ export const skills = sqliteTable("skills", {
   description: text("description"),
   icon: text("icon"),
   color: text("color"),
-  relatedSkills: text("related_skills", { mode: "json" })
+  relatedSkills: text("related_skills")
+    .$type<string[]>()
     .$type<string[]>()
     .notNull()
     .default([]),
-  certifications: text("certifications", { mode: "json" })
+  certifications: text("certifications")
+    .$type<string[]>()
     .$type<string[]>()
     .notNull()
     .default([]),
-  projects: text("projects", { mode: "json" })
+  projects: text("projects")
+    .$type<string[]>()
     .$type<string[]>()
     .notNull()
     .default([]),
-  lastUsed: integer("last_used", { mode: "timestamp" }).notNull(),
-  isVisible: integer("is_visible", { mode: "boolean" }).notNull().default(true),
+  lastUsed: timestamp("last_used", { withTimezone: true }).notNull(),
+  isVisible: boolean("is_visible").notNull().default(true),
   displayOrder: integer("display_order").notNull().default(0),
 
   // Multi-language support
-  nameTranslations: text("name_translations", { mode: "json" }).$type<
+  nameTranslations: text("name_translations").$type<Record<string, string>>(),
+  descriptionTranslations: text("description_translations").$type<
     Record<string, string>
   >(),
-  descriptionTranslations: text("description_translations", {
-    mode: "json",
-  }).$type<Record<string, string>>(),
 
   // Metadata
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .$defaultFn(() => new Date()),
-  updatedAt: integer("updated_at", { mode: "timestamp" }),
+  updatedAt: timestamp("updated_at", { withTimezone: true }),
   createdBy: text("created_by")
     .notNull()
     .references(() => users.id),
@@ -410,32 +404,36 @@ export const skillsLastUsedIdx = index("skills_last_used_idx").on(
 );
 
 // Education table for academic background
-export const education = sqliteTable("education", {
+export const education = pgTable("education", {
   id: text("id").primaryKey().notNull(),
   institution: text("institution").notNull(),
   degree: text("degree").notNull(),
   degreeType: text("degree_type").$type<DegreeType>().notNull(),
   fieldOfStudy: text("field_of_study").notNull(),
-  startDate: integer("start_date", { mode: "timestamp" }).notNull(),
-  endDate: integer("end_date", { mode: "timestamp" }),
+  startDate: timestamp("start_date", { withTimezone: true }).notNull(),
+  endDate: timestamp("end_date", { withTimezone: true }),
   status: text("status")
     .$type<EducationStatus>()
     .notNull()
     .default("completed"),
   gpa: text("gpa"),
-  achievements: text("achievements", { mode: "json" })
+  achievements: text("achievements")
+    .$type<string[]>()
     .$type<string[]>()
     .notNull()
     .default([]),
-  coursework: text("coursework", { mode: "json" })
+  coursework: text("coursework")
+    .$type<string[]>()
     .$type<string[]>()
     .notNull()
     .default([]),
-  projects: text("projects", { mode: "json" })
+  projects: text("projects")
+    .$type<string[]>()
     .$type<string[]>()
     .notNull()
     .default([]),
-  extracurriculars: text("extracurriculars", { mode: "json" })
+  extracurriculars: text("extracurriculars")
+    .$type<string[]>()
     .$type<string[]>()
     .notNull()
     .default([]),
@@ -443,25 +441,25 @@ export const education = sqliteTable("education", {
   institutionUrl: text("institution_url"),
   certificateUrl: text("certificate_url"),
   transcript: text("transcript"),
-  isVisible: integer("is_visible", { mode: "boolean" }).notNull().default(true),
+  isVisible: boolean("is_visible").notNull().default(true),
   displayOrder: integer("display_order").notNull().default(0),
 
   // Multi-language support
-  institutionTranslations: text("institution_translations", {
-    mode: "json",
-  }).$type<Record<string, string>>(),
-  degreeTranslations: text("degree_translations", { mode: "json" }).$type<
+  institutionTranslations: text("institution_translations").$type<
     Record<string, string>
   >(),
-  fieldOfStudyTranslations: text("field_of_study_translations", {
-    mode: "json",
-  }).$type<Record<string, string>>(),
+  degreeTranslations: text("degree_translations").$type<
+    Record<string, string>
+  >(),
+  fieldOfStudyTranslations: text("field_of_study_translations").$type<
+    Record<string, string>
+  >(),
 
   // Metadata
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .$defaultFn(() => new Date()),
-  updatedAt: integer("updated_at", { mode: "timestamp" }),
+  updatedAt: timestamp("updated_at", { withTimezone: true }),
   createdBy: text("created_by")
     .notNull()
     .references(() => users.id),
@@ -482,18 +480,20 @@ export const educationDisplayOrderIdx = index("education_display_order_idx").on(
 );
 
 // Services table for professional offerings
-export const services = sqliteTable("services", {
+export const services = pgTable("services", {
   id: text("id").primaryKey().notNull(),
   name: text("name").notNull(),
   category: text("category").$type<ServiceCategory>().notNull(),
   serviceType: text("service_type").$type<ServiceType>().notNull(),
   description: text("description").notNull(),
   longDescription: text("long_description"),
-  features: text("features", { mode: "json" })
+  features: text("features")
+    .$type<string[]>()
     .$type<string[]>()
     .notNull()
     .default([]),
-  technologies: text("technologies", { mode: "json" })
+  technologies: text("technologies")
+    .$type<string[]>()
     .$type<string[]>()
     .notNull()
     .default([]),
@@ -502,37 +502,36 @@ export const services = sqliteTable("services", {
   pricingType: text("pricing_type").$type<PricingType>().notNull(),
   basePrice: text("base_price"),
   priceRange: text("price_range"), // e.g., "$500-$2000"
-  deliverables: text("deliverables", { mode: "json" })
+  deliverables: text("deliverables")
+    .$type<string[]>()
     .$type<string[]>()
     .notNull()
     .default([]),
-  requirements: text("requirements", { mode: "json" })
+  requirements: text("requirements")
+    .$type<string[]>()
     .$type<string[]>()
     .notNull()
     .default([]),
-  portfolioExamples: text("portfolio_examples", { mode: "json" })
+  portfolioExamples: text("portfolio_examples")
+    .$type<string[]>()
     .$type<string[]>()
     .notNull()
     .default([]),
-  isActive: integer("is_active", { mode: "boolean" }).notNull().default(true),
-  isPopular: integer("is_popular", { mode: "boolean" })
-    .notNull()
-    .default(false),
+  isActive: boolean("is_active").notNull().default(true),
+  isPopular: boolean("is_popular").notNull().default(false),
   displayOrder: integer("display_order").notNull().default(0),
 
   // Multi-language support
-  nameTranslations: text("name_translations", { mode: "json" }).$type<
+  nameTranslations: text("name_translations").$type<Record<string, string>>(),
+  descriptionTranslations: text("description_translations").$type<
     Record<string, string>
   >(),
-  descriptionTranslations: text("description_translations", {
-    mode: "json",
-  }).$type<Record<string, string>>(),
 
   // Metadata
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .$defaultFn(() => new Date()),
-  updatedAt: integer("updated_at", { mode: "timestamp" }),
+  updatedAt: timestamp("updated_at", { withTimezone: true }),
   createdBy: text("created_by")
     .notNull()
     .references(() => users.id),
@@ -556,7 +555,7 @@ export const servicesDisplayOrderIdx = index("services_display_order_idx").on(
 );
 
 // Testimonials table for client/colleague feedback
-export const testimonials = sqliteTable("testimonials", {
+export const testimonials = pgTable("testimonials", {
   id: text("id").primaryKey().notNull(),
   quote: text("quote").notNull(),
   author: text("author").notNull(),
@@ -571,37 +570,29 @@ export const testimonials = sqliteTable("testimonials", {
 
   // Rating and verification
   rating: integer("rating"), // 1-5 stars
-  isVerified: integer("is_verified", { mode: "boolean" })
-    .notNull()
-    .default(false),
-  verificationDate: integer("verification_date", { mode: "timestamp" }),
+  isVerified: boolean("is_verified").notNull().default(false),
+  verificationDate: timestamp("verification_date", { withTimezone: true }),
 
   // Display and ordering
   displayOrder: integer("display_order").notNull().default(0),
-  isVisible: integer("is_visible", { mode: "boolean" }).notNull().default(true),
-  isFeatured: integer("is_featured", { mode: "boolean" })
-    .notNull()
-    .default(false),
+  isVisible: boolean("is_visible").notNull().default(true),
+  isFeatured: boolean("is_featured").notNull().default(false),
 
   // Multi-language support
-  quoteTranslations: text("quote_translations", { mode: "json" }).$type<
+  quoteTranslations: text("quote_translations").$type<Record<string, string>>(),
+  authorTranslations: text("author_translations").$type<
     Record<string, string>
   >(),
-  authorTranslations: text("author_translations", { mode: "json" }).$type<
-    Record<string, string>
-  >(),
-  roleTranslations: text("role_translations", { mode: "json" }).$type<
-    Record<string, string>
-  >(),
-  companyTranslations: text("company_translations", { mode: "json" }).$type<
+  roleTranslations: text("role_translations").$type<Record<string, string>>(),
+  companyTranslations: text("company_translations").$type<
     Record<string, string>
   >(),
 
   // Metadata
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .$defaultFn(() => new Date()),
-  updatedAt: integer("updated_at", { mode: "timestamp" }),
+  updatedAt: timestamp("updated_at", { withTimezone: true }),
   createdBy: text("created_by")
     .notNull()
     .references(() => users.id),

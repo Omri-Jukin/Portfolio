@@ -1,4 +1,4 @@
-import { eq, asc, desc, and, isNull, isNotNull, sql } from "drizzle-orm";
+import { eq, asc, desc, and, isNull, isNotNull, count, or } from "drizzle-orm";
 import { getDB } from "../client";
 import { workExperiences } from "../schema/schema.tables";
 import { EmploymentType } from "../schema/schema.types";
@@ -13,7 +13,7 @@ import type {
 import { nanoid } from "nanoid";
 
 // Helper function to get database client
-const getDbClient = async () => getDB();
+const getDbClient = () => getDB();
 
 // Helper function to transform DB dates to API strings
 const transformDbToApi = (dbWorkExp: WorkExperienceDB): WorkExperience => ({
@@ -28,8 +28,10 @@ export class WorkExperienceManager {
   static async getAll(visibleOnly = false): Promise<WorkExperience[]> {
     const conditions = visibleOnly ? [eq(workExperiences.isVisible, true)] : [];
 
-    const db = await getDbClient();
-    const results = await db
+    const db = getDbClient();
+    const results = await (
+      await db
+    )
       .select()
       .from(workExperiences)
       .where(conditions.length > 0 ? and(...conditions) : undefined)
@@ -42,8 +44,8 @@ export class WorkExperienceManager {
   }
 
   static async getById(id: string): Promise<WorkExperience | null> {
-    const db = await getDbClient();
-    const result = await db
+    const db = getDbClient();
+    const result = await (await db)
       .select()
       .from(workExperiences)
       .where(eq(workExperiences.id, id))
@@ -56,7 +58,7 @@ export class WorkExperienceManager {
     employmentType: string,
     visibleOnly = false
   ): Promise<WorkExperience[]> {
-    const db = await getDbClient();
+    const db = getDbClient();
     const conditions = [
       eq(workExperiences.employmentType, employmentType as EmploymentType),
     ];
@@ -64,7 +66,9 @@ export class WorkExperienceManager {
       conditions.push(eq(workExperiences.isVisible, true));
     }
 
-    const results = await db
+    const results = await (
+      await db
+    )
       .select()
       .from(workExperiences)
       .where(and(...conditions))
@@ -77,8 +81,10 @@ export class WorkExperienceManager {
   }
 
   static async getCurrentPosition(): Promise<WorkExperience | null> {
-    const db = await getDbClient();
-    const result = await db
+    const db = getDbClient();
+    const result = await (
+      await db
+    )
       .select()
       .from(workExperiences)
       .where(
@@ -94,13 +100,15 @@ export class WorkExperienceManager {
   }
 
   static async getFeatured(visibleOnly = true): Promise<WorkExperience[]> {
-    const db = await getDbClient();
+    const db = getDbClient();
     const conditions = [eq(workExperiences.isFeatured, true)];
     if (visibleOnly) {
       conditions.push(eq(workExperiences.isVisible, true));
     }
 
-    const results = await db
+    const results = await (
+      await db
+    )
       .select()
       .from(workExperiences)
       .where(and(...conditions))
@@ -126,10 +134,10 @@ export class WorkExperienceManager {
         updatedAt: now,
       };
 
-      const db = await getDbClient();
+      const db = getDbClient();
       if (!db) throw new Error("Database connection not available");
 
-      await db.insert(workExperiences).values(newWorkExperience);
+      await (await db).insert(workExperiences).values(newWorkExperience);
 
       const created = await this.getById(id);
       if (!created) {
@@ -150,10 +158,12 @@ export class WorkExperienceManager {
     id: string,
     updates: Partial<Omit<NewWorkExperience, "id" | "createdAt">>
   ): Promise<WorkExperience | null> {
-    const db = await getDbClient();
+    const db = getDbClient();
     const now = new Date();
 
-    await db
+    await (
+      await db
+    )
       .update(workExperiences)
       .set({
         ...updates,
@@ -165,22 +175,24 @@ export class WorkExperienceManager {
   }
 
   static async delete(id: string): Promise<boolean> {
-    const db = await getDbClient();
-    const result = await db
+    const db = getDbClient();
+    const result = await (await db)
       .delete(workExperiences)
       .where(eq(workExperiences.id, id));
 
-    return result.changes > 0;
+    return result.length > 0;
   }
 
   static async updateDisplayOrder(
     updates: { id: string; displayOrder: number }[]
   ): Promise<void> {
-    const db = await getDbClient();
+    const db = getDbClient();
     const now = new Date();
 
     for (const update of updates) {
-      await db
+      await (
+        await db
+      )
         .update(workExperiences)
         .set({
           displayOrder: update.displayOrder,
@@ -209,41 +221,63 @@ export class WorkExperienceManager {
   }
 
   static async getStatistics(): Promise<WorkExperienceStatistics> {
-    const db = await getDbClient();
+    const db = getDbClient();
 
     // Get counts by employment type using raw SQL
-    const employmentTypeStats = await db.all(sql`
-      SELECT employmentType, COUNT(*) as count 
-      FROM workExperiences 
-      WHERE isVisible = 1 
-      GROUP BY employmentType
-    `);
+    const employmentTypeStats = await (
+      await db
+    )
+      .select({
+        employmentType: workExperiences.employmentType,
+        count: count(),
+      })
+      .from(workExperiences)
+      .where(eq(workExperiences.isVisible, true))
+      .groupBy(workExperiences.employmentType);
 
     // Get counts by industry using raw SQL
-    const industryStats = await db.all(sql`
-      SELECT industry, COUNT(*) as count 
-      FROM workExperiences 
-      WHERE isVisible = 1 
-      GROUP BY industry
-    `);
+    const industryStats = await (
+      await db
+    )
+      .select({
+        industry: workExperiences.industry,
+        count: count(),
+      })
+      .from(workExperiences)
+      .where(eq(workExperiences.isVisible, true))
+      .groupBy(workExperiences.industry);
 
     // Get total counts using raw SQL
-    const totalVisible = await db.all(sql`
-      SELECT COUNT(*) as count 
-      FROM workExperiences 
-      WHERE isVisible = 1
-    `);
+    const totalVisible = await (
+      await db
+    )
+      .select({
+        count: count(),
+      })
+      .from(workExperiences)
+      .where(eq(workExperiences.isVisible, true));
 
-    const totalFeatured = await db.all(sql`
-      SELECT COUNT(*) as count 
-      FROM workExperiences 
-      WHERE isVisible = 1 AND isFeatured = 1
-    `);
+    const totalFeatured = await (
+      await db
+    )
+      .select({
+        count: count(),
+      })
+      .from(workExperiences)
+      .where(
+        and(
+          eq(workExperiences.isVisible, true),
+          eq(workExperiences.isFeatured, true)
+        )
+      );
 
-    const total = await db.all(sql`
-      SELECT COUNT(*) as count 
-      FROM workExperiences
-    `);
+    const total = await (
+      await db
+    )
+      .select({
+        count: count(),
+      })
+      .from(workExperiences);
 
     // Calculate total years of experience
     const allExperiences = await this.getAll(true);
@@ -266,7 +300,10 @@ export class WorkExperienceManager {
         employmentType: string;
         count: number;
       }[],
-      byIndustry: industryStats as { industry: string; count: number }[],
+      byIndustry: industryStats as {
+        industry: string;
+        count: number;
+      }[],
       totalYearsExperience: Math.round(totalYearsExperience * 10) / 10, // Round to 1 decimal
       currentPosition,
     };
@@ -296,18 +333,18 @@ export class WorkExperienceManager {
     query: string,
     filters?: WorkExperienceFilters
   ): Promise<WorkExperience[]> {
-    const db = await getDbClient();
+    const db = getDbClient();
     const conditions = [];
 
     // Text search across role, company, description
     if (query.trim()) {
       conditions.push(
-        sql`(
-          ${workExperiences.role} LIKE ${"%" + query + "%"} OR 
-          ${workExperiences.company} LIKE ${"%" + query + "%"} OR 
-          ${workExperiences.description} LIKE ${"%" + query + "%"} OR
-          ${workExperiences.industry} LIKE ${"%" + query + "%"}
-        )`
+        or(
+          eq(workExperiences.role, "%" + query + "%"),
+          eq(workExperiences.company, "%" + query + "%"),
+          eq(workExperiences.description, "%" + query + "%"),
+          eq(workExperiences.industry, "%" + query + "%")
+        )
       );
     }
 
@@ -337,7 +374,9 @@ export class WorkExperienceManager {
       }
     }
 
-    const results = await db
+    const results = await (
+      await db
+    )
       .select()
       .from(workExperiences)
       .where(conditions.length > 0 ? and(...conditions) : undefined)

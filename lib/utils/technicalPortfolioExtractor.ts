@@ -5,10 +5,10 @@ import type {
   ArchitectureDecision,
 } from "../types";
 
-// Import TechnicalChallenge from types.ts - this will use the last exported one
+//! Import TechnicalChallenge from types.ts - this will use the last exported one
 import type { TechnicalChallenge } from "../types";
 
-// Types for locale data structure
+//! Types for locale data structure
 interface LocaleData {
   metadata?: { title?: string };
   technicalPortfolio?: {
@@ -71,7 +71,7 @@ export function extractTechnicalPortfolioData(
     throw new Error("Technical portfolio data not found in locale");
   }
 
-  // Extract projects from the technical portfolio
+  //! Extract projects from the technical portfolio
   const projects: TechnicalProject[] =
     technicalPortfolio.projects?.map((project, index: number) => ({
       id: `project-${index + 1}`,
@@ -103,10 +103,10 @@ export function extractTechnicalPortfolioData(
       screenshots: project.screenshots || [],
     })) || [];
 
-  // Extract standalone code examples
+  //! Extract standalone code examples
   const codeExamples: CodeExample[] = [];
 
-  // Add code examples from projects
+  //! Add code examples from projects
   projects.forEach((project) => {
     project.codeExamples.forEach((example) => {
       codeExamples.push({
@@ -122,7 +122,7 @@ export function extractTechnicalPortfolioData(
     });
   });
 
-  // Add standalone code examples from technicalPortfolio.codeExamples
+  //! Add standalone code examples from technicalPortfolio.codeExamples
   if (technicalPortfolio.codeExamples) {
     Object.entries(technicalPortfolio.codeExamples).forEach(
       ([category, examples]) => {
@@ -144,10 +144,10 @@ export function extractTechnicalPortfolioData(
     );
   }
 
-  // Extract technical challenges
+  //! Extract technical challenges
   const technicalChallenges: TechnicalChallenge[] = [];
 
-  // Add challenges from projects
+  //! Add challenges from projects
   projects.forEach((project) => {
     project.technicalChallenges.forEach((challenge) => {
       technicalChallenges.push({
@@ -162,7 +162,7 @@ export function extractTechnicalPortfolioData(
     });
   });
 
-  // Add standalone challenges from technicalPortfolio.technicalChallenges
+  //! Add standalone challenges from technicalPortfolio.technicalChallenges
   if (technicalPortfolio.technicalChallenges?.challenges) {
     technicalPortfolio.technicalChallenges.challenges.forEach((challenge) => {
       technicalChallenges.push({
@@ -177,10 +177,10 @@ export function extractTechnicalPortfolioData(
     });
   }
 
-  // Extract architecture decisions
+  //! Extract architecture decisions
   const architecture: ArchitectureDecision[] = [];
 
-  // Add architecture decisions from projects
+  //! Add architecture decisions from projects
   projects.forEach((project) => {
     project.architecture.decisions.forEach((decision) => {
       architecture.push({

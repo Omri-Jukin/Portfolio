@@ -1,5 +1,5 @@
 // Database client
-export { dbClient, getDB, getDbClient } from "./client";
+export { getDB, getDbClient } from "./client";
 
 // Schema exports
 export * from "./schema/schema.tables";
