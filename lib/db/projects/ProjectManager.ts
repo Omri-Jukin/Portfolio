@@ -11,6 +11,11 @@ import type {
 } from "./Projects.type";
 import { nanoid } from "nanoid";
 import { IProject, TechnicalChallenge, CodeExample } from "#/lib";
+import {
+  ProjectArchitecture,
+  ProjectProblem,
+  ProjectSolution,
+} from "#/lib/types";
 
 // Helper function to get database client
 const getDbClient = async () => getDB();
@@ -23,9 +28,9 @@ const transformDbToApi = (dbProject: ProjectDB): IProject => {
   const technicalChallenges: TechnicalChallenge[] =
     dbProject.technicalChallenges.map((challenge, index) => ({
       id: `challenge-${index}`,
-      title: challenge.challenge,
-      problem: challenge.challenge,
-      solution: challenge.solution,
+      title: challenge,
+      problem: challenge,
+      solution: "",
       technologies: [],
       impact: "",
       project: dbProject.id,
@@ -35,11 +40,11 @@ const transformDbToApi = (dbProject: ProjectDB): IProject => {
   const codeExamples: CodeExample[] = dbProject.codeExamples.map(
     (example, index) => ({
       id: `example-${index}`,
-      title: example.title,
-      description: example.explanation,
-      language: example.language,
-      code: example.code,
-      explanation: example.explanation,
+      title: example,
+      description: example,
+      language: example,
+      code: example,
+      explanation: example,
       project: dbProject.id,
       category: "general",
     })
@@ -52,9 +57,9 @@ const transformDbToApi = (dbProject: ProjectDB): IProject => {
     endDate: dbProject.endDate ? dbProject.endDate.toISOString() : null,
     createdAt: dbProject.createdAt.toISOString(),
     updatedAt: dbProject.updatedAt ? dbProject.updatedAt.toISOString() : null,
-    problem: dbProject.problem || null,
-    solution: dbProject.solution || null,
-    architecture: dbProject.architecture || null,
+    problem: dbProject.problem as ProjectProblem | null,
+    solution: dbProject.solution as ProjectSolution | null,
+    architecture: dbProject.architecture as ProjectArchitecture | null,
     titleTranslations: dbProject.titleTranslations || null,
     descriptionTranslations: dbProject.descriptionTranslations || null,
     technicalChallenges,

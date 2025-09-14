@@ -904,6 +904,7 @@ export interface PDFRenderOptions {
   theme?: PDFTheme;
   maxBulletsPerRole?: number;
   maxProjects?: number;
+  excludeSections?: string[];
 }
 
 /**

@@ -121,6 +121,7 @@ export default function ResumePage() {
             theme: mapTemplateToPDFTheme(selectedTemplate),
             maxBulletsPerRole: 3,
             maxProjects: 4,
+            excludeSections: ["Professional Summary"],
           };
 
           pdf = renderResumePDF(resumeData, renderOptions);
