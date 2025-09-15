@@ -480,6 +480,8 @@
         "time": "2021–2023",
         "company": "Menora Mivtachim Insurance Company, Israel",
         "details": [
+          "Management 17 service representatives.",
+          "Management of 5 collections representatives.",
           "Trained team members and improved service quality through structured processes"
         ]
       }
@@ -517,7 +519,7 @@
     "professionalSummary": "Full-Stack Software Engineer with 2+ years of hands-on experience in modern web technologies and clean architecture. Currently seeking opportunities to contribute to innovative teams building scalable systems and exceptional user experiences, mostly focusing on products that innovate and improve the everyday lives of others.",
     "personalInfo": {
       "name": "Omri Jukin",
-      "title": "Full-Stack Software Engineer",
+      "title": "Full-Stack Software Engineer | Next.js, Node.js & TypeScript | AWS & PostgreSQL | Clean Architecture & Scalable Systems",
       "contacts": {
         "phone": "+972 52-334-4064",
         "email": "contact@omrijukin.com",
@@ -546,16 +548,13 @@
         "Drizzle ORM",
         "PostgreSQL",
         "MongoDB",
-        "REST APIs",
-        "GraphQL"
+        "REST APIs"
       ],
       "architecture": [
         "Microservices",
         "Monolithic Systems",
         "API Design",
-        "System Integration",
-        "Performance Optimization",
-        "Scalable Architecture"
+        "System Integration"
       ],
       "databases": [
         "PostgreSQL",
@@ -566,11 +565,8 @@
         "Data Architecture"
       ],
       "cloudDevOps": [
-        "AWS",
         "Vercel",
         "Docker",
-        "CI/CD",
-        "Deployment",
         "Cloud Infrastructure",
         "Git",
         "Jest",

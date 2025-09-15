@@ -463,16 +463,13 @@
         "Drizzle ORM",
         "PostgreSQL",
         "MongoDB",
-        "REST APIs",
-        "GraphQL"
+        "REST APIs"
       ],
       "architecture": [
         "Microservicios",
         "Sistemas Monolíticos",
         "Diseño de API",
-        "Integración de Sistemas",
-        "Optimización de Rendimiento",
-        "Arquitectura Escalable"
+        "Integración de Sistemas"
       ],
       "databases": [
         "PostgreSQL",
@@ -483,11 +480,8 @@
         "Arquitectura de Datos"
       ],
       "cloudDevOps": [
-        "AWS",
         "Vercel",
         "Docker",
-        "CI/CD",
-        "Despliegue",
         "Infraestructura en la Nube",
         "Git",
         "Jest",

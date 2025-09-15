@@ -20,14 +20,10 @@ import {
 import { styled } from "@mui/material/styles";
 import {
   AnimatedBackground,
-  DNAHelixWrapper,
   AnimatedText,
   Background,
   BackgroundCard,
-  WaveText,
   TagChip,
-  Galaxy,
-  GalaxyCard,
   MotionWrapper,
   Typography as CustomTypography,
   Card as CustomCard,
@@ -35,13 +31,75 @@ import {
   BrokenGlass,
   AnimationType,
   BackgroundVariant,
+  BoxShadowDemo,
+  GlassPaneDemo,
 } from "#/Components";
-import { ColorWorm } from "#/Components/ColorWorm/ColorWorm";
-import { FloatingEmojis } from "#/Components/FloatingEmojis";
-import { InnovationFlow } from "#/Components/InnovationFlow";
-import { ParticleBridge } from "#/Components/ParticleBridge";
-import { VisionRealityBridge } from "#/Components/VisionRealityBridge";
-import { BoxShadowDemo, GlassPaneDemo } from "#/Components";
+import dynamic from "next/dynamic";
+
+// Dynamically import heavy components to improve build performance
+const DNAHelixWrapper = dynamic(
+  () =>
+    import("#/Components/HeavyComponents").then((mod) => ({
+      default: mod.DNAHelixWrapper,
+    })),
+  { ssr: false }
+);
+const WaveText = dynamic(
+  () =>
+    import("#/Components/HeavyComponents").then((mod) => ({
+      default: mod.WaveText,
+    })),
+  { ssr: false }
+);
+const Galaxy = dynamic(
+  () =>
+    import("#/Components/HeavyComponents").then((mod) => ({
+      default: mod.Galaxy,
+    })),
+  { ssr: false }
+);
+const GalaxyCard = dynamic(
+  () =>
+    import("#/Components/HeavyComponents").then((mod) => ({
+      default: mod.GalaxyCard,
+    })),
+  { ssr: false }
+);
+const ColorWorm = dynamic(
+  () =>
+    import("#/Components/HeavyComponents").then((mod) => ({
+      default: mod.ColorWorm,
+    })),
+  { ssr: false }
+);
+const FloatingEmojis = dynamic(
+  () =>
+    import("#/Components/HeavyComponents").then((mod) => ({
+      default: mod.FloatingEmojis,
+    })),
+  { ssr: false }
+);
+const InnovationFlow = dynamic(
+  () =>
+    import("#/Components/HeavyComponents").then((mod) => ({
+      default: mod.InnovationFlow,
+    })),
+  { ssr: false }
+);
+const ParticleBridge = dynamic(
+  () =>
+    import("#/Components/HeavyComponents").then((mod) => ({
+      default: mod.ParticleBridge,
+    })),
+  { ssr: false }
+);
+const VisionRealityBridge = dynamic(
+  () =>
+    import("#/Components/HeavyComponents").then((mod) => ({
+      default: mod.VisionRealityBridge,
+    })),
+  { ssr: false }
+);
 
 // Styled components for the examples page
 const ExamplesContainer = styled(Box)(({ theme }) => ({

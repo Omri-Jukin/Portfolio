@@ -141,13 +141,36 @@ export default function ProjectsAdminPage() {
         documentationUrl: project.documentationUrl || "",
         images: project.images || [],
         keyFeatures: project.keyFeatures || [],
-        technicalChallenges: project.technicalChallenges || [],
-        codeExamples: project.codeExamples.map((example) => ({
-          title: example.title,
-          language: example.language,
-          code: example.code,
-          explanation: example.explanation,
-        })),
+        technicalChallenges: Array.isArray(project.technicalChallenges)
+          ? project.technicalChallenges.map((item) =>
+              typeof item === "string"
+                ? { challenge: item, solution: "" }
+                : item
+            )
+          : [],
+        codeExamples: Array.isArray(project.codeExamples)
+          ? project.codeExamples.map((example) =>
+              typeof example === "object" &&
+              example !== null &&
+              "title" in example &&
+              "language" in example &&
+              "code" in example &&
+              "explanation" in example
+                ? {
+                    title: (example as { title: string }).title ?? "",
+                    language: (example as { language: string }).language ?? "",
+                    code: (example as { code: string }).code ?? "",
+                    explanation:
+                      (example as { explanation: string }).explanation ?? "",
+                  }
+                : {
+                    title: "",
+                    language: "",
+                    code: "",
+                    explanation: "",
+                  }
+            )
+          : [],
         teamSize: project.teamSize || 1,
         myRole: project.myRole || "",
         clientName: project.clientName || "",

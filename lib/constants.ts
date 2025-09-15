@@ -968,10 +968,10 @@ export const PDF_THEMES = {
 export const PDF_LAYOUT = {
   A4: { w: 210, h: 297 }, // mm
   MARGINS: { x: 15, y: 10 },
-  HEADER_HEIGHT: 40,
+  HEADER_HEIGHT: 30,
   FONT_SIZES: {
     name: 24,
-    title: 16,
+    title: 14,
     sectionHeader: 12,
     body: 10,
     small: 9,

@@ -24,31 +24,65 @@ const transformDbToApi = (dbProject: ProjectDB): IProject => {
   // Map status to API ProjectStatus, excluding "deleted"
   const status = dbProject.status === "deleted" ? "archived" : dbProject.status;
 
-  // Transform TTechnicalChallenges to TechnicalChallenge[]
-  const technicalChallenges: TechnicalChallenge[] =
-    dbProject.technicalChallenges.map((challenge, index) => ({
-      id: `challenge-${index}`,
-      title: challenge,
-      problem: challenge,
-      solution: "",
-      technologies: [],
-      impact: "",
-      project: dbProject.id,
-    }));
+  // Transform technicalChallenges to TechnicalChallenge[]
+  const technicalChallenges: TechnicalChallenge[] = Array.isArray(
+    dbProject.technicalChallenges
+  )
+    ? dbProject.technicalChallenges.map((challenge, index) => {
+        // Handle both string and object formats
+        if (typeof challenge === "string") {
+          return {
+            id: `challenge-${index}`,
+            title: challenge,
+            problem: challenge,
+            solution: "",
+            technologies: [],
+            impact: "",
+            project: dbProject.id,
+          };
+        } else {
+          return {
+            id: `challenge-${index}`,
+            title: challenge.challenge,
+            problem: challenge.challenge,
+            solution: challenge.solution,
+            technologies: [],
+            impact: "",
+            project: dbProject.id,
+          };
+        }
+      })
+    : [];
 
-  // Transform TCodeExamples to CodeExample[]
-  const codeExamples: CodeExample[] = dbProject.codeExamples.map(
-    (example, index) => ({
-      id: `example-${index}`,
-      title: example,
-      description: example,
-      language: example,
-      code: example,
-      explanation: example,
-      project: dbProject.id,
-      category: "general",
-    })
-  );
+  // Transform codeExamples to CodeExample[]
+  const codeExamples: CodeExample[] = Array.isArray(dbProject.codeExamples)
+    ? dbProject.codeExamples.map((example, index) => {
+        // Handle both string and object formats
+        if (typeof example === "string") {
+          return {
+            id: `example-${index}`,
+            title: example,
+            description: example,
+            language: example,
+            code: example,
+            explanation: example,
+            project: dbProject.id,
+            category: "general",
+          };
+        } else {
+          return {
+            id: `example-${index}`,
+            title: example.title,
+            description: example.explanation,
+            language: example.language,
+            code: example.code,
+            explanation: example.explanation,
+            project: dbProject.id,
+            category: "general",
+          };
+        }
+      })
+    : [];
 
   return {
     ...dbProject,

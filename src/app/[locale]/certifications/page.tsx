@@ -22,7 +22,16 @@ import {
   WorkOutline as WorkIcon,
   EmojiEvents as AwardIcon,
 } from "@mui/icons-material";
-import { GalaxyCard } from "#/Components";
+import dynamic from "next/dynamic";
+
+// Dynamically import heavy components to improve build performance
+const GalaxyCard = dynamic(
+  () =>
+    import("#/Components/HeavyComponents").then((mod) => ({
+      default: mod.GalaxyCard,
+    })),
+  { ssr: false }
+);
 import type { Certification } from "$/db/schema/schema.types";
 
 export default function CertificationsPage() {

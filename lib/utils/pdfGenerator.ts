@@ -228,25 +228,50 @@ export function renderResumePDF(
   doc.setTextColor(...theme.name);
   doc.setFont(typography.font, "bold");
   doc.setFontSize(PDF_LAYOUT.FONT_SIZES.name);
-  doc.text(data.person.name, margins.x, 25);
+  doc.text(data.person.name, margins.x, 15);
 
-  // Title
+  // Title (2 lines)
+  //! 1st line: Full-Stack Software Engineer | Next.js, Node.js & TypeScript
+  //! 2nd line: AWS & PostgreSQL | Clean Architecture
   doc.setTextColor(...theme.title);
   doc.setFont(typography.font, "normal");
   doc.setFontSize(PDF_LAYOUT.FONT_SIZES.title);
-  doc.text(data.person.title, margins.x, 37);
+  doc.text(
+    `${data.person.title.split(" | ")[0]} | ${
+      data.person.title.split(" | ")[1]
+    }`,
+    margins.x,
+    22
+  ); // 1st line
+  doc.text(
+    `${data.person.title.split(" | ")[2]} | ${
+      data.person.title.split(" | ")[3]
+    }`,
+    margins.x,
+    27
+  ); // 2nd line
 
   // Reset text color for contact info (black text for visibility)
   doc.setTextColor(0, 0, 0);
   doc.setFont(typography.font, "normal");
   doc.setFontSize(PDF_LAYOUT.FONT_SIZES.contacts);
 
-  let contactY = 45;
+  let contactY = 35;
   // const iconSpacing = PDF_VISUAL_ELEMENTS.icons.spacing;
 
   // Phone and Email
-  const contactLine1 = `Phone: ${data.person.contacts.phone} | Email: ${data.person.contacts.email}`;
-  doc.text(contactLine1, margins.x, contactY);
+  // Phone (clickable)
+  doc.text(`Phone: `, margins.x, contactY);
+  doc.textWithLink(data.person.contacts.phone, margins.x + 12, contactY, {
+    url: `tel:${data.person.contacts.phone}`,
+  });
+  contactY += 5;
+
+  // Email (clickable)
+  doc.text(`Email: `, margins.x, contactY);
+  doc.textWithLink(data.person.contacts.email, margins.x + 11, contactY, {
+    url: `mailto:${data.person.contacts.email}`,
+  });
   contactY += 5;
 
   // Portfolio
@@ -273,7 +298,7 @@ export function renderResumePDF(
 
   // Reset text color for body
   doc.setTextColor(...theme.text);
-  currentY = 65; // Start body content after contact info
+  currentY = 60; // Start body content after contact info
 
   // Professional Summary
   if (

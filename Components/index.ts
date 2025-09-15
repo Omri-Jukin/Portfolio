@@ -4,9 +4,8 @@ export { default as AnimatedText } from "./AnimatedText";
 export { default as AnimationSwitcher } from "./AnimationSwitcher";
 export { default as Background } from "./Background";
 export { default as BackgroundCard } from "./Background/BackgroundCard";
-export { default as Galaxy } from "./GalaxyCard/Galaxy";
-export { default as GalaxyCard } from "./GalaxyCard/GalaxyCard";
-export { default as GlobeBackground } from "./GlobeBackground";
+// Heavy components (Three.js, complex animations) are exported from ./HeavyComponents
+// Use dynamic imports for these components to improve build performance
 export { default as ResponsiveBackground } from "./ScrollingSections/ResponsiveBackground";
 export {
   Button,
@@ -21,8 +20,7 @@ export { default as BrokenGlass } from "./BrokenGlass";
 export { default as Card } from "./Card";
 export { default as ContactForm } from "../src/app/[locale]/contact";
 export { default as DarkModeToggle } from "./DarkModeToggle";
-export { default as DNAHelix } from "./DNAHelix";
-export { DNAHelixWrapper } from "./DNAHelix";
+// DNAHelix moved to HeavyComponents
 export { default as Footer } from "./Footer";
 export { default as Header } from "./Header";
 export { default as LanguageSwitcher } from "./LanguageSwitcher";
@@ -32,15 +30,8 @@ export { default as TagChip } from "./TagChip";
 export { Typography } from "./Typography";
 export { default as DataGrid } from "./DataGrid";
 export { default as Snackbar } from "./Snackbar";
-export { WaveText } from "./WaveText/WaveText";
-export { FloatingEmojis } from "./FloatingEmojis/FloatingEmojis";
-export { InnovationFlow } from "./InnovationFlow/InnovationFlow";
-export { ParticleBridge } from "./ParticleBridge/ParticleBridge";
-export { VisionRealityBridge } from "./VisionRealityBridge/VisionRealityBridge";
-export { ColorWorm } from "./ColorWorm/ColorWorm";
-export { ConnectionLine } from "./ConnectionLine";
+// Heavy components moved to HeavyComponents directory
 export { default as ScrollGapAnimator } from "./ScrollGapAnimator";
-export { CollaborationHub } from "./CollaborationHub";
 export { default as FloatingProfile } from "./FloatingProfile";
 export { default as ClientOnly } from "./ClientOnly";
 export { default as Skeleton } from "./Skeleton";
