@@ -51,7 +51,19 @@ export function renderResumePDF(
   const typography = PDF_TYPOGRAPHY_VARIANTS[options.typography];
   const margins = PDF_LAYOUT.MARGINS;
   const pageWidth = PDF_LAYOUT.A4.w - margins.x * 2;
+  const pageHeight = PDF_LAYOUT.A4.h;
   let currentY = margins.y;
+
+  // Helper function to check if we need a new page
+  const checkNewPage = (requiredSpace: number = 20) => {
+    return currentY + requiredSpace > pageHeight - margins.y;
+  };
+
+  // Helper function to add a new page
+  const addNewPage = () => {
+    doc.addPage();
+    currentY = margins.y;
+  };
 
   // Get spacing configuration with defaults
   const spacing = {
@@ -265,9 +277,9 @@ export function renderResumePDF(
 
   // Professional Summary
   if (
-    "excludeSections" in options &&
-    Array.isArray(options.excludeSections) &&
-    options.excludeSections.includes("Professional Summary")
+    (options as PDFRenderOptions).excludeSections?.includes(
+      "Professional Summary"
+    )
   ) {
     // Only print content without title
     doc.setFont(typography.font, "normal");
@@ -277,6 +289,7 @@ export function renderResumePDF(
       doc.text(line, margins.x, currentY);
       currentY += spacing.paragraphGap;
     });
+    currentY += spacing.sectionGap; // Add some spacing after content
   } else {
     // Print with title (normal behavior)
     addSection("Professional Summary", () => {
@@ -383,6 +396,7 @@ export function renderResumePDF(
 
   // Projects
   if (data.projects.length > 0) {
+    if (checkNewPage(60)) addNewPage();
     addSection("Key Projects", () => {
       const maxProjects = Math.min(data.projects.length, options.maxProjects);
       for (let i = 0; i < maxProjects; i++) {
@@ -406,64 +420,44 @@ export function renderResumePDF(
     });
   }
 
-  // Education
+  // Education - Compact version
   if (data.education && data.education.length > 0) {
     addSection("Education", () => {
-      data.education.forEach((edu) => {
-        // Degree and Institution
+      data.education.forEach((edu, index) => {
+        // Single line format: Degree | Institution | Period | GPA
         doc.setFont(typography.font, "bold");
         doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
-        doc.text(`${edu.degree}`, margins.x, currentY);
-        currentY += spacing.bulletGap;
 
-        // Institution and Location
+        const degreeText = `${edu.degree}`;
+        const institutionText = `${edu.institution}`;
+        const periodText = `${edu.period}`;
+        const gpaText = edu.gpa ? `GPA: ${edu.gpa}` : "";
+
+        // First line: Degree only
+        doc.text(degreeText, margins.x, currentY);
+        currentY += 3; // Spacing
+
+        // Second line: Institution
         doc.setFont(typography.font, "normal");
         doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
-        doc.text(`${edu.institution}, ${edu.location}`, margins.x, currentY);
-        currentY += spacing.bulletGap;
+        doc.text(institutionText, margins.x, currentY);
+        currentY += 3; // Spacing
 
-        // Period and GPA
-        const periodGpa = `${edu.period}${edu.gpa ? ` | GPA: ${edu.gpa}` : ""}`;
-        doc.text(periodGpa, margins.x, currentY);
-        currentY += spacing.bulletGap;
+        // Third line: Period and GPA
+        const periodGpaLine = `${periodText}${gpaText ? ` | ${gpaText}` : ""}`;
+        doc.text(periodGpaLine, margins.x, currentY);
+        currentY += 4; // Slightly more spacing
 
-        // Key Achievements
-        if (edu.achievements && edu.achievements.length > 0) {
-          doc.setFont(typography.font, "bold");
-          doc.text("Key Achievements:", margins.x, currentY);
-          currentY += spacing.bulletGap;
-
-          edu.achievements.forEach((achievement) => {
-            doc.setFont(typography.font, "normal");
-            const achievementLines = doc.splitTextToSize(
-              `• ${achievement}`,
-              pageWidth - 5
-            );
-            achievementLines.forEach((line: string) => {
-              doc.text(line, margins.x + 3, currentY);
-              currentY += spacing.bulletGap;
-            });
-          });
+        // Only show key achievements if they exist and are important
+        if (edu.achievements && edu.achievements.length > 0 && index === 0) {
+          const achievementsText = edu.achievements.slice(0, 2).join(", "); // Only first 2 achievements
+          doc.setFont(typography.font, "normal");
+          doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
+          doc.text(`Key: ${achievementsText}`, margins.x, currentY);
+          currentY += 4;
         }
 
-        // Relevant Coursework
-        if (edu.coursework && edu.coursework.length > 0) {
-          doc.setFont(typography.font, "bold");
-          doc.text("Relevant Coursework:", margins.x, currentY);
-          currentY += spacing.bulletGap;
-
-          const courseworkText = edu.coursework.join(", ");
-          const courseworkLines = doc.splitTextToSize(
-            courseworkText,
-            pageWidth
-          );
-          courseworkLines.forEach((line: string) => {
-            doc.text(line, margins.x, currentY);
-            currentY += spacing.bulletGap;
-          });
-        }
-
-        currentY += spacing.experienceGap; // Extra space between education entries
+        currentY += 4; // Slightly more space between education entries
       });
     });
   }
