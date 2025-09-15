@@ -37,7 +37,16 @@ const mapTemplateToPDFTheme = (template: ResumeTemplate): PDFTheme => {
 // Import SxProps for proper typing
 import type { SxProps, Theme } from "@mui/material";
 import { extractResumeData } from "#/lib/utils/resumeDataExtractor";
-import { GalaxyCard } from "#/Components";
+import dynamic from "next/dynamic";
+
+// Dynamically import heavy components to improve build performance
+const GalaxyCard = dynamic(
+  () =>
+    import("#/Components/HeavyComponents").then((mod) => ({
+      default: mod.GalaxyCard,
+    })),
+  { ssr: false }
+);
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";

@@ -10,8 +10,18 @@ import {
 } from "./Contact.style";
 import { CONTACT_CONSTANTS } from "./Contact.const";
 import type { ContactProps } from "./Contact.type";
-import { GalaxyCard, NeonButton } from "..";
-import type { GalaxyCardProps } from "../GalaxyCard/GalaxyCard";
+import dynamic from "next/dynamic";
+
+// Dynamically import heavy components to improve build performance
+const GalaxyCard = dynamic(
+  () =>
+    import("#/Components/HeavyComponents").then((mod) => ({
+      default: mod.GalaxyCard,
+    })),
+  { ssr: false }
+);
+import { type GalaxyCardProps } from "../GalaxyCard/GalaxyCard";
+import { NeonButton } from "..";
 
 const Contact: React.FC<ContactProps> = ({ locale = "en", onContactClick }) => {
   const t = useTranslations("contact");

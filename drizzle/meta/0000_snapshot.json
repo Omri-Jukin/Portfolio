@@ -1,5 +1,5 @@
 {
-  "id": "fa82e411-5e2a-4c28-b79f-3c1b5281eb27",
+  "id": "63e96f79-2e53-4187-9353-d26cead836f0",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -641,17 +641,17 @@
         },
         "technical_challenges": {
           "name": "technical_challenges",
-          "type": "text[]",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
-          "default": "'{}'"
+          "default": []
         },
         "code_examples": {
           "name": "code_examples",
-          "type": "text[]",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
-          "default": "'{}'"
+          "default": []
         },
         "team_size": {
           "name": "team_size",

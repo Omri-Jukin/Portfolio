@@ -186,10 +186,21 @@ export const projects = pgTable("projects", {
   images: text("images").array().notNull().default([]),
   keyFeatures: text("key_features").array().notNull().default([]),
   technicalChallenges: text("technical_challenges")
-    .array()
+    .$type<Array<{ challenge: string; solution: string }> | string[]>()
     .notNull()
     .default([]),
-  codeExamples: text("code_examples").array().notNull().default([]),
+  codeExamples: text("code_examples")
+    .$type<
+      | Array<{
+          title: string;
+          language: string;
+          code: string;
+          explanation: string;
+        }>
+      | string[]
+    >()
+    .notNull()
+    .default([]),
   teamSize: integer("team_size"),
   myRole: text("my_role"),
   clientName: text("client_name"),
