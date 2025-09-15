@@ -78,7 +78,7 @@ export const extractResumeData = async (
       institution: edu.institution,
       location: edu.location,
       period: edu.period,
-      gpa: edu.gpa,
+      gpa: edu.gpa || undefined,
       achievements: edu.achievements,
       coursework: edu.coursework,
       projects: edu.projects,
