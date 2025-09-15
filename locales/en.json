@@ -585,7 +585,7 @@
         "institution": "Air Force Technological College - Be'er Sheva",
         "location": "Be'er Sheva, Israel",
         "period": "2015-2017",
-        "gpa": "85",
+        "gpa": "87",
         "achievements": [
           "Dean's List for academic excellence",
           "Excellence in Mathematics and Physics"
@@ -599,6 +599,39 @@
         "projects": [
           "Smart Home Automation System",
           "Digital Image Processing Application"
+        ]
+      },
+      {
+        "degree": "Full Stack Engineering Course",
+        "institution": "CodeCademy",
+        "location": "Online",
+        "period": "2020-2021",
+        "gpa": "90",
+        "achievements": ["Completed the course with a score of 90%"],
+        "coursework": [
+          "HTML",
+          "CSS",
+          "JavaScript",
+          "React",
+          "Node.js",
+          "Express.js",
+          "PostgreSQL",
+          "MongoDB",
+          "tRPC",
+          "SQL",
+          "Drizzle ORM",
+          "Microservices",
+          "Monolithic Systems",
+          "API Design",
+          "System Integration",
+          "Performance Optimization",
+          "Scalable Architecture"
+        ],
+        "projects": [
+          "Portfolio Website",
+          "Snow HQ",
+          "ClipWhisperer",
+          "Microservices Manager"
         ]
       }
     ],

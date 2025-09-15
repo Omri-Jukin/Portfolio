@@ -269,8 +269,16 @@ export function renderResumePDF(
     Array.isArray(options.excludeSections) &&
     options.excludeSections.includes("Professional Summary")
   ) {
-    // Section excluded, do nothing
+    // Only print content without title
+    doc.setFont(typography.font, "normal");
+    doc.setFontSize(PDF_LAYOUT.FONT_SIZES.body);
+    const summaryLines = doc.splitTextToSize(data.summary, pageWidth);
+    summaryLines.forEach((line: string) => {
+      doc.text(line, margins.x, currentY);
+      currentY += spacing.paragraphGap;
+    });
   } else {
+    // Print with title (normal behavior)
     addSection("Professional Summary", () => {
       doc.setFont(typography.font, "normal");
       doc.setFontSize(PDF_LAYOUT.FONT_SIZES.body);
