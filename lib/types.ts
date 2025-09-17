@@ -882,7 +882,7 @@ export interface ResumeData {
     name: string;
     line: string;
     url?: string;
-  }>;
+  }> | null;
   education: Array<{
     degree: string;
     institution: string;

@@ -68,11 +68,13 @@ export const extractResumeData = async (
       period: exp.time,
       bullets: exp.details,
     })),
-    projects: data.projects.projects.map((project: projectType) => ({
-      name: project.title,
-      line: project.description,
-      url: project.link,
-    })),
+    projects: data.projects.projects
+      .filter((project: projectType) => project.title !== "Portfolio Website")
+      .map((project: projectType) => ({
+        name: project.title,
+        line: project.description,
+        url: project.link,
+      })),
     education: resumeData.education.map((edu: eduType) => ({
       degree: edu.degree,
       institution: edu.institution,

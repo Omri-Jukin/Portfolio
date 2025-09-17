@@ -12,8 +12,14 @@ import type {
   EnhancedPDFRenderOptions,
 } from "../types";
 
-// Re-export types for backward compatibility
+//! Re-export types for backward compatibility
 export type { ResumeData, PDFRenderOptions as RenderOptions };
+
+/** Render Resume PDF Function
+ * @param data - Resume data
+ * @param opts - PDF render options
+ * @returns PDF document
+ */
 
 export function renderResumePDF(
   data: ResumeData,
@@ -54,18 +60,25 @@ export function renderResumePDF(
   const pageHeight = PDF_LAYOUT.A4.h;
   let currentY = margins.y;
 
-  // Helper function to check if we need a new page
+  /** Helper function to check if we need a new page
+   * @param requiredSpace - Required space
+   * @returns boolean
+   */
   const checkNewPage = (requiredSpace: number = 20) => {
     return currentY + requiredSpace > pageHeight - margins.y;
   };
 
-  // Helper function to add a new page
+  /** Helper function to add a new page
+   * @returns void
+   */
   const addNewPage = () => {
     doc.addPage();
     currentY = margins.y;
   };
 
-  // Get spacing configuration with defaults
+  /** Get spacing configuration with defaults
+   * @returns spacing configuration
+   */
   const spacing = {
     sectionGap:
       options.customSpacing?.sectionGap ??
@@ -99,7 +112,9 @@ export function renderResumePDF(
       PDF_LAYOUT.SPACING.ruleGap,
   };
 
-  // Helper functions for visual elements
+  /** Helper functions for visual elements
+   * @returns void
+   */
   // const drawIcon = (
   //   x: number,
   //   y: number,
@@ -192,7 +207,9 @@ export function renderResumePDF(
     }
   };
 
-  // Calculate header height based on content
+  /** Calculate header height based on content
+   * @returns header height
+   */
   const headerHeight = PDF_LAYOUT.HEADER_HEIGHT;
 
   // Header background with gradient if enabled
@@ -256,7 +273,7 @@ export function renderResumePDF(
   doc.setFont(typography.font, "normal");
   doc.setFontSize(PDF_LAYOUT.FONT_SIZES.contacts);
 
-  let contactY = 35;
+  let contactY = 37;
   // const iconSpacing = PDF_VISUAL_ELEMENTS.icons.spacing;
 
   // Phone and Email
@@ -419,13 +436,13 @@ export function renderResumePDF(
     });
   });
 
-  // Projects
-  if (data.projects.length > 0) {
+  //! Projects
+  if (data.projects && data.projects.length > 0) {
     if (checkNewPage(60)) addNewPage();
     addSection("Key Projects", () => {
-      const maxProjects = Math.min(data.projects.length, options.maxProjects);
+      const maxProjects = Math.min(data.projects!.length, options.maxProjects);
       for (let i = 0; i < maxProjects; i++) {
-        const project = data.projects[i];
+        const project = data.projects![i];
 
         // Project name
         doc.setFont(typography.font, "bold");
@@ -445,7 +462,7 @@ export function renderResumePDF(
     });
   }
 
-  // Education - Compact version
+  //! Education - Compact version
   if (data.education && data.education.length > 0) {
     addSection("Education", () => {
       data.education.forEach((edu, index) => {
@@ -487,7 +504,7 @@ export function renderResumePDF(
     });
   }
 
-  // Additional Activities
+  //! Additional Activities
   if (data.additional) {
     addSection("Additional Activities", () => {
       doc.setFont(typography.font, "normal");
@@ -500,6 +517,7 @@ export function renderResumePDF(
     });
   }
 
+  //! Add section
   function addSection(title: string, content: () => void) {
     // Section title
     currentY += spacing.sectionGap;

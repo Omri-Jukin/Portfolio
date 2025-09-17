@@ -7,17 +7,29 @@ let globalConnection: ReturnType<typeof postgres> | null = null;
 
 export async function getDB() {
   try {
-    // Skip database connection during build time
-    if (process.env.NODE_ENV === "production" && !process.env.VERCEL) {
-      console.warn("Skipping database connection during build");
-      throw new Error("Database not available during build");
-    }
-
     // Get database URL from environment
     const databaseUrl = process.env.DATABASE_URL;
 
     if (!databaseUrl) {
+      // During build time, if DATABASE_URL is not available, skip database connection
+      if (process.env.NODE_ENV === "production" && !process.env.VERCEL) {
+        console.warn(
+          "DATABASE_URL not available during build, skipping database connection"
+        );
+        throw new Error("Database not available during build");
+      }
       throw new Error("DATABASE_URL environment variable is not set");
+    }
+
+    // Check if this is a dummy URL during build time
+    if (
+      databaseUrl.includes("dummy") ||
+      databaseUrl.includes("localhost:5432")
+    ) {
+      console.warn(
+        "Dummy database URL detected during build, skipping connection"
+      );
+      throw new Error("Database not available during build");
     }
 
     // Create or reuse connection
@@ -55,6 +67,12 @@ export async function getDB() {
 
 // For backward compatibility - export the type for use in other files
 export type DbClient = Awaited<ReturnType<typeof getDB>>;
+
+// Mock database client for build time
+export function getMockDB(): Awaited<ReturnType<typeof getDB>> | null {
+  console.warn("Using mock database client during build time");
+  return null;
+}
 
 // Legacy function for backward compatibility (now async)
 export const getDbClient = async () => {

@@ -446,6 +446,14 @@
     ]
   },
   "career": {
+    "title": "Carrière",
+    "subtitle": "Mon parcours professionnel et expérience",
+    "description": "Mon parcours professionnel",
+    "experience": "J'ai une expérience pratique en développement full-stack, gestion d'équipes et amélioration des processus dans des entreprises leaders de technologie et d'assurance.",
+    "keyAchievements": "Réalisations Clés et Responsabilités",
+    "interestedInLearning": "Intéressé à Explorer Plus ?",
+    "checkOutResume": "Consultez mon CV détaillé ou contactez-moi pour discuter d'opportunités et de collaborations.",
+    "viewResume": "Voir CV",
     "experiences": [
       {
         "role": "Ingénieur Full Stack",
@@ -470,8 +478,34 @@
         "time": "2021–2023",
         "company": "Compagnie d'Assurance Menora Mivtachim, Israël",
         "details": [
+          "Géré 17 représentants de service.",
+          "Géré 5 représentants de recouvrement.",
           "Formé membres de l'équipe et amélioré la qualité du service grâce à des processus structurés"
         ]
+      }
+    ]
+  },
+  "education": {
+    "title": "Éducation",
+    "subtitle": "Mon parcours académique et apprentissage continu",
+    "description": "Mon parcours éducatif et développement professionnel continu",
+    "academicBackground": "J'ai une base solide en informatique et un apprentissage continu à travers des certifications et une expérience pratique.",
+    "keyAchievements": "Réalisations Académiques Clés et Certifications",
+    "interestedInLearning": "Intéressé à Apprendre Plus ?",
+    "checkOutResume": "Consultez mon CV détaillé ou contactez-moi pour discuter d'opportunités et de collaborations.",
+    "viewResume": "Voir CV",
+    "certifications": [
+      {
+        "name": "AWS Certified Solutions Architect",
+        "issuer": "Amazon Web Services",
+        "date": "2023",
+        "status": "Actif"
+      },
+      {
+        "name": "Google Cloud Professional Developer",
+        "issuer": "Google Cloud",
+        "date": "2023",
+        "status": "Actif"
       }
     ]
   },
@@ -616,19 +650,86 @@
     }
   },
   "languages": {
+    "title": "Langues",
+    "subtitle": "Mes langages de programmation et langues parlées",
     "programming": [
       { "name": "TypeScript", "level": "Avancé" },
       { "name": "JavaScript", "level": "Avancé" },
       { "name": "SQL", "level": "Avancé" },
-      { "name": "HTML/CSS", "level": "Avancé" }
+      { "name": "HTML/CSS", "level": "Avancé" },
+      { "name": "Java", "level": "Intermédiaire" },
+      { "name": "C#", "level": "Intermédiaire" },
+      { "name": "Python", "level": "Débutant" }
     ],
     "spoken": [
       { "name": "Hébreu", "level": "Natif" },
-      { "name": "Anglais", "level": "Courant" },
+      { "name": "Anglais", "level": "Professionnel" },
       { "name": "Français", "level": "Débutant" }
     ]
   },
   "additionalActivities": "Débats ouverts, prise de parole en public, communication scientifique, magicien amateur.",
+  "certifications": {
+    "title": "Certifications et Réalisations",
+    "subtitle": "Crédentials professionnels et certifications techniques qui valident mon expertise",
+    "verify": "Vérifier le Certificat",
+    "credentialId": "ID de Crédential",
+    "categories": {
+      "technical": "Technique",
+      "cloud": "Cloud",
+      "security": "Sécurité",
+      "project-management": "Gestion de Projets",
+      "design": "Design",
+      "other": "Autre"
+    },
+    "list": [
+      {
+        "id": "practical-electrical-engineering",
+        "name": "Diplôme d'Ingénierie Électrique Pratique",
+        "issuer": "Collège Technologique de l'Armée de l'Air",
+        "issueDate": "2017-06-01",
+        "description": "Programme complet d'ingénierie électrique couvrant les fondamentaux électriques, la conception de systèmes et les fondamentaux de programmation.",
+        "skills": [
+          "Ingénierie Électrique",
+          "Conception de Systèmes",
+          "Programmation"
+        ],
+        "category": "technical",
+        "icon": "🎓"
+      },
+      {
+        "id": "full-stack-development",
+        "name": "Spécialisation Développement Full Stack",
+        "issuer": "Apprentissage Autodirigé et Expérience Professionnelle",
+        "issueDate": "2020-01-01",
+        "description": "Expertise avancée en développement full-stack à travers l'expérience pratique de construction d'applications évolutives avec des technologies et frameworks modernes.",
+        "skills": [
+          "React",
+          "Next.js",
+          "Node.js",
+          "TypeScript",
+          "PostgreSQL",
+          "MongoDB"
+        ],
+        "category": "technical",
+        "icon": "💻"
+      },
+      {
+        "id": "microservices-architecture",
+        "name": "Architecture de Microservices",
+        "issuer": "Expérience Professionnelle",
+        "issueDate": "2023-01-01",
+        "description": "Expérience extensive dans la conception et l'implémentation d'architectures de microservices pour des applications de niveau entreprise, incluant l'orchestration de services et la communication inter-services.",
+        "skills": [
+          "Microservices",
+          "Conception d'API",
+          "Architecture de Systèmes",
+          "Orchestration de Services"
+        ],
+        "category": "technical",
+        "icon": "🏗️"
+      }
+    ]
+  },
   "footer": {
     "title": "À propos",
     "children": "Je suis un Ingénieur FullStack construisant des systèmes évolutifs et des expériences web modernes avec une architecture propre et des solutions pratiques.",

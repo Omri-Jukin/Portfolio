@@ -421,8 +421,34 @@
         "time": "2021–2023",
         "company": "Compañía de Seguros Menora Mivtachim, Israel",
         "details": [
+          "Gestioné 17 representantes de servicio.",
+          "Gestioné 5 representantes de cobranza.",
           "Entrené miembros del equipo y mejoré la calidad del servicio a través de procesos estructurados"
         ]
+      }
+    ]
+  },
+  "education": {
+    "title": "Educación",
+    "subtitle": "Mi formación académica y aprendizaje continuo",
+    "description": "Mi viaje educativo y desarrollo profesional continuo",
+    "academicBackground": "Tengo una base sólida en ciencias de la computación y aprendizaje continuo a través de certificaciones y experiencia práctica.",
+    "keyAchievements": "Logros Académicos Clave y Certificaciones",
+    "interestedInLearning": "¿Interesado en Aprender Más?",
+    "checkOutResume": "Revisa mi currículum detallado o ponte en contacto para discutir oportunidades y colaboraciones.",
+    "viewResume": "Ver Currículum",
+    "certifications": [
+      {
+        "name": "AWS Certified Solutions Architect",
+        "issuer": "Amazon Web Services",
+        "date": "2023",
+        "status": "Activo"
+      },
+      {
+        "name": "Google Cloud Professional Developer",
+        "issuer": "Google Cloud",
+        "date": "2023",
+        "status": "Activo"
       }
     ]
   },
@@ -693,6 +719,68 @@
     ]
   },
   "additionalActivities": "Debates abiertos, hablar en público, comunicación científica, mago aficionado.",
+  "certifications": {
+    "title": "Certificaciones y Logros",
+    "subtitle": "Credenciales profesionales y certificaciones técnicas que validan mi experiencia",
+    "verify": "Verificar Certificado",
+    "credentialId": "ID de Credencial",
+    "categories": {
+      "technical": "Técnico",
+      "cloud": "Nube",
+      "security": "Seguridad",
+      "project-management": "Gestión de Proyectos",
+      "design": "Diseño",
+      "other": "Otro"
+    },
+    "list": [
+      {
+        "id": "practical-electrical-engineering",
+        "name": "Diploma de Ingeniería Eléctrica Práctica",
+        "issuer": "Colegio Tecnológico de la Fuerza Aérea",
+        "issueDate": "2017-06-01",
+        "description": "Programa integral de ingeniería eléctrica que cubre fundamentos eléctricos, diseño de sistemas y fundamentos de programación.",
+        "skills": [
+          "Ingeniería Eléctrica",
+          "Diseño de Sistemas",
+          "Programación"
+        ],
+        "category": "technical",
+        "icon": "🎓"
+      },
+      {
+        "id": "full-stack-development",
+        "name": "Especialización en Desarrollo Full Stack",
+        "issuer": "Aprendizaje Autodirigido y Experiencia Profesional",
+        "issueDate": "2020-01-01",
+        "description": "Experiencia avanzada en desarrollo full-stack a través de experiencia práctica construyendo aplicaciones escalables con tecnologías y frameworks modernos.",
+        "skills": [
+          "React",
+          "Next.js",
+          "Node.js",
+          "TypeScript",
+          "PostgreSQL",
+          "MongoDB"
+        ],
+        "category": "technical",
+        "icon": "💻"
+      },
+      {
+        "id": "microservices-architecture",
+        "name": "Arquitectura de Microservicios",
+        "issuer": "Experiencia Profesional",
+        "issueDate": "2023-01-01",
+        "description": "Experiencia extensa diseñando e implementando arquitecturas de microservicios para aplicaciones de nivel empresarial, incluyendo orquestación de servicios y comunicación entre servicios.",
+        "skills": [
+          "Microservicios",
+          "Diseño de API",
+          "Arquitectura de Sistemas",
+          "Orquestación de Servicios"
+        ],
+        "category": "technical",
+        "icon": "🏗️"
+      }
+    ]
+  },
   "footer": {
     "title": "Acerca de",
     "children": "Soy un Ingeniero FullStack construyendo sistemas escalables y experiencias web modernas con arquitectura limpia y soluciones prácticas.",
