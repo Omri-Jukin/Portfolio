@@ -533,6 +533,7 @@
       "frontend": [
         "React",
         "Next.js",
+        "Angular",
         "TypeScript",
         "JavaScript",
         "HTML5",
@@ -560,9 +561,7 @@
         "PostgreSQL",
         "MongoDB",
         "Data Modeling",
-        "Query Optimization",
-        "Database Design",
-        "Data Architecture"
+        "Database Design"
       ],
       "cloudDevOps": [
         "Vercel",
@@ -582,10 +581,7 @@
         "location": "Be'er Sheva, Israel",
         "period": "2015-2017",
         "gpa": "87",
-        "achievements": [
-          "Dean's List for academic excellence",
-          "Excellence in Mathematics and Physics"
-        ],
+        "achievements": [],
         "coursework": [
           "Data Structures and Algorithms",
           "Computer Networks",

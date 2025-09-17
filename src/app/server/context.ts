@@ -1,7 +1,7 @@
 // Do not load dotenv in the Worker. Environment comes from Cloudflare.
 
 import { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
-import { getDB } from "$/db/client";
+import { getDB, getMockDB } from "$/db/client";
 import * as jose from "jose";
 import { getUserById } from "$/db/users/users";
 
@@ -20,23 +20,36 @@ export async function createContext({
   resHeaders,
 }: FetchCreateContextFnOptions) {
   // Create database client
-  let db: Awaited<ReturnType<typeof getDB>>;
+  let db: Awaited<ReturnType<typeof getDB>> | null;
 
   try {
     // Use Cloudflare D1 (both local and production)
     db = await getDB();
   } catch (error) {
     console.error("Failed to create database client:", error);
-    console.error(
-      "CRITICAL: Database connection failed - this is required for the app to function"
-    );
 
-    // Database connection is mandatory - throw error to prevent app from running
-    throw new Error(
-      `Database connection failed: ${
-        error instanceof Error ? error.message : "Unknown error"
-      }`
-    );
+    // During build time, allow the app to continue without database connection
+    if (
+      process.env.NODE_ENV === "production" &&
+      !process.env.VERCEL &&
+      error instanceof Error &&
+      error.message.includes("Database not available during build")
+    ) {
+      console.warn("Skipping database connection during build time");
+      // Return a mock database client for build time
+      db = getMockDB();
+    } else {
+      console.error(
+        "CRITICAL: Database connection failed - this is required for the app to function"
+      );
+
+      // Database connection is mandatory - throw error to prevent app from running
+      throw new Error(
+        `Database connection failed: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    }
   }
 
   // Get JWT_SECRET from Cloudflare context or process.env in dev
@@ -71,14 +84,32 @@ export async function createContext({
       // Verify JWT token
       const secret = new TextEncoder().encode(JWT_SECRET);
       const { payload } = await jose.jwtVerify(token, secret);
-      const decoded = payload as {
-        userId: string;
-        email: string;
-        role: string;
+
+      // Type guard for payload structure
+      if (
+        !payload ||
+        typeof payload !== "object" ||
+        !("userId" in payload) ||
+        !("email" in payload) ||
+        !("role" in payload)
+      ) {
+        throw new Error("Invalid token payload structure");
+      }
+
+      const decoded = {
+        userId: String(payload.userId),
+        email: String(payload.email),
+        role: String(payload.role),
       };
 
       // Fetch user from database to ensure they still exist and have correct role
       try {
+        // Skip user fetching during build time when database is not available
+        if (!db) {
+          console.warn("Skipping user fetch during build time");
+          return null;
+        }
+
         // Database client is guaranteed to be available
         const user = await getUserById(decoded.userId, db);
 

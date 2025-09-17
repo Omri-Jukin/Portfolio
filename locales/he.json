@@ -29,6 +29,69 @@
     "alreadyHaveAccount": "כבר יש לך חשבון?",
     "signInHere": "התחבר כאן"
   },
+  "Admin": {
+    "dashboard": "לוח בקרה",
+    "blog": "בלוג",
+    "workExperience": "ניסיון עבודה",
+    "projects": "פרויקטים",
+    "skills": "כישורים",
+    "certifications": "הסמכות",
+    "new": "חדש",
+    "edit": "ערוך",
+    "workExperienceManagement": "ניהול ניסיון עבודה",
+    "projectsManagement": "ניהול פרויקטים",
+    "skillsManagement": "ניהול כישורים",
+    "certificationsManagement": "ניהול הסמכות",
+    "blogManagement": "ניהול בלוג",
+    "addExperience": "הוסף ניסיון",
+    "editWorkExperience": "ערוך ניסיון עבודה",
+    "addNewWorkExperience": "הוסף ניסיון עבודה חדש",
+    "role": "תפקיד",
+    "company": "חברה",
+    "location": "מיקום",
+    "industry": "תחום",
+    "startDate": "תאריך התחלה",
+    "endDate": "תאריך סיום",
+    "description": "תיאור",
+    "achievements": "הישגים",
+    "technologies": "טכנולוגיות",
+    "responsibilities": "אחריות",
+    "employmentType": "סוג העסקה",
+    "companyUrl": "כתובת אתר החברה",
+    "visible": "נראה",
+    "featured": "מובלט",
+    "add": "הוסף",
+    "cancel": "בטל",
+    "updateExperience": "עדכן ניסיון",
+    "createExperience": "צור ניסיון",
+    "saving": "שומר...",
+    "leaveEmptyForCurrent": "השאר ריק לתפקיד נוכחי",
+    "totalVisible": "סה\"כ נראה",
+    "totalFeatured": "מובלטים",
+    "totalExperience": "ניסיון כולל",
+    "total": "סה\"כ",
+    "past": "עבר",
+    "current": "נוכחי",
+    "companyWebsite": "אתר החברה",
+    "details": "פרטים",
+    "achievementsRecorded": "הישגים נרשמו",
+    "more": "עוד",
+    "hide": "הסתר",
+    "show": "הצג",
+    "unfeature": "הסר הדגשה",
+    "feature": "הדגש",
+    "delete": "מחק",
+    "deleting": "מוחק...",
+    "deleteWorkExperience": "מחק ניסיון עבודה",
+    "deleteConfirmation": "האם אתה בטוח שברצונך למחוק את ניסיון העבודה הזה? פעולה זו לא ניתנת לביטול.",
+    "fullTime": "משרה מלאה",
+    "partTime": "משרה חלקית",
+    "contract": "חוזה",
+    "freelance": "פרילנס",
+    "internship": "התמחות",
+    "ongoing": "בהמשך",
+    "present": "נוכחי"
+  },
   "common": {
     "language": "שפה",
     "home": "בית",
@@ -37,6 +100,7 @@
     "blog": "בלוג",
     "career": "קריירה",
     "education": "השכלה",
+    "certifications": "הסמכות",
     "resume": "קורות חיים",
     "projects": "פרויקטים",
     "skills": "כישורים",
@@ -351,8 +415,34 @@
         "time": "2021–2023",
         "company": "חברת הביטוח מנורה מבטחים, ישראל",
         "details": [
+          "ניהול 17 נציגי שירות.",
+          "ניהול 5 נציגי גבייה.",
           "הכשרתי חברי צוות ושיפרתי איכות השירות באמצעות תהליכים מובנים"
         ]
+      }
+    ]
+  },
+  "education": {
+    "title": "השכלה",
+    "subtitle": "הרקע האקדמי והלמידה המתמשכת שלי",
+    "description": "המסע החינוכי שלי והפיתוח המקצועי המתמשך",
+    "academicBackground": "יש לי בסיס חזק במדעי המחשב ולמידה מתמשכת דרך הסמכות וניסיון מעשי.",
+    "keyAchievements": "הישגים אקדמיים מרכזיים והסמכות",
+    "interestedInLearning": "מעוניין ללמוד יותר?",
+    "checkOutResume": "בדוק את קורות החיים המפורטים שלי או צור קשר כדי לדון בהזדמנויות ושיתופי פעולה.",
+    "viewResume": "צפה בקורות חיים",
+    "certifications": [
+      {
+        "name": "AWS Certified Solutions Architect",
+        "issuer": "Amazon Web Services",
+        "date": "2023",
+        "status": "פעיל"
+      },
+      {
+        "name": "Google Cloud Professional Developer",
+        "issuer": "Google Cloud",
+        "date": "2023",
+        "status": "פעיל"
       }
     ]
   },
@@ -361,10 +451,10 @@
     "description": "הניסיון המקצועי והכישורים שלי",
     "networkingSummary": "הורד את קורות החיים שלי כדי ללמוד יותר על הרקע שלי",
     "experience": "מפתח Full Stack",
-    "professionalSummary": "מהנדס תוכנה Full-Stack עם 2+ שנות ניסיון מעשי בטכנולוגיות web מודרניות וארכיטקטורה נקייה. מחפש כעת הזדמנויות לתרום לצוותים חדשניים הבונים מערכות מתקדמות וחוויות משתמש יוצאות דופן.",
+    "professionalSummary": "מהנדס תוכנה Full-Stack עם 2+ שנות ניסיון מעשי בטכנולוגיות web מודרניות וארכיטקטורה נקייה. מחפש כעת הזדמנויות לתרום לצוותים חדשניים הבונים מערכות מתקדמות וחוויות משתמש יוצאות דופן, בעיקר מתמקד במוצרים שמחדשים ומשפרים את חיי היומיום של אחרים.",
     "personalInfo": {
       "name": "עמרי חוקין",
-      "title": "מהנדס תוכנה Full-Stack",
+      "title": "מהנדס תוכנה Full-Stack | Next.js, Node.js & TypeScript | AWS & PostgreSQL | ארכיטקטורה נקייה ומערכות מתקדמות",
       "contacts": {
         "phone": "+972 52-334-4064",
         "email": "contact@omrijukin.com",
@@ -616,6 +706,8 @@
     "programming": [
       { "name": "TypeScript", "level": "מתקדם" },
       { "name": "JavaScript", "level": "מתקדם" },
+      { "name": "SQL", "level": "מתקדם" },
+      { "name": "HTML/CSS", "level": "מתקדם" },
       { "name": "Java", "level": "בינוני" },
       { "name": "C#", "level": "בינוני" },
       { "name": "Python", "level": "מתחיל" }
@@ -627,6 +719,110 @@
     ]
   },
   "additionalActivities": "דיונים פתוחים, נאומים פומביים, תקשורת מדעית, קוסם חובב.",
+  "certifications": {
+    "title": "הסמכות והישגים",
+    "subtitle": "תעודות מקצועיות והסמכות טכניות המאמתות את המומחיות שלי",
+    "verify": "אמת תעודה",
+    "credentialId": "מזהה תעודה",
+    "categories": {
+      "technical": "טכני",
+      "cloud": "ענן",
+      "security": "אבטחה",
+      "project-management": "ניהול פרויקטים",
+      "design": "עיצוב",
+      "other": "אחר"
+    },
+    "list": [
+      {
+        "id": "practical-electrical-engineering",
+        "name": "תעודת הנדסת חשמל מעשית",
+        "issuer": "מכללה טכנולוגית של חיל האוויר",
+        "issueDate": "2017-06-01",
+        "description": "תכנית הנדסת חשמל מקיפה המכסה יסודות חשמליים, עיצוב מערכות ויסודות תכנות.",
+        "skills": ["הנדסת חשמל", "עיצוב מערכות", "תכנות"],
+        "category": "technical",
+        "icon": "🎓"
+      },
+      {
+        "id": "full-stack-development",
+        "name": "התמחות פיתוח Full Stack",
+        "issuer": "למידה עצמית וניסיון מקצועי",
+        "issueDate": "2020-01-01",
+        "description": "מומחיות מתקדמת בפיתוח full-stack דרך ניסיון מעשי בבניית אפליקציות מתקדמות עם טכנולוגיות ופריימוורקים מודרניים.",
+        "skills": [
+          "React",
+          "Next.js",
+          "Node.js",
+          "TypeScript",
+          "PostgreSQL",
+          "MongoDB"
+        ],
+        "category": "technical",
+        "icon": "💻"
+      },
+      {
+        "id": "microservices-architecture",
+        "name": "ארכיטקטורת מיקרו-שירותים",
+        "issuer": "ניסיון מקצועי",
+        "issueDate": "2023-01-01",
+        "description": "ניסיון נרחב בעיצוב ויישום ארכיטקטורות מיקרו-שירותים לאפליקציות ברמת ארגון, כולל אורכיסטרציה של שירותים ותקשורת בין-שירותים.",
+        "skills": [
+          "מיקרו-שירותים",
+          "עיצוב API",
+          "ארכיטקטורת מערכות",
+          "אורכיסטרציה של שירותים"
+        ],
+        "category": "technical",
+        "icon": "🏗️"
+      }
+    ]
+  },
+  "calendly": {
+    "title": "קבע פגישה",
+    "description": "בואו נדון בפרויקט שלכם, נחקור אפשרויות שיתוף פעולה או ננהל שיחה טכנית. אני כאן כדי לעזור להפוך את הרעיונות שלכם למציאות.",
+    "booking": {
+      "title": "פרטי הפגישה",
+      "description": "בחרו זמן שמתאים לכם. כל הפגישות מתקיימות באמצעות שיחת וידאו עם אפשרות שיתוף מסך.",
+      "details": {
+        "duration": "30 דקות",
+        "durationDesc": "מושלם לדיונים ראשוניים",
+        "format": "שיחת וידאו",
+        "formatDesc": "Google Meet או Zoom",
+        "language": "עברית/אנגלית",
+        "languageDesc": "תמיכה דו-לשונית זמינה",
+        "audience": "אחד על אחד",
+        "audienceDesc": "ייעוץ אישי",
+        "timezone": "שעון ישראל (GMT+2)"
+      }
+    },
+    "widget": {
+      "title": "קבעו את הפגישה שלכם",
+      "description": "בחרו את התאריך והשעה המועדפים עליכם מהזמנים הזמינים למטה.",
+      "buttonText": "קבע פגישה"
+    },
+    "expectations": {
+      "title": "מה לצפות",
+      "description": "הנה מה שאתם יכולים לצפות מהפגישה שלנו כדי להבטיח שננצל את הזמן שלנו יחד בצורה הטובה ביותר.",
+      "items": [
+        {
+          "title": "דיון בפרויקט",
+          "description": "נעמיק בדרישות הפרויקט שלכם, אתגרים טכניים ותוצאות רצויות. הביאו שאלות או בעיות ספציפיות שתרצו לפתור."
+        },
+        {
+          "title": "ייעוץ טכני",
+          "description": "אתן עצות מקצועיות על החלטות ארכיטקטורה, המלצות על מחסנית טכנולוגיות ופרקטיקות מומלצות בהתבסס על המקרה הספציפי שלכם."
+        },
+        {
+          "title": "אפשרויות שיתוף פעולה",
+          "description": "נחקור אפשרויות שותפות פוטנציאליות, פרויקטים פרילנס או אפשרויות שיתוף פעולה ארוכות טווח שמתאימות למטרות שלכם."
+        },
+        {
+          "title": "השלבים הבאים",
+          "description": "נגדיר שלבים ברורים, לוחות זמנים ומסרים לקדם את הפרויקט או השיתוף פעולה שלכם."
+        }
+      ]
+    }
+  },
   "footer": {
     "title": "אודות",
     "children": "אני מהנדס FullStack שבונה מערכות מתקדמות וחוויות web מודרניות עם ארכיטקטורה נקייה ופתרונות מעשיים.",
