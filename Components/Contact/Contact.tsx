@@ -22,9 +22,22 @@ const GalaxyCard = dynamic(
 );
 import { type GalaxyCardProps } from "../GalaxyCard/GalaxyCard";
 import { NeonButton } from "..";
+import ContactForm from "../ContactForm";
 
 const Contact: React.FC<ContactProps> = ({ locale = "en", onContactClick }) => {
   const t = useTranslations("contact");
+  const contactHref = locale
+    ? `/${locale}#${CONTACT_CONSTANTS.SECTION_ID}`
+    : `#${CONTACT_CONSTANTS.SECTION_ID}`;
+
+  const handleContactButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>
+  ) => {
+    if (onContactClick) {
+      event.preventDefault();
+      onContactClick();
+    }
+  };
 
   const galaxyProps: GalaxyCardProps = {
     offset: { x: 5 },
@@ -61,16 +74,27 @@ const Contact: React.FC<ContactProps> = ({ locale = "en", onContactClick }) => {
             {t("description")}
           </ContactDescription>
           <NeonButton
-            href={`/${locale}/contact`}
+            href={contactHref}
             variant="contained"
             size="large"
             endIcon={<ArrowForwardIcon />}
-            onClick={onContactClick}
+            onClick={handleContactButtonClick}
             id={`${CONTACT_CONSTANTS.SECTION_ID}-button`}
+            sx={{ mb: 4 }}
           >
             {t("button")}
           </NeonButton>
         </MotionWrapper>
+
+        {/* Contact Form */}
+        <ContactForm
+          onSuccess={() => {
+            console.log("Contact form submitted successfully");
+          }}
+          onError={(error) => {
+            console.error("Contact form error:", error);
+          }}
+        />
       </ContactContainer>
     </GalaxyCard>
   );

@@ -86,6 +86,7 @@ export const contactInquiries = pgTable("contact_inquiries", {
   id: text("id").primaryKey().notNull(),
   name: text("name").notNull(),
   email: text("email").notNull(),
+  phone: text("phone"),
   subject: text("subject").notNull(),
   message: text("message").notNull(),
   status: text("status").$type<InquiryStatus>().notNull().default("open"),

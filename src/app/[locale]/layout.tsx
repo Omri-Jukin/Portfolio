@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import "../globals.css";
 import "flag-icons/css/flag-icons.min.css";
 import { NextIntlClientProvider } from "next-intl";
-import { inter } from "$/fonts";
+import { anton, inter } from "$/fonts";
 import ClientLayout from "&/ClientLayout/ClientLayout";
+import ThemeRegistry from "&/ThemeRegistry";
 import { getMessages, getTranslations } from "next-intl/server";
 import StructuredData from "./structured-data";
+import SkipLink from "~/SkipLink";
 
 export interface Props {
   children: React.ReactNode;
@@ -110,12 +112,25 @@ export default async function RootLayout({ children, params }: Props) {
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
         />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#7C3AED" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
+        <meta name="apple-mobile-web-app-title" content="Omri Jukin" />
+        <link rel="apple-touch-icon" href="/logo.png" />
         <StructuredData />
       </head>
-      <body className={`${inter.variable} antialiased`}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <ClientLayout>{children}</ClientLayout>
-        </NextIntlClientProvider>
+      <body className={`${inter.variable} ${anton.variable} antialiased`}>
+        <SkipLink targetId="main-content" label="Skip to main content" />
+        <SkipLink targetId="navigation" label="Skip to navigation" />
+        <ThemeRegistry>
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            <ClientLayout>{children}</ClientLayout>
+          </NextIntlClientProvider>
+        </ThemeRegistry>
       </body>
     </html>
   );

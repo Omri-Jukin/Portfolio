@@ -537,3 +537,5 @@ export const DEFAULT_CONFIGS = {
     gridSpacing: 24,
   },
 } as const;
+export { useActiveSection } from "./hooks/useActiveSection";
+export { scrollToSection } from "./utils/scrollToSection";

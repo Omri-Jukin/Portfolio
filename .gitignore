@@ -70,3 +70,5 @@ next-env.d.ts
 !.cursor/rules/.gitkeep
 /prompts/*
 !/prompts/.gitkeep
+codex-instructions/
+

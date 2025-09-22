@@ -107,6 +107,7 @@
     "description": "אני מהנדס FullStack המתמחה בפיתוח web full-stack, ארכיטקטורת מערכות מתקדמות וטכנולוגיות מודרניות כולל React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB ומיקרו-שירותים."
   },
   "hero": {
+    "tagline": "מהנדס Full Stack",
     "titleRow1": "אני לא מוכר תוכנה.",
     "titleRow2": "אני מהנדס אבולוציה של העתיד",
     "subtitle": "אני לא רק מפתח—אני חזון. אני לא רק בונה תוכנה; אני מהנדס אבולוציה. העבודה שלי לא עוסקת ביצירת מוצרים; היא עוסקת בעיצוב העתיד. כרגע מחפש הזדמנויות במשרה מלאה להשפיע לטווח הארוך.",
@@ -114,7 +115,9 @@
     "exploreButton": "חקור עבודה",
     "resumeButton": "קורות חיים",
     "careerButton": "קריירה",
-    "cta": "בואו נהנדס את העתיד יחד"
+    "cta": "בואו נהנדס את העתיד יחד",
+    "availability": "מחפש הזדמנויות במשרה מלאה להשפיע לטווח הארוך.",
+    "contactButton": "צור קשר"
   },
   "examples": {
     "title": "דוגמאות אינטראקטיביות",
@@ -829,12 +832,12 @@
     "linksTitle": "קישורים מהירים",
     "links": [
       { "label": "דף הבית", "href": "/" },
-      { "label": "קריירה", "href": "/career" },
+      { "label": "קריירה", "href": "#career-section" },
       { "label": "הסמכות ותעודות", "href": "/certifications" },
       { "label": "תיק טכני", "href": "/technical-portfolio" },
       { "label": "קורות חיים", "href": "/resume" },
       { "label": "בלוג", "href": "/blog" },
-      { "label": "צור קשר", "href": "/contact" },
+      { "label": "צור קשר", "href": "#contact-section" },
       { "label": "דוגמאות", "href": "/examples" }
     ],
     "socialTitle": "חברתי",

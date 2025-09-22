@@ -1,5 +1,6 @@
 export interface AboutProps {
   onSkillClick?: (skillKey: string) => void;
+  onContactClick?: () => void;
 }
 
 export interface Skill {

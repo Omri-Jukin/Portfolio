@@ -1,4 +1,4 @@
-import { Inter, Source_Serif_4 } from "next/font/google";
+import { Anton, Inter, Source_Serif_4 } from "next/font/google";
 
 // Primary font - Inter (modern, professional sans-serif)
 export const inter = Inter({
@@ -6,6 +6,14 @@ export const inter = Inter({
   variable: "--font-inter",
   display: "swap",
   weight: ["300", "400", "500", "600", "700"],
+});
+
+// Display font for hero headings
+export const anton = Anton({
+  subsets: ["latin"],
+  variable: "--font-anton",
+  weight: "400",
+  display: "swap",
 });
 
 // Alternative professional serif font
@@ -19,3 +27,4 @@ export const sourceSerifPro = Source_Serif_4({
 // For backwards compatibility, alias the primary font
 export const bonaNovaSC = inter;
 export const bonaNovaSCMono = inter;
+

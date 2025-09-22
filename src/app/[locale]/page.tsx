@@ -1,32 +1,35 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect, useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Box } from "@mui/material";
 import Hero from "~/Hero";
-import About from "~/About";
-import QA from "~/QA";
-import Services from "~/Services";
-import Career from "~/Career";
-import Certifications from "~/Certifications";
-import Projects from "~/Projects";
-import Contact from "~/Contact";
-import SkillShowcase from "~/SkillShowcase";
+// import About from "~/About";
+// import QA from "~/QA";
+// import Services from "~/Services";
+// import Career from "~/Career";
+// import Certifications from "~/Certifications";
+// import Projects from "~/Projects";
+// import Contact from "~/Contact";
+import { SECTION_IDS } from "#/lib";
+import { scrollToSection } from "$/utils/scrollToSection";
+// import SkillShowcase from "~/SkillShowcase";
 // import Testimonials from "~/Testimonials";
 import { ResponsiveBackground } from "#/Components/ScrollingSections";
+// import LazySection from "~/LazySection";
 import profileSrc from "#/public/Watercolor_Profile_Picture.png";
 
 export default function HomePage() {
   const locale = useLocale();
   const [mounted, setMounted] = useState(false);
 
-  const t = useTranslations("about");
+  // const t = useTranslations("about");
   const router = useRouter();
 
   // State for skill showcase modal
-  const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
-  const [showSkillModal, setShowSkillModal] = useState(false);
+  // const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
+  // const [showSkillModal, setShowSkillModal] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -36,76 +39,56 @@ export default function HomePage() {
     return null;
   }
 
-  // Navigation functions
-  const scrollToSection = (sectionId: string) => {
-    // Update URL hash for better UX and accessibility
-    window.location.hash = sectionId;
-
-    // Ensure smooth scrolling to the section with retry logic
-    const scrollToElement = () => {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-        return true;
-      }
-      return false;
-    };
-
-    // Try immediately, then retry after a short delay if needed
-    if (!scrollToElement()) {
-      setTimeout(scrollToElement, 100);
-    }
-  };
-
+  // Navigation helpers
   const navigateToPage = (path: string) => {
     router.push(`/${locale}${path}`);
   };
 
   // Skill showcase handlers
-  const handleSkillClick = (skillKey: string) => {
-    setSelectedSkill(skillKey);
-    setShowSkillModal(true);
-  };
+  // const handleSkillClick = (skillKey: string) => {
+  //   setSelectedSkill(skillKey);
+  //   setShowSkillModal(true);
+  // };
 
-  const handleCloseSkillModal = () => {
-    setShowSkillModal(false);
-    setSelectedSkill(null);
-  };
+  // const handleCloseSkillModal = () => {
+  //   setShowSkillModal(false);
+  //   setSelectedSkill(null);
+  // };
 
-  // Get skill details for the selected skill
-  const getSkillDetail = () => {
-    if (!selectedSkill) return null;
-    try {
-      return t.raw(`skillDetails.${selectedSkill}`);
-    } catch {
-      return null;
-    }
-  };
+  // // Get skill details for the selected skill
+  // const getSkillDetail = () => {
+  //   if (!selectedSkill) return null;
+  //   try {
+  //     return t.raw(`skillDetails.${selectedSkill}`);
+  //   } catch {
+  //     return null;
+  //   }
+  // };
 
-  const skillDetail = getSkillDetail();
+  // const skillDetail = getSkillDetail();
 
   // Event handlers for components
-  const handleExploreClick = () => scrollToSection("projects-section");
+  const handleExploreClick = () => scrollToSection(SECTION_IDS.PROJECTS);
   const handleResumeClick = () => navigateToPage("/resume");
-  const handleCareerClick = () => navigateToPage("/career");
+  const handleCareerClick = () => scrollToSection(SECTION_IDS.CAREER);
 
-  const handleServiceClick = (serviceIndex: number) => {
-    if (serviceIndex === 0) {
-      scrollToSection("projects-section");
-    } else if (serviceIndex === 1) {
-      navigateToPage("/resume");
-    } else {
-      scrollToSection("contact-section");
-    }
-  };
+  // const handleServiceClick = (serviceIndex: number) => {
+  //   if (serviceIndex === 0) {
+  //     scrollToSection(SECTION_IDS.PROJECTS);
+  //   } else if (serviceIndex === 1) {
+  //     navigateToPage("/resume");
+  //   } else {
+  //     scrollToSection(SECTION_IDS.CONTACT);
+  //   }
+  // };
   const handleContactClick = () => {
-    // Additional contact logic if needed
-    navigateToPage("/contact");
+    scrollToSection(SECTION_IDS.CONTACT);
   };
 
   return (
     <ResponsiveBackground>
       <Box
+        id="main-content"
         sx={{
           width: "100%",
           maxWidth: "100vw",
@@ -114,46 +97,13 @@ export default function HomePage() {
           alignItems: "center",
         }}
       >
-        {/* Hero Section */}
         <Hero
           onExploreClick={handleExploreClick}
           onAboutClick={handleResumeClick}
           onCareerClick={handleCareerClick}
+          onContactClick={handleContactClick}
           profileSrc={profileSrc}
         />
-
-        {/* About Section */}
-        <About onSkillClick={handleSkillClick} />
-
-        {/* Rapid Q&A Section */}
-        <QA />
-
-        {/* Services Section */}
-        <Services onServiceClick={handleServiceClick} />
-
-        {/* Testimonials Section 
-        <Testimonials />
-*/}
-        {/* Career Section */}
-        <Career onCareerClick={handleCareerClick} />
-
-        {/* Certifications Section */}
-        <Certifications />
-
-        {/* Projects Section */}
-        <Projects />
-
-        {/* Contact Section */}
-        <Contact locale={locale} onContactClick={handleContactClick} />
-
-        {/* Skill Showcase Modal */}
-        {showSkillModal && skillDetail && (
-          <SkillShowcase
-            skillDetail={skillDetail}
-            open={showSkillModal}
-            onClose={handleCloseSkillModal}
-          />
-        )}
       </Box>
     </ResponsiveBackground>
   );

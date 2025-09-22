@@ -1,4 +1,4 @@
-// Main component exports
+﻿// Main component exports
 export { default as AnimatedBackground } from "./AnimatedBackground";
 export { default as AnimatedText } from "./AnimatedText";
 export { default as AnimationSwitcher } from "./AnimationSwitcher";
@@ -18,7 +18,10 @@ export { BoxShadowDemo } from "./BoxShadowDemo";
 export { GlassPane, GlassPaneDemo } from "./GlassPane";
 export { default as BrokenGlass } from "./BrokenGlass";
 export { default as Card } from "./Card";
-export { default as ContactForm } from "../src/app/[locale]/contact";
+export { default as ContactForm } from "./ContactForm";
+export { default as InteractiveTerminal } from "./InteractiveTerminal";
+export { default as CodeEditor } from "./CodeEditor";
+export { default as LiveDemo } from "./LiveDemo";
 export { default as DarkModeToggle } from "./DarkModeToggle";
 // DNAHelix moved to HeavyComponents
 export { default as Footer } from "./Footer";
@@ -33,8 +36,14 @@ export { default as Snackbar } from "./Snackbar";
 // Heavy components moved to HeavyComponents directory
 export { default as ScrollGapAnimator } from "./ScrollGapAnimator";
 export { default as FloatingProfile } from "./FloatingProfile";
+export { default as BackToTop } from "./BackToTop";
 export { default as ClientOnly } from "./ClientOnly";
 export { default as Skeleton } from "./Skeleton";
+export { default as PerformanceMonitor } from "./PerformanceMonitor";
+export { default as BundleAnalyzer } from "./BundleAnalyzer";
+export { default as MemoizedWrapper } from "./MemoizedWrapper";
+export { default as LazySection } from "./LazySection";
+export { default as SkipLink } from "./SkipLink";
 
 // New section components
 export { default as Hero } from "./Hero";
@@ -70,10 +79,7 @@ export type {
 } from "./Background/Background.type";
 export type { CardProps } from "./Card";
 export type { BrokenGlassProps } from "./BrokenGlass";
-export type {
-  ContactFormProps,
-  ContactFormData,
-} from "../src/app/[locale]/contact";
+export type { ContactFormProps, ContactFormData } from "./ContactForm";
 export type { DarkModeToggleProps } from "./DarkModeToggle";
 export type { DNAModelProps } from "./DNAHelix";
 export type { FooterProps } from "./Footer";

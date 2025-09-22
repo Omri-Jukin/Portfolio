@@ -12,7 +12,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TelegramIcon from "@mui/icons-material/Telegram";
 import WebsiteIcon from "@mui/icons-material/Language";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 export const FooterComponent: React.FC<FooterProps> = ({
   title,
@@ -138,10 +138,25 @@ export const FooterComponent: React.FC<FooterProps> = ({
 );
 
 export default function Footer() {
+  const locale = useLocale();
   const t = useTranslations("footer");
   const links = t.raw("links");
   const social = t.raw("social");
   const contact = t.raw("contact");
+
+  const normalizedLinks = Array.isArray(links)
+    ? links.map((item: { label: string; href: string }) => {
+        if (!item?.href?.startsWith("#")) {
+          return item;
+        }
+
+        return {
+          ...item,
+          href: `/${locale}${item.href}`,
+        };
+      })
+    : links;
+
   return (
     <FooterComponent
       title={t("title")}
@@ -150,7 +165,7 @@ export default function Footer() {
       contactTitle={t("contactTitle")}
       contact={contact}
       copyright={t("copyright")}
-      links={links}
+      links={normalizedLinks ?? links}
       social={social}
     >
       {t("children")}

@@ -107,6 +107,7 @@
     "description": "I'm a FullStack Engineer specializing in full-stack web development, scalable systems architecture, and modern technologies including React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB, and microservices."
   },
   "hero": {
+    "tagline": "Systems-first full-stack engineer",
     "titleRow1": "I Don't Sell Software.",
     "titleRow2": "I Engineer the Evolution of the Future",
     "subtitle": "I'm not just a developer—I'm a visionary. I don't just build software; I engineer evolution. My work isn't about creating products; it's about shaping the future. Currently seeking full-time opportunities to make a lasting impact.",
@@ -114,7 +115,9 @@
     "exploreButton": "Explore work",
     "resumeButton": "Resume",
     "careerButton": "Career",
-    "cta": "Let's engineer the future together"
+    "cta": "Let's engineer the future together",
+    "availability": "Open to senior full-stack roles and consultative builds.",
+    "contactButton": "Get in Touch"
   },
   "examples": {
     "title": "Interactive Examples",
@@ -185,7 +188,7 @@
           "CRM systems",
           "E-commerce solutions"
         ],
-        "years": "5+ years"
+        "years": "3+ years"
       },
       "brandArchitect": {
         "title": "BRAND ARCHITECT",
@@ -219,7 +222,7 @@
           "Interactive prototypes",
           "Accessibility improvements"
         ],
-        "years": "4+ years"
+        "years": "3+ years"
       },
       "problemSolver": {
         "title": "PROBLEM SOLVER",
@@ -871,12 +874,12 @@
     "linksTitle": "Quick Links",
     "links": [
       { "label": "Home", "href": "/" },
-      { "label": "Career", "href": "/career" },
+      { "label": "Career", "href": "#career-section" },
       { "label": "Certifications", "href": "/certifications" },
       { "label": "Technical Portfolio", "href": "/technical-portfolio" },
       { "label": "Resume", "href": "/resume" },
       { "label": "Blog", "href": "/blog" },
-      { "label": "Contact", "href": "/contact" },
+      { "label": "Contact", "href": "#contact-section" },
       { "label": "Examples", "href": "/examples" }
     ],
     "socialTitle": "Social",

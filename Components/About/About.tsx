@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+﻿import { useTranslations } from "next-intl";
 import MotionWrapper from "../MotionWrapper/MotionWrapper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, EffectFade } from "swiper/modules";
@@ -19,14 +19,13 @@ import {
 import { ABOUT_CONSTANTS } from "./About.const";
 import type { AboutProps } from "./About.type";
 import { CTA1Button } from "../Button/Button.style";
-import { useRouter } from "next/navigation";
+import { SECTION_IDS } from "#/lib";
+import { scrollToSection } from "$/utils/scrollToSection";
 import { Typography } from "../Typography";
 import { api } from "$/trpc/client";
 
-const About: React.FC<AboutProps> = ({ onSkillClick }) => {
+const About: React.FC<AboutProps> = ({ onSkillClick, onContactClick }) => {
   const t = useTranslations("about");
-  const router = useRouter();
-
   // Fetch skills from database
   const {
     data: skills = [],
@@ -40,34 +39,34 @@ const About: React.FC<AboutProps> = ({ onSkillClick }) => {
   const staticSkills = [
     {
       key: ABOUT_CONSTANTS.SKILLS.CODE_CONJURER,
-      icon: "🧙‍♂️",
+      icon: "ðŸ§™â€â™‚ï¸",
       label: "Code Conjurer",
       description: "Transforming complex requirements into elegant solutions",
     },
     {
       key: ABOUT_CONSTANTS.SKILLS.INNOVATION_ARCHITECT,
-      icon: "🏗️",
+      icon: "ðŸ—ï¸",
       label: "Innovation Architect",
       description:
         "Building scalable systems that push technological boundaries",
     },
     {
       key: ABOUT_CONSTANTS.SKILLS.DIGITAL_STORYTELLER,
-      icon: "📖",
+      icon: "ðŸ“–",
       label: "Digital Storyteller",
       description:
         "Crafting compelling user experiences through intuitive design",
     },
     {
       key: ABOUT_CONSTANTS.SKILLS.PROBLEM_SOLVER,
-      icon: "🔧",
+      icon: "ðŸ”§",
       label: "Problem Solver",
       description:
         "Turning challenges into opportunities for growth and learning",
     },
     {
       key: ABOUT_CONSTANTS.SKILLS.TEAM_PLAYER,
-      icon: "🤝",
+      icon: "ðŸ¤",
       label: "Team Player",
       description:
         "Collaborating effectively to achieve shared goals and vision",
@@ -75,7 +74,12 @@ const About: React.FC<AboutProps> = ({ onSkillClick }) => {
   ];
 
   const handleContactClick = () => {
-    router.push("/contact");
+    if (onContactClick) {
+      onContactClick();
+      return;
+    }
+
+    scrollToSection(SECTION_IDS.CONTACT);
   };
 
   // Transform database skills to match static format
@@ -83,7 +87,7 @@ const About: React.FC<AboutProps> = ({ onSkillClick }) => {
     skills.length > 0
       ? skills.slice(0, 8).map((skill) => ({
           key: skill.id,
-          icon: skill.icon || "⚡",
+          icon: skill.icon || "âš¡",
           label: skill.name,
           description:
             skill.description ||
@@ -227,3 +231,9 @@ const About: React.FC<AboutProps> = ({ onSkillClick }) => {
 };
 
 export default About;
+
+
+
+
+
+

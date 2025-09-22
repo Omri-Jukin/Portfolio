@@ -1,9 +1,11 @@
-export type TLayout = "mobile" | "desktop" | "auto";
+﻿export type TLayout = "mobile" | "desktop" | "auto";
 
 export interface HeaderProps {
   isDarkMode?: boolean;
   onThemeToggle?: (isDark: boolean) => void;
   isMobile?: boolean | undefined;
+  activeSection?: string | null;
+  onNavigateToSection?: (sectionId: string) => void;
   forceLayout?: TLayout;
   onLayoutChange?: (layout: TLayout) => void;
 }

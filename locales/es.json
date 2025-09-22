@@ -106,6 +106,7 @@
     "description": "Soy un Ingeniero FullStack especializado en desarrollo web full-stack, arquitectura de sistemas escalables y tecnologías modernas incluyendo React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB y microservicios."
   },
   "hero": {
+    "tagline": "Ingeniero Full Stack",
     "titleRow1": "No Vendo Software.",
     "titleRow2": "Ingeniería de la evolución del futuro",
     "subtitle": "No soy solo un desarrollador—soy un visionario. No solo construyo software; ingeniero la evolución. Mi trabajo no se trata de crear productos; se trata de dar forma al futuro. Actualmente busco oportunidades de tiempo completo para hacer un impacto duradero.",
@@ -113,7 +114,9 @@
     "exploreButton": "Explorar trabajo",
     "resumeButton": "Currículum",
     "careerButton": "Carrera",
-    "cta": "Ingeniemos el futuro juntos"
+    "cta": "Ingeniemos el futuro juntos",
+    "availability": "Busco oportunidades de tiempo completo para hacer un impacto duradero.",
+    "contactButton": "Ponte en Contacto"
   },
   "examples": {
     "title": "Ejemplos Interactivos",
@@ -787,12 +790,12 @@
     "linksTitle": "Enlaces Rápidos",
     "links": [
       { "label": "Inicio", "href": "/" },
-      { "label": "Carrera", "href": "/career" },
+      { "label": "Carrera", "href": "#career-section" },
       { "label": "Certificaciones", "href": "/certifications" },
       { "label": "Portafolio Técnico", "href": "/technical-portfolio" },
       { "label": "Currículum", "href": "/resume" },
       { "label": "Blog", "href": "/blog" },
-      { "label": "Contacto", "href": "/contact" },
+      { "label": "Contacto", "href": "#contact-section" },
       { "label": "Ejemplos", "href": "/examples" }
     ],
     "socialTitle": "Social",

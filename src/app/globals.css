@@ -1,4 +1,4 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 :root {
   --background: #ffffff;
@@ -24,4 +24,9 @@ body {
 
 html {
   background: transparent;
+  scroll-behavior: smooth;
+}
+
+[id$="-section"] {
+  scroll-margin-top: 7rem;
 }

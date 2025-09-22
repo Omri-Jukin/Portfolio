@@ -258,11 +258,11 @@ export const SOCIAL_COLORS = {
  */
 export const NAVIGATION_ITEMS = [
   { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Career", href: "/career" },
-  { label: "Projects", href: "/projects" },
+  { label: "About", href: "#about-section" },
+  { label: "Career", href: "#career-section" },
+  { label: "Projects", href: "#projects-section" },
   { label: "Resume", href: "/resume" },
-  { label: "Contact", href: "/contact" },
+  { label: "Contact", href: "#contact-section" },
   { label: "Blog", href: "/blog" },
 ] as const;
 

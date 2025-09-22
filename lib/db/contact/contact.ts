@@ -7,6 +7,7 @@ import { InquiryStatus } from "../schema/schema.types";
 export type CreateContactInput = {
   name: string;
   email: string;
+  phone?: string;
   subject: string;
   message: string;
 };
@@ -34,6 +35,7 @@ export const createContactInquiry = async (input: CreateContactInput) => {
       id: uuidv4(),
       name: input.name,
       email: input.email,
+      phone: input.phone,
       subject: input.subject,
       message: input.message,
       status: "open",

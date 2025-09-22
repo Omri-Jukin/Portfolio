@@ -1,9 +1,10 @@
-import { StaticImageData } from "next/image";
+﻿import { StaticImageData } from "next/image";
 
 export interface HeroProps {
   onExploreClick?: () => void;
   onAboutClick?: () => void;
   onCareerClick?: () => void;
+  onContactClick?: () => void;
   profileSrc?: StaticImageData;
   ownerName?: string;
 }
