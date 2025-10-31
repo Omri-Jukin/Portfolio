@@ -5,6 +5,7 @@ import { PopupButton } from "react-calendly";
 import { CalendlyProps } from ".";
 import { useTheme } from "@mui/material/styles";
 import { CalendlyContainer } from "./Calendly.style";
+import { useRouter, usePathname } from "next/navigation";
 
 const CalendlyBadge = ({
   url = "https://calendly.com/omrijukin/30min",
@@ -15,12 +16,68 @@ const CalendlyBadge = ({
   className = "calendly-badge",
 }: CalendlyProps) => {
   const theme = useTheme();
+  const router = useRouter();
+  const pathname = usePathname();
   const [isClient, setIsClient] = useState(false);
 
   // Check if we're on the client side
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  // Listen for Calendly events
+  useEffect(() => {
+    if (!isClient) return;
+
+    const handleEventScheduled = (e: MessageEvent) => {
+      // Check if this is a Calendly event
+      if (e.data.event && e.data.event.indexOf("calendly") === 0) {
+        const eventName = e.data.event;
+
+        if (eventName === "calendly.event_scheduled") {
+          const payload = e.data.payload;
+
+          // Extract booking details
+          const inviteeEmail = payload?.invitee?.email;
+          const inviteeFirstName = payload?.invitee?.first_name;
+          const inviteeLastName = payload?.invitee?.last_name;
+          const eventUri = payload?.event?.uri;
+          const inviteeUri = payload?.invitee?.uri;
+
+          if (inviteeEmail && eventUri) {
+            // Get locale from pathname
+            const locale = pathname.split("/")[1] || "en";
+
+            // Build intake URL with parameters
+            const intakeUrl = new URL(
+              `/${locale}/intake`,
+              window.location.origin
+            );
+            intakeUrl.searchParams.set("inviteeEmail", inviteeEmail);
+            intakeUrl.searchParams.set("eventUri", eventUri);
+            if (inviteeFirstName) {
+              intakeUrl.searchParams.set("inviteeFirstName", inviteeFirstName);
+            }
+            if (inviteeLastName) {
+              intakeUrl.searchParams.set("inviteeLastName", inviteeLastName);
+            }
+            if (inviteeUri) {
+              intakeUrl.searchParams.set("inviteeUri", inviteeUri);
+            }
+
+            // Redirect to intake form
+            router.push(intakeUrl.pathname + intakeUrl.search);
+          }
+        }
+      }
+    };
+
+    window.addEventListener("message", handleEventScheduled);
+
+    return () => {
+      window.removeEventListener("message", handleEventScheduled);
+    };
+  }, [isClient, router, pathname]);
 
   // Use theme colors as defaults, fallback to props if provided
   const buttonBackground = backgroundColor || theme.palette.calendly.primary;

@@ -255,6 +255,46 @@ export const contactFormSchema = z.object({
     ),
 });
 
+// Intake form schema for project intake after Calendly meeting
+export const intakeFormSchema = z.object({
+  contact: z.object({
+    firstName: z.string().min(1, "First name is required").max(100),
+    lastName: z.string().min(1, "Last name is required").max(100),
+    email: emailSchema,
+    phone: phoneSchema.optional(),
+    fullName: z.string().optional(),
+  }),
+  org: z
+    .object({
+      name: z.string().min(1, "Organization name is required").max(200),
+      website: urlSchema.optional(),
+      industry: z.string().optional(),
+      size: z.string().optional(),
+    })
+    .optional(),
+  project: z.object({
+    title: z.string().min(1, "Project title is required").max(200),
+    description: z
+      .string()
+      .min(10, "Project description must be at least 10 characters")
+      .max(5000),
+    requirements: z.array(z.string()).optional(),
+    timeline: z.string().optional(),
+    budget: z.string().optional(),
+    startDate: z.string().optional(),
+    technologies: z.array(z.string()).optional(),
+    goals: z.array(z.string()).optional(),
+  }),
+  additional: z
+    .object({
+      preferredContactMethod: z.string().optional(),
+      timezone: z.string().optional(),
+      urgency: z.string().optional(),
+      notes: z.string().max(2000).optional(),
+    })
+    .optional(),
+});
+
 export const loginSchema = z.object({
   email: emailSchema,
   password: z.string().min(1, "Password is required"),
@@ -748,6 +788,7 @@ export const adminStatsQuerySchema = z.object({
 // ========================
 
 export type ContactFormData = z.infer<typeof contactFormSchema>;
+export type IntakeFormData = z.infer<typeof intakeFormSchema>;
 export type LoginData = z.infer<typeof loginSchema>;
 export type RegisterData = z.infer<typeof registerSchema>;
 export type UserCreateData = z.infer<typeof userCreateSchema>;

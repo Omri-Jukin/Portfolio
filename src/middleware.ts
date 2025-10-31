@@ -1,5 +1,9 @@
 import { NextResponse, NextRequest } from "next/server";
 import createMiddleware from "next-intl/middleware";
+import {
+  generateIntakeSessionToken,
+  verifyIntakeSessionToken,
+} from "#/lib/utils/sessionToken";
 
 const intlMiddleware = createMiddleware({
   locales: ["en", "es", "fr", "he"],
@@ -7,8 +11,8 @@ const intlMiddleware = createMiddleware({
   localePrefix: "always",
 });
 
-export default function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+export default async function middleware(request: NextRequest) {
+  const { pathname, searchParams } = request.nextUrl;
 
   // Protect all /[locale]/admin routes
   const adminRouteRegex = /^\/(en|es|fr|he)\/admin(\/|$)/;
@@ -20,6 +24,100 @@ export default function middleware(request: NextRequest) {
     if (!isAuthenticated) {
       const loginUrl = new URL(`/${pathname.split("/")[1]}/login`, request.url);
       return NextResponse.redirect(loginUrl);
+    }
+  }
+
+  // Protect intake route - validate Calendly parameters or custom token
+  const intakeRouteRegex = /^\/(en|es|fr|he)\/intake(\/|$)/;
+  if (intakeRouteRegex.test(pathname)) {
+    const cookieHeader = request.headers.get("cookie");
+    const intakeSessionToken = cookieHeader
+      ?.split(";")
+      .find((c) => c.trim().startsWith("intake-session-token="))
+      ?.split("=")[1];
+
+    // Check for custom token in URL query parameter
+    const customToken = searchParams.get("token");
+
+    // If custom token is provided, validate it and set cookie
+    if (customToken) {
+      try {
+        const payload = await verifyIntakeSessionToken(customToken);
+        if (payload && payload.isCustomLink) {
+          // Valid custom token - set cookie and allow access
+          const response = intlMiddleware(request);
+          response.cookies.set("intake-session-token", customToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            maxAge: 30 * 24 * 60 * 60, // 30 days default for custom links
+            path: "/",
+          });
+          return response;
+        }
+      } catch (error) {
+        console.error("Failed to verify custom token:", error);
+        // Fall through to redirect
+      }
+    }
+
+    // Check if valid session token exists in cookie
+    if (intakeSessionToken) {
+      try {
+        const payload = await verifyIntakeSessionToken(intakeSessionToken);
+        if (payload) {
+          // Valid token exists, allow access
+          return intlMiddleware(request);
+        }
+      } catch (error) {
+        console.error("Failed to verify session token:", error);
+        // Fall through to validation
+      }
+    }
+
+    // No valid token, validate Calendly parameters
+    const inviteeEmail = searchParams.get("inviteeEmail");
+    const eventUri = searchParams.get("eventUri");
+
+    // Require at least email and eventUri
+    if (!inviteeEmail || !eventUri) {
+      const locale = pathname.split("/")[1] || "en";
+      const calendlyUrl = new URL(`/${locale}/calendly`, request.url);
+      return NextResponse.redirect(calendlyUrl);
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(inviteeEmail)) {
+      const locale = pathname.split("/")[1] || "en";
+      const calendlyUrl = new URL(`/${locale}/calendly`, request.url);
+      return NextResponse.redirect(calendlyUrl);
+    }
+
+    // Generate session token
+    try {
+      const sessionToken = await generateIntakeSessionToken({
+        email: inviteeEmail,
+        eventUri,
+        inviteeUri: searchParams.get("inviteeUri") || undefined,
+      });
+
+      // Create response with session token cookie
+      const response = intlMiddleware(request);
+      response.cookies.set("intake-session-token", sessionToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 24 * 60 * 60, // 24 hours
+        path: "/",
+      });
+
+      return response;
+    } catch (error) {
+      console.error("Failed to generate intake session token:", error);
+      const locale = pathname.split("/")[1] || "en";
+      const calendlyUrl = new URL(`/${locale}/calendly`, request.url);
+      return NextResponse.redirect(calendlyUrl);
     }
   }
 

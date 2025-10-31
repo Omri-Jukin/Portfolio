@@ -95,9 +95,11 @@ export const usersRouter = router({
       const firstName = nameParts[0] || "";
       const lastName = nameParts.slice(1).join(" ") || "";
 
+      // SECURITY: Passwords MUST be provided in plain text from the frontend.
+      // createUser() will hash the password exactly once before storing.
       return await createUser({
         email: input.email,
-        password: input.password,
+        password: input.password, // Plain text password - will be hashed once in createUser()
         firstName,
         lastName,
         role: input.role,
@@ -132,6 +134,8 @@ export const usersRouter = router({
         throw new Error("Unauthorized");
       }
 
+      // SECURITY: If password is provided, it MUST be in plain text from the frontend.
+      // updateUser() will hash the password exactly once before storing.
       return await updateUser(input);
     }),
 

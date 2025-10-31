@@ -27,6 +27,8 @@
     "skillsManagement": "Gestión de Habilidades",
     "certificationsManagement": "Gestión de Certificaciones",
     "blogManagement": "Gestión de Blog",
+    "intakesManagement": "Gestión de Solicitudes de Proyectos",
+    "intakes": "Solicitudes",
     "addExperience": "Agregar Experiencia",
     "editWorkExperience": "Editar Experiencia Laboral",
     "addNewWorkExperience": "Agregar Nueva Experiencia Laboral",
@@ -1412,6 +1414,55 @@
           "description": "Definiremos pasos claros, cronogramas y entregables para avanzar con tu proyecto o colaboración."
         }
       ]
+    }
+  },
+  "intake": {
+    "title": "Formulario de Ingreso del Proyecto",
+    "description": "Por favor completa el formulario a continuación con los detalles de tu proyecto. Esta información nos ayudará a preparar una propuesta integral para tu proyecto.",
+    "sections": {
+      "contact": "Información de Contacto",
+      "organization": "Información de la Organización",
+      "project": "Información del Proyecto"
+    },
+    "form": {
+      "contact": {
+        "firstName": "Nombre",
+        "lastName": "Apellido",
+        "email": "Correo Electrónico",
+        "phone": "Teléfono"
+      },
+      "org": {
+        "name": "Nombre de la Organización",
+        "website": "Sitio Web",
+        "industry": "Industria",
+        "size": "Tamaño de la Organización"
+      },
+      "project": {
+        "title": "Título del Proyecto",
+        "description": "Descripción del Proyecto",
+        "timeline": "Cronograma",
+        "budget": "Presupuesto",
+        "startDate": "Fecha de Inicio Preferida",
+        "technologies": "Tecnologías",
+        "requirements": "Requisitos",
+        "goals": "Objetivos"
+      },
+      "additional": {
+        "preferredContactMethod": "Método de Contacto Preferido",
+        "timezone": "Zona Horaria",
+        "urgency": "Nivel de Urgencia",
+        "notes": "Notas Adicionales"
+      },
+      "submit": "Enviar Formulario de Ingreso",
+      "submitting": "Enviando..."
+    },
+    "success": {
+      "title": "¡Gracias!",
+      "message": "Tu formulario de ingreso del proyecto se ha enviado correctamente. Revisaremos tu información y te contactaremos pronto."
+    },
+    "error": {
+      "title": "Error",
+      "message": "Algo salió mal. Por favor, inténtalo de nuevo."
     }
   }
 }

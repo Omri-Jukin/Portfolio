@@ -5,7 +5,9 @@ import {
   integer,
   uuid,
   boolean,
+  jsonb,
 } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 import {
   UserRole,
   UserStatus,
@@ -188,7 +190,7 @@ export const projects = pgTable("projects", {
   technicalChallenges: text("technical_challenges")
     .$type<Array<{ challenge: string; solution: string }> | string[]>()
     .notNull()
-    .default([]),
+    .default(sql`'[]'::text`),
   codeExamples: text("code_examples")
     .$type<
       | Array<{
@@ -200,7 +202,7 @@ export const projects = pgTable("projects", {
       | string[]
     >()
     .notNull()
-    .default([]),
+    .default(sql`'[]'::text`),
   teamSize: integer("team_size"),
   myRole: text("my_role"),
   clientName: text("client_name"),
@@ -366,4 +368,18 @@ export const testimonials = pgTable("testimonials", {
   createdBy: uuid("created_by")
     .notNull()
     .references(() => users.id),
+});
+
+// Intakes table for project intake forms
+export const intakes = pgTable("intakes", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  email: text("email").notNull(),
+  data: jsonb("data").notNull(),
+  proposalMd: text("proposal_md").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 });

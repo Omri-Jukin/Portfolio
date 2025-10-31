@@ -54,15 +54,15 @@ export const authRouter = router({
           throw new Error("Database client not available");
         }
 
-        // Hash password
-        const hashedPassword = await bcrypt.hash(input.password, 12);
-
         // Create user with appropriate role and status
+        // SECURITY: Passwords MUST be provided in plain text from the frontend.
+        // createUser() will hash the password exactly once before storing.
+        // Never hash passwords before passing them to createUser().
         const newUser = await createUser({
           email: input.email,
           firstName: input.firstName,
           lastName: input.lastName,
-          password: hashedPassword,
+          password: input.password, // Plain text password - will be hashed once in createUser()
           role: isFirstUser ? "admin" : "visitor", // First user becomes admin
           status: isFirstUser ? "approved" : "pending", // First user is auto-approved
         });
@@ -155,12 +155,21 @@ export const authRouter = router({
         }
 
         // Verify password
+        if (!user.password) {
+          console.error("User password is missing for:", user.email);
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Invalid email or password",
+          });
+        }
+
         const isValidPassword = await bcrypt.compare(
           input.password,
           user.password
         );
 
         if (!isValidPassword) {
+          console.error("Password mismatch for user:", user.email);
           throw new TRPCError({
             code: "UNAUTHORIZED",
             message: "Invalid email or password",

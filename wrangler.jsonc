@@ -33,6 +33,7 @@
   ],
 
   "vars": {
-    "NODE_ENV": "production"
+    "NODE_ENV": "production",
+    "NEXT_PUBLIC_BASE_URL": "https://omrijukin.com"
   }
 }
