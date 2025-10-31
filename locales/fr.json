@@ -27,6 +27,8 @@
     "skillsManagement": "Gestion des Compétences",
     "certificationsManagement": "Gestion des Certifications",
     "blogManagement": "Gestion du Blog",
+    "intakesManagement": "Gestion des Demandes de Projets",
+    "intakes": "Demandes",
     "addExperience": "Ajouter une Expérience",
     "editWorkExperience": "Modifier l'Expérience Professionnelle",
     "addNewWorkExperience": "Ajouter une Nouvelle Expérience Professionnelle",
@@ -1361,6 +1363,55 @@
           "description": "Nous définirons des étapes claires, des délais et des livrables pour faire avancer votre projet ou collaboration."
         }
       ]
+    }
+  },
+  "intake": {
+    "title": "Formulaire d'Admission du Projet",
+    "description": "Veuillez remplir le formulaire ci-dessous avec les détails de votre projet. Ces informations nous aideront à préparer une proposition complète pour votre projet.",
+    "sections": {
+      "contact": "Informations de Contact",
+      "organization": "Informations de l'Organisation",
+      "project": "Informations du Projet"
+    },
+    "form": {
+      "contact": {
+        "firstName": "Prénom",
+        "lastName": "Nom de Famille",
+        "email": "Courriel",
+        "phone": "Téléphone"
+      },
+      "org": {
+        "name": "Nom de l'Organisation",
+        "website": "Site Web",
+        "industry": "Industrie",
+        "size": "Taille de l'Organisation"
+      },
+      "project": {
+        "title": "Titre du Projet",
+        "description": "Description du Projet",
+        "timeline": "Calendrier",
+        "budget": "Budget",
+        "startDate": "Date de Début Préférée",
+        "technologies": "Technologies",
+        "requirements": "Exigences",
+        "goals": "Objectifs"
+      },
+      "additional": {
+        "preferredContactMethod": "Méthode de Contact Préférée",
+        "timezone": "Fuseau Horaire",
+        "urgency": "Niveau d'Urgence",
+        "notes": "Notes Supplémentaires"
+      },
+      "submit": "Soumettre le Formulaire d'Admission",
+      "submitting": "Soumission..."
+    },
+    "success": {
+      "title": "Merci!",
+      "message": "Votre formulaire d'admission du projet a été soumis avec succès. Nous examinerons vos informations et vous contacterons bientôt!"
+    },
+    "error": {
+      "title": "Erreur",
+      "message": "Quelque chose s'est mal passé. Veuillez réessayer."
     }
   }
 }

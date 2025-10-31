@@ -11,6 +11,7 @@ import { workExperiencesRouter } from "./routers/workExperiences";
 import { educationRouter } from "./routers/education";
 import { projectsRouter } from "./routers/projects";
 import { skillsRouter } from "./routers/skills";
+import { intakesRouter } from "./routers/intakes";
 
 export const appRouter = router({
   blog: blogRouter,
@@ -25,6 +26,7 @@ export const appRouter = router({
   education: educationRouter,
   projects: projectsRouter,
   skills: skillsRouter,
+  intakes: intakesRouter,
 });
 
 export type AppRouter = typeof appRouter;

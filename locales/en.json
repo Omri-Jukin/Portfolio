@@ -27,6 +27,8 @@
     "skillsManagement": "Skills Management",
     "certificationsManagement": "Certifications Management",
     "blogManagement": "Blog Management",
+    "intakesManagement": "Project Intakes Management",
+    "intakes": "Intakes",
     "addExperience": "Add Experience",
     "editWorkExperience": "Edit Work Experience",
     "addNewWorkExperience": "Add New Work Experience",
@@ -1429,6 +1431,55 @@
           "description": "We'll outline clear next steps, timelines, and deliverables to move forward with your project or collaboration."
         }
       ]
+    }
+  },
+  "intake": {
+    "title": "Project Intake Form",
+    "description": "Please fill out the form below with your project details. This information will help us prepare a comprehensive proposal for your project.",
+    "sections": {
+      "contact": "Contact Information",
+      "organization": "Organization Information",
+      "project": "Project Information"
+    },
+    "form": {
+      "contact": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "phone": "Phone"
+      },
+      "org": {
+        "name": "Organization Name",
+        "website": "Website",
+        "industry": "Industry",
+        "size": "Organization Size"
+      },
+      "project": {
+        "title": "Project Title",
+        "description": "Project Description",
+        "timeline": "Timeline",
+        "budget": "Budget",
+        "startDate": "Preferred Start Date",
+        "technologies": "Technologies",
+        "requirements": "Requirements",
+        "goals": "Goals"
+      },
+      "additional": {
+        "preferredContactMethod": "Preferred Contact Method",
+        "timezone": "Timezone",
+        "urgency": "Urgency Level",
+        "notes": "Additional Notes"
+      },
+      "submit": "Submit Intake Form",
+      "submitting": "Submitting..."
+    },
+    "success": {
+      "title": "Thank You!",
+      "message": "Your project intake form has been submitted successfully. We'll review your information and get back to you soon!"
+    },
+    "error": {
+      "title": "Error",
+      "message": "Something went wrong. Please try again."
     }
   }
 }

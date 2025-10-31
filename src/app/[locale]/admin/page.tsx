@@ -286,6 +286,35 @@ export default function AdminDashboard() {
             </Box>
           </CardContent>
         </Card>
+
+        {/* Intakes Management */}
+        <Card sx={{ mb: 3 }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              Project Intakes
+            </Typography>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              View and manage project intake forms submitted after Calendly
+              meetings.
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                gap: 2,
+                alignItems: "center",
+                mt: 2,
+              }}
+            >
+              <Button
+                variant="contained"
+                onClick={() => router.push("/admin/intakes")}
+              >
+                View Intakes
+              </Button>
+            </Box>
+          </CardContent>
+        </Card>
       </Box>
     </ClientOnly>
   );

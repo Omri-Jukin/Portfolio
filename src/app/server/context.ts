@@ -138,10 +138,22 @@ export async function createContext({
 
   const user = await getUserFromToken();
 
+  // Extract origin from request for URL generation
+  const origin =
+    req.headers.get("origin") ||
+    (req.headers.get("host") ? `https://${req.headers.get("host")}` : null) ||
+    (process.env.NODE_ENV === "production"
+      ? `https://${
+          process.env.NEXT_PUBLIC_BASE_URL?.replace(/^https?:\/\//, "") ||
+          "omrijukin.com"
+        }`
+      : "http://localhost:3000");
+
   return {
     db,
     user,
     resHeaders,
+    origin,
   };
 }
 

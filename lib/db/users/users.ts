@@ -6,6 +6,53 @@ import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
 // Removed remote-client fallbacks to avoid Node polyfills in edge runtime
 
+/**
+ * ============================================================================
+ * PASSWORD HANDLING CONTRACT
+ * ============================================================================
+ *
+ * SECURITY RULE: Passwords MUST be provided in PLAIN TEXT from the frontend.
+ *
+ * Flow:
+ * 1. Frontend sends plain text password → tRPC API → Database functions
+ * 2. Database functions (createUser, updateUser) hash the password ONCE using bcrypt
+ * 3. Hashed password is stored in the database
+ *
+ * NEVER:
+ * - Hash passwords on the frontend
+ * - Hash passwords before passing to createUser() or updateUser()
+ * - Pass already-hashed passwords to these functions
+ *
+ * The ensurePasswordHashedOnce() function will detect and reject
+ * already-hashed passwords to prevent double-hashing.
+ *
+ * ============================================================================
+ */
+
+/**
+ * Checks if a password string is already hashed (bcrypt format).
+ * Bcrypt hashes start with $2a$, $2b$, or $2y$ followed by cost and salt.
+ */
+function isPasswordHashed(password: string): boolean {
+  return /^\$2[ayb]\$\d{2}\$/.test(password);
+}
+
+/**
+ * Ensures a password is hashed exactly once.
+ * If the password is already hashed, it throws an error.
+ * This prevents double-hashing scenarios.
+ */
+async function ensurePasswordHashedOnce(
+  plainPassword: string
+): Promise<string> {
+  if (isPasswordHashed(plainPassword)) {
+    throw new Error(
+      "Password is already hashed. Passwords must be provided in plain text and will be hashed automatically."
+    );
+  }
+  return await bcrypt.hash(plainPassword, 12);
+}
+
 // Simple types for portfolio user management
 export type CreateUserInput = {
   email: string;
@@ -44,7 +91,9 @@ export const createUser = async (input: CreateUserInput) => {
       throw new Error("User with this email already exists.");
     }
 
-    const hashedPassword = await bcrypt.hash(input.password, 12);
+    // Hash password once - ensure it's not already hashed
+    // Passwords MUST be provided in plain text from the frontend
+    const hashedPassword = await ensurePasswordHashedOnce(input.password);
 
     const newUser = await dbClient
       .insert(users)
@@ -257,7 +306,11 @@ export const updateUser = async (input: UpdateUserInput) => {
   if (input.email) updateData.email = input.email;
   if (input.firstName) updateData.firstName = input.firstName;
   if (input.lastName) updateData.lastName = input.lastName;
-  if (input.password) updateData.password = input.password;
+  if (input.password) {
+    // Hash password once - ensure it's not already hashed
+    // Passwords MUST be provided in plain text from the frontend
+    updateData.password = await ensurePasswordHashedOnce(input.password);
+  }
   if (input.role) updateData.role = input.role;
   if (input.status) updateData.status = input.status;
 
