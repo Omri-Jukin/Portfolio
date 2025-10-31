@@ -12,6 +12,11 @@ import {
   Button,
   TextField,
   Divider,
+  IconButton,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import {
   intakeFormSchema,
@@ -28,10 +33,12 @@ import {
   Business as BusinessIcon,
   Person as PersonIcon,
   Work as WorkIcon,
+  Add as AddIcon,
+  Delete as DeleteIcon,
+  Info as InfoIcon,
 } from "@mui/icons-material";
 import MotionWrapper from "~/MotionWrapper";
 import { ResponsiveBackground } from "~/ScrollingSections";
-import { verifyIntakeSessionToken } from "#/lib/utils/sessionToken";
 
 export default function IntakePage() {
   const searchParams = useSearchParams();
@@ -74,41 +81,56 @@ export default function IntakePage() {
         c.trim().startsWith("intake-session-token=")
       );
 
-      // Check for token in URL (custom link)
+      // Check for token in URL (custom link) - decode it without verification
+      // since middleware already validated it server-side
       const urlToken = searchParams.get("token");
       const token = urlToken || tokenCookie?.split("=")[1];
 
       if (token) {
-        const payload = await verifyIntakeSessionToken(token);
-        if (!payload) {
-          // Invalid token, redirect to calendly
-          const locale = window.location.pathname.split("/")[1] || "en";
-          router.push(`/${locale}/calendly`);
-          return;
-        }
+        try {
+          // Decode JWT payload without verification (middleware already validated it)
+          // JWT format: header.payload.signature
+          const parts = token.split(".");
+          if (parts.length === 3) {
+            // Decode base64url payload (second part)
+            const payload = JSON.parse(
+              atob(parts[1].replace(/-/g, "+").replace(/_/g, "/"))
+            ) as {
+              email?: string;
+              isCustomLink?: boolean;
+              firstName?: string;
+              lastName?: string;
+              organizationName?: string;
+              organizationWebsite?: string;
+            };
 
-        // If it's a custom link, pre-fill with custom client data
-        if (payload.isCustomLink) {
-          setFormData((prev) => ({
-            ...prev,
-            contact: {
-              ...prev.contact,
-              firstName: payload.firstName || prev.contact.firstName,
-              lastName: payload.lastName || prev.contact.lastName,
-              email: payload.email || prev.contact.email,
-              fullName:
-                payload.firstName && payload.lastName
-                  ? `${payload.firstName} ${payload.lastName}`
-                  : prev.contact.fullName,
-            },
-            org: payload.organizationName
-              ? {
-                  name: payload.organizationName,
-                  website: payload.organizationWebsite || undefined,
-                }
-              : prev.org,
-          }));
-          return;
+            // If it's a custom link, pre-fill with custom client data
+            if (payload.isCustomLink) {
+              setFormData((prev) => ({
+                ...prev,
+                contact: {
+                  ...prev.contact,
+                  firstName: payload.firstName || prev.contact.firstName,
+                  lastName: payload.lastName || prev.contact.lastName,
+                  email: payload.email || prev.contact.email,
+                  fullName:
+                    payload.firstName && payload.lastName
+                      ? `${payload.firstName} ${payload.lastName}`
+                      : prev.contact.fullName,
+                },
+                org: payload.organizationName
+                  ? {
+                      name: payload.organizationName,
+                      website: payload.organizationWebsite || undefined,
+                    }
+                  : prev.org,
+              }));
+              return;
+            }
+          }
+        } catch (error) {
+          console.error("Failed to decode token payload:", error);
+          // If decoding fails, continue to Calendly parameters fallback
         }
       }
 
@@ -186,60 +208,96 @@ export default function IntakePage() {
     [errors]
   );
 
-  // Array handlers for future form fields (technologies, requirements, goals)
-  // TODO: Uncomment when adding array input fields to the form
-  // const handleArrayInputChange = useCallback(
-  //   (path: string[], index: number) =>
-  //     (event: React.ChangeEvent<HTMLInputElement>) => {
-  //       const value = event.target.value;
-  //       setFormData((prev) => {
-  //         const newData = JSON.parse(JSON.stringify(prev)) as IntakeFormData;
-  //         let current: Record<string, unknown> = newData as Record<string, unknown>;
-  //         for (let i = 0; i < path.length - 1; i++) {
-  //           current = current[path[i]] as Record<string, unknown>;
-  //         }
-  //         const array = [...((current[path[path.length - 1]] as string[]) || [])];
-  //         array[index] = value;
-  //         current[path[path.length - 1]] = array;
-  //         return newData;
-  //       });
-  //     },
-  //   []
-  // );
+  // Array handlers for technologies, requirements, and goals
+  const handleArrayInputChange = useCallback(
+    (path: string[], index: number) =>
+      (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        setFormData((prev) => {
+          const newData = JSON.parse(JSON.stringify(prev)) as IntakeFormData;
+          let current: Record<string, unknown> = newData as Record<
+            string,
+            unknown
+          >;
+          for (let i = 0; i < path.length - 1; i++) {
+            if (!current[path[i]]) {
+              current[path[i]] = {};
+            }
+            current = current[path[i]] as Record<string, unknown>;
+          }
+          const array = [
+            ...((current[path[path.length - 1]] as string[]) || []),
+          ];
+          array[index] = value;
+          current[path[path.length - 1]] = array;
+          return newData;
+        });
 
-  // const addArrayItem = useCallback((path: string[]) => {
-  //   setFormData((prev) => {
-  //     const newData = JSON.parse(JSON.stringify(prev)) as IntakeFormData;
-  //     let current: Record<string, unknown> = newData as Record<string, unknown>;
-  //     for (let i = 0; i < path.length - 1; i++) {
-  //       current = current[path[i]] as Record<string, unknown>;
-  //     }
-  //     const array = [...((current[path[path.length - 1]] as string[]) || [])];
-  //     array.push("");
-  //     current[path[path.length - 1]] = array;
-  //     return newData;
-  //   });
-  // }, []);
+        // Clear error
+        const errorKey = path.join(".") + `.${index}`;
+        if (errors[errorKey]) {
+          setErrors((prev) => {
+            const newErrors = { ...prev };
+            delete newErrors[errorKey];
+            return newErrors;
+          });
+        }
+      },
+    [errors]
+  );
 
-  // const removeArrayItem = useCallback((path: string[], index: number) => {
-  //   setFormData((prev) => {
-  //     const newData = JSON.parse(JSON.stringify(prev)) as IntakeFormData;
-  //     let current: Record<string, unknown> = newData as Record<string, unknown>;
-  //     for (let i = 0; i < path.length - 1; i++) {
-  //       current = current[path[i]] as Record<string, unknown>;
-  //     }
-  //     const array = [...((current[path[path.length - 1]] as string[]) || [])];
-  //     array.splice(index, 1);
-  //     current[path[path.length - 1]] = array;
-  //     return newData;
-  //   });
-  // }, []);
+  const addArrayItem = useCallback((path: string[]) => {
+    setFormData((prev) => {
+      const newData = JSON.parse(JSON.stringify(prev)) as IntakeFormData;
+      let current: Record<string, unknown> = newData as Record<string, unknown>;
+      for (let i = 0; i < path.length - 1; i++) {
+        if (!current[path[i]]) {
+          current[path[i]] = {};
+        }
+        current = current[path[i]] as Record<string, unknown>;
+      }
+      const array = [...((current[path[path.length - 1]] as string[]) || [])];
+      array.push("");
+      current[path[path.length - 1]] = array;
+      return newData;
+    });
+  }, []);
 
-  const validateForm = (): boolean => {
+  const removeArrayItem = useCallback((path: string[], index: number) => {
+    setFormData((prev) => {
+      const newData = JSON.parse(JSON.stringify(prev)) as IntakeFormData;
+      let current: Record<string, unknown> = newData as Record<string, unknown>;
+      for (let i = 0; i < path.length - 1; i++) {
+        current = current[path[i]] as Record<string, unknown>;
+      }
+      const array = [...((current[path[path.length - 1]] as string[]) || [])];
+      array.splice(index, 1);
+      current[path[path.length - 1]] = array;
+      return newData;
+    });
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setState((prev) => ({ ...prev, error: null }));
+
+    // Clean up form data: filter empty strings from arrays
+    const cleanedFormData = {
+      ...formData,
+      project: {
+        ...formData.project,
+        technologies:
+          formData.project.technologies?.filter((t) => t.trim() !== "") || [],
+        requirements:
+          formData.project.requirements?.filter((r) => r.trim() !== "") || [],
+        goals: formData.project.goals?.filter((g) => g.trim() !== "") || [],
+      },
+    };
+
+    // Validate cleaned data
     try {
-      intakeFormSchema.parse(formData);
+      intakeFormSchema.parse(cleanedFormData);
       setErrors({});
-      return true;
     } catch (error: unknown) {
       if (error && typeof error === "object" && "issues" in error) {
         const zodError = error as {
@@ -250,21 +308,13 @@ export default function IntakePage() {
           newErrors[issue.path.join(".")] = issue.message;
         });
         setErrors(newErrors);
+        return;
       }
-      return false;
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setState((prev) => ({ ...prev, error: null }));
-
-    if (!validateForm()) {
       return;
     }
 
     setState((prev) => ({ ...prev, isSubmitting: true }));
-    submitIntake.mutate(formData);
+    submitIntake.mutate(cleanedFormData);
   };
 
   const isFormDisabled = state.isSubmitting || state.isSubmitted;
@@ -519,6 +569,282 @@ export default function IntakePage() {
                           InputLabelProps={{ shrink: true }}
                           disabled={isFormDisabled}
                           fullWidth
+                        />
+
+                        {/* Technologies Array */}
+                        <Box>
+                          <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                            {t("form.project.technologies")}
+                          </Typography>
+                          <Stack spacing={1}>
+                            {(formData.project.technologies || []).map(
+                              (tech, index) => (
+                                <Box
+                                  key={index}
+                                  sx={{
+                                    display: "flex",
+                                    gap: 1,
+                                    alignItems: "flex-start",
+                                  }}
+                                >
+                                  <TextField
+                                    value={tech}
+                                    onChange={handleArrayInputChange(
+                                      ["project", "technologies"],
+                                      index
+                                    )}
+                                    placeholder={t("form.project.technologies")}
+                                    disabled={isFormDisabled}
+                                    fullWidth
+                                    size="small"
+                                  />
+                                  <IconButton
+                                    onClick={() =>
+                                      removeArrayItem(
+                                        ["project", "technologies"],
+                                        index
+                                      )
+                                    }
+                                    disabled={isFormDisabled}
+                                    color="error"
+                                    size="small"
+                                    aria-label={`Remove technology ${
+                                      index + 1
+                                    }`}
+                                  >
+                                    <DeleteIcon />
+                                  </IconButton>
+                                </Box>
+                              )
+                            )}
+                            <Button
+                              startIcon={<AddIcon />}
+                              onClick={() =>
+                                addArrayItem(["project", "technologies"])
+                              }
+                              disabled={isFormDisabled}
+                              variant="outlined"
+                              size="small"
+                              sx={{ alignSelf: "flex-start" }}
+                            >
+                              {t("form.addTechnology")}
+                            </Button>
+                          </Stack>
+                        </Box>
+
+                        {/* Requirements Array */}
+                        <Box>
+                          <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                            {t("form.project.requirements")}
+                          </Typography>
+                          <Stack spacing={1}>
+                            {(formData.project.requirements || []).map(
+                              (req, index) => (
+                                <Box
+                                  key={index}
+                                  sx={{
+                                    display: "flex",
+                                    gap: 1,
+                                    alignItems: "flex-start",
+                                  }}
+                                >
+                                  <TextField
+                                    value={req}
+                                    onChange={handleArrayInputChange(
+                                      ["project", "requirements"],
+                                      index
+                                    )}
+                                    placeholder={t("form.project.requirements")}
+                                    disabled={isFormDisabled}
+                                    fullWidth
+                                    multiline
+                                    rows={2}
+                                    size="small"
+                                  />
+                                  <IconButton
+                                    onClick={() =>
+                                      removeArrayItem(
+                                        ["project", "requirements"],
+                                        index
+                                      )
+                                    }
+                                    disabled={isFormDisabled}
+                                    color="error"
+                                    size="small"
+                                    aria-label={`Remove requirement ${
+                                      index + 1
+                                    }`}
+                                  >
+                                    <DeleteIcon />
+                                  </IconButton>
+                                </Box>
+                              )
+                            )}
+                            <Button
+                              startIcon={<AddIcon />}
+                              onClick={() =>
+                                addArrayItem(["project", "requirements"])
+                              }
+                              disabled={isFormDisabled}
+                              variant="outlined"
+                              size="small"
+                              sx={{ alignSelf: "flex-start" }}
+                            >
+                              {t("form.addRequirement")}
+                            </Button>
+                          </Stack>
+                        </Box>
+
+                        {/* Goals Array */}
+                        <Box>
+                          <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                            {t("form.project.goals")}
+                          </Typography>
+                          <Stack spacing={1}>
+                            {(formData.project.goals || []).map(
+                              (goal, index) => (
+                                <Box
+                                  key={index}
+                                  sx={{
+                                    display: "flex",
+                                    gap: 1,
+                                    alignItems: "flex-start",
+                                  }}
+                                >
+                                  <TextField
+                                    value={goal}
+                                    onChange={handleArrayInputChange(
+                                      ["project", "goals"],
+                                      index
+                                    )}
+                                    placeholder={t("form.project.goals")}
+                                    disabled={isFormDisabled}
+                                    fullWidth
+                                    multiline
+                                    rows={2}
+                                    size="small"
+                                  />
+                                  <IconButton
+                                    onClick={() =>
+                                      removeArrayItem(
+                                        ["project", "goals"],
+                                        index
+                                      )
+                                    }
+                                    disabled={isFormDisabled}
+                                    color="error"
+                                    size="small"
+                                    aria-label={`Remove goal ${index + 1}`}
+                                  >
+                                    <DeleteIcon />
+                                  </IconButton>
+                                </Box>
+                              )
+                            )}
+                            <Button
+                              startIcon={<AddIcon />}
+                              onClick={() => addArrayItem(["project", "goals"])}
+                              disabled={isFormDisabled}
+                              variant="outlined"
+                              size="small"
+                              sx={{ alignSelf: "flex-start" }}
+                            >
+                              {t("form.addGoal")}
+                            </Button>
+                          </Stack>
+                        </Box>
+                      </Stack>
+                    </Box>
+
+                    <Divider />
+
+                    {/* Additional Information */}
+                    <Box>
+                      <Stack
+                        direction="row"
+                        alignItems="center"
+                        spacing={1}
+                        mb={2}
+                      >
+                        <InfoIcon />
+                        <Typography variant="h5">
+                          {t("sections.additional")}
+                        </Typography>
+                      </Stack>
+                      <Stack spacing={2}>
+                        <FormControl fullWidth>
+                          <InputLabel>
+                            {t("form.additional.preferredContactMethod")}
+                          </InputLabel>
+                          <Select
+                            value={
+                              formData.additional?.preferredContactMethod || ""
+                            }
+                            onChange={(e) => {
+                              setFormData((prev) => ({
+                                ...prev,
+                                additional: {
+                                  ...prev.additional,
+                                  preferredContactMethod: e.target.value,
+                                },
+                              }));
+                            }}
+                            label={t("form.additional.preferredContactMethod")}
+                            disabled={isFormDisabled}
+                          >
+                            <MenuItem value="email">Email</MenuItem>
+                            <MenuItem value="phone">Phone</MenuItem>
+                            <MenuItem value="video">Video Call</MenuItem>
+                            <MenuItem value="in-person">In Person</MenuItem>
+                          </Select>
+                        </FormControl>
+
+                        <TextField
+                          label={t("form.additional.timezone")}
+                          value={formData.additional?.timezone || ""}
+                          onChange={handleInputChange([
+                            "additional",
+                            "timezone",
+                          ])}
+                          placeholder="e.g., UTC-5, EST, PST"
+                          disabled={isFormDisabled}
+                          fullWidth
+                        />
+
+                        <FormControl fullWidth>
+                          <InputLabel>
+                            {t("form.additional.urgency")}
+                          </InputLabel>
+                          <Select
+                            value={formData.additional?.urgency || ""}
+                            onChange={(e) => {
+                              setFormData((prev) => ({
+                                ...prev,
+                                additional: {
+                                  ...prev.additional,
+                                  urgency: e.target.value,
+                                },
+                              }));
+                            }}
+                            label={t("form.additional.urgency")}
+                            disabled={isFormDisabled}
+                          >
+                            <MenuItem value="low">Low</MenuItem>
+                            <MenuItem value="medium">Medium</MenuItem>
+                            <MenuItem value="high">High</MenuItem>
+                            <MenuItem value="urgent">Urgent</MenuItem>
+                          </Select>
+                        </FormControl>
+
+                        <TextField
+                          label={t("form.additional.notes")}
+                          value={formData.additional?.notes || ""}
+                          onChange={handleInputChange(["additional", "notes"])}
+                          multiline
+                          rows={4}
+                          disabled={isFormDisabled}
+                          fullWidth
+                          helperText={t("form.additional.notesHelper")}
                         />
                       </Stack>
                     </Box>

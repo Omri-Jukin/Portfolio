@@ -38,6 +38,7 @@ import {
   Link as LinkIcon,
   ContentCopy as ContentCopyIcon,
   Close as CloseIcon,
+  CheckCircle as CheckCircleIcon,
 } from "@mui/icons-material";
 import { ClientOnly } from "~/ClientOnly";
 
@@ -54,6 +55,11 @@ const AdminIntakesList = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [generatedLink, setGeneratedLink] = useState<string | null>(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState(
+    "Link copied to clipboard!"
+  );
+  const [formError, setFormError] = useState<string | null>(null);
+  const [copyButtonClicked, setCopyButtonClicked] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     firstName: "",
@@ -65,32 +71,83 @@ const AdminIntakesList = () => {
   });
 
   const handleGenerateLink = async () => {
+    setFormError(null);
+
+    // Validate email before submission
+    const trimmedEmail = formData.email.trim();
+    if (!trimmedEmail) {
+      setFormError("Please enter a valid email address");
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      setFormError("Please enter a valid email address");
+      return;
+    }
+
     try {
       const result = await generateLinkMutation.mutateAsync({
-        email: formData.email,
-        firstName: formData.firstName || undefined,
-        lastName: formData.lastName || undefined,
-        organizationName: formData.organizationName || undefined,
-        organizationWebsite: formData.organizationWebsite || undefined,
+        email: trimmedEmail,
+        firstName: formData.firstName?.trim() || undefined,
+        lastName: formData.lastName?.trim() || undefined,
+        organizationName: formData.organizationName?.trim() || undefined,
+        organizationWebsite: formData.organizationWebsite?.trim() || undefined,
         expiresInDays: formData.expiresInDays,
         locale: formData.locale,
       });
       setGeneratedLink(result.link);
+      setFormError(null);
+
+      // Automatically copy link to clipboard
+      try {
+        await navigator.clipboard.writeText(result.link);
+        setSnackbarMessage("Link copied to clipboard!");
+        setSnackbarOpen(true);
+      } catch (copyError) {
+        console.error("Failed to copy link:", copyError);
+        // Still show the link even if copy fails
+      }
     } catch (error) {
       console.error("Failed to generate link:", error);
+      let errorMessage = "Failed to generate link";
+
+      if (error instanceof Error) {
+        // Handle tRPC error format
+        if (error.message.includes("Invalid email")) {
+          errorMessage = "Please enter a valid email address";
+        } else {
+          errorMessage = error.message;
+        }
+      }
+
+      setFormError(errorMessage);
     }
   };
 
   const handleCopyLink = async () => {
     if (generatedLink) {
-      await navigator.clipboard.writeText(generatedLink);
-      setSnackbarOpen(true);
+      try {
+        await navigator.clipboard.writeText(generatedLink);
+        setSnackbarMessage("Link copied to clipboard!");
+        setSnackbarOpen(true);
+        setCopyButtonClicked(true);
+        setTimeout(() => setCopyButtonClicked(false), 2000);
+      } catch (error) {
+        console.error("Failed to copy link:", error);
+        setSnackbarMessage("Failed to copy link. Please copy manually.");
+        setSnackbarOpen(true);
+      }
     }
   };
 
   const handleCloseDialog = () => {
     setDialogOpen(false);
     setGeneratedLink(null);
+    setFormError(null);
+    setCopyButtonClicked(false);
+    setSnackbarOpen(false);
     setFormData({
       email: "",
       firstName: "",
@@ -168,16 +225,23 @@ const AdminIntakesList = () => {
           </DialogTitle>
           <DialogContent>
             <Stack spacing={3} sx={{ mt: 1 }}>
+              {formError && (
+                <Alert severity="error" onClose={() => setFormError(null)}>
+                  {formError}
+                </Alert>
+              )}
               <TextField
                 label="Email *"
                 type="email"
                 fullWidth
                 required
                 value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                helperText="Client's email address"
+                onChange={(e) => {
+                  setFormData({ ...formData, email: e.target.value });
+                  setFormError(null); // Clear error when user types
+                }}
+                helperText={formError || "Client's email address"}
+                error={!!formError}
               />
               <Stack direction="row" spacing={2}>
                 <TextField
@@ -280,8 +344,21 @@ const AdminIntakesList = () => {
                     >
                       {generatedLink}
                     </Typography>
-                    <IconButton onClick={handleCopyLink} color="primary">
-                      <ContentCopyIcon />
+                    <IconButton
+                      onClick={handleCopyLink}
+                      color={copyButtonClicked ? "success" : "primary"}
+                      sx={{
+                        transition: "all 0.2s ease-in-out",
+                        transform: copyButtonClicked
+                          ? "scale(1.1)"
+                          : "scale(1)",
+                      }}
+                    >
+                      {copyButtonClicked ? (
+                        <CheckCircleIcon />
+                      ) : (
+                        <ContentCopyIcon />
+                      )}
                     </IconButton>
                   </Box>
                 </Box>
@@ -305,9 +382,20 @@ const AdminIntakesList = () => {
         {/* Snackbar for copy confirmation */}
         <Snackbar
           open={snackbarOpen}
-          autoHideDuration={3000}
+          autoHideDuration={4000}
           onClose={() => setSnackbarOpen(false)}
-          message="Link copied to clipboard!"
+          message={snackbarMessage}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          action={
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={() => setSnackbarOpen(false)}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          }
         />
 
         {!intakes || intakes.length === 0 ? (

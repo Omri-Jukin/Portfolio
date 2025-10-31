@@ -13,25 +13,29 @@ const handler = async (req: Request) => {
         try {
           return await createContext(opts);
         } catch (error) {
-          // During build time, if database connection fails, return a minimal context
-          if (
-            process.env.NODE_ENV === "production" &&
-            !process.env.VERCEL &&
-            error instanceof Error &&
-            error.message.includes("Database not available during build")
-          ) {
-            console.warn("Using minimal context during build time");
-            return {
-              db: null,
-              user: null,
-              resHeaders: new Headers(),
-              origin:
-                typeof opts.req.headers.get === "function"
-                  ? opts.req.headers.get("origin") ?? ""
-                  : "",
-            };
-          }
-          throw error;
+          // Always return a valid context, never throw
+          // This ensures JSON responses instead of HTML error pages
+          console.error(
+            "Error creating context, using minimal context:",
+            error
+          );
+          return {
+            db: null,
+            user: null,
+            resHeaders: new Headers(),
+            origin:
+              typeof opts.req.headers.get === "function"
+                ? opts.req.headers.get("origin") ??
+                  (opts.req.headers.get("host")
+                    ? `https://${opts.req.headers.get("host")}`
+                    : null) ??
+                  (process.env.NODE_ENV === "production"
+                    ? "https://omrijukin.com"
+                    : "http://localhost:3000")
+                : process.env.NODE_ENV === "production"
+                ? "https://omrijukin.com"
+                : "http://localhost:3000",
+          };
         }
       },
       onError: ({ error, path }) => {

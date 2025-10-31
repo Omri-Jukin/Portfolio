@@ -142,7 +142,9 @@ export const intakesRouter = router({
         (process.env.NODE_ENV === "production"
           ? "https://omrijukin.com"
           : "http://localhost:3000");
-      const link = `${baseUrl}/${input.locale}/intake?token=${token}`;
+      const link = `${baseUrl}/${
+        input.locale
+      }/intake?token=${encodeURIComponent(token)}`;
 
       return {
         link,

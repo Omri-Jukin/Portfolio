@@ -1422,7 +1422,8 @@
     "sections": {
       "contact": "Información de Contacto",
       "organization": "Información de la Organización",
-      "project": "Información del Proyecto"
+      "project": "Información del Proyecto",
+      "additional": "Información Adicional"
     },
     "form": {
       "contact": {
@@ -1451,8 +1452,12 @@
         "preferredContactMethod": "Método de Contacto Preferido",
         "timezone": "Zona Horaria",
         "urgency": "Nivel de Urgencia",
-        "notes": "Notas Adicionales"
+        "notes": "Notas Adicionales",
+        "notesHelper": "Cualquier información adicional, requisitos especiales o notas sobre tu proyecto"
       },
+      "addTechnology": "Agregar Tecnología",
+      "addRequirement": "Agregar Requisito",
+      "addGoal": "Agregar Objetivo",
       "submit": "Enviar Formulario de Ingreso",
       "submitting": "Enviando..."
     },

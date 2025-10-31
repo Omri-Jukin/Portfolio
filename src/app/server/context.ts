@@ -43,12 +43,21 @@ export async function createContext({
         "CRITICAL: Database connection failed - this is required for the app to function"
       );
 
-      // Database connection is mandatory - throw error to prevent app from running
-      throw new Error(
-        `Database connection failed: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
-      );
+      // In production, don't throw - return null db and let endpoints handle it
+      // This prevents HTML error pages from being returned
+      if (process.env.NODE_ENV === "production") {
+        console.warn(
+          "Continuing without database connection - endpoints will handle errors"
+        );
+        db = null;
+      } else {
+        // Database connection is mandatory - throw error to prevent app from running
+        throw new Error(
+          `Database connection failed: ${
+            error instanceof Error ? error.message : "Unknown error"
+          }`
+        );
+      }
     }
   }
 
