@@ -41,10 +41,20 @@ export default async function middleware(request: NextRequest) {
 
     // If custom token is provided, validate it and set cookie
     if (customToken) {
+      console.log("[Middleware] Found custom token in URL, verifying...");
       try {
         const payload = await verifyIntakeSessionToken(customToken);
-        if (payload && payload.isCustomLink) {
+        console.log("[Middleware] Token verification result:", {
+          hasPayload: !!payload,
+          isCustomLink: payload?.isCustomLink,
+          email: payload?.email,
+        });
+
+        if (payload && payload.isCustomLink === true) {
           // Valid custom token - set cookie and allow access
+          console.log(
+            "[Middleware] Valid custom link token, setting cookie and allowing access"
+          );
           const response = intlMiddleware(request);
           response.cookies.set("intake-session-token", customToken, {
             httpOnly: true,
@@ -54,9 +64,16 @@ export default async function middleware(request: NextRequest) {
             path: "/",
           });
           return response;
+        } else {
+          // Token is valid but not a custom link token
+          console.error("[Middleware] Token is valid but not a custom link:", {
+            hasPayload: !!payload,
+            isCustomLink: payload?.isCustomLink,
+            email: payload?.email,
+          });
         }
       } catch (error) {
-        console.error("Failed to verify custom token:", error);
+        console.error("[Middleware] Failed to verify custom token:", error);
         // Fall through to redirect
       }
     }

@@ -43,26 +43,42 @@ const CustomCalendlyWrapper = ({
     setIsClient(true);
   }, []);
 
-  // Listen for Calendly events
+  // Listen for Calendly events - Enhanced callback handling
   useEffect(() => {
     if (!isClient) return;
 
-    const handleEventScheduled = (e: MessageEvent) => {
+    const handleCalendlyEvent = (e: MessageEvent) => {
+      // Only process messages from Calendly origin
+      if (!e.origin.includes("calendly.com")) {
+        return;
+      }
+
       // Check if this is a Calendly event
-      if (e.data.event && e.data.event.indexOf("calendly") === 0) {
+      if (e.data?.event && typeof e.data.event === "string") {
         const eventName = e.data.event;
 
+        console.log("[Calendly] Event received:", eventName, e.data);
+
+        // Handle event scheduled callback
         if (eventName === "calendly.event_scheduled") {
-          const payload = e.data.payload;
+          try {
+            const payload = e.data.payload;
 
-          // Extract booking details
-          const inviteeEmail = payload?.invitee?.email;
-          const inviteeFirstName = payload?.invitee?.first_name;
-          const inviteeLastName = payload?.invitee?.last_name;
-          const eventUri = payload?.event?.uri;
-          const inviteeUri = payload?.invitee?.uri;
+            // Extract booking details with validation
+            const inviteeEmail = payload?.invitee?.email;
+            const inviteeFirstName = payload?.invitee?.first_name;
+            const inviteeLastName = payload?.invitee?.last_name;
+            const eventUri = payload?.event?.uri;
+            const inviteeUri = payload?.invitee?.uri;
 
-          if (inviteeEmail && eventUri) {
+            if (!inviteeEmail || !eventUri) {
+              console.error("[Calendly] Missing required fields:", {
+                inviteeEmail,
+                eventUri,
+              });
+              return;
+            }
+
             // Get locale from pathname
             const locale = pathname.split("/")[1] || "en";
 
@@ -83,17 +99,30 @@ const CustomCalendlyWrapper = ({
               intakeUrl.searchParams.set("inviteeUri", inviteeUri);
             }
 
-            // Redirect to intake form
-            router.push(intakeUrl.pathname + intakeUrl.search);
+            console.log(
+              "[Calendly] Redirecting to intake form:",
+              intakeUrl.toString()
+            );
+
+            // Small delay to ensure Calendly confirmation is visible
+            setTimeout(() => {
+              router.push(intakeUrl.pathname + intakeUrl.search);
+            }, 500);
+          } catch (error) {
+            console.error("[Calendly] Error processing event:", error);
           }
         }
       }
     };
 
-    window.addEventListener("message", handleEventScheduled);
+    // Add event listener with proper origin check
+    window.addEventListener("message", handleCalendlyEvent);
+
+    console.log("[Calendly] Event listener attached for intake form redirect");
 
     return () => {
-      window.removeEventListener("message", handleEventScheduled);
+      window.removeEventListener("message", handleCalendlyEvent);
+      console.log("[Calendly] Event listener removed");
     };
   }, [isClient, router, pathname]);
 
@@ -444,6 +473,11 @@ const CustomCalendlyWrapper = ({
               email: "",
               firstName: "",
               lastName: "",
+            }}
+            utm={{
+              utmCampaign: "Portfolio Intake",
+              utmSource: "Website",
+              utmMedium: "Calendly Widget",
             }}
           />
         </Box>

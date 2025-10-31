@@ -113,6 +113,14 @@ export const authRouter = router({
     .mutation(async (opts) => {
       const { input, ctx } = opts;
 
+      // Check database availability first
+      if (!ctx.db) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Database connection unavailable. Please try again later.",
+        });
+      }
+
       try {
         // Get JWT secret from context environment
         const JWT_SECRET =

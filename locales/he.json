@@ -1380,7 +1380,8 @@
     "sections": {
       "contact": "פרטי יצירת קשר",
       "organization": "פרטי הארגון",
-      "project": "פרטי הפרויקט"
+      "project": "פרטי הפרויקט",
+      "additional": "מידע נוסף"
     },
     "form": {
       "contact": {
@@ -1409,8 +1410,12 @@
         "preferredContactMethod": "שיטת יצירת קשר מועדפת",
         "timezone": "אזור זמן",
         "urgency": "רמת דחיפות",
-        "notes": "הערות נוספות"
+        "notes": "הערות נוספות",
+        "notesHelper": "כל מידע נוסף, דרישות מיוחדות או הערות על הפרויקט שלך"
       },
+      "addTechnology": "הוסף טכנולוגיה",
+      "addRequirement": "הוסף דרישה",
+      "addGoal": "הוסף מטרה",
       "submit": "שלח טופס כניסה",
       "submitting": "שולח..."
     },

@@ -1439,7 +1439,8 @@
     "sections": {
       "contact": "Contact Information",
       "organization": "Organization Information",
-      "project": "Project Information"
+      "project": "Project Information",
+      "additional": "Additional Information"
     },
     "form": {
       "contact": {
@@ -1468,8 +1469,12 @@
         "preferredContactMethod": "Preferred Contact Method",
         "timezone": "Timezone",
         "urgency": "Urgency Level",
-        "notes": "Additional Notes"
+        "notes": "Additional Notes",
+        "notesHelper": "Any additional information, special requirements, or notes about your project"
       },
+      "addTechnology": "Add Technology",
+      "addRequirement": "Add Requirement",
+      "addGoal": "Add Goal",
       "submit": "Submit Intake Form",
       "submitting": "Submitting..."
     },
