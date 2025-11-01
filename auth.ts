@@ -1,13 +1,9 @@
-import type { NextAuthOptions } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { getDB } from "$/db/client";
-import type { Adapter } from "next-auth/adapters";
+import NextAuth from "next-auth";
+import Google from "next-auth/providers/google";
 
-export const authOptions: NextAuthOptions = {
-  adapter: DrizzleAdapter(await getDB()) as Adapter,
+export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
-    GoogleProvider({
+    Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
@@ -29,19 +25,20 @@ export const authOptions: NextAuthOptions = {
       });
       return false; // Reject all other users
     },
-    async session({ session, user }) {
-      // Add custom fields to session
-      if (session.user) {
+    async session({ session, token }) {
+      // Add custom fields to session from JWT token
+      if (session.user && token) {
         session.user.role = "admin";
-        session.user.id = user.id;
+        session.user.id = token.sub || "";
       }
       return session;
     },
     async jwt({ token, user }) {
-      // Add user info to JWT token
+      // Store user info in JWT token on first sign in
       if (user) {
         token.role = "admin";
-        token.id = user.id;
+        token.email = user.email || undefined;
+        token.name = user.name || undefined;
       }
       return token;
     },
@@ -51,7 +48,10 @@ export const authOptions: NextAuthOptions = {
     error: "/login",
   },
   session: {
-    strategy: "database",
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   secret: process.env.NEXTAUTH_SECRET,
-};
+  debug: true, // Temporarily enabled for debugging
+  trustHost: true, // Required for Cloudflare Workers
+});
