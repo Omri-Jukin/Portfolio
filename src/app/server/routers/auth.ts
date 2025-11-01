@@ -62,7 +62,18 @@ export const authRouter = router({
         let isFirstUser = false;
         try {
           console.log("[AUTH] Checking if this is the first user");
-          const existingUsers = await ctx.db.query.users.findMany({
+          if (!ctx.db || !("query" in ctx.db)) {
+            throw new TRPCError({
+              code: "INTERNAL_SERVER_ERROR",
+              message:
+                "Database connection unavailable. Please try again later.",
+            });
+          }
+          // Type assertion: after null/query checks, we know it's a valid Drizzle client
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const db = ctx.db as any;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for build-time handling
+          const existingUsers = await (db.query as any).users.findMany({
             limit: 1,
           });
           isFirstUser = existingUsers.length === 0;
@@ -71,6 +82,10 @@ export const authRouter = router({
             existingUserCount: existingUsers.length,
           });
         } catch (dbError) {
+          // If it's already a TRPCError, re-throw it
+          if (dbError instanceof TRPCError) {
+            throw dbError;
+          }
           console.error("[AUTH] Database query failed during registration:", {
             error: dbError instanceof Error ? dbError.message : String(dbError),
             stack: dbError instanceof Error ? dbError.stack : undefined,
@@ -463,7 +478,7 @@ export const authRouter = router({
 
     try {
       const pendingUsers = await getPendingUsers();
-      return pendingUsers.map((user) => ({
+      return pendingUsers.map((user: User) => ({
         id: user.id,
         email: user.email,
         firstName: user.firstName,

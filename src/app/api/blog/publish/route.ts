@@ -46,7 +46,8 @@ export async function POST(request: NextRequest) {
     const dbClient = await getDB();
 
     // Find the first admin user (or create a default one)
-    const adminUser = await dbClient.query.users.findFirst({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for build-time handling
+    const adminUser = await ((dbClient as any).query as any).users.findFirst({
       where: eq(users.role, "admin"),
     });
 

@@ -1,4 +1,4 @@
-import { getDB } from "../client";
+import { DbClient, getDB } from "../client";
 import { adminDashboardSections } from "../schema/schema.tables";
 import { eq } from "drizzle-orm";
 
@@ -34,20 +34,45 @@ export const DEFAULT_SECTIONS = [
 export async function initializeDashboardSections(): Promise<void> {
   const db = await getDB();
 
-  try {
-    const existing = await db.query.adminDashboardSections.findMany();
-    if (existing.length > 0) {
-      return; // Already initialized
-    }
-  } catch {
-    // Table doesn't exist yet - we'll let the migration handle it
-    // Just return silently to avoid breaking the app
-    console.warn("Dashboard sections table not found. Please run migrations.");
+  // Handle build-time scenarios where db might be null
+  if (!db || !("query" in db)) {
+    console.warn(
+      "Database not available during build, skipping dashboard initialization"
+    );
     return;
   }
 
   try {
-    await db.insert(adminDashboardSections).values(
+    // Type assertion: after null/query checks, we know it's a valid Drizzle client
+    const existing =
+      await // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for build-time handling
+      ((db as any).query as any).adminDashboardSections.findMany({
+        orderBy: (
+          sections: typeof adminDashboardSections,
+          {
+            asc,
+          }: {
+            asc: (
+              column: typeof adminDashboardSections.displayOrder
+            ) => unknown;
+          }
+        ) => [asc(sections.displayOrder)],
+        where: (
+          sections: typeof adminDashboardSections,
+          {
+            eq,
+          }: {
+            eq: (
+              column: typeof adminDashboardSections.enabled,
+              value: boolean
+            ) => unknown;
+          }
+        ) => eq(sections.enabled, true),
+      });
+    if (existing.length > 0) {
+      return; // Already initialized
+    }
+    await (db as DbClient).insert(adminDashboardSections).values(
       DEFAULT_SECTIONS.map((section) => ({
         sectionKey: section.sectionKey,
         displayOrder: section.displayOrder,
@@ -66,16 +91,51 @@ export async function initializeDashboardSections(): Promise<void> {
 export async function getDashboardSections(): Promise<AdminDashboardSection[]> {
   const db = await getDB();
 
+  // Handle build-time scenarios where db might be null
+  if (!db || !("query" in db)) {
+    console.warn(
+      "Database not available during build, returning empty dashboard sections"
+    );
+    return [];
+  }
+
   // Initialize if needed (handles missing table gracefully)
   await initializeDashboardSections();
 
   try {
-    const sections = await db.query.adminDashboardSections.findMany({
-      orderBy: (sections, { asc }) => [asc(sections.displayOrder)],
-      where: (sections, { eq }) => eq(sections.enabled, true),
-    });
+    if (!("query" in db)) {
+      throw new Error(
+        "Database connection unavailable. Please try again later."
+      );
+    }
+    // Type assertion: after null/query checks, we know it's a valid Drizzle client
+    const sections =
+      await // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for build-time handling
+      ((db as any).query as any).adminDashboardSections.findMany({
+        orderBy: (
+          sections: typeof adminDashboardSections,
+          {
+            asc,
+          }: {
+            asc: (
+              column: typeof adminDashboardSections.displayOrder
+            ) => unknown;
+          }
+        ) => [asc(sections.displayOrder)],
+        where: (
+          sections: typeof adminDashboardSections,
+          {
+            eq,
+          }: {
+            eq: (
+              column: typeof adminDashboardSections.enabled,
+              value: boolean
+            ) => unknown;
+          }
+        ) => eq(sections.enabled, true),
+      });
 
-    return sections.map((section) => ({
+    return sections.map((section: typeof adminDashboardSections) => ({
       id: section.id,
       sectionKey: section.sectionKey,
       displayOrder: section.displayOrder,
@@ -97,6 +157,14 @@ export async function updateDashboardSectionOrder(
   input: UpdateSectionOrderInput
 ): Promise<void> {
   const db = await getDB();
+
+  // Handle build-time scenarios where db might be null
+  if (!db || !("query" in db)) {
+    console.warn(
+      "Database not available during build, skipping dashboard section order update"
+    );
+    return;
+  }
 
   // Update each section's order
   await Promise.all(
@@ -120,11 +188,22 @@ export async function getSectionByKey(
 ): Promise<AdminDashboardSection | null> {
   const db = await getDB();
 
+  // Handle build-time scenarios where db might be null
+  if (!db || !("query" in db)) {
+    console.warn(
+      "Database not available during build, skipping section lookup"
+    );
+    return null;
+  }
+
   await initializeDashboardSections();
 
-  const section = await db.query.adminDashboardSections.findFirst({
-    where: eq(adminDashboardSections.sectionKey, sectionKey),
-  });
+  // Type assertion: after null/query checks, we know it's a valid Drizzle client
+  const section =
+    await // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for build-time handling
+    ((db as any).query as any).adminDashboardSections.findFirst({
+      where: eq(adminDashboardSections.sectionKey, sectionKey),
+    });
 
   if (!section) return null;
 

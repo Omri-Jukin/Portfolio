@@ -252,11 +252,23 @@ export async function getCustomLinkBySlug(
 export async function getAllCustomLinks(): Promise<CustomLink[]> {
   const db = await getDB();
 
-  const links = await db.query.customIntakeLinks.findMany({
-    orderBy: (links, { desc }) => [desc(links.createdAt)],
+  // Handle build-time scenarios where db might be null
+  if (!db || !("query" in db)) {
+    return [];
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for build-time handling
+  const links = await ((db as any).query as any).customIntakeLinks.findMany({
+    orderBy: (
+      links: typeof customIntakeLinks,
+      {
+        desc,
+      }: { desc: (column: typeof customIntakeLinks.createdAt) => unknown }
+    ) => [desc(links.createdAt)],
   });
 
-  return links.map((link) => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for query result
+  return links.map((link: any) => ({
     id: link.id,
     slug: link.slug,
     email: link.email,
