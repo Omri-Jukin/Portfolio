@@ -143,6 +143,7 @@
     "clean-install": "rm -rf node_modules package-lock.json .next && npm install",
     "seed:email-templates": "npx tsx scripts/seed-email-templates.ts",
     "test:db": "npx tsx scripts/test-db-connection.ts",
+    "set:secrets": "node scripts/set-cloudflare-secrets.js",
     "//7": "— git —",
     "gitgraph": "git log --graph --decorate --oneline --all"
   },

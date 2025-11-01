@@ -8,22 +8,34 @@ This document explains how to configure environment variables for production dep
 
 These MUST be set as **encrypted secrets** in Cloudflare (never in `wrangler.jsonc`):
 
+#### Option A: Using the Node.js Script (Recommended - Cross-platform)
+
 ```bash
-# Via Wrangler CLI (recommended):
-npx wrangler secret put DATABASE_URL
-npx wrangler secret put JWT_SECRET
-npx wrangler secret put BLOG_API_KEY
-npx wrangler secret put AWS_ACCESS_KEY_ID
-npx wrangler secret put AWS_SECRET_ACCESS_KEY
-npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
-npx wrangler secret put GMAIL_USER
-npx wrangler secret put GMAIL_APP_PASSWORD
-npx wrangler secret put SMTP_USERNAME
-npx wrangler secret put SMTP_PW
-npx wrangler secret put GITHUB_PERSONAL_ACCESS_KEY
+npm run set:secrets
+# or
+node scripts/set-cloudflare-secrets.js
 ```
 
-**Or via Cloudflare Dashboard:**
+The script will guide you through setting all secrets interactively.
+
+#### Option B: Via Wrangler CLI (Manual)
+
+```bash
+# Via Wrangler CLI:
+npx wrangler secret put DATABASE_URL --name homepage
+npx wrangler secret put JWT_SECRET --name homepage
+npx wrangler secret put BLOG_API_KEY --name homepage
+npx wrangler secret put AWS_ACCESS_KEY_ID --name homepage
+npx wrangler secret put AWS_SECRET_ACCESS_KEY --name homepage
+npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY --name homepage
+npx wrangler secret put GMAIL_USER --name homepage
+npx wrangler secret put GMAIL_APP_PASSWORD --name homepage
+npx wrangler secret put SMTP_USERNAME --name homepage
+npx wrangler secret put SMTP_PW --name homepage
+npx wrangler secret put GITHUB_PERSONAL_ACCESS_KEY --name homepage
+```
+
+#### Option C: Via Cloudflare Dashboard
 
 1. Go to Workers & Pages → Your Project
 2. Settings → Variables and Secrets
@@ -137,11 +149,13 @@ If you see `npm error code ECONNRESET` during Cloudflare Pages builds:
 4. **Consider build caching** - Cloudflare Pages caches `node_modules` between builds if the lockfile hasn't changed
 
 The `.npmrc` file includes:
+
 - Increased timeouts (5 minutes)
 - Retry logic (5 retries with exponential backoff)
 - Optimized socket configuration
 
 If the issue persists:
+
 - Check Cloudflare Pages status page for known issues
 - Try deploying during off-peak hours
 - Consider using Cloudflare's build cache by ensuring `package-lock.json` is committed
