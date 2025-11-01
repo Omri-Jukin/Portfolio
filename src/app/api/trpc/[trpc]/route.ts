@@ -38,12 +38,16 @@ const handler = async (req: Request) => {
           };
         }
       },
-      onError: ({ error, path, type }) => {
-        console.error(`tRPC error on '${path ?? "<no-path>"}':`, {
+      onError: ({ error, path, type, ctx }) => {
+        console.error(`[TRPC] Error on '${path ?? "<no-path>"}':`, {
           error: error.message,
           code: error.code,
           type,
           cause: error.cause,
+          stack: error.stack,
+          hasDb: !!ctx?.db,
+          hasUser: !!ctx?.user,
+          timestamp: new Date().toISOString(),
         });
       },
       responseMeta: () => {

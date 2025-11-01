@@ -35,9 +35,22 @@ export const authRouter = router({
     )
     .mutation(async (opts) => {
       const { input, ctx } = opts;
+      const startTime = Date.now();
+
+      // Enhanced logging for production debugging
+      console.log("[AUTH] Registration attempt started:", {
+        email: input.email,
+        firstName: input.firstName,
+        timestamp: new Date().toISOString(),
+        nodeEnv: process.env.NODE_ENV,
+        hasDb: !!ctx.db,
+      });
 
       // Check database availability first
       if (!ctx.db) {
+        console.error(
+          "[AUTH] Database connection unavailable during registration"
+        );
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Database connection unavailable. Please try again later.",
@@ -48,12 +61,21 @@ export const authRouter = router({
         // Check if this is the first user (make them admin)
         let isFirstUser = false;
         try {
+          console.log("[AUTH] Checking if this is the first user");
           const existingUsers = await ctx.db.query.users.findMany({
             limit: 1,
           });
           isFirstUser = existingUsers.length === 0;
+          console.log("[AUTH] First user check result:", {
+            isFirstUser,
+            existingUserCount: existingUsers.length,
+          });
         } catch (dbError) {
-          console.error("Database query failed during registration:", dbError);
+          console.error("[AUTH] Database query failed during registration:", {
+            error: dbError instanceof Error ? dbError.message : String(dbError),
+            stack: dbError instanceof Error ? dbError.stack : undefined,
+            email: input.email,
+          });
           throw new TRPCError({
             code: "INTERNAL_SERVER_ERROR",
             message: "Database error. Please try again later.",
@@ -66,34 +88,85 @@ export const authRouter = router({
         // Never hash passwords before passing them to createUser().
         let newUser;
         try {
-          newUser = await createUser({
+          console.log("[AUTH] Attempting to create user:", {
             email: input.email,
-            firstName: input.firstName,
-            lastName: input.lastName,
-            password: input.password, // Plain text password - will be hashed once in createUser()
-            role: isFirstUser ? "admin" : "visitor", // First user becomes admin
-            status: isFirstUser ? "approved" : "pending", // First user is auto-approved
+            role: isFirstUser ? "admin" : "visitor",
+            status: isFirstUser ? "approved" : "pending",
+          });
+
+          // Use the database client from context to avoid connection issues
+          newUser = await createUser(
+            {
+              email: input.email,
+              firstName: input.firstName,
+              lastName: input.lastName,
+              password: input.password, // Plain text password - will be hashed once in createUser()
+              role: isFirstUser ? "admin" : "visitor", // First user becomes admin
+              status: isFirstUser ? "approved" : "pending", // First user is auto-approved
+            },
+            ctx.db // Pass the database client from context
+          );
+
+          console.log("[AUTH] User created successfully:", {
+            userId: newUser.id,
+            email: newUser.email,
+            role: newUser.role,
+            status: newUser.status,
           });
         } catch (createError) {
-          console.error("Error creating user:", createError);
+          console.error("[AUTH] Error creating user:", {
+            error:
+              createError instanceof Error
+                ? createError.message
+                : String(createError),
+            stack: createError instanceof Error ? createError.stack : undefined,
+            errorType: createError?.constructor?.name || typeof createError,
+            email: input.email,
+            // Check if it's a database connection error
+            isDbConnectionError:
+              createError instanceof Error &&
+              (createError.message.includes("DATABASE_URL") ||
+                createError.message.includes("Database connection failed") ||
+                createError.message.includes("Database client not available")),
+          });
 
           // Handle duplicate user error
           if (
             createError instanceof Error &&
             createError.message.includes("already exists")
           ) {
+            console.log("[AUTH] Duplicate user detected");
             throw new TRPCError({
               code: "CONFLICT",
               message: "User with this email already exists",
             });
           }
 
-          // Handle database errors
+          // Handle database errors with more specific messaging
+          const errorMessage =
+            createError instanceof Error
+              ? createError.message
+              : "Unknown error";
+          console.error(
+            "[AUTH] Database error during user creation:",
+            errorMessage
+          );
+
           throw new TRPCError({
             code: "INTERNAL_SERVER_ERROR",
             message: "Database error. Please try again later.",
           });
         }
+
+        const duration = Date.now() - startTime;
+        console.log("[AUTH] Registration successful:", {
+          email: newUser.email,
+          userId: newUser.id,
+          role: newUser.role,
+          status: newUser.status,
+          isFirstUser,
+          duration: `${duration}ms`,
+        });
 
         return {
           user: {
@@ -109,13 +182,27 @@ export const authRouter = router({
             : "Registration successful! Please wait for admin approval.",
         };
       } catch (error) {
-        // If it's already a TRPCError, re-throw it
+        const duration = Date.now() - startTime;
+
+        // If it's already a TRPCError, log and re-throw it
         if (error instanceof TRPCError) {
+          console.error("[AUTH] Registration failed (TRPCError):", {
+            code: error.code,
+            message: error.message,
+            email: input.email,
+            duration: `${duration}ms`,
+          });
           throw error;
         }
 
-        // Log unexpected errors
-        console.error("Unexpected registration error:", error);
+        // Log unexpected errors with full details
+        console.error("[AUTH] Unexpected registration error:", {
+          error: error instanceof Error ? error.message : String(error),
+          stack: error instanceof Error ? error.stack : undefined,
+          email: input.email,
+          duration: `${duration}ms`,
+          errorType: error?.constructor?.name || typeof error,
+        });
 
         // Convert any other errors to TRPCError with proper JSON format
         throw new TRPCError({
@@ -138,9 +225,20 @@ export const authRouter = router({
     )
     .mutation(async (opts) => {
       const { input, ctx } = opts;
+      const startTime = Date.now();
+
+      // Enhanced logging for production debugging
+      console.log("[AUTH] Login attempt started:", {
+        email: input.email,
+        timestamp: new Date().toISOString(),
+        nodeEnv: process.env.NODE_ENV,
+        hasDb: !!ctx.db,
+        hasUser: !!ctx.user,
+      });
 
       // Check database availability first
       if (!ctx.db) {
+        console.error("[AUTH] Database connection unavailable during login");
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Database connection unavailable. Please try again later.",
@@ -158,8 +256,14 @@ export const authRouter = router({
           process.env.NODE_ENV ||
           "development";
 
+        console.log("[AUTH] Environment check:", {
+          hasJwtSecret: !!JWT_SECRET && JWT_SECRET !== "JWT_SECRET_KEY",
+          nodeEnv: NODE_ENV,
+          jwtSecretLength: JWT_SECRET?.length || 0,
+        });
+
         if (!JWT_SECRET || JWT_SECRET === "JWT_SECRET_KEY") {
-          console.error("JWT_SECRET is not properly configured");
+          console.error("[AUTH] JWT_SECRET is not properly configured");
           throw new TRPCError({
             code: "INTERNAL_SERVER_ERROR",
             message: "Server configuration error. Please contact support.",
@@ -169,9 +273,18 @@ export const authRouter = router({
         // Find user by email - pass the database client from context
         let userResult;
         try {
+          console.log("[AUTH] Attempting to find user in database");
           userResult = await loginUser(input, ctx.db);
+          console.log("[AUTH] User lookup result:", {
+            found: !!userResult,
+            hasEmail: !!userResult?.email,
+          });
         } catch (dbError) {
-          console.error("Database error during login:", dbError);
+          console.error("[AUTH] Database error during login:", {
+            error: dbError instanceof Error ? dbError.message : String(dbError),
+            stack: dbError instanceof Error ? dbError.stack : undefined,
+            email: input.email,
+          });
           throw new TRPCError({
             code: "INTERNAL_SERVER_ERROR",
             message: "Database error. Please try again later.",
@@ -207,7 +320,7 @@ export const authRouter = router({
 
         // Verify password
         if (!user.password) {
-          console.error("User password is missing for:", user.email);
+          console.error("[AUTH] User password is missing for:", user.email);
           throw new TRPCError({
             code: "UNAUTHORIZED",
             message: "Invalid email or password",
@@ -216,12 +329,16 @@ export const authRouter = router({
 
         let isValidPassword = false;
         try {
+          console.log("[AUTH] Verifying password");
           isValidPassword = await bcrypt.compare(input.password, user.password);
         } catch (bcryptError) {
-          console.error(
-            "Bcrypt error during password comparison:",
-            bcryptError
-          );
+          console.error("[AUTH] Bcrypt error during password comparison:", {
+            error:
+              bcryptError instanceof Error
+                ? bcryptError.message
+                : String(bcryptError),
+            email: input.email,
+          });
           throw new TRPCError({
             code: "INTERNAL_SERVER_ERROR",
             message: "Authentication error. Please try again.",
@@ -229,7 +346,7 @@ export const authRouter = router({
         }
 
         if (!isValidPassword) {
-          console.error("Password mismatch for user:", user.email);
+          console.error("[AUTH] Password mismatch for user:", user.email);
           throw new TRPCError({
             code: "UNAUTHORIZED",
             message: "Invalid email or password",
@@ -239,6 +356,7 @@ export const authRouter = router({
         // Generate JWT token
         let token: string;
         try {
+          console.log("[AUTH] Generating JWT token");
           const secret = new TextEncoder().encode(JWT_SECRET);
           token = await new jose.SignJWT({
             userId: user.id,
@@ -248,8 +366,13 @@ export const authRouter = router({
             .setProtectedHeader({ alg: "HS256" })
             .setExpirationTime(JWT_EXPIRES_IN)
             .sign(secret);
+          console.log("[AUTH] JWT token generated successfully");
         } catch (jwtError) {
-          console.error("JWT signing error:", jwtError);
+          console.error("[AUTH] JWT signing error:", {
+            error:
+              jwtError instanceof Error ? jwtError.message : String(jwtError),
+            email: user.email,
+          });
           throw new TRPCError({
             code: "INTERNAL_SERVER_ERROR",
             message: "Authentication error. Please try again.",
@@ -269,7 +392,16 @@ export const authRouter = router({
           ].join("; ");
 
           ctx.resHeaders.set("Set-Cookie", cookieOptions);
+          console.log("[AUTH] Cookie set in response headers");
         }
+
+        const duration = Date.now() - startTime;
+        console.log("[AUTH] Login successful:", {
+          email: user.email,
+          userId: user.id,
+          role: user.role,
+          duration: `${duration}ms`,
+        });
 
         // Return user data (without password)
         return {
@@ -284,13 +416,27 @@ export const authRouter = router({
           token,
         };
       } catch (error) {
-        // If it's already a TRPCError, re-throw it
+        const duration = Date.now() - startTime;
+
+        // If it's already a TRPCError, log and re-throw it
         if (error instanceof TRPCError) {
+          console.error("[AUTH] Login failed (TRPCError):", {
+            code: error.code,
+            message: error.message,
+            email: input.email,
+            duration: `${duration}ms`,
+          });
           throw error;
         }
 
-        // Log unexpected errors
-        console.error("Unexpected login error:", error);
+        // Log unexpected errors with full details
+        console.error("[AUTH] Unexpected login error:", {
+          error: error instanceof Error ? error.message : String(error),
+          stack: error instanceof Error ? error.stack : undefined,
+          email: input.email,
+          duration: `${duration}ms`,
+          errorType: error?.constructor?.name || typeof error,
+        });
 
         // Convert any other errors to TRPCError with proper JSON format
         throw new TRPCError({

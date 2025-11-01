@@ -78,9 +78,17 @@ export type UpdateUserInput = {
   status?: UserStatus;
 };
 
-export const createUser = async (input: CreateUserInput) => {
+export const createUser = async (
+  input: CreateUserInput,
+  db?: Awaited<ReturnType<typeof getDB>>
+) => {
   try {
-    const dbClient = await getDB();
+    // Use provided database client or create a new one
+    let dbClient = db;
+    if (!dbClient) {
+      console.log("[USER] No db client provided, creating new connection");
+      dbClient = await getDB();
+    }
 
     // Check if user already exists
     const existingUser = await dbClient.query.users.findFirst({
@@ -116,7 +124,19 @@ export const createUser = async (input: CreateUserInput) => {
 
     return newUser[0];
   } catch (error) {
-    console.error("Failed to create user:", error);
+    console.error("[USER] Failed to create user:", {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      email: input.email,
+      hasProvidedDb: !!db,
+    });
+
+    // If it's already a specific error (like duplicate user), re-throw it
+    if (error instanceof Error && error.message.includes("already exists")) {
+      throw error;
+    }
+
+    // Otherwise, throw a generic database error
     throw new Error(
       "Database client not available. Please check your Supabase DATABASE_URL configuration."
     );
