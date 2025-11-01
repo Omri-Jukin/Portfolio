@@ -2,8 +2,7 @@
 
 import { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 import { getDB, getMockDB } from "$/db/client";
-import { getServerSession } from "next-auth";
-import { authOptions } from "$/auth/config";
+import { auth } from "../../../auth";
 
 // User type for authentication
 interface AuthenticatedUser {
@@ -72,14 +71,14 @@ export async function createContext({
     }
   }
 
-  // Get user from NextAuth session
+  // Get user from Auth.js session
   let user: AuthenticatedUser | null = null;
 
   try {
-    const session = await getServerSession(authOptions);
+    const session = await auth();
 
     if (session?.user) {
-      // Transform NextAuth session user to our AuthenticatedUser type
+      // Transform Auth.js session user to our AuthenticatedUser type
       user = {
         id: session.user.id,
         email: session.user.email || "",
