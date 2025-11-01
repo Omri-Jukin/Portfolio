@@ -184,7 +184,7 @@ export class SkillManager {
 
   static async delete(id: string): Promise<boolean> {
     const db = await getDbClient();
-    const result = await db.delete(skills).where(eq(skills.id, id));
+    const result = await db.delete(skills).where(eq(skills.id, id)).returning();
 
     return result.length > 0;
   }

@@ -178,7 +178,8 @@ export class WorkExperienceManager {
     const db = getDbClient();
     const result = await (await db)
       .delete(workExperiences)
-      .where(eq(workExperiences.id, id));
+      .where(eq(workExperiences.id, id))
+      .returning();
 
     return result.length > 0;
   }

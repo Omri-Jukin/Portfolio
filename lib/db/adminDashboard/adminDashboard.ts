@@ -35,7 +35,7 @@ export async function initializeDashboardSections(): Promise<void> {
   const db = await getDB();
 
   // Handle build-time scenarios where db might be null
-  if (!db || !("query" in db)) {
+  if (!db) {
     console.warn(
       "Database not available during build, skipping dashboard initialization"
     );
@@ -43,10 +43,11 @@ export async function initializeDashboardSections(): Promise<void> {
   }
 
   try {
-    // Type assertion: after null/query checks, we know it's a valid Drizzle client
+    // Type assertion: we know it's a valid Drizzle client
+    const dbClient = db as DbClient;
     const existing =
       await // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for build-time handling
-      ((db as any).query as any).adminDashboardSections.findMany({
+      ((dbClient as any).query as any).adminDashboardSections.findMany({
         orderBy: (
           sections: typeof adminDashboardSections,
           {
@@ -92,7 +93,7 @@ export async function getDashboardSections(): Promise<AdminDashboardSection[]> {
   const db = await getDB();
 
   // Handle build-time scenarios where db might be null
-  if (!db || !("query" in db)) {
+  if (!db) {
     console.warn(
       "Database not available during build, returning empty dashboard sections"
     );

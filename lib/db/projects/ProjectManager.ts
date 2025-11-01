@@ -263,7 +263,10 @@ export class ProjectManager {
 
   static async delete(id: string): Promise<boolean> {
     const db = await getDbClient();
-    const result = await db.delete(projects).where(eq(projects.id, id));
+    const result = await db
+      .delete(projects)
+      .where(eq(projects.id, id))
+      .returning();
 
     return result.length > 0;
   }

@@ -27,6 +27,9 @@
     "NODE_ENV": "production",
     "NEXT_PUBLIC_BASE_URL": "https://omrijukin.com",
 
+    // NextAuth Configuration
+    "NEXTAUTH_URL": "https://omrijukin.com",
+
     // Email Configuration (Non-sensitive)
     "EMAIL_PROVIDER": "gmail",
     "EMAIL_FROM": "intake@omrijukin.com",
@@ -47,25 +50,4 @@
     // Supabase (Non-sensitive URLs only)
     "SUPABASE_URL": "https://ocmtnzuhommmsliebcjy.supabase.co"
   }
-
-  // NOTE: The following variables MUST be set as SECRETS in Cloudflare Dashboard
-  // (not in this file, as they contain sensitive information):
-  //
-  // SECRETS (Set via: Cloudflare Dashboard > Workers > Your Project > Settings > Variables and Secrets):
-  // - DATABASE_URL (Supabase PostgreSQL connection string)
-  // - JWT_SECRET (Authentication secret key)
-  // - BLOG_API_KEY (Blog API authentication key)
-  // - AWS_ACCESS_KEY_ID (AWS access key)
-  // - AWS_SECRET_ACCESS_KEY (AWS secret key)
-  // - SUPABASE_SERVICE_ROLE_KEY (Supabase service role key - sensitive)
-  // - GMAIL_USER (Gmail email address)
-  // - GMAIL_APP_PASSWORD (Gmail app password - sensitive)
-  // - SMTP_USERNAME (AWS SES SMTP username)
-  // - SMTP_PW (AWS SES SMTP password - sensitive)
-  // - GITHUB_PERSONAL_ACCESS_KEY (GitHub PAT - sensitive)
-  //
-  // To set secrets via CLI:
-  //   npx wrangler secret put DATABASE_URL
-  //   npx wrangler secret put JWT_SECRET
-  //   (repeat for each secret)
 }

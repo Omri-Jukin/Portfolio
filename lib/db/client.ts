@@ -1,9 +1,21 @@
-import { drizzle } from "drizzle-orm/postgres-js";
+import { drizzle as drizzleNeon } from "drizzle-orm/neon-serverless";
 import postgres from "postgres";
+import { drizzle } from "drizzle-orm/postgres-js";
+import { Pool, neonConfig } from "@neondatabase/serverless";
 import * as schema from "./schema/schema.tables";
 
-// Global connection instance
+// Global connection instances
 let globalConnection: ReturnType<typeof postgres> | null = null;
+let globalNeonPool: Pool | null = null;
+
+// Detect if we're in Cloudflare Workers environment
+function isCloudflareWorkers(): boolean {
+  return (
+    typeof globalThis !== "undefined" &&
+    "caches" in globalThis &&
+    !("process" in globalThis && process.versions?.node)
+  );
+}
 
 export async function getDB() {
   // Check if we're in a build-time context (Next.js static analysis)
@@ -11,6 +23,8 @@ export async function getDB() {
     typeof process !== "undefined" &&
     (process.env.NEXT_PHASE === "phase-production-build" ||
       process.env.NEXT_PHASE === "phase-development-build");
+
+  const isCloudflare = isCloudflareWorkers();
 
   try {
     // Get database URL from environment (Cloudflare-compatible)
@@ -23,19 +37,39 @@ export async function getDB() {
       (typeof process !== "undefined" &&
         (process as { env?: { DATABASE_URL?: string } }).env?.DATABASE_URL);
 
+    // Enhanced logging for production debugging
     if (!databaseUrl) {
-      // During build time, gracefully return null instead of throwing
-      if (
-        isBuildTime ||
-        (process.env.NODE_ENV === "production" && !process.env.VERCEL)
-      ) {
+      console.error("[DB] DATABASE_URL not found in environment:", {
+        hasDATABASE_URL: !!process.env.DATABASE_URL,
+        hasGlobalEnv: !!(globalThis as { __env?: unknown }).__env,
+        hasGlobalDatabaseUrl: !!(
+          globalThis as { __env?: { DATABASE_URL?: string } }
+        ).__env?.DATABASE_URL,
+        nodeEnv: process.env.NODE_ENV,
+        isBuildTime,
+        isVercel: !!process.env.VERCEL,
+        availableEnvKeys: Object.keys(process.env || {})
+          .filter((key) => !key.includes("SECRET") && !key.includes("KEY"))
+          .slice(0, 10),
+      });
+    }
+
+    if (!databaseUrl) {
+      // During build time ONLY, gracefully return null
+      if (isBuildTime) {
         console.warn(
-          "DATABASE_URL not available during build, skipping database connection"
+          "[DB] DATABASE_URL not available during build, skipping database connection"
         );
         // Return a mock/null instead of throwing during build
         return null as unknown as ReturnType<typeof drizzle>;
       }
-      throw new Error("DATABASE_URL environment variable is not set");
+
+      // In production runtime (not build time), this is a critical error
+      const error = new Error(
+        "DATABASE_URL environment variable is not set - database connection failed"
+      );
+      console.error("[DB] CRITICAL ERROR:", error.message);
+      throw error;
     }
 
     // Check if this is a dummy URL during build time
@@ -52,7 +86,22 @@ export async function getDB() {
       throw new Error("Database not available during build");
     }
 
-    // Create or reuse connection
+    // Use Neon serverless driver for Cloudflare Workers (WebSocket support)
+    if (isCloudflare) {
+      console.log("[DB] Using Neon serverless driver for Cloudflare Workers");
+
+      // Configure Neon to use WebSockets (required for Cloudflare Workers)
+      neonConfig.webSocketConstructor = WebSocket;
+
+      if (!globalNeonPool) {
+        globalNeonPool = new Pool({ connectionString: databaseUrl });
+      }
+
+      return drizzleNeon(globalNeonPool, { schema });
+    }
+
+    // Use postgres-js for local development and traditional Node.js environments
+    console.log("[DB] Using postgres-js driver for Node.js");
     if (!globalConnection) {
       globalConnection = postgres(databaseUrl, {
         prepare: false,
@@ -113,5 +162,10 @@ export async function closeDB() {
     await globalConnection.end();
     globalConnection = null;
     console.log("🔌 PostgreSQL connection closed");
+  }
+  if (globalNeonPool) {
+    await globalNeonPool.end();
+    globalNeonPool = null;
+    console.log("🔌 Neon pool connection closed");
   }
 }

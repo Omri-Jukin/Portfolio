@@ -121,7 +121,8 @@ export class CertificationsService {
   static async delete(id: string): Promise<boolean> {
     const result = await db
       .delete(certifications)
-      .where(eq(certifications.id, id));
+      .where(eq(certifications.id, id))
+      .returning();
 
     return result.length > 0;
   }
