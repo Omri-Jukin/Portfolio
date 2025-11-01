@@ -1,108 +1,41 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, useParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useParams } from "next/navigation";
+import { signIn } from "next-auth/react";
 import {
   Box,
   Card,
   CardContent,
-  TextField,
   Button,
   Typography,
   Alert,
   CircularProgress,
-  Link,
-  InputAdornment,
-  IconButton,
+  Divider,
 } from "@mui/material";
-import {
-  Lock as LockIcon,
-  Visibility as VisibilityIcon,
-  VisibilityOff as VisibilityOffIcon,
-} from "@mui/icons-material";
+import { Lock as LockIcon, Google as GoogleIcon } from "@mui/icons-material";
 import * as Common from "~/Common/Common.style";
-import { api } from "$/trpc/client";
 
 export default function LoginPage() {
-  const t = useTranslations("login");
-  const router = useRouter();
   const params = useParams();
   const locale = (params?.locale as string) || "en";
-  const [credentials, setCredentials] = useState({
-    email: "",
-    password: "",
-  });
   const [error, setError] = useState<string | null>(null);
-  const [visiblePassword, setVisiblePassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const loginMutation = api.auth.login.useMutation({
-    onSuccess: () => {
-      // Redirect to admin dashboard on successful login
-      router.push(`/${locale}/admin`);
-    },
-    onError: (error) => {
-      // Enhanced error logging for production debugging
-      console.error("[CLIENT] Login error:", {
-        message: error.message,
-        data: error.data,
-        shape: error.shape,
-        // Log raw error details if available
-        rawError: error,
+  const handleGoogleSignIn = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      // Sign in with Google and redirect to admin on success
+      await signIn("google", {
+        callbackUrl: `/${locale}/admin`,
       });
-
-      // Check if it's a JSON parsing error
-      if (error.message?.includes("JSON") || error.message?.includes("parse")) {
-        console.error("[CLIENT] Possible JSON parsing error detected");
-        // Try to fetch the raw response for debugging
-        fetch("/api/trpc/auth.login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: credentials.email,
-            password: "***", // Don't log actual password
-          }),
-        })
-          .then(async (response) => {
-            const text = await response.text();
-            console.error("[CLIENT] Raw API response:", {
-              status: response.status,
-              statusText: response.statusText,
-              headers: Object.fromEntries(response.headers.entries()),
-              body: text.substring(0, 500), // First 500 chars
-              isJson:
-                text.trim().startsWith("{") || text.trim().startsWith("["),
-            });
-          })
-          .catch((fetchError) => {
-            console.error("[CLIENT] Failed to fetch raw response:", fetchError);
-          });
-      }
-
-      setError(error.message || "Login failed");
-    },
-  });
-
-  const handleInputChange =
-    (field: "email" | "password") =>
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setCredentials((prev) => ({
-        ...prev,
-        [field]: event.target.value,
-      }));
-      if (error) setError(null);
-    };
-
-  const handlePasswordVisibility = () => setVisiblePassword((v) => !v);
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    setError(null);
-
-    loginMutation.mutate({
-      email: credentials.email,
-      password: credentials.password,
-    });
+    } catch (error) {
+      console.error("[AUTH] Google sign in error:", error);
+      setError("Failed to sign in with Google. Please try again.");
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -127,10 +60,10 @@ export default function LoginPage() {
             >
               <LockIcon sx={{ fontSize: 48, color: "primary.main", mb: 2 }} />
               <Typography variant="h4" component="h1" gutterBottom>
-                {t("title")}
+                Admin Login
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {t("subtitle")}
+                Sign in with your Google account
               </Typography>
             </Box>
 
@@ -140,71 +73,30 @@ export default function LoginPage() {
               </Alert>
             )}
 
-            <form onSubmit={handleSubmit}>
-              <TextField
-                fullWidth
-                label="Email"
-                type="email"
-                value={credentials.email}
-                onChange={handleInputChange("email")}
-                margin="normal"
-                required
-                disabled={loginMutation.isPending}
-                autoComplete="email"
-              />
-              <TextField
-                fullWidth
-                label={t("password")}
-                type={visiblePassword ? "text" : "password"}
-                value={credentials.password}
-                onChange={handleInputChange("password")}
-                margin="normal"
-                required
-                disabled={loginMutation.isPending}
-                autoComplete="current-password"
-                slotProps={{
-                  input: {
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={handlePasswordVisibility}
-                          tabIndex={-1}
-                          edge="end"
-                        >
-                          {visiblePassword ? (
-                            <VisibilityIcon />
-                          ) : (
-                            <VisibilityOffIcon />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  },
-                }}
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                size="large"
-                disabled={loginMutation.isPending}
-                startIcon={
-                  loginMutation.isPending ? (
-                    <CircularProgress size={20} />
-                  ) : undefined
-                }
-                sx={{ mt: 3, mb: 2 }}
-              >
-                {loginMutation.isPending ? t("signingIn") : t("signIn")}
-              </Button>
-            </form>
+            <Button
+              fullWidth
+              variant="contained"
+              size="large"
+              onClick={handleGoogleSignIn}
+              disabled={isLoading}
+              startIcon={
+                isLoading ? <CircularProgress size={20} /> : <GoogleIcon />
+              }
+              sx={{
+                mt: 2,
+                mb: 2,
+                textTransform: "none",
+                fontSize: "1rem",
+              }}
+            >
+              {isLoading ? "Signing in..." : "Sign in with Google"}
+            </Button>
 
-            <Box sx={{ textAlign: "center", mt: 2 }}>
-              <Typography variant="body2" color="text.secondary">
-                Don&apos;t have an account?{" "}
-                <Link href="/signup" sx={{ textDecoration: "none" }}>
-                  Register here
-                </Link>
+            <Divider sx={{ my: 2 }} />
+
+            <Box sx={{ textAlign: "center" }}>
+              <Typography variant="caption" color="text.secondary">
+                Only authorized admin accounts can access this portal
               </Typography>
             </Box>
           </CardContent>

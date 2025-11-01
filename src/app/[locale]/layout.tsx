@@ -6,6 +6,7 @@ import { inter } from "$/fonts";
 import ClientLayout from "&/ClientLayout/ClientLayout";
 import { getMessages, getTranslations } from "next-intl/server";
 import StructuredData from "./structured-data";
+import { SessionProvider } from "../providers/SessionProvider";
 
 export interface Props {
   children: React.ReactNode;
@@ -113,9 +114,11 @@ export default async function RootLayout({ children, params }: Props) {
         <StructuredData />
       </head>
       <body className={`${inter.variable} antialiased`}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <ClientLayout>{children}</ClientLayout>
-        </NextIntlClientProvider>
+        <SessionProvider>
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            <ClientLayout>{children}</ClientLayout>
+          </NextIntlClientProvider>
+        </SessionProvider>
       </body>
     </html>
   );

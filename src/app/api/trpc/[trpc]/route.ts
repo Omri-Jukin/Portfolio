@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 // Force this route to be dynamic - prevents Next.js from trying to statically analyze it during build
 export const dynamic = "force-dynamic";
-export const runtime = "nodejs";
+// Note: Using default Node.js runtime - Cloudflare Pages + OpenNext adapter supports this
 
 const handler = async (req: Request) => {
   // Wrap everything in try-catch to ensure we always return JSON
