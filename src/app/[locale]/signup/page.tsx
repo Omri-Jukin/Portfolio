@@ -20,7 +20,6 @@ import {
   VisibilityOff as VisibilityOffIcon,
 } from "@mui/icons-material";
 import * as Common from "~/Common/Common.style";
-import { api } from "$/trpc/client";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -41,18 +40,6 @@ export default function RegisterPage() {
   const handleConfirmPasswordVisibility = () => {
     setVisibleConfirmPassword(!visibleConfirmPassword);
   };
-
-  const registerMutation = api.auth.register.useMutation({
-    onSuccess: (data) => {
-      setSuccess(data.message);
-      setError(null);
-      // Don't redirect - show success message
-    },
-    onError: (error) => {
-      setError(error.message || "Registration failed");
-      setSuccess(null);
-    },
-  });
 
   const handleInputChange =
     (field: keyof typeof formData) =>
@@ -81,13 +68,6 @@ export default function RegisterPage() {
       setError("Password must be at least 6 characters");
       return;
     }
-
-    registerMutation.mutate({
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      email: formData.email,
-      password: formData.password,
-    });
   };
 
   return (
@@ -141,7 +121,6 @@ export default function RegisterPage() {
                 onChange={handleInputChange("firstName")}
                 margin="normal"
                 required
-                disabled={registerMutation.isPending}
                 autoComplete="given-name"
               />
               <TextField
@@ -151,7 +130,6 @@ export default function RegisterPage() {
                 onChange={handleInputChange("lastName")}
                 margin="normal"
                 required
-                disabled={registerMutation.isPending}
                 autoComplete="family-name"
               />
               <TextField
@@ -162,7 +140,6 @@ export default function RegisterPage() {
                 onChange={handleInputChange("email")}
                 margin="normal"
                 required
-                disabled={registerMutation.isPending}
                 autoComplete="email"
               />
               <TextField
@@ -173,7 +150,6 @@ export default function RegisterPage() {
                 onChange={handleInputChange("password")}
                 margin="normal"
                 required
-                disabled={registerMutation.isPending}
                 autoComplete="new-password"
                 helperText="Password must be at least 6 characters"
                 slotProps={{
@@ -204,7 +180,6 @@ export default function RegisterPage() {
                 onChange={handleInputChange("confirmPassword")}
                 margin="normal"
                 required
-                disabled={registerMutation.isPending}
                 autoComplete="new-password"
                 slotProps={{
                   input: {
@@ -231,17 +206,10 @@ export default function RegisterPage() {
                 fullWidth
                 variant="contained"
                 size="large"
-                disabled={registerMutation.isPending}
-                startIcon={
-                  registerMutation.isPending ? (
-                    <CircularProgress size={20} />
-                  ) : undefined
-                }
+                startIcon={<CircularProgress size={20} />}
                 sx={{ mt: 3, mb: 2 }}
               >
-                {registerMutation.isPending
-                  ? "Creating Account..."
-                  : "Create Account"}
+                Create Account
               </Button>
             </form>
 

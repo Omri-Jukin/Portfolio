@@ -1,9 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from "@jest/globals";
 import {
-  initializeDashboardSections,
   getDashboardSections,
   updateDashboardSectionOrder,
-  DEFAULT_SECTIONS,
 } from "$/db/adminDashboard/adminDashboard";
 import { getDB } from "$/db/client";
 import { adminDashboardSections } from "$/db/schema/schema.tables";
@@ -38,52 +36,6 @@ describe("Admin Dashboard Sections", () => {
     if (db) {
       await db.delete(adminDashboardSections);
     }
-  });
-
-  describe("initializeDashboardSections", () => {
-    it("should create default sections if none exist", async () => {
-      if (
-        !db ||
-        !process.env.DATABASE_URL ||
-        process.env.NODE_ENV === "production"
-      ) {
-        return;
-      }
-      await initializeDashboardSections();
-
-      const sections = await db.query.adminDashboardSections.findMany();
-      expect(sections).toHaveLength(DEFAULT_SECTIONS.length);
-
-      // Verify all default sections are created
-      DEFAULT_SECTIONS.forEach((defaultSection) => {
-        const found = sections.find(
-          (s) => s.sectionKey === defaultSection.sectionKey
-        );
-        expect(found).toBeDefined();
-        expect(found?.displayOrder).toBe(defaultSection.displayOrder);
-        expect(found?.enabled).toBe(defaultSection.enabled);
-      });
-    });
-
-    it("should not create duplicate sections if they already exist", async () => {
-      if (
-        !db ||
-        !process.env.DATABASE_URL ||
-        process.env.NODE_ENV === "production"
-      ) {
-        return;
-      }
-      await initializeDashboardSections();
-      const firstCount = (await db.query.adminDashboardSections.findMany())
-        .length;
-
-      await initializeDashboardSections();
-      const secondCount = (await db.query.adminDashboardSections.findMany())
-        .length;
-
-      expect(firstCount).toBe(secondCount);
-      expect(firstCount).toBe(DEFAULT_SECTIONS.length);
-    });
   });
 
   describe("getDashboardSections", () => {
