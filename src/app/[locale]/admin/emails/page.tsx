@@ -47,6 +47,15 @@ import { useRouter } from "next/navigation";
 import { ClientOnly } from "~/ClientOnly";
 import { EmailTemplate } from "$/db/emailTemplates/emailTemplates";
 
+// Serialized version of EmailTemplate (dates become strings when serialized via tRPC)
+type SerializedEmailTemplate = Omit<
+  EmailTemplate,
+  "createdAt" | "updatedAt"
+> & {
+  createdAt: string;
+  updatedAt: string;
+};
+
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -88,6 +97,9 @@ const EmailTemplatesAdmin = () => {
     isLoading,
     refetch,
   } = api.emailTemplates.getAll.useQuery();
+
+  // Type templates as serialized version (dates become strings via tRPC)
+  const typedTemplates = templates as SerializedEmailTemplate[] | undefined;
   const { data: recipients, isLoading: recipientsLoading } =
     api.emailTemplates.getRecipients.useQuery();
   const createMutation = api.emailTemplates.create.useMutation({
@@ -137,9 +149,9 @@ const EmailTemplatesAdmin = () => {
 
   // Get template for editing
   const editingTemplate = useMemo(() => {
-    if (!selectedTemplate || !templates) return null;
-    return templates.find((t: EmailTemplate) => t.id === selectedTemplate);
-  }, [selectedTemplate, templates]);
+    if (!selectedTemplate || !typedTemplates) return null;
+    return typedTemplates.find((t) => t.id === selectedTemplate);
+  }, [selectedTemplate, typedTemplates]);
 
   // Filtered recipients
   const filteredRecipients = useMemo(() => {
@@ -168,7 +180,7 @@ const EmailTemplatesAdmin = () => {
   };
 
   const handleEditTemplate = (id: string) => {
-    const template = templates?.find((t: EmailTemplate) => t.id === id);
+    const template = typedTemplates?.find((t) => t.id === id);
     if (template) {
       setSelectedTemplate(id);
       setTemplateForm({
@@ -281,9 +293,9 @@ const EmailTemplatesAdmin = () => {
 
         {/* Templates List */}
         <Box sx={{ mb: 3 }}>
-          {templates && templates.length > 0 ? (
+          {typedTemplates && typedTemplates.length > 0 ? (
             <Stack spacing={2}>
-              {templates.map((template: EmailTemplate) => (
+              {typedTemplates.map((template) => (
                 <Card key={template.id}>
                   <CardContent>
                     <Box
