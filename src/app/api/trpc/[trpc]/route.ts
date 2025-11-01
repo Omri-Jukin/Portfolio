@@ -8,6 +8,7 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 const handler = async (req: Request) => {
+  // Wrap everything in try-catch to ensure we always return JSON
   try {
     const response = await fetchRequestHandler({
       endpoint: "/api/trpc",
@@ -15,13 +16,19 @@ const handler = async (req: Request) => {
       router: appRouter,
       createContext: async (opts) => {
         try {
-          return await createContext(opts);
+          const ctx = await createContext(opts);
+          return ctx;
         } catch (error) {
           // Always return a valid context, never throw
           // This ensures JSON responses instead of HTML error pages
           console.error(
-            "Error creating context, using minimal context:",
-            error
+            "[TRPC] Error creating context, using minimal context:",
+            {
+              error: error instanceof Error ? error.message : String(error),
+              stack: error instanceof Error ? error.stack : undefined,
+              hasDatabaseUrl: !!process.env.DATABASE_URL,
+              nodeEnv: process.env.NODE_ENV,
+            }
           );
           return {
             db: null,
@@ -51,8 +58,12 @@ const handler = async (req: Request) => {
           stack: error.stack,
           hasDb: !!ctx?.db,
           hasUser: !!ctx?.user,
+          hasDatabaseUrl: !!process.env.DATABASE_URL,
           timestamp: new Date().toISOString(),
         });
+
+        // Ensure error responses are always JSON
+        // tRPC handles this, but we log it for debugging
       },
       responseMeta: () => {
         // Ensure JSON content type is always set
@@ -64,12 +75,22 @@ const handler = async (req: Request) => {
       },
     });
 
-    // Ensure response is JSON-compatible
-    if (!response.headers.get("Content-Type")?.includes("application/json")) {
+    // Ensure response is JSON-compatible - check both content-type and body
+    const contentType = response.headers.get("Content-Type") || "";
+    const isJsonResponse = contentType.includes("application/json");
+
+    // If response is not JSON, we need to convert it or return JSON error
+    if (!isJsonResponse) {
+      console.error("[TRPC] Response is not JSON:", {
+        contentType,
+        status: response.status,
+        statusText: response.statusText,
+      });
       return NextResponse.json(
         {
           error: {
-            message: "Invalid response format",
+            message:
+              "Server returned invalid response format. This may indicate a server error.",
             code: "INTERNAL_SERVER_ERROR",
           },
         },
@@ -77,10 +98,17 @@ const handler = async (req: Request) => {
       );
     }
 
+    // Return the JSON response
     return response;
   } catch (error) {
     // Catch any unhandled errors and return JSON
-    console.error("Unhandled error in tRPC handler:", error);
+    // This includes errors that occur outside tRPC handler
+    console.error("[TRPC] Unhandled error in tRPC handler:", {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      errorType: error?.constructor?.name || typeof error,
+    });
+
     return NextResponse.json(
       {
         error: {
@@ -89,7 +117,12 @@ const handler = async (req: Request) => {
           code: "INTERNAL_SERVER_ERROR",
         },
       },
-      { status: 500 }
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
   }
 };

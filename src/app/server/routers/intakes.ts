@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { router, procedure, protectedProcedure } from "../trpc";
+import { TRPCError } from "@trpc/server";
 import {
   createIntake,
   getIntakes,
@@ -246,17 +247,43 @@ export const intakesRouter = router({
     .mutation(async (opts) => {
       const { user, db } = opts.ctx;
       const { input } = opts;
-      if (!db) throw new Error("Database not available");
+      
+      if (!db) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Database connection unavailable. Please try again later.",
+        });
+      }
+      
       if (!user || user.role !== "admin") {
-        throw new Error("Unauthorized");
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Unauthorized. Admin access required.",
+        });
       }
 
-      const deleted = await deleteCustomLink(input.id);
-      if (!deleted) {
-        throw new Error("Custom link not found");
-      }
+      try {
+        const deleted = await deleteCustomLink(input.id);
+        if (!deleted) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Custom link not found",
+          });
+        }
 
-      return { success: true };
+        return { success: true };
+      } catch (error) {
+        // Re-throw TRPCError as-is
+        if (error instanceof TRPCError) {
+          throw error;
+        }
+        // Wrap other errors in TRPCError
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message:
+            error instanceof Error ? error.message : "Failed to delete custom link",
+        });
+      }
     }),
 
   // Delete multiple custom links (admin protected)
@@ -265,16 +292,42 @@ export const intakesRouter = router({
     .mutation(async (opts) => {
       const { user, db } = opts.ctx;
       const { input } = opts;
-      if (!db) throw new Error("Database not available");
+      
+      if (!db) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Database connection unavailable. Please try again later.",
+        });
+      }
+      
       if (!user || user.role !== "admin") {
-        throw new Error("Unauthorized");
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Unauthorized. Admin access required.",
+        });
       }
 
       if (input.ids.length === 0) {
-        throw new Error("No IDs provided");
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "No IDs provided",
+        });
       }
 
-      const deletedCount = await deleteCustomLinks(input.ids);
-      return { success: true, deletedCount };
+      try {
+        const deletedCount = await deleteCustomLinks(input.ids);
+        return { success: true, deletedCount };
+      } catch (error) {
+        // Re-throw TRPCError as-is
+        if (error instanceof TRPCError) {
+          throw error;
+        }
+        // Wrap other errors in TRPCError
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message:
+            error instanceof Error ? error.message : "Failed to delete custom links",
+        });
+      }
     }),
 });
