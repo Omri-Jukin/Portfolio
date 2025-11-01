@@ -118,7 +118,7 @@ export const createUser = async (input: CreateUserInput) => {
   } catch (error) {
     console.error("Failed to create user:", error);
     throw new Error(
-      "Database client not available. Please check your D1 binding configuration."
+      "Database client not available. Please check your Supabase DATABASE_URL configuration."
     );
   }
 };
@@ -140,13 +140,13 @@ export const loginUser = async (
 
   if (!client) {
     if (process.env.NODE_ENV === "development") {
-      // No local fallback; require D1 binding
+      // No local fallback; require Supabase connection
     }
 
     // In production, we can't use shell commands, so we need to throw an error
     // The database client should be available from the context in production
     throw new Error(
-      "Database client not available in production. Please check your D1 binding configuration."
+      "Database client not available. Please check your Supabase DATABASE_URL configuration."
     );
   }
 
@@ -183,12 +183,12 @@ export const getUserById = async (
 
   if (!client) {
     if (process.env.NODE_ENV === "development") {
-      // No local fallback; require D1 binding
+      // No local fallback; require Supabase connection
     }
 
     // In production, we can't use shell commands, so we need to throw an error
     throw new Error(
-      "Database client not available in production. Please check your D1 binding configuration."
+      "Database client not available. Please check your Supabase DATABASE_URL configuration."
     );
   }
 
@@ -213,10 +213,12 @@ export const getPendingUsers = async () => {
 
   if (!dbClient) {
     if (process.env.NODE_ENV === "development") {
-      // No remote fallback; require D1 binding
+      // No remote fallback; require Supabase connection
     }
 
-    throw new Error("Database client not available.");
+    throw new Error(
+      "Database client not available. Please check your Supabase DATABASE_URL configuration."
+    );
   }
 
   const pendingUsers = await dbClient.query.users.findMany({
@@ -237,10 +239,12 @@ export const approveUser = async (id: string) => {
 
   if (!dbClient) {
     if (process.env.NODE_ENV === "development") {
-      // No remote fallback; require D1 binding
+      // No remote fallback; require Supabase connection
     }
 
-    throw new Error("Database client not available.");
+    throw new Error(
+      "Database client not available. Please check your Supabase DATABASE_URL configuration."
+    );
   }
 
   const updatedUser = await dbClient

@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 const handler = async (req: Request) => {
   try {
-    return await fetchRequestHandler({
+    const response = await fetchRequestHandler({
       endpoint: "/api/trpc",
       req,
       router: appRouter,
@@ -38,10 +38,38 @@ const handler = async (req: Request) => {
           };
         }
       },
-      onError: ({ error, path }) => {
-        console.error(`tRPC error on '${path ?? "<no-path>"}':`, error);
+      onError: ({ error, path, type }) => {
+        console.error(`tRPC error on '${path ?? "<no-path>"}':`, {
+          error: error.message,
+          code: error.code,
+          type,
+          cause: error.cause,
+        });
+      },
+      responseMeta: () => {
+        // Ensure JSON content type is always set
+        return {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
       },
     });
+
+    // Ensure response is JSON-compatible
+    if (!response.headers.get("Content-Type")?.includes("application/json")) {
+      return NextResponse.json(
+        {
+          error: {
+            message: "Invalid response format",
+            code: "INTERNAL_SERVER_ERROR",
+          },
+        },
+        { status: 500 }
+      );
+    }
+
+    return response;
   } catch (error) {
     // Catch any unhandled errors and return JSON
     console.error("Unhandled error in tRPC handler:", error);

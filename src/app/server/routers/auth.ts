@@ -36,36 +36,64 @@ export const authRouter = router({
     .mutation(async (opts) => {
       const { input, ctx } = opts;
 
+      // Check database availability first
+      if (!ctx.db) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Database connection unavailable. Please try again later.",
+        });
+      }
+
       try {
         // Check if this is the first user (make them admin)
         let isFirstUser = false;
-        if (ctx.db) {
-          try {
-            const existingUsers = await ctx.db.query.users.findMany({
-              limit: 1,
-            });
-            isFirstUser = existingUsers.length === 0;
-          } catch (dbError) {
-            console.error("Database query failed:", dbError);
-            throw new Error(`Database query failed: ${dbError}`);
-          }
-        } else {
-          console.error("No database client available in context");
-          throw new Error("Database client not available");
+        try {
+          const existingUsers = await ctx.db.query.users.findMany({
+            limit: 1,
+          });
+          isFirstUser = existingUsers.length === 0;
+        } catch (dbError) {
+          console.error("Database query failed during registration:", dbError);
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Database error. Please try again later.",
+          });
         }
 
         // Create user with appropriate role and status
         // SECURITY: Passwords MUST be provided in plain text from the frontend.
         // createUser() will hash the password exactly once before storing.
         // Never hash passwords before passing them to createUser().
-        const newUser = await createUser({
-          email: input.email,
-          firstName: input.firstName,
-          lastName: input.lastName,
-          password: input.password, // Plain text password - will be hashed once in createUser()
-          role: isFirstUser ? "admin" : "visitor", // First user becomes admin
-          status: isFirstUser ? "approved" : "pending", // First user is auto-approved
-        });
+        let newUser;
+        try {
+          newUser = await createUser({
+            email: input.email,
+            firstName: input.firstName,
+            lastName: input.lastName,
+            password: input.password, // Plain text password - will be hashed once in createUser()
+            role: isFirstUser ? "admin" : "visitor", // First user becomes admin
+            status: isFirstUser ? "approved" : "pending", // First user is auto-approved
+          });
+        } catch (createError) {
+          console.error("Error creating user:", createError);
+
+          // Handle duplicate user error
+          if (
+            createError instanceof Error &&
+            createError.message.includes("already exists")
+          ) {
+            throw new TRPCError({
+              code: "CONFLICT",
+              message: "User with this email already exists",
+            });
+          }
+
+          // Handle database errors
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Database error. Please try again later.",
+          });
+        }
 
         return {
           user: {
@@ -81,23 +109,21 @@ export const authRouter = router({
             : "Registration successful! Please wait for admin approval.",
         };
       } catch (error) {
-        console.error("Registration error:", error);
-
-        if (
-          error instanceof Error &&
-          error.message.includes("already exists")
-        ) {
-          throw new TRPCError({
-            code: "CONFLICT",
-            message: "User with this email already exists",
-          });
+        // If it's already a TRPCError, re-throw it
+        if (error instanceof TRPCError) {
+          throw error;
         }
 
+        // Log unexpected errors
+        console.error("Unexpected registration error:", error);
+
+        // Convert any other errors to TRPCError with proper JSON format
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: `Failed to create user: ${
-            error instanceof Error ? error.message : "Unknown error"
-          }`,
+          message:
+            error instanceof Error
+              ? `Registration failed: ${error.message}`
+              : "An unexpected error occurred during registration. Please try again.",
         });
       }
     }),
@@ -126,14 +152,31 @@ export const authRouter = router({
         const JWT_SECRET =
           (ctx as ExtendedContext).env?.JWT_SECRET ||
           process.env.JWT_SECRET ||
-          "your-secret-key-change-in-production";
+          "JWT_SECRET_KEY";
         const NODE_ENV =
           (ctx as ExtendedContext).env?.NODE_ENV ||
           process.env.NODE_ENV ||
           "development";
 
+        if (!JWT_SECRET || JWT_SECRET === "JWT_SECRET_KEY") {
+          console.error("JWT_SECRET is not properly configured");
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Server configuration error. Please contact support.",
+          });
+        }
+
         // Find user by email - pass the database client from context
-        const userResult = await loginUser(input, ctx.db || undefined);
+        let userResult;
+        try {
+          userResult = await loginUser(input, ctx.db);
+        } catch (dbError) {
+          console.error("Database error during login:", dbError);
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Database error. Please try again later.",
+          });
+        }
 
         // Check if userResult is an error object or null
         if (
@@ -171,10 +214,19 @@ export const authRouter = router({
           });
         }
 
-        const isValidPassword = await bcrypt.compare(
-          input.password,
-          user.password
-        );
+        let isValidPassword = false;
+        try {
+          isValidPassword = await bcrypt.compare(input.password, user.password);
+        } catch (bcryptError) {
+          console.error(
+            "Bcrypt error during password comparison:",
+            bcryptError
+          );
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Authentication error. Please try again.",
+          });
+        }
 
         if (!isValidPassword) {
           console.error("Password mismatch for user:", user.email);
@@ -185,15 +237,24 @@ export const authRouter = router({
         }
 
         // Generate JWT token
-        const secret = new TextEncoder().encode(JWT_SECRET);
-        const token = await new jose.SignJWT({
-          userId: user.id,
-          email: user.email,
-          role: user.role,
-        })
-          .setProtectedHeader({ alg: "HS256" })
-          .setExpirationTime(JWT_EXPIRES_IN)
-          .sign(secret);
+        let token: string;
+        try {
+          const secret = new TextEncoder().encode(JWT_SECRET);
+          token = await new jose.SignJWT({
+            userId: user.id,
+            email: user.email,
+            role: user.role,
+          })
+            .setProtectedHeader({ alg: "HS256" })
+            .setExpirationTime(JWT_EXPIRES_IN)
+            .sign(secret);
+        } catch (jwtError) {
+          console.error("JWT signing error:", jwtError);
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Authentication error. Please try again.",
+          });
+        }
 
         // Set HTTP-only cookie
         if (ctx.resHeaders) {
@@ -223,13 +284,21 @@ export const authRouter = router({
           token,
         };
       } catch (error) {
-        console.error("Login error:", error);
+        // If it's already a TRPCError, re-throw it
         if (error instanceof TRPCError) {
           throw error;
         }
+
+        // Log unexpected errors
+        console.error("Unexpected login error:", error);
+
+        // Convert any other errors to TRPCError with proper JSON format
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "Login failed",
+          message:
+            error instanceof Error
+              ? `Login failed: ${error.message}`
+              : "An unexpected error occurred during login. Please try again.",
         });
       }
     }),

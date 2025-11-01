@@ -26,7 +26,7 @@ describe("Resume Data Extractor", () => {
     const data = await extractResumeData("es");
 
     expect(data).toBeDefined();
-    expect(data.meta?.title).toBe("Omri Jukin");
+    expect(data.meta?.title).toBe("Omri Jukin - Desarrollador Full Stack");
     expect(data.person.name).toBe("Omri Jukin");
   });
 
@@ -34,7 +34,7 @@ describe("Resume Data Extractor", () => {
     const data = await extractResumeData("fr");
 
     expect(data).toBeDefined();
-    expect(data.meta?.title).toBe("Omri Jukin");
+    expect(data.meta?.title).toBe("Omri Jukin - Développeur Full Stack");
     expect(data.person.name).toBe("Omri Jukin");
   });
 
@@ -42,8 +42,8 @@ describe("Resume Data Extractor", () => {
     const data = await extractResumeData("he");
 
     expect(data).toBeDefined();
-    expect(data.meta?.title).toBe("עמרי חוקין");
-    expect(data.person.name).toBe("Omri Jukin");
+    expect(data.meta?.title).toBe("עמרי חוקין - מפתח Full Stack");
+    expect(data.person.name).toBe("עמרי חוקין");
   });
 
   test("should fallback to English for invalid language", async () => {

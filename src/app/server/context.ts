@@ -23,7 +23,7 @@ export async function createContext({
   let db: Awaited<ReturnType<typeof getDB>> | null;
 
   try {
-    // Use Cloudflare D1 (both local and production)
+    // Use Supabase PostgreSQL database (both local and production)
     db = await getDB();
   } catch (error) {
     console.error("Failed to create database client:", error);
@@ -51,17 +51,17 @@ export async function createContext({
         );
         db = null;
       } else {
-        // Database connection is mandatory - throw error to prevent app from running
-        throw new Error(
-          `Database connection failed: ${
-            error instanceof Error ? error.message : "Unknown error"
-          }`
-        );
+      // Database connection is mandatory - throw error to prevent app from running
+      throw new Error(
+        `Database connection failed: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
       }
     }
   }
 
-  // Get JWT_SECRET from Cloudflare context or process.env in dev
+  // Get JWT_SECRET from environment variables (Cloudflare Workers env or process.env)
   const JWT_SECRET =
     (globalThis as { __env?: { JWT_SECRET?: string } }).__env?.JWT_SECRET ||
     process.env.JWT_SECRET;

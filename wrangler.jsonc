@@ -22,16 +22,6 @@
     "enabled": false
   },
   "upload_source_maps": false,
-
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "personal-website",
-      "database_id": "4219580a-35c2-41e5-9581-20d6e0d92185",
-      "migrations_dir": "drizzle"
-    }
-  ],
-
   "vars": {
     "NODE_ENV": "production",
     "NEXT_PUBLIC_BASE_URL": "https://omrijukin.com"

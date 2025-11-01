@@ -17,6 +17,9 @@
   },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.882.0",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@jest/globals": "^30.0.4",
@@ -138,6 +141,7 @@
     "db:update": "drizzle-kit generate && drizzle-kit migrate && drizzle-kit push",
     "//6": "— Utilities —",
     "clean-install": "rm -rf node_modules package-lock.json .next && npm install",
+    "seed:email-templates": "npx tsx scripts/seed-email-templates.ts",
     "//7": "— git —",
     "gitgraph": "git log --graph --decorate --oneline --all"
   },

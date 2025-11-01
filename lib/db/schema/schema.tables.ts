@@ -383,3 +383,75 @@ export const intakes = pgTable("intakes", {
     .notNull()
     .defaultNow(),
 });
+
+// Custom intake links table - stores generated custom links with slugs
+export const customIntakeLinks = pgTable("custom_intake_links", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  slug: text("slug").notNull().unique(),
+  email: text("email").notNull(),
+  token: text("token").notNull(),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  organizationName: text("organization_name"),
+  organizationWebsite: text("organization_website"),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+// Email templates table - stores email templates with HTML, CSS, and content
+export const emailTemplates = pgTable("email_templates", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  name: text("name").notNull(),
+  subject: text("subject").notNull(),
+  htmlContent: text("html_content").notNull(),
+  textContent: text("text_content"),
+  cssStyles: text("css_styles"),
+  variables: jsonb("variables").$type<Record<string, string>>(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  createdBy: uuid("created_by").references(() => users.id),
+});
+
+// Email sends table - tracks sent emails for analytics
+export const emailSends = pgTable("email_sends", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  templateId: uuid("template_id")
+    .references(() => emailTemplates.id)
+    .notNull(),
+  recipientEmail: text("recipient_email").notNull(),
+  recipientName: text("recipient_name"),
+  subject: text("subject").notNull(),
+  status: text("status")
+    .$type<"sent" | "failed" | "pending">()
+    .notNull()
+    .default("pending"),
+  sentAt: timestamp("sent_at", { withTimezone: true }),
+  error: text("error"),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  sentBy: uuid("sent_by").references(() => users.id),
+});
+
+// Admin dashboard sections order - stores custom order for dashboard cards
+export const adminDashboardSections = pgTable("admin_dashboard_sections", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  sectionKey: text("section_key").notNull().unique(),
+  displayOrder: integer("display_order").notNull(),
+  enabled: boolean("enabled").notNull().default(true),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});

@@ -21,6 +21,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     if (path.includes("/skills")) return t("skillsManagement");
     if (path.includes("/certifications")) return t("certificationsManagement");
     if (path.includes("/intakes")) return t("intakesManagement");
+    if (path.includes("/emails")) return "Email Templates";
     return t("dashboard");
   };
 
@@ -46,6 +47,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         breadcrumbs.push({ label: t("certifications"), url });
       } else if (segment === "intakes") {
         breadcrumbs.push({ label: t("intakes"), url });
+      } else if (segment === "emails") {
+        breadcrumbs.push({ label: "Email Templates", url });
       } else if (segment === "new") {
         breadcrumbs.push({ label: t("new"), url });
       } else if (segment === "edit") {

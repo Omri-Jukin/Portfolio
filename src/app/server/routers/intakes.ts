@@ -7,8 +7,13 @@ import {
 } from "../../../../lib/db/intakes/intakes";
 import { intakeFormSchema } from "#/lib/schemas";
 import { renderProposal } from "#/lib/proposal/renderProposal";
-import { sendIntakeEmails } from "#/lib/email/sendEmail";
+import { sendIntakeEmails, sendCustomLinkEmail } from "#/lib/email/sendEmail";
 import { generateCustomIntakeLinkToken } from "#/lib/utils/sessionToken";
+import {
+  createCustomLink,
+  generateSlugFromName,
+  getAllCustomLinks,
+} from "$/db/intakes/customLinks";
 
 export const intakesRouter = router({
   // Submit intake form (public)
@@ -121,35 +126,109 @@ export const intakesRouter = router({
       })
     )
     .mutation(async (opts) => {
-      const { user } = opts.ctx;
+      const { user, db } = opts.ctx;
       const { input } = opts;
       if (!user || user.role !== "admin") {
         throw new Error("Unauthorized");
       }
+      if (!db) {
+        throw new Error("Database not available");
+      }
 
+      // Generate token
+      const expiresInHours = input.expiresInDays * 24;
       const token = await generateCustomIntakeLinkToken(input.email, {
         firstName: input.firstName,
         lastName: input.lastName,
         organizationName: input.organizationName,
         organizationWebsite: input.organizationWebsite || undefined,
-        expiresInHours: input.expiresInDays * 24,
+        expiresInHours,
       });
 
-      // Build the full URL - prefer env var, fallback to request origin
+      // Generate slug from name
+      const baseSlug = generateSlugFromName(input.firstName, input.lastName);
+      let slug = baseSlug;
+      let slugSuffix = 1;
+
+      // Ensure unique slug by checking database
+      const { getCustomLinkBySlug } = await import(
+        "../../../../lib/db/intakes/customLinks"
+      );
+      while (await getCustomLinkBySlug(slug)) {
+        slug = `${baseSlug}-${slugSuffix}`;
+        slugSuffix++;
+      }
+
+      // Calculate expiration date
+      const expiresAt = new Date();
+      expiresAt.setHours(expiresAt.getHours() + expiresInHours);
+
+      // Save to database
+      await createCustomLink({
+        slug,
+        email: input.email,
+        token,
+        firstName: input.firstName,
+        lastName: input.lastName,
+        organizationName: input.organizationName,
+        organizationWebsite: input.organizationWebsite || undefined,
+        expiresAt,
+      });
+
+      // Build the full URL with slug-based path
       const baseUrl =
         process.env.NEXT_PUBLIC_BASE_URL ||
         (opts.ctx.origin as string | undefined) ||
         (process.env.NODE_ENV === "production"
           ? "https://omrijukin.com"
           : "http://localhost:3000");
-      const link = `${baseUrl}/${
-        input.locale
-      }/intake?token=${encodeURIComponent(token)}`;
+      const link = `${baseUrl}/${input.locale}/intake/${slug}`;
+
+      // Send email to client with the custom link
+      const emailResult = await sendCustomLinkEmail(
+        input.email,
+        link,
+        input.expiresInDays,
+        input.firstName,
+        input.lastName,
+        input.organizationName
+      );
+
+      if (!emailResult.success) {
+        console.error("Failed to send custom link email:", emailResult.error);
+        // Don't fail the mutation if email fails, but log it
+        // The link is still generated and saved to database
+      }
 
       return {
         link,
         token,
+        slug,
         expiresInDays: input.expiresInDays,
+        emailSent: emailResult.success,
+        emailError: emailResult.error || undefined, // Include error message for UI
       };
     }),
+
+  // Get all custom links (admin protected)
+  getAllCustomLinks: protectedProcedure.query(async (opts) => {
+    const { user, db } = opts.ctx;
+    if (!db) throw new Error("Database not available");
+    if (!user || user.role !== "admin") {
+      throw new Error("Unauthorized");
+    }
+
+    const links = await getAllCustomLinks();
+    return links.map((link) => ({
+      id: link.id,
+      slug: link.slug,
+      email: link.email,
+      firstName: link.firstName,
+      lastName: link.lastName,
+      organizationName: link.organizationName,
+      expiresAt: link.expiresAt,
+      createdAt: link.createdAt,
+      isExpired: link.expiresAt < new Date(),
+    }));
+  }),
 });
