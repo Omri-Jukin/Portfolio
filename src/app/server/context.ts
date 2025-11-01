@@ -25,15 +25,26 @@ export async function createContext({
   try {
     // Use Supabase PostgreSQL database (both local and production)
     db = await getDB();
+
+    // getDB() may return null during build time
+    if (!db) {
+      console.warn("Database client returned null (likely during build time)");
+    }
   } catch (error) {
     console.error("Failed to create database client:", error);
 
     // During build time, allow the app to continue without database connection
+    const isBuildTime =
+      typeof process !== "undefined" &&
+      (process.env.NEXT_PHASE === "phase-production-build" ||
+        process.env.NEXT_PHASE === "phase-development-build");
+
     if (
-      process.env.NODE_ENV === "production" &&
-      !process.env.VERCEL &&
-      error instanceof Error &&
-      error.message.includes("Database not available during build")
+      isBuildTime ||
+      (process.env.NODE_ENV === "production" &&
+        !process.env.VERCEL &&
+        error instanceof Error &&
+        error.message.includes("Database not available during build"))
     ) {
       console.warn("Skipping database connection during build time");
       // Return a mock database client for build time
@@ -51,12 +62,12 @@ export async function createContext({
         );
         db = null;
       } else {
-      // Database connection is mandatory - throw error to prevent app from running
-      throw new Error(
-        `Database connection failed: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
-      );
+        // Database connection is mandatory - throw error to prevent app from running
+        throw new Error(
+          `Database connection failed: ${
+            error instanceof Error ? error.message : "Unknown error"
+          }`
+        );
       }
     }
   }

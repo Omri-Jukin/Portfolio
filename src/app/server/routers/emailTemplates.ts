@@ -11,6 +11,7 @@ import {
 import { getIntakes } from "$/db/intakes/intakes";
 import { getAllCustomLinks } from "$/db/intakes/customLinks";
 import { EmailManager } from "#/backend/email/EmailManager";
+import { users } from "$/db/schema/schema.tables";
 
 const emailManager = new EmailManager();
 const EMAIL_FROM = process.env.EMAIL_FROM || "intake@omrijukin.com";
@@ -172,7 +173,11 @@ export const emailTemplatesRouter = router({
       });
 
       // Get users (excluding current admin)
-      const allUsers = await db.query.users.findMany();
+      const allUsers =
+        (await // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for build-time handling
+        ((db as any).query as any).users.findMany()) as Array<
+          typeof users.$inferSelect
+        >;
       allUsers.forEach((userRecord) => {
         const name = `${userRecord.firstName} ${userRecord.lastName}`;
         // Avoid duplicates
@@ -262,7 +267,11 @@ export const emailTemplatesRouter = router({
       // Get recipients data for name resolution
       const intakesData = await getIntakes();
       const customLinksData = await getAllCustomLinks();
-      const allUsersData = await db.query.users.findMany();
+      const allUsersData =
+        (await // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for build-time handling
+        ((db as any).query as any).users.findMany()) as Array<
+          typeof users.$inferSelect
+        >;
 
       const results = await Promise.allSettled(
         input.recipientEmails.map(async (email) => {

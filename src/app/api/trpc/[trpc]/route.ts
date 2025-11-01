@@ -3,6 +3,10 @@ import { appRouter } from "../../../server/router";
 import { createContext } from "../../../server/context";
 import { NextResponse } from "next/server";
 
+// Force this route to be dynamic - prevents Next.js from trying to statically analyze it during build
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 const handler = async (req: Request) => {
   try {
     const response = await fetchRequestHandler({

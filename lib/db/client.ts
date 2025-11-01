@@ -6,17 +6,34 @@ import * as schema from "./schema/schema.tables";
 let globalConnection: ReturnType<typeof postgres> | null = null;
 
 export async function getDB() {
+  // Check if we're in a build-time context (Next.js static analysis)
+  const isBuildTime =
+    typeof process !== "undefined" &&
+    (process.env.NEXT_PHASE === "phase-production-build" ||
+      process.env.NEXT_PHASE === "phase-development-build");
+
   try {
-    // Get database URL from environment
-    const databaseUrl = process.env.DATABASE_URL;
+    // Get database URL from environment (Cloudflare-compatible)
+    // Check multiple sources: process.env (populated by OpenNext), globalThis.__env, or direct process access
+    const databaseUrl =
+      process.env.DATABASE_URL ||
+      (typeof globalThis !== "undefined" &&
+        (globalThis as { __env?: { DATABASE_URL?: string } }).__env
+          ?.DATABASE_URL) ||
+      (typeof process !== "undefined" &&
+        (process as { env?: { DATABASE_URL?: string } }).env?.DATABASE_URL);
 
     if (!databaseUrl) {
-      // During build time, if DATABASE_URL is not available, skip database connection
-      if (process.env.NODE_ENV === "production" && !process.env.VERCEL) {
+      // During build time, gracefully return null instead of throwing
+      if (
+        isBuildTime ||
+        (process.env.NODE_ENV === "production" && !process.env.VERCEL)
+      ) {
         console.warn(
           "DATABASE_URL not available during build, skipping database connection"
         );
-        throw new Error("Database not available during build");
+        // Return a mock/null instead of throwing during build
+        return null as unknown as ReturnType<typeof drizzle>;
       }
       throw new Error("DATABASE_URL environment variable is not set");
     }
@@ -26,9 +43,12 @@ export async function getDB() {
       databaseUrl.includes("dummy") ||
       databaseUrl.includes("localhost:5432")
     ) {
-      console.warn(
-        "Dummy database URL detected during build, skipping connection"
-      );
+      if (isBuildTime) {
+        console.warn(
+          "Dummy database URL detected during build, skipping connection"
+        );
+        return null as unknown as ReturnType<typeof drizzle>;
+      }
       throw new Error("Database not available during build");
     }
 
@@ -44,6 +64,15 @@ export async function getDB() {
 
     return drizzle(globalConnection, { schema });
   } catch (error) {
+    // During build time, return null instead of throwing
+    if (isBuildTime) {
+      console.warn(
+        "Build-time database connection error (expected), returning null:",
+        error instanceof Error ? error.message : String(error)
+      );
+      return null as unknown as ReturnType<typeof drizzle>;
+    }
+
     console.error(
       "❌ Failed to connect to Supabase PostgreSQL database:",
       error

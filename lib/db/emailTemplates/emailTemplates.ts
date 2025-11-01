@@ -71,7 +71,13 @@ export async function getEmailTemplateById(
 ): Promise<EmailTemplate | null> {
   const db = await getDB();
 
-  const template = await db.query.emailTemplates.findFirst({
+  // Handle build-time scenarios where db might be null
+  if (!db || !("query" in db)) {
+    return null;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for build-time handling
+  const template = await ((db as any).query as any).emailTemplates.findFirst({
     where: eq(emailTemplates.id, id),
   });
 
@@ -94,11 +100,20 @@ export async function getEmailTemplateById(
 export async function getAllEmailTemplates(): Promise<EmailTemplate[]> {
   const db = await getDB();
 
-  const templates = await db.query.emailTemplates.findMany({
-    orderBy: (templates, { desc }) => [desc(templates.updatedAt)],
+  // Handle build-time scenarios where db might be null
+  if (!db || !("query" in db)) {
+    return [];
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for build-time handling
+  const templates = await ((db as any).query as any).emailTemplates.findMany({
+    orderBy: (
+      templates: typeof emailTemplates,
+      { desc }: { desc: (column: typeof emailTemplates.updatedAt) => unknown }
+    ) => [desc(templates.updatedAt)],
   });
 
-  return templates.map((template) => ({
+  return templates.map((template: typeof emailTemplates.$inferSelect) => ({
     id: template.id,
     name: template.name,
     subject: template.subject,

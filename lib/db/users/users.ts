@@ -91,9 +91,12 @@ export const createUser = async (
     }
 
     // Check if user already exists
-    const existingUser = await dbClient.query.users.findFirst({
-      where: eq(users.email, input.email),
-    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for build-time handling
+    const existingUser = await ((dbClient as any).query as any).users.findFirst(
+      {
+        where: eq(users.email, input.email),
+      }
+    );
 
     if (existingUser) {
       throw new Error("User with this email already exists.");
@@ -171,7 +174,8 @@ export const loginUser = async (
   }
 
   try {
-    const user = await client.query.users.findFirst({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for build-time handling
+    const user = await ((client as any).query as any).users.findFirst({
       where: eq(users.email, input.email),
     });
 
@@ -212,7 +216,8 @@ export const getUserById = async (
     );
   }
 
-  const user = await client.query.users.findFirst({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for build-time handling
+  const user = await ((client as any).query as any).users.findFirst({
     where: eq(users.id, id),
   });
 
@@ -241,9 +246,13 @@ export const getPendingUsers = async () => {
     );
   }
 
-  const pendingUsers = await dbClient.query.users.findMany({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for build-time handling
+  const pendingUsers = await ((dbClient as any).query as any).users.findMany({
     where: eq(users.status, "pending"),
-    orderBy: (users, { desc }) => [desc(users.createdAt)],
+    orderBy: (
+      table: typeof users,
+      { desc }: { desc: (column: typeof users.createdAt) => unknown }
+    ) => [desc(table.createdAt)],
   });
 
   return pendingUsers;
