@@ -10,6 +10,7 @@ const config: Config = {
         tsconfig: {
           jsx: "react-jsx",
         },
+        useESM: true,
       },
     ],
     "^.+\\.(js|jsx)$": "babel-jest",
@@ -29,7 +30,7 @@ const config: Config = {
   },
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   testPathIgnorePatterns: ["/node_modules/", "/dist/", "/build/"],
-  transformIgnorePatterns: ["node_modules/(?!(@react-three|three)/)"],
+  transformIgnorePatterns: ["node_modules/(?!(@react-three|three|jose)/)"],
   collectCoverageFrom: [
     "Components/**/*.{ts,tsx}",
     "!**/node_modules/**",

@@ -1,4 +1,46 @@
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  CircularProgress,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import "@testing-library/jest-dom";
+
+// Mock jose module globally to avoid ESM issues
+jest.mock("jose", () => ({
+  SignJWT: jest.fn().mockImplementation(() => ({
+    setProtectedHeader: jest.fn().mockReturnThis(),
+    setExpirationTime: jest.fn().mockReturnThis(),
+    sign: jest.fn().mockResolvedValue("mock-jwt-token"),
+  })),
+  jwtVerify: jest.fn().mockResolvedValue({
+    payload: {
+      userId: "test-user-id",
+      email: "test@example.com",
+      role: "admin",
+    },
+  }),
+}));
+
+// Mock nanoid module globally to avoid ESM issues
+jest.mock("nanoid", () => ({
+  nanoid: jest.fn(() => "mock-nanoid-id"),
+}));
+
+// Mock certifications module to avoid top-level await issues
+jest.mock("$/db/certifications/certifications", () => ({
+  CertificationsService: {
+    getAll: jest.fn(),
+    getById: jest.fn(),
+    create: jest.fn(),
+    update: jest.fn(),
+    delete: jest.fn(),
+  },
+}));
 
 // Mock Next.js router
 jest.mock("next/navigation", () => ({
@@ -28,7 +70,7 @@ jest.mock("next-intl", () => ({
 
 // Mock Three.js and React Three Fiber
 jest.mock("@react-three/fiber", () => ({
-  Canvas: ({ children }: { children: any }) => ({
+  Canvas: ({ children }: { children: React.ReactNode }) => ({
     type: "div",
     props: { "data-testid": "canvas", children },
   }),
@@ -37,32 +79,38 @@ jest.mock("@react-three/fiber", () => ({
 
 // Mock Material-UI components
 jest.mock("@mui/material", () => ({
-  Box: ({ children, ...props }: any) => ({
+  Box: ({ children, ...props }: React.ComponentProps<typeof Box>) => ({
     type: "div",
     props: { ...props, children },
   }),
-  Typography: ({ children, ...props }: any) => ({
+  Typography: ({
+    children,
+    ...props
+  }: React.ComponentProps<typeof Typography>) => ({
     type: "div",
     props: { ...props, children },
   }),
-  Button: ({ children, ...props }: any) => ({
+  Button: ({ children, ...props }: React.ComponentProps<typeof Button>) => ({
     type: "button",
     props: { ...props, children },
   }),
-  Card: ({ children, ...props }: any) => ({
+  Card: ({ children, ...props }: React.ComponentProps<typeof Card>) => ({
     type: "div",
     props: { ...props, children },
   }),
-  TextField: ({ label, ...props }: any) => ({
+  TextField: ({ label, ...props }: React.ComponentProps<typeof TextField>) => ({
     type: "input",
     props: { "aria-label": label, ...props },
   }),
-  Alert: ({ children, ...props }: any) => ({
+  Alert: ({ children, ...props }: React.ComponentProps<typeof Alert>) => ({
     type: "div",
     props: { ...props, children },
   }),
-  CircularProgress: (props: any) => ({ type: "div", props }),
-  Paper: ({ children, ...props }: any) => ({
+  CircularProgress: (props: React.ComponentProps<typeof CircularProgress>) => ({
+    type: "div",
+    props,
+  }),
+  Paper: ({ children, ...props }: React.ComponentProps<typeof Paper>) => ({
     type: "div",
     props: { ...props, children },
   }),
@@ -84,7 +132,7 @@ jest.mock("@mui/icons-material", () => ({
 }));
 
 jest.mock("@react-three/drei", () => ({
-  PresentationControls: ({ children }: { children: any }) => ({
+  PresentationControls: ({ children }: { children: React.ReactNode }) => ({
     type: "div",
     props: { "data-testid": "presentation-controls", children },
   }),
@@ -130,7 +178,7 @@ jest.mock("@mui/material/styles", () => ({
       rotating: "1s linear infinite",
     },
   }),
-  styled: (component: any) => (styles: any) => component,
+  styled: (component: React.Component) => () => component,
   createTheme: () => ({
     palette: {
       mode: "light",

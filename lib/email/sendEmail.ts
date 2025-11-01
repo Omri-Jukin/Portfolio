@@ -5,6 +5,7 @@ import {
   renderClientReceiptText,
   renderInternalSummaryHTML,
 } from "./intake";
+import { renderCustomLinkHTML, renderCustomLinkText } from "./customLink";
 
 const emailManager = new EmailManager();
 const EMAIL_FROM = process.env.EMAIL_FROM || "intake@omrijukin.com";
@@ -66,6 +67,67 @@ export async function sendIntakeEmails(
       success: false,
       error:
         error instanceof Error ? error.message : "Unknown error sending emails",
+    };
+  }
+}
+
+/**
+ * Send custom intake link email to client
+ */
+export async function sendCustomLinkEmail(
+  email: string,
+  customLink: string,
+  expiresInDays: number,
+  firstName?: string,
+  lastName?: string,
+  organizationName?: string
+): Promise<{ success: boolean; error?: string }> {
+  const recipientName =
+    firstName && lastName ? `${firstName} ${lastName}` : email.split("@")[0];
+
+  try {
+    const emailHtml = renderCustomLinkHTML(
+      recipientName,
+      customLink,
+      expiresInDays,
+      firstName,
+      lastName,
+      organizationName
+    );
+    const emailText = renderCustomLinkText(
+      recipientName,
+      customLink,
+      expiresInDays,
+      firstName,
+      lastName,
+      organizationName
+    );
+
+    const result = await emailManager.sendEmail({
+      to: email,
+      from: EMAIL_FROM,
+      subject: `Your Personalized Project Intake Form${
+        organizationName ? ` - ${organizationName}` : ""
+      }`,
+      htmlBody: emailHtml,
+      textBody: emailText,
+    });
+
+    if (!result.success) {
+      console.error("Failed to send custom link email:", result.error);
+      return {
+        success: false,
+        error: `Failed to send email: ${result.error}`,
+      };
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error sending custom link email:", error);
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "Unknown error sending email",
     };
   }
 }

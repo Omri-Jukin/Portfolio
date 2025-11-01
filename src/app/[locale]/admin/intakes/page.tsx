@@ -54,6 +54,8 @@ const AdminIntakesList = () => {
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [generatedLink, setGeneratedLink] = useState<string | null>(null);
+  const [emailSent, setEmailSent] = useState<boolean | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState(
     "Link copied to clipboard!"
@@ -98,6 +100,8 @@ const AdminIntakesList = () => {
         locale: formData.locale,
       });
       setGeneratedLink(result.link);
+      setEmailSent(result.emailSent ?? null);
+      setEmailError((result as { emailError?: string }).emailError || null);
       setFormError(null);
 
       // Automatically copy link to clipboard
@@ -145,6 +149,8 @@ const AdminIntakesList = () => {
   const handleCloseDialog = () => {
     setDialogOpen(false);
     setGeneratedLink(null);
+    setEmailSent(null);
+    setEmailError(null);
     setFormError(null);
     setCopyButtonClicked(false);
     setSnackbarOpen(false);
@@ -246,6 +252,7 @@ const AdminIntakesList = () => {
               <Stack direction="row" spacing={2}>
                 <TextField
                   label="First Name"
+                  required
                   fullWidth
                   value={formData.firstName}
                   onChange={(e) =>
@@ -254,6 +261,7 @@ const AdminIntakesList = () => {
                 />
                 <TextField
                   label="Last Name"
+                  required
                   fullWidth
                   value={formData.lastName}
                   onChange={(e) =>
@@ -361,6 +369,37 @@ const AdminIntakesList = () => {
                       )}
                     </IconButton>
                   </Box>
+                  {emailSent !== null && (
+                    <Alert
+                      severity={emailSent ? "success" : "warning"}
+                      sx={{ mt: 2 }}
+                    >
+                      {emailSent ? (
+                        "✅ Email sent successfully to client!"
+                      ) : (
+                        <Box>
+                          <Typography variant="body2" fontWeight="bold">
+                            ⚠️ Link generated but email failed to send
+                          </Typography>
+                          {emailError && (
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                mt: 1,
+                                fontFamily: "monospace",
+                                fontSize: "0.875rem",
+                              }}
+                            >
+                              Error: {emailError}
+                            </Typography>
+                          )}
+                          <Typography variant="body2" sx={{ mt: 1 }}>
+                            You can copy and share the link manually.
+                          </Typography>
+                        </Box>
+                      )}
+                    </Alert>
+                  )}
                 </Box>
               )}
             </Stack>

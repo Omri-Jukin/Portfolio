@@ -27,8 +27,8 @@ export default async function middleware(request: NextRequest) {
     }
   }
 
-  // Protect intake route - validate Calendly parameters or custom token
-  const intakeRouteRegex = /^\/(en|es|fr|he)\/intake(\/|$)/;
+  // Protect intake route - validate meeting parameters, custom token, or slug
+  const intakeRouteRegex = /^\/(en|es|fr|he)\/intake(\/.*)?$/;
   if (intakeRouteRegex.test(pathname)) {
     const cookieHeader = request.headers.get("cookie");
     const intakeSessionToken = cookieHeader
@@ -36,7 +36,50 @@ export default async function middleware(request: NextRequest) {
       .find((c) => c.trim().startsWith("intake-session-token="))
       ?.split("=")[1];
 
-    // Check for custom token in URL query parameter
+    // Check for slug-based route: /[locale]/intake/[slug]
+    const slugMatch = pathname.match(/^\/(en|es|fr|he)\/intake\/([^\/]+)$/);
+    if (slugMatch) {
+      const [, locale, slug] = slugMatch;
+
+      try {
+        // Try to get custom link by slug
+        const { getCustomLinkBySlug } = await import(
+          "#/lib/db/intakes/customLinks"
+        );
+        const customLink = await getCustomLinkBySlug(slug);
+
+        if (customLink) {
+          // Check if link is expired
+          if (customLink.expiresAt < new Date()) {
+            const meetingUrl = new URL(`/${locale}/meeting`, request.url);
+            return NextResponse.redirect(meetingUrl);
+          }
+
+          // Valid custom link with slug - set cookie and allow access
+          const response = intlMiddleware(request);
+          response.cookies.set("intake-session-token", customLink.token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            maxAge: Math.floor(
+              (customLink.expiresAt.getTime() - Date.now()) / 1000
+            ),
+            path: "/",
+          });
+          return response;
+        } else {
+          // Slug not found, redirect to meeting page
+          const meetingUrl = new URL(`/${locale}/meeting`, request.url);
+          return NextResponse.redirect(meetingUrl);
+        }
+      } catch (error) {
+        console.error("[Middleware] Failed to get custom link by slug:", error);
+        const meetingUrl = new URL(`/${locale}/meeting`, request.url);
+        return NextResponse.redirect(meetingUrl);
+      }
+    }
+
+    // Check for custom token in URL query parameter (legacy support)
     const customToken = searchParams.get("token");
 
     // If custom token is provided, validate it and set cookie
@@ -92,23 +135,23 @@ export default async function middleware(request: NextRequest) {
       }
     }
 
-    // No valid token, validate Calendly parameters
+    // No valid token, validate meeting parameters (from Calendly/meeting booking)
     const inviteeEmail = searchParams.get("inviteeEmail");
     const eventUri = searchParams.get("eventUri");
 
-    // Require at least email and eventUri
+    // Require at least email and eventUri for meeting-based access
     if (!inviteeEmail || !eventUri) {
       const locale = pathname.split("/")[1] || "en";
-      const calendlyUrl = new URL(`/${locale}/calendly`, request.url);
-      return NextResponse.redirect(calendlyUrl);
+      const meetingUrl = new URL(`/${locale}/meeting`, request.url);
+      return NextResponse.redirect(meetingUrl);
     }
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(inviteeEmail)) {
       const locale = pathname.split("/")[1] || "en";
-      const calendlyUrl = new URL(`/${locale}/calendly`, request.url);
-      return NextResponse.redirect(calendlyUrl);
+      const meetingUrl = new URL(`/${locale}/meeting`, request.url);
+      return NextResponse.redirect(meetingUrl);
     }
 
     // Generate session token
@@ -133,8 +176,8 @@ export default async function middleware(request: NextRequest) {
     } catch (error) {
       console.error("Failed to generate intake session token:", error);
       const locale = pathname.split("/")[1] || "en";
-      const calendlyUrl = new URL(`/${locale}/calendly`, request.url);
-      return NextResponse.redirect(calendlyUrl);
+      const meetingUrl = new URL(`/${locale}/meeting`, request.url);
+      return NextResponse.redirect(meetingUrl);
     }
   }
 

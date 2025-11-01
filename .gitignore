@@ -2,10 +2,8 @@
 
 # dependencies
 /node_modules
-/portfolio
 /.pnp
 .pnp.js
-.yarn/install-state.gz
 
 # testing
 /coverage
@@ -37,16 +35,18 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# drizzle
+drizzle/
+
 # OpenNext
 /.open-next
 
-# wrangler files
-.wrangler
-.dev.vars*
-
-# uploaded files
-/public/uploads/*
-!/public/uploads/.gitkeep
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 
 # uploaded files
 /public/uploads/*
