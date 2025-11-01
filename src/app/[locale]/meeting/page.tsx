@@ -29,7 +29,7 @@ import { ResponsiveBackground } from "~/ScrollingSections";
 import { Typography as CustomTypography } from "~/Typography";
 import { CustomCalendlyWrapper } from "~/Calendly";
 
-export default function CalendlyPage() {
+export default function MeetingPage() {
   const t = useTranslations("calendly");
   const router = useRouter();
 
@@ -140,7 +140,7 @@ export default function CalendlyPage() {
               </CardContent>
             </Card>
 
-            {/* Calendly Booking Section */}
+            {/* Meeting Booking Section */}
             <Grid container spacing={4} sx={{ ...centered }}>
               {/* Booking Information */}
               <Grid columns={1} rowSpacing={2}>

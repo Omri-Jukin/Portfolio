@@ -1442,11 +1442,17 @@
         "title": "Título del Proyecto",
         "description": "Descripción del Proyecto",
         "timeline": "Cronograma",
-        "budget": "Presupuesto",
+        "budget": "Rango de Presupuesto",
+        "currency": "Moneda",
+        "budgetMin": "Presupuesto Mínimo",
+        "budgetMax": "Presupuesto Máximo",
         "startDate": "Fecha de Inicio Preferida",
         "technologies": "Tecnologías",
         "requirements": "Requisitos",
-        "goals": "Objetivos"
+        "goals": "Objetivos",
+        "resourceLinks": "Enlaces de Recursos (Figma, Diseños, etc.)",
+        "resourceLabel": "Etiqueta",
+        "resourceUrl": "URL"
       },
       "additional": {
         "preferredContactMethod": "Método de Contacto Preferido",
@@ -1458,12 +1464,25 @@
       "addTechnology": "Agregar Tecnología",
       "addRequirement": "Agregar Requisito",
       "addGoal": "Agregar Objetivo",
+      "addResourceLink": "Agregar Enlace de Recurso",
       "submit": "Enviar Formulario de Ingreso",
       "submitting": "Enviando..."
     },
     "success": {
       "title": "¡Gracias!",
-      "message": "Tu formulario de ingreso del proyecto se ha enviado correctamente. Revisaremos tu información y te contactaremos pronto."
+      "message": "Tu formulario de ingreso del proyecto se ha enviado correctamente. Revisaremos tu información y te contactaremos pronto.",
+      "scheduleMeeting": "Programar una Reunión"
+    },
+    "customLink": {
+      "title": "¡Bienvenido!",
+      "description": "Hemos prellenado tu información. Por favor revisa y completa el formulario a continuación para comenzar.",
+      "info": "Tu información ha sido prellenada. Por favor revisa y completa los campos faltantes.",
+      "notFound": {
+        "title": "Enlace Personalizado No Encontrado",
+        "description": "El enlace de ingreso personalizado que estás intentando acceder es inválido, ha expirado o ya no existe.",
+        "help": "Por favor programa una reunión para recibir un nuevo enlace de formulario de ingreso personalizado, o contáctanos directamente.",
+        "scheduleMeeting": "Programar una Reunión"
+      }
     },
     "error": {
       "title": "Error",

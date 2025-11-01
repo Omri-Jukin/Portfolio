@@ -13,7 +13,10 @@ import {
   createCustomLink,
   generateSlugFromName,
   getAllCustomLinks,
+  deleteCustomLink,
+  deleteCustomLinks,
 } from "$/db/intakes/customLinks";
+import { getCustomLinkBySlug } from "$/db/intakes/customLinks";
 
 export const intakesRouter = router({
   // Submit intake form (public)
@@ -151,9 +154,6 @@ export const intakesRouter = router({
       let slugSuffix = 1;
 
       // Ensure unique slug by checking database
-      const { getCustomLinkBySlug } = await import(
-        "../../../../lib/db/intakes/customLinks"
-      );
       while (await getCustomLinkBySlug(slug)) {
         slug = `${baseSlug}-${slugSuffix}`;
         slugSuffix++;
@@ -164,7 +164,7 @@ export const intakesRouter = router({
       expiresAt.setHours(expiresAt.getHours() + expiresInHours);
 
       // Save to database
-      await createCustomLink({
+      const createdLink = await createCustomLink({
         slug,
         email: input.email,
         token,
@@ -174,6 +174,14 @@ export const intakesRouter = router({
         organizationWebsite: input.organizationWebsite || undefined,
         expiresAt,
       });
+
+      // Verify the link was created by querying it back
+      const verificationLink = await getCustomLinkBySlug(createdLink.slug);
+      if (!verificationLink) {
+        throw new Error(
+          `Failed to verify custom link creation - link not found after creation`
+        );
+      }
 
       // Build the full URL with slug-based path
       const baseUrl =
@@ -231,4 +239,42 @@ export const intakesRouter = router({
       isExpired: link.expiresAt < new Date(),
     }));
   }),
+
+  // Delete a single custom link (admin protected)
+  deleteCustomLink: protectedProcedure
+    .input(z.object({ id: z.string().uuid() }))
+    .mutation(async (opts) => {
+      const { user, db } = opts.ctx;
+      const { input } = opts;
+      if (!db) throw new Error("Database not available");
+      if (!user || user.role !== "admin") {
+        throw new Error("Unauthorized");
+      }
+
+      const deleted = await deleteCustomLink(input.id);
+      if (!deleted) {
+        throw new Error("Custom link not found");
+      }
+
+      return { success: true };
+    }),
+
+  // Delete multiple custom links (admin protected)
+  deleteCustomLinks: protectedProcedure
+    .input(z.object({ ids: z.array(z.string().uuid()) }))
+    .mutation(async (opts) => {
+      const { user, db } = opts.ctx;
+      const { input } = opts;
+      if (!db) throw new Error("Database not available");
+      if (!user || user.role !== "admin") {
+        throw new Error("Unauthorized");
+      }
+
+      if (input.ids.length === 0) {
+        throw new Error("No IDs provided");
+      }
+
+      const deletedCount = await deleteCustomLinks(input.ids);
+      return { success: true, deletedCount };
+    }),
 });

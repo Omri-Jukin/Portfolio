@@ -37,46 +37,19 @@ export default async function middleware(request: NextRequest) {
       ?.split("=")[1];
 
     // Check for slug-based route: /[locale]/intake/[slug]
+    // Note: We can't do database queries in middleware (Edge Runtime limitation)
+    // Validation will be done in the page component instead
     const slugMatch = pathname.match(/^\/(en|es|fr|he)\/intake\/([^\/]+)$/);
     if (slugMatch) {
-      const [, locale, slug] = slugMatch;
-
-      try {
-        // Try to get custom link by slug
-        const { getCustomLinkBySlug } = await import(
-          "#/lib/db/intakes/customLinks"
+      // For slug-based routes, just allow the request to proceed
+      // The page component will handle validation and show not-found if invalid
+      // This avoids Edge Runtime limitations with database connections
+      if (process.env.NODE_ENV === "development") {
+        console.log(
+          `[Middleware] Allowing slug-based route - validation will happen in page component`
         );
-        const customLink = await getCustomLinkBySlug(slug);
-
-        if (customLink) {
-          // Check if link is expired
-          if (customLink.expiresAt < new Date()) {
-            const meetingUrl = new URL(`/${locale}/meeting`, request.url);
-            return NextResponse.redirect(meetingUrl);
-          }
-
-          // Valid custom link with slug - set cookie and allow access
-          const response = intlMiddleware(request);
-          response.cookies.set("intake-session-token", customLink.token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-            maxAge: Math.floor(
-              (customLink.expiresAt.getTime() - Date.now()) / 1000
-            ),
-            path: "/",
-          });
-          return response;
-        } else {
-          // Slug not found, redirect to meeting page
-          const meetingUrl = new URL(`/${locale}/meeting`, request.url);
-          return NextResponse.redirect(meetingUrl);
-        }
-      } catch (error) {
-        console.error("[Middleware] Failed to get custom link by slug:", error);
-        const meetingUrl = new URL(`/${locale}/meeting`, request.url);
-        return NextResponse.redirect(meetingUrl);
       }
+      return intlMiddleware(request);
     }
 
     // Check for custom token in URL query parameter (legacy support)
@@ -84,20 +57,11 @@ export default async function middleware(request: NextRequest) {
 
     // If custom token is provided, validate it and set cookie
     if (customToken) {
-      console.log("[Middleware] Found custom token in URL, verifying...");
       try {
         const payload = await verifyIntakeSessionToken(customToken);
-        console.log("[Middleware] Token verification result:", {
-          hasPayload: !!payload,
-          isCustomLink: payload?.isCustomLink,
-          email: payload?.email,
-        });
 
         if (payload && payload.isCustomLink === true) {
           // Valid custom token - set cookie and allow access
-          console.log(
-            "[Middleware] Valid custom link token, setting cookie and allowing access"
-          );
           const response = intlMiddleware(request);
           response.cookies.set("intake-session-token", customToken, {
             httpOnly: true,
@@ -107,17 +71,9 @@ export default async function middleware(request: NextRequest) {
             path: "/",
           });
           return response;
-        } else {
-          // Token is valid but not a custom link token
-          console.error("[Middleware] Token is valid but not a custom link:", {
-            hasPayload: !!payload,
-            isCustomLink: payload?.isCustomLink,
-            email: payload?.email,
-          });
         }
-      } catch (error) {
-        console.error("[Middleware] Failed to verify custom token:", error);
-        // Fall through to redirect
+      } catch {
+        // Invalid token - fall through to redirect
       }
     }
 
@@ -129,9 +85,8 @@ export default async function middleware(request: NextRequest) {
           // Valid token exists, allow access
           return intlMiddleware(request);
         }
-      } catch (error) {
-        console.error("Failed to verify session token:", error);
-        // Fall through to validation
+      } catch {
+        // Invalid session token - fall through to validation
       }
     }
 
@@ -173,8 +128,8 @@ export default async function middleware(request: NextRequest) {
       });
 
       return response;
-    } catch (error) {
-      console.error("Failed to generate intake session token:", error);
+    } catch {
+      // Failed to generate token - redirect to meeting
       const locale = pathname.split("/")[1] || "en";
       const meetingUrl = new URL(`/${locale}/meeting`, request.url);
       return NextResponse.redirect(meetingUrl);

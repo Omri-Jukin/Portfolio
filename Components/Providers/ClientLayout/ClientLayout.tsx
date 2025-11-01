@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { baseTheme } from "!/theme";
 import { createTheme, ThemeProvider, CssBaseline, Box } from "@mui/material";
+import { applyTextColorVariables } from "#/theme";
 import Header, { TLayout } from "~/Header";
 
 import Footer from "~/Footer";
@@ -85,52 +86,59 @@ export default function ClientLayout({
   });
 
   // Create dynamic theme only after mounting
-  const appTheme = mounted
-    ? createTheme({
-        ...baseTheme,
-        direction: isRTL ? "rtl" : "ltr",
-        palette: {
-          ...baseTheme.palette,
-          mode: isDarkMode ? "dark" : "light",
-          background: {
-            ...baseTheme.palette.background,
-            default: isDarkMode ? "#0a0a0a" : "#fafafa",
-            paper: isDarkMode ? "#1a1a1a" : "#ffffff",
-          },
-          text: {
-            ...baseTheme.palette.text,
-            primary: isDarkMode ? "#FFEAA7" : "#2C3E50",
-            secondary: isDarkMode ? "#FFFFFF" : "#34495E",
-          },
-          primary: {
-            ...baseTheme.palette.primary,
-            main: isDarkMode ? "#64B5F6" : "#4ECDC4",
-            light: isDarkMode ? "#45B7D1" : "#64B5F6",
-            dark: isDarkMode ? "#4ECDC4" : "#45B7D1",
-          },
-          secondary: {
-            ...baseTheme.palette.secondary,
-            main: "#FF6B6B",
-            light: "#F06292",
-            dark: "#9575CD",
-          },
-        },
-        breakpoints: {
-          ...baseTheme.breakpoints,
-          values: {
-            xs: 0,
-            sm: 600,
-            md: 900,
-            lg: 1200,
-            xl: 1536,
-            ml: 1920,
-            xxl: 2560,
-            xxxl: 3840,
-            xxxxl: 5120,
-          },
-        },
-      })
-    : initialTheme;
+  // Memoize to prevent unnecessary re-creations and re-renders
+  const appTheme = useMemo(
+    () =>
+      mounted
+        ? createTheme({
+            ...baseTheme,
+            direction: isRTL ? "rtl" : "ltr",
+            palette: {
+              ...baseTheme.palette,
+              mode: isDarkMode ? "dark" : "light",
+              background: {
+                ...baseTheme.palette.background,
+                default: isDarkMode ? "#0a0a0a" : "#fafafa",
+                paper: isDarkMode ? "#1a1a1a" : "#ffffff",
+              },
+              text: {
+                ...baseTheme.palette.text,
+                primary: isDarkMode ? "#FFEAA7" : "#2C3E50",
+                secondary: isDarkMode ? "#FFFFFF" : "#34495E",
+              },
+              primary: {
+                ...baseTheme.palette.primary,
+                main: isDarkMode ? "#64B5F6" : "#4ECDC4",
+                light: isDarkMode ? "#45B7D1" : "#64B5F6",
+                dark: isDarkMode ? "#4ECDC4" : "#45B7D1",
+              },
+              secondary: {
+                ...baseTheme.palette.secondary,
+                main: "#FF6B6B",
+                light: "#F06292",
+                dark: "#9575CD",
+              },
+            },
+            breakpoints: {
+              ...baseTheme.breakpoints,
+              values: {
+                xs: 0,
+                sm: 600,
+                md: 900,
+                lg: 1200,
+                xl: 1536,
+                ml: 1920,
+                xxl: 2560,
+                xxxl: 3840,
+                xxxxl: 5120,
+              },
+            },
+          })
+        : initialTheme,
+    // initialTheme is intentionally static and doesn't need to be in dependencies
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [mounted, isRTL, isDarkMode]
+  );
 
   useEffect(() => {
     // Only run on client side
@@ -162,6 +170,12 @@ export default function ClientLayout({
       setIsMobile(window.innerWidth < 768);
     }
   }, []); // Empty dependency array since we only want this to run once
+
+  // Apply CSS variables after mount and when theme changes to prevent hydration mismatches
+  useEffect(() => {
+    if (!mounted) return;
+    applyTextColorVariables(appTheme);
+  }, [mounted, appTheme]);
 
   // Reset manual override when user navigates to new page
   useEffect(() => {

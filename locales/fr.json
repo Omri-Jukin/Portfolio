@@ -1391,11 +1391,17 @@
         "title": "Titre du Projet",
         "description": "Description du Projet",
         "timeline": "Calendrier",
-        "budget": "Budget",
+        "budget": "Fourchette Budgétaire",
+        "currency": "Devise",
+        "budgetMin": "Budget Minimum",
+        "budgetMax": "Budget Maximum",
         "startDate": "Date de Début Préférée",
         "technologies": "Technologies",
         "requirements": "Exigences",
-        "goals": "Objectifs"
+        "goals": "Objectifs",
+        "resourceLinks": "Liens de Ressources (Figma, Conceptions, etc.)",
+        "resourceLabel": "Libellé",
+        "resourceUrl": "URL"
       },
       "additional": {
         "preferredContactMethod": "Méthode de Contact Préférée",
@@ -1407,12 +1413,25 @@
       "addTechnology": "Ajouter une Technologie",
       "addRequirement": "Ajouter une Exigence",
       "addGoal": "Ajouter un Objectif",
+      "addResourceLink": "Ajouter un Lien de Ressource",
       "submit": "Soumettre le Formulaire d'Admission",
       "submitting": "Soumission..."
     },
     "success": {
       "title": "Merci!",
-      "message": "Votre formulaire d'admission du projet a été soumis avec succès. Nous examinerons vos informations et vous contacterons bientôt!"
+      "message": "Votre formulaire d'admission du projet a été soumis avec succès. Nous examinerons vos informations et vous contacterons bientôt!",
+      "scheduleMeeting": "Planifier une Réunion"
+    },
+    "customLink": {
+      "title": "Bienvenue!",
+      "description": "Nous avons prérempli vos informations. Veuillez les examiner et compléter le formulaire ci-dessous pour commencer.",
+      "info": "Vos informations ont été préremplies. Veuillez les examiner et compléter les champs manquants.",
+      "notFound": {
+        "title": "Lien Personnalisé Introuvable",
+        "description": "Le lien d'admission personnalisé que vous essayez d'accéder est invalide, expiré ou n'existe plus.",
+        "help": "Veuillez planifier une réunion pour recevoir un nouveau lien de formulaire d'admission personnalisé, ou contactez-nous directement.",
+        "scheduleMeeting": "Planifier une Réunion"
+      }
     },
     "error": {
       "title": "Erreur",

@@ -9,6 +9,7 @@ import Image from "next/image";
 import { useTheme } from "@mui/material/styles";
 import { baseTheme } from "!/theme";
 import { useRouter } from "next/navigation";
+import { Button } from "..";
 
 export default function Header({
   isDarkMode = false,
@@ -30,7 +31,7 @@ export default function Header({
   };
 
   const handleCalendlyClick = () => {
-    router.push("/calendly");
+    router.push("/meeting");
   };
 
   const gradientStyles = {
@@ -56,7 +57,7 @@ export default function Header({
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           {isClient && !isMobile && (
-            <button
+            <Button
               onClick={handleCalendlyClick}
               style={{
                 background: gradientStyles.background,
@@ -84,7 +85,7 @@ export default function Header({
               }}
             >
               Let&apos;s Talk!
-            </button>
+            </Button>
           )}
           <DarkModeToggle onToggle={onThemeToggle} isDark={isDarkMode} />
           <Box sx={{ display: "flex", alignItems: "center" }}>

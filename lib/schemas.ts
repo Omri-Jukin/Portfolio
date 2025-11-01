@@ -19,6 +19,8 @@ import {
   PROFICIENCY_LEVELS,
   FILE_UPLOAD,
   DB_LIMITS,
+  INTAKE_FORM_CURRENCY_MAPPING,
+  IntakeFormCurrencyCode,
 } from "./constants";
 
 // ========================
@@ -280,10 +282,31 @@ export const intakeFormSchema = z.object({
       .max(5000),
     requirements: z.array(z.string()).optional(),
     timeline: z.string().optional(),
-    budget: z.string().optional(),
+    budget: z
+      .object({
+        currency: z
+          .enum(
+            Object.keys(INTAKE_FORM_CURRENCY_MAPPING) as [
+              IntakeFormCurrencyCode,
+              ...IntakeFormCurrencyCode[]
+            ]
+          )
+          .optional(),
+        min: z.string().optional(),
+        max: z.string().optional(),
+      })
+      .optional(),
     startDate: z.string().optional(),
     technologies: z.array(z.string()).optional(),
     goals: z.array(z.string()).optional(),
+    resourceLinks: z
+      .array(
+        z.object({
+          label: z.string().min(1, "Label is required"),
+          url: z.string().url("Must be a valid URL"),
+        })
+      )
+      .optional(),
   }),
   additional: z
     .object({
