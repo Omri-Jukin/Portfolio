@@ -1,3 +1,5 @@
+import { type IntakeFormCurrencyCode } from "$/constants";
+
 export const INTAKE_FORM_DEFAULTS = {
   contact: {
     firstName: "",
@@ -17,10 +19,15 @@ export const INTAKE_FORM_DEFAULTS = {
     description: "",
     requirements: [] as string[],
     timeline: "",
-    budget: "",
+    budget: {
+      currency: "USD" as IntakeFormCurrencyCode,
+      min: "",
+      max: "",
+    },
     startDate: "",
     technologies: [] as string[],
     goals: [] as string[],
+    resourceLinks: [] as Array<{ label: string; url: string }>,
   },
   additional: {
     preferredContactMethod: "",
@@ -28,4 +35,4 @@ export const INTAKE_FORM_DEFAULTS = {
     urgency: "",
     notes: "",
   },
-} as const;
+};

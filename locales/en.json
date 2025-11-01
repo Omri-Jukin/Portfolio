@@ -1459,11 +1459,17 @@
         "title": "Project Title",
         "description": "Project Description",
         "timeline": "Timeline",
-        "budget": "Budget",
+        "budget": "Budget Range",
+        "currency": "Currency",
+        "budgetMin": "Minimum Budget",
+        "budgetMax": "Maximum Budget",
         "startDate": "Preferred Start Date",
         "technologies": "Technologies",
         "requirements": "Requirements",
-        "goals": "Goals"
+        "goals": "Goals",
+        "resourceLinks": "Resource Links (Figma, Designs, etc.)",
+        "resourceLabel": "Label",
+        "resourceUrl": "URL"
       },
       "additional": {
         "preferredContactMethod": "Preferred Contact Method",
@@ -1475,12 +1481,25 @@
       "addTechnology": "Add Technology",
       "addRequirement": "Add Requirement",
       "addGoal": "Add Goal",
+      "addResourceLink": "Add Resource Link",
       "submit": "Submit Intake Form",
       "submitting": "Submitting..."
     },
     "success": {
       "title": "Thank You!",
-      "message": "Your project intake form has been submitted successfully. We'll review your information and get back to you soon!"
+      "message": "Your project intake form has been submitted successfully. We'll review your information and get back to you soon!",
+      "scheduleMeeting": "Schedule a Meeting"
+    },
+    "customLink": {
+      "title": "Welcome!",
+      "description": "We've pre-filled your information. Please review and complete the form below to get started.",
+      "info": "Your information has been pre-filled. Please review and complete any missing fields.",
+      "notFound": {
+        "title": "Custom Link Not Found",
+        "description": "The custom intake link you're trying to access is either invalid, expired, or no longer exists.",
+        "help": "Please schedule a meeting to receive a new custom intake form link, or contact us directly.",
+        "scheduleMeeting": "Schedule a Meeting"
+      }
     },
     "error": {
       "title": "Error",

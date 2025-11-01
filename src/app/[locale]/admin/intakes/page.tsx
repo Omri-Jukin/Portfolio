@@ -29,6 +29,7 @@ import {
   FormControl,
   InputLabel,
   FormHelperText,
+  Checkbox,
 } from "@mui/material";
 import { api } from "$/trpc/client";
 import { useRouter, usePathname } from "next/navigation";
@@ -39,6 +40,10 @@ import {
   ContentCopy as ContentCopyIcon,
   Close as CloseIcon,
   CheckCircle as CheckCircleIcon,
+  AccessTime as AccessTimeIcon,
+  Person as PersonIcon,
+  Business as BusinessIcon,
+  Delete as DeleteIcon,
 } from "@mui/icons-material";
 import { ClientOnly } from "~/ClientOnly";
 
@@ -46,7 +51,15 @@ const AdminIntakesList = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { data: intakes, isLoading, error } = api.intakes.getAll.useQuery();
+  const {
+    data: customLinks,
+    isLoading: isLoadingCustomLinks,
+    error: customLinksError,
+    refetch: refetchCustomLinks,
+  } = api.intakes.getAllCustomLinks.useQuery();
   const generateLinkMutation = api.intakes.generateCustomLink.useMutation();
+  const deleteCustomLinkMutation = api.intakes.deleteCustomLink.useMutation();
+  const deleteCustomLinksMutation = api.intakes.deleteCustomLinks.useMutation();
 
   // Get current locale from pathname
   const currentLocale =
@@ -71,6 +84,8 @@ const AdminIntakesList = () => {
     expiresInDays: 30,
     locale: currentLocale,
   });
+  const [selectedLinks, setSelectedLinks] = useState<string[]>([]);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const handleGenerateLink = async () => {
     setFormError(null);
@@ -165,7 +180,64 @@ const AdminIntakesList = () => {
     });
   };
 
-  if (isLoading) {
+  const handleSelectLink = (linkId: string) => {
+    setSelectedLinks((prev) =>
+      prev.includes(linkId)
+        ? prev.filter((id) => id !== linkId)
+        : [...prev, linkId]
+    );
+  };
+
+  const handleSelectAll = (checked: boolean) => {
+    if (checked && customLinks) {
+      setSelectedLinks(
+        customLinks.map(
+          (link: {
+            id: string;
+            slug: string;
+            email: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            organizationName?: string | null;
+            expiresAt: Date | string;
+            createdAt: Date | string;
+            isExpired: boolean;
+          }) => link.id
+        )
+      );
+    } else {
+      setSelectedLinks([]);
+    }
+  };
+
+  const handleDeleteSelected = async () => {
+    if (selectedLinks.length === 0) return;
+
+    try {
+      if (selectedLinks.length === 1) {
+        await deleteCustomLinkMutation.mutateAsync({ id: selectedLinks[0] });
+      } else {
+        await deleteCustomLinksMutation.mutateAsync({ ids: selectedLinks });
+      }
+      setSelectedLinks([]);
+      setDeleteDialogOpen(false);
+      setSnackbarMessage(
+        `Successfully deleted ${selectedLinks.length} custom link${
+          selectedLinks.length > 1 ? "s" : ""
+        }`
+      );
+      setSnackbarOpen(true);
+      await refetchCustomLinks();
+    } catch (error) {
+      console.error("Failed to delete links:", error);
+      setSnackbarMessage(
+        error instanceof Error ? error.message : "Failed to delete custom links"
+      );
+      setSnackbarOpen(true);
+    }
+  };
+
+  if (isLoading || isLoadingCustomLinks) {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
@@ -175,11 +247,11 @@ const AdminIntakesList = () => {
     );
   }
 
-  if (error) {
+  if (error || customLinksError) {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Alert severity="error">
-          {error.message || "Failed to load intakes"}
+          {error?.message || customLinksError?.message || "Failed to load data"}
         </Alert>
       </Container>
     );
@@ -418,6 +490,38 @@ const AdminIntakesList = () => {
           </DialogActions>
         </Dialog>
 
+        {/* Delete Confirmation Dialog */}
+        <Dialog
+          open={deleteDialogOpen}
+          onClose={() => setDeleteDialogOpen(false)}
+        >
+          <DialogTitle>Confirm Deletion</DialogTitle>
+          <DialogContent>
+            <Typography>
+              Are you sure you want to delete {selectedLinks.length}{" "}
+              {selectedLinks.length === 1 ? "custom link" : "custom links"}?
+              This action cannot be undone.
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+            <Button
+              onClick={handleDeleteSelected}
+              variant="contained"
+              color="error"
+              disabled={
+                deleteCustomLinkMutation.isPending ||
+                deleteCustomLinksMutation.isPending
+              }
+            >
+              {deleteCustomLinkMutation.isPending ||
+              deleteCustomLinksMutation.isPending
+                ? "Deleting..."
+                : "Delete"}
+            </Button>
+          </DialogActions>
+        </Dialog>
+
         {/* Snackbar for copy confirmation */}
         <Snackbar
           open={snackbarOpen}
@@ -437,56 +541,278 @@ const AdminIntakesList = () => {
           }
         />
 
-        {!intakes || intakes.length === 0 ? (
-          <Alert severity="info">No intakes found.</Alert>
-        ) : (
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Name/Organization</TableCell>
-                  <TableCell>Created</TableCell>
-                  <TableCell>Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {intakes.map(
-                  (intake: {
-                    id: string;
-                    email: string;
-                    name: string;
-                    createdAt: string | number | Date;
-                  }) => (
-                    <TableRow key={intake.id}>
-                      <TableCell>{intake.email}</TableCell>
-                      <TableCell>{intake.name || "Unknown"}</TableCell>
-                      <TableCell>
-                        {intake.createdAt
-                          ? format(
-                              new Date(intake.createdAt),
-                              "MMM dd, yyyy HH:mm"
-                            )
-                          : "N/A"}
-                      </TableCell>
-                      <TableCell>
-                        <MuiLink
-                          component="button"
-                          onClick={() =>
-                            router.push(`/admin/intakes/${intake.id}`)
+        <Stack spacing={4}>
+          {/* Custom Links Section */}
+          <Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mb: 2,
+              }}
+            >
+              <Typography variant="h5" sx={{ fontWeight: 600 }}>
+                Custom Links
+              </Typography>
+              {selectedLinks.length > 0 && (
+                <Button
+                  variant="contained"
+                  color="error"
+                  startIcon={<DeleteIcon />}
+                  onClick={() => setDeleteDialogOpen(true)}
+                  disabled={
+                    deleteCustomLinkMutation.isPending ||
+                    deleteCustomLinksMutation.isPending
+                  }
+                >
+                  Delete {selectedLinks.length}{" "}
+                  {selectedLinks.length === 1 ? "Link" : "Links"}
+                </Button>
+              )}
+            </Box>
+            {!customLinks || customLinks.length === 0 ? (
+              <Alert severity="info">No custom links found.</Alert>
+            ) : (
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          indeterminate={
+                            selectedLinks.length > 0 &&
+                            selectedLinks.length < customLinks.length
                           }
-                          sx={{ cursor: "pointer" }}
-                        >
-                          View
-                        </MuiLink>
+                          checked={
+                            customLinks.length > 0 &&
+                            selectedLinks.length === customLinks.length
+                          }
+                          onChange={(e) => handleSelectAll(e.target.checked)}
+                        />
                       </TableCell>
+                      <TableCell>Slug/Link</TableCell>
+                      <TableCell>Email</TableCell>
+                      <TableCell>Client Name</TableCell>
+                      <TableCell>Organization</TableCell>
+                      <TableCell>Status</TableCell>
+                      <TableCell>Expires</TableCell>
+                      <TableCell>Created</TableCell>
                     </TableRow>
-                  )
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
+                  </TableHead>
+                  <TableBody>
+                    {customLinks.map(
+                      (link: {
+                        id: string;
+                        slug: string;
+                        email: string;
+                        firstName?: string | null;
+                        lastName?: string | null;
+                        organizationName?: string | null;
+                        expiresAt: Date | string;
+                        createdAt: Date | string;
+                        isExpired: boolean;
+                      }) => {
+                        const baseUrl =
+                          process.env.NEXT_PUBLIC_BASE_URL ||
+                          (typeof window !== "undefined"
+                            ? window.location.origin
+                            : "http://localhost:3000");
+                        const fullLink = `${baseUrl}/${currentLocale}/intake/${link.slug}`;
+                        const isExpired = link.isExpired;
+                        const clientName =
+                          [link.firstName, link.lastName]
+                            .filter(Boolean)
+                            .join(" ") || "N/A";
+
+                        return (
+                          <TableRow key={link.id}>
+                            <TableCell padding="checkbox">
+                              <Checkbox
+                                checked={selectedLinks.includes(link.id)}
+                                onChange={() => handleSelectLink(link.id)}
+                              />
+                            </TableCell>
+                            <TableCell>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 1,
+                                }}
+                              >
+                                <LinkIcon fontSize="small" color="action" />
+                                <MuiLink
+                                  href={fullLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  sx={{
+                                    fontFamily: "monospace",
+                                    fontSize: "0.875rem",
+                                    maxWidth: 200,
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                    display: "block",
+                                  }}
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    navigator.clipboard.writeText(fullLink);
+                                    setSnackbarMessage(
+                                      "Custom link copied to clipboard!"
+                                    );
+                                    setSnackbarOpen(true);
+                                  }}
+                                >
+                                  {link.slug}
+                                </MuiLink>
+                              </Box>
+                            </TableCell>
+                            <TableCell>{link.email}</TableCell>
+                            <TableCell>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 0.5,
+                                }}
+                              >
+                                <PersonIcon fontSize="small" color="action" />
+                                {clientName}
+                              </Box>
+                            </TableCell>
+                            <TableCell>
+                              {link.organizationName ? (
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 0.5,
+                                  }}
+                                >
+                                  <BusinessIcon
+                                    fontSize="small"
+                                    color="action"
+                                  />
+                                  {link.organizationName}
+                                </Box>
+                              ) : (
+                                "N/A"
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              <Box
+                                sx={{
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  gap: 0.5,
+                                  px: 1,
+                                  py: 0.5,
+                                  borderRadius: 1,
+                                  bgcolor: isExpired
+                                    ? "error.light"
+                                    : "success.light",
+                                  color: isExpired
+                                    ? "error.contrastText"
+                                    : "success.contrastText",
+                                  fontSize: "0.75rem",
+                                  fontWeight: 600,
+                                }}
+                              >
+                                {isExpired ? "Expired" : "Active"}
+                              </Box>
+                            </TableCell>
+                            <TableCell>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 0.5,
+                                  color: isExpired
+                                    ? "error.main"
+                                    : "text.primary",
+                                }}
+                              >
+                                <AccessTimeIcon fontSize="small" />
+                                {format(
+                                  new Date(link.expiresAt),
+                                  "MMM dd, yyyy"
+                                )}
+                              </Box>
+                            </TableCell>
+                            <TableCell>
+                              {format(
+                                new Date(link.createdAt),
+                                "MMM dd, yyyy HH:mm"
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      }
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
+          </Box>
+
+          {/* Regular Intakes Section */}
+          <Box>
+            <Typography variant="h5" sx={{ mb: 2, fontWeight: 600 }}>
+              Regular Intakes (Submitted Forms)
+            </Typography>
+            {!intakes || intakes.length === 0 ? (
+              <Alert severity="info">No intakes found.</Alert>
+            ) : (
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Email</TableCell>
+                      <TableCell>Name/Organization</TableCell>
+                      <TableCell>Created</TableCell>
+                      <TableCell>Actions</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {intakes.map(
+                      (intake: {
+                        id: string;
+                        email: string;
+                        name: string;
+                        createdAt: string | number | Date;
+                      }) => (
+                        <TableRow key={intake.id}>
+                          <TableCell>{intake.email}</TableCell>
+                          <TableCell>{intake.name || "Unknown"}</TableCell>
+                          <TableCell>
+                            {intake.createdAt
+                              ? format(
+                                  new Date(intake.createdAt),
+                                  "MMM dd, yyyy HH:mm"
+                                )
+                              : "N/A"}
+                          </TableCell>
+                          <TableCell>
+                            <MuiLink
+                              component="button"
+                              onClick={() =>
+                                router.push(`/admin/intakes/${intake.id}`)
+                              }
+                              sx={{ cursor: "pointer" }}
+                            >
+                              View
+                            </MuiLink>
+                          </TableCell>
+                        </TableRow>
+                      )
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
+          </Box>
+        </Stack>
       </Container>
     </ClientOnly>
   );

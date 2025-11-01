@@ -1,6 +1,6 @@
 import { ContactCardType } from "@/app/[locale]/contact/page.type";
 import { Theme, createTheme } from "@mui/material/styles";
-import { getTextColors, applyTextColorVariables } from "./textColors";
+import { getTextColors } from "./textColors";
 
 // Utility function to extract colors from conic gradients
 const extractColorsFromGradient = (gradient: string): string[] => {
@@ -1042,10 +1042,8 @@ export const createAppTheme = (
     },
   });
 
-  // Apply CSS variables for text colors
-  if (typeof window !== "undefined") {
-    applyTextColorVariables(enhancedTheme);
-  }
+  // Note: CSS variables are applied client-side after mount to prevent hydration mismatches
+  // See ClientLayout component for implementation
 
   return enhancedTheme;
 };

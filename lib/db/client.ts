@@ -34,7 +34,6 @@ export async function getDB() {
 
     // Create or reuse connection
     if (!globalConnection) {
-      console.log("🔧 Creating new PostgreSQL connection to Supabase");
       globalConnection = postgres(databaseUrl, {
         prepare: false,
         max: 10,
@@ -43,14 +42,6 @@ export async function getDB() {
       });
     }
 
-    // Log connection type
-    if (process.env.NODE_ENV === "development") {
-      console.log("🔧 Development mode: Using Supabase PostgreSQL database");
-    } else {
-      console.log("✅ Production mode: Using Supabase PostgreSQL database");
-    }
-
-    console.log("✅ Connected to Supabase PostgreSQL database");
     return drizzle(globalConnection, { schema });
   } catch (error) {
     console.error(
@@ -78,6 +69,14 @@ export function getMockDB(): Awaited<ReturnType<typeof getDB>> | null {
 export const getDbClient = async () => {
   return await getDB();
 };
+
+// Get the underlying postgres client for raw queries (useful in middleware)
+export function getPostgresClient() {
+  if (!globalConnection) {
+    throw new Error("Database connection not initialized");
+  }
+  return globalConnection;
+}
 
 // Cleanup function for graceful shutdown
 export async function closeDB() {

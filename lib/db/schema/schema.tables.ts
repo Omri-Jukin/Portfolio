@@ -394,6 +394,7 @@ export const customIntakeLinks = pgTable("custom_intake_links", {
   lastName: text("last_name"),
   organizationName: text("organization_name"),
   organizationWebsite: text("organization_website"),
+  hiddenSections: jsonb("hidden_sections").$type<string[]>().default([]),
   expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()

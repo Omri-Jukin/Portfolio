@@ -1141,6 +1141,363 @@ export const RESUME_TEMPLATE_MAPPING = {
   blueGrey: "blueGrey",
 } as const;
 
+export type IntakeFormCurrencyMapping = {
+  name: string;
+  symbol: string;
+  code: string;
+};
+
+/**
+ * Intake form currency mapping for currencies that we support
+ */
+export const INTAKE_FORM_CURRENCY_MAPPING: Record<
+  string,
+  IntakeFormCurrencyMapping
+> = {
+  ILS: {
+    name: "ILS - Israeli Shekel",
+    symbol: "₪",
+    code: "ILS",
+  },
+  USD: {
+    name: "USD - US Dollar",
+    symbol: "$",
+    code: "USD",
+  },
+  EUR: {
+    name: "EUR - Euro",
+    symbol: "€",
+    code: "EUR",
+  },
+  GBP: {
+    name: "GBP - British Pound",
+    symbol: "£",
+    code: "GBP",
+  },
+  CAD: {
+    name: "CAD - Canadian Dollar",
+    symbol: "CA$",
+    code: "CAD",
+  },
+  AUD: {
+    name: "AUD - Australian Dollar",
+    symbol: "A$",
+    code: "AUD",
+  },
+  JPY: {
+    name: "JPY - Japanese Yen",
+    symbol: "¥",
+    code: "JPY",
+  },
+  CHF: {
+    name: "CHF - Swiss Franc",
+    symbol: "CHF",
+    code: "CHF",
+  },
+  CNY: {
+    name: "CNY - Chinese Yuan",
+    symbol: "¥",
+    code: "CNY",
+  },
+  INR: {
+    name: "INR - Indian Rupee",
+    symbol: "₹",
+    code: "INR",
+  },
+  BRL: {
+    name: "BRL - Brazilian Real",
+    symbol: "R$",
+    code: "BRL",
+  },
+  MXN: {
+    name: "MXN - Mexican Peso",
+    symbol: "MX$",
+    code: "MXN",
+  },
+  ZAR: {
+    name: "ZAR - South African Rand",
+    symbol: "R",
+    code: "ZAR",
+  },
+  SEK: {
+    name: "SEK - Swedish Krona",
+    symbol: "kr",
+    code: "SEK",
+  },
+  NOK: {
+    name: "NOK - Norwegian Krone",
+    symbol: "kr",
+    code: "NOK",
+  },
+  DKK: {
+    name: "DKK - Danish Krone",
+    symbol: "kr",
+    code: "DKK",
+  },
+  PLN: {
+    name: "PLN - Polish Zloty",
+    symbol: "zł",
+    code: "PLN",
+  },
+  RUB: {
+    name: "RUB - Russian Ruble",
+    symbol: "₽",
+    code: "RUB",
+  },
+} as const;
+
+// Currency code type extracted from the mapping keys
+export type IntakeFormCurrencyCode = keyof typeof INTAKE_FORM_CURRENCY_MAPPING;
+
+/**
+ * Get GMT offset for a timezone
+ * Returns format like "GMT+2" or "GMT-5"
+ */
+export function getGMTOffset(timezone: string): string {
+  if (typeof window === "undefined") {
+    // Server-side: return placeholder, will be calculated client-side
+    return "";
+  }
+
+  try {
+    const now = new Date();
+
+    // More reliable method: use Intl.DateTimeFormat with formatToParts
+    const formatter = new Intl.DateTimeFormat("en-US", {
+      timeZone: timezone,
+      timeZoneName: "shortOffset",
+    });
+    const parts = formatter.formatToParts(now);
+    const offsetPart = parts.find((part) => part.type === "timeZoneName");
+
+    if (offsetPart) {
+      return offsetPart.value.replace("GMT", "GMT");
+    }
+
+    // Fallback: calculate offset manually
+    const utc = new Date(now.toLocaleString("en-US", { timeZone: "UTC" }));
+    const tz = new Date(now.toLocaleString("en-US", { timeZone: timezone }));
+    const offsetMs = tz.getTime() - utc.getTime();
+    const offsetHours = offsetMs / (1000 * 60 * 60);
+    const sign = offsetHours >= 0 ? "+" : "-";
+    const absOffset = Math.abs(offsetHours);
+    return `GMT${sign}${Math.floor(absOffset)}`;
+  } catch {
+    return "";
+  }
+}
+
+/**
+ * Common timezones for intake form
+ * Using IANA timezone identifiers
+ */
+export const COMMON_TIMEZONES = [
+  { value: "UTC", label: "UTC", getLabel: () => "UTC (GMT±0)" },
+  {
+    value: "America/New_York",
+    label: "Eastern Time",
+    getLabel: () => "Eastern Time (US & Canada) - GMT-5",
+  },
+  {
+    value: "America/Chicago",
+    label: "Central Time",
+    getLabel: () => "Central Time (US & Canada) - GMT-6",
+  },
+  {
+    value: "America/Denver",
+    label: "Mountain Time",
+    getLabel: () => "Mountain Time (US & Canada) - GMT-7",
+  },
+  {
+    value: "America/Los_Angeles",
+    label: "Pacific Time",
+    getLabel: () => "Pacific Time (US & Canada) - GMT-8",
+  },
+  {
+    value: "America/Toronto",
+    label: "Eastern Time (Canada)",
+    getLabel: () => "Eastern Time (Canada) - GMT-5",
+  },
+  {
+    value: "America/Vancouver",
+    label: "Pacific Time (Canada)",
+    getLabel: () => "Pacific Time (Canada) - GMT-8",
+  },
+  { value: "Europe/London", label: "London", getLabel: () => "London - GMT±0" },
+  { value: "Europe/Paris", label: "Paris", getLabel: () => "Paris - GMT+1" },
+  { value: "Europe/Berlin", label: "Berlin", getLabel: () => "Berlin - GMT+1" },
+  { value: "Europe/Rome", label: "Rome", getLabel: () => "Rome - GMT+1" },
+  { value: "Europe/Madrid", label: "Madrid", getLabel: () => "Madrid - GMT+1" },
+  {
+    value: "Europe/Amsterdam",
+    label: "Amsterdam",
+    getLabel: () => "Amsterdam - GMT+1",
+  },
+  {
+    value: "Europe/Brussels",
+    label: "Brussels",
+    getLabel: () => "Brussels - GMT+1",
+  },
+  { value: "Europe/Vienna", label: "Vienna", getLabel: () => "Vienna - GMT+1" },
+  { value: "Europe/Zurich", label: "Zurich", getLabel: () => "Zurich - GMT+1" },
+  {
+    value: "Europe/Stockholm",
+    label: "Stockholm",
+    getLabel: () => "Stockholm - GMT+1",
+  },
+  {
+    value: "Europe/Copenhagen",
+    label: "Copenhagen",
+    getLabel: () => "Copenhagen - GMT+1",
+  },
+  { value: "Europe/Oslo", label: "Oslo", getLabel: () => "Oslo - GMT+1" },
+  {
+    value: "Europe/Helsinki",
+    label: "Helsinki",
+    getLabel: () => "Helsinki - GMT+2",
+  },
+  { value: "Europe/Warsaw", label: "Warsaw", getLabel: () => "Warsaw - GMT+1" },
+  { value: "Europe/Prague", label: "Prague", getLabel: () => "Prague - GMT+1" },
+  {
+    value: "Europe/Budapest",
+    label: "Budapest",
+    getLabel: () => "Budapest - GMT+1",
+  },
+  { value: "Europe/Athens", label: "Athens", getLabel: () => "Athens - GMT+2" },
+  { value: "Europe/Dublin", label: "Dublin", getLabel: () => "Dublin - GMT±0" },
+  { value: "Europe/Lisbon", label: "Lisbon", getLabel: () => "Lisbon - GMT±0" },
+  {
+    value: "Asia/Jerusalem",
+    label: "Jerusalem",
+    getLabel: () => "Jerusalem - GMT+2",
+  },
+  { value: "Asia/Dubai", label: "Dubai", getLabel: () => "Dubai - GMT+4" },
+  { value: "Asia/Riyadh", label: "Riyadh", getLabel: () => "Riyadh - GMT+3" },
+  { value: "Asia/Kuwait", label: "Kuwait", getLabel: () => "Kuwait - GMT+3" },
+  {
+    value: "Asia/Bahrain",
+    label: "Bahrain",
+    getLabel: () => "Bahrain - GMT+3",
+  },
+  { value: "Asia/Qatar", label: "Qatar", getLabel: () => "Qatar - GMT+3" },
+  { value: "Asia/Muscat", label: "Muscat", getLabel: () => "Muscat - GMT+4" },
+  {
+    value: "Asia/Kolkata",
+    label: "Mumbai, Delhi, Kolkata",
+    getLabel: () => "Mumbai, Delhi, Kolkata - GMT+5:30",
+  },
+  {
+    value: "Asia/Karachi",
+    label: "Karachi",
+    getLabel: () => "Karachi - GMT+5",
+  },
+  { value: "Asia/Dhaka", label: "Dhaka", getLabel: () => "Dhaka - GMT+6" },
+  {
+    value: "Asia/Colombo",
+    label: "Colombo",
+    getLabel: () => "Colombo - GMT+5:30",
+  },
+  {
+    value: "Asia/Kathmandu",
+    label: "Kathmandu",
+    getLabel: () => "Kathmandu - GMT+5:45",
+  },
+  {
+    value: "Asia/Bangkok",
+    label: "Bangkok",
+    getLabel: () => "Bangkok - GMT+7",
+  },
+  {
+    value: "Asia/Jakarta",
+    label: "Jakarta",
+    getLabel: () => "Jakarta - GMT+7",
+  },
+  { value: "Asia/Manila", label: "Manila", getLabel: () => "Manila - GMT+8" },
+  {
+    value: "Asia/Singapore",
+    label: "Singapore",
+    getLabel: () => "Singapore - GMT+8",
+  },
+  {
+    value: "Asia/Kuala_Lumpur",
+    label: "Kuala Lumpur",
+    getLabel: () => "Kuala Lumpur - GMT+8",
+  },
+  {
+    value: "Asia/Hong_Kong",
+    label: "Hong Kong",
+    getLabel: () => "Hong Kong - GMT+8",
+  },
+  { value: "Asia/Taipei", label: "Taipei", getLabel: () => "Taipei - GMT+8" },
+  { value: "Asia/Seoul", label: "Seoul", getLabel: () => "Seoul - GMT+9" },
+  { value: "Asia/Tokyo", label: "Tokyo", getLabel: () => "Tokyo - GMT+9" },
+  {
+    value: "Asia/Shanghai",
+    label: "Shanghai, Beijing",
+    getLabel: () => "Shanghai, Beijing - GMT+8",
+  },
+  { value: "Asia/Sydney", label: "Sydney", getLabel: () => "Sydney - GMT+10" },
+  {
+    value: "Asia/Melbourne",
+    label: "Melbourne",
+    getLabel: () => "Melbourne - GMT+10",
+  },
+  {
+    value: "Australia/Brisbane",
+    label: "Brisbane",
+    getLabel: () => "Brisbane - GMT+10",
+  },
+  { value: "Australia/Perth", label: "Perth", getLabel: () => "Perth - GMT+8" },
+  {
+    value: "Australia/Adelaide",
+    label: "Adelaide",
+    getLabel: () => "Adelaide - GMT+9:30",
+  },
+  {
+    value: "Pacific/Auckland",
+    label: "Auckland",
+    getLabel: () => "Auckland - GMT+12",
+  },
+  {
+    value: "America/Mexico_City",
+    label: "Mexico City",
+    getLabel: () => "Mexico City - GMT-6",
+  },
+  {
+    value: "America/Bogota",
+    label: "Bogota",
+    getLabel: () => "Bogota - GMT-5",
+  },
+  { value: "America/Lima", label: "Lima", getLabel: () => "Lima - GMT-5" },
+  {
+    value: "America/Santiago",
+    label: "Santiago",
+    getLabel: () => "Santiago - GMT-4",
+  },
+  {
+    value: "America/Buenos_Aires",
+    label: "Buenos Aires",
+    getLabel: () => "Buenos Aires - GMT-3",
+  },
+  {
+    value: "America/Sao_Paulo",
+    label: "Sao Paulo",
+    getLabel: () => "Sao Paulo - GMT-3",
+  },
+  {
+    value: "Africa/Johannesburg",
+    label: "Johannesburg",
+    getLabel: () => "Johannesburg - GMT+2",
+  },
+  { value: "Africa/Cairo", label: "Cairo", getLabel: () => "Cairo - GMT+2" },
+  { value: "Africa/Lagos", label: "Lagos", getLabel: () => "Lagos - GMT+1" },
+  {
+    value: "Africa/Casablanca",
+    label: "Casablanca",
+    getLabel: () => "Casablanca - GMT+1",
+  },
+];
+
 // ========================
 // EXPORT TYPES
 // ========================

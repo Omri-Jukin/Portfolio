@@ -45,6 +45,9 @@ export default function IntakePage() {
   const router = useRouter();
   const t = useTranslations("intake");
 
+  const [isCustomLink, setIsCustomLink] = useState(false);
+  const [clientName, setClientName] = useState<string | null>(null);
+
   const submitIntake = api.intakes.submit.useMutation({
     onSuccess: () => {
       setState((prev) => ({ ...prev, isSubmitted: true, isSubmitting: false }));
@@ -106,16 +109,25 @@ export default function IntakePage() {
 
             // If it's a custom link, pre-fill with custom client data
             if (payload.isCustomLink) {
+              setIsCustomLink(true);
+              const firstName = payload.firstName || "";
+              const lastName = payload.lastName || "";
+              if (firstName || lastName) {
+                setClientName(
+                  `${firstName} ${lastName}`.trim() || payload.email || null
+                );
+              }
+
               setFormData((prev) => ({
                 ...prev,
                 contact: {
                   ...prev.contact,
-                  firstName: payload.firstName || prev.contact.firstName,
-                  lastName: payload.lastName || prev.contact.lastName,
+                  firstName: firstName || prev.contact.firstName,
+                  lastName: lastName || prev.contact.lastName,
                   email: payload.email || prev.contact.email,
                   fullName:
-                    payload.firstName && payload.lastName
-                      ? `${payload.firstName} ${payload.lastName}`
+                    firstName && lastName
+                      ? `${firstName} ${lastName}`
                       : prev.contact.fullName,
                 },
                 org: payload.organizationName
@@ -152,7 +164,7 @@ export default function IntakePage() {
       } else if (!token) {
         // No token and no valid params, redirect
         const locale = window.location.pathname.split("/")[1] || "en";
-        router.push(`/${locale}/calendly`);
+        router.push(`/${locale}/meeting`);
       }
     };
 
@@ -380,12 +392,44 @@ export default function IntakePage() {
             <CardContent sx={{ p: 4 }}>
               <Stack spacing={3}>
                 <Box sx={{ textAlign: "center" }}>
-                  <Typography variant="h3" sx={{ fontWeight: 700, mb: 2 }}>
-                    {t("title")}
-                  </Typography>
-                  <Typography variant="body1" color="text.secondary">
-                    {t("description")}
-                  </Typography>
+                  {isCustomLink && clientName ? (
+                    <>
+                      <Typography variant="h3" sx={{ fontWeight: 700, mb: 2 }}>
+                        {t("customLink.title") || `Welcome, ${clientName}!`}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        color="text.secondary"
+                        sx={{ mb: 2 }}
+                      >
+                        {t("customLink.description") ||
+                          "We've pre-filled some information for you. Please complete the form below to get started."}
+                      </Typography>
+                      <Alert
+                        severity="info"
+                        sx={{
+                          borderRadius: 2,
+                          textAlign: "left",
+                          bgcolor: "rgba(102, 126, 234, 0.1)",
+                          border: "1px solid rgba(102, 126, 234, 0.3)",
+                        }}
+                      >
+                        <Typography variant="body2">
+                          {t("customLink.info") ||
+                            "Your information has been pre-filled. Please review and complete any missing fields."}
+                        </Typography>
+                      </Alert>
+                    </>
+                  ) : (
+                    <>
+                      <Typography variant="h3" sx={{ fontWeight: 700, mb: 2 }}>
+                        {t("title")}
+                      </Typography>
+                      <Typography variant="body1" color="text.secondary">
+                        {t("description")}
+                      </Typography>
+                    </>
+                  )}
                 </Box>
 
                 {state.error && (
