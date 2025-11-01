@@ -97,13 +97,16 @@ export const usersRouter = router({
 
       // SECURITY: Passwords MUST be provided in plain text from the frontend.
       // createUser() will hash the password exactly once before storing.
-      return await createUser({
-        email: input.email,
-        password: input.password, // Plain text password - will be hashed once in createUser()
-        firstName,
-        lastName,
-        role: input.role,
-      });
+      return await createUser(
+        {
+          email: input.email,
+          password: input.password, // Plain text password - will be hashed once in createUser()
+          firstName,
+          lastName,
+          role: input.role,
+        },
+        db // Pass the database client from context
+      );
     }),
 
   getById: procedure.input(z.object({ id: z.string() })).query(async (opts) => {

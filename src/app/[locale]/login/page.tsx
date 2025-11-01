@@ -42,6 +42,43 @@ export default function LoginPage() {
       router.push(`/${locale}/admin`);
     },
     onError: (error) => {
+      // Enhanced error logging for production debugging
+      console.error("[CLIENT] Login error:", {
+        message: error.message,
+        data: error.data,
+        shape: error.shape,
+        // Log raw error details if available
+        rawError: error,
+      });
+
+      // Check if it's a JSON parsing error
+      if (error.message?.includes("JSON") || error.message?.includes("parse")) {
+        console.error("[CLIENT] Possible JSON parsing error detected");
+        // Try to fetch the raw response for debugging
+        fetch("/api/trpc/auth.login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: credentials.email,
+            password: "***", // Don't log actual password
+          }),
+        })
+          .then(async (response) => {
+            const text = await response.text();
+            console.error("[CLIENT] Raw API response:", {
+              status: response.status,
+              statusText: response.statusText,
+              headers: Object.fromEntries(response.headers.entries()),
+              body: text.substring(0, 500), // First 500 chars
+              isJson:
+                text.trim().startsWith("{") || text.trim().startsWith("["),
+            });
+          })
+          .catch((fetchError) => {
+            console.error("[CLIENT] Failed to fetch raw response:", fetchError);
+          });
+      }
+
       setError(error.message || "Login failed");
     },
   });

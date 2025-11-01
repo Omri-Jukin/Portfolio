@@ -28,6 +28,15 @@ import {
 } from "@mui/icons-material";
 import { AdminDashboardSection } from "#/lib/db/adminDashboard/adminDashboard";
 
+// Serialized version of AdminDashboardSection (dates become strings when serialized via tRPC)
+type SerializedAdminDashboardSection = Omit<
+  AdminDashboardSection,
+  "createdAt" | "updatedAt"
+> & {
+  createdAt: string;
+  updatedAt: string;
+};
+
 // Section configuration
 const SECTION_CONFIG = {
   pendingUsers: {
@@ -155,8 +164,16 @@ export default function AdminDashboard() {
   });
 
   // Get dashboard sections
+  // Note: tRPC serializes Date objects to strings at runtime, but TypeScript types remain as Date
+  // We need to cast to the serialized version
   const { data: dashboardSections, isLoading: sectionsLoading } =
     api.adminDashboard.getSections.useQuery();
+
+  // Type dashboardSections as serialized version (dates become strings via tRPC)
+  // At runtime, tRPC automatically serializes Date to string, but TypeScript doesn't know this
+  const typedDashboardSections = dashboardSections
+    ? (dashboardSections as unknown as SerializedAdminDashboardSection[])
+    : undefined;
   const updateOrderMutation = api.adminDashboard.updateSectionOrder.useMutation(
     {
       onSuccess: () => {
@@ -169,9 +186,9 @@ export default function AdminDashboard() {
 
   // Initialize sections from API or use defaults
   useEffect(() => {
-    if (dashboardSections && dashboardSections.length > 0) {
+    if (typedDashboardSections && typedDashboardSections.length > 0) {
       setSections(
-        dashboardSections.map((s: AdminDashboardSection) => ({
+        typedDashboardSections.map((s) => ({
           sectionKey: s.sectionKey,
           displayOrder: s.displayOrder,
         }))
@@ -184,7 +201,7 @@ export default function AdminDashboard() {
       }));
       setSections(defaultSections);
     }
-  }, [dashboardSections, sectionsLoading]);
+  }, [typedDashboardSections, sectionsLoading]);
 
   // Handle authentication error
   useEffect(() => {
@@ -300,9 +317,9 @@ export default function AdminDashboard() {
                   onClick={() => {
                     setIsEditing(false);
                     // Reset to original order
-                    if (dashboardSections) {
+                    if (typedDashboardSections) {
                       setSections(
-                        dashboardSections.map((s: AdminDashboardSection) => ({
+                        typedDashboardSections.map((s) => ({
                           sectionKey: s.sectionKey,
                           displayOrder: s.displayOrder,
                         }))
