@@ -126,3 +126,22 @@ After setting secrets, verify they're accessible:
 - Ensure variable is set in correct environment (Production vs Preview)
 - Redeploy after adding new secrets
 - Check variable name spelling (case-sensitive)
+
+### Build Fails with Network Error (ECONNRESET)
+
+If you see `npm error code ECONNRESET` during Cloudflare Pages builds:
+
+1. **Retry the build** - Most transient network issues resolve on retry
+2. **Check `.npmrc` configuration** - The repository includes an `.npmrc` file with optimized settings for Cloudflare's build environment
+3. **Verify npm registry accessibility** - Cloudflare builds use the public npm registry
+4. **Consider build caching** - Cloudflare Pages caches `node_modules` between builds if the lockfile hasn't changed
+
+The `.npmrc` file includes:
+- Increased timeouts (5 minutes)
+- Retry logic (5 retries with exponential backoff)
+- Optimized socket configuration
+
+If the issue persists:
+- Check Cloudflare Pages status page for known issues
+- Try deploying during off-peak hours
+- Consider using Cloudflare's build cache by ensuring `package-lock.json` is committed
