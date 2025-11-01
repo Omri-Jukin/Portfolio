@@ -115,6 +115,7 @@
     "dev:turbo": "next dev --turbopack",
     "start": "next dev",
     "lint": "next lint",
+    "typecheck": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watch",
     "check": "tsc -p .",
