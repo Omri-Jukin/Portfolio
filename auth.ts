@@ -9,20 +9,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async signIn({ user, account }) {
+    async signIn({ user }) {
       // Only allow specific admin email
       if (user.email === "omrijukin@gmail.com") {
-        console.log("[AUTH] Admin user sign in:", {
-          email: user.email,
-          provider: account?.provider,
-        });
         return true;
       }
-
-      console.log("[AUTH] Unauthorized sign in attempt:", {
-        email: user.email,
-        provider: account?.provider,
-      });
       return false; // Reject all other users
     },
     async session({ session, token }) {
@@ -51,7 +42,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
-  secret: process.env.NEXTAUTH_SECRET,
-  debug: true, // Temporarily enabled for debugging
+  // Auth.js v5 uses AUTH_SECRET, fallback to NEXTAUTH_SECRET for compatibility
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
+  debug: process.env.NODE_ENV === "development",
   trustHost: true, // Required for Cloudflare Workers
 });
