@@ -3,7 +3,11 @@
   "name": "homepage",
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-08-03",
-  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "compatibility_flags": [
+    "nodejs_compat",
+    "global_fetch_strictly_public",
+    "no_handle_cross_request_promise_resolution"
+  ],
   "minify": true,
 
   "assets": {
@@ -26,6 +30,9 @@
     // Application Configuration
     "NODE_ENV": "production",
     "NEXT_PUBLIC_BASE_URL": "https://omrijukin.com",
+
+    // Database Configuration
+    "USE_NEON_DRIVER": "true",
 
     // Auth Configuration
     "NEXTAUTH_URL": "https://omrijukin.com",

@@ -1,4 +1,4 @@
-import { getDB, getPostgresClient } from "../client";
+import { getDB } from "../client";
 import { customIntakeLinks } from "../schema/schema.tables";
 import { eq, inArray } from "drizzle-orm";
 
@@ -113,121 +113,32 @@ export async function getCustomLinkBySlug(
   }
 
   try {
-    // Try SQL builder API first
-    try {
-      const result = await db
-        .select()
-        .from(customIntakeLinks)
-        .where(eq(customIntakeLinks.slug, slug))
-        .limit(1);
+    const result = await db
+      .select()
+      .from(customIntakeLinks)
+      .where(eq(customIntakeLinks.slug, slug))
+      .limit(1);
 
-      if (!result || result.length === 0) {
-        return null;
-      }
-
-      const link = result[0];
-
-      return {
-        id: link.id,
-        slug: link.slug,
-        email: link.email,
-        token: link.token,
-        firstName: link.firstName,
-        lastName: link.lastName,
-        organizationName: link.organizationName,
-        organizationWebsite: link.organizationWebsite,
-        hiddenSections: (link.hiddenSections as string[]) || null,
-        expiresAt: link.expiresAt,
-        createdAt: link.createdAt,
-        updatedAt: link.updatedAt,
-      };
-    } catch {
-      // If SQL builder fails (e.g., in middleware), try raw postgres query
-      if (process.env.NODE_ENV === "development") {
-        console.log(
-          `[getCustomLinkBySlug] SQL builder failed, trying raw query for slug "${slug}"`
-        );
-      }
-
-      const postgresClient = getPostgresClient();
-      // Try to get hidden_sections, but handle case where column doesn't exist yet
-      let rows;
-      try {
-        rows = await postgresClient`
-          SELECT 
-            id, slug, email, token,
-            first_name, last_name,
-            organization_name, organization_website,
-            COALESCE(hidden_sections, '[]'::jsonb) as hidden_sections,
-            expires_at, created_at, updated_at
-          FROM custom_intake_links
-          WHERE slug = ${slug}
-          LIMIT 1
-        `;
-      } catch (error) {
-        // If hidden_sections column doesn't exist, query without it
-        if (
-          error instanceof Error &&
-          error.message.includes("hidden_sections")
-        ) {
-          rows = await postgresClient`
-            SELECT 
-              id, slug, email, token,
-              first_name, last_name,
-              organization_name, organization_website,
-              expires_at, created_at, updated_at
-            FROM custom_intake_links
-            WHERE slug = ${slug}
-            LIMIT 1
-          `;
-        } else {
-          throw error;
-        }
-      }
-
-      if (!rows || rows.length === 0) {
-        return null;
-      }
-
-      const link = rows[0] as {
-        id: string;
-        slug: string;
-        email: string;
-        token: string;
-        first_name: string | null;
-        last_name: string | null;
-        organization_name: string | null;
-        organization_website: string | null;
-        hidden_sections?: string[] | null;
-        expires_at: Date | string;
-        created_at: Date | string;
-        updated_at: Date | string;
-      };
-
-      return {
-        id: link.id,
-        slug: link.slug,
-        email: link.email,
-        token: link.token,
-        firstName: link.first_name,
-        lastName: link.last_name,
-        organizationName: link.organization_name,
-        organizationWebsite: link.organization_website,
-        hiddenSections: (link.hidden_sections as string[]) || null,
-        expiresAt:
-          link.expires_at instanceof Date
-            ? link.expires_at
-            : new Date(link.expires_at),
-        createdAt:
-          link.created_at instanceof Date
-            ? link.created_at
-            : new Date(link.created_at),
-        updatedAt:
-          link.updated_at instanceof Date
-            ? link.updated_at
-            : new Date(link.updated_at),
-      };
+    if (!result || result.length === 0) {
+      return null;
     }
+
+    const link = result[0];
+
+    return {
+      id: link.id,
+      slug: link.slug,
+      email: link.email,
+      token: link.token,
+      firstName: link.firstName,
+      lastName: link.lastName,
+      organizationName: link.organizationName,
+      organizationWebsite: link.organizationWebsite,
+      hiddenSections: (link.hiddenSections as string[]) || null,
+      expiresAt: link.expiresAt,
+      createdAt: link.createdAt,
+      updatedAt: link.updatedAt,
+    };
   } catch (error) {
     // Re-throw with more context for debugging
     const errorMessage =

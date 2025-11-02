@@ -6,14 +6,24 @@ import * as schema from "./schema/schema.tables";
 
 // Global connection instances
 let globalConnection: ReturnType<typeof postgres> | null = null;
-let globalNeonPool: Pool | null = null;
 
 // Detect if we're in Cloudflare Workers environment
 function isCloudflareWorkers(): boolean {
+  // Explicit flag to force Neon serverless driver (set in wrangler.jsonc)
+  if (process.env.USE_NEON_DRIVER === "true") {
+    return true;
+  }
+
+  // Check for Cloudflare-specific environment variables
+  if (process.env.CF_PAGES === "1" || process.env.CLOUDFLARE_ENV) {
+    return true;
+  }
+
+  // Check for typical Cloudflare Workers global objects
   return (
     typeof globalThis !== "undefined" &&
     "caches" in globalThis &&
-    !("process" in globalThis && process.versions?.node)
+    "CloudflareWorkersGlobalScope" in globalThis
   );
 }
 
@@ -93,11 +103,11 @@ export async function getDB() {
       // Configure Neon to use WebSockets (required for Cloudflare Workers)
       neonConfig.webSocketConstructor = WebSocket;
 
-      if (!globalNeonPool) {
-        globalNeonPool = new Pool({ connectionString: databaseUrl });
-      }
+      // IMPORTANT: Create a NEW Pool for each request in Cloudflare Workers
+      // Global pools violate Workers' request isolation model
+      const pool = new Pool({ connectionString: databaseUrl });
 
-      return drizzleNeon(globalNeonPool, { schema });
+      return drizzleNeon(pool, { schema });
     }
 
     // Use postgres-js for local development and traditional Node.js environments
@@ -162,10 +172,5 @@ export async function closeDB() {
     await globalConnection.end();
     globalConnection = null;
     console.log("🔌 PostgreSQL connection closed");
-  }
-  if (globalNeonPool) {
-    await globalNeonPool.end();
-    globalNeonPool = null;
-    console.log("🔌 Neon pool connection closed");
   }
 }
