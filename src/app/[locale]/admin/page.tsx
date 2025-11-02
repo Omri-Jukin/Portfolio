@@ -44,12 +44,16 @@ const SECTION_CONFIG = {
     description: "Manage user registrations and approvals.",
     route: null,
     buttonText: null,
+    secondaryRoute: null,
+    secondaryButtonText: null,
   },
   blog: {
     title: "Blog Posts",
     description: "Manage blog posts and content.",
     route: "/admin/blog",
     buttonText: "View Blog Posts",
+    secondaryRoute: null,
+    secondaryButtonText: null,
   },
   workExperience: {
     title: "Work Experience",
@@ -57,6 +61,8 @@ const SECTION_CONFIG = {
       "Manage professional work experience, roles, and career history.",
     route: "/admin/work-experiences",
     buttonText: "Manage Work Experience",
+    secondaryRoute: null,
+    secondaryButtonText: null,
   },
   projects: {
     title: "Projects",
@@ -64,6 +70,8 @@ const SECTION_CONFIG = {
       "Manage portfolio projects, technical details, and showcased work.",
     route: "/admin/projects",
     buttonText: "Manage Projects",
+    secondaryRoute: null,
+    secondaryButtonText: null,
   },
   skills: {
     title: "Skills",
@@ -71,6 +79,8 @@ const SECTION_CONFIG = {
       "Manage technical skills, proficiency levels, and competencies.",
     route: "/admin/skills",
     buttonText: "Manage Skills",
+    secondaryRoute: null,
+    secondaryButtonText: null,
   },
   emails: {
     title: "Email Templates",
@@ -78,6 +88,8 @@ const SECTION_CONFIG = {
       "Create, edit, and send styled emails to clients. Manage templates with HTML/CSS editing.",
     route: "/admin/emails",
     buttonText: "Manage Email Templates",
+    secondaryRoute: null,
+    secondaryButtonText: null,
   },
   education: {
     title: "Education",
@@ -85,6 +97,8 @@ const SECTION_CONFIG = {
       "Manage academic background, degrees, and educational achievements displayed on the portfolio.",
     route: "/admin/education",
     buttonText: "Manage Education",
+    secondaryRoute: null,
+    secondaryButtonText: null,
   },
   certifications: {
     title: "Certifications",
@@ -92,13 +106,17 @@ const SECTION_CONFIG = {
       "Manage professional certifications and credentials displayed on the portfolio.",
     route: "/admin/certifications",
     buttonText: "Manage Certifications",
+    secondaryRoute: null,
+    secondaryButtonText: null,
   },
   intakes: {
     title: "Project Intakes",
     description:
-      "View and manage project intake forms submitted after meeting scheduling.",
-    route: "/admin/intakes",
-    buttonText: "View Intakes",
+      "Review intake forms with advanced tools, or manage custom intake links.",
+    route: "/admin/review",
+    buttonText: "Review Intakes",
+    secondaryRoute: "/admin/intakes",
+    secondaryButtonText: "Manage Intake Links",
   },
 } as const;
 
@@ -437,6 +455,7 @@ export default function AdminDashboard() {
                                 gap: 2,
                                 alignItems: "center",
                                 mt: 2,
+                                flexWrap: "wrap",
                               }}
                             >
                               <Button
@@ -445,6 +464,17 @@ export default function AdminDashboard() {
                               >
                                 {config.buttonText}
                               </Button>
+                              {config.secondaryRoute &&
+                                config.secondaryButtonText && (
+                                  <Button
+                                    variant="outlined"
+                                    onClick={() =>
+                                      router.push(config.secondaryRoute!)
+                                    }
+                                  >
+                                    {config.secondaryButtonText}
+                                  </Button>
+                                )}
                             </Box>
                           )}
                           {sectionKey === "pendingUsers" && (

@@ -44,6 +44,7 @@ import {
   Person as PersonIcon,
   Business as BusinessIcon,
   Delete as DeleteIcon,
+  RateReview as RateReviewIcon,
 } from "@mui/icons-material";
 import { ClientOnly } from "~/ClientOnly";
 
@@ -279,6 +280,38 @@ const AdminIntakesList = () => {
             Generate Custom Link
           </Button>
         </Box>
+
+        {/* New Review Page Banner */}
+        <Alert
+          severity="info"
+          sx={{
+            mb: 3,
+            "& .MuiAlert-message": {
+              width: "100%",
+            },
+          }}
+          action={
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<RateReviewIcon />}
+              onClick={() => router.push("/admin/review")}
+              sx={{ whiteSpace: "nowrap" }}
+            >
+              Open Review Page
+            </Button>
+          }
+        >
+          <Box>
+            <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
+              🎉 New Intake Review Page Available!
+            </Typography>
+            <Typography variant="body2">
+              Try the new advanced review interface with status management,
+              notes, reminders, and dual design variants.
+            </Typography>
+          </Box>
+        </Alert>
 
         {/* Generate Custom Link Dialog */}
         <Dialog

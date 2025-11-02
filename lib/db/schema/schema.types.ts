@@ -227,3 +227,21 @@ export type DataType =
   | "json"
   | "deleted"
   | "cancelled";
+
+// Intake types
+export type IntakeStatus =
+  | "new"
+  | "reviewing"
+  | "contacted"
+  | "proposal_sent"
+  | "accepted"
+  | "declined";
+
+export type IntakeRiskLevel = "low" | "medium" | "high";
+
+export type IntakeNoteCategory =
+  | "follow-up"
+  | "waiting-on-client"
+  | "budget-concerns"
+  | "technical-notes"
+  | "general";
