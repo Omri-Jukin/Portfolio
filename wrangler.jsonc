@@ -26,6 +26,9 @@
     "enabled": false
   },
   "upload_source_maps": false,
+  "triggers": {
+    "crons": ["0 9 * * *"]
+  },
   "vars": {
     // Application Configuration
     "NODE_ENV": "production",

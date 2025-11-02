@@ -26,6 +26,9 @@ import {
   ServiceCategory,
   ServiceType,
   PricingType,
+  IntakeStatus,
+  IntakeRiskLevel,
+  IntakeNoteCategory,
 } from "./schema.types";
 
 // ============================================
@@ -445,10 +448,50 @@ export const intakes = pgTable("intakes", {
   email: text("email").notNull(),
   data: jsonb("data").notNull(),
   proposalMd: text("proposal_md").notNull(),
+  status: text("status").$type<IntakeStatus>().notNull().default("new"),
+  flagged: boolean("flagged").notNull().default(false),
+  lastReviewedAt: timestamp("last_reviewed_at", { withTimezone: true }),
+  reminderDate: timestamp("reminder_date", { withTimezone: true }),
+  estimatedValue: integer("estimated_value"),
+  riskLevel: text("risk_level").$type<IntakeRiskLevel>(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+// Intake notes table for internal admin notes
+export const intakeNotes = pgTable("intake_notes", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  intakeId: uuid("intake_id")
+    .notNull()
+    .references(() => intakes.id, { onDelete: "cascade" }),
+  note: text("note").notNull(),
+  category: text("category")
+    .$type<IntakeNoteCategory>()
+    .notNull()
+    .default("general"),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  createdBy: uuid("created_by").references(() => users.id),
+});
+
+// Intake status history table for tracking status changes
+export const intakeStatusHistory = pgTable("intake_status_history", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  intakeId: uuid("intake_id")
+    .notNull()
+    .references(() => intakes.id, { onDelete: "cascade" }),
+  oldStatus: text("old_status").$type<IntakeStatus>(),
+  newStatus: text("new_status").$type<IntakeStatus>().notNull(),
+  changedBy: uuid("changed_by").references(() => users.id),
+  createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
 });
