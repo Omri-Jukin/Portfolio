@@ -17,12 +17,14 @@ export default async function middleware(request: NextRequest) {
   // Protect all /[locale]/admin routes
   const adminRouteRegex = /^\/(en|es|fr|he)\/admin(\/|$)/;
   if (adminRouteRegex.test(pathname)) {
-    // Check for auth token in cookies
+    // Check for Auth.js v5 session token in cookies
+    // Auth.js v5 uses "next-auth.session-token" as the cookie name
     const cookieHeader = request.headers.get("cookie");
-    const isAuthenticated = cookieHeader?.includes("auth-token=");
+    const isAuthenticated = cookieHeader?.includes("next-auth.session-token=");
 
     if (!isAuthenticated) {
-      const loginUrl = new URL(`/${pathname.split("/")[1]}/login`, request.url);
+      const locale = pathname.split("/")[1] || "en";
+      const loginUrl = new URL(`/${locale}/login`, request.url);
       return NextResponse.redirect(loginUrl);
     }
   }

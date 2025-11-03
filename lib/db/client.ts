@@ -98,7 +98,7 @@ export async function getDB() {
 
     // Use Neon serverless driver for Cloudflare Workers (WebSocket support)
     if (isCloudflare) {
-      console.log("[DB] Using Neon serverless driver for Cloudflare Workers");
+      // console.log("[DB] Using Neon serverless driver for Cloudflare Workers");
 
       // Configure Neon to use WebSockets (required for Cloudflare Workers)
       neonConfig.webSocketConstructor = WebSocket;
@@ -111,7 +111,7 @@ export async function getDB() {
     }
 
     // Use postgres-js for local development and traditional Node.js environments
-    console.log("[DB] Using postgres-js driver for Node.js");
+    // console.log("[DB] Using postgres-js driver for Node.js");
     if (!globalConnection) {
       globalConnection = postgres(databaseUrl, {
         prepare: false,
