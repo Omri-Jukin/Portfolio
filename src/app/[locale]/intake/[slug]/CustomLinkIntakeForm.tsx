@@ -37,6 +37,7 @@ import {
   Add as AddIcon,
   Delete as DeleteIcon,
   Info as InfoIcon,
+  RateReview as RateReviewIcon,
 } from "@mui/icons-material";
 import MotionWrapper from "~/MotionWrapper";
 import { ResponsiveBackground } from "~/ScrollingSections";
@@ -102,11 +103,17 @@ export default function CustomLinkIntakeForm({
   }, [customLink.token, customLink.maxAge]);
 
   const submitIntake = api.intakes.submit.useMutation({
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log("[Intake Form] Successfully submitted intake:", data.id);
       setState((prev) => ({ ...prev, isSubmitted: true, isSubmitting: false }));
       setFormData(INTAKE_FORM_DEFAULTS);
     },
     onError: (error) => {
+      console.error("[Intake Form] Submission error:", error);
+      console.error("[Intake Form] Error details:", {
+        message: error.message,
+        data: error.data,
+      });
       setState((prev) => ({
         ...prev,
         isSubmitting: false,
@@ -430,25 +437,48 @@ export default function CustomLinkIntakeForm({
                 >
                   {t("success.message")}
                 </Typography>
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={() => router.push(`/${locale}/meeting`)}
-                  sx={{
-                    bgcolor: "primary.main",
-                    "&:hover": {
-                      bgcolor: "primary.dark",
-                    },
-                    px: 4,
-                    py: 1.5,
-                    borderRadius: 3,
-                    textTransform: "none",
-                    fontSize: "1.1rem",
-                    fontWeight: 600,
-                  }}
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  justifyContent="center"
+                  flexWrap="wrap"
                 >
-                  {t("success.scheduleMeeting") || "Schedule a Meeting"}
-                </Button>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={() => router.push(`/${locale}/meeting`)}
+                    sx={{
+                      bgcolor: "primary.main",
+                      "&:hover": {
+                        bgcolor: "primary.dark",
+                      },
+                      px: 4,
+                      py: 1.5,
+                      borderRadius: 3,
+                      textTransform: "none",
+                      fontSize: "1.1rem",
+                      fontWeight: 600,
+                    }}
+                  >
+                    {t("success.scheduleMeeting") || "Schedule a Meeting"}
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    startIcon={<RateReviewIcon />}
+                    onClick={() => router.push(`/${locale}/admin/review`)}
+                    sx={{
+                      px: 4,
+                      py: 1.5,
+                      borderRadius: 3,
+                      textTransform: "none",
+                      fontSize: "1.1rem",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Review Intake
+                  </Button>
+                </Stack>
               </CardContent>
             </Card>
           </Box>
@@ -480,7 +510,21 @@ export default function CustomLinkIntakeForm({
           >
             <CardContent sx={{ p: 4 }}>
               <Stack spacing={3}>
-                <Box sx={{ textAlign: "center" }}>
+                <Box sx={{ textAlign: "center", position: "relative" }}>
+                  <Box sx={{ position: "absolute", top: 0, right: 0 }}>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      startIcon={<RateReviewIcon />}
+                      onClick={() => router.push(`/${locale}/admin/review`)}
+                      sx={{
+                        textTransform: "none",
+                        fontSize: "0.875rem",
+                      }}
+                    >
+                      Review
+                    </Button>
+                  </Box>
                   <Typography variant="h3" sx={{ fontWeight: 700, mb: 2 }}>
                     {t("customLink.title") || `Welcome, ${clientName}!`}
                   </Typography>

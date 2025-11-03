@@ -51,9 +51,9 @@ npm install @neondatabase/serverless ws
 
 - Added `@neondatabase/serverless` and Drizzle's Neon adapter
 - Created `isCloudflareWorkers()` function to detect runtime environment
-- Implemented dual connection pools:
-  - `globalConnection` (postgres-js) for Node.js
-  - `globalNeonPool` (Neon) for Cloudflare Workers
+- Implemented dual connection approach:
+  - `globalConnection` (postgres-js) for Node.js - reused across requests
+  - **Per-request Neon Pool** for Cloudflare Workers - NEW pool per request (required for Workers isolation)
 - Configured WebSocket constructor for Cloudflare Workers
 
 **Environment Detection:**
@@ -76,11 +76,11 @@ if (isCloudflare) {
   console.log("[DB] Using Neon serverless driver for Cloudflare Workers");
   neonConfig.webSocketConstructor = WebSocket;
 
-  if (!globalNeonPool) {
-    globalNeonPool = new Pool({ connectionString: databaseUrl });
-  }
+  // IMPORTANT: Create a NEW Pool for each request in Cloudflare Workers
+  // Global pools violate Workers' request isolation model
+  const pool = new Pool({ connectionString: databaseUrl });
 
-  return drizzleNeon(globalNeonPool, { schema });
+  return drizzleNeon(pool, { schema });
 }
 
 // Use postgres-js for local development and traditional Node.js environments
@@ -167,8 +167,17 @@ The Neon serverless driver requires WebSocket support, which is available in:
 
 Both drivers use connection pooling:
 
-- **postgres-js**: In-memory pool (max: 10 connections)
-- **Neon serverless**: WebSocket-based pool
+- **postgres-js**: In-memory pool (max: 10 connections) - **global**, reused across requests
+- **Neon serverless**: WebSocket-based pool - **per-request** (required for Cloudflare Workers isolation)
+
+### Important: Cloudflare Workers Request Isolation
+
+⚠️ **Critical**: Cloudflare Workers enforces strict request isolation. Each request MUST have its own database connection pool. Sharing pools across requests will cause:
+
+- `Error: Cannot perform I/O on behalf of a different request`
+- `Error: The Workers runtime canceled this request because it detected that your Worker's code had hung`
+
+**Solution**: Always create a new `Pool` instance for each request when running in Cloudflare Workers.
 
 ## Verification Checklist
 

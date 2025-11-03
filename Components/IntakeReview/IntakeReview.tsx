@@ -261,10 +261,16 @@ export default function IntakeReview({
   const project = data.project as ProjectInfo;
   const additional = data.additional as AdditionalInfo | undefined;
 
-  const currentIntake = intakes.find((i) => i.id === intakeId);
   const urgencyColor = additional?.urgency
     ? URGENCY_COLORS[additional.urgency.toLowerCase()] || URGENCY_COLORS.medium
     : URGENCY_COLORS.medium;
+
+  // Get client/customer name for breadcrumbs
+  const clientName =
+    contact?.fullName ||
+    (contact?.firstName && contact?.lastName
+      ? `${contact.firstName} ${contact.lastName}`
+      : contact?.firstName || contact?.lastName || contact?.email || "Review");
 
   // Glassmorphism card style
   const cardStyle = {
@@ -326,9 +332,7 @@ export default function IntakeReview({
                 Review
               </MuiLink>
             )}
-            <Typography color="text.primary">
-              {currentIntake?.name || "Review"}
-            </Typography>
+            <Typography color="text.primary">{clientName}</Typography>
           </Breadcrumbs>
         </Box>
 

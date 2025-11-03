@@ -145,14 +145,18 @@
     "db:reset": "drizzle-kit push",
     "db:drop": "drizzle-kit drop",
     "db:update": "drizzle-kit generate && drizzle-kit migrate && drizzle-kit push",
-    "//6": "— Utilities —",
+    "//6": "— Utilities/Scripts —",
     "clean-install": "rm -rf node_modules package-lock.json .next && npm install",
     "seed:email-templates": "npx tsx scripts/seed-email-templates.ts",
     "test:db": "npx tsx scripts/test-db-connection.ts",
+    "enable:rls": "npx tsx scripts/enable-rls.ts",
     "reset:password": "npx tsx scripts/reset-admin-password.ts",
     "set:secrets": "node scripts/set-cloudflare-secrets.js",
+    "tail": "node scripts/wrangler-tail.local.js",
     "//7": "— git —",
-    "gitgraph": "git log --graph --decorate --oneline --all"
+    "gitgraph": "git log --graph --decorate --oneline --all",
+    "//8": "— Push and RLS —",
+    "push:rls": "drizzle-kit push && npx tsx scripts/enable-rls.ts"
   },
   "imports": {
     "@/*": "./src/*",

@@ -60,6 +60,8 @@ drizzle/
 # scripts
 /scripts/*
 /scripts/migrations/*
+# Local wrangler tail script (not committed)
+scripts/wrangler-tail.local.js
 
 # roadmap
 /roadmap/*
