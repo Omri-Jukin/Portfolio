@@ -30,6 +30,8 @@ import {
   InputLabel,
   FormHelperText,
   Checkbox,
+  Tooltip,
+  Chip,
 } from "@mui/material";
 import { api } from "$/trpc/client";
 import { useRouter, usePathname } from "next/navigation";
@@ -45,6 +47,8 @@ import {
   Business as BusinessIcon,
   Delete as DeleteIcon,
   RateReview as RateReviewIcon,
+  OpenInNew as OpenInNewIcon,
+  Visibility as VisibilityIcon,
 } from "@mui/icons-material";
 import { ClientOnly } from "~/ClientOnly";
 
@@ -607,11 +611,17 @@ const AdminIntakesList = () => {
             {!customLinks || customLinks.length === 0 ? (
               <Alert severity="info">No custom links found.</Alert>
             ) : (
-              <TableContainer component={Paper}>
-                <Table>
+              <TableContainer
+                component={Paper}
+                sx={{
+                  maxWidth: "100%",
+                  overflowX: "auto",
+                }}
+              >
+                <Table size="small" sx={{ minWidth: 1000 }}>
                   <TableHead>
                     <TableRow>
-                      <TableCell padding="checkbox">
+                      <TableCell padding="checkbox" sx={{ width: 48 }}>
                         <Checkbox
                           indeterminate={
                             selectedLinks.length > 0 &&
@@ -624,13 +634,16 @@ const AdminIntakesList = () => {
                           onChange={(e) => handleSelectAll(e.target.checked)}
                         />
                       </TableCell>
-                      <TableCell>Slug/Link</TableCell>
-                      <TableCell>Email</TableCell>
-                      <TableCell>Client Name</TableCell>
-                      <TableCell>Organization</TableCell>
-                      <TableCell>Status</TableCell>
-                      <TableCell>Expires</TableCell>
-                      <TableCell>Created</TableCell>
+                      <TableCell sx={{ minWidth: 120 }}>Slug</TableCell>
+                      <TableCell sx={{ minWidth: 180 }}>Email</TableCell>
+                      <TableCell sx={{ minWidth: 130 }}>Client</TableCell>
+                      <TableCell sx={{ minWidth: 140 }}>Organization</TableCell>
+                      <TableCell sx={{ minWidth: 80 }}>Status</TableCell>
+                      <TableCell sx={{ minWidth: 110 }}>Expires</TableCell>
+                      <TableCell sx={{ minWidth: 130 }}>Created</TableCell>
+                      <TableCell sx={{ width: 100 }} align="center">
+                        Actions
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -667,55 +680,7 @@ const AdminIntakesList = () => {
                               />
                             </TableCell>
                             <TableCell>
-                              <Box
-                                sx={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: 1,
-                                }}
-                              >
-                                <LinkIcon fontSize="small" color="action" />
-                                <MuiLink
-                                  href={fullLink}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  sx={{
-                                    fontFamily: "monospace",
-                                    fontSize: "0.875rem",
-                                    maxWidth: 200,
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                    whiteSpace: "nowrap",
-                                    display: "block",
-                                  }}
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    navigator.clipboard.writeText(fullLink);
-                                    setSnackbarMessage(
-                                      "Custom link copied to clipboard!"
-                                    );
-                                    setSnackbarOpen(true);
-                                  }}
-                                >
-                                  {link.slug}
-                                </MuiLink>
-                              </Box>
-                            </TableCell>
-                            <TableCell>{link.email}</TableCell>
-                            <TableCell>
-                              <Box
-                                sx={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: 0.5,
-                                }}
-                              >
-                                <PersonIcon fontSize="small" color="action" />
-                                {clientName}
-                              </Box>
-                            </TableCell>
-                            <TableCell>
-                              {link.organizationName ? (
+                              <Tooltip title={`Click to copy: ${fullLink}`}>
                                 <Box
                                   sx={{
                                     display: "flex",
@@ -723,37 +688,52 @@ const AdminIntakesList = () => {
                                     gap: 0.5,
                                   }}
                                 >
-                                  <BusinessIcon
-                                    fontSize="small"
-                                    color="action"
-                                  />
-                                  {link.organizationName}
+                                  <LinkIcon fontSize="small" color="action" />
+                                  <MuiLink
+                                    href={fullLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    sx={{
+                                      fontFamily: "monospace",
+                                      fontSize: "0.813rem",
+                                      maxWidth: 100,
+                                      overflow: "hidden",
+                                      textOverflow: "ellipsis",
+                                      whiteSpace: "nowrap",
+                                      display: "block",
+                                      textDecoration: "none",
+                                      "&:hover": {
+                                        textDecoration: "underline",
+                                      },
+                                    }}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      navigator.clipboard.writeText(fullLink);
+                                      setSnackbarMessage(
+                                        "Custom link copied to clipboard!"
+                                      );
+                                      setSnackbarOpen(true);
+                                    }}
+                                  >
+                                    {link.slug}
+                                  </MuiLink>
                                 </Box>
-                              ) : (
-                                "N/A"
-                              )}
+                              </Tooltip>
                             </TableCell>
                             <TableCell>
-                              <Box
-                                sx={{
-                                  display: "inline-flex",
-                                  alignItems: "center",
-                                  gap: 0.5,
-                                  px: 1,
-                                  py: 0.5,
-                                  borderRadius: 1,
-                                  bgcolor: isExpired
-                                    ? "error.light"
-                                    : "success.light",
-                                  color: isExpired
-                                    ? "error.contrastText"
-                                    : "success.contrastText",
-                                  fontSize: "0.75rem",
-                                  fontWeight: 600,
-                                }}
-                              >
-                                {isExpired ? "Expired" : "Active"}
-                              </Box>
+                              <Tooltip title={link.email}>
+                                <Typography
+                                  sx={{
+                                    fontSize: "0.813rem",
+                                    maxWidth: 170,
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                  }}
+                                >
+                                  {link.email}
+                                </Typography>
+                              </Tooltip>
                             </TableCell>
                             <TableCell>
                               <Box
@@ -761,23 +741,173 @@ const AdminIntakesList = () => {
                                   display: "flex",
                                   alignItems: "center",
                                   gap: 0.5,
-                                  color: isExpired
-                                    ? "error.main"
-                                    : "text.primary",
                                 }}
                               >
-                                <AccessTimeIcon fontSize="small" />
-                                {format(
-                                  new Date(link.expiresAt),
-                                  "MMM dd, yyyy"
-                                )}
+                                <PersonIcon
+                                  fontSize="small"
+                                  color="action"
+                                  sx={{ flexShrink: 0 }}
+                                />
+                                <Typography
+                                  sx={{
+                                    fontSize: "0.813rem",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                  }}
+                                >
+                                  {clientName}
+                                </Typography>
                               </Box>
                             </TableCell>
                             <TableCell>
-                              {format(
-                                new Date(link.createdAt),
-                                "MMM dd, yyyy HH:mm"
+                              {link.organizationName ? (
+                                <Tooltip title={link.organizationName}>
+                                  <Box
+                                    sx={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: 0.5,
+                                    }}
+                                  >
+                                    <BusinessIcon
+                                      fontSize="small"
+                                      color="action"
+                                      sx={{ flexShrink: 0 }}
+                                    />
+                                    <Typography
+                                      sx={{
+                                        fontSize: "0.813rem",
+                                        maxWidth: 130,
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
+                                        whiteSpace: "nowrap",
+                                      }}
+                                    >
+                                      {link.organizationName}
+                                    </Typography>
+                                  </Box>
+                                </Tooltip>
+                              ) : (
+                                <Typography
+                                  sx={{
+                                    fontSize: "0.813rem",
+                                    color: "text.secondary",
+                                  }}
+                                >
+                                  —
+                                </Typography>
                               )}
+                            </TableCell>
+                            <TableCell>
+                              <Chip
+                                label={isExpired ? "Expired" : "Active"}
+                                size="small"
+                                sx={{
+                                  bgcolor: isExpired
+                                    ? "error.light"
+                                    : "success.light",
+                                  color: isExpired
+                                    ? "error.contrastText"
+                                    : "success.contrastText",
+                                  fontSize: "0.688rem",
+                                  height: 22,
+                                  fontWeight: 600,
+                                }}
+                              />
+                            </TableCell>
+                            <TableCell>
+                              <Tooltip
+                                title={format(new Date(link.expiresAt), "PPp")}
+                              >
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 0.5,
+                                    color: isExpired
+                                      ? "error.main"
+                                      : "text.primary",
+                                  }}
+                                >
+                                  <AccessTimeIcon
+                                    fontSize="small"
+                                    sx={{ flexShrink: 0 }}
+                                  />
+                                  <Typography sx={{ fontSize: "0.813rem" }}>
+                                    {format(new Date(link.expiresAt), "MMM dd")}
+                                  </Typography>
+                                </Box>
+                              </Tooltip>
+                            </TableCell>
+                            <TableCell>
+                              <Tooltip
+                                title={format(new Date(link.createdAt), "PPp")}
+                              >
+                                <Typography sx={{ fontSize: "0.813rem" }}>
+                                  {format(
+                                    new Date(link.createdAt),
+                                    "MMM dd, HH:mm"
+                                  )}
+                                </Typography>
+                              </Tooltip>
+                            </TableCell>
+                            <TableCell align="center">
+                              <Stack
+                                direction="row"
+                                spacing={0.5}
+                                justifyContent="center"
+                              >
+                                <Tooltip title="Review in admin panel">
+                                  <IconButton
+                                    size="small"
+                                    onClick={() => {
+                                      // Find if there's a submitted intake with this email
+                                      const matchingIntake = intakes?.find(
+                                        (intake: {
+                                          id: string;
+                                          email: string;
+                                          name: string;
+                                        }) => intake.email === link.email
+                                      );
+                                      if (matchingIntake) {
+                                        router.push(
+                                          `/${currentLocale}/admin/review?id=${matchingIntake.id}`
+                                        );
+                                      } else {
+                                        // Navigate to review page - will show all intakes
+                                        router.push(
+                                          `/${currentLocale}/admin/review`
+                                        );
+                                      }
+                                    }}
+                                    sx={{
+                                      color: "primary.main",
+                                      "&:hover": { bgcolor: "action.hover" },
+                                    }}
+                                  >
+                                    <VisibilityIcon fontSize="small" />
+                                  </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Open intake form">
+                                  <IconButton
+                                    size="small"
+                                    onClick={() => {
+                                      window.open(
+                                        fullLink,
+                                        "_blank",
+                                        "noopener,noreferrer"
+                                      );
+                                    }}
+                                    sx={{
+                                      color: "primary.main",
+                                      "&:hover": { bgcolor: "action.hover" },
+                                    }}
+                                  >
+                                    <OpenInNewIcon fontSize="small" />
+                                  </IconButton>
+                                </Tooltip>
+                              </Stack>
                             </TableCell>
                           </TableRow>
                         );

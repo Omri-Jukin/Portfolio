@@ -54,6 +54,11 @@ export const intakesRouter = router({
         proposalMd,
       });
 
+      // Log successful intake creation
+      console.log(
+        `[Intake Submit] Successfully created intake with ID: ${intake.id} for email: ${input.contact.email}`
+      );
+
       // Send emails (client + admin)
       const emailResult = await sendIntakeEmails(input, proposalMd);
       if (!emailResult.success) {
@@ -67,7 +72,12 @@ export const intakesRouter = router({
         status: "ok",
       };
     } catch (error) {
-      console.error("Error creating intake:", error);
+      console.error("[Intake Submit] Error creating intake:", error);
+      console.error("[Intake Submit] Error details:", {
+        email: input.contact.email,
+        errorMessage: error instanceof Error ? error.message : "Unknown error",
+        errorStack: error instanceof Error ? error.stack : undefined,
+      });
       throw new Error(
         error instanceof Error ? error.message : "Failed to create intake"
       );
@@ -83,6 +93,11 @@ export const intakesRouter = router({
     }
 
     const intakes = await getIntakes();
+    console.log(
+      `[Intakes GetAll] Found ${intakes.length} intakes for admin user: ${
+        user.email || user.id
+      }`
+    );
     return intakes.map((intake) => {
       const data = intake.data as Record<string, unknown>;
       const orgName =
