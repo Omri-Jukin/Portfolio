@@ -15,22 +15,51 @@ export default function BlogPage() {
 
   if (isLoading) {
     return (
-      <Container maxWidth="md" sx={{ py: 6 }}>
-        <Typography variant="h3" gutterBottom>
+      <Container
+        maxWidth="md"
+        sx={{
+          py: 6,
+          mx: "auto",
+          width: "100%",
+          px: { xs: 2, sm: 3 },
+        }}
+      >
+        <Typography
+          variant="h3"
+          gutterBottom
+          sx={{ textAlign: { xs: "center", md: "left" } }}
+        >
           Blog
         </Typography>
-        <Typography>Loading blog posts...</Typography>
+        <Typography sx={{ textAlign: { xs: "center", md: "left" } }}>
+          Loading blog posts...
+        </Typography>
       </Container>
     );
   }
 
   if (error) {
     return (
-      <Container maxWidth="md" sx={{ py: 6 }}>
-        <Typography variant="h3" gutterBottom>
+      <Container
+        maxWidth="md"
+        sx={{
+          py: 6,
+          mx: "auto",
+          width: "100%",
+          px: { xs: 2, sm: 3 },
+        }}
+      >
+        <Typography
+          variant="h3"
+          gutterBottom
+          sx={{ textAlign: { xs: "center", md: "left" } }}
+        >
           Blog
         </Typography>
-        <Typography color="error">
+        <Typography
+          color="error"
+          sx={{ textAlign: { xs: "center", md: "left" } }}
+        >
           Error loading blog posts. Please try again later.
         </Typography>
       </Container>
@@ -38,8 +67,20 @@ export default function BlogPage() {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 6 }}>
-      <Typography variant="h3" gutterBottom>
+    <Container
+      maxWidth="lg"
+      sx={{
+        py: 6,
+        mx: "auto",
+        width: "100%",
+        px: { xs: 2, sm: 3 },
+      }}
+    >
+      <Typography
+        variant="h3"
+        gutterBottom
+        sx={{ textAlign: { xs: "center", md: "left" } }}
+      >
         Blog
       </Typography>
       <Box

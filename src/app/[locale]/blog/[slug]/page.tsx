@@ -18,16 +18,37 @@ export default function BlogPostPage() {
 
   if (isLoading) {
     return (
-      <Container maxWidth="md" sx={{ py: 6 }}>
-        <Typography>Loading post...</Typography>
+      <Container
+        maxWidth="md"
+        sx={{
+          py: 6,
+          mx: "auto",
+          width: "100%",
+          px: { xs: 2, sm: 3 },
+        }}
+      >
+        <Typography sx={{ textAlign: { xs: "center", md: "left" } }}>
+          Loading post...
+        </Typography>
       </Container>
     );
   }
 
   if (error || !post) {
     return (
-      <Container maxWidth="md" sx={{ py: 6 }}>
-        <Typography color="error">
+      <Container
+        maxWidth="md"
+        sx={{
+          py: 6,
+          mx: "auto",
+          width: "100%",
+          px: { xs: 2, sm: 3 },
+        }}
+      >
+        <Typography
+          color="error"
+          sx={{ textAlign: { xs: "center", md: "left" } }}
+        >
           Post not found or error loading post.
         </Typography>
       </Container>
@@ -35,11 +56,29 @@ export default function BlogPostPage() {
   }
 
   return (
-    <Container maxWidth="md" sx={{ py: 6 }}>
-      <Typography variant="h3" gutterBottom>
+    <Container
+      maxWidth="md"
+      sx={{
+        py: 6,
+        mx: "auto",
+        width: "100%",
+        px: { xs: 2, sm: 3 },
+      }}
+    >
+      <Typography
+        variant="h3"
+        gutterBottom
+        sx={{ textAlign: { xs: "center", md: "left" } }}
+      >
         {post.title}
       </Typography>
-      <Box sx={{ color: "text.secondary", mb: 2 }}>
+      <Box
+        sx={{
+          color: "text.secondary",
+          mb: 2,
+          textAlign: { xs: "center", md: "left" },
+        }}
+      >
         By {post.author} • {new Date(post.createdAt).toLocaleDateString()}
         {post.publishedAt &&
           ` • Published ${new Date(post.publishedAt).toLocaleDateString()}`}
