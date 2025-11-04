@@ -442,6 +442,27 @@ export const testimonials = pgTable("testimonials", {
     .references(() => users.id),
 });
 
+// Custom intake links table - stores generated custom links with slugs
+// Must be defined before intakes table for foreign key reference
+export const customIntakeLinks = pgTable("custom_intake_links", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  slug: text("slug").notNull().unique(),
+  email: text("email").notNull(),
+  token: text("token").notNull(),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  organizationName: text("organization_name"),
+  organizationWebsite: text("organization_website"),
+  hiddenSections: jsonb("hidden_sections").$type<string[]>().default([]),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
 // Intakes table for project intake forms
 export const intakes = pgTable("intakes", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
@@ -454,6 +475,9 @@ export const intakes = pgTable("intakes", {
   reminderDate: timestamp("reminder_date", { withTimezone: true }),
   estimatedValue: integer("estimated_value"),
   riskLevel: text("risk_level").$type<IntakeRiskLevel>(),
+  customLinkId: uuid("custom_link_id").references(() => customIntakeLinks.id, {
+    onDelete: "set null",
+  }),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
@@ -492,26 +516,6 @@ export const intakeStatusHistory = pgTable("intake_status_history", {
   newStatus: text("new_status").$type<IntakeStatus>().notNull(),
   changedBy: uuid("changed_by").references(() => users.id),
   createdAt: timestamp("created_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-});
-
-// Custom intake links table - stores generated custom links with slugs
-export const customIntakeLinks = pgTable("custom_intake_links", {
-  id: uuid("id").primaryKey().notNull().defaultRandom(),
-  slug: text("slug").notNull().unique(),
-  email: text("email").notNull(),
-  token: text("token").notNull(),
-  firstName: text("first_name"),
-  lastName: text("last_name"),
-  organizationName: text("organization_name"),
-  organizationWebsite: text("organization_website"),
-  hiddenSections: jsonb("hidden_sections").$type<string[]>().default([]),
-  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
 });

@@ -50,6 +50,7 @@ import {
 
 interface CustomLinkIntakeFormProps {
   customLink: {
+    id: string;
     slug: string;
     email: string;
     firstName: string | null;
@@ -390,7 +391,10 @@ export default function CustomLinkIntakeForm({
     }
 
     setState((prev) => ({ ...prev, isSubmitting: true }));
-    submitIntake.mutate(cleanedFormData);
+    submitIntake.mutate({
+      ...cleanedFormData,
+      customLinkId: customLink.id,
+    });
   };
 
   const isFormDisabled = state.isSubmitting || state.isSubmitted;
@@ -437,48 +441,14 @@ export default function CustomLinkIntakeForm({
                 >
                   {t("success.message")}
                 </Typography>
-                <Stack
-                  direction="row"
-                  spacing={2}
-                  justifyContent="center"
-                  flexWrap="wrap"
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 3, fontStyle: "italic" }}
                 >
-                  <Button
-                    variant="contained"
-                    size="large"
-                    onClick={() => router.push(`/${locale}/meeting`)}
-                    sx={{
-                      bgcolor: "primary.main",
-                      "&:hover": {
-                        bgcolor: "primary.dark",
-                      },
-                      px: 4,
-                      py: 1.5,
-                      borderRadius: 3,
-                      textTransform: "none",
-                      fontSize: "1.1rem",
-                      fontWeight: 600,
-                    }}
-                  >
-                    {t("success.scheduleMeeting") || "Schedule a Meeting"}
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    size="large"
-                    startIcon={<RateReviewIcon />}
-                    onClick={() => router.push(`/${locale}/admin/review`)}
-                    sx={{
-                      px: 4,
-                      py: 1.5,
-                      borderRadius: 3,
-                      textTransform: "none",
-                      fontSize: "1.1rem",
-                      fontWeight: 600,
-                    }}
-                  >
-                    Review Intake
-                  </Button>
-                </Stack>
+                  {t("success.followUp") ||
+                    "I'll review your information and get back to you shortly."}
+                </Typography>
               </CardContent>
             </Card>
           </Box>

@@ -4,6 +4,19 @@ import type {
   IntakeNoteCategory,
 } from "$/db/schema/schema.types";
 
+export interface CustomLinkInfo {
+  id: string;
+  slug: string;
+  email: string;
+  firstName: string | null;
+  lastName: string | null;
+  organizationName: string | null;
+  organizationWebsite: string | null;
+  hiddenSections: string[];
+  expiresAt: string;
+  createdAt: string;
+}
+
 export interface IntakeData {
   id: string;
   email: string;
@@ -15,6 +28,8 @@ export interface IntakeData {
   reminderDate: string | null;
   estimatedValue: number | null;
   riskLevel: IntakeRiskLevel | null;
+  customLinkId?: string | null;
+  customLink?: CustomLinkInfo | null;
   createdAt: string;
   updatedAt: string;
   notes?: IntakeNote[];
@@ -78,6 +93,7 @@ export interface ProjectInfo {
   technologies?: string[];
   requirements?: string[];
   goals?: string[];
+  resourceLinks?: Array<{ label: string; url: string }>;
 }
 
 export interface AdditionalInfo {

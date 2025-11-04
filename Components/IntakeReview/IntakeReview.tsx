@@ -39,6 +39,8 @@ import {
   Alarm as AlarmIcon,
   AttachMoney as AttachMoneyIcon,
   ExpandMore as ExpandMoreIcon,
+  Info as InfoIcon,
+  Link as LinkIcon,
 } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { api } from "$/trpc/client";
@@ -437,6 +439,73 @@ export default function IntakeReview({
           </Stack>
         </Card>
 
+        {/* Custom Link Info (if available) */}
+        {selectedIntake.customLink && (
+          <Card
+            sx={{ ...cardStyle, mb: 3, p: 2, borderLeft: "4px solid #667eea" }}
+          >
+            <Stack direction="row" spacing={1} alignItems="center" mb={1}>
+              <LinkIcon color="primary" />
+              <Typography variant="h6">Custom Link Submission</Typography>
+            </Stack>
+            <Stack spacing={1}>
+              <Typography variant="body2" color="text.secondary">
+                <strong>Slug:</strong> {selectedIntake.customLink.slug}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                <strong>Link Email:</strong> {selectedIntake.customLink.email}
+              </Typography>
+              {selectedIntake.customLink.hiddenSections &&
+                selectedIntake.customLink.hiddenSections.length > 0 && (
+                  <Box>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      gutterBottom
+                    >
+                      <strong>Hidden Sections:</strong>
+                    </Typography>
+                    <Stack direction="row" spacing={1} flexWrap="wrap">
+                      {selectedIntake.customLink.hiddenSections.map(
+                        (section, idx) => (
+                          <Chip
+                            key={idx}
+                            label={section}
+                            size="small"
+                            sx={{ mb: 0.5 }}
+                          />
+                        )
+                      )}
+                    </Stack>
+                  </Box>
+                )}
+              <Typography variant="caption" color="text.secondary">
+                Link created:{" "}
+                {(() => {
+                  try {
+                    return new Date(
+                      selectedIntake.customLink.createdAt
+                    ).toLocaleString();
+                  } catch {
+                    return selectedIntake.customLink.createdAt;
+                  }
+                })()}
+                {" • "}
+                Expires:{" "}
+                {(() => {
+                  try {
+                    return new Date(
+                      selectedIntake.customLink.expiresAt
+                    ).toLocaleString();
+                  } catch {
+                    return selectedIntake.customLink.expiresAt;
+                  }
+                })()}
+              </Typography>
+            </Stack>
+          </Card>
+        )}
+
         {/* Quick Actions */}
         <Card sx={{ ...cardStyle, mb: 3, p: 2 }}>
           <Typography variant="h6" gutterBottom>
@@ -722,8 +791,52 @@ export default function IntakeReview({
                 {additional?.preferredContactMethod || "Email"}
               </Typography>
             </Box>
+            {additional?.timezone && (
+              <Box sx={{ flex: 1 }}>
+                <Typography variant="caption" color="text.secondary">
+                  Timezone
+                </Typography>
+                <Typography variant="h6">{additional.timezone}</Typography>
+              </Box>
+            )}
           </Stack>
         </Card>
+
+        {/* Additional Information (if present) */}
+        {additional && (additional.timezone || additional.notes) && (
+          <Card sx={{ ...cardStyle, mb: 3, p: 3 }}>
+            <Stack direction="row" spacing={1} alignItems="center" mb={2}>
+              <InfoIcon color="primary" />
+              <Typography variant="h6">Additional Information</Typography>
+            </Stack>
+            <Stack spacing={2}>
+              {additional.timezone && (
+                <Box>
+                  <Typography variant="body2" color="text.secondary">
+                    Timezone
+                  </Typography>
+                  <Typography>{additional.timezone}</Typography>
+                </Box>
+              )}
+              {additional.notes && (
+                <Box>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    Client Notes
+                  </Typography>
+                  <Paper sx={{ p: 2, bgcolor: "action.hover" }}>
+                    <Typography sx={{ whiteSpace: "pre-wrap" }}>
+                      {additional.notes}
+                    </Typography>
+                  </Paper>
+                </Box>
+              )}
+            </Stack>
+          </Card>
+        )}
 
         {/* Contact Information */}
         <Card sx={{ ...cardStyle, mb: 3, p: 3 }}>
@@ -736,7 +849,14 @@ export default function IntakeReview({
               <Typography variant="body2" color="text.secondary">
                 Name
               </Typography>
-              <Typography>{`${contact.firstName} ${contact.lastName}`}</Typography>
+              <Typography>
+                {contact.fullName || `${contact.firstName} ${contact.lastName}`}
+              </Typography>
+              {contact.fullName && (
+                <Typography variant="caption" color="text.secondary">
+                  ({contact.firstName} {contact.lastName})
+                </Typography>
+              )}
             </Box>
             <Box>
               <Typography variant="body2" color="text.secondary">
@@ -862,7 +982,7 @@ export default function IntakeReview({
           )}
 
           {project.goals && project.goals.length > 0 && (
-            <Box>
+            <Box sx={{ mb: 2 }}>
               <Typography variant="body2" color="text.secondary" gutterBottom>
                 Goals
               </Typography>
@@ -873,6 +993,47 @@ export default function IntakeReview({
                   </Box>
                 ))}
               </Box>
+            </Box>
+          )}
+
+          {project.startDate && (
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                Project Start Date
+              </Typography>
+              <Typography variant="body2">
+                {(() => {
+                  try {
+                    return new Date(project.startDate).toLocaleDateString();
+                  } catch {
+                    return project.startDate;
+                  }
+                })()}
+              </Typography>
+            </Box>
+          )}
+
+          {project.resourceLinks && project.resourceLinks.length > 0 && (
+            <Box>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                Resource Links
+              </Typography>
+              <Stack spacing={1}>
+                {project.resourceLinks.map((link, idx) => (
+                  <Box key={idx}>
+                    <MuiLink
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                    >
+                      <Typography variant="body2">
+                        <strong>{link.label}:</strong> {link.url}
+                      </Typography>
+                    </MuiLink>
+                  </Box>
+                ))}
+              </Stack>
             </Box>
           )}
         </Card>
