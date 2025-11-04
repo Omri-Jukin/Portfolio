@@ -25,7 +25,7 @@ export const FooterComponent: React.FC<FooterProps> = ({
   contact,
   copyright,
 }) => (
-  <FooterContainer id="footer-container">
+  <FooterContainer id="footer-container" sx={{ width: "100%" }}>
     <Grid container spacing={4} justifyContent="center" id="footer-grid">
       <Grid component="div" id="footer-grid-item">
         <FooterSection id="footer-section">

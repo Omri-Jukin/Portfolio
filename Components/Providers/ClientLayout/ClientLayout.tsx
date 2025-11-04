@@ -242,6 +242,7 @@ export default function ClientLayout({
               width: "100%",
               marginTop: "4rem",
               maxWidth: "calc(100vw - 4rem)",
+              mx: "auto",
               background: "transparent",
             }}
           >

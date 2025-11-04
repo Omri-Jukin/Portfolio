@@ -192,9 +192,17 @@ export default function CustomLinkIntakeForm({
     }
   }, []); // Only run once on mount
 
-  // Check if sections should be hidden
-  const hiddenSections = customLink.hiddenSections || [];
-  const isSectionHidden = (section: string) => hiddenSections.includes(section);
+  // Check if fields should be hidden
+  const hiddenFields = customLink.hiddenSections || [];
+  const isFieldHidden = (fieldPath: string) => hiddenFields.includes(fieldPath);
+
+  // Legacy support: check if entire section is hidden (for backward compatibility)
+  const isSectionHidden = (section: string) => {
+    // Check if section name matches (legacy format)
+    if (hiddenFields.includes(section)) return true;
+    // Check if any field in this section is hidden
+    return hiddenFields.some((field) => field.startsWith(`${section}.`));
+  };
 
   const [errors, setErrors] = useState<Partial<Record<string, string>>>({});
 
@@ -606,39 +614,50 @@ export default function CustomLinkIntakeForm({
                             </Typography>
                           </Stack>
                           <Stack spacing={2}>
-                            <TextField
-                              label={t("form.org.name")}
-                              value={formData.org?.name || ""}
-                              onChange={handleInputChange(["org", "name"])}
-                              error={!!errors["org.name"]}
-                              helperText={errors["org.name"]}
-                              disabled={isFormDisabled}
-                              fullWidth
-                            />
-                            <TextField
-                              label={t("form.org.website")}
-                              type="url"
-                              value={formData.org?.website || ""}
-                              onChange={handleInputChange(["org", "website"])}
-                              error={!!errors["org.website"]}
-                              helperText={errors["org.website"]}
-                              disabled={isFormDisabled}
-                              fullWidth
-                            />
-                            <TextField
-                              label={t("form.org.industry")}
-                              value={formData.org?.industry || ""}
-                              onChange={handleInputChange(["org", "industry"])}
-                              disabled={isFormDisabled}
-                              fullWidth
-                            />
-                            <TextField
-                              label={t("form.org.size")}
-                              value={formData.org?.size || ""}
-                              onChange={handleInputChange(["org", "size"])}
-                              disabled={isFormDisabled}
-                              fullWidth
-                            />
+                            {!isFieldHidden("org.name") && (
+                              <TextField
+                                label={t("form.org.name")}
+                                value={formData.org?.name || ""}
+                                onChange={handleInputChange(["org", "name"])}
+                                error={!!errors["org.name"]}
+                                helperText={errors["org.name"]}
+                                disabled={isFormDisabled}
+                                fullWidth
+                              />
+                            )}
+                            {!isFieldHidden("org.website") && (
+                              <TextField
+                                label={t("form.org.website")}
+                                type="url"
+                                value={formData.org?.website || ""}
+                                onChange={handleInputChange(["org", "website"])}
+                                error={!!errors["org.website"]}
+                                helperText={errors["org.website"]}
+                                disabled={isFormDisabled}
+                                fullWidth
+                              />
+                            )}
+                            {!isFieldHidden("org.industry") && (
+                              <TextField
+                                label={t("form.org.industry")}
+                                value={formData.org?.industry || ""}
+                                onChange={handleInputChange([
+                                  "org",
+                                  "industry",
+                                ])}
+                                disabled={isFormDisabled}
+                                fullWidth
+                              />
+                            )}
+                            {!isFieldHidden("org.size") && (
+                              <TextField
+                                label={t("form.org.size")}
+                                value={formData.org?.size || ""}
+                                onChange={handleInputChange(["org", "size"])}
+                                disabled={isFormDisabled}
+                                fullWidth
+                              />
+                            )}
                           </Stack>
                         </Box>
                       </>
@@ -685,492 +704,531 @@ export default function CustomLinkIntakeForm({
                           fullWidth
                           required
                         />
-                        <TextField
-                          label={t("form.project.timeline")}
-                          value={formData.project.timeline || ""}
-                          onChange={handleInputChange(["project", "timeline"])}
-                          disabled={isFormDisabled}
-                          fullWidth
-                        />
-                        {!isSectionHidden("budget") && (
+                        {!isFieldHidden("project.timeline") && (
+                          <TextField
+                            label={t("form.project.timeline")}
+                            value={formData.project.timeline || ""}
+                            onChange={handleInputChange([
+                              "project",
+                              "timeline",
+                            ])}
+                            disabled={isFormDisabled}
+                            fullWidth
+                          />
+                        )}
+                        {(!isSectionHidden("budget") ||
+                          (!isFieldHidden("budget.currency") &&
+                            !isFieldHidden("budget.min") &&
+                            !isFieldHidden("budget.max"))) && (
                           <Box>
                             <Typography variant="subtitle2" sx={{ mb: 1 }}>
                               {t("form.project.budget") || "Budget Range"}
                             </Typography>
                             <Stack spacing={2}>
-                              <FormControl fullWidth>
-                                <InputLabel>
-                                  {t("form.project.currency") || "Currency"}
-                                </InputLabel>
-                                <Select
-                                  value={
-                                    (
-                                      formData.project.budget as {
-                                        currency?: IntakeFormCurrencyCode;
-                                        min?: string;
-                                        max?: string;
-                                      }
-                                    )?.currency ||
-                                    ("USD" as IntakeFormCurrencyCode)
-                                  }
-                                  onChange={(e) => {
-                                    setFormData((prev) => {
-                                      const newData = JSON.parse(
-                                        JSON.stringify(prev)
-                                      ) as IntakeFormData;
-                                      if (!newData.project.budget) {
-                                        newData.project.budget = {
-                                          currency:
-                                            "USD" as IntakeFormCurrencyCode,
-                                          min: "",
-                                          max: "",
-                                        };
-                                      }
+                              {!isFieldHidden("budget.currency") && (
+                                <FormControl fullWidth>
+                                  <InputLabel>
+                                    {t("form.project.currency") || "Currency"}
+                                  </InputLabel>
+                                  <Select
+                                    value={
                                       (
-                                        newData.project.budget as {
+                                        formData.project.budget as {
                                           currency?: IntakeFormCurrencyCode;
                                           min?: string;
                                           max?: string;
                                         }
-                                      ).currency = e.target
-                                        .value as IntakeFormCurrencyCode;
-                                      return newData;
-                                    });
-                                  }}
-                                  label={
-                                    t("form.project.currency") || "Currency"
-                                  }
-                                  disabled={isFormDisabled}
-                                >
-                                  {Object.entries(
-                                    INTAKE_FORM_CURRENCY_MAPPING
-                                  ).map(([code, currency]) => (
-                                    <MenuItem key={code} value={code}>
-                                      {currency.name}
-                                    </MenuItem>
-                                  ))}
-                                </Select>
-                              </FormControl>
+                                      )?.currency ||
+                                      ("USD" as IntakeFormCurrencyCode)
+                                    }
+                                    onChange={(e) => {
+                                      setFormData((prev) => {
+                                        const newData = JSON.parse(
+                                          JSON.stringify(prev)
+                                        ) as IntakeFormData;
+                                        if (!newData.project.budget) {
+                                          newData.project.budget = {
+                                            currency:
+                                              "USD" as IntakeFormCurrencyCode,
+                                            min: "",
+                                            max: "",
+                                          };
+                                        }
+                                        (
+                                          newData.project.budget as {
+                                            currency?: IntakeFormCurrencyCode;
+                                            min?: string;
+                                            max?: string;
+                                          }
+                                        ).currency = e.target
+                                          .value as IntakeFormCurrencyCode;
+                                        return newData;
+                                      });
+                                    }}
+                                    label={
+                                      t("form.project.currency") || "Currency"
+                                    }
+                                    disabled={isFormDisabled}
+                                  >
+                                    {Object.entries(
+                                      INTAKE_FORM_CURRENCY_MAPPING
+                                    ).map(([code, currency]) => (
+                                      <MenuItem key={code} value={code}>
+                                        {currency.name}
+                                      </MenuItem>
+                                    ))}
+                                  </Select>
+                                </FormControl>
+                              )}
                               <Stack direction="row" spacing={2}>
-                                <TextField
-                                  label={
-                                    t("form.project.budgetMin") ||
-                                    "Minimum Budget"
-                                  }
-                                  slotProps={{
-                                    input: {
-                                      endAdornment: (
-                                        <InputAdornment position="end">
-                                          {currentCurrency?.symbol || ""}
-                                        </InputAdornment>
-                                      ),
-                                    },
-                                  }}
-                                  value={
-                                    (
-                                      formData.project.budget as {
-                                        currency?: IntakeFormCurrencyCode;
-                                        min?: string;
-                                        max?: string;
-                                      }
-                                    )?.min || ""
-                                  }
-                                  onChange={(e) => {
-                                    setFormData((prev) => {
-                                      const newData = JSON.parse(
-                                        JSON.stringify(prev)
-                                      ) as IntakeFormData;
-                                      if (!newData.project.budget) {
-                                        newData.project.budget = {
-                                          currency:
-                                            "USD" as IntakeFormCurrencyCode,
-                                          min: "",
-                                          max: "",
-                                        };
-                                      }
+                                {!isFieldHidden("budget.min") && (
+                                  <TextField
+                                    label={
+                                      t("form.project.budgetMin") ||
+                                      "Minimum Budget"
+                                    }
+                                    slotProps={{
+                                      input: {
+                                        endAdornment: (
+                                          <InputAdornment position="end">
+                                            {currentCurrency?.symbol || ""}
+                                          </InputAdornment>
+                                        ),
+                                      },
+                                    }}
+                                    value={
                                       (
-                                        newData.project.budget as {
+                                        formData.project.budget as {
                                           currency?: IntakeFormCurrencyCode;
                                           min?: string;
                                           max?: string;
                                         }
-                                      ).min = e.target.value;
-                                      return newData;
-                                    });
-                                  }}
-                                  disabled={isFormDisabled}
-                                  fullWidth
-                                  placeholder="e.g., 10,000"
-                                />
-                                <TextField
-                                  label={
-                                    t("form.project.budgetMax") ||
-                                    "Maximum Budget"
-                                  }
-                                  slotProps={{
-                                    input: {
-                                      endAdornment: (
-                                        <InputAdornment position="end">
-                                          {currentCurrency?.symbol || ""}
-                                        </InputAdornment>
-                                      ),
-                                    },
-                                  }}
-                                  value={
-                                    (
-                                      formData.project.budget as {
-                                        currency?: IntakeFormCurrencyCode;
-                                        min?: string;
-                                        max?: string;
-                                      }
-                                    )?.max || ""
-                                  }
-                                  onChange={(e) => {
-                                    setFormData((prev) => {
-                                      const newData = JSON.parse(
-                                        JSON.stringify(prev)
-                                      ) as IntakeFormData;
-                                      if (!newData.project.budget) {
-                                        newData.project.budget = {
-                                          currency:
-                                            "USD" as IntakeFormCurrencyCode,
-                                          min: "",
-                                          max: "",
-                                        };
-                                      }
+                                      )?.min || ""
+                                    }
+                                    onChange={(e) => {
+                                      setFormData((prev) => {
+                                        const newData = JSON.parse(
+                                          JSON.stringify(prev)
+                                        ) as IntakeFormData;
+                                        if (!newData.project.budget) {
+                                          newData.project.budget = {
+                                            currency:
+                                              "USD" as IntakeFormCurrencyCode,
+                                            min: "",
+                                            max: "",
+                                          };
+                                        }
+                                        (
+                                          newData.project.budget as {
+                                            currency?: IntakeFormCurrencyCode;
+                                            min?: string;
+                                            max?: string;
+                                          }
+                                        ).min = e.target.value;
+                                        return newData;
+                                      });
+                                    }}
+                                    disabled={isFormDisabled}
+                                    fullWidth
+                                    placeholder="e.g., 10,000"
+                                  />
+                                )}
+                                {!isFieldHidden("budget.max") && (
+                                  <TextField
+                                    label={
+                                      t("form.project.budgetMax") ||
+                                      "Maximum Budget"
+                                    }
+                                    slotProps={{
+                                      input: {
+                                        endAdornment: (
+                                          <InputAdornment position="end">
+                                            {currentCurrency?.symbol || ""}
+                                          </InputAdornment>
+                                        ),
+                                      },
+                                    }}
+                                    value={
                                       (
-                                        newData.project.budget as {
+                                        formData.project.budget as {
                                           currency?: IntakeFormCurrencyCode;
                                           min?: string;
                                           max?: string;
                                         }
-                                      ).max = e.target.value;
-                                      return newData;
-                                    });
-                                  }}
-                                  disabled={isFormDisabled}
-                                  fullWidth
-                                  placeholder="e.g., 50,000"
-                                />
+                                      )?.max || ""
+                                    }
+                                    onChange={(e) => {
+                                      setFormData((prev) => {
+                                        const newData = JSON.parse(
+                                          JSON.stringify(prev)
+                                        ) as IntakeFormData;
+                                        if (!newData.project.budget) {
+                                          newData.project.budget = {
+                                            currency:
+                                              "USD" as IntakeFormCurrencyCode,
+                                            min: "",
+                                            max: "",
+                                          };
+                                        }
+                                        (
+                                          newData.project.budget as {
+                                            currency?: IntakeFormCurrencyCode;
+                                            min?: string;
+                                            max?: string;
+                                          }
+                                        ).max = e.target.value;
+                                        return newData;
+                                      });
+                                    }}
+                                    disabled={isFormDisabled}
+                                    fullWidth
+                                    placeholder="e.g., 50,000"
+                                  />
+                                )}
                               </Stack>
                             </Stack>
                           </Box>
                         )}
-                        <TextField
-                          label={t("form.project.startDate")}
-                          type="date"
-                          value={formData.project.startDate || ""}
-                          onChange={handleInputChange(["project", "startDate"])}
-                          InputLabelProps={{ shrink: true }}
-                          disabled={isFormDisabled}
-                          fullWidth
-                        />
+                        {!isFieldHidden("project.startDate") && (
+                          <TextField
+                            label={t("form.project.startDate")}
+                            type="date"
+                            value={formData.project.startDate || ""}
+                            onChange={handleInputChange([
+                              "project",
+                              "startDate",
+                            ])}
+                            InputLabelProps={{ shrink: true }}
+                            disabled={isFormDisabled}
+                            fullWidth
+                          />
+                        )}
 
                         {/* Technologies Array */}
-                        <Box>
-                          <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                            {t("form.project.technologies")}
-                          </Typography>
-                          <Stack spacing={1}>
-                            {(formData.project.technologies || []).map(
-                              (tech, index) => (
-                                <Box
-                                  key={index}
-                                  sx={{
-                                    display: "flex",
-                                    gap: 1,
-                                    alignItems: "flex-start",
-                                  }}
-                                >
-                                  <TextField
-                                    value={tech}
-                                    onChange={handleArrayInputChange(
-                                      ["project", "technologies"],
-                                      index
-                                    )}
-                                    placeholder={t("form.project.technologies")}
-                                    disabled={isFormDisabled}
-                                    fullWidth
-                                    size="small"
-                                  />
-                                  <IconButton
-                                    onClick={() =>
-                                      removeArrayItem(
+                        {!isFieldHidden("project.technologies") && (
+                          <Box>
+                            <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                              {t("form.project.technologies")}
+                            </Typography>
+                            <Stack spacing={1}>
+                              {(formData.project.technologies || []).map(
+                                (tech, index) => (
+                                  <Box
+                                    key={index}
+                                    sx={{
+                                      display: "flex",
+                                      gap: 1,
+                                      alignItems: "flex-start",
+                                    }}
+                                  >
+                                    <TextField
+                                      value={tech}
+                                      onChange={handleArrayInputChange(
                                         ["project", "technologies"],
                                         index
-                                      )
-                                    }
-                                    disabled={isFormDisabled}
-                                    color="error"
-                                    size="small"
-                                    aria-label={`Remove technology ${
-                                      index + 1
-                                    }`}
-                                  >
-                                    <DeleteIcon />
-                                  </IconButton>
-                                </Box>
-                              )
-                            )}
-                            <Button
-                              startIcon={<AddIcon />}
-                              onClick={() =>
-                                addArrayItem(["project", "technologies"])
-                              }
-                              disabled={isFormDisabled}
-                              variant="outlined"
-                              size="small"
-                              sx={{ alignSelf: "flex-start" }}
-                            >
-                              {t("form.addTechnology")}
-                            </Button>
-                          </Stack>
-                        </Box>
+                                      )}
+                                      placeholder={t(
+                                        "form.project.technologies"
+                                      )}
+                                      disabled={isFormDisabled}
+                                      fullWidth
+                                      size="small"
+                                    />
+                                    <IconButton
+                                      onClick={() =>
+                                        removeArrayItem(
+                                          ["project", "technologies"],
+                                          index
+                                        )
+                                      }
+                                      disabled={isFormDisabled}
+                                      color="error"
+                                      size="small"
+                                      aria-label={`Remove technology ${
+                                        index + 1
+                                      }`}
+                                    >
+                                      <DeleteIcon />
+                                    </IconButton>
+                                  </Box>
+                                )
+                              )}
+                              <Button
+                                startIcon={<AddIcon />}
+                                onClick={() =>
+                                  addArrayItem(["project", "technologies"])
+                                }
+                                disabled={isFormDisabled}
+                                variant="outlined"
+                                size="small"
+                                sx={{ alignSelf: "flex-start" }}
+                              >
+                                {t("form.addTechnology")}
+                              </Button>
+                            </Stack>
+                          </Box>
+                        )}
 
                         {/* Requirements Array */}
-                        <Box>
-                          <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                            {t("form.project.requirements")}
-                          </Typography>
-                          <Stack spacing={1}>
-                            {(formData.project.requirements || []).map(
-                              (req, index) => (
-                                <Box
-                                  key={index}
-                                  sx={{
-                                    display: "flex",
-                                    gap: 1,
-                                    alignItems: "flex-start",
-                                  }}
-                                >
-                                  <TextField
-                                    value={req}
-                                    onChange={handleArrayInputChange(
-                                      ["project", "requirements"],
-                                      index
-                                    )}
-                                    placeholder={t("form.project.requirements")}
-                                    disabled={isFormDisabled}
-                                    fullWidth
-                                    multiline
-                                    rows={2}
-                                    size="small"
-                                  />
-                                  <IconButton
-                                    onClick={() =>
-                                      removeArrayItem(
+                        {!isFieldHidden("project.requirements") && (
+                          <Box>
+                            <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                              {t("form.project.requirements")}
+                            </Typography>
+                            <Stack spacing={1}>
+                              {(formData.project.requirements || []).map(
+                                (req, index) => (
+                                  <Box
+                                    key={index}
+                                    sx={{
+                                      display: "flex",
+                                      gap: 1,
+                                      alignItems: "flex-start",
+                                    }}
+                                  >
+                                    <TextField
+                                      value={req}
+                                      onChange={handleArrayInputChange(
                                         ["project", "requirements"],
                                         index
-                                      )
-                                    }
-                                    disabled={isFormDisabled}
-                                    color="error"
-                                    size="small"
-                                    aria-label={`Remove requirement ${
-                                      index + 1
-                                    }`}
-                                  >
-                                    <DeleteIcon />
-                                  </IconButton>
-                                </Box>
-                              )
-                            )}
-                            <Button
-                              startIcon={<AddIcon />}
-                              onClick={() =>
-                                addArrayItem(["project", "requirements"])
-                              }
-                              disabled={isFormDisabled}
-                              variant="outlined"
-                              size="small"
-                              sx={{ alignSelf: "flex-start" }}
-                            >
-                              {t("form.addRequirement")}
-                            </Button>
-                          </Stack>
-                        </Box>
+                                      )}
+                                      placeholder={t(
+                                        "form.project.requirements"
+                                      )}
+                                      disabled={isFormDisabled}
+                                      fullWidth
+                                      multiline
+                                      rows={2}
+                                      size="small"
+                                    />
+                                    <IconButton
+                                      onClick={() =>
+                                        removeArrayItem(
+                                          ["project", "requirements"],
+                                          index
+                                        )
+                                      }
+                                      disabled={isFormDisabled}
+                                      color="error"
+                                      size="small"
+                                      aria-label={`Remove requirement ${
+                                        index + 1
+                                      }`}
+                                    >
+                                      <DeleteIcon />
+                                    </IconButton>
+                                  </Box>
+                                )
+                              )}
+                              <Button
+                                startIcon={<AddIcon />}
+                                onClick={() =>
+                                  addArrayItem(["project", "requirements"])
+                                }
+                                disabled={isFormDisabled}
+                                variant="outlined"
+                                size="small"
+                                sx={{ alignSelf: "flex-start" }}
+                              >
+                                {t("form.addRequirement")}
+                              </Button>
+                            </Stack>
+                          </Box>
+                        )}
 
                         {/* Goals Array */}
-                        <Box>
-                          <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                            {t("form.project.goals")}
-                          </Typography>
-                          <Stack spacing={1}>
-                            {(formData.project.goals || []).map(
-                              (goal, index) => (
-                                <Box
-                                  key={index}
-                                  sx={{
-                                    display: "flex",
-                                    gap: 1,
-                                    alignItems: "flex-start",
-                                  }}
-                                >
-                                  <TextField
-                                    value={goal}
-                                    onChange={handleArrayInputChange(
-                                      ["project", "goals"],
-                                      index
-                                    )}
-                                    placeholder={t("form.project.goals")}
-                                    disabled={isFormDisabled}
-                                    fullWidth
-                                    multiline
-                                    rows={2}
-                                    size="small"
-                                  />
-                                  <IconButton
-                                    onClick={() =>
-                                      removeArrayItem(
+                        {!isFieldHidden("project.goals") && (
+                          <Box>
+                            <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                              {t("form.project.goals")}
+                            </Typography>
+                            <Stack spacing={1}>
+                              {(formData.project.goals || []).map(
+                                (goal, index) => (
+                                  <Box
+                                    key={index}
+                                    sx={{
+                                      display: "flex",
+                                      gap: 1,
+                                      alignItems: "flex-start",
+                                    }}
+                                  >
+                                    <TextField
+                                      value={goal}
+                                      onChange={handleArrayInputChange(
                                         ["project", "goals"],
                                         index
-                                      )
-                                    }
-                                    disabled={isFormDisabled}
-                                    color="error"
-                                    size="small"
-                                    aria-label={`Remove goal ${index + 1}`}
-                                  >
-                                    <DeleteIcon />
-                                  </IconButton>
-                                </Box>
-                              )
-                            )}
-                            <Button
-                              startIcon={<AddIcon />}
-                              onClick={() => addArrayItem(["project", "goals"])}
-                              disabled={isFormDisabled}
-                              variant="outlined"
-                              size="small"
-                              sx={{ alignSelf: "flex-start" }}
-                            >
-                              {t("form.addGoal")}
-                            </Button>
-                          </Stack>
-                        </Box>
+                                      )}
+                                      placeholder={t("form.project.goals")}
+                                      disabled={isFormDisabled}
+                                      fullWidth
+                                      multiline
+                                      rows={2}
+                                      size="small"
+                                    />
+                                    <IconButton
+                                      onClick={() =>
+                                        removeArrayItem(
+                                          ["project", "goals"],
+                                          index
+                                        )
+                                      }
+                                      disabled={isFormDisabled}
+                                      color="error"
+                                      size="small"
+                                      aria-label={`Remove goal ${index + 1}`}
+                                    >
+                                      <DeleteIcon />
+                                    </IconButton>
+                                  </Box>
+                                )
+                              )}
+                              <Button
+                                startIcon={<AddIcon />}
+                                onClick={() =>
+                                  addArrayItem(["project", "goals"])
+                                }
+                                disabled={isFormDisabled}
+                                variant="outlined"
+                                size="small"
+                                sx={{ alignSelf: "flex-start" }}
+                              >
+                                {t("form.addGoal")}
+                              </Button>
+                            </Stack>
+                          </Box>
+                        )}
 
                         {/* Resource Links */}
-                        <Box>
-                          <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                            {t("form.project.resourceLinks") ||
-                              "Resource Links (Figma, Designs, etc.)"}
-                          </Typography>
-                          <Stack spacing={1}>
-                            {(formData.project.resourceLinks || []).map(
-                              (resource, index) => (
-                                <Box
-                                  key={index}
-                                  sx={{
-                                    display: "flex",
-                                    gap: 1,
-                                    alignItems: "flex-start",
-                                  }}
-                                >
-                                  <TextField
-                                    label={
-                                      t("form.project.resourceLabel") || "Label"
-                                    }
-                                    value={resource.label}
-                                    onChange={(e) => {
-                                      setFormData((prev) => {
-                                        const newData = JSON.parse(
-                                          JSON.stringify(prev)
-                                        ) as IntakeFormData;
-                                        if (!newData.project.resourceLinks) {
-                                          newData.project.resourceLinks = [];
-                                        }
-                                        newData.project.resourceLinks![index] =
-                                          {
+                        {!isFieldHidden("project.resourceLinks") && (
+                          <Box>
+                            <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                              {t("form.project.resourceLinks") ||
+                                "Resource Links (Figma, Designs, etc.)"}
+                            </Typography>
+                            <Stack spacing={1}>
+                              {(formData.project.resourceLinks || []).map(
+                                (resource, index) => (
+                                  <Box
+                                    key={index}
+                                    sx={{
+                                      display: "flex",
+                                      gap: 1,
+                                      alignItems: "flex-start",
+                                    }}
+                                  >
+                                    <TextField
+                                      label={
+                                        t("form.project.resourceLabel") ||
+                                        "Label"
+                                      }
+                                      value={resource.label}
+                                      onChange={(e) => {
+                                        setFormData((prev) => {
+                                          const newData = JSON.parse(
+                                            JSON.stringify(prev)
+                                          ) as IntakeFormData;
+                                          if (!newData.project.resourceLinks) {
+                                            newData.project.resourceLinks = [];
+                                          }
+                                          newData.project.resourceLinks![
+                                            index
+                                          ] = {
                                             ...resource,
                                             label: e.target.value,
                                           };
-                                        return newData;
-                                      });
-                                    }}
-                                    disabled={isFormDisabled}
-                                    size="small"
-                                    sx={{ flex: 1 }}
-                                    placeholder="e.g., Figma Design"
-                                  />
-                                  <TextField
-                                    label={
-                                      t("form.project.resourceUrl") || "URL"
-                                    }
-                                    type="url"
-                                    value={resource.url}
-                                    onChange={(e) => {
-                                      setFormData((prev) => {
-                                        const newData = JSON.parse(
-                                          JSON.stringify(prev)
-                                        ) as IntakeFormData;
-                                        if (!newData.project.resourceLinks) {
-                                          newData.project.resourceLinks = [];
-                                        }
-                                        newData.project.resourceLinks![index] =
-                                          {
+                                          return newData;
+                                        });
+                                      }}
+                                      disabled={isFormDisabled}
+                                      size="small"
+                                      sx={{ flex: 1 }}
+                                      placeholder="e.g., Figma Design"
+                                    />
+                                    <TextField
+                                      label={
+                                        t("form.project.resourceUrl") || "URL"
+                                      }
+                                      type="url"
+                                      value={resource.url}
+                                      onChange={(e) => {
+                                        setFormData((prev) => {
+                                          const newData = JSON.parse(
+                                            JSON.stringify(prev)
+                                          ) as IntakeFormData;
+                                          if (!newData.project.resourceLinks) {
+                                            newData.project.resourceLinks = [];
+                                          }
+                                          newData.project.resourceLinks![
+                                            index
+                                          ] = {
                                             ...resource,
                                             url: e.target.value,
                                           };
-                                        return newData;
-                                      });
-                                    }}
-                                    disabled={isFormDisabled}
-                                    size="small"
-                                    sx={{ flex: 2 }}
-                                    placeholder="https://..."
-                                  />
-                                  <IconButton
-                                    onClick={() => {
-                                      setFormData((prev) => {
-                                        const newData = JSON.parse(
-                                          JSON.stringify(prev)
-                                        ) as IntakeFormData;
-                                        if (!newData.project.resourceLinks) {
                                           return newData;
-                                        }
-                                        newData.project.resourceLinks =
-                                          newData.project.resourceLinks!.filter(
-                                            (_, i) => i !== index
-                                          );
-                                        return newData;
-                                      });
-                                    }}
-                                    disabled={isFormDisabled}
-                                    color="error"
-                                    size="small"
-                                    aria-label={`Remove resource ${index + 1}`}
-                                  >
-                                    <DeleteIcon />
-                                  </IconButton>
-                                </Box>
-                              )
-                            )}
-                            <Button
-                              startIcon={<AddIcon />}
-                              onClick={() => {
-                                setFormData((prev) => {
-                                  const newData = JSON.parse(
-                                    JSON.stringify(prev)
-                                  ) as IntakeFormData;
-                                  if (!newData.project.resourceLinks) {
-                                    newData.project.resourceLinks = [];
-                                  }
-                                  newData.project.resourceLinks = [
-                                    ...newData.project.resourceLinks,
-                                    { label: "", url: "" },
-                                  ];
-                                  return newData;
-                                });
-                              }}
-                              disabled={isFormDisabled}
-                              variant="outlined"
-                              size="small"
-                              sx={{ alignSelf: "flex-start" }}
-                            >
-                              {t("form.addResourceLink") || "Add Resource Link"}
-                            </Button>
-                          </Stack>
-                        </Box>
+                                        });
+                                      }}
+                                      disabled={isFormDisabled}
+                                      size="small"
+                                      sx={{ flex: 2 }}
+                                      placeholder="https://..."
+                                    />
+                                    <IconButton
+                                      onClick={() => {
+                                        setFormData((prev) => {
+                                          const newData = JSON.parse(
+                                            JSON.stringify(prev)
+                                          ) as IntakeFormData;
+                                          if (!newData.project.resourceLinks) {
+                                            return newData;
+                                          }
+                                          newData.project.resourceLinks =
+                                            newData.project.resourceLinks!.filter(
+                                              (_, i) => i !== index
+                                            );
+                                          return newData;
+                                        });
+                                      }}
+                                      disabled={isFormDisabled}
+                                      color="error"
+                                      size="small"
+                                      aria-label={`Remove resource ${
+                                        index + 1
+                                      }`}
+                                    >
+                                      <DeleteIcon />
+                                    </IconButton>
+                                  </Box>
+                                )
+                              )}
+                              <Button
+                                startIcon={<AddIcon />}
+                                onClick={() => {
+                                  setFormData((prev) => {
+                                    const newData = JSON.parse(
+                                      JSON.stringify(prev)
+                                    ) as IntakeFormData;
+                                    if (!newData.project.resourceLinks) {
+                                      newData.project.resourceLinks = [];
+                                    }
+                                    newData.project.resourceLinks = [
+                                      ...newData.project.resourceLinks,
+                                      { label: "", url: "" },
+                                    ];
+                                    return newData;
+                                  });
+                                }}
+                                disabled={isFormDisabled}
+                                variant="outlined"
+                                size="small"
+                                sx={{ alignSelf: "flex-start" }}
+                              >
+                                {t("form.addResourceLink") ||
+                                  "Add Resource Link"}
+                              </Button>
+                            </Stack>
+                          </Box>
+                        )}
                       </Stack>
                     </Box>
 
@@ -1190,108 +1248,124 @@ export default function CustomLinkIntakeForm({
                         </Typography>
                       </Stack>
                       <Stack spacing={2}>
-                        <FormControl fullWidth>
-                          <InputLabel>
-                            {t("form.additional.preferredContactMethod")}
-                          </InputLabel>
-                          <Select
-                            value={
-                              formData.additional?.preferredContactMethod || ""
-                            }
-                            onChange={(e) => {
-                              setFormData((prev) => ({
-                                ...prev,
-                                additional: {
-                                  ...prev.additional,
-                                  preferredContactMethod: e.target.value,
-                                },
-                              }));
-                            }}
-                            label={t("form.additional.preferredContactMethod")}
-                            disabled={isFormDisabled}
-                          >
-                            <MenuItem value="email">Email</MenuItem>
-                            <MenuItem value="phone">Phone</MenuItem>
-                            <MenuItem value="video">Video Call</MenuItem>
-                            <MenuItem value="in-person">In Person</MenuItem>
-                          </Select>
-                        </FormControl>
+                        {!isFieldHidden(
+                          "additional.preferredContactMethod"
+                        ) && (
+                          <FormControl fullWidth>
+                            <InputLabel>
+                              {t("form.additional.preferredContactMethod")}
+                            </InputLabel>
+                            <Select
+                              value={
+                                formData.additional?.preferredContactMethod ||
+                                ""
+                              }
+                              onChange={(e) => {
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  additional: {
+                                    ...prev.additional,
+                                    preferredContactMethod: e.target.value,
+                                  },
+                                }));
+                              }}
+                              label={t(
+                                "form.additional.preferredContactMethod"
+                              )}
+                              disabled={isFormDisabled}
+                            >
+                              <MenuItem value="email">Email</MenuItem>
+                              <MenuItem value="phone">Phone</MenuItem>
+                              <MenuItem value="video">Video Call</MenuItem>
+                              <MenuItem value="in-person">In Person</MenuItem>
+                            </Select>
+                          </FormControl>
+                        )}
 
-                        <FormControl fullWidth>
-                          <InputLabel>
-                            {t("form.additional.timezone")}
-                          </InputLabel>
-                          <Select
-                            value={formData.additional?.timezone || "UTC"}
-                            onChange={(e) => {
-                              setFormData((prev) => ({
-                                ...prev,
-                                additional: {
-                                  ...prev.additional,
-                                  timezone: e.target.value,
-                                },
-                              }));
-                            }}
-                            label={t("form.additional.timezone")}
-                            disabled={isFormDisabled}
-                          >
-                            {/* Show detected timezone first if not in common list */}
-                            {!COMMON_TIMEZONES.some(
-                              (tz) => tz.value === detectedTimezone
-                            ) && (
-                              <MenuItem value={detectedTimezone}>
-                                {detectedTimezone}{" "}
-                                {getGMTOffset(detectedTimezone) &&
-                                  `(${getGMTOffset(detectedTimezone)})`}{" "}
-                                (Detected)
-                              </MenuItem>
-                            )}
-                            {COMMON_TIMEZONES.map((tz) => {
-                              const offset = getGMTOffset(tz.value);
-                              return (
-                                <MenuItem key={tz.value} value={tz.value}>
-                                  {tz.label} {offset && `(${offset})`}
+                        {!isFieldHidden("additional.timezone") && (
+                          <FormControl fullWidth>
+                            <InputLabel>
+                              {t("form.additional.timezone")}
+                            </InputLabel>
+                            <Select
+                              value={formData.additional?.timezone || "UTC"}
+                              onChange={(e) => {
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  additional: {
+                                    ...prev.additional,
+                                    timezone: e.target.value,
+                                  },
+                                }));
+                              }}
+                              label={t("form.additional.timezone")}
+                              disabled={isFormDisabled}
+                            >
+                              {/* Show detected timezone first if not in common list */}
+                              {!COMMON_TIMEZONES.some(
+                                (tz) => tz.value === detectedTimezone
+                              ) && (
+                                <MenuItem value={detectedTimezone}>
+                                  {detectedTimezone}{" "}
+                                  {getGMTOffset(detectedTimezone) &&
+                                    `(${getGMTOffset(detectedTimezone)})`}{" "}
+                                  (Detected)
                                 </MenuItem>
-                              );
-                            })}
-                          </Select>
-                        </FormControl>
+                              )}
+                              {COMMON_TIMEZONES.map((tz) => {
+                                const offset = getGMTOffset(tz.value);
+                                return (
+                                  <MenuItem key={tz.value} value={tz.value}>
+                                    {tz.label} {offset && `(${offset})`}
+                                  </MenuItem>
+                                );
+                              })}
+                            </Select>
+                          </FormControl>
+                        )}
 
-                        <FormControl fullWidth>
-                          <InputLabel>
-                            {t("form.additional.urgency")}
-                          </InputLabel>
-                          <Select
-                            value={formData.additional?.urgency || ""}
-                            onChange={(e) => {
-                              setFormData((prev) => ({
-                                ...prev,
-                                additional: {
-                                  ...prev.additional,
-                                  urgency: e.target.value,
-                                },
-                              }));
-                            }}
-                            label={t("form.additional.urgency")}
+                        {!isFieldHidden("additional.urgency") && (
+                          <FormControl fullWidth>
+                            <InputLabel>
+                              {t("form.additional.urgency")}
+                            </InputLabel>
+                            <Select
+                              value={formData.additional?.urgency || ""}
+                              onChange={(e) => {
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  additional: {
+                                    ...prev.additional,
+                                    urgency: e.target.value,
+                                  },
+                                }));
+                              }}
+                              label={t("form.additional.urgency")}
+                              disabled={isFormDisabled}
+                            >
+                              <MenuItem value="low">Low</MenuItem>
+                              <MenuItem value="medium">Medium</MenuItem>
+                              <MenuItem value="high">High</MenuItem>
+                              <MenuItem value="urgent">Urgent</MenuItem>
+                            </Select>
+                          </FormControl>
+                        )}
+
+                        {!isFieldHidden("additional.notes") && (
+                          <TextField
+                            label={t("form.additional.notes")}
+                            value={formData.additional?.notes || ""}
+                            onChange={handleInputChange([
+                              "additional",
+                              "notes",
+                            ])}
+                            multiline
+                            rows={4}
                             disabled={isFormDisabled}
-                          >
-                            <MenuItem value="low">Low</MenuItem>
-                            <MenuItem value="medium">Medium</MenuItem>
-                            <MenuItem value="high">High</MenuItem>
-                            <MenuItem value="urgent">Urgent</MenuItem>
-                          </Select>
-                        </FormControl>
-
-                        <TextField
-                          label={t("form.additional.notes")}
-                          value={formData.additional?.notes || ""}
-                          onChange={handleInputChange(["additional", "notes"])}
-                          multiline
-                          rows={4}
-                          disabled={isFormDisabled}
-                          fullWidth
-                          helperText={t("form.additional.notesHelper")}
-                        />
+                            fullWidth
+                            helperText={t("form.additional.notesHelper")}
+                          />
+                        )}
                       </Stack>
                     </Box>
 

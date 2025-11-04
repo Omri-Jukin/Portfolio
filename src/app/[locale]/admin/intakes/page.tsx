@@ -11,7 +11,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
   CircularProgress,
   Alert,
   Button,
@@ -36,6 +35,7 @@ import {
 import { api } from "$/trpc/client";
 import { useRouter, usePathname } from "next/navigation";
 import { format } from "date-fns";
+import { useTheme, useMediaQuery } from "@mui/material";
 import {
   ArrowBack as ArrowBackIcon,
   Link as LinkIcon,
@@ -46,15 +46,17 @@ import {
   Person as PersonIcon,
   Business as BusinessIcon,
   Delete as DeleteIcon,
-  RateReview as RateReviewIcon,
   OpenInNew as OpenInNewIcon,
   Visibility as VisibilityIcon,
 } from "@mui/icons-material";
+import TokenOutlinedIcon from "@mui/icons-material/TokenOutlined";
 import { ClientOnly } from "~/ClientOnly";
 
 const AdminIntakesList = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { data: intakes, isLoading, error } = api.intakes.getAll.useQuery();
   const {
     data: customLinks,
@@ -88,9 +90,73 @@ const AdminIntakesList = () => {
     organizationWebsite: "",
     expiresInDays: 30,
     locale: currentLocale,
+    hiddenSections: [] as string[],
   });
   const [selectedLinks, setSelectedLinks] = useState<string[]>([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+  // Helper function to get section fields
+  const getSectionFields = (sectionPrefix: string): string[] => {
+    const fieldMap: Record<string, string[]> = {
+      org: ["org.name", "org.website", "org.industry", "org.size"],
+      budget: ["budget.currency", "budget.min", "budget.max"],
+      project: [
+        "project.timeline",
+        "project.startDate",
+        "project.technologies",
+        "project.requirements",
+        "project.goals",
+        "project.resourceLinks",
+      ],
+      additional: [
+        "additional.preferredContactMethod",
+        "additional.timezone",
+        "additional.urgency",
+        "additional.notes",
+      ],
+    };
+    return fieldMap[sectionPrefix] || [];
+  };
+
+  // Helper function to get section checkbox state
+  const getSectionState = (sectionPrefix: string) => {
+    const sectionFields = getSectionFields(sectionPrefix);
+    const hiddenFields = formData.hiddenSections;
+    const checkedCount = sectionFields.filter((field) =>
+      hiddenFields.includes(field)
+    ).length;
+
+    if (checkedCount === 0) return { checked: false, indeterminate: false };
+    if (checkedCount === sectionFields.length)
+      return { checked: true, indeterminate: false };
+    return { checked: false, indeterminate: true };
+  };
+
+  // Handle section checkbox toggle
+  const handleSectionToggle = (sectionPrefix: string) => {
+    const sectionFields = getSectionFields(sectionPrefix);
+    const hiddenFields = formData.hiddenSections;
+    const sectionState = getSectionState(sectionPrefix);
+
+    let newSections: string[];
+    if (sectionState.checked) {
+      // If all checked, uncheck all
+      newSections = hiddenFields.filter(
+        (field) => !sectionFields.includes(field)
+      );
+    } else {
+      // If none or some checked, check all
+      const fieldsToAdd = sectionFields.filter(
+        (field) => !hiddenFields.includes(field)
+      );
+      newSections = [...hiddenFields, ...fieldsToAdd];
+    }
+
+    setFormData({
+      ...formData,
+      hiddenSections: newSections,
+    });
+  };
 
   const handleGenerateLink = async () => {
     setFormError(null);
@@ -118,6 +184,10 @@ const AdminIntakesList = () => {
         organizationWebsite: formData.organizationWebsite?.trim() || undefined,
         expiresInDays: formData.expiresInDays,
         locale: formData.locale,
+        hiddenSections:
+          formData.hiddenSections.length > 0
+            ? formData.hiddenSections
+            : undefined,
       });
       setGeneratedLink(result.link);
       setEmailSent(result.emailSent ?? null);
@@ -182,6 +252,7 @@ const AdminIntakesList = () => {
       organizationWebsite: "",
       expiresInDays: 30,
       locale: currentLocale,
+      hiddenSections: [],
     });
   };
 
@@ -244,7 +315,10 @@ const AdminIntakesList = () => {
 
   if (isLoading || isLoadingCustomLinks) {
     return (
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Container
+        maxWidth="lg"
+        sx={{ px: { xs: 2, sm: 3 }, py: { xs: 3, sm: 4 } }}
+      >
         <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
           <CircularProgress />
         </Box>
@@ -254,7 +328,10 @@ const AdminIntakesList = () => {
 
   if (error || customLinksError) {
     return (
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Container
+        maxWidth="lg"
+        sx={{ px: { xs: 2, sm: 3 }, py: { xs: 3, sm: 4 } }}
+      >
         <Alert severity="error">
           {error?.message || customLinksError?.message || "Failed to load data"}
         </Alert>
@@ -264,65 +341,65 @@ const AdminIntakesList = () => {
 
   return (
     <ClientOnly skeleton>
-      <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Box sx={{ mb: 3, display: "flex", alignItems: "center", gap: 2 }}>
+      <Box
+        sx={{
+          px: { xs: 2, sm: 3 },
+          py: { xs: 3, sm: 4 },
+          width: "100%",
+          maxWidth: "100%",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <Box
+          sx={{
+            mb: 3,
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            alignItems: { xs: "center", sm: "center" },
+            justifyContent: { xs: "center", sm: "space-between" },
+            gap: 2,
+            width: "100%",
+          }}
+        >
           <Button
             startIcon={<ArrowBackIcon />}
             onClick={() => router.push("/admin")}
+            sx={{ alignSelf: { xs: "center", sm: "center" } }}
           >
             Back to Dashboard
           </Button>
-          <Typography variant="h4" component="h1">
+          <Typography
+            variant="h4"
+            component="h1"
+            sx={{
+              fontSize: { xs: "1.75rem", sm: "2.125rem" },
+              textAlign: { xs: "center", sm: "left" },
+            }}
+          >
             Project Intakes
           </Typography>
           <Button
             variant="contained"
             startIcon={<LinkIcon />}
             onClick={() => setDialogOpen(true)}
-            sx={{ ml: "auto" }}
+            sx={{
+              ml: { xs: 0, sm: "auto" },
+              alignSelf: { xs: "stretch", sm: "center" },
+              width: { xs: "100%", sm: "auto" },
+            }}
           >
             Generate Custom Link
           </Button>
         </Box>
 
-        {/* New Review Page Banner */}
-        <Alert
-          severity="info"
-          sx={{
-            mb: 3,
-            "& .MuiAlert-message": {
-              width: "100%",
-            },
-          }}
-          action={
-            <Button
-              variant="contained"
-              size="small"
-              startIcon={<RateReviewIcon />}
-              onClick={() => router.push("/admin/review")}
-              sx={{ whiteSpace: "nowrap" }}
-            >
-              Open Review Page
-            </Button>
-          }
-        >
-          <Box>
-            <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
-              🎉 New Intake Review Page Available!
-            </Typography>
-            <Typography variant="body2">
-              Try the new advanced review interface with status management,
-              notes, reminders, and dual design variants.
-            </Typography>
-          </Box>
-        </Alert>
-
         {/* Generate Custom Link Dialog */}
         <Dialog
           open={dialogOpen}
           onClose={handleCloseDialog}
-          maxWidth="md"
+          maxWidth={isMobile ? false : "md"}
           fullWidth
+          fullScreen={isMobile}
         >
           <DialogTitle>
             Generate Custom Intake Link
@@ -338,8 +415,14 @@ const AdminIntakesList = () => {
               <CloseIcon />
             </IconButton>
           </DialogTitle>
-          <DialogContent>
-            <Stack spacing={3} sx={{ mt: 1 }}>
+          <DialogContent
+            sx={{
+              px: { xs: 2, sm: 3 },
+              py: { xs: 2, sm: 3 },
+              overflowY: "auto",
+            }}
+          >
+            <Stack spacing={3} sx={{ mt: { xs: 0, sm: 1 } }}>
               {formError && (
                 <Alert severity="error" onClose={() => setFormError(null)}>
                   {formError}
@@ -358,7 +441,7 @@ const AdminIntakesList = () => {
                 helperText={formError || "Client's email address"}
                 error={!!formError}
               />
-              <Stack direction="row" spacing={2}>
+              <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                 <TextField
                   label="First Name"
                   required
@@ -434,6 +517,414 @@ const AdminIntakesList = () => {
                   The language for the intake form
                 </FormHelperText>
               </FormControl>
+
+              {/* Hidden Fields */}
+              <Box>
+                <Typography variant="subtitle2" gutterBottom>
+                  Hide Fields (Optional)
+                </Typography>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ mb: 2, display: "block" }}
+                >
+                  Select individual fields to hide from the client when they
+                  fill out the form. Useful for pro bono projects or when
+                  certain information isn&apos;t needed.
+                </Typography>
+
+                <Stack
+                  direction={{ xs: "column", md: "row" }}
+                  spacing={2}
+                  sx={{ width: "100%" }}
+                >
+                  {/* Organization Section */}
+                  <Box sx={{ flex: 1 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        mb: 1.5,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        handleSectionToggle("org");
+                      }}
+                    >
+                      <Checkbox
+                        checked={getSectionState("org").checked}
+                        indeterminate={getSectionState("org").indeterminate}
+                        onChange={() => {
+                          handleSectionToggle("org");
+                        }}
+                        size="small"
+                        icon={<TokenOutlinedIcon />}
+                        checkedIcon={<TokenOutlinedIcon />}
+                        sx={{
+                          "&.Mui-checked .MuiSvgIcon-root": {
+                            fill: (theme) => theme.palette.error.main,
+                          },
+                          "&.MuiCheckbox-indeterminate .MuiSvgIcon-root": {
+                            fill: (theme) => theme.palette.error.main,
+                          },
+                        }}
+                      />
+                      <Typography variant="body2" fontWeight={600}>
+                        Organization Information
+                      </Typography>
+                    </Box>
+                    <Box component="ul" sx={{ pl: 0, m: 0, listStyle: "none" }}>
+                      {[
+                        { key: "org.name", label: "Organization Name" },
+                        {
+                          key: "org.website",
+                          label: "Organization Website",
+                        },
+                        { key: "org.industry", label: "Industry" },
+                        { key: "org.size", label: "Organization Size" },
+                      ].map((field) => {
+                        const isChecked = formData.hiddenSections.includes(
+                          field.key
+                        );
+                        const handleToggle = () => {
+                          const newSections = isChecked
+                            ? formData.hiddenSections.filter(
+                                (s) => s !== field.key
+                              )
+                            : [...formData.hiddenSections, field.key];
+                          setFormData({
+                            ...formData,
+                            hiddenSections: newSections,
+                          });
+                        };
+                        return (
+                          <Box
+                            key={field.key}
+                            component="li"
+                            onClick={handleToggle}
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              p: 1,
+                              borderRadius: 0.5,
+                              cursor: "pointer",
+                              "&:hover": { bgcolor: "action.hover" },
+                            }}
+                          >
+                            <Checkbox
+                              size="small"
+                              checked={isChecked}
+                              onChange={handleToggle}
+                              icon={<TokenOutlinedIcon />}
+                              checkedIcon={<TokenOutlinedIcon />}
+                              sx={{
+                                "&.Mui-checked .MuiSvgIcon-root": {
+                                  fill: (theme) => theme.palette.error.main,
+                                },
+                              }}
+                            />
+                            <Typography variant="body2">
+                              {field.label}
+                            </Typography>
+                          </Box>
+                        );
+                      })}
+                    </Box>
+                  </Box>
+
+                  {/* Budget Section */}
+                  <Box sx={{ flex: 1 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        mb: 1.5,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        handleSectionToggle("budget");
+                      }}
+                    >
+                      <Checkbox
+                        checked={getSectionState("budget").checked}
+                        indeterminate={getSectionState("budget").indeterminate}
+                        onChange={() => {
+                          handleSectionToggle("budget");
+                        }}
+                        size="small"
+                        icon={<TokenOutlinedIcon />}
+                        checkedIcon={<TokenOutlinedIcon />}
+                        sx={{
+                          "&.Mui-checked .MuiSvgIcon-root": {
+                            fill: (theme) => theme.palette.error.main,
+                          },
+                          "&.MuiCheckbox-indeterminate .MuiSvgIcon-root": {
+                            fill: (theme) => theme.palette.error.main,
+                          },
+                        }}
+                      />
+                      <Typography variant="body2" fontWeight={600}>
+                        Budget Information
+                      </Typography>
+                    </Box>
+                    <Box component="ul" sx={{ pl: 0, m: 0, listStyle: "none" }}>
+                      {[
+                        { key: "budget.currency", label: "Currency" },
+                        { key: "budget.min", label: "Minimum Budget" },
+                        { key: "budget.max", label: "Maximum Budget" },
+                      ].map((field) => {
+                        const isChecked = formData.hiddenSections.includes(
+                          field.key
+                        );
+                        const handleToggle = () => {
+                          const newSections = isChecked
+                            ? formData.hiddenSections.filter(
+                                (s) => s !== field.key
+                              )
+                            : [...formData.hiddenSections, field.key];
+                          setFormData({
+                            ...formData,
+                            hiddenSections: newSections,
+                          });
+                        };
+                        return (
+                          <Box
+                            key={field.key}
+                            component="li"
+                            onClick={handleToggle}
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              p: 1,
+                              borderRadius: 0.5,
+                              cursor: "pointer",
+                              "&:hover": { bgcolor: "action.hover" },
+                            }}
+                          >
+                            <Checkbox
+                              size="small"
+                              checked={isChecked}
+                              onChange={handleToggle}
+                              icon={<TokenOutlinedIcon />}
+                              checkedIcon={<TokenOutlinedIcon />}
+                              sx={{
+                                "&.Mui-checked .MuiSvgIcon-root": {
+                                  fill: (theme) => theme.palette.error.main,
+                                },
+                              }}
+                            />
+                            <Typography variant="body2">
+                              {field.label}
+                            </Typography>
+                          </Box>
+                        );
+                      })}
+                    </Box>
+                  </Box>
+
+                  {/* Project Section */}
+                  <Box sx={{ flex: 1 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        mb: 1.5,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        handleSectionToggle("project");
+                      }}
+                    >
+                      <Checkbox
+                        checked={getSectionState("project").checked}
+                        indeterminate={getSectionState("project").indeterminate}
+                        onChange={() => {
+                          handleSectionToggle("project");
+                        }}
+                        size="small"
+                        icon={<TokenOutlinedIcon />}
+                        checkedIcon={<TokenOutlinedIcon />}
+                        sx={{
+                          "&.Mui-checked .MuiSvgIcon-root": {
+                            fill: (theme) => theme.palette.error.main,
+                          },
+                          "&.MuiCheckbox-indeterminate .MuiSvgIcon-root": {
+                            fill: (theme) => theme.palette.error.main,
+                          },
+                        }}
+                      />
+                      <Typography variant="body2" fontWeight={600}>
+                        Project Information
+                      </Typography>
+                    </Box>
+                    <Box component="ul" sx={{ pl: 0, m: 0, listStyle: "none" }}>
+                      {[
+                        { key: "project.timeline", label: "Timeline" },
+                        { key: "project.startDate", label: "Start Date" },
+                        {
+                          key: "project.technologies",
+                          label: "Technologies",
+                        },
+                        {
+                          key: "project.requirements",
+                          label: "Requirements",
+                        },
+                        { key: "project.goals", label: "Goals" },
+                        {
+                          key: "project.resourceLinks",
+                          label: "Resource Links",
+                        },
+                      ].map((field) => {
+                        const isChecked = formData.hiddenSections.includes(
+                          field.key
+                        );
+                        const handleToggle = () => {
+                          const newSections = isChecked
+                            ? formData.hiddenSections.filter(
+                                (s) => s !== field.key
+                              )
+                            : [...formData.hiddenSections, field.key];
+                          setFormData({
+                            ...formData,
+                            hiddenSections: newSections,
+                          });
+                        };
+                        return (
+                          <Box
+                            key={field.key}
+                            component="li"
+                            onClick={handleToggle}
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              p: 1,
+                              borderRadius: 0.5,
+                              cursor: "pointer",
+                              "&:hover": { bgcolor: "action.hover" },
+                            }}
+                          >
+                            <Checkbox
+                              size="small"
+                              checked={isChecked}
+                              onChange={handleToggle}
+                              icon={<TokenOutlinedIcon />}
+                              checkedIcon={<TokenOutlinedIcon />}
+                              sx={{
+                                "&.Mui-checked .MuiSvgIcon-root": {
+                                  fill: (theme) => theme.palette.error.main,
+                                },
+                              }}
+                            />
+                            <Typography variant="body2">
+                              {field.label}
+                            </Typography>
+                          </Box>
+                        );
+                      })}
+                    </Box>
+                  </Box>
+
+                  {/* Additional Information Section */}
+                  <Box sx={{ flex: 1 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        mb: 1.5,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        handleSectionToggle("additional");
+                      }}
+                    >
+                      <Checkbox
+                        checked={getSectionState("additional").checked}
+                        indeterminate={
+                          getSectionState("additional").indeterminate
+                        }
+                        onChange={() => {
+                          handleSectionToggle("additional");
+                        }}
+                        size="small"
+                        icon={<TokenOutlinedIcon />}
+                        checkedIcon={<TokenOutlinedIcon />}
+                        sx={{
+                          "&.Mui-checked .MuiSvgIcon-root": {
+                            fill: (theme) => theme.palette.error.main,
+                          },
+                          "&.MuiCheckbox-indeterminate .MuiSvgIcon-root": {
+                            fill: (theme) => theme.palette.error.main,
+                          },
+                        }}
+                      />
+                      <Typography variant="body2" fontWeight={600}>
+                        Additional Information
+                      </Typography>
+                    </Box>
+                    <Box component="ul" sx={{ pl: 0, m: 0, listStyle: "none" }}>
+                      {[
+                        {
+                          key: "additional.preferredContactMethod",
+                          label: "Preferred Contact Method",
+                        },
+                        { key: "additional.timezone", label: "Timezone" },
+                        { key: "additional.urgency", label: "Urgency" },
+                        { key: "additional.notes", label: "Client Notes" },
+                      ].map((field) => {
+                        const isChecked = formData.hiddenSections.includes(
+                          field.key
+                        );
+                        const handleToggle = () => {
+                          const newSections = isChecked
+                            ? formData.hiddenSections.filter(
+                                (s) => s !== field.key
+                              )
+                            : [...formData.hiddenSections, field.key];
+                          setFormData({
+                            ...formData,
+                            hiddenSections: newSections,
+                          });
+                        };
+                        return (
+                          <Box
+                            key={field.key}
+                            component="li"
+                            onClick={handleToggle}
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              p: 1,
+                              borderRadius: 0.5,
+                              cursor: "pointer",
+                              "&:hover": { bgcolor: "action.hover" },
+                            }}
+                          >
+                            <Checkbox
+                              size="small"
+                              checked={isChecked}
+                              onChange={handleToggle}
+                              icon={<TokenOutlinedIcon />}
+                              checkedIcon={<TokenOutlinedIcon />}
+                              sx={{
+                                "&.Mui-checked .MuiSvgIcon-root": {
+                                  fill: (theme) => theme.palette.error.main,
+                                },
+                              }}
+                            />
+                            <Typography variant="body2">
+                              {field.label}
+                            </Typography>
+                          </Box>
+                        );
+                      })}
+                    </Box>
+                  </Box>
+                </Stack>
+              </Box>
               {generatedLink && (
                 <Box>
                   <Typography variant="subtitle2" gutterBottom>
@@ -578,18 +1069,28 @@ const AdminIntakesList = () => {
           }
         />
 
-        <Stack spacing={4}>
+        <Stack spacing={4} sx={{ width: "100%" }}>
           {/* Custom Links Section */}
-          <Box>
+          <Box sx={{ width: "100%" }}>
             <Box
               sx={{
                 display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+                flexDirection: { xs: "column", sm: "row" },
+                justifyContent: { xs: "center", sm: "space-between" },
+                alignItems: { xs: "center", sm: "center" },
+                gap: { xs: 2, sm: 0 },
                 mb: 2,
+                width: "100%",
               }}
             >
-              <Typography variant="h5" sx={{ fontWeight: 600 }}>
+              <Typography
+                variant="h5"
+                sx={{
+                  fontWeight: 600,
+                  fontSize: { xs: "1.5rem", sm: "1.75rem" },
+                  textAlign: { xs: "center", sm: "left" },
+                }}
+              >
                 Custom Links
               </Typography>
               {selectedLinks.length > 0 && (
@@ -612,10 +1113,11 @@ const AdminIntakesList = () => {
               <Alert severity="info">No custom links found.</Alert>
             ) : (
               <TableContainer
-                component={Paper}
                 sx={{
                   maxWidth: "100%",
                   overflowX: "auto",
+                  mx: "auto",
+                  width: "100%",
                 }}
               >
                 <Table size="small" sx={{ minWidth: 1000 }}>
@@ -920,14 +1422,28 @@ const AdminIntakesList = () => {
           </Box>
 
           {/* Regular Intakes Section */}
-          <Box>
-            <Typography variant="h5" sx={{ mb: 2, fontWeight: 600 }}>
+          <Box sx={{ width: "100%", maxWidth: "100%" }}>
+            <Typography
+              variant="h5"
+              sx={{
+                mb: 2,
+                fontWeight: 600,
+                textAlign: { xs: "center", sm: "left" },
+              }}
+            >
               Regular Intakes (Submitted Forms)
             </Typography>
             {!intakes || intakes.length === 0 ? (
               <Alert severity="info">No intakes found.</Alert>
             ) : (
-              <TableContainer component={Paper}>
+              <TableContainer
+                sx={{
+                  maxWidth: "100%",
+                  overflowX: "auto",
+                  mx: "auto",
+                  width: "100%",
+                }}
+              >
                 <Table>
                   <TableHead>
                     <TableRow>
@@ -976,7 +1492,7 @@ const AdminIntakesList = () => {
             )}
           </Box>
         </Stack>
-      </Container>
+      </Box>
     </ClientOnly>
   );
 };

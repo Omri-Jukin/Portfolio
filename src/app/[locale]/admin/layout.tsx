@@ -64,16 +64,29 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   return (
     <Box
+      id="admin-page-layout"
       sx={{
-        minHeight: "100vh",
-        backgroundColor: "background.default",
         pt: { xs: 8, md: 10 },
         pb: 4,
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
       }}
     >
-      <Container maxWidth="xl">
+      <Container
+        id="admin-page-container-content"
+        maxWidth="xl"
+        sx={{
+          mx: "auto",
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          px: { xs: 2, sm: 3 },
+        }}
+      >
         {/* Page Header */}
-        <Box sx={{ mb: 4 }}>
+        <Box id="admin-page-header" sx={{ mb: 4 }}>
           <Typography
             variant="h3"
             component="h1"
@@ -89,6 +102,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
           {/* Breadcrumbs */}
           <Breadcrumbs
+            id="admin-page-breadcrumbs"
             aria-label="breadcrumb"
             sx={{
               mb: 2,
@@ -118,13 +132,14 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
         {/* Page Content */}
         <Box
+          id={`admin-page-content-${pageTitle}`}
           sx={{
-            backgroundColor: "background.paper",
-            borderRadius: 3,
-            boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
-            overflow: "hidden",
-            border: "1px solid",
-            borderColor: "divider",
+            width: "100%",
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            mx: "auto",
+            maxWidth: "100%",
           }}
         >
           {children}
