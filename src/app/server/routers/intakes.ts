@@ -213,6 +213,7 @@ export const intakesRouter = router({
         organizationWebsite: z.string().url().optional().or(z.literal("")),
         expiresInDays: z.number().min(1).max(90).default(30),
         locale: z.enum(["en", "es", "fr", "he"]).default("en"),
+        hiddenSections: z.array(z.string()).optional(),
       })
     )
     .mutation(async (opts) => {
@@ -259,6 +260,7 @@ export const intakesRouter = router({
         lastName: input.lastName,
         organizationName: input.organizationName,
         organizationWebsite: input.organizationWebsite || undefined,
+        hiddenSections: input.hiddenSections || [],
         expiresAt,
       });
 
