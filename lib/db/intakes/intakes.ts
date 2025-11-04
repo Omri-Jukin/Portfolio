@@ -2,6 +2,7 @@ import {
   intakes,
   intakeNotes,
   intakeStatusHistory,
+  customIntakeLinks,
 } from "../schema/schema.tables";
 import { eq, desc, and, or, like, sql } from "drizzle-orm";
 import { getDB } from "../client";
@@ -15,6 +16,7 @@ export type CreateIntakeInput = {
   email: string;
   data: Record<string, unknown>;
   proposalMd: string;
+  customLinkId?: string | null;
 };
 
 export const createIntake = async (input: CreateIntakeInput) => {
@@ -35,6 +37,7 @@ export const createIntake = async (input: CreateIntakeInput) => {
       email: input.email,
       data: input.data,
       proposalMd: input.proposalMd,
+      customLinkId: input.customLinkId || null,
       createdAt: new Date(),
       updatedAt: new Date(),
     })
@@ -80,8 +83,12 @@ export const getIntakeById = async (id: string) => {
   }
 
   const intake = await dbClient
-    .select()
+    .select({
+      intake: intakes,
+      customLink: customIntakeLinks,
+    })
     .from(intakes)
+    .leftJoin(customIntakeLinks, eq(intakes.customLinkId, customIntakeLinks.id))
     .where(eq(intakes.id, id))
     .limit(1);
 
@@ -89,7 +96,11 @@ export const getIntakeById = async (id: string) => {
     throw new Error("Intake not found.");
   }
 
-  return intake[0];
+  const result = intake[0];
+  return {
+    ...result.intake,
+    customLink: result.customLink || null,
+  };
 };
 
 // Update intake status

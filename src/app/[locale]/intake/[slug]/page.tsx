@@ -48,6 +48,7 @@ export default async function CustomLinkIntakePage({
     return (
       <CustomLinkIntakeForm
         customLink={{
+          id: customLink.id,
           slug: customLink.slug,
           email: customLink.email,
           firstName: customLink.firstName ?? null,

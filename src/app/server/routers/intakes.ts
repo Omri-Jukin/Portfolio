@@ -38,51 +38,65 @@ import { getIntakesWithReminders } from "$/db/intakes/reminders";
 
 export const intakesRouter = router({
   // Submit intake form (public)
-  submit: procedure.input(intakeFormSchema).mutation(async (opts) => {
-    const { db } = opts.ctx;
-    const { input } = opts;
-    if (!db) throw new Error("Database not available");
+  submit: procedure
+    .input(
+      intakeFormSchema.extend({
+        customLinkId: z.string().uuid().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const { db } = opts.ctx;
+      const { input } = opts;
+      const { customLinkId, ...formData } = input;
+      if (!db) throw new Error("Database not available");
 
-    try {
-      // Generate proposal markdown
-      const proposalMd = renderProposal(input);
+      try {
+        // Generate proposal markdown
+        const proposalMd = renderProposal(formData);
 
-      // Save to database
-      const intake = await createIntake({
-        email: input.contact.email,
-        data: input as unknown as Record<string, unknown>,
-        proposalMd,
-      });
+        // Save to database
+        const intake = await createIntake({
+          email: formData.contact.email,
+          data: formData as unknown as Record<string, unknown>,
+          proposalMd,
+          customLinkId: customLinkId || null,
+        });
 
-      // Log successful intake creation
-      console.log(
-        `[Intake Submit] Successfully created intake with ID: ${intake.id} for email: ${input.contact.email}`
-      );
+        // Log successful intake creation
+        console.log(
+          `[Intake Submit] Successfully created intake with ID: ${
+            intake.id
+          } for email: ${formData.contact.email}${
+            customLinkId ? ` (custom link: ${customLinkId})` : ""
+          }`
+        );
 
-      // Send emails (client + admin)
-      const emailResult = await sendIntakeEmails(input, proposalMd);
-      if (!emailResult.success) {
-        console.error("Failed to send intake emails:", emailResult.error);
-        // Don't fail the request if email fails, but log it
+        // Send emails (client + admin)
+        const emailResult = await sendIntakeEmails(formData, proposalMd);
+        if (!emailResult.success) {
+          console.error("Failed to send intake emails:", emailResult.error);
+          // Don't fail the request if email fails, but log it
+        }
+
+        return {
+          id: intake.id,
+          proposalMarkdown: proposalMd,
+          status: "ok",
+        };
+      } catch (error) {
+        console.error("[Intake Submit] Error creating intake:", error);
+        console.error("[Intake Submit] Error details:", {
+          email: formData.contact.email,
+          customLinkId,
+          errorMessage:
+            error instanceof Error ? error.message : "Unknown error",
+          errorStack: error instanceof Error ? error.stack : undefined,
+        });
+        throw new Error(
+          error instanceof Error ? error.message : "Failed to create intake"
+        );
       }
-
-      return {
-        id: intake.id,
-        proposalMarkdown: proposalMd,
-        status: "ok",
-      };
-    } catch (error) {
-      console.error("[Intake Submit] Error creating intake:", error);
-      console.error("[Intake Submit] Error details:", {
-        email: input.contact.email,
-        errorMessage: error instanceof Error ? error.message : "Unknown error",
-        errorStack: error instanceof Error ? error.stack : undefined,
-      });
-      throw new Error(
-        error instanceof Error ? error.message : "Failed to create intake"
-      );
-    }
-  }),
+    }),
 
   // Get all intakes (admin protected)
   getAll: procedure.query(async (opts) => {
@@ -165,6 +179,22 @@ export const intakesRouter = router({
         reminderDate: intake.reminderDate,
         estimatedValue: intake.estimatedValue,
         riskLevel: intake.riskLevel,
+        customLinkId: intake.customLinkId,
+        customLink: intake.customLink
+          ? {
+              id: intake.customLink.id,
+              slug: intake.customLink.slug,
+              email: intake.customLink.email,
+              firstName: intake.customLink.firstName,
+              lastName: intake.customLink.lastName,
+              organizationName: intake.customLink.organizationName,
+              organizationWebsite: intake.customLink.organizationWebsite,
+              hiddenSections:
+                (intake.customLink.hiddenSections as string[]) || [],
+              expiresAt: intake.customLink.expiresAt,
+              createdAt: intake.customLink.createdAt,
+            }
+          : null,
         createdAt: intake.createdAt,
         updatedAt: intake.updatedAt,
         notes,

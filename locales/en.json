@@ -1487,8 +1487,8 @@
     },
     "success": {
       "title": "Thank You!",
-      "message": "Your project intake form has been submitted successfully. We'll review your information and get back to you soon!",
-      "scheduleMeeting": "Schedule a Meeting"
+      "message": "Your project intake form has been submitted successfully.",
+      "followUp": "I'll review your information and get back to you shortly."
     },
     "customLink": {
       "title": "Welcome!",
