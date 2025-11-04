@@ -89,7 +89,15 @@ export default function CertificationsPage() {
   // Show loading state
   if (isLoading) {
     return (
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Container
+        maxWidth="lg"
+        sx={{
+          py: 4,
+          mx: "auto",
+          width: "100%",
+          px: { xs: 2, sm: 3 },
+        }}
+      >
         <MotionWrapper variant="fadeIn" duration={0.8} delay={0.2}>
           <Box sx={{ textAlign: "center", mb: 6 }}>
             <Typography
@@ -119,7 +127,15 @@ export default function CertificationsPage() {
   // Show error state
   if (error) {
     return (
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Container
+        maxWidth="lg"
+        sx={{
+          py: 4,
+          mx: "auto",
+          width: "100%",
+          px: { xs: 2, sm: 3 },
+        }}
+      >
         <MotionWrapper variant="fadeIn" duration={0.8} delay={0.2}>
           <Box sx={{ textAlign: "center", mb: 6 }}>
             <Typography
@@ -149,7 +165,15 @@ export default function CertificationsPage() {
   // Show empty state
   if (!certifications || certifications.length === 0) {
     return (
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Container
+        maxWidth="lg"
+        sx={{
+          py: 4,
+          mx: "auto",
+          width: "100%",
+          px: { xs: 2, sm: 3 },
+        }}
+      >
         <MotionWrapper variant="fadeIn" duration={0.8} delay={0.2}>
           <Box sx={{ textAlign: "center", mb: 6 }}>
             <Typography
@@ -177,7 +201,15 @@ export default function CertificationsPage() {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container
+      maxWidth="lg"
+      sx={{
+        py: 4,
+        mx: "auto",
+        width: "100%",
+        px: { xs: 2, sm: 3 },
+      }}
+    >
       {/* Header */}
       <MotionWrapper variant="fadeIn" duration={0.8} delay={0.2}>
         <Box sx={{ textAlign: "center", mb: 6 }}>

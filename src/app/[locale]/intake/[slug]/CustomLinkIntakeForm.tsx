@@ -430,6 +430,7 @@ export default function CustomLinkIntakeForm({
               sx={{
                 maxWidth: 600,
                 width: "100%",
+                mx: "auto",
                 textAlign: "center",
                 borderRadius: 4,
                 boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
@@ -482,6 +483,7 @@ export default function CustomLinkIntakeForm({
             sx={{
               maxWidth: 900,
               width: "100%",
+              mx: "auto",
               borderRadius: 4,
               boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
             }}

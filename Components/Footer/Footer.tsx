@@ -2,7 +2,6 @@
 
 import React from "react";
 import { Box, Typography, Link, IconButton } from "@mui/material";
-import Grid from "@mui/material/Grid";
 import { FooterContainer, FooterSection } from "./Footer.style";
 import type { FooterProps } from "./Footer.type";
 import EmailIcon from "@mui/icons-material/Email";
@@ -25,9 +24,35 @@ export const FooterComponent: React.FC<FooterProps> = ({
   contact,
   copyright,
 }) => (
-  <FooterContainer id="footer-container" sx={{ width: "100%" }}>
-    <Grid container spacing={4} justifyContent="center" id="footer-grid">
-      <Grid component="div" id="footer-grid-item">
+  <FooterContainer
+    id="footer-container"
+    sx={{
+      width: "100%",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    }}
+  >
+    <Box
+      id="footer-grid"
+      sx={{
+        maxWidth: "1200px",
+        width: "100%",
+        mx: "auto",
+        px: { xs: 2, sm: 3 },
+        display: "grid",
+        gridTemplateColumns: {
+          xs: "1fr",
+          sm: "repeat(2, 1fr)",
+          md: "repeat(4, 1fr)",
+        },
+        gap: 4,
+      }}
+    >
+      <Box
+        id="footer-grid-item"
+        sx={{ textAlign: { xs: "center", md: "left" } }}
+      >
         <FooterSection id="footer-section">
           <Typography variant="h6" gutterBottom id="footer-title">
             {title}
@@ -36,8 +61,11 @@ export const FooterComponent: React.FC<FooterProps> = ({
             {children}
           </Typography>
         </FooterSection>
-      </Grid>
-      <Grid component="div" id="footer-grid-item">
+      </Box>
+      <Box
+        id="footer-grid-item"
+        sx={{ textAlign: { xs: "center", md: "left" } }}
+      >
         <FooterSection id="footer-section">
           <Typography variant="h6" gutterBottom id="footer-links-title">
             {linksTitle}
@@ -59,8 +87,16 @@ export const FooterComponent: React.FC<FooterProps> = ({
             </Link>
           ))}
         </FooterSection>
-      </Grid>
-      <Grid component="div" id="footer-grid-item">
+      </Box>
+      <Box
+        id="footer-grid-item"
+        sx={{
+          textAlign: { xs: "center", md: "left" },
+          display: "flex",
+          flexDirection: "column",
+          alignItems: { xs: "center", md: "flex-start" },
+        }}
+      >
         <FooterSection id="footer-section">
           <Typography variant="h6" gutterBottom id="footer-social-title">
             {socialTitle}
@@ -93,8 +129,16 @@ export const FooterComponent: React.FC<FooterProps> = ({
             </IconButton>
           ))}
         </FooterSection>
-      </Grid>
-      <Grid component="div" id="footer-grid-item">
+      </Box>
+      <Box
+        id="footer-grid-item"
+        sx={{
+          textAlign: { xs: "center", md: "left" },
+          display: "flex",
+          flexDirection: "column",
+          alignItems: { xs: "center", md: "flex-start" },
+        }}
+      >
         <FooterSection id="footer-section">
           <Typography variant="h6" gutterBottom id="footer-contact-title">
             {contactTitle}
@@ -127,8 +171,8 @@ export const FooterComponent: React.FC<FooterProps> = ({
             </IconButton>
           ))}
         </FooterSection>
-      </Grid>
-    </Grid>
+      </Box>
+    </Box>
     <Box mt={4} textAlign="center" id="footer-copyright-box">
       <Typography variant="body2" color="text.secondary" id="footer-copyright">
         {copyright}

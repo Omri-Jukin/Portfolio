@@ -53,8 +53,10 @@ export const FormContainer = styled(Paper, {
   },
   [theme.breakpoints.down("sm")]: {
     padding: theme.spacing(3),
-    margin: theme.spacing(2),
+    margin: `${theme.spacing(2)} auto`,
     borderRadius: theme.spacing(2),
+    width: "calc(100% - 2rem)",
+    maxWidth: "100%",
   },
 }));
 

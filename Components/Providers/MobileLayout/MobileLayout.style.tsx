@@ -6,6 +6,11 @@ export const MobileLayoutContainer = styled(Box)(() => ({
   flex: 1,
   backgroundColor: "transparent",
   WebkitOverflowScrolling: "touch",
+  width: "100%",
+  maxWidth: "100%",
+  marginLeft: "auto",
+  marginRight: "auto",
+  alignItems: "center",
 
   // Mobile-specific optimizations
   "& *": {
