@@ -1494,6 +1494,7 @@
       "title": "Welcome!",
       "description": "We've pre-filled your information. Please review and complete the form below to get started.",
       "info": "Your information has been pre-filled. Please review and complete any missing fields.",
+      "returnHome": "Return to Home",
       "notFound": {
         "title": "Custom Link Not Found",
         "description": "The custom intake link you're trying to access is either invalid, expired, or no longer exists.",
@@ -1504,6 +1505,35 @@
     "error": {
       "title": "Error",
       "message": "Something went wrong. Please try again."
+    },
+    "templates": {
+      "selectTemplate": "Select a Template (Optional)",
+      "templateApplied": "Template applied! You can edit all fields below.",
+      "clearTemplate": "Clear Template",
+      "none": "None - Start from scratch"
+    },
+    "calculator": {
+      "title": "Project Cost Calculator",
+      "projectType": "Project Type",
+      "complexity": "Complexity",
+      "numPages": "Number of Pages/Screens",
+      "features": "Features",
+      "timelineUrgency": "Timeline Urgency",
+      "techStackComplexity": "Tech Stack Complexity",
+      "costBreakdown": "Cost Breakdown",
+      "baseCost": "Base Cost",
+      "totalEstimate": "Total Estimate",
+      "range": "Range",
+      "copyBreakdown": "Copy Breakdown"
+    },
+    "delete": {
+      "confirmTitle": "Confirm Intake Deletion",
+      "finalConfirmTitle": "Final Confirmation Required",
+      "deleteForever": "Delete Forever",
+      "typeIntakeId": "To confirm, please type the intake ID:",
+      "lastChance": "This is your last chance to cancel!",
+      "permanentlyDelete": "You are about to permanently delete the intake for:",
+      "cannotBeUndone": "This action cannot be undone. All related notes, status history, and reminders will also be deleted."
     }
   }
 }

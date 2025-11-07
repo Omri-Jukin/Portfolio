@@ -31,6 +31,29 @@ jest.mock("nanoid", () => ({
   nanoid: jest.fn(() => "mock-nanoid-id"),
 }));
 
+// Polyfill TextDecoder/TextEncoder for Jest environment (needed for Neon database client)
+if (typeof globalThis.TextDecoder === "undefined") {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { TextDecoder, TextEncoder } = require("util");
+  globalThis.TextDecoder = TextDecoder;
+  globalThis.TextEncoder = TextEncoder;
+}
+
+// Polyfill setImmediate for Jest environment (needed for postgres client)
+if (typeof globalThis.setImmediate === "undefined") {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (globalThis as any).setImmediate = (
+    callback: (...args: unknown[]) => void,
+    ...args: unknown[]
+  ) => {
+    return setTimeout(() => callback(...args), 0);
+  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (globalThis as any).clearImmediate = (id: NodeJS.Timeout) => {
+    clearTimeout(id);
+  };
+}
+
 // Mock certifications module to avoid top-level await issues
 jest.mock("$/db/certifications/certifications", () => ({
   CertificationsService: {

@@ -1,6 +1,6 @@
-import { ContactCardType } from "@/app/[locale]/contact/page.type";
 import { Theme, createTheme } from "@mui/material/styles";
 import { getTextColors } from "./textColors";
+import { ContactCardType } from "#/lib";
 
 // Utility function to extract colors from conic gradients
 const extractColorsFromGradient = (gradient: string): string[] => {

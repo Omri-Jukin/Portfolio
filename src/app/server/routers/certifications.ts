@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { router, procedure, protectedProcedure } from "../trpc";
+import { TRPCError } from "@trpc/server";
+import { router, procedure, editorProcedure } from "../trpc";
 
 const publicProcedure = procedure;
 import { CertificationsService } from "$/db/certifications/certifications";
@@ -75,8 +76,8 @@ const CreateCertificationSchema = z.object({
   skills: z
     .array(z.string().min(1).max(50))
     .min(1, "At least one skill is required"),
-  issueDate: z.date(),
-  expiryDate: z.date().optional(),
+  issueDate: z.coerce.date(),
+  expiryDate: z.coerce.date().optional(),
   credentialId: z.string().max(100).optional(),
   verificationUrl: z.string().url().optional().or(z.literal("")),
   icon: z.string().max(10).optional(),
@@ -118,8 +119,23 @@ export const certificationsRouter = router({
 
   getById: publicProcedure
     .input(z.object({ id: z.string() }))
-    .query(async ({ input }) => {
-      return await CertificationsService.getById(input.id);
+    .query(async ({ input, ctx }) => {
+      const certification = await CertificationsService.getById(input.id);
+
+      // Public users can only see visible certifications
+      // Admin/editor users can see all certifications
+      if (!certification) {
+        return null;
+      }
+
+      const userRole = ctx.user?.role || "visitor";
+      const canSeeAll = userRole === "admin" || userRole === "editor";
+
+      if (!canSeeAll && !certification.isVisible) {
+        return null; // Return null instead of throwing to prevent information leakage
+      }
+
+      return certification;
     }),
 
   getByCategory: publicProcedure
@@ -141,11 +157,11 @@ export const certificationsRouter = router({
   }),
 
   // Protected routes (admin only)
-  getAllAdmin: protectedProcedure.query(async () => {
+  getAllAdmin: editorProcedure.query(async () => {
     return await CertificationsService.getAll(false);
   }),
 
-  create: protectedProcedure
+  create: editorProcedure
     .input(CreateCertificationSchema)
     .mutation(async ({ input, ctx }) => {
       // Convert empty string URLs to undefined
@@ -159,14 +175,34 @@ export const certificationsRouter = router({
       return await CertificationsService.create(cleanInput);
     }),
 
-  update: protectedProcedure
+  update: editorProcedure
     .input(
       z.object({
         id: z.string(),
         data: UpdateCertificationSchema,
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
+      // Verify createdBy matches session user (unless admin)
+      const existing = await CertificationsService.getById(input.id);
+      if (!existing) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Certification not found",
+        });
+      }
+
+      const userRole = ctx.user.role || "visitor";
+      const isAdmin = userRole === "admin";
+
+      // Check if user is trying to update a record they didn't create
+      if (!isAdmin && existing.createdBy !== ctx.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You can only update certifications you created",
+        });
+      }
+
       // Convert empty string URLs to undefined
       const cleanData = {
         ...input.data,
@@ -179,9 +215,29 @@ export const certificationsRouter = router({
       return await CertificationsService.update(input.id, cleanData);
     }),
 
-  delete: protectedProcedure
+  delete: editorProcedure
     .input(z.object({ id: z.string() }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
+      // Verify createdBy matches session user (unless admin)
+      const existing = await CertificationsService.getById(input.id);
+      if (!existing) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Certification not found",
+        });
+      }
+
+      const userRole = ctx.user.role || "visitor";
+      const isAdmin = userRole === "admin";
+
+      // Check if user is trying to delete a record they didn't create
+      if (!isAdmin && existing.createdBy !== ctx.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You can only delete certifications you created",
+        });
+      }
+
       const success = await CertificationsService.delete(input.id);
       if (!success) {
         throw new Error("Failed to delete certification");
@@ -189,14 +245,14 @@ export const certificationsRouter = router({
       return { success: true };
     }),
 
-  reorder: protectedProcedure
+  reorder: editorProcedure
     .input(ReorderCertificationsSchema)
     .mutation(async ({ input }) => {
       await CertificationsService.updateDisplayOrder(input);
       return { success: true };
     }),
 
-  toggleVisibility: protectedProcedure
+  toggleVisibility: editorProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input }) => {
       const updated = await CertificationsService.toggleVisibility(input.id);
@@ -206,19 +262,19 @@ export const certificationsRouter = router({
       return updated;
     }),
 
-  markAsExpired: protectedProcedure
+  markAsExpired: editorProcedure
     .input(z.object({ ids: z.array(z.string()) }))
     .mutation(async ({ input }) => {
       await CertificationsService.markAsExpired(input.ids);
       return { success: true };
     }),
 
-  getExpired: protectedProcedure.query(async () => {
+  getExpired: editorProcedure.query(async () => {
     return await CertificationsService.getExpiredCertifications();
   }),
 
   // Bulk operations
-  bulkUpdate: protectedProcedure
+  bulkUpdate: editorProcedure
     .input(
       z.object({
         ids: z.array(z.string()),
@@ -232,7 +288,7 @@ export const certificationsRouter = router({
       return results.filter(Boolean);
     }),
 
-  bulkDelete: protectedProcedure
+  bulkDelete: editorProcedure
     .input(z.object({ ids: z.array(z.string()) }))
     .mutation(async ({ input }) => {
       const results = await Promise.all(

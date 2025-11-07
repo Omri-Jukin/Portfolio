@@ -1,10 +1,10 @@
 import { z } from "zod";
-import { router, procedure } from "../trpc";
+import { router, adminProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 
 export const uploadRouter = router({
-  // Get upload URL and policy for client-side upload
-  getUploadUrl: procedure
+  // Get upload URL and policy for client-side upload (admin only)
+  getUploadUrl: adminProcedure
     .input(
       z.object({
         fileName: z.string(),
@@ -13,15 +13,7 @@ export const uploadRouter = router({
       })
     )
     .mutation(async (opts) => {
-      const { input, ctx } = opts;
-
-      // Check if user is admin
-      if (!ctx.user || ctx.user.role !== "admin") {
-        throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "Only admins can upload files",
-        });
-      }
+      const { input } = opts;
 
       // Validate file type
       const allowedTypes = [
@@ -61,17 +53,7 @@ export const uploadRouter = router({
     }),
 
   // Get upload statistics (admin only)
-  getUploadStats: procedure.query(async (opts) => {
-    const { ctx } = opts;
-
-    // Check if user is admin
-    if (!ctx.user || ctx.user.role !== "admin") {
-      throw new TRPCError({
-        code: "FORBIDDEN",
-        message: "Only admins can view upload stats",
-      });
-    }
-
+  getUploadStats: adminProcedure.query(async () => {
     // This could return upload statistics, file count, etc.
     return {
       totalUploads: 0, // You could implement this by tracking uploads

@@ -1477,6 +1477,7 @@
       "title": "¡Bienvenido!",
       "description": "Hemos prellenado tu información. Por favor revisa y completa el formulario a continuación para comenzar.",
       "info": "Tu información ha sido prellenada. Por favor revisa y completa los campos faltantes.",
+      "returnHome": "Volver a la Página Principal",
       "notFound": {
         "title": "Enlace Personalizado No Encontrado",
         "description": "El enlace de ingreso personalizado que estás intentando acceder es inválido, ha expirado o ya no existe.",
@@ -1487,6 +1488,35 @@
     "error": {
       "title": "Error",
       "message": "Algo salió mal. Por favor, inténtalo de nuevo."
+    },
+    "templates": {
+      "selectTemplate": "Seleccionar una Plantilla (Opcional)",
+      "templateApplied": "¡Plantilla aplicada! Puedes editar todos los campos a continuación.",
+      "clearTemplate": "Limpiar Plantilla",
+      "none": "Ninguna - Empezar desde cero"
+    },
+    "calculator": {
+      "title": "Calculadora de Costos de Proyecto",
+      "projectType": "Tipo de Proyecto",
+      "complexity": "Complejidad",
+      "numPages": "Número de Páginas/Pantallas",
+      "features": "Características",
+      "timelineUrgency": "Urgencia de Cronograma",
+      "techStackComplexity": "Complejidad de Stack Tecnológico",
+      "costBreakdown": "Desglose de Costos",
+      "baseCost": "Costo Base",
+      "totalEstimate": "Estimación Total",
+      "range": "Rango",
+      "copyBreakdown": "Copiar Desglose"
+    },
+    "delete": {
+      "confirmTitle": "Confirmar Eliminación de Ingreso",
+      "finalConfirmTitle": "Confirmación Final Requerida",
+      "deleteForever": "Eliminar Permanentemente",
+      "typeIntakeId": "Para confirmar, por favor escribe el ID del ingreso:",
+      "lastChance": "¡Esta es tu última oportunidad de cancelar!",
+      "permanentlyDelete": "Estás a punto de eliminar permanentemente el ingreso para:",
+      "cannotBeUndone": "Esta acción no se puede deshacer. Todas las notas relacionadas, historial de estado y recordatorios también se eliminarán."
     }
   }
 }

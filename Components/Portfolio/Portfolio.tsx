@@ -38,6 +38,7 @@ import {
   CodeExampleBox,
   ProblemSolution,
   ArchitectureSection,
+  StyledList,
 } from "./Portfolio.style";
 import type { PortfolioProps } from "./Portfolio.type";
 import { api } from "$/trpc/client";
@@ -117,6 +118,8 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const transformProject = (project: any): IProject => ({
     id: project.id,
+    createdById: project.createdById,
+    createdBy: project.createdBy,
     createdAt: project.createdAt,
     updatedAt: project.updatedAt,
     isVisible: project.isVisible,
@@ -438,29 +441,24 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                           {project.solution?.methodology}
                           <br />
                           <strong>Key Decisions:</strong>
-                          <ul style={{ margin: "8px 0", paddingLeft: "20px" }}>
+                          <StyledList>
                             {project.solution?.keyDecisions.map(
                               (decision: string, idx: number) => (
                                 <li key={idx}>{decision}</li>
                               )
                             )}
-                          </ul>
+                          </StyledList>
                           {project.solution?.alternatives &&
                             project.solution.alternatives.length > 0 && (
                               <>
                                 <strong>Alternatives Considered:</strong>
-                                <ul
-                                  style={{
-                                    margin: "8px 0",
-                                    paddingLeft: "20px",
-                                  }}
-                                >
+                                <StyledList>
                                   {project.solution.alternatives.map(
                                     (alt: string, idx: number) => (
                                       <li key={idx}>{alt}</li>
                                     )
                                   )}
-                                </ul>
+                                </StyledList>
                               </>
                             )}
                         </Typography>
@@ -485,13 +483,13 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                           {project.architecture?.overview}
                           <br />
                           <strong>Components:</strong>
-                          <ul style={{ margin: "8px 0", paddingLeft: "20px" }}>
+                          <StyledList>
                             {project.architecture?.components.map(
                               (component: string, idx: number) => (
                                 <li key={idx}>{component}</li>
                               )
                             )}
-                          </ul>
+                          </StyledList>
                           <strong>Data Flow:</strong>{" "}
                           {project.architecture?.dataFlow}
                           <br />

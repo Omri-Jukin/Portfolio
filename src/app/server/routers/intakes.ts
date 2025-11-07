@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { router, procedure, protectedProcedure } from "../trpc";
+import { router, procedure, adminProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import {
   createIntake,
@@ -16,6 +16,7 @@ import {
   searchIntakes,
   checkReturningClient,
   getIntakeStatistics,
+  deleteIntake,
 } from "../../../../lib/db/intakes/intakes";
 import type {
   IntakeStatus,
@@ -35,6 +36,20 @@ import {
 } from "$/db/intakes/customLinks";
 import { getCustomLinkBySlug } from "$/db/intakes/customLinks";
 import { getIntakesWithReminders } from "$/db/intakes/reminders";
+import {
+  createIntakeTemplate,
+  getIntakeTemplates,
+  getIntakeTemplateById,
+  updateIntakeTemplate,
+  deleteIntakeTemplate,
+} from "$/db/intakes/templates";
+import {
+  createCalculatorSetting,
+  getCalculatorSettings,
+  getCalculatorSettingById,
+  updateCalculatorSetting,
+  deleteCalculatorSetting,
+} from "$/db/intakes/calculatorSettings";
 
 export const intakesRouter = router({
   // Submit intake form (public)
@@ -99,12 +114,9 @@ export const intakesRouter = router({
     }),
 
   // Get all intakes (admin protected)
-  getAll: procedure.query(async (opts) => {
+  getAll: adminProcedure.query(async (opts) => {
     const { db, user } = opts.ctx;
     if (!db) throw new Error("Database not available");
-    if (!user || user.role !== "admin") {
-      throw new Error("Unauthorized");
-    }
 
     const intakes = await getIntakes();
     console.log(
@@ -154,15 +166,12 @@ export const intakesRouter = router({
   }),
 
   // Get intake by ID (admin protected) - Enhanced with notes and history
-  getById: procedure
+  getById: adminProcedure
     .input(z.object({ id: z.string().uuid() }))
     .query(async (opts) => {
-      const { db, user } = opts.ctx;
+      const { db } = opts.ctx;
       const { input } = opts;
       if (!db) throw new Error("Database not available");
-      if (!user || user.role !== "admin") {
-        throw new Error("Unauthorized");
-      }
 
       const intake = await getIntakeById(input.id);
       const notes = await getIntakeNotes(input.id);
@@ -203,7 +212,7 @@ export const intakesRouter = router({
     }),
 
   // Generate custom intake link (admin protected)
-  generateCustomLink: protectedProcedure
+  generateCustomLink: adminProcedure
     .input(
       z.object({
         email: z.string().email("Invalid email address"),
@@ -217,11 +226,8 @@ export const intakesRouter = router({
       })
     )
     .mutation(async (opts) => {
-      const { user, db } = opts.ctx;
+      const { db } = opts.ctx;
       const { input } = opts;
-      if (!user || user.role !== "admin") {
-        throw new Error("Unauthorized");
-      }
       if (!db) {
         throw new Error("Database not available");
       }
@@ -308,12 +314,9 @@ export const intakesRouter = router({
     }),
 
   // Get all custom links (admin protected)
-  getAllCustomLinks: protectedProcedure.query(async (opts) => {
-    const { user, db } = opts.ctx;
+  getAllCustomLinks: adminProcedure.query(async (opts) => {
+    const { db } = opts.ctx;
     if (!db) throw new Error("Database not available");
-    if (!user || user.role !== "admin") {
-      throw new Error("Unauthorized");
-    }
 
     const links = await getAllCustomLinks();
     return links.map((link) => ({
@@ -330,23 +333,16 @@ export const intakesRouter = router({
   }),
 
   // Delete a single custom link (admin protected)
-  deleteCustomLink: protectedProcedure
+  deleteCustomLink: adminProcedure
     .input(z.object({ id: z.string().uuid() }))
     .mutation(async (opts) => {
-      const { user, db } = opts.ctx;
+      const { db } = opts.ctx;
       const { input } = opts;
 
       if (!db) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Database connection unavailable. Please try again later.",
-        });
-      }
-
-      if (!user || user.role !== "admin") {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Unauthorized. Admin access required.",
         });
       }
 
@@ -377,23 +373,16 @@ export const intakesRouter = router({
     }),
 
   // Delete multiple custom links (admin protected)
-  deleteCustomLinks: protectedProcedure
+  deleteCustomLinks: adminProcedure
     .input(z.object({ ids: z.array(z.string().uuid()) }))
     .mutation(async (opts) => {
-      const { user, db } = opts.ctx;
+      const { db } = opts.ctx;
       const { input } = opts;
 
       if (!db) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Database connection unavailable. Please try again later.",
-        });
-      }
-
-      if (!user || user.role !== "admin") {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Unauthorized. Admin access required.",
         });
       }
 
@@ -424,7 +413,7 @@ export const intakesRouter = router({
     }),
 
   // Update intake status (admin protected)
-  updateStatus: protectedProcedure
+  updateStatus: adminProcedure
     .input(
       z.object({
         id: z.string().uuid(),
@@ -447,8 +436,6 @@ export const intakesRouter = router({
           code: "INTERNAL_SERVER_ERROR",
           message: "Database not available",
         });
-      if (!user || user.role !== "admin")
-        throw new TRPCError({ code: "UNAUTHORIZED", message: "Unauthorized" });
 
       try {
         const updated = await updateIntakeStatus(
@@ -467,10 +454,10 @@ export const intakesRouter = router({
     }),
 
   // Toggle flagged status (admin protected)
-  toggleFlag: protectedProcedure
+  toggleFlag: adminProcedure
     .input(z.object({ id: z.string().uuid() }))
     .mutation(async (opts) => {
-      const { user, db } = opts.ctx;
+      const { db } = opts.ctx;
       const { input } = opts;
 
       if (!db)
@@ -478,8 +465,6 @@ export const intakesRouter = router({
           code: "INTERNAL_SERVER_ERROR",
           message: "Database not available",
         });
-      if (!user || user.role !== "admin")
-        throw new TRPCError({ code: "UNAUTHORIZED", message: "Unauthorized" });
 
       try {
         const updated = await toggleIntakeFlag(input.id);
@@ -494,7 +479,7 @@ export const intakesRouter = router({
     }),
 
   // Add internal note (admin protected)
-  addNote: protectedProcedure
+  addNote: adminProcedure
     .input(
       z.object({
         intakeId: z.string().uuid(),
@@ -517,8 +502,6 @@ export const intakesRouter = router({
           code: "INTERNAL_SERVER_ERROR",
           message: "Database not available",
         });
-      if (!user || user.role !== "admin")
-        throw new TRPCError({ code: "UNAUTHORIZED", message: "Unauthorized" });
 
       try {
         const note = await addIntakeNote(
@@ -538,10 +521,10 @@ export const intakesRouter = router({
     }),
 
   // Delete internal note (admin protected)
-  deleteNote: protectedProcedure
+  deleteNote: adminProcedure
     .input(z.object({ noteId: z.string().uuid() }))
     .mutation(async (opts) => {
-      const { user, db } = opts.ctx;
+      const { db } = opts.ctx;
       const { input } = opts;
 
       if (!db)
@@ -549,8 +532,6 @@ export const intakesRouter = router({
           code: "INTERNAL_SERVER_ERROR",
           message: "Database not available",
         });
-      if (!user || user.role !== "admin")
-        throw new TRPCError({ code: "UNAUTHORIZED", message: "Unauthorized" });
 
       try {
         const deleted = await deleteIntakeNote(input.noteId);
@@ -569,7 +550,7 @@ export const intakesRouter = router({
     }),
 
   // Set reminder (admin protected)
-  setReminder: protectedProcedure
+  setReminder: adminProcedure
     .input(
       z.object({
         id: z.string().uuid(),
@@ -591,7 +572,7 @@ export const intakesRouter = router({
       })
     )
     .mutation(async (opts) => {
-      const { user, db } = opts.ctx;
+      const { db } = opts.ctx;
       const { input } = opts;
 
       if (!db)
@@ -599,8 +580,6 @@ export const intakesRouter = router({
           code: "INTERNAL_SERVER_ERROR",
           message: "Database not available",
         });
-      if (!user || user.role !== "admin")
-        throw new TRPCError({ code: "UNAUTHORIZED", message: "Unauthorized" });
 
       try {
         const updated = await setIntakeReminder(input.id, input.reminderDate);
@@ -615,7 +594,7 @@ export const intakesRouter = router({
     }),
 
   // Update estimated value (admin protected)
-  updateEstimatedValue: protectedProcedure
+  updateEstimatedValue: adminProcedure
     .input(
       z.object({
         id: z.string().uuid(),
@@ -624,7 +603,7 @@ export const intakesRouter = router({
       })
     )
     .mutation(async (opts) => {
-      const { user, db } = opts.ctx;
+      const { db } = opts.ctx;
       const { input } = opts;
 
       if (!db)
@@ -632,8 +611,6 @@ export const intakesRouter = router({
           code: "INTERNAL_SERVER_ERROR",
           message: "Database not available",
         });
-      if (!user || user.role !== "admin")
-        throw new TRPCError({ code: "UNAUTHORIZED", message: "Unauthorized" });
 
       try {
         const updated = await updateIntakeEstimatedValue(
@@ -658,7 +635,7 @@ export const intakesRouter = router({
     }),
 
   // Search intakes (admin protected)
-  search: protectedProcedure
+  search: adminProcedure
     .input(
       z.object({
         searchTerm: z.string().optional(),
@@ -675,12 +652,12 @@ export const intakesRouter = router({
           )
           .optional(),
         flagged: z.boolean().optional(),
-        startDate: z.date().optional(),
-        endDate: z.date().optional(),
+        startDate: z.coerce.date().optional(),
+        endDate: z.coerce.date().optional(),
       })
     )
     .query(async (opts) => {
-      const { user, db } = opts.ctx;
+      const { db } = opts.ctx;
       const { input } = opts;
 
       if (!db)
@@ -688,8 +665,6 @@ export const intakesRouter = router({
           code: "INTERNAL_SERVER_ERROR",
           message: "Database not available",
         });
-      if (!user || user.role !== "admin")
-        throw new TRPCError({ code: "UNAUTHORIZED", message: "Unauthorized" });
 
       try {
         const results = await searchIntakes({
@@ -755,10 +730,10 @@ export const intakesRouter = router({
     }),
 
   // Check returning client (admin protected)
-  checkReturningClient: protectedProcedure
+  checkReturningClient: adminProcedure
     .input(z.object({ email: z.string().email() }))
     .query(async (opts) => {
-      const { user, db } = opts.ctx;
+      const { db } = opts.ctx;
       const { input } = opts;
 
       if (!db)
@@ -766,8 +741,6 @@ export const intakesRouter = router({
           code: "INTERNAL_SERVER_ERROR",
           message: "Database not available",
         });
-      if (!user || user.role !== "admin")
-        throw new TRPCError({ code: "UNAUTHORIZED", message: "Unauthorized" });
 
       try {
         const result = await checkReturningClient(input.email);
@@ -784,16 +757,14 @@ export const intakesRouter = router({
     }),
 
   // Get intake statistics (admin protected)
-  getStatistics: protectedProcedure.query(async (opts) => {
-    const { user, db } = opts.ctx;
+  getStatistics: adminProcedure.query(async (opts) => {
+    const { db } = opts.ctx;
 
     if (!db)
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
         message: "Database not available",
       });
-    if (!user || user.role !== "admin")
-      throw new TRPCError({ code: "UNAUTHORIZED", message: "Unauthorized" });
 
     try {
       const stats = await getIntakeStatistics();
@@ -808,7 +779,7 @@ export const intakesRouter = router({
   }),
 
   // Get intakes with reminders (admin protected)
-  getReminders: protectedProcedure
+  getReminders: adminProcedure
     .input(
       z
         .object({
@@ -817,7 +788,7 @@ export const intakesRouter = router({
         .optional()
     )
     .query(async (opts) => {
-      const { user, db } = opts.ctx;
+      const { db } = opts.ctx;
       const { input } = opts;
 
       if (!db)
@@ -825,8 +796,6 @@ export const intakesRouter = router({
           code: "INTERNAL_SERVER_ERROR",
           message: "Database not available",
         });
-      if (!user || user.role !== "admin")
-        throw new TRPCError({ code: "UNAUTHORIZED", message: "Unauthorized" });
 
       try {
         const reminders = await getIntakesWithReminders(input?.filter);
@@ -845,7 +814,7 @@ export const intakesRouter = router({
     }),
 
   // Bulk set reminders (admin protected)
-  bulkSetReminders: protectedProcedure
+  bulkSetReminders: adminProcedure
     .input(
       z.object({
         intakeIds: z.array(z.string().uuid()),
@@ -863,7 +832,7 @@ export const intakesRouter = router({
       })
     )
     .mutation(async (opts) => {
-      const { user, db } = opts.ctx;
+      const { db } = opts.ctx;
       const { input } = opts;
 
       if (!db)
@@ -871,8 +840,6 @@ export const intakesRouter = router({
           code: "INTERNAL_SERVER_ERROR",
           message: "Database not available",
         });
-      if (!user || user.role !== "admin")
-        throw new TRPCError({ code: "UNAUTHORIZED", message: "Unauthorized" });
 
       try {
         const results = await Promise.allSettled(
@@ -902,14 +869,14 @@ export const intakesRouter = router({
     }),
 
   // Bulk clear reminders (admin protected)
-  bulkClearReminders: protectedProcedure
+  bulkClearReminders: adminProcedure
     .input(
       z.object({
         intakeIds: z.array(z.string().uuid()),
       })
     )
     .mutation(async (opts) => {
-      const { user, db } = opts.ctx;
+      const { db } = opts.ctx;
       const { input } = opts;
 
       if (!db)
@@ -917,8 +884,6 @@ export const intakesRouter = router({
           code: "INTERNAL_SERVER_ERROR",
           message: "Database not available",
         });
-      if (!user || user.role !== "admin")
-        throw new TRPCError({ code: "UNAUTHORIZED", message: "Unauthorized" });
 
       try {
         const results = await Promise.allSettled(
@@ -946,4 +911,390 @@ export const intakesRouter = router({
         });
       }
     }),
+
+  // Delete intake (admin protected)
+  delete: adminProcedure
+    .input(
+      z.object({
+        id: z.string().uuid(),
+      })
+    )
+    .mutation(async (opts) => {
+      const { db } = opts.ctx;
+      const { input } = opts;
+
+      if (!db)
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Database not available",
+        });
+
+      try {
+        const deleted = await deleteIntake(input.id);
+        return { success: true, deleted };
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message:
+            error instanceof Error ? error.message : "Failed to delete intake",
+        });
+      }
+    }),
+
+  // Template management routes
+  templates: router({
+    // Get all templates (public for form, admin for management)
+    getAll: procedure
+      .input(
+        z
+          .object({
+            includeInactive: z.boolean().optional().default(false),
+          })
+          .optional()
+      )
+      .query(async (opts) => {
+        const { db } = opts.ctx;
+        const { input } = opts;
+        if (!db) throw new Error("Database not available");
+
+        try {
+          const templates = await getIntakeTemplates(
+            input?.includeInactive ?? false
+          );
+          return templates.map((template) => ({
+            ...template,
+            templateData: template.templateData as unknown,
+            createdAt: template.createdAt.toISOString(),
+            updatedAt: template.updatedAt.toISOString(),
+          }));
+        } catch (error) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message:
+              error instanceof Error
+                ? error.message
+                : "Failed to fetch templates",
+          });
+        }
+      }),
+
+    // Get template by ID
+    getById: procedure
+      .input(z.object({ id: z.string().uuid() }))
+      .query(async (opts) => {
+        const { db } = opts.ctx;
+        const { input } = opts;
+        if (!db) throw new Error("Database not available");
+
+        try {
+          const template = await getIntakeTemplateById(input.id);
+          return {
+            ...template,
+            templateData: template.templateData as unknown,
+            createdAt: template.createdAt.toISOString(),
+            updatedAt: template.updatedAt.toISOString(),
+          };
+        } catch (error) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message:
+              error instanceof Error
+                ? error.message
+                : "Failed to fetch template",
+          });
+        }
+      }),
+
+    // Create template (admin only)
+    create: adminProcedure
+      .input(
+        z.object({
+          name: z.string().min(1).max(200),
+          description: z.string().optional(),
+          category: z.string().min(1),
+          templateData: intakeFormSchema,
+          isActive: z.boolean().optional().default(true),
+          displayOrder: z.number().int().optional().default(0),
+        })
+      )
+      .mutation(async (opts) => {
+        const { db } = opts.ctx;
+        const { input } = opts;
+
+        if (!db)
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Database not available",
+          });
+
+        try {
+          const template = await createIntakeTemplate(input);
+          return {
+            ...template,
+            templateData: template.templateData as unknown,
+            createdAt: template.createdAt.toISOString(),
+            updatedAt: template.updatedAt.toISOString(),
+          };
+        } catch (error) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message:
+              error instanceof Error
+                ? error.message
+                : "Failed to create template",
+          });
+        }
+      }),
+
+    // Update template (admin only)
+    update: adminProcedure
+      .input(
+        z.object({
+          id: z.string().uuid(),
+          name: z.string().min(1).max(200).optional(),
+          description: z.string().optional(),
+          category: z.string().min(1).optional(),
+          templateData: intakeFormSchema.optional(),
+          isActive: z.boolean().optional(),
+          displayOrder: z.number().int().optional(),
+        })
+      )
+      .mutation(async (opts) => {
+        const { db } = opts.ctx;
+        const { input } = opts;
+        const { id, ...updateData } = input;
+
+        if (!db)
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Database not available",
+          });
+
+        try {
+          const template = await updateIntakeTemplate(id, updateData);
+          return {
+            ...template,
+            templateData: template.templateData as unknown,
+            createdAt: template.createdAt.toISOString(),
+            updatedAt: template.updatedAt.toISOString(),
+          };
+        } catch (error) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message:
+              error instanceof Error
+                ? error.message
+                : "Failed to update template",
+          });
+        }
+      }),
+
+    // Delete template (admin only)
+    delete: adminProcedure
+      .input(z.object({ id: z.string().uuid() }))
+      .mutation(async (opts) => {
+        const { db } = opts.ctx;
+        const { input } = opts;
+
+        if (!db)
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Database not available",
+          });
+
+        try {
+          await deleteIntakeTemplate(input.id);
+          return { success: true };
+        } catch (error) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message:
+              error instanceof Error
+                ? error.message
+                : "Failed to delete template",
+          });
+        }
+      }),
+  }),
+
+  // Calculator settings routes
+  calculatorSettings: router({
+    // Get all settings (public for calculator, admin for management)
+    getAll: procedure
+      .input(
+        z
+          .object({
+            includeInactive: z.boolean().optional().default(false),
+          })
+          .optional()
+      )
+      .query(async (opts) => {
+        const { db } = opts.ctx;
+        const { input } = opts;
+        if (!db) throw new Error("Database not available");
+
+        try {
+          const includeInactive = input?.includeInactive ?? false;
+          const settings = await getCalculatorSettings(includeInactive);
+          return settings.map((setting) => ({
+            ...setting,
+            settingValue: setting.settingValue as unknown,
+            createdAt: setting.createdAt.toISOString(),
+            updatedAt: setting.updatedAt.toISOString(),
+          }));
+        } catch (error) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message:
+              error instanceof Error
+                ? error.message
+                : "Failed to fetch calculator settings",
+          });
+        }
+      }),
+
+    // Get setting by ID
+    getById: procedure
+      .input(z.object({ id: z.string().uuid() }))
+      .query(async (opts) => {
+        const { db } = opts.ctx;
+        const { input } = opts;
+        if (!db) throw new Error("Database not available");
+
+        try {
+          const setting = await getCalculatorSettingById(input.id);
+          return {
+            ...setting,
+            settingValue: setting.settingValue as unknown,
+            createdAt: setting.createdAt.toISOString(),
+            updatedAt: setting.updatedAt.toISOString(),
+          };
+        } catch (error) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message:
+              error instanceof Error
+                ? error.message
+                : "Failed to fetch calculator setting",
+          });
+        }
+      }),
+
+    // Create setting (admin only)
+    create: adminProcedure
+      .input(
+        z.object({
+          settingType: z.enum(["base_rate", "feature_cost", "multiplier"]),
+          settingKey: z.string().min(1),
+          settingValue: z.union([z.number(), z.record(z.string(), z.number())]),
+          displayName: z.string().min(1),
+          description: z.string().optional(),
+          displayOrder: z.number().int().optional().default(0),
+          isActive: z.boolean().optional().default(true),
+        })
+      )
+      .mutation(async (opts) => {
+        const { db } = opts.ctx;
+        const { input } = opts;
+
+        if (!db)
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Database not available",
+          });
+
+        try {
+          const setting = await createCalculatorSetting(input);
+          return {
+            ...setting,
+            settingValue: setting.settingValue as unknown,
+            createdAt: setting.createdAt.toISOString(),
+            updatedAt: setting.updatedAt.toISOString(),
+          };
+        } catch (error) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message:
+              error instanceof Error
+                ? error.message
+                : "Failed to create calculator setting",
+          });
+        }
+      }),
+
+    // Update setting (admin only)
+    update: adminProcedure
+      .input(
+        z.object({
+          id: z.string().uuid(),
+          settingType: z
+            .enum(["base_rate", "feature_cost", "multiplier"])
+            .optional(),
+          settingKey: z.string().min(1).optional(),
+          settingValue: z
+            .union([z.number(), z.record(z.string(), z.number())])
+            .optional(),
+          displayName: z.string().min(1).optional(),
+          description: z.string().optional(),
+          displayOrder: z.number().int().optional(),
+          isActive: z.boolean().optional(),
+        })
+      )
+      .mutation(async (opts) => {
+        const { db } = opts.ctx;
+        const { input } = opts;
+        const { id, ...updateData } = input;
+
+        if (!db)
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Database not available",
+          });
+
+        try {
+          const setting = await updateCalculatorSetting(id, updateData);
+          return {
+            ...setting,
+            settingValue: setting.settingValue as unknown,
+            createdAt: setting.createdAt.toISOString(),
+            updatedAt: setting.updatedAt.toISOString(),
+          };
+        } catch (error) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message:
+              error instanceof Error
+                ? error.message
+                : "Failed to update calculator setting",
+          });
+        }
+      }),
+
+    // Delete setting (admin only)
+    delete: adminProcedure
+      .input(z.object({ id: z.string().uuid() }))
+      .mutation(async (opts) => {
+        const { db } = opts.ctx;
+        const { input } = opts;
+
+        if (!db)
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Database not available",
+          });
+
+        try {
+          await deleteCalculatorSetting(input.id);
+          return { success: true };
+        } catch (error) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message:
+              error instanceof Error
+                ? error.message
+                : "Failed to delete calculator setting",
+          });
+        }
+      }),
+  }),
 });

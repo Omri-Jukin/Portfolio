@@ -7,6 +7,8 @@ import {
   boolean,
   jsonb,
   primaryKey,
+  numeric,
+  unique,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import {
@@ -94,6 +96,27 @@ export const verificationToken = pgTable(
 // ============================================
 // Portfolio Application Tables
 // ============================================
+
+// Roles table - stores available user roles dynamically
+export const roles = pgTable("roles", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  name: text("name").notNull().unique(), // e.g., "admin", "editor", "user", "visitor"
+  displayName: text("display_name").notNull(), // Human-readable name
+  description: text("description"),
+  permissions: jsonb("permissions").$type<{
+    canAccessAdmin?: boolean;
+    canEditContent?: boolean;
+    canEditTables?: string[]; // List of table names this role can edit
+  }>(),
+  isActive: boolean("is_active").notNull().default(true),
+  displayOrder: integer("display_order").notNull().default(0),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
 
 // Users table - minimal for portfolio admin
 export const users = pgTable("users", {
@@ -572,3 +595,202 @@ export const adminDashboardSections = pgTable("admin_dashboard_sections", {
     .notNull()
     .defaultNow(),
 });
+
+// Intake templates table - stores reusable intake form templates
+export const intakeTemplates = pgTable("intake_templates", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  name: text("name").notNull().unique(),
+  description: text("description"),
+  category: text("category").notNull(),
+  templateData: jsonb("template_data").notNull(),
+  isActive: boolean("is_active").notNull().default(true),
+  displayOrder: integer("display_order").notNull().default(0),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+// Calculator settings table - stores configurable calculator rates and multipliers
+export const calculatorSettings = pgTable("calculator_settings", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  settingType: text("setting_type").notNull(), // "base_rate", "feature_cost", "multiplier", "page_cost", "meta"
+  settingKey: text("setting_key").notNull(), // e.g., "website", "app", "cms", "auth", "complexity", "page", etc.
+  settingValue: jsonb("setting_value").notNull(), // Stores the actual value(s) - can be number, object, or {value: ...}
+  displayName: text("display_name").notNull(),
+  description: text("description"),
+  displayOrder: integer("display_order").notNull().default(0),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+// Pricing discounts table - stores promotional discount codes with usage limits
+export const pricingDiscounts = pgTable("pricing_discounts", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  code: text("code").notNull().unique(), // e.g., WELCOME50
+  description: text("description"),
+  discountType: text("discount_type").notNull(), // 'percent' | 'fixed'
+  amount: numeric("amount", { precision: 10, scale: 2 }).notNull(), // percent or ILS amount
+  currency: text("currency").notNull().default("ILS"), // default currency for fixed discounts
+  appliesTo: jsonb("applies_to") // projectTypes?: string[]; features?: string[]; clientTypes?: string[]; excludeClientTypes?: string[]
+    // Example: { projectTypes: ["website"], excludeClientTypes: ["charity", "non-profit"] } = websites but NOT charity/non-profit
+    .$type<{
+      projectTypes?: string[];
+      features?: string[];
+      clientTypes?: string[];
+      excludeClientTypes?: string[];
+    }>()
+    .notNull()
+    .default({}),
+  startsAt: timestamp("starts_at", { withTimezone: true }),
+  endsAt: timestamp("ends_at", { withTimezone: true }),
+  maxUses: integer("max_uses"), // e.g., 50
+  usedCount: integer("used_count").notNull().default(0),
+  perUserLimit: integer("per_user_limit").notNull().default(1),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+// ============================================
+// Dynamic Pricing Tables
+// ============================================
+
+export const pricingProjectTypes = pgTable("pricing_project_types", {
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
+  key: text("key").notNull().unique(),
+  displayName: text("display_name").notNull(),
+  baseRateIls: integer("base_rate_ils").notNull(), // Default base rate (used when no client-type-specific rate exists)
+  order: integer("order").notNull().default(0),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
+export type PricingProjectType = typeof pricingProjectTypes.$inferSelect;
+export type NewPricingProjectType = typeof pricingProjectTypes.$inferInsert;
+
+// Base rates that can vary by client type
+// If clientTypeKey is null, it's a default rate for the project type
+// If clientTypeKey is set, it overrides the default for that specific client type
+export const pricingBaseRates = pgTable(
+  "pricing_base_rates",
+  {
+    id: uuid("id").defaultRandom().primaryKey().notNull(),
+    projectTypeKey: text("project_type_key").notNull(),
+    clientTypeKey: text("client_type_key"), // null = default rate, otherwise client-type-specific
+    baseRateIls: integer("base_rate_ils").notNull(),
+    order: integer("order").notNull().default(0),
+    isActive: boolean("is_active").notNull().default(true),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => ({
+    uniqueProjectClient: unique().on(table.projectTypeKey, table.clientTypeKey),
+  })
+);
+
+export type PricingBaseRate = typeof pricingBaseRates.$inferSelect;
+export type NewPricingBaseRate = typeof pricingBaseRates.$inferInsert;
+
+export const pricingFeatures = pgTable("pricing_features", {
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
+  key: text("key").notNull().unique(),
+  displayName: text("display_name").notNull(),
+  defaultCostIls: integer("default_cost_ils").notNull(),
+  group: text("group"),
+  order: integer("order").notNull().default(0),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
+export type PricingFeature = typeof pricingFeatures.$inferSelect;
+export type NewPricingFeature = typeof pricingFeatures.$inferInsert;
+
+export const pricingMultiplierGroups = pgTable("pricing_multiplier_groups", {
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
+  key: text("key").notNull().unique(),
+  displayName: text("display_name").notNull(),
+  order: integer("order").notNull().default(0),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
+export const pricingMultiplierValues = pgTable(
+  "pricing_multiplier_values",
+  {
+    id: uuid("id").defaultRandom().primaryKey().notNull(),
+    groupKey: text("group_key").notNull(),
+    optionKey: text("option_key").notNull(),
+    displayName: text("display_name").notNull(),
+    value: numeric("value", { precision: 6, scale: 3 }).notNull(),
+    order: integer("order").notNull().default(0),
+    isFixed: boolean("is_fixed").notNull().default(false),
+    isActive: boolean("is_active").notNull().default(true),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => ({
+    uniqueGroupOption: unique().on(table.groupKey, table.optionKey),
+  })
+);
+
+export type PricingMultiplierGroup =
+  typeof pricingMultiplierGroups.$inferSelect;
+export type NewPricingMultiplierGroup =
+  typeof pricingMultiplierGroups.$inferInsert;
+
+export type PricingMultiplierValue =
+  typeof pricingMultiplierValues.$inferSelect;
+export type NewPricingMultiplierValue =
+  typeof pricingMultiplierValues.$inferInsert;
+
+export const pricingMeta = pgTable("pricing_meta", {
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
+  key: text("key").notNull().unique(),
+  value: jsonb("value").notNull(),
+  order: integer("order").notNull().default(0),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
+export type PricingMeta = typeof pricingMeta.$inferSelect;
+export type NewPricingMeta = typeof pricingMeta.$inferInsert;

@@ -323,6 +323,140 @@ export const loginSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
+// ========================
+// DISCOUNT SCHEMAS
+// ========================
+
+export const discountCodeSchema = z
+  .string()
+  .min(3, "Discount code must be at least 3 characters")
+  .max(50, "Discount code must be less than 50 characters")
+  .regex(
+    /^[A-Z0-9_-]+$/,
+    "Discount code can only contain uppercase letters, numbers, hyphens, and underscores"
+  );
+
+export const discountAppliesToSchema = z
+  .object({
+    projectTypes: z.array(z.string()).optional(),
+    features: z.array(z.string()).optional(),
+    clientTypes: z.array(z.string()).optional(),
+    excludeClientTypes: z.array(z.string()).optional(),
+  })
+  .default({});
+
+export const discountSchema = z
+  .object({
+    code: discountCodeSchema,
+    description: z.string().max(500).optional(),
+    discountType: z.enum(["percent", "fixed"]),
+    amount: z.number().positive("Amount must be positive"),
+    currency: z.string().default("ILS"),
+    appliesTo: discountAppliesToSchema,
+    startsAt: z.date().optional(),
+    endsAt: z.date().optional(),
+    maxUses: z.number().int().positive().optional(),
+    perUserLimit: z.number().int().positive().default(1),
+    isActive: z.boolean().default(true),
+  })
+  .refine(
+    (data) => {
+      // Percent discount cannot exceed 100%
+      if (data.discountType === "percent" && data.amount > 100) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "Percent discount cannot exceed 100%",
+      path: ["amount"],
+    }
+  )
+  .refine(
+    (data) => {
+      // If endsAt is provided, startsAt must be before endsAt
+      if (data.endsAt && data.startsAt) {
+        return data.startsAt < data.endsAt;
+      }
+      return true;
+    },
+    {
+      message: "Start date must be before end date",
+      path: ["endsAt"],
+    }
+  )
+  .refine(
+    (data) => {
+      // If both dates are provided, ensure they're in the future or valid
+      const now = new Date();
+      if (data.endsAt && data.endsAt < now) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "End date must be in the future",
+      path: ["endsAt"],
+    }
+  );
+
+export const createDiscountSchema = discountSchema;
+
+export const updateDiscountSchema = z
+  .object({
+    code: discountCodeSchema.optional(),
+    description: z.string().max(500).optional(),
+    discountType: z.enum(["percent", "fixed"]).optional(),
+    amount: z.number().positive("Amount must be positive").optional(),
+    currency: z.string().optional(),
+    appliesTo: discountAppliesToSchema.optional(),
+    startsAt: z.date().optional(),
+    endsAt: z.date().optional(),
+    maxUses: z.number().int().positive().optional(),
+    perUserLimit: z.number().int().positive().optional(),
+    isActive: z.boolean().optional(),
+  })
+  .refine(
+    (data) => {
+      // Percent discount cannot exceed 100%
+      if (data.discountType === "percent" && data.amount && data.amount > 100) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "Percent discount cannot exceed 100%",
+      path: ["amount"],
+    }
+  )
+  .refine(
+    (data) => {
+      // If endsAt is provided, startsAt must be before endsAt
+      if (data.endsAt && data.startsAt) {
+        return data.startsAt < data.endsAt;
+      }
+      return true;
+    },
+    {
+      message: "Start date must be before end date",
+      path: ["endsAt"],
+    }
+  )
+  .refine(
+    (data) => {
+      // If both dates are provided, ensure they're in the future or valid
+      const now = new Date();
+      if (data.endsAt && data.endsAt < now) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "End date must be in the future",
+      path: ["endsAt"],
+    }
+  );
+
 export const registerSchema = z
   .object({
     email: emailSchema,
@@ -416,8 +550,8 @@ export const workExperienceCreateSchema = z.object({
     .string()
     .min(1, "Location is required")
     .max(DB_LIMITS.LOCATION_MAX_LENGTH, "Location too long"),
-  startDate: z.date(),
-  endDate: z.date().optional(),
+  startDate: z.coerce.date(),
+  endDate: z.coerce.date().optional(),
   description: z
     .string()
     .min(1, "Description is required")
@@ -507,8 +641,8 @@ export const projectCreateSchema = z.object({
     .min(1, "At least one category is required"),
   status: projectStatusSchema.default(PROJECT_STATUSES.COMPLETED),
   projectType: projectTypeSchema,
-  startDate: z.date(),
-  endDate: z.date().optional(),
+  startDate: z.coerce.date(),
+  endDate: z.coerce.date().optional(),
   githubUrl: urlSchema,
   liveUrl: urlSchema,
   demoUrl: urlSchema,
@@ -546,7 +680,7 @@ export const skillCreateSchema = z.object({
     .int("Years of experience must be an integer")
     .min(0, "Years of experience must be positive")
     .max(50, "Years of experience too high"),
-  lastUsed: z.date(),
+  lastUsed: z.coerce.date(),
   description: z
     .string()
     .max(DB_LIMITS.DESCRIPTION_MAX_LENGTH, "Description too long")
@@ -580,8 +714,8 @@ export const certificationCreateSchema = z.object({
   skills: z
     .array(z.string().min(1).max(DB_LIMITS.SKILL_MAX_LENGTH))
     .min(1, "At least one skill is required"),
-  issueDate: z.date(),
-  expiryDate: z.date().optional(),
+  issueDate: z.coerce.date(),
+  expiryDate: z.coerce.date().optional(),
   credentialId: z.string().max(100).optional(),
   verificationUrl: urlSchema,
   icon: z.string().max(10).optional(),
@@ -614,8 +748,8 @@ export const educationCreateSchema = z.object({
     .string()
     .min(1, "Location is required")
     .max(DB_LIMITS.LOCATION_MAX_LENGTH, "Location too long"),
-  startDate: z.date(),
-  endDate: z.date().optional(),
+  startDate: z.coerce.date(),
+  endDate: z.coerce.date().optional(),
   gpa: z
     .number()
     .min(0, "GPA must be positive")
@@ -801,8 +935,8 @@ export const adminActionSchema = z.object({
 });
 
 export const adminStatsQuerySchema = z.object({
-  startDate: z.date().optional(),
-  endDate: z.date().optional(),
+  startDate: z.coerce.date().optional(),
+  endDate: z.coerce.date().optional(),
   groupBy: z.enum(["day", "week", "month", "year"]).default("day"),
 });
 
@@ -851,3 +985,6 @@ export type BulkUpdateVisibilityData = z.infer<
 export type BulkUpdateOrderData = z.infer<typeof bulkUpdateOrderSchema>;
 export type AdminActionData = z.infer<typeof adminActionSchema>;
 export type AdminStatsQueryData = z.infer<typeof adminStatsQuerySchema>;
+export type DiscountData = z.infer<typeof discountSchema>;
+export type CreateDiscountData = z.infer<typeof createDiscountSchema>;
+export type UpdateDiscountData = z.infer<typeof updateDiscountSchema>;

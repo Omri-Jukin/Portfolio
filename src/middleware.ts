@@ -1,9 +1,11 @@
 import { NextResponse, NextRequest } from "next/server";
 import createMiddleware from "next-intl/middleware";
+import { getToken } from "next-auth/jwt";
 import {
   generateIntakeSessionToken,
   verifyIntakeSessionToken,
 } from "#/lib/utils/sessionToken";
+import { canAccessAdminSync } from "#/lib/auth/rbac";
 
 const intlMiddleware = createMiddleware({
   locales: ["en", "es", "fr", "he"],
@@ -15,16 +17,41 @@ export default async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
 
   // Protect all /[locale]/admin routes
+  // Note: Admin routes are organized under (admin) route group but URLs remain /[locale]/admin
   const adminRouteRegex = /^\/(en|es|fr|he)\/admin(\/|$)/;
   if (adminRouteRegex.test(pathname)) {
-    // Check for Auth.js v5 session token in cookies
-    // Auth.js v5 uses "next-auth.session-token" as the cookie name
-    const cookieHeader = request.headers.get("cookie");
-    const isAuthenticated = cookieHeader?.includes("next-auth.session-token=");
-
-    if (!isAuthenticated) {
       const locale = pathname.split("/")[1] || "en";
+
+    try {
+      // Get token from next-auth
+      const token = await getToken({
+        req: request,
+        secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
+      });
+
+      // Check if user is authenticated
+      if (!token) {
+        const loginUrl = new URL(`/${locale}/login`, request.url);
+        loginUrl.searchParams.set("redirectTo", pathname);
+        return NextResponse.redirect(loginUrl);
+      }
+
+      // Extract role from token
+      const role = (token.role as string) || "visitor";
+
+      // Check if role can access admin panel
+      if (!canAccessAdminSync(role)) {
+        // User doesn't have admin access, redirect to 403 or home
+        const forbiddenUrl = new URL(`/${locale}/403`, request.url);
+        return NextResponse.redirect(forbiddenUrl);
+      }
+
+      // User is authenticated and has admin role, allow access
+    } catch (error) {
+      console.error("Middleware auth error:", error);
+      // On error, redirect to login for security
       const loginUrl = new URL(`/${locale}/login`, request.url);
+      loginUrl.searchParams.set("redirectTo", pathname);
       return NextResponse.redirect(loginUrl);
     }
   }

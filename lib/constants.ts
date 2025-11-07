@@ -324,7 +324,7 @@ export const FORM_VALIDATION = {
   NAME_MIN_LENGTH: 2,
   NAME_MAX_LENGTH: 100,
   EMAIL_REGEX: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-  PHONE_REGEX: /^[\+]?[1-9][\d]{0,15}$/,
+  PHONE_REGEX: /^[\+]?[\d\s\-]{7,20}$/,
   SUBJECT_MIN_LENGTH: 3,
   SUBJECT_MAX_LENGTH: 200,
   MESSAGE_MIN_LENGTH: 10,
@@ -505,6 +505,8 @@ export const DB_LIMITS = {
  */
 export const USER_ROLES = {
   ADMIN: "admin",
+  EDITOR: "editor",
+  USER: "user",
   VISITOR: "visitor",
 } as const;
 

@@ -1,12 +1,45 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { intakeFormSchema } from "#/lib/schemas";
 import { renderProposal } from "#/lib/proposal/renderProposal";
 import { sendIntakeEmails } from "#/lib/email/sendEmail";
 import { createIntake } from "#/lib/db/intakes/intakes";
+import {
+  contactFormRateLimiter,
+  getRateLimitIdentifier,
+  checkRateLimit,
+} from "$/rateLimit/rateLimiter";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  // Rate limiting
+  let payload;
   try {
-    const payload = await req.json();
+    payload = await req.json();
+    const identifier = getRateLimitIdentifier(
+      req,
+      payload?.contact?.email || null
+    );
+    checkRateLimit(contactFormRateLimiter, identifier);
+  } catch (error) {
+    // Check if it's a rate limit error
+    if (error instanceof Error && error.message.includes("Rate limit")) {
+      return NextResponse.json(
+        {
+          status: "error",
+          error: error.message,
+        },
+        { status: 429 }
+      );
+    }
+    // If it's a JSON parse error, continue to validation
+    if (!payload) {
+      return NextResponse.json(
+        { status: "error", error: "Invalid request body" },
+        { status: 400 }
+      );
+    }
+  }
+
+  try {
     const data = intakeFormSchema.parse(payload);
 
     const proposalMd = renderProposal(data);

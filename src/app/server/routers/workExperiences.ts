@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { router, procedure, protectedProcedure } from "../trpc";
+import { TRPCError } from "@trpc/server";
+import { router, procedure, editorProcedure } from "../trpc";
 import {
   employmentTypeSchema,
   workExperienceCreateSchema,
@@ -40,8 +41,23 @@ export const workExperiencesRouter = router({
 
   getById: publicProcedure
     .input(z.object({ id: z.string() }))
-    .query(async ({ input }) => {
-      return await WorkExperienceManager.getById(input.id);
+    .query(async ({ input, ctx }) => {
+      const workExperience = await WorkExperienceManager.getById(input.id);
+
+      // Public users can only see visible work experiences
+      // Admin/editor users can see all work experiences
+      if (!workExperience) {
+        return null;
+      }
+
+      const userRole = ctx.user?.role || "visitor";
+      const canSeeAll = userRole === "admin" || userRole === "editor";
+
+      if (!canSeeAll && !workExperience.isVisible) {
+        return null; // Return null instead of throwing to prevent information leakage
+      }
+
+      return workExperience;
     }),
 
   getByEmploymentType: publicProcedure
@@ -88,11 +104,11 @@ export const workExperiencesRouter = router({
     }),
 
   // Protected routes (admin only)
-  getAllAdmin: protectedProcedure.query(async () => {
+  getAllAdmin: editorProcedure.query(async () => {
     return await WorkExperienceManager.getAll(false);
   }),
 
-  create: protectedProcedure
+  create: editorProcedure
     .input(workExperienceCreateSchema)
     .mutation(async ({ input, ctx }) => {
       // Convert empty string URLs to undefined
@@ -105,14 +121,34 @@ export const workExperiencesRouter = router({
       return await WorkExperienceManager.create(cleanInput);
     }),
 
-  update: protectedProcedure
+  update: editorProcedure
     .input(
       z.object({
         id: z.string(),
         data: workExperienceUpdateSchema,
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
+      // Verify createdBy matches session user (unless admin)
+      const existing = await WorkExperienceManager.getById(input.id);
+      if (!existing) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Work experience not found",
+        });
+      }
+
+      const userRole = ctx.user.role || "visitor";
+      const isAdmin = userRole === "admin";
+
+      // Check if user is trying to update a record they didn't create
+      if (!isAdmin && existing.createdBy !== ctx.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You can only update work experiences you created",
+        });
+      }
+
       // Convert empty string URLs to undefined
       const cleanData = {
         ...input.data,
@@ -123,45 +159,74 @@ export const workExperiencesRouter = router({
       return await WorkExperienceManager.update(input.id, cleanData);
     }),
 
-  delete: protectedProcedure
+  delete: editorProcedure
     .input(z.object({ id: z.string() }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
+      // Verify createdBy matches session user (unless admin)
+      const existing = await WorkExperienceManager.getById(input.id);
+      if (!existing) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Work experience not found",
+        });
+      }
+
+      const userRole = ctx.user.role || "visitor";
+      const isAdmin = userRole === "admin";
+
+      // Check if user is trying to delete a record they didn't create
+      if (!isAdmin && existing.createdBy !== ctx.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You can only delete work experiences you created",
+        });
+      }
+
       const success = await WorkExperienceManager.delete(input.id);
       if (!success) {
-        throw new Error("Failed to delete work experience");
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to delete work experience",
+        });
       }
       return { success: true };
     }),
 
-  reorder: protectedProcedure
+  reorder: editorProcedure
     .input(bulkUpdateOrderSchema)
     .mutation(async ({ input }) => {
       await WorkExperienceManager.updateDisplayOrder(input.items);
       return { success: true };
     }),
 
-  toggleVisibility: protectedProcedure
+  toggleVisibility: editorProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input }) => {
       const updated = await WorkExperienceManager.toggleVisibility(input.id);
       if (!updated) {
-        throw new Error("Work experience not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Work experience not found",
+        });
       }
       return updated;
     }),
 
-  toggleFeatured: protectedProcedure
+  toggleFeatured: editorProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input }) => {
       const updated = await WorkExperienceManager.toggleFeatured(input.id);
       if (!updated) {
-        throw new Error("Work experience not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Work experience not found",
+        });
       }
       return updated;
     }),
 
   // Bulk operations
-  bulkUpdate: protectedProcedure
+  bulkUpdate: editorProcedure
     .input(
       z.object({
         ids: z.array(z.string()),
@@ -176,7 +241,7 @@ export const workExperiencesRouter = router({
       return results;
     }),
 
-  bulkDelete: protectedProcedure
+  bulkDelete: editorProcedure
     .input(z.object({ ids: z.array(z.string()) }))
     .mutation(async ({ input }) => {
       const result = await WorkExperienceManager.bulkDelete(input.ids);

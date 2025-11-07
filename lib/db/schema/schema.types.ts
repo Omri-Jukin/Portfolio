@@ -120,7 +120,9 @@ export type UpdateTestimonial = Partial<
   Omit<typeof Tables.testimonials.$inferSelect, "id" | "createdAt">
 >;
 
-export type UserRole = "admin" | "visitor";
+// UserRole type - roles are stored in the database roles table
+// This type provides TypeScript safety, but actual roles are validated against the database
+export type UserRole = "admin" | "editor" | "user" | "visitor";
 export type UserStatus = "pending" | "approved" | "rejected";
 export type PostStatus =
   | "draft"
@@ -245,3 +247,5 @@ export type IntakeNoteCategory =
   | "budget-concerns"
   | "technical-notes"
   | "general";
+
+export type DiscountType = "percent" | "fixed";

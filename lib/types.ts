@@ -455,6 +455,8 @@ export interface IProject
   extends BaseEntity,
     BaseVisibility,
     BaseMultiLanguage {
+  createdById: string;
+  createdBy: string;
   title: string;
   subtitle: string;
   description: string;

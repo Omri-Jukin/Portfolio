@@ -1,5 +1,8 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
+import { getDB } from "./lib/db/client";
+import { users } from "./lib/db/schema/schema.tables";
+import { eq } from "drizzle-orm";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -19,7 +22,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async session({ session, token }) {
       // Add custom fields to session from JWT token
       if (session.user && token) {
-        session.user.role = "admin";
+        session.user.role = (token.role as string) || "visitor";
         session.user.id = token.sub || "";
       }
       return session;
@@ -27,9 +30,35 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, user }) {
       // Store user info in JWT token on first sign in
       if (user) {
-        token.role = "admin";
         token.email = user.email || undefined;
         token.name = user.name || undefined;
+
+        // Fetch user role from database
+        try {
+          const db = await getDB();
+          if (db && user.email) {
+            const [dbUser] = await db
+              .select({ role: users.role })
+              .from(users)
+              .where(eq(users.email, user.email))
+              .limit(1);
+
+            if (dbUser) {
+              token.role = dbUser.role || "visitor";
+            } else {
+              // User doesn't exist in users table yet, default to visitor
+              // In the future, you might want to create the user here
+              token.role = "visitor";
+            }
+          } else {
+            // Database unavailable, default to visitor
+            token.role = "visitor";
+          }
+        } catch (error) {
+          console.error("Failed to fetch user role from database:", error);
+          // On error, default to visitor for security
+          token.role = "visitor";
+        }
       }
       return token;
     },

@@ -1,11 +1,22 @@
 import { NextResponse } from "next/server";
+import { requireAdminAccess } from "$/api/auth";
 
 /**
  * Debug endpoint to check production environment configuration
- * Accessible at /api/debug
+ * Accessible at /api/debug (admin only)
  * This helps diagnose production issues without exposing sensitive data
  */
 export async function GET() {
+  // Require admin access
+  try {
+    await requireAdminAccess();
+  } catch (error: unknown) {
+    console.error("Admin access required:", error);
+    return NextResponse.json(
+      { error: "Admin access required" },
+      { status: 403 }
+    );
+  }
   try {
     const env = {
       nodeEnv: process.env.NODE_ENV,

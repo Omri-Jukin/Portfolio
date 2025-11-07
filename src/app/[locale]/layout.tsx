@@ -7,6 +7,7 @@ import ClientLayout from "&/ClientLayout/ClientLayout";
 import { getMessages, getTranslations } from "next-intl/server";
 import StructuredData from "./structured-data";
 import { SessionProvider } from "../providers/SessionProvider";
+import AdminFAB from "~/AdminFAB/AdminFAB";
 
 export interface Props {
   children: React.ReactNode;
@@ -116,7 +117,10 @@ export default async function RootLayout({ children, params }: Props) {
       <body className={`${inter.variable} antialiased`}>
         <SessionProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>
-            <ClientLayout>{children}</ClientLayout>
+            <ClientLayout>
+              {children}
+              <AdminFAB />
+            </ClientLayout>
           </NextIntlClientProvider>
         </SessionProvider>
       </body>

@@ -145,9 +145,13 @@ describe("Custom Intake Links", () => {
         expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
       });
 
+      // Wait a bit to ensure the database has committed the transaction
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
       const retrieved = await getCustomLinkBySlug("test-slug");
 
       expect(retrieved).toBeDefined();
+      expect(retrieved).not.toBeNull();
       expect(retrieved?.id).toBe(created.id);
       expect(retrieved?.slug).toBe("test-slug");
     });
@@ -229,8 +233,14 @@ describe("Custom Intake Links", () => {
         expiresAt: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
       });
 
+      // Wait a bit to ensure the database has committed the transaction
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
       const retrieved = await getCustomLinkBySlug("expired-link");
       expect(retrieved).toBeDefined();
+      expect(retrieved).not.toBeNull();
+      expect(retrieved?.expiresAt).toBeDefined();
+      expect(retrieved?.expiresAt).toBeInstanceOf(Date);
       expect(retrieved?.expiresAt.getTime()).toBeLessThan(Date.now());
       expect(retrieved?.id).toBe(link.id);
       expect(retrieved?.slug).toBe("expired-link");
@@ -258,8 +268,14 @@ describe("Custom Intake Links", () => {
         expiresAt: futureDate,
       });
 
+      // Wait a bit to ensure the database has committed the transaction
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
       const retrieved = await getCustomLinkBySlug("future-link");
       expect(retrieved).toBeDefined();
+      expect(retrieved).not.toBeNull();
+      expect(retrieved?.expiresAt).toBeDefined();
+      expect(retrieved?.expiresAt).toBeInstanceOf(Date);
       expect(retrieved?.expiresAt.getTime()).toBeGreaterThan(Date.now());
       expect(retrieved?.id).toBe(link.id);
       expect(retrieved?.slug).toBe("future-link");

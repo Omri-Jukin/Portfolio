@@ -160,8 +160,11 @@ export async function deleteEmailTemplate(id: string): Promise<boolean> {
   const db = await getDB();
 
   try {
-    await db.delete(emailTemplates).where(eq(emailTemplates.id, id));
-    return true;
+    const result = await db
+      .delete(emailTemplates)
+      .where(eq(emailTemplates.id, id))
+      .returning();
+    return result.length > 0;
   } catch (error) {
     console.error("Failed to delete email template:", error);
     return false;

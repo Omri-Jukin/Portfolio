@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
+import { getSecurityHeaders } from "./lib/security/headers";
 
 const withNextIntl = createNextIntlPlugin("./i18n.ts");
 
@@ -11,6 +12,19 @@ const nextConfig: NextConfig = {
         hostname: "**",
       },
     ],
+  },
+  // Security headers
+  async headers() {
+    return [
+      {
+        // Apply security headers to all routes
+        source: "/:path*",
+        headers: Object.entries(getSecurityHeaders()).map(([key, value]) => ({
+          key,
+          value,
+        })),
+      },
+    ];
   },
   // Suppress webpack cache performance warnings
   // These are informational warnings about serializing large strings (locale files)

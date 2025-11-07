@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { router, procedure, protectedProcedure } from "../trpc";
+import { TRPCError } from "@trpc/server";
+import { router, procedure, editorProcedure } from "../trpc";
 
 const publicProcedure = procedure;
 import { SkillManager } from "$/db/skills/SkillManager";
@@ -43,7 +44,7 @@ const CreateSkillSchema = z.object({
   relatedSkills: z.array(z.string()).default([]),
   certifications: z.array(z.string()).default([]),
   projects: z.array(z.string()).default([]),
-  lastUsed: z.date(),
+  lastUsed: z.coerce.date(),
   isVisible: z.boolean().default(true),
   displayOrder: z.number().int().min(0).default(0),
   nameTranslations: z.record(z.string(), z.string()).optional(),
@@ -98,8 +99,23 @@ export const skillsRouter = router({
 
   getById: publicProcedure
     .input(z.object({ id: z.string() }))
-    .query(async ({ input }) => {
-      return await SkillManager.getById(input.id);
+    .query(async ({ input, ctx }) => {
+      const skill = await SkillManager.getById(input.id);
+
+      // Public users can only see visible skills
+      // Admin/editor users can see all skills
+      if (!skill) {
+        return null;
+      }
+
+      const userRole = ctx.user?.role || "visitor";
+      const canSeeAll = userRole === "admin" || userRole === "editor";
+
+      if (!canSeeAll && !skill.isVisible) {
+        return null; // Return null instead of throwing to prevent information leakage
+      }
+
+      return skill;
     }),
 
   getByCategory: publicProcedure
@@ -171,11 +187,11 @@ export const skillsRouter = router({
     }),
 
   // Protected routes (admin only)
-  getAllAdmin: protectedProcedure.query(async () => {
+  getAllAdmin: editorProcedure.query(async () => {
     return await SkillManager.getAll(false);
   }),
 
-  create: protectedProcedure
+  create: editorProcedure
     .input(CreateSkillSchema)
     .mutation(async ({ input, ctx }) => {
       const cleanInput = {
@@ -186,20 +202,60 @@ export const skillsRouter = router({
       return await SkillManager.create(cleanInput);
     }),
 
-  update: protectedProcedure
+  update: editorProcedure
     .input(
       z.object({
         id: z.string(),
         data: UpdateSkillSchema,
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
+      // Verify createdBy matches session user (unless admin)
+      const existing = await SkillManager.getById(input.id);
+      if (!existing) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Skill not found",
+        });
+      }
+
+      const userRole = ctx.user.role || "visitor";
+      const isAdmin = userRole === "admin";
+
+      // Check if user is trying to update a record they didn't create
+      if (!isAdmin && existing.createdBy !== ctx.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You can only update skills you created",
+        });
+      }
+
       return await SkillManager.update(input.id, input.data);
     }),
 
-  delete: protectedProcedure
+  delete: editorProcedure
     .input(z.object({ id: z.string() }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
+      // Verify createdBy matches session user (unless admin)
+      const existing = await SkillManager.getById(input.id);
+      if (!existing) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Skill not found",
+        });
+      }
+
+      const userRole = ctx.user.role || "visitor";
+      const isAdmin = userRole === "admin";
+
+      // Check if user is trying to delete a record they didn't create
+      if (!isAdmin && existing.createdBy !== ctx.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You can only delete skills you created",
+        });
+      }
+
       const success = await SkillManager.delete(input.id);
       if (!success) {
         throw new Error("Failed to delete skill");
@@ -207,14 +263,14 @@ export const skillsRouter = router({
       return { success: true };
     }),
 
-  reorder: protectedProcedure
+  reorder: editorProcedure
     .input(ReorderSkillsSchema)
     .mutation(async ({ input }) => {
       await SkillManager.updateDisplayOrder(input);
       return { success: true };
     }),
 
-  toggleVisibility: protectedProcedure
+  toggleVisibility: editorProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input }) => {
       const updated = await SkillManager.toggleVisibility(input.id);
@@ -224,7 +280,7 @@ export const skillsRouter = router({
       return updated;
     }),
 
-  updateLastUsed: protectedProcedure
+  updateLastUsed: editorProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input }) => {
       const updated = await SkillManager.updateLastUsed(input.id);
@@ -235,7 +291,7 @@ export const skillsRouter = router({
     }),
 
   // Bulk operations
-  bulkUpdate: protectedProcedure
+  bulkUpdate: editorProcedure
     .input(
       z.object({
         ids: z.array(z.string()),
@@ -247,14 +303,14 @@ export const skillsRouter = router({
       return results;
     }),
 
-  bulkDelete: protectedProcedure
+  bulkDelete: editorProcedure
     .input(z.object({ ids: z.array(z.string()) }))
     .mutation(async ({ input }) => {
       const result = await SkillManager.bulkDelete(input.ids);
       return result;
     }),
 
-  bulkUpdateLastUsed: protectedProcedure
+  bulkUpdateLastUsed: editorProcedure
     .input(z.object({ ids: z.array(z.string()) }))
     .mutation(async ({ input }) => {
       const results = await Promise.all(
