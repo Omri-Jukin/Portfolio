@@ -6,30 +6,25 @@
 import { createClient } from "@supabase/supabase-js";
 
 // Get Supabase credentials from environment
+// These may be undefined during build time - that's OK, we'll validate at runtime
 const supabaseUrl =
   process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceKey =
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
 
-if (!supabaseUrl) {
-  throw new Error(
-    "SUPABASE_URL or NEXT_PUBLIC_SUPABASE_URL environment variable is required"
-  );
-}
-
-if (!supabaseServiceKey) {
-  throw new Error(
-    "SUPABASE_SERVICE_ROLE_KEY or SUPABASE_ANON_KEY environment variable is required"
-  );
-}
-
 // Create Supabase client with service role key for admin operations
-export const supabase = createClient(supabaseUrl, supabaseServiceKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false,
-  },
-});
+// Use dummy values during build time to avoid errors
+// Validation happens in the functions when they're actually called
+export const supabase = createClient(
+  supabaseUrl || "https://placeholder.supabase.co",
+  supabaseServiceKey || "placeholder-key",
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  }
+);
 
 /**
  * Upload a file to Supabase Storage
@@ -43,6 +38,19 @@ export async function uploadToSupabaseStorage(
   filePath: string,
   file: File | Buffer | ArrayBuffer
 ): Promise<{ url: string; path: string }> {
+  // Validate environment variables at runtime
+  if (!supabaseUrl || supabaseUrl === "https://placeholder.supabase.co") {
+    throw new Error(
+      "SUPABASE_URL or NEXT_PUBLIC_SUPABASE_URL environment variable is required"
+    );
+  }
+
+  if (!supabaseServiceKey || supabaseServiceKey === "placeholder-key") {
+    throw new Error(
+      "SUPABASE_SERVICE_ROLE_KEY or SUPABASE_ANON_KEY environment variable is required"
+    );
+  }
+
   // Convert file to Uint8Array (compatible with Supabase Storage)
   let fileData: Uint8Array;
   if (file instanceof File) {
@@ -98,6 +106,19 @@ export async function deleteFromSupabaseStorage(
  * @param bucket - Storage bucket name
  */
 export async function ensureBucketExists(bucket: string): Promise<void> {
+  // Validate environment variables at runtime
+  if (!supabaseUrl || supabaseUrl === "https://placeholder.supabase.co") {
+    throw new Error(
+      "SUPABASE_URL or NEXT_PUBLIC_SUPABASE_URL environment variable is required"
+    );
+  }
+
+  if (!supabaseServiceKey || supabaseServiceKey === "placeholder-key") {
+    throw new Error(
+      "SUPABASE_SERVICE_ROLE_KEY or SUPABASE_ANON_KEY environment variable is required"
+    );
+  }
+
   // List buckets to check if it exists
   const { data: buckets, error: listError } =
     await supabase.storage.listBuckets();
