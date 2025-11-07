@@ -15,7 +15,7 @@ import Contact from "~/Contact";
 import SkillShowcase from "~/SkillShowcase";
 // import Testimonials from "~/Testimonials";
 import { ResponsiveBackground } from "#/Components/ScrollingSections";
-import profileSrc from "#/public/Watercolor_Profile_Picture.png";
+import profileSrc from "^/Watercolor_Profile_Picture.png";
 
 export default function HomePage() {
   const locale = useLocale();
