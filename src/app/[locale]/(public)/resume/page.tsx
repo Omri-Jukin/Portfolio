@@ -38,6 +38,18 @@ const mapTemplateToPDFTheme = (template: ResumeTemplate): PDFTheme => {
 import type { SxProps, Theme } from "@mui/material";
 import { extractResumeData } from "#/lib/utils/resumeDataExtractor";
 import dynamic from "next/dynamic";
+// Import all locales statically (required for build-time)
+import enLocale from "%/en.json";
+import esLocale from "%/es.json";
+import frLocale from "%/fr.json";
+import heLocale from "%/he.json";
+
+const localeDataMap = {
+  en: enLocale,
+  es: esLocale,
+  fr: frLocale,
+  he: heLocale,
+};
 
 // Dynamically import heavy components to improve build performance
 const GalaxyCard = dynamic(
@@ -137,17 +149,18 @@ export default function ResumePage() {
         } else if (docType === "technicalPortfolio") {
           filename = `Omri Jukin - Technical Portfolio.pdf`;
 
-          // Load locale data for technical portfolio
-          const localeData = await import(
-            `../../../../locales/${options.language}.json`
-          );
+          // Get locale data from statically imported locales
+          const localeData =
+            localeDataMap[options.language as keyof typeof localeDataMap] ||
+            localeDataMap.en;
 
           // Extract technical portfolio data
           const { extractTechnicalPortfolioData } = await import(
             "#/lib/utils/technicalPortfolioExtractor"
           );
+          // Type assertion needed because locale JSON structure is more flexible
           const technicalPortfolioData = extractTechnicalPortfolioData(
-            localeData.default
+            localeData as Parameters<typeof extractTechnicalPortfolioData>[0]
           );
 
           // Generate technical portfolio PDF

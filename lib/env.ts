@@ -60,11 +60,19 @@ export const env = (() => {
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || "",
   };
 
-  // Only validate in production or when explicitly requested
+  // Check if we're in a build-time context (Next.js static analysis)
+  const isBuildTime =
+    typeof process !== "undefined" &&
+    (process.env.NEXT_PHASE === "phase-production-build" ||
+      process.env.NEXT_PHASE === "phase-development-build" ||
+      process.env.CI === "true");
+
+  // Only validate at runtime in production, not during build
   // In development/build time, we allow missing values for flexibility
   const shouldValidate =
-    process.env.NODE_ENV === "production" ||
-    process.env.VALIDATE_ENV === "true";
+    !isBuildTime &&
+    (process.env.NODE_ENV === "production" ||
+      process.env.VALIDATE_ENV === "true");
 
   if (shouldValidate) {
     try {
@@ -83,8 +91,8 @@ export const env = (() => {
           "\nPlease ensure all required environment variables are set correctly."
         );
 
-        // In production, throw to prevent app from starting with invalid config
-        if (process.env.NODE_ENV === "production") {
+        // In production runtime (not build), throw to prevent app from starting with invalid config
+        if (process.env.NODE_ENV === "production" && !isBuildTime) {
           throw new Error(
             `Environment validation failed:\n${errorMessages}\n\nApplication cannot start with invalid configuration.`
           );
