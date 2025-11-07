@@ -34,6 +34,7 @@ const handler = async (req: Request) => {
             db: null,
             user: null,
             resHeaders: new Headers(),
+            req: opts.req,
             origin:
               typeof opts.req.headers.get === "function"
                 ? opts.req.headers.get("origin") ??

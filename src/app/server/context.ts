@@ -109,6 +109,7 @@ export async function createContext({
     user,
     resHeaders,
     origin,
+    req, // Include request for audit logging
   };
 }
 

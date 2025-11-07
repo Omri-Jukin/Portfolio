@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { router, procedure, protectedProcedure } from "../trpc";
+import { TRPCError } from "@trpc/server";
+import { router, procedure, editorProcedure } from "../trpc";
 import {
   educationCreateSchema,
   educationUpdateSchema,
@@ -32,8 +33,23 @@ export const educationRouter = router({
 
   getById: publicProcedure
     .input(z.object({ id: z.string() }))
-    .query(async ({ input }) => {
-      return await EducationManager.getById(input.id);
+    .query(async ({ input, ctx }) => {
+      const education = await EducationManager.getById(input.id);
+
+      // Public users can only see visible education records
+      // Admin/editor users can see all education records
+      if (!education) {
+        return null;
+      }
+
+      const userRole = ctx.user?.role || "visitor";
+      const canSeeAll = userRole === "admin" || userRole === "editor";
+
+      if (!canSeeAll && !education.isVisible) {
+        return null; // Return null instead of throwing to prevent information leakage
+      }
+
+      return education;
     }),
 
   getByDegreeType: publicProcedure
@@ -76,11 +92,11 @@ export const educationRouter = router({
     }),
 
   // Protected routes (admin only)
-  getAllAdmin: protectedProcedure.query(async () => {
+  getAllAdmin: editorProcedure.query(async () => {
     return await EducationManager.getAll(false);
   }),
 
-  create: protectedProcedure
+  create: editorProcedure
     .input(educationCreateSchema)
     .mutation(async ({ input, ctx }) => {
       // Convert empty string URLs to undefined
@@ -96,14 +112,34 @@ export const educationRouter = router({
       return await EducationManager.create(createData);
     }),
 
-  update: protectedProcedure
+  update: editorProcedure
     .input(
       z.object({
         id: z.string(),
         data: educationUpdateSchema,
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
+      // Verify createdBy matches session user (unless admin)
+      const existing = await EducationManager.getById(input.id);
+      if (!existing) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Education record not found",
+        });
+      }
+
+      const userRole = ctx.user.role || "visitor";
+      const isAdmin = userRole === "admin";
+
+      // Check if user is trying to update a record they didn't create
+      if (!isAdmin && existing.createdBy !== ctx.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You can only update education records you created",
+        });
+      }
+
       // Convert empty string URLs to undefined
       const cleanData = {
         ...input.data,
@@ -119,34 +155,60 @@ export const educationRouter = router({
       );
     }),
 
-  delete: protectedProcedure
+  delete: editorProcedure
     .input(z.object({ id: z.string() }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
+      // Verify createdBy matches session user (unless admin)
+      const existing = await EducationManager.getById(input.id);
+      if (!existing) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Education record not found",
+        });
+      }
+
+      const userRole = ctx.user.role || "visitor";
+      const isAdmin = userRole === "admin";
+
+      // Check if user is trying to delete a record they didn't create
+      if (!isAdmin && existing.createdBy !== ctx.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You can only delete education records you created",
+        });
+      }
+
       const success = await EducationManager.delete(input.id);
       if (!success) {
-        throw new Error("Failed to delete education record");
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to delete education record",
+        });
       }
       return { success: true };
     }),
 
-  reorder: protectedProcedure
+  reorder: editorProcedure
     .input(educationBulkUpdateOrderSchema)
     .mutation(async ({ input }) => {
       return await EducationManager.bulkUpdateOrder(input.updates);
     }),
 
-  bulkDelete: protectedProcedure
+  bulkDelete: editorProcedure
     .input(z.object({ ids: z.array(z.string()) }))
     .mutation(async ({ input }) => {
       return await EducationManager.bulkDelete(input.ids);
     }),
 
-  toggleVisibility: protectedProcedure
+  toggleVisibility: editorProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input }) => {
       const education = await EducationManager.getById(input.id);
       if (!education) {
-        throw new Error("Education record not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Education record not found",
+        });
       }
 
       return await EducationManager.update(input.id, {

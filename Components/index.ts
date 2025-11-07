@@ -4,6 +4,7 @@ export { default as AnimatedText } from "./AnimatedText";
 export { default as AnimationSwitcher } from "./AnimationSwitcher";
 export { default as Background } from "./Background";
 export { default as BackgroundCard } from "./Background/BackgroundCard";
+export * from "./PathSelection3DCard";
 // Heavy components (Three.js, complex animations) are exported from ./HeavyComponents
 // Use dynamic imports for these components to improve build performance
 export { default as ResponsiveBackground } from "./ScrollingSections/ResponsiveBackground";
@@ -18,7 +19,6 @@ export { BoxShadowDemo } from "./BoxShadowDemo";
 export { GlassPane, GlassPaneDemo } from "./GlassPane";
 export { default as BrokenGlass } from "./BrokenGlass";
 export { default as Card } from "./Card";
-export { default as ContactForm } from "../src/app/[locale]/contact";
 export { default as DarkModeToggle } from "./DarkModeToggle";
 // DNAHelix moved to HeavyComponents
 export { default as Footer } from "./Footer";
@@ -35,6 +35,8 @@ export { default as ScrollGapAnimator } from "./ScrollGapAnimator";
 export { default as FloatingProfile } from "./FloatingProfile";
 export { default as ClientOnly } from "./ClientOnly";
 export { default as Skeleton } from "./Skeleton";
+export { default as ProjectCostCalculator } from "./ProjectCostCalculator";
+export { default as AdminFAB } from "./AdminFAB/AdminFAB";
 
 // New section components
 export { default as Hero } from "./Hero";
@@ -70,10 +72,6 @@ export type {
 } from "./Background/Background.type";
 export type { CardProps } from "./Card";
 export type { BrokenGlassProps } from "./BrokenGlass";
-export type {
-  ContactFormProps,
-  ContactFormData,
-} from "../src/app/[locale]/contact";
 export type { DarkModeToggleProps } from "./DarkModeToggle";
 export type { DNAModelProps } from "./DNAHelix";
 export type { FooterProps } from "./Footer";

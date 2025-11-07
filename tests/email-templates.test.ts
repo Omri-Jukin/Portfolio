@@ -10,6 +10,7 @@ import {
 import { getDB } from "$/db/client";
 import { emailTemplates } from "$/db/schema/schema.tables";
 import { users } from "$/db/schema/schema.tables";
+import { eq } from "drizzle-orm";
 
 describe("Email Templates", () => {
   let db: Awaited<ReturnType<typeof getDB>> | null = null;
@@ -30,6 +31,10 @@ describe("Email Templates", () => {
         return;
       }
 
+      // Clean up templates and users before each test
+      await db.delete(emailTemplates);
+      await db.delete(users).where(eq(users.email, "test-admin@example.com"));
+
       // Create a test user for createdBy
       const testUser = await db
         .insert(users)
@@ -41,10 +46,11 @@ describe("Email Templates", () => {
           role: "admin",
         })
         .returning();
-      testUserId = testUser[0].id;
+      testUserId = testUser[0]?.id;
 
-      // Clean up templates before each test
-      await db.delete(emailTemplates);
+      if (!testUserId) {
+        throw new Error("Failed to create test user");
+      }
     } catch (error) {
       console.error("Failed to setup test database:", error);
       db = null;
@@ -110,9 +116,17 @@ describe("Email Templates", () => {
 
       const template = await createEmailTemplate(input);
 
+      expect(template).toBeDefined();
+      expect(template.id).toBeTruthy();
+      expect(template.name).toBe(input.name);
+      expect(template.subject).toBe(input.subject);
+      expect(template.htmlContent).toBe(input.htmlContent);
       expect(template.textContent).toBeNull();
       expect(template.cssStyles).toBeNull();
       expect(template.variables).toBeNull();
+      expect(template.createdBy).toBe(testUserId);
+      expect(template.createdAt).toBeInstanceOf(Date);
+      expect(template.updatedAt).toBeInstanceOf(Date);
     });
   });
 
@@ -147,10 +161,10 @@ describe("Email Templates", () => {
       ) {
         return;
       }
-      const result = await getEmailTemplateById(
+      const retrieved = await getEmailTemplateById(
         "00000000-0000-0000-0000-000000000000"
       );
-      expect(result).toBeNull();
+      expect(retrieved).toBeNull();
     });
   });
 

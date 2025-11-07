@@ -1426,6 +1426,7 @@
       "title": "Bienvenue!",
       "description": "Nous avons prérempli vos informations. Veuillez les examiner et compléter le formulaire ci-dessous pour commencer.",
       "info": "Vos informations ont été préremplies. Veuillez les examiner et compléter les champs manquants.",
+      "returnHome": "Retour à la Page Principale",
       "notFound": {
         "title": "Lien Personnalisé Introuvable",
         "description": "Le lien d'admission personnalisé que vous essayez d'accéder est invalide, expiré ou n'existe plus.",
@@ -1436,6 +1437,35 @@
     "error": {
       "title": "Erreur",
       "message": "Quelque chose s'est mal passé. Veuillez réessayer."
+    },
+    "templates": {
+      "selectTemplate": "Sélectionner un Modèle (Optionnel)",
+      "templateApplied": "Modèle appliqué! Vous pouvez modifier tous les champs ci-dessous.",
+      "clearTemplate": "Effacer le Modèle",
+      "none": "Aucun - Commencer à zéro"
+    },
+    "calculator": {
+      "title": "Calculateur de Coût de Projet",
+      "projectType": "Type de Projet",
+      "complexity": "Complexité",
+      "numPages": "Nombre de Pages/Écrans",
+      "features": "Fonctionnalités",
+      "timelineUrgency": "Urgence du Calendrier",
+      "techStackComplexity": "Complexité de la Pile Technologique",
+      "costBreakdown": "Répartition des Coûts",
+      "baseCost": "Coût de Base",
+      "totalEstimate": "Estimation Totale",
+      "range": "Plage",
+      "copyBreakdown": "Copier la Répartition"
+    },
+    "delete": {
+      "confirmTitle": "Confirmer la Suppression de l'Admission",
+      "finalConfirmTitle": "Confirmation Finale Requise",
+      "deleteForever": "Supprimer Définitivement",
+      "typeIntakeId": "Pour confirmer, veuillez saisir l'ID de l'admission:",
+      "lastChance": "C'est votre dernière chance d'annuler!",
+      "permanentlyDelete": "Vous êtes sur le point de supprimer définitivement l'admission pour:",
+      "cannotBeUndone": "Cette action ne peut pas être annulée. Toutes les notes associées, l'historique des statuts et les rappels seront également supprimés."
     }
   }
 }

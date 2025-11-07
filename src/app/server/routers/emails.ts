@@ -1,6 +1,12 @@
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 import { router, procedure } from "../trpc";
 import { EmailManager } from "#/backend/email/EmailManager";
+import {
+  emailSendRateLimiter,
+  getRateLimitIdentifier,
+  checkRateLimit,
+} from "$/rateLimit/rateLimiter";
 
 // Lazy initialization of the email service
 let emailService: EmailManager | null = null;
@@ -46,7 +52,21 @@ export const emailsRouter = router({
         message: z.string().min(10, "Message must be at least 10 characters"),
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
+      // Rate limiting: Use email as identifier
+      const identifier = getRateLimitIdentifier(ctx.req, input.email);
+
+      try {
+        checkRateLimit(emailSendRateLimiter, identifier);
+      } catch (error) {
+        throw new TRPCError({
+          code: "TOO_MANY_REQUESTS",
+          message:
+            error instanceof Error
+              ? error.message
+              : "Rate limit exceeded. Please try again later.",
+        });
+      }
       try {
         const emailService = getEmailService();
         if (!emailService) {

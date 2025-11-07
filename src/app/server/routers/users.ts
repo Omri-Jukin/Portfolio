@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { router, procedure } from "../trpc";
+import { router, procedure, adminProcedure } from "../trpc";
 import {
   createUser,
   loginUser,
@@ -73,22 +73,19 @@ export const usersRouter = router({
   }),
 
   // Admin routes
-  create: procedure
+  create: adminProcedure
     .input(
       z.object({
         email: z.string().email(),
         password: z.string().min(6),
         name: z.string().min(1),
-        role: z.enum(["admin", "visitor"]).default("visitor"),
+        role: z.enum(["admin", "editor", "user", "visitor"]).default("visitor"),
       })
     )
     .mutation(async (opts) => {
-      const { db, user } = opts.ctx;
+      const { db } = opts.ctx;
       const { input } = opts;
       if (!db) throw new Error("Database not available");
-      if (!user || user.role !== "admin") {
-        throw new Error("Unauthorized");
-      }
 
       // Split the name into firstName and lastName
       const nameParts = input.name.split(" ");
@@ -109,18 +106,17 @@ export const usersRouter = router({
       );
     }),
 
-  getById: procedure.input(z.object({ id: z.string() })).query(async (opts) => {
-    const { db, user } = opts.ctx;
-    const { input } = opts;
-    if (!db) throw new Error("Database not available");
-    if (!user || user.role !== "admin") {
-      throw new Error("Unauthorized");
-    }
+  getById: adminProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async (opts) => {
+      const { db } = opts.ctx;
+      const { input } = opts;
+      if (!db) throw new Error("Database not available");
 
-    return await getUserById(input.id);
-  }),
+      return await getUserById(input.id);
+    }),
 
-  update: procedure
+  update: adminProcedure
     .input(
       z.object({
         id: z.string(),
@@ -130,27 +126,21 @@ export const usersRouter = router({
       })
     )
     .mutation(async (opts) => {
-      const { db, user } = opts.ctx;
+      const { db } = opts.ctx;
       const { input } = opts;
       if (!db) throw new Error("Database not available");
-      if (!user || user.role !== "admin") {
-        throw new Error("Unauthorized");
-      }
 
       // SECURITY: If password is provided, it MUST be in plain text from the frontend.
       // updateUser() will hash the password exactly once before storing.
       return await updateUser(input);
     }),
 
-  delete: procedure
+  delete: adminProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async (opts) => {
-      const { db, user } = opts.ctx;
+      const { db } = opts.ctx;
       const { input } = opts;
       if (!db) throw new Error("Database not available");
-      if (!user || user.role !== "admin") {
-        throw new Error("Unauthorized");
-      }
 
       return await deleteUser(input.id);
     }),

@@ -1,4 +1,58 @@
 import type { IntakeFormData } from "#/lib/schemas";
+import { INTAKE_FORM_CURRENCY_MAPPING } from "#/lib/constants";
+
+/**
+ * Format budget object into human-readable string
+ */
+function formatBudget(
+  budget:
+    | {
+        currency?: string;
+        min?: string;
+        max?: string;
+      }
+    | string
+    | undefined
+): string {
+  if (!budget) return "Not specified";
+
+  if (typeof budget === "string") {
+    return budget;
+  }
+
+  const currency = budget.currency || "ILS";
+  const currencyInfo = INTAKE_FORM_CURRENCY_MAPPING[currency];
+  const symbol = currencyInfo?.symbol || "₪";
+  const code = currencyInfo?.code || currency;
+
+  const min = budget.min ? parseFloat(budget.min) : 0;
+  const max = budget.max ? parseFloat(budget.max) : 0;
+
+  if (min === 0 && max === 0) {
+    return "Budget not specified";
+  }
+
+  const formatNumber = (num: number): string => {
+    return new Intl.NumberFormat("he-IL", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(num);
+  };
+
+  if (min > 0 && max > 0 && min !== max) {
+    return `${symbol}${formatNumber(min)} - ${symbol}${formatNumber(
+      max
+    )} ${code}`;
+  } else if (min > 0 && max > 0 && min === max) {
+    return `${symbol}${formatNumber(min)} ${code}`;
+  } else if (min > 0) {
+    return `${symbol}${formatNumber(min)}+ ${code}`;
+  } else if (max > 0) {
+    return `Up to ${symbol}${formatNumber(max)} ${code}`;
+  }
+
+  return "Budget not specified";
+}
 
 /**
  * Render HTML email template for client receipt
@@ -247,11 +301,7 @@ export function renderInternalSummaryHTML(intake: IntakeFormData): string {
     `${intake.contact.firstName} ${intake.contact.lastName}`;
 
   // Format budget properly
-  const budgetDisplay = intake.project.budget
-    ? typeof intake.project.budget === "object"
-      ? JSON.stringify(intake.project.budget)
-      : intake.project.budget
-    : "Not specified";
+  const budgetDisplay = formatBudget(intake.project.budget);
 
   // Urgency color coding
   const urgencyColors: Record<string, string> = {
@@ -313,23 +363,23 @@ export function renderInternalSummaryHTML(intake: IntakeFormData): string {
     </div>
     
     <!-- Key Metrics -->
-    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px;">
-      <div style="text-align: center;">
-        <div style="font-size: 24px; font-weight: 700; color: #667eea;">💰</div>
-        <div style="font-size: 11px; color: #999; text-transform: uppercase; margin-top: 4px;">Budget</div>
-        <div style="font-size: 14px; font-weight: 600; color: #333; margin-top: 2px;">${budgetDisplay}</div>
+    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+      <div style="text-align: center; background: linear-gradient(135deg, #f8f9ff 0%, #e8ebff 100%); padding: 15px; border-radius: 8px; border: 1px solid #e0e4ff;">
+        <div style="font-size: 32px; font-weight: 700; margin-bottom: 8px;">💰</div>
+        <div style="font-size: 11px; color: #667eea; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 6px;">Budget</div>
+        <div style="font-size: 15px; font-weight: 700; color: #333; line-height: 1.3;">${budgetDisplay}</div>
       </div>
-      <div style="text-align: center;">
-        <div style="font-size: 24px; font-weight: 700; color: #667eea;">📅</div>
-        <div style="font-size: 11px; color: #999; text-transform: uppercase; margin-top: 4px;">Timeline</div>
-        <div style="font-size: 14px; font-weight: 600; color: #333; margin-top: 2px;">${
-          intake.project.timeline || "TBD"
+      <div style="text-align: center; background: linear-gradient(135deg, #fff8f0 0%, #ffe8d0 100%); padding: 15px; border-radius: 8px; border: 1px solid #ffd4a0;">
+        <div style="font-size: 32px; font-weight: 700; margin-bottom: 8px;">📅</div>
+        <div style="font-size: 11px; color: #fd7e14; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 6px;">Timeline</div>
+        <div style="font-size: 15px; font-weight: 700; color: #333; line-height: 1.3;">${
+          intake.project.timeline || "To be determined"
         }</div>
       </div>
-      <div style="text-align: center;">
-        <div style="font-size: 24px; font-weight: 700; color: #667eea;">📞</div>
-        <div style="font-size: 11px; color: #999; text-transform: uppercase; margin-top: 4px;">Contact</div>
-        <div style="font-size: 14px; font-weight: 600; color: #333; margin-top: 2px;">${
+      <div style="text-align: center; background: linear-gradient(135deg, #f0f8ff 0%, #d0e8ff 100%); padding: 15px; border-radius: 8px; border: 1px solid #a0c4ff;">
+        <div style="font-size: 32px; font-weight: 700; margin-bottom: 8px;">📞</div>
+        <div style="font-size: 11px; color: #17a2b8; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 6px;">Contact</div>
+        <div style="font-size: 15px; font-weight: 700; color: #333; line-height: 1.3;">${
           intake.additional?.preferredContactMethod || "Email"
         }</div>
       </div>
@@ -337,22 +387,22 @@ export function renderInternalSummaryHTML(intake: IntakeFormData): string {
   </div>
 
   <!-- Quick Actions -->
-  <div style="background: #f8f9fa; padding: 20px; text-align: center; border-bottom: 1px solid #dee2e6;">
-    <p style="margin: 0 0 15px 0; font-size: 14px; color: #666; font-weight: 600;">QUICK ACTIONS</p>
-    <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-      <a href="${adminDashboardLink}" style="display: inline-block; background: #667eea; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; transition: background 0.3s;">
+  <div style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); padding: 25px 20px; text-align: center; border-bottom: 1px solid #dee2e6;">
+    <p style="margin: 0 0 18px 0; font-size: 13px; color: #667eea; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Quick Actions</p>
+    <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+      <a href="${adminDashboardLink}" style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #5568d3 100%); color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3); transition: transform 0.2s, box-shadow 0.2s;">
         📊 View in Admin
       </a>
       <a href="mailto:${intake.contact.email}?subject=Re: ${encodeURIComponent(
     intake.project.title
-  )}" style="display: inline-block; background: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px;">
+  )}" style="display: inline-block; background: linear-gradient(135deg, #28a745 0%, #218838 100%); color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; box-shadow: 0 4px 6px rgba(40, 167, 69, 0.3);">
         ✉️ Reply to Client
       </a>
       <a href="mailto:${
         intake.contact.email
       }?subject=Let's Schedule a Call&body=Hi ${
     intake.contact.firstName
-  }," style="display: inline-block; background: #17a2b8; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px;">
+  }," style="display: inline-block; background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; box-shadow: 0 4px 6px rgba(23, 162, 184, 0.3);">
         📞 Schedule Call
       </a>
     </div>
@@ -478,7 +528,7 @@ export function renderInternalSummaryHTML(intake: IntakeFormData): string {
           ${intake.project.technologies
             .map(
               (tech) =>
-                `<span style="background: #667eea; color: white; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: 500;">${tech}</span>`
+                `<span style="background: linear-gradient(135deg, #667eea 0%, #5568d3 100%); color: white; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2); display: inline-block; margin: 2px;">${tech}</span>`
             )
             .join("")}
         </div>
@@ -553,13 +603,17 @@ export function renderInternalSummaryHTML(intake: IntakeFormData): string {
     }
     
     <!-- Next Steps / Admin Note -->
-    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 8px; margin-top: 25px; text-align: center;">
-      <p style="margin: 0 0 10px 0; color: white; font-size: 16px; font-weight: 600;">📌 Next Steps</p>
-      <p style="margin: 0; color: rgba(255,255,255,0.95); font-size: 14px; line-height: 1.6;">
-        Review the full proposal in the admin panel and respond to <strong>${
-          intake.contact.firstName
-        }</strong> within 24-48 hours.
-      </p>
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 25px 20px; border-radius: 12px; margin-top: 30px; text-align: center; box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3); position: relative; overflow: hidden;">
+      <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+      <div style="position: absolute; bottom: -30px; left: -30px; width: 100px; height: 100px; background: rgba(255,255,255,0.08); border-radius: 50%;"></div>
+      <div style="position: relative; z-index: 1;">
+        <p style="margin: 0 0 12px 0; color: white; font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">📌 Next Steps</p>
+        <p style="margin: 0; color: rgba(255,255,255,0.98); font-size: 15px; line-height: 1.7;">
+          Review the full proposal in the admin panel and respond to <strong style="color: white;">${
+            intake.contact.firstName
+          }</strong> within <strong style="color: white;">24-48 hours</strong> to maximize engagement.
+        </p>
+      </div>
     </div>
     
     <!-- Footer -->

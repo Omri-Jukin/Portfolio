@@ -1,6 +1,6 @@
 import { getDB } from "../client";
 import { customIntakeLinks } from "../schema/schema.tables";
-import { eq, inArray } from "drizzle-orm";
+import { eq, inArray, desc } from "drizzle-orm";
 
 export interface CreateCustomLinkInput {
   slug: string;
@@ -85,6 +85,16 @@ export async function createCustomLink(
       updatedAt: link.updatedAt,
     };
   } catch (error) {
+    // Check if it's a unique constraint violation
+    if (
+      error instanceof Error &&
+      (error.message.includes("unique") ||
+        error.message.includes("duplicate") ||
+        error.message.includes("violates unique constraint"))
+    ) {
+      throw new Error(`Custom link with slug "${input.slug}" already exists`);
+    }
+
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";
     throw new Error(
@@ -164,34 +174,34 @@ export async function getAllCustomLinks(): Promise<CustomLink[]> {
   const db = await getDB();
 
   // Handle build-time scenarios where db might be null
-  if (!db || !("query" in db)) {
+  if (!db) {
     return [];
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for build-time handling
-  const links = await ((db as any).query as any).customIntakeLinks.findMany({
-    orderBy: (
-      links: typeof customIntakeLinks,
-      {
-        desc,
-      }: { desc: (column: typeof customIntakeLinks.createdAt) => unknown }
-    ) => [desc(links.createdAt)],
-  });
+  try {
+    const links = await db
+      .select()
+      .from(customIntakeLinks)
+      .orderBy(desc(customIntakeLinks.createdAt));
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for query result
-  return links.map((link: any) => ({
-    id: link.id,
-    slug: link.slug,
-    email: link.email,
-    token: link.token,
-    firstName: link.firstName,
-    lastName: link.lastName,
-    organizationName: link.organizationName,
-    organizationWebsite: link.organizationWebsite,
-    expiresAt: link.expiresAt,
-    createdAt: link.createdAt,
-    updatedAt: link.updatedAt,
-  }));
+    return links.map((link) => ({
+      id: link.id,
+      slug: link.slug,
+      email: link.email,
+      token: link.token,
+      firstName: link.firstName,
+      lastName: link.lastName,
+      organizationName: link.organizationName,
+      organizationWebsite: link.organizationWebsite,
+      hiddenSections: (link.hiddenSections as string[]) || null,
+      expiresAt: link.expiresAt,
+      createdAt: link.createdAt,
+      updatedAt: link.updatedAt,
+    }));
+  } catch (error) {
+    console.error("Failed to get all custom links:", error);
+    return [];
+  }
 }
 
 /**

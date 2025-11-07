@@ -72,3 +72,7 @@ scripts/wrangler-tail.local.js
 !.cursor/rules/.gitkeep
 /prompts/*
 !/prompts/.gitkeep
+
+# backups
+/backups/*
+!/backups/.gitkeep

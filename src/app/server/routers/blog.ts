@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { router, procedure } from "../trpc";
+import { TRPCError } from "@trpc/server";
+import { router, procedure, editorProcedure } from "../trpc";
 import {
   createPost,
   getPostBySlug,
@@ -14,7 +15,12 @@ export const blogRouter = router({
   // Get all published posts (public)
   getPublished: procedure.query(async (opts) => {
     const { db } = opts.ctx;
-    if (!db) throw new Error("Database not available");
+    if (!db) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Database not available",
+      });
+    }
 
     return await getPublishedPosts();
   }),
@@ -23,46 +29,62 @@ export const blogRouter = router({
   getBySlug: procedure
     .input(z.object({ slug: z.string() }))
     .query(async (opts) => {
-      const { db } = opts.ctx;
+      const { db, user } = opts.ctx;
       const { input } = opts;
-      if (!db) throw new Error("Database not available");
+      if (!db) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Database not available",
+        });
+      }
 
       const post = await getPostBySlug(input.slug);
       if (!post) {
-        throw new Error("Post not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Post not found",
+        });
       }
 
-      // Only return published posts for public access
-      if (post.status !== "published") {
-        throw new Error("Post not found");
+      // Public users can only see published posts
+      // Admin/editor users can see all posts
+      const userRole = user?.role || "visitor";
+      const canSeeAll = userRole === "admin" || userRole === "editor";
+
+      if (!canSeeAll && post.status !== "published") {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Post not found",
+        });
       }
 
       return post;
     }),
 
-  // Admin routes (require authentication)
-  getAll: procedure.query(async (opts) => {
-    const { db, user } = opts.ctx;
-    if (!db) throw new Error("Database not available");
-    if (!user || user.role !== "admin") {
-      throw new Error("Unauthorized");
+  // Admin routes (require editor or admin role)
+  getAll: editorProcedure.query(async (opts) => {
+    const { db } = opts.ctx;
+    if (!db) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Database not available",
+      });
     }
 
     return await getAllPosts();
   }),
 
-  getById: procedure.input(z.object({ id: z.string() })).query(async (opts) => {
-    const { db, user } = opts.ctx;
-    const { input } = opts;
-    if (!db) throw new Error("Database not available");
-    if (!user || user.role !== "admin") {
-      throw new Error("Unauthorized");
-    }
+  getById: editorProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async (opts) => {
+      const { db } = opts.ctx;
+      const { input } = opts;
+      if (!db) throw new Error("Database not available");
 
-    return await getPostById(input.id);
-  }),
+      return await getPostById(input.id);
+    }),
 
-  create: procedure
+  create: editorProcedure
     .input(
       z.object({
         title: z.string().min(1),
@@ -80,9 +102,11 @@ export const blogRouter = router({
     .mutation(async (opts) => {
       const { db, user } = opts.ctx;
       const { input } = opts;
-      if (!db) throw new Error("Database not available");
-      if (!user || user.role !== "admin") {
-        throw new Error("Unauthorized");
+      if (!db) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Database not available",
+        });
       }
 
       const author = `${user.firstName} ${user.lastName}`;
@@ -94,7 +118,7 @@ export const blogRouter = router({
       });
     }),
 
-  update: procedure
+  update: editorProcedure
     .input(
       z.object({
         id: z.string(),
@@ -111,25 +135,19 @@ export const blogRouter = router({
       })
     )
     .mutation(async (opts) => {
-      const { db, user } = opts.ctx;
+      const { db } = opts.ctx;
       const { input } = opts;
       if (!db) throw new Error("Database not available");
-      if (!user || user.role !== "admin") {
-        throw new Error("Unauthorized");
-      }
 
       return await updatePost(input);
     }),
 
-  delete: procedure
+  delete: editorProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async (opts) => {
-      const { db, user } = opts.ctx;
+      const { db } = opts.ctx;
       const { input } = opts;
       if (!db) throw new Error("Database not available");
-      if (!user || user.role !== "admin") {
-        throw new Error("Unauthorized");
-      }
 
       return await deletePost(input.id);
     }),

@@ -2,12 +2,23 @@ import { NextResponse } from "next/server";
 import { getDB } from "$/db/client";
 import { sql } from "drizzle-orm";
 import { UserStatus, UserRole } from "#/lib";
+import { requireAdminAccess } from "$/api/auth";
 
 /**
  * Test database connectivity in production
- * Accessible at /api/test-db
+ * Accessible at /api/test-db (admin only)
  */
 export async function GET() {
+  // Require admin access
+  try {
+    await requireAdminAccess();
+  } catch (error: unknown) {
+    console.error("Admin access required:", error);
+    return NextResponse.json(
+      { error: "Admin access required" },
+      { status: 403 }
+    );
+  }
   try {
     console.log("[TEST-DB] Starting database test");
 

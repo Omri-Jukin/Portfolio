@@ -1,21 +1,10 @@
-import type { Config } from "jest";
+import nextJest from "next/jest.js";
 
-const config: Config = {
+const createJestConfig = nextJest({ dir: "./" });
+
+const config = {
   testEnvironment: "jsdom",
-  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
-  transform: {
-    "^.+\\.(ts|tsx)$": [
-      "ts-jest",
-      {
-        tsconfig: {
-          jsx: "react-jsx",
-        },
-        useESM: true,
-      },
-    ],
-    "^.+\\.(js|jsx)$": "babel-jest",
-  },
-  testMatch: ["**/?(*.)+(test|spec).[tj]s?(x)"],
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   moduleNameMapper: {
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
     "^@mui/(.*)$": "<rootDir>/node_modules/@mui/$1",
@@ -28,14 +17,15 @@ const config: Config = {
     "^!/(.*)$": "<rootDir>/theme/$1",
     "^&/(.*)$": "<rootDir>/Components/Providers/$1",
   },
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
-  testPathIgnorePatterns: ["/node_modules/", "/dist/", "/build/"],
+  testPathIgnorePatterns: ["/node_modules/", "/dist/", "/build/", "/.next/"],
   transformIgnorePatterns: ["node_modules/(?!(@react-three|three|jose)/)"],
   collectCoverageFrom: [
     "Components/**/*.{ts,tsx}",
+    "lib/**/*.{ts,tsx}",
     "!**/node_modules/**",
     "!**/vendor/**",
+    "!**/__tests__/**",
   ],
 };
 
-export default config;
+export default createJestConfig(config);

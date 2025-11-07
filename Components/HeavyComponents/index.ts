@@ -14,6 +14,7 @@ export { FloatingEmojis } from "../FloatingEmojis/FloatingEmojis";
 export { WaveText } from "../WaveText/WaveText";
 export { ConnectionLine } from "../ConnectionLine";
 export { CollaborationHub } from "../CollaborationHub";
+export { default as PathSelection3D } from "../PathSelection3D/PathSelection3D";
 
 // Type exports for heavy components
 export type { GalaxyProps } from "../GalaxyCard/Galaxy.type";

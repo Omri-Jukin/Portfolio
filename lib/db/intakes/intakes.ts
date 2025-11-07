@@ -415,3 +415,43 @@ export const getIntakeStatistics = async () => {
 
   return stats;
 };
+
+export const deleteIntake = async (id: string) => {
+  let dbClient: Awaited<ReturnType<typeof getDB>> | null = null;
+  try {
+    dbClient = await getDB();
+  } catch (error) {
+    console.error("Failed to get database client:", error);
+  }
+
+  if (!dbClient) {
+    throw new Error("Database client not available.");
+  }
+
+  // Get intake before deletion for logging
+  const intakeToDelete = await dbClient
+    .select()
+    .from(intakes)
+    .where(eq(intakes.id, id))
+    .limit(1);
+
+  if (!intakeToDelete.length) {
+    throw new Error("Intake not found.");
+  }
+
+  // Delete intake (cascade will handle related records)
+  const deleted = await dbClient
+    .delete(intakes)
+    .where(eq(intakes.id, id))
+    .returning();
+
+  if (!deleted.length) {
+    throw new Error("Failed to delete intake.");
+  }
+
+  console.log(
+    `[Intake Delete] Successfully deleted intake with ID: ${id}, email: ${intakeToDelete[0].email}`
+  );
+
+  return deleted[0];
+};

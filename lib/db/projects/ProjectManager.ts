@@ -22,7 +22,6 @@ const getDbClient = async () => getDB();
 
 const transformDbToApi = (dbProject: ProjectDB): IProject => {
   // Map status to API ProjectStatus, excluding "deleted"
-  const status = dbProject.status === "deleted" ? "archived" : dbProject.status;
 
   // Transform technicalChallenges to TechnicalChallenge[]
   const technicalChallenges: TechnicalChallenge[] = Array.isArray(
@@ -85,19 +84,41 @@ const transformDbToApi = (dbProject: ProjectDB): IProject => {
     : [];
 
   return {
-    ...dbProject,
-    status,
+    id: dbProject.id,
+    createdById: dbProject.createdBy,
+    createdBy: dbProject.createdBy,
+    title: dbProject.title,
+    subtitle: dbProject.subtitle,
+    description: dbProject.description,
+    longDescription: dbProject.longDescription,
+    technologies: dbProject.technologies,
+    categories: dbProject.categories,
+    status: dbProject.status,
+    projectType: dbProject.projectType,
     startDate: dbProject.startDate.toISOString(),
     endDate: dbProject.endDate ? dbProject.endDate.toISOString() : null,
-    createdAt: dbProject.createdAt.toISOString(),
-    updatedAt: dbProject.updatedAt ? dbProject.updatedAt.toISOString() : null,
+    githubUrl: dbProject.githubUrl,
+    liveUrl: dbProject.liveUrl,
+    demoUrl: dbProject.demoUrl,
+    documentationUrl: dbProject.documentationUrl,
+    images: dbProject.images,
+    keyFeatures: dbProject.keyFeatures,
+    technicalChallenges: technicalChallenges,
+    codeExamples: codeExamples,
+    teamSize: dbProject.teamSize,
+    myRole: dbProject.myRole,
+    clientName: dbProject.clientName,
+    budget: dbProject.budget,
+    isFeatured: dbProject.isFeatured,
     problem: dbProject.problem as ProjectProblem | null,
     solution: dbProject.solution as ProjectSolution | null,
     architecture: dbProject.architecture as ProjectArchitecture | null,
     titleTranslations: dbProject.titleTranslations || null,
     descriptionTranslations: dbProject.descriptionTranslations || null,
-    technicalChallenges,
-    codeExamples,
+    createdAt: dbProject.createdAt.toISOString(),
+    updatedAt: dbProject.updatedAt ? dbProject.updatedAt.toISOString() : null,
+    displayOrder: dbProject.displayOrder,
+    isVisible: dbProject.isVisible,
   };
 };
 

@@ -175,3 +175,8 @@ export const ArchitectureSection = styled(Box)(({ theme }) => ({
     marginBottom: theme.spacing(0.5),
   },
 }));
+
+export const StyledList = styled("ul")(({ theme }) => ({
+  margin: theme.spacing(1, 0),
+  paddingLeft: theme.spacing(2.5),
+}));

@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { router, procedure, protectedProcedure } from "../trpc";
+import { TRPCError } from "@trpc/server";
+import { router, procedure, editorProcedure } from "../trpc";
 
 const publicProcedure = procedure;
 import { ProjectManager } from "$/db/projects/ProjectManager";
@@ -62,8 +63,8 @@ const CreateProjectSchema = z.object({
     .min(1, "At least one category is required"),
   status: ProjectStatusSchema.default("completed"),
   projectType: ProjectTypeSchema,
-  startDate: z.date(),
-  endDate: z.date().optional(),
+  startDate: z.coerce.date(),
+  endDate: z.coerce.date().optional(),
   githubUrl: z.string().url().optional().or(z.literal("")),
   liveUrl: z.string().url().optional().or(z.literal("")),
   demoUrl: z.string().url().optional().or(z.literal("")),
@@ -140,8 +141,23 @@ export const projectsRouter = router({
 
   getById: publicProcedure
     .input(z.object({ id: z.string() }))
-    .query(async ({ input }) => {
-      return await ProjectManager.getById(input.id);
+    .query(async ({ input, ctx }) => {
+      const project = await ProjectManager.getById(input.id);
+
+      // Public users can only see visible projects
+      // Admin/editor users can see all projects
+      if (!project) {
+        return null;
+      }
+
+      const userRole = ctx.user?.role || "visitor";
+      const canSeeAll = userRole === "admin" || userRole === "editor";
+
+      if (!canSeeAll && !project.isVisible) {
+        return null; // Return null instead of throwing to prevent information leakage
+      }
+
+      return project;
     }),
 
   getByStatus: publicProcedure
@@ -219,11 +235,11 @@ export const projectsRouter = router({
     }),
 
   // Protected routes (admin only)
-  getAllAdmin: protectedProcedure.query(async () => {
+  getAllAdmin: editorProcedure.query(async () => {
     return await ProjectManager.getAll(false);
   }),
 
-  create: protectedProcedure
+  create: editorProcedure
     .input(CreateProjectSchema)
     .mutation(async ({ input, ctx }) => {
       // Convert empty string URLs to undefined
@@ -240,14 +256,34 @@ export const projectsRouter = router({
       return await ProjectManager.create(cleanInput);
     }),
 
-  update: protectedProcedure
+  update: editorProcedure
     .input(
       z.object({
         id: z.string(),
         data: UpdateProjectSchema,
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
+      // Verify createdBy matches session user (unless admin)
+      const existing = await ProjectManager.getById(input.id);
+      if (!existing) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Project not found",
+        });
+      }
+
+      const userRole = ctx.user.role || "visitor";
+      const isAdmin = userRole === "admin";
+
+      // Check if user is trying to update a record they didn't create
+      if (!isAdmin && existing.createdById !== ctx.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You can only update projects you created",
+        });
+      }
+
       // Convert empty string URLs to undefined
       const cleanData = {
         ...input.data,
@@ -264,24 +300,47 @@ export const projectsRouter = router({
       return await ProjectManager.update(input.id, cleanData);
     }),
 
-  delete: protectedProcedure
+  delete: editorProcedure
     .input(z.object({ id: z.string() }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
+      // Verify createdBy matches session user (unless admin)
+      const existing = await ProjectManager.getById(input.id);
+      if (!existing) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Project not found",
+        });
+      }
+
+      const userRole = ctx.user.role || "visitor";
+      const isAdmin = userRole === "admin";
+
+      // Check if user is trying to delete a record they didn't create
+      if (!isAdmin && existing.createdById !== ctx.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You can only delete projects you created",
+        });
+      }
+
       const success = await ProjectManager.delete(input.id);
       if (!success) {
-        throw new Error("Failed to delete project");
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to delete project",
+        });
       }
       return { success: true };
     }),
 
-  reorder: protectedProcedure
+  reorder: editorProcedure
     .input(ReorderProjectsSchema)
     .mutation(async ({ input }) => {
       await ProjectManager.updateDisplayOrder(input);
       return { success: true };
     }),
 
-  toggleVisibility: protectedProcedure
+  toggleVisibility: editorProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input }) => {
       const updated = await ProjectManager.toggleVisibility(input.id);
@@ -291,7 +350,7 @@ export const projectsRouter = router({
       return updated;
     }),
 
-  toggleFeatured: protectedProcedure
+  toggleFeatured: editorProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input }) => {
       const updated = await ProjectManager.toggleFeatured(input.id);
@@ -302,7 +361,7 @@ export const projectsRouter = router({
     }),
 
   // Bulk operations
-  bulkUpdate: protectedProcedure
+  bulkUpdate: editorProcedure
     .input(
       z.object({
         ids: z.array(z.string()),
@@ -314,7 +373,7 @@ export const projectsRouter = router({
       return results;
     }),
 
-  bulkDelete: protectedProcedure
+  bulkDelete: editorProcedure
     .input(z.object({ ids: z.array(z.string()) }))
     .mutation(async ({ input }) => {
       const result = await ProjectManager.bulkDelete(input.ids);
