@@ -27,6 +27,7 @@ import {
   arrayMove,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { createContext, useContext } from "react";
 import {
   DragIndicator as DragIndicatorIcon,
   Save as SaveIcon,
@@ -57,7 +58,7 @@ const SECTION_CONFIG = {
   blog: {
     title: "Blog Posts",
     description: "Manage blog posts and content.",
-    route: "/admin/blog",
+    route: "/dashboard/blog",
     buttonText: "View Blog Posts",
     secondaryRoute: null,
     secondaryButtonText: null,
@@ -66,7 +67,7 @@ const SECTION_CONFIG = {
     title: "Work Experience",
     description:
       "Manage professional work experience, roles, and career history.",
-    route: "/admin/work-experiences",
+    route: "/dashboard/work-experiences",
     buttonText: "Manage Work Experience",
     secondaryRoute: null,
     secondaryButtonText: null,
@@ -75,7 +76,7 @@ const SECTION_CONFIG = {
     title: "Projects",
     description:
       "Manage portfolio projects, technical details, and showcased work.",
-    route: "/admin/projects",
+    route: "/dashboard/projects",
     buttonText: "Manage Projects",
     secondaryRoute: null,
     secondaryButtonText: null,
@@ -84,7 +85,7 @@ const SECTION_CONFIG = {
     title: "Skills",
     description:
       "Manage technical skills, proficiency levels, and competencies.",
-    route: "/admin/skills",
+    route: "/dashboard/skills",
     buttonText: "Manage Skills",
     secondaryRoute: null,
     secondaryButtonText: null,
@@ -93,7 +94,7 @@ const SECTION_CONFIG = {
     title: "Email Templates",
     description:
       "Create, edit, and send styled emails to clients. Manage templates with HTML/CSS editing.",
-    route: "/admin/emails",
+    route: "/dashboard/emails",
     buttonText: "Manage Email Templates",
     secondaryRoute: null,
     secondaryButtonText: null,
@@ -102,7 +103,7 @@ const SECTION_CONFIG = {
     title: "Education",
     description:
       "Manage academic background, degrees, and educational achievements displayed on the portfolio.",
-    route: "/admin/education",
+    route: "/dashboard/education",
     buttonText: "Manage Education",
     secondaryRoute: null,
     secondaryButtonText: null,
@@ -111,7 +112,7 @@ const SECTION_CONFIG = {
     title: "Certifications",
     description:
       "Manage professional certifications and credentials displayed on the portfolio.",
-    route: "/admin/certifications",
+    route: "/dashboard/certifications",
     buttonText: "Manage Certifications",
     secondaryRoute: null,
     secondaryButtonText: null,
@@ -120,16 +121,16 @@ const SECTION_CONFIG = {
     title: "Project Intakes",
     description:
       "Review intake forms with advanced tools, or manage custom intake links.",
-    route: "/admin/review",
+    route: "/dashboard/review",
     buttonText: "Review Intakes",
-    secondaryRoute: "/admin/intakes",
+    secondaryRoute: "/dashboard/intakes",
     secondaryButtonText: "Manage Intake Links",
   },
   calculatorSettings: {
     title: "Calculator Settings",
     description:
       "Manage pricing calculator rates, multipliers, and feature costs. Configure base rates, complexity multipliers, timeline adjustments, and more.",
-    route: "/admin/calculator-settings",
+    route: "/dashboard/calculator-settings",
     buttonText: "Manage Calculator Settings",
     secondaryRoute: null,
     secondaryButtonText: null,
@@ -138,7 +139,7 @@ const SECTION_CONFIG = {
     title: "Pricing Management",
     description:
       "Manage dynamic pricing model: project types, base rates (including client-type-specific), features, multipliers, and meta settings.",
-    route: "/admin/pricing",
+    route: "/dashboard/pricing",
     buttonText: "Manage Pricing",
     secondaryRoute: null,
     secondaryButtonText: null,
@@ -147,8 +148,35 @@ const SECTION_CONFIG = {
     title: "Discounts",
     description:
       "Create and manage promotional discount codes with usage limits, date ranges, and scope restrictions.",
-    route: "/admin/discounts",
+    route: "/dashboard/discounts",
     buttonText: "Manage Discounts",
+    secondaryRoute: null,
+    secondaryButtonText: null,
+  },
+  roles: {
+    title: "Roles & Permissions",
+    description:
+      "Manage user roles and their permissions. Configure what each role can access and edit.",
+    route: "/dashboard/roles",
+    buttonText: "Manage Roles",
+    secondaryRoute: null,
+    secondaryButtonText: null,
+  },
+  services: {
+    title: "Services",
+    description:
+      "Manage professional service offerings, pricing, and availability displayed on the portfolio.",
+    route: "/dashboard/services",
+    buttonText: "Manage Services",
+    secondaryRoute: null,
+    secondaryButtonText: null,
+  },
+  testimonials: {
+    title: "Testimonials",
+    description:
+      "Manage client testimonials, reviews, and feedback displayed on the portfolio.",
+    route: "/dashboard/testimonials",
+    buttonText: "Manage Testimonials",
     secondaryRoute: null,
     secondaryButtonText: null,
   },
@@ -157,6 +185,73 @@ const SECTION_CONFIG = {
 type SectionKey = keyof typeof SECTION_CONFIG;
 
 type SectionConfig = (typeof SECTION_CONFIG)[SectionKey];
+
+// Context for passing drag handle props to children
+const DragHandleContext = createContext<{
+  setActivatorNodeRef: (element: HTMLElement | null) => void;
+  attributes: ReturnType<typeof useSortable>["attributes"];
+  listeners: ReturnType<typeof useSortable>["listeners"];
+} | null>(null);
+
+// Drag handle component that uses the context
+function DragHandle({
+  sectionKey,
+  viewMode,
+}: {
+  sectionKey: string;
+  viewMode: "list" | "cards";
+}) {
+  const dragHandleProps = useContext(DragHandleContext);
+
+  if (!dragHandleProps) {
+    // If not inside a SortableSectionCard, return a non-functional handle
+    return (
+      <Box
+        key={`section-drag-handle-${sectionKey}`}
+        id={`section-drag-handle-${sectionKey}`}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          cursor: "grab",
+          color: "text.secondary",
+          mt: viewMode === "cards" ? 0 : 1,
+          "&:active": {
+            cursor: "grabbing",
+          },
+          mr: 1,
+        }}
+      >
+        <DragIndicatorIcon />
+      </Box>
+    );
+  }
+
+  const { setActivatorNodeRef, attributes, listeners } = dragHandleProps;
+
+  return (
+    <Box
+      key={`section-drag-handle-${sectionKey}`}
+      id={`section-drag-handle-${sectionKey}`}
+      ref={setActivatorNodeRef}
+      {...attributes}
+      {...listeners}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        cursor: "grab",
+        color: "text.secondary",
+        mt: viewMode === "cards" ? 0 : 1,
+        "&:active": {
+          cursor: "grabbing",
+        },
+        mr: 1,
+        touchAction: "none", // Prevent scrolling on touch devices
+      }}
+    >
+      <DragIndicatorIcon />
+    </Box>
+  );
+}
 
 interface SortableSectionCardProps {
   id: string;
@@ -169,7 +264,15 @@ function SortableSectionCard({
   children,
   viewMode,
 }: SortableSectionCardProps) {
-  const { setNodeRef, transform, transition, isDragging } = useSortable({ id });
+  const {
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    transition,
+    isDragging,
+    attributes,
+    listeners,
+  } = useSortable({ id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -178,22 +281,26 @@ function SortableSectionCard({
   };
 
   return (
-    <Card
-      key={id}
-      id={`admin-dashboard-section-${id}`}
-      ref={setNodeRef}
-      style={style}
-      sx={{
-        mb: viewMode === "list" ? 3 : 0,
-        height: viewMode === "cards" ? "100%" : "auto",
-        position: "relative",
-        boxShadow: isDragging ? 6 : 1,
-        transform: isDragging ? "rotate(2deg)" : "none",
-        transition: "all 0.2s ease",
-      }}
+    <DragHandleContext.Provider
+      value={{ setActivatorNodeRef, attributes, listeners }}
     >
-      {children}
-    </Card>
+      <Card
+        key={id}
+        id={`admin-dashboard-section-${id}`}
+        ref={setNodeRef}
+        style={style}
+        sx={{
+          mb: viewMode === "list" ? 3 : 0,
+          height: viewMode === "cards" ? "100%" : "auto",
+          position: "relative",
+          boxShadow: isDragging ? 6 : 1,
+          transform: isDragging ? "rotate(2deg)" : "none",
+          transition: "all 0.2s ease",
+        }}
+      >
+        {children}
+      </Card>
+    </DragHandleContext.Provider>
   );
 }
 
@@ -435,23 +542,7 @@ export default function AdminDashboard() {
         >
           {/* If editing, drag handle */}
           {isEditing && (
-            <Box
-              key={`section-drag-handle-${sectionKey}`}
-              id={`section-drag-handle-${sectionKey}`}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                cursor: "grab",
-                color: "text.secondary",
-                mt: viewMode === "cards" ? 0 : 1,
-                "&:active": {
-                  cursor: "grabbing",
-                },
-                mr: 1,
-              }}
-            >
-              <DragIndicatorIcon />
-            </Box>
+            <DragHandle sectionKey={sectionKey} viewMode={viewMode} />
           )}
           <Box
             key={`section-content-pending-users-${sectionKey}`}
@@ -700,7 +791,7 @@ export default function AdminDashboard() {
                       return (
                         <SortableSectionCard
                           key={`admin-dashboard-section-${section.sectionKey}`}
-                          id={`admin-dashboard-section-${section.sectionKey}`}
+                          id={section.sectionKey}
                           viewMode={viewMode}
                         >
                           {renderSectionContent(section)}
@@ -742,7 +833,7 @@ export default function AdminDashboard() {
                           id={`admin-dashboard-section-${section.sectionKey}`}
                         >
                           <SortableSectionCard
-                            id={`admin-dashboard-section-${section.sectionKey}`}
+                            id={section.sectionKey}
                             key={`admin-dashboard-section-${section.sectionKey}`}
                             viewMode={viewMode}
                           >

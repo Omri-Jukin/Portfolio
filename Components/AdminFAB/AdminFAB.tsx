@@ -47,8 +47,13 @@ export default function AdminFAB() {
   // Extract locale from pathname
   const locale = pathname.split("/")[1] || "en";
 
+  // Don't show FAB on login page
+  if (pathname.includes("/login")) {
+    return null;
+  }
+
   // Extract intake ID from pathname if on intake detail page
-  const intakeIdMatch = pathname.match(/\/admin\/intakes\/([^/]+)/);
+  const intakeIdMatch = pathname.match(/\/dashboard\/intakes\/([^/]+)/);
   const intakeId = intakeIdMatch ? intakeIdMatch[1] : undefined;
 
   const navigateTo = (path: string) => {
@@ -80,10 +85,7 @@ export default function AdminFAB() {
       });
 
       if (!response.ok) {
-        console.warn(
-          "NextAuth signout returned non-OK status:",
-          response.status
-        );
+        // NextAuth signout returned non-OK status, but continue with redirect
       }
 
       // Wait for the signout to complete, then redirect
@@ -109,31 +111,31 @@ export default function AdminFAB() {
     {
       icon: <DashboardIcon />,
       label: "Dashboard",
-      onClick: () => navigateTo("/admin"),
+      onClick: () => navigateTo("/dashboard"),
       color: "secondary",
     },
     {
       icon: <IntakesIcon />,
       label: "Intakes",
-      onClick: () => navigateTo("/admin/intakes"),
+      onClick: () => navigateTo("/dashboard/intakes"),
       color: "secondary",
     },
     {
       icon: <ReviewIcon />,
       label: "Review",
-      onClick: () => navigateTo("/admin/review"),
+      onClick: () => navigateTo("/dashboard/review"),
       color: "secondary",
     },
     {
       icon: <CalculatorSettingsIcon />,
       label: "Calculator Settings",
-      onClick: () => navigateTo("/admin/calculator-settings"),
+      onClick: () => navigateTo("/dashboard/calculator-settings"),
       color: "default",
     },
     {
       icon: <SettingsIcon />,
       label: "Intake Templates",
-      onClick: () => navigateTo("/admin/intake-templates"),
+      onClick: () => navigateTo("/dashboard/intake-templates"),
       color: "default",
     },
     {

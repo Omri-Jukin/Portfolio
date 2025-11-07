@@ -1,60 +1,27 @@
 /**
  * Dynamic currency exchange rate fetching
- * Uses a free API service to get real-time exchange rates
+ * Fetches from server-side API route to avoid CSP issues
  */
-
-const EXCHANGE_RATE_API = "https://api.exchangerate-api.com/v4/latest/ILS";
-const CACHE_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
-
-interface ExchangeRatesResponse {
-  rates: Record<string, number>;
-  base: string;
-  date: string;
-}
-
-let cachedRates: Record<string, number> | null = null;
-let cacheTimestamp: number = 0;
 
 /**
  * Fetch exchange rates dynamically from API
+ * Uses server-side API route to avoid CSP violations
  * Falls back to cached rates if API fails
  */
 export async function fetchExchangeRates(): Promise<Record<string, number>> {
-  // Return cached rates if still valid
-  const now = Date.now();
-  if (cachedRates && now - cacheTimestamp < CACHE_DURATION) {
-    return cachedRates;
-  }
-
   try {
-    const response = await fetch(EXCHANGE_RATE_API, {
+    const response = await fetch("/api/currency/rates", {
       next: { revalidate: 3600 }, // Revalidate every hour
     });
 
     if (!response.ok) {
-      throw new Error(`Exchange rate API returned ${response.status}`);
+      throw new Error(`Currency API returned ${response.status}`);
     }
 
-    const data = (await response.json()) as ExchangeRatesResponse;
-
-    // Store rates with ILS as base (1 ILS = X other currency)
-    // The API returns rates with ILS as base, so we can use them directly
-    cachedRates = data.rates;
-    cacheTimestamp = now;
-
-    // Ensure ILS is 1.0 (base currency)
-    cachedRates.ILS = 1.0;
-
-    return cachedRates;
-  } catch (error) {
-    console.error("Failed to fetch exchange rates:", error);
-
-    // Return cached rates if available, otherwise fallback rates
-    if (cachedRates) {
-      return cachedRates;
-    }
-
-    // Fallback rates (ILS as base = 1.0)
+    const rates = (await response.json()) as Record<string, number>;
+    return rates;
+  } catch {
+    // Return fallback rates on error
     return getFallbackRates();
   }
 }
@@ -68,22 +35,7 @@ function getFallbackRates(): Record<string, number> {
   return {
     ILS: 1.0,
     USD: 0.274, // 1 ILS = 0.274 USD (approximately 3.65 ILS = 1 USD)
-    EUR: 0.252, // 1 ILS = 0.252 EUR
-    GBP: 0.217, // 1 ILS = 0.217 GBP
-    CAD: 0.37,
-    AUD: 0.417,
-    JPY: 41.0,
-    CHF: 0.241,
-    CNY: 1.97,
-    INR: 22.8,
-    BRL: 1.36,
-    MXN: 4.66,
-    ZAR: 5.07,
-    SEK: 2.88,
-    NOK: 2.96,
-    DKK: 1.89,
-    PLN: 1.1,
-    RUB: 24.7,
+    EUR: 0.252, // 1 ILS = 0.252 EUR (approximately 3.97 ILS = 1 EUR)
   };
 }
 

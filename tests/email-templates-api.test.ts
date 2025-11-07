@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from "@jest/globals";
 import { getDB } from "$/db/client";
-import { emailTemplates, users, emailSends } from "$/db/schema/schema.tables";
+import { emailTemplates, emailSends } from "$/db/schema/schema.tables";
 
 describe("Email Templates API", () => {
   let db: Awaited<ReturnType<typeof getDB>> | null = null;
@@ -19,9 +19,14 @@ describe("Email Templates API", () => {
       if (!db) {
         return;
       }
-      await db.delete(emailTemplates);
-      await db.delete(users);
+      // Delete in correct order to respect foreign key constraints:
+      // 1. email_sends (references email_templates and users)
+      // 2. email_templates (references users)
+      // 3. users (no dependencies)
       await db.delete(emailSends);
+      await db.delete(emailTemplates);
+      // Only delete test users, not all users
+      // Users are managed by other tests and may have other foreign key relationships
     } catch (error) {
       console.error("Failed to setup test database:", error);
       db = null;
@@ -30,9 +35,11 @@ describe("Email Templates API", () => {
 
   afterEach(async () => {
     if (db) {
-      await db.delete(emailTemplates);
+      // Delete in correct order to respect foreign key constraints
       await db.delete(emailSends);
-      await db.delete(users);
+      await db.delete(emailTemplates);
+      // Don't delete users - they may be used by other tests
+      // and have other foreign key relationships
     }
   });
 

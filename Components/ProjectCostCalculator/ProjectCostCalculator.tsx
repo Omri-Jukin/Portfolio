@@ -110,7 +110,7 @@ export default function ProjectCostCalculator({
   }, [pricingModel, inputs.projectTypeKey]);
 
   // Auto-fetch intake data if on intake detail page
-  const intakeIdFromPath = pathname.match(/\/admin\/intakes\/([^/]+)/)?.[1];
+  const intakeIdFromPath = pathname.match(/\/dashboard\/intakes\/([^/]+)/)?.[1];
   const effectiveIntakeId = intakeId || intakeIdFromPath;
 
   const { data: intake } = api.intakes.getById.useQuery(

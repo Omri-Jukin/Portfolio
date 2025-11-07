@@ -274,7 +274,7 @@ const EmailTemplatesAdmin = () => {
         <Box sx={{ mb: 3, display: "flex", alignItems: "center", gap: 2 }}>
           <Button
             startIcon={<ArrowBackIcon />}
-            onClick={() => router.push("/admin")}
+            onClick={() => router.push("/dashboard")}
           >
             Back to Dashboard
           </Button>

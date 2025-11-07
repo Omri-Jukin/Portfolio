@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getDB } from "$/db/client";
 import { sql } from "drizzle-orm";
 import { UserStatus, UserRole } from "#/lib";
@@ -8,10 +8,10 @@ import { requireAdminAccess } from "$/api/auth";
  * Test database connectivity in production
  * Accessible at /api/test-db (admin only)
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   // Require admin access
   try {
-    await requireAdminAccess();
+    await requireAdminAccess(request);
   } catch (error: unknown) {
     console.error("Admin access required:", error);
     return NextResponse.json(
@@ -20,8 +20,6 @@ export async function GET() {
     );
   }
   try {
-    console.log("[TEST-DB] Starting database test");
-
     const db = await getDB();
 
     if (!db) {
@@ -36,17 +34,13 @@ export async function GET() {
       );
     }
 
-    console.log("[TEST-DB] Database client created successfully");
-
     // Test 1: Simple query
     const testResult = await db.execute(sql`SELECT 1 as test`);
-    console.log("[TEST-DB] Simple query result:", testResult);
 
     // Test 2: Check users table
     const usersResult = await db.execute(
       sql`SELECT id, email, role, status FROM users LIMIT 5`
     );
-    console.log("[TEST-DB] Users query result:", usersResult);
 
     // Convert results to arrays for both driver types
     const testRows = Array.isArray(testResult)

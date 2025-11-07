@@ -96,14 +96,14 @@ export default function IntakeCards({
         <Box sx={{ mb: 4 }}>
           <Breadcrumbs sx={{ mb: 2 }}>
             <MuiLink
-              href="/admin"
+              href="/dashboard"
               sx={{ color: "text.primary", cursor: "pointer" }}
               onClick={(e) => {
                 e.preventDefault();
-                router.push("/admin");
+                router.push("/dashboard");
               }}
             >
-              Admin
+              Dashboard
             </MuiLink>
             <Typography color="text.primary">Intake Review</Typography>
           </Breadcrumbs>
@@ -125,7 +125,7 @@ export default function IntakeCards({
             <Button
               variant="outlined"
               startIcon={<NotificationsIcon />}
-              onClick={() => router.push("/admin/review/reminders")}
+              onClick={() => router.push("/dashboard/review/reminders")}
               sx={{ mt: { xs: 2, sm: 0 } }}
             >
               View Reminders

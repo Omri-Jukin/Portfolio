@@ -213,8 +213,7 @@ export default function CustomLinkIntakeForm({
   }, [customLink.token, customLink.maxAge]);
 
   const submitIntake = api.intakes.submit.useMutation({
-    onSuccess: (data) => {
-      console.log("[Intake Form] Successfully submitted intake:", data.id);
+    onSuccess: () => {
       setState((prev) => ({ ...prev, isSubmitted: true, isSubmitting: false }));
       setFormData(INTAKE_FORM_DEFAULTS);
     },
@@ -612,7 +611,7 @@ export default function CustomLinkIntakeForm({
                       variant="outlined"
                       size="small"
                       startIcon={<RateReviewIcon />}
-                      onClick={() => router.push(`/${locale}/admin/review`)}
+                      onClick={() => router.push(`/${locale}/dashboard/review`)}
                       sx={{
                         textTransform: "none",
                         fontSize: "0.875rem",

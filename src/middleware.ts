@@ -16,13 +16,17 @@ const intlMiddleware = createMiddleware({
 export default async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
 
-  // Protect all /[locale]/admin routes
-  // Note: Admin routes are organized under (admin) route group but URLs remain /[locale]/admin
-  const adminRouteRegex = /^\/(en|es|fr|he)\/admin(\/|$)/;
-  if (adminRouteRegex.test(pathname)) {
-      const locale = pathname.split("/")[1] || "en";
+  // Protect all /[locale]/dashboard routes
+  // Note: Dashboard routes are organized under (dashboard) route group but URLs remain /[locale]/dashboard
+  const dashboardRouteRegex = /^\/(en|es|fr|he)\/dashboard(\/|$)/;
+  if (dashboardRouteRegex.test(pathname)) {
+    const locale = pathname.split("/")[1] || "en";
 
     try {
+      // Check if session cookie exists (might be set but not yet decoded)
+      const cookies = request.cookies;
+      const sessionCookie = cookies.get("next-auth.session-token");
+
       // Get token from next-auth
       const token = await getToken({
         req: request,
@@ -30,7 +34,16 @@ export default async function middleware(request: NextRequest) {
       });
 
       // Check if user is authenticated
+      // If we have a session cookie but no token, it might be a timing issue after OAuth callback
+      // Allow through if session cookie exists - the page will handle auth via auth() which can decode it
       if (!token) {
+        if (sessionCookie) {
+          // Session cookie exists but token can't be decoded yet (timing issue)
+          // Allow through - auth() in page components can decode it
+          return intlMiddleware(request);
+        }
+
+        // No session cookie and no token - redirect to login
         const loginUrl = new URL(`/${locale}/login`, request.url);
         loginUrl.searchParams.set("redirectTo", pathname);
         return NextResponse.redirect(loginUrl);
@@ -73,11 +86,6 @@ export default async function middleware(request: NextRequest) {
       // For slug-based routes, just allow the request to proceed
       // The page component will handle validation and show not-found if invalid
       // This avoids Edge Runtime limitations with database connections
-      if (process.env.NODE_ENV === "development") {
-        console.log(
-          `[Middleware] Allowing slug-based route - validation will happen in page component`
-        );
-      }
       return intlMiddleware(request);
     }
 

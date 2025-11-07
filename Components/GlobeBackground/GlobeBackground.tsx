@@ -19,6 +19,7 @@ const GlobeBackground: React.FC<GlobeBackgroundProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const globeRef = useRef<{ destroy: () => void } | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [webglSupported, setWebglSupported] = useState(true);
   const [windowSize, setWindowSize] = useState({ width: 1920, height: 1080 });
 
   const [globePosition, setGlobePosition] = useState(
@@ -38,7 +39,30 @@ const GlobeBackground: React.FC<GlobeBackgroundProps> = ({
     setGlobePosition(position);
   }, []);
 
+  // Check WebGL support
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const checkWebGL = () => {
+      try {
+        const canvas = document.createElement("canvas");
+        const gl =
+          canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+        if (!gl) {
+          setWebglSupported(false);
+          console.warn(
+            "WebGL is not supported or blocked. Globe background will not render."
+          );
+          return;
+        }
+        setWebglSupported(true);
+      } catch (e) {
+        setWebglSupported(false);
+        console.warn("WebGL check failed:", e);
+      }
+    };
+
+    checkWebGL();
     setMounted(true);
     if (typeof window !== "undefined") {
       const { innerWidth, innerHeight } = window;
@@ -59,7 +83,7 @@ const GlobeBackground: React.FC<GlobeBackgroundProps> = ({
   }, [updateGlobePosition]);
 
   useEffect(() => {
-    if (!mounted || !canvasRef.current) return;
+    if (!mounted || !canvasRef.current || !webglSupported) return;
 
     let phi = 0;
 
@@ -104,6 +128,7 @@ const GlobeBackground: React.FC<GlobeBackgroundProps> = ({
       });
     } catch (error) {
       console.error("Failed to create globe:", error);
+      setWebglSupported(false);
     }
 
     return () => {
@@ -112,7 +137,7 @@ const GlobeBackground: React.FC<GlobeBackgroundProps> = ({
         globeRef.current = null;
       }
     };
-  }, [mounted, markers, rotationSpeed, isDark, windowSize]);
+  }, [mounted, webglSupported, markers, rotationSpeed, isDark, windowSize]);
 
   if (!mounted) return null;
 
@@ -123,28 +148,30 @@ const GlobeBackground: React.FC<GlobeBackgroundProps> = ({
       scrollProgress={0}
       {...props}
     >
-      <Box
-        className="globe-canvas-container"
-        sx={{
-          position: "fixed",
-          left: globePosition.left,
-          top: globePosition.top,
-          transform: globePosition.transform,
-          width: "100vmin",
-          height: "100vmin",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          zIndex: -1,
-          pointerEvents: "none",
-          overflow: "visible",
-          opacity: opacity,
-          transition: "none",
-          willChange: "auto",
-        }}
-      >
-        <StyledCanvas ref={canvasRef} isDark={isDark} />
-      </Box>
+      {webglSupported && (
+        <Box
+          className="globe-canvas-container"
+          sx={{
+            position: "fixed",
+            left: globePosition.left,
+            top: globePosition.top,
+            transform: globePosition.transform,
+            width: "100vmin",
+            height: "100vmin",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: -1,
+            pointerEvents: "none",
+            overflow: "visible",
+            opacity: opacity,
+            transition: "none",
+            willChange: "auto",
+          }}
+        >
+          <StyledCanvas ref={canvasRef} isDark={isDark} />
+        </Box>
+      )}
 
       {children && <Box className="content-container">{children}</Box>}
     </StyledGlobeContainer>

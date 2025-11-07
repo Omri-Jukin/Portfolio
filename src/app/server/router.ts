@@ -16,6 +16,9 @@ import { skillsRouter } from "./routers/skills";
 import { adminDashboardRouter } from "./routers/adminDashboard";
 import { pricingRouter } from "./routers/pricing";
 import { discountsRouter } from "./routers/discounts";
+import { servicesRouter } from "./routers/services";
+import { testimonialsRouter } from "./routers/testimonials";
+import { rolesRouter } from "./routers/roles";
 
 export const appRouter = router({
   blog: blogRouter,
@@ -35,6 +38,9 @@ export const appRouter = router({
   adminDashboard: adminDashboardRouter,
   pricing: pricingRouter,
   discounts: discountsRouter,
+  services: servicesRouter,
+  testimonials: testimonialsRouter,
+  roles: rolesRouter,
 });
 
 export type AppRouter = typeof appRouter;

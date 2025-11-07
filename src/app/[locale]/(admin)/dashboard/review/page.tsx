@@ -34,7 +34,7 @@ export default function ReviewPage() {
     : null;
 
   const handleIntakeSelect = (id: string) => {
-    router.push(`/admin/review?id=${id}`);
+    router.push(`/dashboard/review?id=${id}`);
   };
 
   if (loadingIntakes) {
@@ -86,7 +86,7 @@ export default function ReviewPage() {
         loadingIntake={loadingIntake}
         intakeError={intakeError}
         onIntakeSelect={handleIntakeSelect}
-        onBackToCards={() => router.push("/admin/review")}
+        onBackToCards={() => router.push("/dashboard/review")}
       />
     </ClientOnly>
   );

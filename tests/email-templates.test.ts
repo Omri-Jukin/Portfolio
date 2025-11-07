@@ -8,7 +8,7 @@ import {
   type CreateEmailTemplateInput,
 } from "$/db/emailTemplates/emailTemplates";
 import { getDB } from "$/db/client";
-import { emailTemplates } from "$/db/schema/schema.tables";
+import { emailTemplates, emailSends } from "$/db/schema/schema.tables";
 import { users } from "$/db/schema/schema.tables";
 import { eq } from "drizzle-orm";
 
@@ -31,22 +31,29 @@ describe("Email Templates", () => {
         return;
       }
 
-      // Clean up templates and users before each test
+      // Clean up in correct order to respect foreign key constraints:
+      // 1. email_sends (references email_templates and users)
+      // 2. email_templates (references users)
+      // 3. users (no dependencies)
+      await db.delete(emailSends);
       await db.delete(emailTemplates);
       await db.delete(users).where(eq(users.email, "test-admin@example.com"));
 
       // Create a test user for createdBy
-      const testUser = await db
-        .insert(users)
-        .values({
+      // Use createUser to properly hash the password
+      const { createUser } = await import("$/db/users/users");
+      const testUser = await createUser(
+        {
           email: "test-admin@example.com",
-          password: "hashed_password",
+          password: "test-password-123", // Plain text - will be hashed
           firstName: "Test",
           lastName: "Admin",
           role: "admin",
-        })
-        .returning();
-      testUserId = testUser[0]?.id;
+          status: "approved",
+        },
+        db
+      );
+      testUserId = testUser.id;
 
       if (!testUserId) {
         throw new Error("Failed to create test user");
@@ -58,10 +65,12 @@ describe("Email Templates", () => {
   });
 
   afterEach(async () => {
-    // Clean up after each test
+    // Clean up after each test in correct order to respect foreign key constraints
     if (db) {
+      await db.delete(emailSends);
       await db.delete(emailTemplates);
-      await db.delete(users);
+      // Only delete the test user we created, not all users
+      await db.delete(users).where(eq(users.email, "test-admin@example.com"));
     }
   });
 
@@ -149,7 +158,7 @@ describe("Email Templates", () => {
       const retrieved = await getEmailTemplateById(created.id);
 
       expect(retrieved).toBeDefined();
-      expect(retrieved?.id).toBe(created.id);
+      expect(retrieved?.id).toEqual(created.id);
       expect(retrieved?.name).toBe("Test Template");
     });
 

@@ -89,7 +89,7 @@ const AdminBlogEdit = () => {
         severity: "success",
       });
       setTimeout(() => {
-        router.push("/admin/blog");
+        router.push("/dashboard/blog");
       }, 2000);
     },
     onError: (error) => {
@@ -246,7 +246,10 @@ const AdminBlogEdit = () => {
         <Typography variant="h6" color="error" sx={{ mb: 2 }}>
           Post not found
         </Typography>
-        <Button variant="outlined" onClick={() => router.push("/admin/blog")}>
+        <Button
+          variant="outlined"
+          onClick={() => router.push("/dashboard/blog")}
+        >
           Back to Blog Management
         </Button>
       </Container>
@@ -469,7 +472,7 @@ const AdminBlogEdit = () => {
           <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end" }}>
             <Button
               variant="outlined"
-              onClick={() => router.push("/admin/blog")}
+              onClick={() => router.push("/dashboard/blog")}
               disabled={updatePostMutation.isPending}
             >
               Cancel

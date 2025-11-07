@@ -365,7 +365,7 @@ export default function RemindersDashboard() {
                         size="small"
                         variant="outlined"
                         onClick={() =>
-                          router.push(`/admin/review?id=${reminder.id}`)
+                          router.push(`/dashboard/review?id=${reminder.id}`)
                         }
                       >
                         Review

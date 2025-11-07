@@ -394,7 +394,7 @@ const AdminIntakesList = () => {
         >
           <Button
             startIcon={<ArrowBackIcon />}
-            onClick={() => router.push("/admin")}
+            onClick={() => router.push("/dashboard")}
             sx={{ alignSelf: { xs: "center", sm: "center" } }}
           >
             Back to Dashboard
@@ -1658,12 +1658,12 @@ const AdminIntakesList = () => {
                                       );
                                       if (matchingIntake) {
                                         router.push(
-                                          `/${currentLocale}/admin/review?id=${matchingIntake.id}`
+                                          `/${currentLocale}/dashboard/review?id=${matchingIntake.id}`
                                         );
                                       } else {
                                         // Navigate to review page - will show all intakes
                                         router.push(
-                                          `/${currentLocale}/admin/review`
+                                          `/${currentLocale}/dashboard/review`
                                         );
                                       }
                                     }}
@@ -1782,7 +1782,7 @@ const AdminIntakesList = () => {
                                 component="button"
                                 onClick={() =>
                                   router.push(
-                                    `/${currentLocale}/admin/intakes/${intake.id}`
+                                    `/${currentLocale}/dashboard/intakes/${intake.id}`
                                   )
                                 }
                                 sx={{
