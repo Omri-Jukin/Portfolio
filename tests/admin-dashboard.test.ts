@@ -169,9 +169,13 @@ describe("Admin Dashboard Sections", () => {
       });
 
       const sections = await getDashboardSections();
-      expect(sections[0].sectionKey).toBe("projects");
-      expect(sections[1].sectionKey).toBe("skills");
-      expect(sections[2].sectionKey).toBe("blog");
+      // Filter to only the sections we created in this test
+      const testSections = sections.filter((s) =>
+        ["projects", "skills", "blog"].includes(s.sectionKey)
+      );
+      expect(testSections[0].sectionKey).toBe("projects");
+      expect(testSections[1].sectionKey).toBe("skills");
+      expect(testSections[2].sectionKey).toBe("blog");
     }, 15000); // Increased timeout to fix test timeout error
 
     it("should handle partial section updates", async () => {

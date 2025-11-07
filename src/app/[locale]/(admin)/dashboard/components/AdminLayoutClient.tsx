@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Box, Typography, Breadcrumbs, Link } from "@mui/material";
+import { Box, Breadcrumbs, Link } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import ProjectCostCalculator from "~/ProjectCostCalculator";
@@ -37,9 +37,10 @@ export default function AdminLayoutClient({
 
     for (let i = 0; i < segments.length; i++) {
       const segment = segments[i];
+      // Build URL from actual path segments, not translated labels
       const url = "/" + segments.slice(0, i + 1).join("/");
 
-      if (segment === "admin") {
+      if (segment === "dashboard") {
         breadcrumbs.push({ label: t("dashboard"), url });
       } else if (segment === "blog") {
         breadcrumbs.push({ label: t("blog"), url });
@@ -99,19 +100,6 @@ export default function AdminLayoutClient({
       >
         {/* Page Header */}
         <Box id="admin-page-header" sx={{ mb: 4 }}>
-          <Typography
-            variant="h3"
-            component="h1"
-            sx={{
-              fontWeight: 700,
-              color: "text.primary",
-              mb: 1,
-              textAlign: { xs: "center", md: "left" },
-            }}
-          >
-            {pageTitle}
-          </Typography>
-
           {/* Breadcrumbs */}
           <Breadcrumbs
             id="admin-page-breadcrumbs"
@@ -163,4 +151,3 @@ export default function AdminLayoutClient({
     </Box>
   );
 }
-

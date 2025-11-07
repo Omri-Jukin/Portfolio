@@ -77,14 +77,7 @@ export const intakesRouter = router({
           customLinkId: customLinkId || null,
         });
 
-        // Log successful intake creation
-        console.log(
-          `[Intake Submit] Successfully created intake with ID: ${
-            intake.id
-          } for email: ${formData.contact.email}${
-            customLinkId ? ` (custom link: ${customLinkId})` : ""
-          }`
-        );
+        // Intake successfully created
 
         // Send emails (client + admin)
         const emailResult = await sendIntakeEmails(formData, proposalMd);
@@ -115,15 +108,10 @@ export const intakesRouter = router({
 
   // Get all intakes (admin protected)
   getAll: adminProcedure.query(async (opts) => {
-    const { db, user } = opts.ctx;
+    const { db } = opts.ctx;
     if (!db) throw new Error("Database not available");
 
     const intakes = await getIntakes();
-    console.log(
-      `[Intakes GetAll] Found ${intakes.length} intakes for admin user: ${
-        user.email || user.id
-      }`
-    );
     return intakes.map((intake) => {
       const data = intake.data as Record<string, unknown>;
       const orgName =

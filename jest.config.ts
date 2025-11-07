@@ -4,6 +4,7 @@ const createJestConfig = nextJest({ dir: "./" });
 
 const config = {
   testEnvironment: "jsdom",
+  setupFiles: ["<rootDir>/jest.setup.polyfills.ts"], // Run polyfills first
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   moduleNameMapper: {
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",

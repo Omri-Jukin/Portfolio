@@ -127,7 +127,7 @@ const AdminBlogDashboard = () => {
           </Button>
           <Button
             variant="outlined"
-            onClick={() => router.push("/admin/blog/new")}
+            onClick={() => router.push("/dashboard/blog/new")}
           >
             Advanced Editor
           </Button>
@@ -226,7 +226,7 @@ const AdminBlogDashboard = () => {
                         <IconButton
                           size="small"
                           onClick={() =>
-                            router.push(`/admin/blog/${post.id}/edit`)
+                            router.push(`/dashboard/blog/${post.id}/edit`)
                           }
                           aria-label="Edit post"
                         >

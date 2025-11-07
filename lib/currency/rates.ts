@@ -7,21 +7,6 @@ export const CURRENCY_RATES: Record<string, number> = {
   USD: 1.0,
   ILS: 3.65, // Israeli Shekel (approximate rate)
   EUR: 0.92,
-  GBP: 0.79,
-  CAD: 1.35,
-  AUD: 1.52,
-  JPY: 150.0,
-  CHF: 0.88,
-  CNY: 7.2,
-  INR: 83.0,
-  BRL: 4.95,
-  MXN: 17.0,
-  ZAR: 18.5,
-  SEK: 10.5,
-  NOK: 10.8,
-  DKK: 6.9,
-  PLN: 4.0,
-  RUB: 90.0,
 };
 
 /**

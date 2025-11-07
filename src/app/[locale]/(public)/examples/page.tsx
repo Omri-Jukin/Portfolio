@@ -330,7 +330,8 @@ const ExamplesPage: React.FC = () => {
                   <PathSelection3D
                     height={600}
                     onSelect={(type) => {
-                      console.log(`Selected: ${type}`);
+                      // Handle selection (can be extended for production use)
+                      void type;
                       // In production:
                       // - "employer" → navigate to /employers
                       // - "client" → navigate to /clients

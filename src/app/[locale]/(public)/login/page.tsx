@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import {
   Box,
@@ -18,18 +18,23 @@ import * as Common from "~/Common/Common.style";
 
 export default function LoginPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const locale = (params?.locale as string) || "en";
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Get redirectTo from query params (set by middleware) or default to dashboard
+  const redirectTo = searchParams.get("redirectTo") || `/${locale}/dashboard`;
 
   const handleGoogleSignIn = async () => {
     try {
       setIsLoading(true);
       setError(null);
 
-      // Sign in with Google and redirect to admin on success
+      // Sign in with Google and redirect to the specified URL or dashboard on success
       await signIn("google", {
-        callbackUrl: `/${locale}/admin`,
+        callbackUrl: redirectTo,
+        redirect: true, // Explicitly enable redirect
       });
     } catch (error) {
       console.error("[AUTH] Google sign in error:", error);

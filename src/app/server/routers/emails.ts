@@ -87,10 +87,7 @@ export const emailsRouter = router({
           input
         );
         if (!userConfirmation.success) {
-          console.warn(
-            "Failed to send user confirmation:",
-            userConfirmation.error
-          );
+          // Failed to send user confirmation email
           // Don't fail the entire request if user confirmation fails
         }
 

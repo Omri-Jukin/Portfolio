@@ -18,7 +18,7 @@ const AdminBlogEdit = () => {
         >
           <Typography variant="h2">{post.title}</Typography>
           <Typography variant="body1">{post.content}</Typography>
-          <Link href={`/admin/blog/${post.id}/edit`} underline="none">
+          <Link href={`/dashboard/blog/${post.id}/edit`} underline="none">
             <Button
               variant="contained"
               color="primary"
@@ -28,7 +28,7 @@ const AdminBlogEdit = () => {
               Edit
             </Button>
           </Link>
-          <Link href={`/admin/blog/${post.id}/delete`} underline="none">
+          <Link href={`/dashboard/blog/${post.id}/delete`} underline="none">
             <Button
               variant="contained"
               color="secondary"

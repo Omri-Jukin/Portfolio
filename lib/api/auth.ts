@@ -3,15 +3,17 @@
  * Provides helpers for protecting Next.js API routes
  */
 
-import { auth } from "../../auth";
+import { NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
 import { canAccessAdminSync } from "$/auth/rbac";
+import { env } from "$/env";
 
 /**
  * Check if the request is from an authenticated admin user
  * @param request - The incoming request
  * @returns Object with isAdmin flag and user info, or null if not authenticated
  */
-export async function checkAdminAccess(): Promise<{
+export async function checkAdminAccess(request: NextRequest): Promise<{
   isAdmin: boolean;
   user: {
     id: string;
@@ -20,20 +22,23 @@ export async function checkAdminAccess(): Promise<{
   } | null;
 } | null> {
   try {
-    const session = await auth();
+    const token = await getToken({
+      req: request,
+      secret: env.AUTH_SECRET || env.NEXTAUTH_SECRET,
+    });
 
-    if (!session || !session.user) {
+    if (!token) {
       return null;
     }
 
-    const role = (session.user.role as string) || "visitor";
+    const role = (token.role as string) || "visitor";
     const isAdmin = canAccessAdminSync(role);
 
     return {
       isAdmin,
       user: {
-        id: session.user.id || "",
-        email: session.user.email || "",
+        id: (token.sub || token.id || "") as string,
+        email: (token.email || "") as string,
         role,
       },
     };
@@ -46,15 +51,16 @@ export async function checkAdminAccess(): Promise<{
 /**
  * Require admin access for an API route
  * Throws an error if the user is not an admin
+ * @param request - The incoming request
  */
-export async function requireAdminAccess(): Promise<{
+export async function requireAdminAccess(request: NextRequest): Promise<{
   user: {
     id: string;
     email: string;
     role: string;
   };
 }> {
-  const access = await checkAdminAccess();
+  const access = await checkAdminAccess(request);
 
   if (!access || !access.isAdmin) {
     throw new Error("Admin access required");

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { requireAdminAccess } from "$/api/auth";
 
 /**
@@ -6,10 +6,10 @@ import { requireAdminAccess } from "$/api/auth";
  * Accessible at /api/debug (admin only)
  * This helps diagnose production issues without exposing sensitive data
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   // Require admin access
   try {
-    await requireAdminAccess();
+    await requireAdminAccess(request);
   } catch (error: unknown) {
     console.error("Admin access required:", error);
     return NextResponse.json(

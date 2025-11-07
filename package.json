@@ -147,6 +147,7 @@
     "db:update": "drizzle-kit generate && drizzle-kit migrate && drizzle-kit push",
     "//6": "— Utilities/Scripts —",
     "clean-install": "rm -rf node_modules package-lock.json .next && npm install",
+    "seed:database": "npx tsx scripts/seed-database.ts",
     "seed:email-templates": "npx tsx scripts/seed-email-templates.ts",
     "seed:calculator-settings": "npx tsx scripts/seed-calculator-settings.ts",
     "seed:pricing-discounts": "npx tsx scripts/seed-pricing-discounts.ts",

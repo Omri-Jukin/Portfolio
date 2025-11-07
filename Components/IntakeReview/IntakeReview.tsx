@@ -302,18 +302,18 @@ export default function IntakeReview({
         >
           <Breadcrumbs>
             <MuiLink
-              href="/admin"
+              href="/dashboard"
               sx={{ color: "text.primary", cursor: "pointer" }}
               onClick={(e) => {
                 e.preventDefault();
-                router.push("/admin");
+                router.push("/dashboard");
               }}
             >
-              Admin
+              Dashboard
             </MuiLink>
             {onBackToCards ? (
               <MuiLink
-                href="/admin/review"
+                href="/dashboard/review"
                 sx={{ color: "text.primary", cursor: "pointer" }}
                 onClick={(e) => {
                   e.preventDefault();
@@ -324,11 +324,11 @@ export default function IntakeReview({
               </MuiLink>
             ) : (
               <MuiLink
-                href="/admin/review"
+                href="/dashboard/review"
                 sx={{ color: "text.primary", cursor: "pointer" }}
                 onClick={(e) => {
                   e.preventDefault();
-                  router.push("/admin/review");
+                  router.push("/dashboard/review");
                 }}
               >
                 Review
@@ -532,7 +532,7 @@ export default function IntakeReview({
             <Button
               variant="outlined"
               startIcon={<AssignmentIcon />}
-              onClick={() => router.push(`/admin/intakes`)}
+              onClick={() => router.push(`/dashboard/intakes`)}
             >
               View in Old Admin
             </Button>
