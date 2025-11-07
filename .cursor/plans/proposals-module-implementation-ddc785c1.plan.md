@@ -1,4 +1,4 @@
-<!-- ddc785c1-f721-44b2-894e-b7d91bc5735c cb1b215e-bb8d-45bf-a822-9f2451dd5e5a -->
+<!-- ddc785c1-f721-44b2-894e-b7d91bc5735c 41b26a54-8314-472c-8d5c-7959e87e49f9 -->
 # Proposals Module Implementation Plan
 
 ## Overview
@@ -104,54 +104,55 @@ Build a complete Proposals module that integrates with existing intakes and pric
 
 **Procedures:**
 
-- `getAll` - List proposals with filters (status, client, date range)
-- `getById` - Get full proposal with sections, items, discounts, taxes
-- `create` - Create from template or blank
-- `update` - Update proposal header fields
-- `delete` - Soft delete or hard delete
-- `duplicate` - Clone proposal
-- `setStatus` - Update status and log event
-- `generateShareToken` - Create/regenerate share token
-- `getByShareToken` - Public access (no auth)
-- `acceptProposal` - Public action, sets status, logs event, stores snapshot
-- `declineProposal` - Public action, sets status, logs event
-- `applyTaxes` - Add/update tax lines or apply tax profile
-- `setPriceDisplay` - Toggle inclusive/exclusive
-- `calculateTotals` - Compute totals (for live preview)
-- `sendProposal` - Send email with PDF attachment
-- `exportPDF` - Generate PDF blob
+- `getAll` - List proposals with filters (status, client, date range) - uses `adminProcedure`
+- `getById` - Get full proposal with sections, items, discounts, taxes - uses `adminProcedure`
+- `create` - Create from template or blank - uses `adminProcedure`
+- `update` - Update proposal header fields - uses `adminProcedure`
+- `delete` - Soft delete or hard delete - uses `adminProcedure`
+- `duplicate` - Clone proposal - uses `adminProcedure`
+- `setStatus` - Update status and log event - uses `adminProcedure`
+- `generateShareToken` - Create/regenerate share token - uses `adminProcedure`
+- `getByShareToken` - Public access (no auth) - uses `publicProcedure`
+- `acceptProposal` - Public action, sets status, logs event, stores snapshot - uses `publicProcedure`
+- `declineProposal` - Public action, sets status, logs event - uses `publicProcedure`
+- `applyTaxes` - Add/update tax lines or apply tax profile - uses `adminProcedure`
+- `setPriceDisplay` - Toggle inclusive/exclusive - uses `adminProcedure`
+- `calculateTotals` - Compute totals (for live preview) - uses `adminProcedure`
+- `sendProposal` - Send email with PDF attachment - uses `adminProcedure`
+- `exportPDF` - Generate PDF blob - uses `adminProcedure` or `publicProcedure` (for share token)
 
 **Sections router:**
 
-- `createSection`, `updateSection`, `deleteSection`, `reorderSections`
+- `createSection`, `updateSection`, `deleteSection`, `reorderSections` - all use `adminProcedure`
 
 **Line items router:**
 
-- `createLineItem`, `updateLineItem`, `toggleSelection`, `deleteLineItem`
+- `createLineItem`, `updateLineItem`, `toggleSelection`, `deleteLineItem` - all use `adminProcedure`
 
 **Discounts router:**
 
-- `addDiscount`, `updateDiscount`, `deleteDiscount`
+- `addDiscount`, `updateDiscount`, `deleteDiscount` - all use `adminProcedure`
 
 **Taxes router:**
 
-- `addTax`, `updateTax`, `reorderTaxes`, `deleteTax`
+- `addTax`, `updateTax`, `reorderTaxes`, `deleteTax` - all use `adminProcedure`
 
 **Templates router:**
 
-- `getTemplates`, `getTemplateById`, `createTemplate`, `updateTemplate`, `deleteTemplate`
+- `getTemplates`, `getTemplateById`, `createTemplate`, `updateTemplate`, `deleteTemplate` - all use `adminProcedure`
 
 **Reference existing:**
 
 - Follow `src/app/server/routers/intakes.ts` structure
 - Use `src/app/server/routers/discounts.ts` for discount patterns
-- Use `protectedProcedure` for admin, public procedure for share token access
+- Use `adminProcedure` from `src/app/server/trpc.ts` for admin endpoints
+- Use `publicProcedure` for share token access (no auth required)
 
 ### 5. Admin UI - List Page
 
 **Files to create:**
 
-- `src/app/[locale]/admin/proposals/page.tsx` - List view
+- `src/app/[locale]/(admin)/dashboard/proposals/page.tsx` - List view
 
 **Features:**
 
@@ -164,19 +165,20 @@ Build a complete Proposals module that integrates with existing intakes and pric
 
 **Reference existing:**
 
-- Follow `src/app/[locale]/admin/intakes/page.tsx` structure
+- Follow `src/app/[locale]/(admin)/dashboard/intakes/page.tsx` structure
 - Use `Components/DataGrid` component
 - Use status filtering pattern from intakes page
+- Layout automatically handled by `(admin)/dashboard/layout.tsx` and `AdminLayoutClient`
 
 ### 6. Admin UI - Editor
 
 **Files to create:**
 
-- `src/app/[locale]/admin/proposals/[id]/page.tsx` - Editor page
-- `src/app/[locale]/admin/proposals/[id]/components/DetailsCard.tsx`
-- `src/app/[locale]/admin/proposals/[id]/components/ContentBuilder.tsx`
-- `src/app/[locale]/admin/proposals/[id]/components/ChargesPanel.tsx`
-- `src/app/[locale]/admin/proposals/[id]/components/TotalsPanel.tsx`
+- `src/app/[locale]/(admin)/dashboard/proposals/[id]/page.tsx` - Editor page
+- `src/app/[locale]/(admin)/dashboard/proposals/[id]/components/DetailsCard.tsx`
+- `src/app/[locale]/(admin)/dashboard/proposals/[id]/components/ContentBuilder.tsx`
+- `src/app/[locale]/(admin)/dashboard/proposals/[id]/components/ChargesPanel.tsx`
+- `src/app/[locale]/(admin)/dashboard/proposals/[id]/components/TotalsPanel.tsx`
 
 **Layout:**
 
@@ -493,22 +495,3 @@ Build a complete Proposals module that integrates with existing intakes and pric
 - ✅ Migrations + seeds run clean
 - ✅ No TypeScript errors
 - ✅ Tests pass (including multi-tax and withholding cases)
-
-### To-dos
-
-- [ ] Create database schema for proposals tables (proposals, proposal_sections, proposal_line_items, proposal_discounts, proposal_taxes, proposal_templates, proposal_events) with migrations and seed data
-- [ ] Build calcProposalTotals pricing engine with multi-tax support, discount stacking, integer money handling, and rounding strategy
-- [ ] Write comprehensive unit tests for calcProposalTotals covering edge cases, multi-tax stacking, withholding, and rounding
-- [ ] Create database access layer functions for proposals CRUD, sections, line items, discounts, taxes, templates, and events
-- [ ] Build tRPC router with procedures for proposals CRUD, sections, line items, discounts, taxes, templates, totals calculation, share token, accept/decline, PDF export, and email sending
-- [ ] Add TypeScript type definitions for all proposal entities and calculation inputs/outputs
-- [ ] Create admin proposals list page with DataGrid, filters, status badges, and create from intake action
-- [ ] Build admin proposal editor with split layout: Details card, Content builder (sections/items), Charges panel (discounts/taxes tabs), and live Totals panel
-- [ ] Create templates management UI (list and editor) for reusable proposal structures
-- [ ] Build tax profiles CRUD UI for managing tax profiles in pricing_meta
-- [ ] Create public share page (/p/[token]) with proposal display, accept/decline actions, and PDF download
-- [ ] Implement PDF generator for proposals using jsPDF with sections, line items, totals, tax breakdown, and footer notes
-- [ ] Add email sending for proposals with PDF attachment and template mentioning tax inclusive/exclusive status
-- [ ] Add Create Proposal action to intake list page with prefilling and suggested discounts
-- [ ] Add localization keys for all proposal UI elements across all language files
-- [ ] Integrate proposals router into main app router
