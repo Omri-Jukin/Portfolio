@@ -57,6 +57,7 @@ const ADMIN_ONLY_TABLES = [
   "calculatorSettings",
   "adminDashboardSections",
   "pricing",
+  "proposals",
 ] as const;
 
 /**

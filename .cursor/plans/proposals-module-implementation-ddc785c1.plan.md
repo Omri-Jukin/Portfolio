@@ -1,4 +1,4 @@
-<!-- ddc785c1-f721-44b2-894e-b7d91bc5735c 41b26a54-8314-472c-8d5c-7959e87e49f9 -->
+<!-- ddc785c1-f721-44b2-894e-b7d91bc5735c f67004c3-418a-4c26-8424-23f8ff6ab891 -->
 # Proposals Module Implementation Plan
 
 ## Overview
@@ -239,8 +239,8 @@ Build a complete Proposals module that integrates with existing intakes and pric
 
 **Files to create:**
 
-- `src/app/[locale]/admin/proposals/templates/page.tsx` - Templates list
-- `src/app/[locale]/admin/proposals/templates/[id]/page.tsx` - Template editor
+- `src/app/[locale]/(admin)/dashboard/proposals/templates/page.tsx` - Templates list
+- `src/app/[locale]/(admin)/dashboard/proposals/templates/[id]/page.tsx` - Template editor
 
 **Features:**
 
@@ -252,13 +252,13 @@ Build a complete Proposals module that integrates with existing intakes and pric
 
 **Reference existing:**
 
-- Follow `src/app/[locale]/admin/intake-templates/page.tsx` pattern
+- Follow `src/app/[locale]/(admin)/dashboard/intake-templates/page.tsx` pattern
 
 ### 8. Admin UI - Tax Profiles CRUD
 
 **Files to create:**
 
-- `src/app/[locale]/admin/proposals/tax-profiles/page.tsx` - Tax profiles management
+- `src/app/[locale]/(admin)/dashboard/proposals/tax-profiles/page.tsx` - Tax profiles management
 
 **Features:**
 
@@ -271,7 +271,7 @@ Build a complete Proposals module that integrates with existing intakes and pric
 
 **Reference existing:**
 
-- Follow `src/app/[locale]/admin/calculator-settings/page.tsx` pattern for meta CRUD
+- Follow `src/app/[locale]/(admin)/dashboard/calculator-settings/page.tsx` pattern for meta CRUD
 
 ### 9. Public Share Page
 

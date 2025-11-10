@@ -23,15 +23,16 @@ export const DEFAULT_SECTIONS = [
   { sectionKey: "calculatorSettings", displayOrder: 4, enabled: true },
   { sectionKey: "pricing", displayOrder: 5, enabled: true },
   { sectionKey: "discounts", displayOrder: 6, enabled: true },
-  { sectionKey: "intakes", displayOrder: 7, enabled: true },
-  { sectionKey: "emails", displayOrder: 8, enabled: true },
-  { sectionKey: "workExperience", displayOrder: 9, enabled: true },
-  { sectionKey: "projects", displayOrder: 10, enabled: true },
-  { sectionKey: "skills", displayOrder: 11, enabled: true },
-  { sectionKey: "education", displayOrder: 12, enabled: true },
-  { sectionKey: "certifications", displayOrder: 13, enabled: true },
-  { sectionKey: "services", displayOrder: 14, enabled: true },
-  { sectionKey: "testimonials", displayOrder: 15, enabled: true },
+  { sectionKey: "proposals", displayOrder: 7, enabled: true },
+  { sectionKey: "intakes", displayOrder: 8, enabled: true },
+  { sectionKey: "emails", displayOrder: 9, enabled: true },
+  { sectionKey: "workExperience", displayOrder: 10, enabled: true },
+  { sectionKey: "projects", displayOrder: 11, enabled: true },
+  { sectionKey: "skills", displayOrder: 12, enabled: true },
+  { sectionKey: "education", displayOrder: 13, enabled: true },
+  { sectionKey: "certifications", displayOrder: 14, enabled: true },
+  { sectionKey: "services", displayOrder: 15, enabled: true },
+  { sectionKey: "testimonials", displayOrder: 16, enabled: true },
 ];
 
 /**
@@ -49,29 +50,19 @@ export async function initializeDashboardSections(): Promise<void> {
   }
 
   try {
+    // Load seed data from YAML config
+    const { loadSeedConfig } = await import("../../utils/loadSeedConfig");
+    const config = loadSeedConfig();
+
     // Type assertion: we know it's a valid Drizzle client
     const dbClient = db as DbClient;
-    const existing =
-      await // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for build-time handling
-      ((dbClient as any).query as any).adminDashboardSections.findMany({});
+    const existing = await dbClient.select().from(adminDashboardSections);
 
-    if (existing.length === 0) {
-      // No sections exist, insert all defaults
-      await (db as DbClient).insert(adminDashboardSections).values(
-        DEFAULT_SECTIONS.map((section) => ({
-          sectionKey: section.sectionKey,
-          displayOrder: section.displayOrder,
-          enabled: section.enabled,
-        }))
-      );
-      return;
-    }
-
-    // Some sections exist - check for missing ones and add them
+    // Check for missing sections and add them
     const existingKeys = new Set(
       existing.map((s: { sectionKey: string }) => s.sectionKey)
     );
-    const missingSections = DEFAULT_SECTIONS.filter(
+    const missingSections = config.dashboardSections.filter(
       (section) => !existingKeys.has(section.sectionKey)
     );
 

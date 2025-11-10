@@ -3,14 +3,65 @@ import { TRPCError } from "@trpc/server";
 import { router, procedure, editorProcedure } from "../trpc";
 import {
   educationCreateSchema,
-  educationUpdateSchema,
   educationFiltersSchema,
   educationBulkUpdateOrderSchema,
 } from "#/lib/schemas";
 import { EducationManager } from "$/db/Education/EducationManager";
 import { NewEducation, UpdateEducation } from "#/lib/db/Education";
+import type { DegreeType } from "#/lib/db/schema/schema.types";
 
 const publicProcedure = procedure;
+
+// Helper function to derive degreeType from degree string
+function deriveDegreeType(degree: string): DegreeType {
+  if (!degree) return "bachelor";
+
+  const firstWord = degree.trim().split(/\s+/)[0]?.toLowerCase() || "";
+  const validTypes: DegreeType[] = [
+    "bachelor",
+    "master",
+    "phd",
+    "diploma",
+    "certificate",
+    "bootcamp",
+  ];
+
+  // Check if first word matches a valid type
+  if (validTypes.includes(firstWord as DegreeType)) {
+    return firstWord as DegreeType;
+  }
+
+  // Fallback: try to match common variations
+  if (
+    firstWord.startsWith("bachelor") ||
+    firstWord.startsWith("bsc") ||
+    firstWord.startsWith("ba")
+  ) {
+    return "bachelor";
+  }
+  if (
+    firstWord.startsWith("master") ||
+    firstWord.startsWith("msc") ||
+    firstWord.startsWith("ma")
+  ) {
+    return "master";
+  }
+  if (firstWord.startsWith("phd") || firstWord.startsWith("doctorate")) {
+    return "phd";
+  }
+  if (firstWord.startsWith("diploma")) {
+    return "diploma";
+  }
+  if (firstWord.startsWith("certificate")) {
+    return "certificate";
+  }
+  if (firstWord.startsWith("bootcamp")) {
+    return "bootcamp";
+  }
+
+  // Default fallback
+  return "bachelor";
+}
 
 export const educationRouter = router({
   // Public routes (for displaying education)
@@ -103,7 +154,8 @@ export const educationRouter = router({
       const cleanInput = {
         ...input,
         institution: input.institution === "" ? undefined : input.institution,
-        degreeType: input.degree === "" ? undefined : input.degree,
+        degreeType:
+          input.degree === "" ? undefined : deriveDegreeType(input.degree),
         fieldOfStudy: input.field === "" ? undefined : input.field,
         createdBy: ctx.user.id,
       };
@@ -116,7 +168,7 @@ export const educationRouter = router({
     .input(
       z.object({
         id: z.string(),
-        data: educationUpdateSchema,
+        data: educationCreateSchema.partial(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -145,7 +197,12 @@ export const educationRouter = router({
         ...input.data,
         institution:
           input.data.institution === "" ? undefined : input.data.institution,
-        degreeType: input.data.degree === "" ? undefined : input.data.degree,
+        degreeType:
+          input.data.degree === ""
+            ? undefined
+            : input.data.degree
+            ? deriveDegreeType(input.data.degree)
+            : undefined,
         fieldOfStudy: input.data.field === "" ? undefined : input.data.field,
       };
 

@@ -7,6 +7,7 @@ import { getDB } from "../client";
 import { roles } from "../schema/schema.tables";
 import { eq } from "drizzle-orm";
 import type { RolePermissions } from "$/auth/rbac";
+import { incrementOrdersForConflict } from "../utils/orderUtils";
 
 export interface Role {
   id: string;
@@ -130,6 +131,11 @@ export async function createRole(input: CreateRoleInput): Promise<Role> {
     throw new Error("Database not available");
   }
 
+  const newOrder = input.displayOrder ?? 0;
+
+  // Increment orders for conflicts
+  await incrementOrdersForConflict(db, roles, roles.displayOrder, newOrder);
+
   const [newRole] = await db
     .insert(roles)
     .values({
@@ -138,7 +144,7 @@ export async function createRole(input: CreateRoleInput): Promise<Role> {
       description: input.description || null,
       permissions: input.permissions || null,
       isActive: input.isActive ?? true,
-      displayOrder: input.displayOrder ?? 0,
+      displayOrder: newOrder,
     })
     .returning();
 
@@ -217,70 +223,11 @@ export async function initializeDefaultRoles(): Promise<void> {
     throw new Error("Database not available");
   }
 
-  const defaultRoles: CreateRoleInput[] = [
-    {
-      name: "admin",
-      displayName: "Administrator",
-      description:
-        "Full system access - can access admin panel and all system configuration",
-      permissions: {
-        canAccessAdmin: true,
-        canEditContent: true,
-        canEditTables: ["*"], // All tables
-      },
-      isActive: true,
-      displayOrder: 0,
-    },
-    {
-      name: "editor",
-      displayName: "Editor",
-      description:
-        "Content management access - can edit content but NOT system configuration",
-      permissions: {
-        canAccessAdmin: false,
-        canEditContent: true,
-        canEditTables: [
-          "projects",
-          "skills",
-          "certifications",
-          "education",
-          "workExperiences",
-          "services",
-          "testimonials",
-          "blog",
-        ],
-      },
-      isActive: true,
-      displayOrder: 1,
-    },
-    {
-      name: "user",
-      displayName: "User",
-      description:
-        "Customer/employer account - NO admin panel access, limited to profile/portfolio viewing",
-      permissions: {
-        canAccessAdmin: false,
-        canEditContent: false,
-        canEditTables: [],
-      },
-      isActive: true,
-      displayOrder: 2,
-    },
-    {
-      name: "visitor",
-      displayName: "Visitor",
-      description: "Unauthenticated user - public access only",
-      permissions: {
-        canAccessAdmin: false,
-        canEditContent: false,
-        canEditTables: [],
-      },
-      isActive: true,
-      displayOrder: 3,
-    },
-  ];
+  // Load seed data from YAML config
+  const { loadSeedConfig } = await import("../../utils/loadSeedConfig");
+  const config = loadSeedConfig();
 
-  for (const roleInput of defaultRoles) {
+  for (const roleInput of config.roles) {
     const existingRole = await getRoleByName(roleInput.name);
     if (!existingRole) {
       await createRole(roleInput);

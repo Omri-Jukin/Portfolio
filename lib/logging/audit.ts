@@ -4,6 +4,8 @@
  */
 
 import { getDB } from "$/db/client";
+import { createAuditLog } from "$/db/logging/auditLogs";
+import { AuditLogResource } from "$/db/schema/schema.types";
 
 export type AuditAction =
   | "create"
@@ -29,7 +31,8 @@ export type AuditResource =
   | "pricing"
   | "discount"
   | "admin_dashboard"
-  | "system";
+  | "system"
+  | "proposal";
 
 export interface AuditLogEntry {
   id: string;
@@ -56,7 +59,7 @@ export async function emitAudit(entry: {
   userEmail?: string | null;
   userRole?: string | null;
   action: AuditAction;
-  resource: AuditResource;
+  resource: AuditLogResource;
   resourceId?: string | null;
   details?: Record<string, unknown> | null;
   ipAddress?: string | null;
@@ -75,10 +78,8 @@ export async function emitAudit(entry: {
       return;
     }
 
-    // For now, we'll log to console
-    // In the future, we can create an audit_logs table if needed
-    const logEntry: AuditLogEntry = {
-      id: crypto.randomUUID(),
+    // Write to database
+    const dbLog = await createAuditLog({
       userId: entry.userId || null,
       userEmail: entry.userEmail || null,
       userRole: entry.userRole || null,
@@ -90,17 +91,27 @@ export async function emitAudit(entry: {
       userAgent: entry.userAgent || null,
       success: entry.success ?? true,
       errorMessage: entry.errorMessage || null,
-      createdAt: new Date(),
-    };
+    });
 
-    // Log to console in development, could be extended to write to database
+    // Also log to console in development for easier debugging
     if (process.env.NODE_ENV === "development") {
+      const logEntry: AuditLogEntry = {
+        id: dbLog?.id || crypto.randomUUID(),
+        userId: entry.userId || null,
+        userEmail: entry.userEmail || null,
+        userRole: entry.userRole || null,
+        action: entry.action,
+        resource: entry.resource,
+        resourceId: entry.resourceId || null,
+        details: entry.details || null,
+        ipAddress: entry.ipAddress || null,
+        userAgent: entry.userAgent || null,
+        success: entry.success ?? true,
+        errorMessage: entry.errorMessage || null,
+        createdAt: new Date(),
+      };
       console.log("[AUDIT]", JSON.stringify(logEntry, null, 2));
     }
-
-    // TODO: Create audit_logs table and write to database
-    // For now, this provides the interface and console logging
-    // The actual database table can be added later if needed
   } catch (error) {
     // Don't throw errors from audit logging - it should never break the main flow
     console.error("[AUDIT] Failed to emit audit log:", error);

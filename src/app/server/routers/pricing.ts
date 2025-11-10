@@ -30,6 +30,7 @@ import {
   getPricingMeta,
   getPricingMetaByKey,
   updatePricingMeta,
+  upsertPricingMeta,
 } from "$/db/pricing/meta";
 import {
   createPricingBaseRate,
@@ -556,6 +557,28 @@ export const pricingRouter = router({
       )
       .mutation(async (opts) => {
         const meta = await updatePricingMeta(opts.input.key, opts.input.value);
+        return {
+          ...meta,
+          createdAt: meta.createdAt.toISOString(),
+          updatedAt: meta.updatedAt.toISOString(),
+        };
+      }),
+
+    upsert: adminProcedure
+      .input(
+        z.object({
+          key: z.string(),
+          value: z.unknown(),
+          order: z.number().int().optional(),
+          isActive: z.boolean().optional(),
+        })
+      )
+      .mutation(async (opts) => {
+        const { key, value, order, isActive } = opts.input;
+        const meta = await upsertPricingMeta(key, value, {
+          order,
+          isActive,
+        });
         return {
           ...meta,
           createdAt: meta.createdAt.toISOString(),

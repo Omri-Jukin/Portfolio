@@ -18,7 +18,8 @@ import type {
 } from "../schema/schema.types";
 import { nanoid } from "nanoid";
 
-const db = await getDB();
+// Helper function to get database client
+const getDbClient = async () => getDB();
 
 // Helper function to transform DB dates to API strings
 const transformDbToApi = (dbCert: CertificationDB): Certification => ({
@@ -32,6 +33,10 @@ const transformDbToApi = (dbCert: CertificationDB): Certification => ({
 export class CertificationsService {
   static async getAll(visibleOnly = false): Promise<Certification[]> {
     const conditions = visibleOnly ? [eq(certifications.isVisible, true)] : [];
+    const db = await getDbClient();
+    if (!db) {
+      throw new Error("Database not available");
+    }
 
     const results = await db
       .select()
@@ -46,6 +51,11 @@ export class CertificationsService {
   }
 
   static async getById(id: string): Promise<Certification | null> {
+    const db = await getDbClient();
+    if (!db) {
+      throw new Error("Database not available");
+    }
+
     const result = await db
       .select()
       .from(certifications)
@@ -66,6 +76,11 @@ export class CertificationsService {
       conditions.push(eq(certifications.isVisible, true));
     }
 
+    const db = await getDbClient();
+    if (!db) {
+      throw new Error("Database not available");
+    }
+
     const results = await db
       .select()
       .from(certifications)
@@ -81,6 +96,11 @@ export class CertificationsService {
   static async create(
     certification: Omit<NewCertification, "id" | "createdAt">
   ): Promise<Certification> {
+    const db = await getDbClient();
+    if (!db) {
+      throw new Error("Database not available");
+    }
+
     const id = nanoid();
     const now = new Date();
 
@@ -105,6 +125,11 @@ export class CertificationsService {
     id: string,
     updates: Partial<Omit<NewCertification, "id" | "createdAt">>
   ): Promise<Certification | null> {
+    const db = await getDbClient();
+    if (!db) {
+      throw new Error("Database not available");
+    }
+
     const now = new Date();
 
     await db
@@ -119,6 +144,11 @@ export class CertificationsService {
   }
 
   static async delete(id: string): Promise<boolean> {
+    const db = await getDbClient();
+    if (!db) {
+      throw new Error("Database not available");
+    }
+
     const result = await db
       .delete(certifications)
       .where(eq(certifications.id, id))
@@ -130,6 +160,11 @@ export class CertificationsService {
   static async updateDisplayOrder(
     updates: { id: string; displayOrder: number }[]
   ): Promise<void> {
+    const db = await getDbClient();
+    if (!db) {
+      throw new Error("Database not available");
+    }
+
     const now = new Date();
 
     for (const update of updates) {
@@ -153,6 +188,11 @@ export class CertificationsService {
   }
 
   static async getExpiredCertifications(): Promise<Certification[]> {
+    const db = await getDbClient();
+    if (!db) {
+      throw new Error("Database not available");
+    }
+
     const now = new Date();
 
     const results = await db
@@ -171,6 +211,11 @@ export class CertificationsService {
   }
 
   static async markAsExpired(ids: string[]): Promise<void> {
+    const db = await getDbClient();
+    if (!db) {
+      throw new Error("Database not available");
+    }
+
     const now = new Date();
 
     await db
@@ -183,6 +228,11 @@ export class CertificationsService {
   }
 
   static async getStatistics() {
+    const db = await getDbClient();
+    if (!db) {
+      throw new Error("Database not available");
+    }
+
     // Get counts by category
     const categoryStats = await db
       .select({

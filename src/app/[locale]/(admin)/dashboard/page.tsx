@@ -153,6 +153,15 @@ const SECTION_CONFIG = {
     secondaryRoute: null,
     secondaryButtonText: null,
   },
+  proposals: {
+    title: "Proposals",
+    description:
+      "Create, manage, and send proposals (quotes/statements of work) to clients with PDF export and email integration.",
+    route: "/dashboard/proposals",
+    buttonText: "Manage Proposals",
+    secondaryRoute: null,
+    secondaryButtonText: null,
+  },
   roles: {
     title: "Roles & Permissions",
     description:

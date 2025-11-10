@@ -1,11 +1,18 @@
 // Email service implemented using MailChannels API instead of AWS SES
 
+export interface EmailAttachment {
+  filename: string;
+  content: Buffer;
+  contentType: string;
+}
+
 export interface EmailData {
   to: string;
   from: string;
   subject: string;
   htmlBody: string;
   textBody?: string;
+  attachments?: EmailAttachment[];
 }
 
 export interface ContactFormEmailData {
@@ -136,6 +143,13 @@ export class EmailManager {
         ...(emailData.textBody && { text: emailData.textBody }),
         // Add reply-to if different from Gmail
         ...(emailData.from !== gmailUser && { replyTo: emailData.from }),
+        ...(emailData.attachments && {
+          attachments: emailData.attachments.map((att) => ({
+            filename: att.filename,
+            content: att.content,
+            contentType: att.contentType,
+          })),
+        }),
       };
 
       const info = await transporter.sendMail(mailOptions);

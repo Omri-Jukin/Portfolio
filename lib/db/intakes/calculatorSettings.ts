@@ -1,6 +1,7 @@
 import { calculatorSettings } from "../schema/schema.tables";
 import { eq, desc } from "drizzle-orm";
 import { getDB } from "../client";
+import { incrementOrdersForConflict } from "../utils/orderUtils";
 
 export type CalculatorSettingType =
   | "base_rate"
@@ -12,7 +13,7 @@ export type CalculatorSettingType =
 export type CreateCalculatorSettingInput = {
   settingType: CalculatorSettingType;
   settingKey: string;
-  settingValue: number | Record<string, number | string>;
+  settingValue: number | { value: number };
   displayName: string;
   description?: string;
   displayOrder?: number;
@@ -31,6 +32,16 @@ export const createCalculatorSetting = async (
 ) => {
   const dbClient = await getDB();
 
+  const newOrder = input.displayOrder ?? 0;
+
+  // Increment orders for conflicts
+  await incrementOrdersForConflict(
+    dbClient,
+    calculatorSettings,
+    calculatorSettings.displayOrder,
+    newOrder
+  );
+
   const newSetting = await dbClient
     .insert(calculatorSettings)
     .values({
@@ -39,7 +50,7 @@ export const createCalculatorSetting = async (
       settingValue: input.settingValue as unknown as Record<string, unknown>,
       displayName: input.displayName,
       description: input.description || null,
-      displayOrder: input.displayOrder ?? 0,
+      displayOrder: newOrder,
       isActive: input.isActive ?? true,
       createdAt: new Date(),
       updatedAt: new Date(),

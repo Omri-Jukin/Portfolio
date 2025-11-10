@@ -2,12 +2,23 @@ import { pricingProjectTypes } from "../schema/schema.tables";
 import { eq, asc } from "drizzle-orm";
 import { getDB } from "../client";
 import type { NewPricingProjectType } from "../schema/schema.tables";
+import { incrementOrdersForConflict } from "../utils/orderUtils";
 
 export const createPricingProjectType = async (
   input: NewPricingProjectType
 ) => {
   const db = await getDB();
   if (!db) throw new Error("Database not available");
+
+  const newOrder = input.order ?? 0;
+
+  // Increment orders for conflicts
+  await incrementOrdersForConflict(
+    db,
+    pricingProjectTypes,
+    pricingProjectTypes.order,
+    newOrder
+  );
 
   const result = await db
     .insert(pricingProjectTypes)
@@ -93,4 +104,3 @@ export const togglePricingProjectTypeActive = async (
 ) => {
   return updatePricingProjectType(id, { isActive });
 };
-

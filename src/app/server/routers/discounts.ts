@@ -8,7 +8,11 @@ import {
   updatePricingDiscount,
   deletePricingDiscount,
 } from "$/db/intakes/pricingDiscounts";
-import { createDiscountSchema, updateDiscountSchema } from "#/lib/schemas";
+import {
+  createDiscountSchema,
+  discountAppliesToSchema,
+  updateDiscountSchema,
+} from "#/lib/schemas";
 
 export const discountsRouter = router({
   // ============================================
@@ -19,6 +23,7 @@ export const discountsRouter = router({
       z
         .object({
           includeInactive: z.boolean().optional().default(false),
+          appliesTo: discountAppliesToSchema.optional(),
         })
         .optional()
     )

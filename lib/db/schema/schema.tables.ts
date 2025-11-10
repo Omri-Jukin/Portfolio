@@ -9,6 +9,7 @@ import {
   primaryKey,
   numeric,
   unique,
+  index,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import {
@@ -31,6 +32,10 @@ import {
   IntakeStatus,
   IntakeRiskLevel,
   IntakeNoteCategory,
+  ApplicationLogCategory,
+  ApplicationLogLevel,
+  AuditLogAction,
+  AuditLogResource,
 } from "./schema.types";
 
 // ============================================
@@ -667,20 +672,29 @@ export const pricingDiscounts = pgTable("pricing_discounts", {
 // Dynamic Pricing Tables
 // ============================================
 
-export const pricingProjectTypes = pgTable("pricing_project_types", {
-  id: uuid("id").defaultRandom().primaryKey().notNull(),
-  key: text("key").notNull().unique(),
-  displayName: text("display_name").notNull(),
-  baseRateIls: integer("base_rate_ils").notNull(), // Default base rate (used when no client-type-specific rate exists)
-  order: integer("order").notNull().default(0),
-  isActive: boolean("is_active").notNull().default(true),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-});
+export const pricingProjectTypes = pgTable(
+  "pricing_project_types",
+  {
+    id: uuid("id").defaultRandom().primaryKey().notNull(),
+    key: text("key").notNull().unique(),
+    displayName: text("display_name").notNull(),
+    baseRateIls: integer("base_rate_ils").notNull(), // Default base rate (used when no client-type-specific rate exists)
+    order: integer("order").notNull().default(0),
+    isActive: boolean("is_active").notNull().default(true),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => ({
+    isActiveOrderIdx: index("pricing_project_types_is_active_order_idx").on(
+      table.isActive,
+      table.order
+    ),
+  })
+);
 
 export type PricingProjectType = typeof pricingProjectTypes.$inferSelect;
 export type NewPricingProjectType = typeof pricingProjectTypes.$inferInsert;
@@ -706,44 +720,66 @@ export const pricingBaseRates = pgTable(
   },
   (table) => ({
     uniqueProjectClient: unique().on(table.projectTypeKey, table.clientTypeKey),
+    isActiveOrderIdx: index("pricing_base_rates_is_active_order_idx").on(
+      table.isActive,
+      table.order
+    ),
   })
 );
 
 export type PricingBaseRate = typeof pricingBaseRates.$inferSelect;
 export type NewPricingBaseRate = typeof pricingBaseRates.$inferInsert;
 
-export const pricingFeatures = pgTable("pricing_features", {
-  id: uuid("id").defaultRandom().primaryKey().notNull(),
-  key: text("key").notNull().unique(),
-  displayName: text("display_name").notNull(),
-  defaultCostIls: integer("default_cost_ils").notNull(),
-  group: text("group"),
-  order: integer("order").notNull().default(0),
-  isActive: boolean("is_active").notNull().default(true),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-});
+export const pricingFeatures = pgTable(
+  "pricing_features",
+  {
+    id: uuid("id").defaultRandom().primaryKey().notNull(),
+    key: text("key").notNull().unique(),
+    displayName: text("display_name").notNull(),
+    defaultCostIls: integer("default_cost_ils").notNull(),
+    group: text("group"),
+    order: integer("order").notNull().default(0),
+    isActive: boolean("is_active").notNull().default(true),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => ({
+    isActiveOrderIdx: index("pricing_features_is_active_order_idx").on(
+      table.isActive,
+      table.order
+    ),
+  })
+);
 
 export type PricingFeature = typeof pricingFeatures.$inferSelect;
 export type NewPricingFeature = typeof pricingFeatures.$inferInsert;
 
-export const pricingMultiplierGroups = pgTable("pricing_multiplier_groups", {
-  id: uuid("id").defaultRandom().primaryKey().notNull(),
-  key: text("key").notNull().unique(),
-  displayName: text("display_name").notNull(),
-  order: integer("order").notNull().default(0),
-  isActive: boolean("is_active").notNull().default(true),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-});
+export const pricingMultiplierGroups = pgTable(
+  "pricing_multiplier_groups",
+  {
+    id: uuid("id").defaultRandom().primaryKey().notNull(),
+    key: text("key").notNull().unique(),
+    displayName: text("display_name").notNull(),
+    order: integer("order").notNull().default(0),
+    isActive: boolean("is_active").notNull().default(true),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => ({
+    isActiveOrderIdx: index("pricing_multiplier_groups_is_active_order_idx").on(
+      table.isActive,
+      table.order
+    ),
+  })
+);
 
 export const pricingMultiplierValues = pgTable(
   "pricing_multiplier_values",
@@ -765,6 +801,10 @@ export const pricingMultiplierValues = pgTable(
   },
   (table) => ({
     uniqueGroupOption: unique().on(table.groupKey, table.optionKey),
+    isActiveOrderIdx: index("pricing_multiplier_values_is_active_order_idx").on(
+      table.isActive,
+      table.order
+    ),
   })
 );
 
@@ -778,19 +818,292 @@ export type PricingMultiplierValue =
 export type NewPricingMultiplierValue =
   typeof pricingMultiplierValues.$inferInsert;
 
-export const pricingMeta = pgTable("pricing_meta", {
-  id: uuid("id").defaultRandom().primaryKey().notNull(),
-  key: text("key").notNull().unique(),
-  value: jsonb("value").notNull(),
-  order: integer("order").notNull().default(0),
-  isActive: boolean("is_active").notNull().default(true),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-});
+export const pricingMeta = pgTable(
+  "pricing_meta",
+  {
+    id: uuid("id").defaultRandom().primaryKey().notNull(),
+    key: text("key").notNull().unique(),
+    value: jsonb("value").notNull(),
+    order: integer("order").notNull().default(0),
+    isActive: boolean("is_active").notNull().default(true),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => ({
+    isActiveOrderIdx: index("pricing_meta_is_active_order_idx").on(
+      table.isActive,
+      table.order
+    ),
+  })
+);
 
 export type PricingMeta = typeof pricingMeta.$inferSelect;
 export type NewPricingMeta = typeof pricingMeta.$inferInsert;
+
+// ============================================
+// Proposals Tables
+// ============================================
+
+// Proposal templates table - stores reusable proposal structures
+export const proposalTemplates = pgTable("proposal_templates", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  name: text("name").notNull(),
+  description: text("description"),
+  defaultCurrency: text("default_currency").notNull().default("ILS"),
+  defaultTaxProfileKey: text("default_tax_profile_key"),
+  defaultPriceDisplay: text("default_price_display")
+    .$type<"taxExclusive" | "taxInclusive">()
+    .notNull()
+    .default("taxExclusive"),
+  templateData: jsonb("template_data").notNull().default({}),
+  isActive: boolean("is_active").notNull().default(true),
+  displayOrder: integer("display_order").notNull().default(0),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+export type ProposalTemplate = typeof proposalTemplates.$inferSelect;
+export type NewProposalTemplate = typeof proposalTemplates.$inferInsert;
+
+// Proposals table - main proposal/quote records
+export const proposals = pgTable("proposals", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  clientUserId: uuid("client_user_id").references(() => users.id, {
+    onDelete: "set null",
+  }),
+  intakeId: uuid("intake_id").references(() => intakes.id, {
+    onDelete: "set null",
+  }),
+  templateId: uuid("template_id").references(() => proposalTemplates.id, {
+    onDelete: "set null",
+  }),
+  clientName: text("client_name").notNull(),
+  clientEmail: text("client_email").notNull(),
+  clientCompany: text("client_company"),
+  status: text("status").notNull().default("draft"),
+  currency: text("currency").notNull().default("ILS"),
+  taxProfileKey: text("tax_profile_key"),
+  priceDisplay: text("price_display")
+    .$type<"taxExclusive" | "taxInclusive">()
+    .notNull()
+    .default("taxExclusive"),
+  validUntil: timestamp("valid_until", { withTimezone: true }),
+  shareToken: text("share_token").unique(),
+  notesInternal: text("notes_internal"),
+  notesClient: text("notes_client"),
+  pricingSnapshot: jsonb("pricing_snapshot"),
+  meta: jsonb("meta").default({}),
+  createdBy: uuid("created_by")
+    .notNull()
+    .references(() => users.id),
+  updatedBy: uuid("updated_by").references(() => users.id),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+export type Proposal = typeof proposals.$inferSelect;
+export type NewProposal = typeof proposals.$inferInsert;
+
+// Proposal sections table - organizes line items into sections
+export const proposalSections = pgTable("proposal_sections", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  proposalId: uuid("proposal_id")
+    .notNull()
+    .references(() => proposals.id, { onDelete: "cascade" }),
+  key: text("key").notNull(),
+  label: text("label").notNull(),
+  description: text("description"),
+  sortOrder: integer("sort_order").notNull().default(0),
+  meta: jsonb("meta").default({}),
+});
+
+export type ProposalSection = typeof proposalSections.$inferSelect;
+export type NewProposalSection = typeof proposalSections.$inferInsert;
+
+// Proposal line items table - individual items/services in proposals
+export const proposalLineItems = pgTable("proposal_line_items", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  proposalId: uuid("proposal_id")
+    .notNull()
+    .references(() => proposals.id, { onDelete: "cascade" }),
+  sectionId: uuid("section_id").references(() => proposalSections.id, {
+    onDelete: "set null",
+  }),
+  featureKey: text("feature_key"),
+  label: text("label").notNull(),
+  description: text("description"),
+  quantity: numeric("quantity", { precision: 10, scale: 2 })
+    .notNull()
+    .default("1"),
+  unitPriceMinor: integer("unit_price_minor").notNull(),
+  isOptional: boolean("is_optional").notNull().default(false),
+  isSelected: boolean("is_selected").notNull().default(true),
+  taxClass: text("tax_class"),
+  meta: jsonb("meta").default({}),
+});
+
+export type ProposalLineItem = typeof proposalLineItems.$inferSelect;
+export type NewProposalLineItem = typeof proposalLineItems.$inferInsert;
+
+// Proposal discounts table - discounts applied to proposals
+export const proposalDiscounts = pgTable("proposal_discounts", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  proposalId: uuid("proposal_id")
+    .notNull()
+    .references(() => proposals.id, { onDelete: "cascade" }),
+  scope: text("scope").$type<"overall" | "section" | "line">().notNull(),
+  sectionId: uuid("section_id").references(() => proposalSections.id, {
+    onDelete: "cascade",
+  }),
+  lineItemId: uuid("line_item_id").references(() => proposalLineItems.id, {
+    onDelete: "cascade",
+  }),
+  sourceDiscountId: uuid("source_discount_id").references(
+    () => pricingDiscounts.id,
+    { onDelete: "set null" }
+  ),
+  label: text("label").notNull(),
+  type: text("type").$type<"percent" | "fixed">().notNull(),
+  amountMinor: integer("amount_minor"),
+  percent: numeric("percent", { precision: 10, scale: 2 }),
+  appliesMeta: jsonb("applies_meta").default({}),
+});
+
+export type ProposalDiscount = typeof proposalDiscounts.$inferSelect;
+export type NewProposalDiscount = typeof proposalDiscounts.$inferInsert;
+
+// Proposal taxes table - tax lines applied to proposals
+export const proposalTaxes = pgTable("proposal_taxes", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  proposalId: uuid("proposal_id")
+    .notNull()
+    .references(() => proposals.id, { onDelete: "cascade" }),
+  scope: text("scope").$type<"overall" | "section" | "line">().notNull(),
+  sectionId: uuid("section_id").references(() => proposalSections.id, {
+    onDelete: "cascade",
+  }),
+  lineItemId: uuid("line_item_id").references(() => proposalLineItems.id, {
+    onDelete: "cascade",
+  }),
+  label: text("label").notNull(),
+  kind: text("kind").$type<"vat" | "surcharge" | "withholding">().notNull(),
+  type: text("type").$type<"percent" | "fixed">().notNull(),
+  rateOrAmount: numeric("rate_or_amount", {
+    precision: 10,
+    scale: 2,
+  }).notNull(),
+  orderIndex: integer("order_index").notNull().default(0),
+  meta: jsonb("meta").default({}),
+});
+
+export type ProposalTax = typeof proposalTaxes.$inferSelect;
+export type NewProposalTax = typeof proposalTaxes.$inferInsert;
+
+// Proposal events table - audit log for proposal actions
+export const proposalEvents = pgTable("proposal_events", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  proposalId: uuid("proposal_id")
+    .notNull()
+    .references(() => proposals.id, { onDelete: "cascade" }),
+  actorId: uuid("actor_id").references(() => users.id, {
+    onDelete: "set null",
+  }),
+  event: text("event").notNull(),
+  payload: jsonb("payload").default({}),
+  occurredAt: timestamp("occurred_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+export type ProposalEvent = typeof proposalEvents.$inferSelect;
+export type NewProposalEvent = typeof proposalEvents.$inferInsert;
+
+// ============================================
+// Logging Tables
+// ============================================
+
+// Application logs table - general application logging
+export const applicationLogs = pgTable(
+  "application_logs",
+  {
+    id: uuid("id").primaryKey().notNull().defaultRandom(),
+    level: text("level").$type<ApplicationLogLevel>().notNull(),
+    category: text("category").$type<ApplicationLogCategory>().notNull(),
+    message: text("message").notNull(),
+    metadata: jsonb("metadata").default({}),
+    userId: uuid("user_id").references(() => users.id, {
+      onDelete: "set null",
+    }),
+    resourceType: text("resource_type"),
+    resourceId: uuid("resource_id"),
+    errorCode: text("error_code"),
+    stackTrace: text("stack_trace"),
+    duration: integer("duration"), // milliseconds
+    ipAddress: text("ip_address"),
+    userAgent: text("user_agent"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => ({
+    createdAtIdx: index("application_logs_created_at_idx").on(table.createdAt),
+    levelIdx: index("application_logs_level_idx").on(table.level),
+    categoryIdx: index("application_logs_category_idx").on(table.category),
+    userIdIdx: index("application_logs_user_id_idx").on(table.userId),
+    resourceIdx: index("application_logs_resource_idx").on(
+      table.resourceType,
+      table.resourceId
+    ),
+  })
+);
+
+export type ApplicationLog = typeof applicationLogs.$inferSelect;
+export type NewApplicationLog = typeof applicationLogs.$inferInsert;
+
+// Audit logs table - security and compliance logging
+export const auditLogs = pgTable(
+  "audit_logs",
+  {
+    id: uuid("id").primaryKey().notNull().defaultRandom(),
+    userId: uuid("user_id").references(() => users.id, {
+      onDelete: "set null",
+    }),
+    userEmail: text("user_email"),
+    userRole: text("user_role"),
+    action: text("action").$type<AuditLogAction>().notNull(),
+    resource: text("resource").$type<AuditLogResource>().notNull(),
+    resourceId: uuid("resource_id"),
+    details: jsonb("details").default({}),
+    ipAddress: text("ip_address"),
+    userAgent: text("user_agent"),
+    success: boolean("success").notNull().default(true),
+    errorMessage: text("error_message"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => ({
+    createdAtIdx: index("audit_logs_created_at_idx").on(table.createdAt),
+    userIdIdx: index("audit_logs_user_id_idx").on(table.userId),
+    actionIdx: index("audit_logs_action_idx").on(table.action),
+    resourceIdx: index("audit_logs_resource_idx").on(
+      table.resource,
+      table.resourceId
+    ),
+  })
+);
+
+export type AuditLog = typeof auditLogs.$inferSelect;
+export type NewAuditLog = typeof auditLogs.$inferInsert;

@@ -2,10 +2,21 @@ import { pricingFeatures } from "../schema/schema.tables";
 import { eq, asc } from "drizzle-orm";
 import { getDB } from "../client";
 import type { NewPricingFeature } from "../schema/schema.tables";
+import { incrementOrdersForConflict } from "../utils/orderUtils";
 
 export const createPricingFeature = async (input: NewPricingFeature) => {
   const db = await getDB();
   if (!db) throw new Error("Database not available");
+
+  const newOrder = input.order ?? 0;
+
+  // Increment orders for conflicts
+  await incrementOrdersForConflict(
+    db,
+    pricingFeatures,
+    pricingFeatures.order,
+    newOrder
+  );
 
   const result = await db
     .insert(pricingFeatures)
@@ -91,4 +102,3 @@ export const togglePricingFeatureActive = async (
 ) => {
   return updatePricingFeature(id, { isActive });
 };
-

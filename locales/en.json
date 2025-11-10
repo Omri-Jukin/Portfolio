@@ -1535,5 +1535,47 @@
       "permanentlyDelete": "You are about to permanently delete the intake for:",
       "cannotBeUndone": "This action cannot be undone. All related notes, status history, and reminders will also be deleted."
     }
+  },
+  "proposals": {
+    "title": "Proposals",
+    "create": "Create Proposal",
+    "createFromIntake": "Create from Intake",
+    "edit": "Edit Proposal",
+    "delete": "Delete Proposal",
+    "duplicate": "Duplicate",
+    "send": "Send Proposal",
+    "exportPDF": "Export PDF",
+    "generateShareLink": "Generate Share Link",
+    "status": {
+      "draft": "Draft",
+      "sent": "Sent",
+      "accepted": "Accepted",
+      "declined": "Declined",
+      "expired": "Expired",
+      "revised": "Revised"
+    },
+    "priceDisplay": {
+      "taxExclusive": "Tax Exclusive",
+      "taxInclusive": "Tax Inclusive"
+    },
+    "taxKind": {
+      "vat": "VAT",
+      "surcharge": "Surcharge",
+      "withholding": "Withholding"
+    },
+    "discountScope": {
+      "overall": "Overall",
+      "section": "Section",
+      "line": "Line"
+    },
+    "public": {
+      "accept": "Accept Proposal",
+      "decline": "Decline Proposal",
+      "downloadPDF": "Download PDF",
+      "acceptConfirm": "Are you sure you want to accept this proposal?",
+      "declineReason": "Reason for declining (optional)",
+      "accepted": "This proposal has been accepted.",
+      "declined": "This proposal has been declined."
+    }
   }
 }

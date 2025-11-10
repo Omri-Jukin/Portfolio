@@ -1,6 +1,7 @@
 import { intakeTemplates } from "../schema/schema.tables";
 import { eq, desc } from "drizzle-orm";
 import { getDB } from "../client";
+import { incrementOrdersForConflict } from "../utils/orderUtils";
 import type { IntakeFormData } from "#/lib/schemas";
 
 export type CreateIntakeTemplateInput = {
@@ -32,6 +33,16 @@ export const createIntakeTemplate = async (
     throw new Error("Database client not available.");
   }
 
+  const newOrder = input.displayOrder ?? 0;
+
+  // Increment orders for conflicts
+  await incrementOrdersForConflict(
+    dbClient,
+    intakeTemplates,
+    intakeTemplates.displayOrder,
+    newOrder
+  );
+
   const newTemplate = await dbClient
     .insert(intakeTemplates)
     .values({
@@ -40,7 +51,7 @@ export const createIntakeTemplate = async (
       category: input.category,
       templateData: input.templateData as unknown as Record<string, unknown>,
       isActive: input.isActive ?? true,
-      displayOrder: input.displayOrder ?? 0,
+      displayOrder: newOrder,
       createdAt: new Date(),
       updatedAt: new Date(),
     })

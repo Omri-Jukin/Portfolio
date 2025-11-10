@@ -988,3 +988,186 @@ export type AdminStatsQueryData = z.infer<typeof adminStatsQuerySchema>;
 export type DiscountData = z.infer<typeof discountSchema>;
 export type CreateDiscountData = z.infer<typeof createDiscountSchema>;
 export type UpdateDiscountData = z.infer<typeof updateDiscountSchema>;
+
+// ========================
+// PROPOSAL SCHEMAS
+// ========================
+
+export const proposalStatusSchema = z.enum([
+  "draft",
+  "sent",
+  "accepted",
+  "declined",
+  "expired",
+  "revised",
+]);
+
+export const proposalPriceDisplaySchema = z.enum([
+  "taxExclusive",
+  "taxInclusive",
+]);
+
+export const proposalDiscountScopeSchema = z.enum([
+  "overall",
+  "section",
+  "line",
+]);
+
+export const proposalTaxKindSchema = z.enum([
+  "vat",
+  "surcharge",
+  "withholding",
+]);
+
+export const proposalTaxScopeSchema = z.enum(["overall", "section", "line"]);
+
+export const createProposalSchema = z.object({
+  clientUserId: z.string().uuid().optional().nullable(),
+  intakeId: z.string().uuid().optional().nullable(),
+  templateId: z.string().uuid().optional().nullable(),
+  clientName: z.string().min(1).max(255),
+  clientEmail: emailSchema,
+  clientCompany: z.string().max(255).optional().nullable(),
+  status: proposalStatusSchema.optional(),
+  currency: z.string().default("ILS"),
+  taxProfileKey: z.string().optional().nullable(),
+  priceDisplay: proposalPriceDisplaySchema.optional(),
+  validUntil: z.coerce.date().optional().nullable(),
+  notesInternal: z.string().optional().nullable(),
+  notesClient: z.string().optional().nullable(),
+});
+
+export const updateProposalSchema = createProposalSchema.partial();
+
+export const createProposalSectionSchema = z.object({
+  proposalId: z.string().uuid(),
+  key: z.string().min(1).max(100),
+  label: z.string().min(1).max(255),
+  description: z.string().optional().nullable(),
+  sortOrder: z.number().int().min(0).default(0),
+  meta: z.record(z.unknown()).optional(),
+});
+
+export const updateProposalSectionSchema = createProposalSectionSchema
+  .omit({ proposalId: true })
+  .partial();
+
+export const createProposalLineItemSchema = z.object({
+  proposalId: z.string().uuid(),
+  sectionId: z.string().uuid().optional().nullable(),
+  featureKey: z.string().optional().nullable(),
+  label: z.string().min(1).max(255),
+  description: z.string().optional().nullable(),
+  quantity: z.number().positive().default(1),
+  unitPriceMinor: z.number().int().min(0),
+  isOptional: z.boolean().default(false),
+  isSelected: z.boolean().default(true),
+  taxClass: z.string().optional().nullable(),
+  meta: z.record(z.unknown()).optional(),
+});
+
+export const updateProposalLineItemSchema = createProposalLineItemSchema
+  .omit({ proposalId: true })
+  .partial();
+
+export const createProposalDiscountSchema = z.object({
+  proposalId: z.string().uuid(),
+  scope: proposalDiscountScopeSchema,
+  sectionId: z.string().uuid().optional().nullable(),
+  lineItemId: z.string().uuid().optional().nullable(),
+  sourceDiscountId: z.string().uuid().optional().nullable(),
+  label: z.string().min(1).max(255),
+  type: z.enum(["percent", "fixed"]),
+  amountMinor: z.number().int().min(0).optional().nullable(),
+  percent: z.number().min(0).max(100).optional().nullable(),
+  appliesMeta: z.record(z.unknown()).optional(),
+});
+
+export const updateProposalDiscountSchema = createProposalDiscountSchema
+  .omit({ proposalId: true })
+  .partial();
+
+export const createProposalTaxSchema = z.object({
+  proposalId: z.string().uuid(),
+  scope: proposalTaxScopeSchema,
+  sectionId: z.string().uuid().optional().nullable(),
+  lineItemId: z.string().uuid().optional().nullable(),
+  label: z.string().min(1).max(255),
+  kind: proposalTaxKindSchema,
+  type: z.enum(["percent", "fixed"]),
+  rateOrAmount: z.number(),
+  orderIndex: z.number().int().min(0).default(0),
+  meta: z.record(z.unknown()).optional(),
+});
+
+export const updateProposalTaxSchema = createProposalTaxSchema
+  .omit({ proposalId: true })
+  .partial();
+
+export const createProposalTemplateSchema = z.object({
+  name: z.string().min(1).max(255),
+  description: z.string().optional().nullable(),
+  defaultCurrency: z.string().default("ILS"),
+  defaultTaxProfileKey: z.string().optional().nullable(),
+  defaultPriceDisplay: proposalPriceDisplaySchema.optional(),
+  templateData: z.record(z.unknown()).default({}),
+  isActive: z.boolean().default(true),
+  displayOrder: z.number().int().min(0).default(0),
+});
+
+export const updateProposalTemplateSchema =
+  createProposalTemplateSchema.partial();
+
+export const proposalFiltersSchema = z.object({
+  status: z.array(proposalStatusSchema).optional(),
+  clientEmail: z.string().optional(),
+  clientName: z.string().optional(),
+  startDate: z.coerce.date().optional(),
+  endDate: z.coerce.date().optional(),
+  searchTerm: z.string().optional(),
+});
+
+export const calculateProposalTotalsSchema = z.object({
+  proposalId: z.string().uuid(),
+});
+
+export const acceptProposalSchema = z.object({
+  shareToken: z.string(),
+  acceptedAt: z.coerce.date().optional(),
+});
+
+export const declineProposalSchema = z.object({
+  shareToken: z.string(),
+  reason: z.string().optional().nullable(),
+});
+
+// Export types
+export type CreateProposalData = z.infer<typeof createProposalSchema>;
+export type UpdateProposalData = z.infer<typeof updateProposalSchema>;
+export type CreateProposalSectionData = z.infer<
+  typeof createProposalSectionSchema
+>;
+export type UpdateProposalSectionData = z.infer<
+  typeof updateProposalSectionSchema
+>;
+export type CreateProposalLineItemData = z.infer<
+  typeof createProposalLineItemSchema
+>;
+export type UpdateProposalLineItemData = z.infer<
+  typeof updateProposalLineItemSchema
+>;
+export type CreateProposalDiscountData = z.infer<
+  typeof createProposalDiscountSchema
+>;
+export type UpdateProposalDiscountData = z.infer<
+  typeof updateProposalDiscountSchema
+>;
+export type CreateProposalTaxData = z.infer<typeof createProposalTaxSchema>;
+export type UpdateProposalTaxData = z.infer<typeof updateProposalTaxSchema>;
+export type CreateProposalTemplateData = z.infer<
+  typeof createProposalTemplateSchema
+>;
+export type UpdateProposalTemplateData = z.infer<
+  typeof updateProposalTemplateSchema
+>;
+export type ProposalFiltersData = z.infer<typeof proposalFiltersSchema>;

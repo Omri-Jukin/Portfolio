@@ -1518,5 +1518,47 @@
       "permanentlyDelete": "Estás a punto de eliminar permanentemente el ingreso para:",
       "cannotBeUndone": "Esta acción no se puede deshacer. Todas las notas relacionadas, historial de estado y recordatorios también se eliminarán."
     }
+  },
+  "proposals": {
+    "title": "Propuestas",
+    "create": "Crear Propuesta",
+    "createFromIntake": "Crear desde Ingreso",
+    "edit": "Editar Propuesta",
+    "delete": "Eliminar Propuesta",
+    "duplicate": "Duplicar",
+    "send": "Enviar Propuesta",
+    "exportPDF": "Exportar PDF",
+    "generateShareLink": "Generar Enlace Compartido",
+    "status": {
+      "draft": "Borrador",
+      "sent": "Enviado",
+      "accepted": "Aceptado",
+      "declined": "Rechazado",
+      "expired": "Expirado",
+      "revised": "Revisado"
+    },
+    "priceDisplay": {
+      "taxExclusive": "Sin Impuestos",
+      "taxInclusive": "Con Impuestos"
+    },
+    "taxKind": {
+      "vat": "IVA",
+      "surcharge": "Recargo",
+      "withholding": "Retención"
+    },
+    "discountScope": {
+      "overall": "General",
+      "section": "Sección",
+      "line": "Línea"
+    },
+    "public": {
+      "accept": "Aceptar Propuesta",
+      "decline": "Rechazar Propuesta",
+      "downloadPDF": "Descargar PDF",
+      "acceptConfirm": "¿Está seguro de que desea aceptar esta propuesta?",
+      "declineReason": "Motivo del rechazo (opcional)",
+      "accepted": "Esta propuesta ha sido aceptada.",
+      "declined": "Esta propuesta ha sido rechazada."
+    }
   }
 }

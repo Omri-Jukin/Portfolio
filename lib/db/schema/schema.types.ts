@@ -249,3 +249,164 @@ export type IntakeNoteCategory =
   | "general";
 
 export type DiscountType = "percent" | "fixed";
+
+// Proposal types
+export type ProposalStatus =
+  | "draft"
+  | "sent"
+  | "accepted"
+  | "declined"
+  | "expired"
+  | "revised";
+
+export type ProposalPriceDisplay = "taxExclusive" | "taxInclusive";
+
+export type ProposalDiscountScope = "overall" | "section" | "line";
+
+export type ProposalTaxKind = "vat" | "surcharge" | "withholding";
+
+export type ProposalTaxScope = "overall" | "section" | "line";
+
+export type ProposalEventType =
+  | "created"
+  | "sent"
+  | "viewed"
+  | "accepted"
+  | "declined"
+  | "expired"
+  | "revised";
+
+// Database proposal types (what comes from DB)
+export type ProposalDB = typeof Tables.proposals.$inferSelect;
+export type ProposalSectionDB = typeof Tables.proposalSections.$inferSelect;
+export type ProposalLineItemDB = typeof Tables.proposalLineItems.$inferSelect;
+export type ProposalDiscountDB = typeof Tables.proposalDiscounts.$inferSelect;
+export type ProposalTaxDB = typeof Tables.proposalTaxes.$inferSelect;
+export type ProposalTemplateDB = typeof Tables.proposalTemplates.$inferSelect;
+export type ProposalEventDB = typeof Tables.proposalEvents.$inferSelect;
+
+// API proposal types (what comes through tRPC - dates are strings)
+export type Proposal = Omit<
+  ProposalDB,
+  "createdAt" | "updatedAt" | "validUntil"
+> & {
+  createdAt: string;
+  updatedAt: string;
+  validUntil: string | null;
+};
+
+export type ProposalSection = ProposalSectionDB;
+
+export type ProposalLineItem = ProposalLineItemDB;
+
+export type ProposalDiscount = ProposalDiscountDB;
+
+export type ProposalTax = ProposalTaxDB;
+
+export type ProposalTemplate = Omit<
+  ProposalTemplateDB,
+  "createdAt" | "updatedAt"
+> & {
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ProposalEvent = Omit<ProposalEventDB, "occurredAt"> & {
+  occurredAt: string;
+};
+
+// Insert types
+export type NewProposal = typeof Tables.proposals.$inferInsert;
+export type NewProposalSection = typeof Tables.proposalSections.$inferInsert;
+export type NewProposalLineItem = typeof Tables.proposalLineItems.$inferInsert;
+export type NewProposalDiscount = typeof Tables.proposalDiscounts.$inferInsert;
+export type NewProposalTax = typeof Tables.proposalTaxes.$inferInsert;
+export type NewProposalTemplate = typeof Tables.proposalTemplates.$inferInsert;
+export type NewProposalEvent = typeof Tables.proposalEvents.$inferInsert;
+
+// Update types
+export type UpdateProposal = Partial<
+  Omit<ProposalDB, "id" | "createdAt" | "createdBy">
+>;
+export type UpdateProposalSection = Partial<
+  Omit<ProposalSectionDB, "id" | "proposalId">
+>;
+export type UpdateProposalLineItem = Partial<
+  Omit<ProposalLineItemDB, "id" | "proposalId">
+>;
+export type UpdateProposalDiscount = Partial<
+  Omit<ProposalDiscountDB, "id" | "proposalId">
+>;
+export type UpdateProposalTax = Partial<
+  Omit<ProposalTaxDB, "id" | "proposalId">
+>;
+export type UpdateProposalTemplate = Partial<
+  Omit<ProposalTemplateDB, "id" | "createdAt">
+>;
+
+// ============================================
+// Logging Types
+// ============================================
+
+export type ApplicationLogLevel = "error" | "warn" | "info" | "debug";
+export type ApplicationLogCategory =
+  | "email"
+  | "database"
+  | "api"
+  | "validation"
+  | "performance"
+  | "system"
+  | "integration"
+  | "background_job"
+  | "proposal"
+  | "pricing"
+  | "pdf"
+  | "general";
+export type AuditLogAction =
+  | "create"
+  | "update"
+  | "delete"
+  | "read"
+  | "login"
+  | "logout"
+  | "access_denied"
+  | "unauthorized_access";
+export type AuditLogResource =
+  | "project"
+  | "skill"
+  | "certification"
+  | "education"
+  | "work_experience"
+  | "blog"
+  | "email_template"
+  | "intake"
+  | "contact"
+  | "user"
+  | "pricing"
+  | "discount"
+  | "admin_dashboard"
+  | "system"
+  | "proposal";
+
+// Database logging types (what comes from DB)
+export type ApplicationLogDB = typeof Tables.applicationLogs.$inferSelect;
+export type AuditLogDB = typeof Tables.auditLogs.$inferSelect;
+
+// API logging types (what comes through tRPC - dates are strings)
+export type ApplicationLog = Omit<ApplicationLogDB, "createdAt"> & {
+  createdAt: string;
+};
+
+export type AuditLog = Omit<AuditLogDB, "createdAt"> & {
+  createdAt: string;
+};
+
+// Insert types
+export type NewApplicationLog = typeof Tables.applicationLogs.$inferInsert;
+export type NewAuditLog = typeof Tables.auditLogs.$inferInsert;
+
+// Update types (not typically used for logs, but available if needed)
+export type UpdateApplicationLog = Partial<
+  Omit<ApplicationLogDB, "id" | "createdAt">
+>;
+export type UpdateAuditLog = Partial<Omit<AuditLogDB, "id" | "createdAt">>;

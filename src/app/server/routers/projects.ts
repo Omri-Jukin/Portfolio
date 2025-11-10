@@ -277,7 +277,7 @@ export const projectsRouter = router({
       const isAdmin = userRole === "admin";
 
       // Check if user is trying to update a record they didn't create
-      if (!isAdmin && existing.createdById !== ctx.user.id) {
+      if (!isAdmin && existing.createdBy !== ctx.user.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "You can only update projects you created",
@@ -316,7 +316,7 @@ export const projectsRouter = router({
       const isAdmin = userRole === "admin";
 
       // Check if user is trying to delete a record they didn't create
-      if (!isAdmin && existing.createdById !== ctx.user.id) {
+      if (!isAdmin && existing.createdBy !== ctx.user.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "You can only delete projects you created",

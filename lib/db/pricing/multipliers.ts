@@ -8,6 +8,7 @@ import type {
   NewPricingMultiplierGroup,
   NewPricingMultiplierValue,
 } from "../schema/schema.tables";
+import { incrementOrdersForConflict } from "../utils/orderUtils";
 
 // Groups
 export const createPricingMultiplierGroup = async (
@@ -15,6 +16,16 @@ export const createPricingMultiplierGroup = async (
 ) => {
   const db = await getDB();
   if (!db) throw new Error("Database not available");
+
+  const newOrder = input.order ?? 0;
+
+  // Increment orders for conflicts
+  await incrementOrdersForConflict(
+    db,
+    pricingMultiplierGroups,
+    pricingMultiplierGroups.order,
+    newOrder
+  );
 
   const result = await db
     .insert(pricingMultiplierGroups)
@@ -99,6 +110,17 @@ export const createPricingMultiplierValue = async (
   const db = await getDB();
   if (!db) throw new Error("Database not available");
 
+  const newOrder = input.order ?? 0;
+
+  // Increment orders for conflicts (scoped to this group)
+  await incrementOrdersForConflict(
+    db,
+    pricingMultiplierValues,
+    pricingMultiplierValues.order,
+    newOrder,
+    [eq(pricingMultiplierValues.groupKey, input.groupKey)]
+  );
+
   const result = await db
     .insert(pricingMultiplierValues)
     .values({
@@ -171,4 +193,3 @@ export const deletePricingMultiplierValue = async (id: string) => {
   if (!result.length) throw new Error("Multiplier value not found");
   return result[0];
 };
-

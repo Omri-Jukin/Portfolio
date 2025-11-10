@@ -1476,5 +1476,47 @@
       "permanentlyDelete": "אתה עומד למחוק לצמיתות את הכניסה עבור:",
       "cannotBeUndone": "פעולה זו לא ניתנת לביטול. כל ההערות הקשורות, היסטוריית הסטטוס והתזכורות יימחקו גם כן."
     }
+  },
+  "proposals": {
+    "title": "הצעות מחיר",
+    "create": "צור הצעת מחיר",
+    "createFromIntake": "צור מכניסה",
+    "edit": "ערוך הצעת מחיר",
+    "delete": "מחק הצעת מחיר",
+    "duplicate": "שכפל",
+    "send": "שלח הצעת מחיר",
+    "exportPDF": "ייצא PDF",
+    "generateShareLink": "צור קישור שיתוף",
+    "status": {
+      "draft": "טיוטה",
+      "sent": "נשלח",
+      "accepted": "אושר",
+      "declined": "נדחה",
+      "expired": "פג תוקף",
+      "revised": "מעודכן"
+    },
+    "priceDisplay": {
+      "taxExclusive": "ללא מע\"מ",
+      "taxInclusive": "כולל מע\"מ"
+    },
+    "taxKind": {
+      "vat": "מע\"מ",
+      "surcharge": "תוספת",
+      "withholding": "ניכוי במקור"
+    },
+    "discountScope": {
+      "overall": "כולל",
+      "section": "סעיף",
+      "line": "שורה"
+    },
+    "public": {
+      "accept": "אשר הצעת מחיר",
+      "decline": "דחה הצעת מחיר",
+      "downloadPDF": "הורד PDF",
+      "acceptConfirm": "האם אתה בטוח שברצונך לאשר הצעת מחיר זו?",
+      "declineReason": "סיבת הדחייה (אופציונלי)",
+      "accepted": "הצעת המחיר אושרה.",
+      "declined": "הצעת המחיר נדחתה."
+    }
   }
 }

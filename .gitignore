@@ -76,3 +76,11 @@ scripts/wrangler-tail.local.js
 # backups
 /backups/*
 !/backups/.gitkeep
+
+# playwright
+/test-results
+/test-results/*
+!/test-results/.gitkeep
+/playwright-report
+/playwright-report/*
+!/playwright-report/.gitkeep

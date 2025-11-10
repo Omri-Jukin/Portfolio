@@ -1467,5 +1467,47 @@
       "permanentlyDelete": "Vous êtes sur le point de supprimer définitivement l'admission pour:",
       "cannotBeUndone": "Cette action ne peut pas être annulée. Toutes les notes associées, l'historique des statuts et les rappels seront également supprimés."
     }
+  },
+  "proposals": {
+    "title": "Propositions",
+    "create": "Créer une Proposition",
+    "createFromIntake": "Créer depuis une Admission",
+    "edit": "Modifier la Proposition",
+    "delete": "Supprimer la Proposition",
+    "duplicate": "Dupliquer",
+    "send": "Envoyer la Proposition",
+    "exportPDF": "Exporter PDF",
+    "generateShareLink": "Générer un Lien de Partage",
+    "status": {
+      "draft": "Brouillon",
+      "sent": "Envoyé",
+      "accepted": "Accepté",
+      "declined": "Refusé",
+      "expired": "Expiré",
+      "revised": "Révisé"
+    },
+    "priceDisplay": {
+      "taxExclusive": "Hors Taxes",
+      "taxInclusive": "TTC"
+    },
+    "taxKind": {
+      "vat": "TVA",
+      "surcharge": "Surcharge",
+      "withholding": "Retenue"
+    },
+    "discountScope": {
+      "overall": "Global",
+      "section": "Section",
+      "line": "Ligne"
+    },
+    "public": {
+      "accept": "Accepter la Proposition",
+      "decline": "Refuser la Proposition",
+      "downloadPDF": "Télécharger PDF",
+      "acceptConfirm": "Êtes-vous sûr de vouloir accepter cette proposition?",
+      "declineReason": "Raison du refus (optionnel)",
+      "accepted": "Cette proposition a été acceptée.",
+      "declined": "Cette proposition a été refusée."
+    }
   }
 }

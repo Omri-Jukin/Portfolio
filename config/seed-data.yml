@@ -1,0 +1,565 @@
+# Database Seed Data Configuration
+# This file contains all default data that gets seeded when running `npm run seed`
+
+roles:
+  - name: admin
+    displayName: Administrator
+    description: Full system access - can access admin panel and all system configuration
+    permissions:
+      canAccessAdmin: true
+      canEditContent: true
+      canEditTables: ["*"]
+    isActive: true
+    displayOrder: 0
+
+  - name: editor
+    displayName: Editor
+    description: Content management access - can edit content but NOT system configuration
+    permissions:
+      canAccessAdmin: false
+      canEditContent: true
+      canEditTables:
+        - projects
+        - skills
+        - certifications
+        - education
+        - workExperiences
+        - services
+        - testimonials
+        - blog
+    isActive: true
+    displayOrder: 1
+
+  - name: user
+    displayName: User
+    description: Customer/employer account - NO admin panel access, limited to profile/portfolio viewing
+    permissions:
+      canAccessAdmin: false
+      canEditContent: false
+      canEditTables: []
+    isActive: true
+    displayOrder: 2
+
+  - name: visitor
+    displayName: Visitor
+    description: Unauthenticated user - public access only
+    permissions:
+      canAccessAdmin: false
+      canEditContent: false
+      canEditTables: []
+    isActive: true
+    displayOrder: 3
+
+dashboardSections:
+  - sectionKey: pendingUsers
+    displayOrder: 1
+    enabled: true
+  - sectionKey: roles
+    displayOrder: 2
+    enabled: true
+  - sectionKey: blog
+    displayOrder: 3
+    enabled: true
+  - sectionKey: calculatorSettings
+    displayOrder: 4
+    enabled: true
+  - sectionKey: pricing
+    displayOrder: 5
+    enabled: true
+  - sectionKey: discounts
+    displayOrder: 6
+    enabled: true
+  - sectionKey: proposals
+    displayOrder: 7
+    enabled: true
+  - sectionKey: intakes
+    displayOrder: 8
+    enabled: true
+  - sectionKey: emails
+    displayOrder: 9
+    enabled: true
+  - sectionKey: workExperience
+    displayOrder: 10
+    enabled: true
+  - sectionKey: projects
+    displayOrder: 11
+    enabled: true
+  - sectionKey: skills
+    displayOrder: 12
+    enabled: true
+  - sectionKey: education
+    displayOrder: 13
+    enabled: true
+  - sectionKey: certifications
+    displayOrder: 14
+    enabled: true
+  - sectionKey: services
+    displayOrder: 15
+    enabled: true
+  - sectionKey: testimonials
+    displayOrder: 16
+    enabled: true
+
+pricing:
+  projectTypes:
+    - key: landing-page
+      displayName: Landing Page (base)
+      baseRateIls: 250
+      order: 0
+    - key: website
+      displayName: Website (base)
+      baseRateIls: 4000
+      order: 1
+    - key: portfolio
+      displayName: Portfolio (base)
+      baseRateIls: 7000
+      order: 2
+    - key: blog
+      displayName: Blog (base)
+      baseRateIls: 6000
+      order: 3
+    - key: app
+      displayName: App/MVP (base)
+      baseRateIls: 12000
+      order: 4
+    - key: ecommerce
+      displayName: eCommerce (base)
+      baseRateIls: 20000
+      order: 5
+    - key: saas
+      displayName: SaaS (base)
+      baseRateIls: 30000
+      order: 6
+    - key: other
+      displayName: Other (base)
+      baseRateIls: 10000
+      order: 7
+
+  features:
+    - key: cms
+      displayName: CMS
+      defaultCostIls: 5000
+      order: 20
+    - key: auth
+      displayName: Auth
+      defaultCostIls: 3500
+      order: 21
+    - key: payment
+      displayName: Payments
+      defaultCostIls: 8000
+      order: 22
+    - key: api
+      displayName: 3rd-party API
+      defaultCostIls: 5000
+      order: 23
+    - key: realtime
+      displayName: Realtime
+      defaultCostIls: 10000
+      order: 24
+    - key: analytics
+      displayName: Analytics
+      defaultCostIls: 3000
+      order: 25
+
+  multipliers:
+    complexity:
+      displayName: Complexity
+      order: 30
+      values:
+        - optionKey: simple
+          displayName: Simple
+          value: 1.0
+          isFixed: true
+          order: 0
+        - optionKey: moderate
+          displayName: Moderate
+          value: 1.6
+          isFixed: false
+          order: 1
+        - optionKey: complex
+          displayName: Complex
+          value: 2.4
+          isFixed: false
+          order: 2
+
+    timeline:
+      displayName: Timeline
+      order: 31
+      values:
+        - optionKey: normal
+          displayName: Normal
+          value: 1.0
+          isFixed: true
+          order: 0
+        - optionKey: fast
+          displayName: Fast
+          value: 1.3
+          isFixed: false
+          order: 1
+        - optionKey: urgent
+          displayName: Urgent
+          value: 1.6
+          isFixed: false
+          order: 2
+
+    tech:
+      displayName: Tech Stack
+      order: 32
+      values:
+        - optionKey: standard
+          displayName: Standard
+          value: 1.0
+          isFixed: true
+          order: 0
+        - optionKey: advanced
+          displayName: Advanced
+          value: 1.15
+          isFixed: false
+          order: 1
+        - optionKey: cutting-edge
+          displayName: Cutting-edge
+          value: 1.35
+          isFixed: false
+          order: 2
+
+    clientType:
+      displayName: Client Type
+      order: 33
+      values:
+        - optionKey: personal
+          displayName: Personal
+          value: 1.0
+          isFixed: true
+          order: 0
+        - optionKey: startup
+          displayName: Startup
+          value: 1.1
+          isFixed: false
+          order: 1
+        - optionKey: small-business
+          displayName: Small Business
+          value: 1.0
+          isFixed: true
+          order: 2
+        - optionKey: medium-business
+          displayName: Medium Business
+          value: 1.2
+          isFixed: false
+          order: 3
+        - optionKey: enterprise
+          displayName: Enterprise
+          value: 1.6
+          isFixed: false
+          order: 4
+        - optionKey: charity
+          displayName: Charity
+          value: 0.8
+          isFixed: false
+          order: 5
+        - optionKey: non-profit
+          displayName: Non-profit
+          value: 0.85
+          isFixed: false
+          order: 6
+
+  meta:
+    pageCostPerPage:
+      value: 600
+      order: 40
+    rangePercent:
+      value: 0.18
+      order: 41
+    defaultCurrency:
+      value: ILS
+      order: 42
+    projectMinimums:
+      value:
+        landing-page: 250
+        website: 4000
+        portfolio: 7000
+        blog: 6000
+        app: 12000
+        ecommerce: 20000
+        saas: 30000
+        other: 10000
+      order: 43
+    tax_profiles:
+      value:
+        - key: israel-vat
+          label: Israel VAT (17%)
+          lines:
+            - kind: vat
+              type: percent
+              value: 17
+              orderIndex: 0
+              label: VAT
+        - key: us-no-tax
+          label: US - No Tax
+          lines: []
+        - key: eu-vat
+          label: EU VAT (20%)
+          lines:
+            - kind: vat
+              type: percent
+              value: 20
+              orderIndex: 0
+              label: VAT
+        - key: uk-vat
+          label: UK VAT (20%)
+          lines:
+            - kind: vat
+              type: percent
+              value: 20
+              orderIndex: 0
+              label: VAT
+        - key: israel-vat-surcharge
+          label: Israel VAT + Surcharge
+          lines:
+            - kind: vat
+              type: percent
+              value: 17
+              orderIndex: 0
+              label: VAT
+            - kind: surcharge
+              type: percent
+              value: 2
+              orderIndex: 1
+              label: Surcharge
+      order: 44
+
+calculatorSettings:
+  baseRates:
+    - settingKey: landing-page
+      settingValue: 250
+      displayName: Landing Page (base)
+      description: Base for landing page
+    - settingKey: website
+      settingValue: 4000
+      displayName: Website (base)
+      description: Base for small company site
+    - settingKey: portfolio
+      settingValue: 7000
+      displayName: Portfolio (base)
+      description: Base for portfolio website
+    - settingKey: blog
+      settingValue: 6000
+      displayName: Blog (base)
+      description: Base for blog website
+    - settingKey: app
+      settingValue: 12000
+      displayName: App/MVP (base)
+      description: Base for web app / MVP
+    - settingKey: ecommerce
+      settingValue: 20000
+      displayName: eCommerce (base)
+      description: Base for online store
+    - settingKey: saas
+      settingValue: 30000
+      displayName: SaaS (base)
+      description: Base for SaaS project
+    - settingKey: other
+      settingValue: 10000
+      displayName: Other (base)
+      description: Generic base bucket
+
+  pageCost:
+    settingKey: page
+    settingValue:
+      value: 600
+    displayName: Per Page
+    description: Cost per additional page
+    displayOrder: 10
+
+  featureCosts:
+    - settingKey: cms
+      settingValue: 5000
+      displayName: CMS
+      description: Content management system
+    - settingKey: auth
+      settingValue: 3500
+      displayName: Auth
+      description: User authentication
+    - settingKey: payment
+      settingValue: 8000
+      displayName: Payments
+      description: Payment processing
+    - settingKey: api
+      settingValue: 5000
+      displayName: 3rd‑party API
+      description: External API integration
+    - settingKey: realtime
+      settingValue: 10000
+      displayName: Realtime
+      description: Realtime features
+    - settingKey: analytics
+      settingValue: 3000
+      displayName: Analytics
+      description: Tracking & dashboards
+
+  multipliers:
+    complexity:
+      settingKey: complexity
+      settingValue:
+        simple: 1.0
+        moderate: 1.6
+        complex: 2.4
+      displayName: Complexity
+      description: Complexity multiplier map
+      displayOrder: 30
+
+    timeline:
+      settingKey: timeline
+      settingValue:
+        normal: 1.0
+        fast: 1.3
+        urgent: 1.6
+      displayName: Timeline
+      description: Timeline multiplier map
+      displayOrder: 31
+
+    tech:
+      settingKey: tech
+      settingValue:
+        standard: 1.0
+        advanced: 1.15
+        cutting-edge: 1.35
+      displayName: Tech Stack
+      description: Tech multiplier map
+      displayOrder: 32
+
+    clientType:
+      settingKey: clientType
+      settingValue:
+        personal: 1.0
+        startup: 1.1
+        small-business: 1.0
+        medium-business: 1.2
+        enterprise: 1.6
+        charity: 0.8
+        non-profit: 0.85
+      displayName: Client Type
+      description: Client type multiplier map
+      displayOrder: 33
+
+  meta:
+    rangePercent:
+      settingKey: rangePercent
+      settingValue:
+        value: 0.18
+      displayName: Range Percent
+      description: ± percentage used for output range
+      displayOrder: 40
+
+    projectMinimums:
+      settingKey: projectMinimums
+      settingValue:
+        landing-page: 250
+        website: 4000
+        portfolio: 7000
+        blog: 6000
+        app: 12000
+        ecommerce: 20000
+        saas: 30000
+        other: 10000
+      displayName: Project Minimums
+      description: Minimum totals by type
+      displayOrder: 41
+
+    defaultCurrency:
+      settingKey: defaultCurrency
+      settingValue:
+        value: ILS
+      displayName: Default Currency
+      description: App default currency (ILS)
+      displayOrder: 42
+
+discounts:
+  - code: WEBSITE50
+    description: 50% off for the next 50 website projects (excludes charity/non-profit)
+    discountType: percent
+    amount: "50"
+    currency: ILS
+    appliesTo:
+      projectTypes:
+        - website
+      excludeClientTypes:
+        - charity
+        - non-profit
+    startsAt: null  # Will be set to current date in script
+    endsAt: null
+    maxUses: 50
+    perUserLimit: 1
+    isActive: true
+
+  - code: STARTUP2024
+    description: 20% off for startup clients - first 100 projects
+    discountType: percent
+    amount: "20"
+    currency: ILS
+    appliesTo:
+      projectTypes:
+        - website
+        - app
+        - saas
+    startsAt: null  # Will be set to current date in script
+    endsAt: null  # Will be set to 1 year from now in script
+    maxUses: 100
+    perUserLimit: 1
+    isActive: true
+
+  - code: CHARITY100
+    description: 1000 ILS fixed discount for charity/non-profit organizations
+    discountType: fixed
+    amount: "1000"
+    currency: ILS
+    appliesTo:
+      projectTypes:
+        - website
+        - app
+        - ecommerce
+    startsAt: null  # Will be set to current date in script
+    endsAt: null
+    maxUses: null  # Unlimited
+    perUserLimit: 1
+    isActive: true
+
+proposals:
+  statuses:
+    - key: draft
+      label: Draft
+      color: grey
+    - key: sent
+      label: Sent
+      color: blue
+    - key: accepted
+      label: Accepted
+      color: green
+    - key: declined
+      label: Declined
+      color: red
+    - key: expired
+      label: Expired
+      color: orange
+
+  templates:
+    - name: Standard Proposal
+      description: A standard proposal template with common sections
+      defaultCurrency: ILS
+      defaultTaxProfileKey: israel-vat
+      defaultPriceDisplay: taxExclusive
+      templateData:
+        sections:
+          - key: development
+            label: Development Services
+            description: Core development work
+            sortOrder: 0
+          - key: additional
+            label: Additional Services
+            description: Optional add-ons
+            sortOrder: 1
+      isActive: true
+      displayOrder: 0
+
+# Note: Intake templates and Email templates are too large/complex for YAML
+# They remain in their respective seed scripts but can reference constants from seed-constants.ts
+

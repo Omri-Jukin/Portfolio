@@ -67,7 +67,7 @@ export default function ProjectCostCalculator({
   // Initialize inputs with empty strings (will be set to defaults once model loads)
   const [inputs, setInputs] = useState<DynamicCalculatorInputs>({
     projectTypeKey: "",
-    numPages: 5,
+    numPages: 1,
     selectedFeatureKeys: [],
     complexityKey: "",
     timelineKey: "",
@@ -77,7 +77,6 @@ export default function ProjectCostCalculator({
   });
 
   const [discountCode, setDiscountCode] = useState("");
-  const [discountError, setDiscountError] = useState<string | null>(null);
 
   // Set default values once pricing model loads
   useEffect(() => {
@@ -98,7 +97,7 @@ export default function ProjectCostCalculator({
 
       setInputs({
         projectTypeKey: defaultProjectType,
-        numPages: 5,
+        numPages: 1,
         selectedFeatureKeys: [],
         complexityKey: defaultComplexity,
         timelineKey: defaultTimeline,
@@ -223,6 +222,16 @@ export default function ProjectCostCalculator({
     { enabled: discountCode.length > 0 }
   );
 
+  // fetch all active discounts
+  const { data: activeDiscounts } = api.discounts.getAll.useQuery({
+    includeInactive: false,
+    appliesTo: {
+      projectTypes: [inputs.projectTypeKey],
+      features: inputs.selectedFeatureKeys.map((key) => key),
+      clientTypes: inputs.clientTypeKey ? [inputs.clientTypeKey] : undefined,
+    },
+  });
+
   // Calculate cost breakdown
   const costBreakdownILS = useMemo(() => {
     if (!pricingModel || !inputs.projectTypeKey) {
@@ -248,16 +257,8 @@ export default function ProjectCostCalculator({
           type: discountType,
           amount: discountData.amount,
         };
-        setDiscountError(null);
-      } else {
-        setDiscountError("Discount does not apply to current selection");
       }
-    } else if (discountCode && !discountData) {
-      setDiscountError("Discount code not found or expired");
-    } else {
-      setDiscountError(null);
     }
-
     return calculateEstimate(pricingModel, inputs, discount);
   }, [pricingModel, inputs, discountCode, discountData]);
 
@@ -785,7 +786,22 @@ Range: ${symbol}${Math.round(
             </Stack>
 
             {/* Discount Code Input */}
-            <TextField
+            <Stack direction="row" spacing={1}>
+              <FormControl fullWidth>
+                <InputLabel>Discount Code (Optional)</InputLabel>
+                <Select
+                  value={discountCode}
+                  onChange={(e) => setDiscountCode(e.target.value)}
+                >
+                  {activeDiscounts?.map((discount) => (
+                    <MenuItem key={discount.id} value={discount.code}>
+                      {discount.code}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Stack>
+            {/* <TextField
               id="project-cost-calculator-text-field-discount-code"
               label="Discount Code (Optional)"
               size="small"
@@ -796,7 +812,7 @@ Range: ${symbol}${Math.round(
               helperText={
                 discountError || "Enter a discount code if you have one"
               }
-            />
+            /> */}
 
             <Divider
               id="project-cost-calculator-divider-cost-breakdown"

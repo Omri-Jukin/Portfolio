@@ -2,10 +2,21 @@ import { pricingBaseRates } from "../schema/schema.tables";
 import { eq, asc, and, isNull } from "drizzle-orm";
 import { getDB } from "../client";
 import type { NewPricingBaseRate } from "../schema/schema.tables";
+import { incrementOrdersForConflict } from "../utils/orderUtils";
 
 export const createPricingBaseRate = async (input: NewPricingBaseRate) => {
   const db = await getDB();
   if (!db) throw new Error("Database not available");
+
+  const newOrder = input.order ?? 0;
+
+  // Increment orders for conflicts
+  await incrementOrdersForConflict(
+    db,
+    pricingBaseRates,
+    pricingBaseRates.order,
+    newOrder
+  );
 
   const result = await db
     .insert(pricingBaseRates)

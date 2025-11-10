@@ -48,6 +48,7 @@ import {
   Delete as DeleteIcon,
   OpenInNew as OpenInNewIcon,
   Visibility as VisibilityIcon,
+  Description as DescriptionIcon,
 } from "@mui/icons-material";
 import TokenOutlinedIcon from "@mui/icons-material/TokenOutlined";
 import { ClientOnly } from "~/ClientOnly";
@@ -57,6 +58,7 @@ const AdminIntakesList = () => {
   const pathname = usePathname();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const utils = api.useUtils();
   const {
     data: intakes,
     isLoading,
@@ -72,6 +74,66 @@ const AdminIntakesList = () => {
   const generateLinkMutation = api.intakes.generateCustomLink.useMutation();
   const deleteCustomLinkMutation = api.intakes.deleteCustomLink.useMutation();
   const deleteCustomLinksMutation = api.intakes.deleteCustomLinks.useMutation();
+  const createProposalMutation = api.proposals.create.useMutation({
+    onSuccess: (proposal) => {
+      setSnackbarMessage("Proposal created successfully");
+      setSnackbarOpen(true);
+      router.push(`/${currentLocale}/dashboard/proposals/${proposal.id}`);
+    },
+    onError: (error) => {
+      setSnackbarMessage(error.message || "Failed to create proposal");
+      setSnackbarOpen(true);
+    },
+  });
+
+  const handleCreateProposalFromIntake = async (intakeId: string) => {
+    try {
+      // Fetch full intake data to get contact and org info
+      const fullIntake = await utils.intakes.getById.fetch({ id: intakeId });
+      if (!fullIntake) {
+        setSnackbarMessage("Intake not found");
+        setSnackbarOpen(true);
+        return;
+      }
+
+      const intakeData = fullIntake.data as Record<string, unknown> | undefined;
+      const contact = intakeData?.contact as
+        | {
+            firstName?: string;
+            lastName?: string;
+            fullName?: string;
+            email?: string;
+          }
+        | undefined;
+      const org = intakeData?.org as { name?: string } | undefined;
+
+      const clientName =
+        contact?.fullName ||
+        (contact?.firstName && contact?.lastName
+          ? `${contact.firstName} ${contact.lastName}`
+          : contact?.firstName ||
+            contact?.lastName ||
+            fullIntake.email ||
+            "Unknown");
+      const clientEmail = contact?.email || fullIntake.email;
+      const clientCompany = org?.name || null;
+
+      createProposalMutation.mutate({
+        clientName,
+        clientEmail,
+        clientCompany,
+        intakeId: fullIntake.id,
+        currency: "ILS",
+        priceDisplay: "taxExclusive",
+        status: "draft",
+      });
+    } catch (error) {
+      setSnackbarMessage(
+        error instanceof Error ? error.message : "Failed to load intake data"
+      );
+      setSnackbarOpen(true);
+    }
+  };
   const deleteIntakeMutation = api.intakes.delete.useMutation({
     onSuccess: () => {
       setSnackbarMessage("Intake deleted successfully");
@@ -1778,32 +1840,44 @@ const AdminIntakesList = () => {
                           </TableCell>
                           <TableCell sx={{ color: "text.primary" }}>
                             <Stack direction="row" spacing={1}>
-                              <MuiLink
-                                component="button"
-                                onClick={() =>
-                                  router.push(
-                                    `/${currentLocale}/dashboard/intakes/${intake.id}`
-                                  )
-                                }
-                                sx={{
-                                  cursor: "pointer",
-                                  color: "text.primary",
-                                }}
-                              >
-                                View
-                              </MuiLink>
-                              <IconButton
-                                size="small"
-                                color="error"
-                                onClick={() => {
-                                  setIntakeToDelete(intake);
-                                  setDeleteIntakeDialogOpen(true);
-                                  setIntakeIdConfirm("");
-                                }}
-                                disabled={deleteIntakeMutation.isPending}
-                              >
-                                <DeleteIcon fontSize="small" />
-                              </IconButton>
+                              <Tooltip title="View Intake">
+                                <IconButton
+                                  size="small"
+                                  onClick={() =>
+                                    router.push(
+                                      `/${currentLocale}/dashboard/intakes/${intake.id}`
+                                    )
+                                  }
+                                >
+                                  <VisibilityIcon fontSize="small" />
+                                </IconButton>
+                              </Tooltip>
+                              <Tooltip title="Create Proposal">
+                                <IconButton
+                                  size="small"
+                                  color="primary"
+                                  onClick={() =>
+                                    handleCreateProposalFromIntake(intake.id)
+                                  }
+                                  disabled={createProposalMutation.isPending}
+                                >
+                                  <DescriptionIcon fontSize="small" />
+                                </IconButton>
+                              </Tooltip>
+                              <Tooltip title="Delete">
+                                <IconButton
+                                  size="small"
+                                  color="error"
+                                  onClick={() => {
+                                    setIntakeToDelete(intake);
+                                    setDeleteIntakeDialogOpen(true);
+                                    setIntakeIdConfirm("");
+                                  }}
+                                  disabled={deleteIntakeMutation.isPending}
+                                >
+                                  <DeleteIcon fontSize="small" />
+                                </IconButton>
+                              </Tooltip>
                             </Stack>
                           </TableCell>
                         </TableRow>

@@ -93,3 +93,16 @@ export interface CostBreakdown {
   };
 }
 
+// Re-export proposal calculation types
+export type {
+  TaxLine,
+  TaxProfile,
+  ProposalLineItem,
+  ProposalSection,
+  ProposalDiscount,
+  ProposalTax,
+  ProposalTotalsInput,
+  ProposalTotalsOutput,
+  DiscountBreakdown,
+  TaxBreakdown,
+} from "./calcProposalTotals";

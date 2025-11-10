@@ -15,6 +15,59 @@ import {
 import { eq, asc } from "drizzle-orm";
 import type { PricingModel } from "./types";
 
+/**
+ * Retry a database query with exponential backoff
+ * Handles connection timeouts and temporary pooler issues
+ */
+async function retryQuery<T>(
+  queryFn: () => Promise<T>,
+  maxRetries = 2,
+  initialDelay = 1000
+): Promise<T> {
+  let lastError: Error | unknown;
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      return await queryFn();
+    } catch (error) {
+      lastError = error;
+
+      // Check if it's a connection timeout error
+      const isTimeoutError =
+        error instanceof Error &&
+        (error.message.includes("CONNECT_TIMEOUT") ||
+          error.message.includes("timeout") ||
+          error.message.includes("Failed query"));
+
+      // Don't retry on non-timeout errors (except on last attempt)
+      if (!isTimeoutError && attempt < maxRetries - 1) {
+        throw error;
+      }
+
+      // If it's the last attempt, throw the error
+      if (attempt === maxRetries - 1) {
+        break;
+      }
+
+      // Calculate delay with exponential backoff
+      const delay = initialDelay * Math.pow(2, attempt);
+
+      if (isTimeoutError) {
+        console.warn(
+          `[Pricing] Query timeout (attempt ${
+            attempt + 1
+          }/${maxRetries}), retrying in ${delay}ms...`
+        );
+      }
+
+      // Wait before retrying
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
+  }
+
+  throw lastError;
+}
+
 export async function getPricingModel(): Promise<PricingModel> {
   const db = await getDB();
   if (!db) {
@@ -22,39 +75,58 @@ export async function getPricingModel(): Promise<PricingModel> {
   }
 
   // Fetch all active items, sorted by order
-  const [projectTypes, baseRates, features, groups, values, meta] =
-    await Promise.all([
-      db
-        .select()
-        .from(pricingProjectTypes)
-        .where(eq(pricingProjectTypes.isActive, true))
-        .orderBy(asc(pricingProjectTypes.order)),
+  // Use sequential queries with batching to reduce connection pool pressure
+  // This prevents connection timeouts when the pooler is busy
+  const projectTypes = await retryQuery(() =>
+    db
+      .select()
+      .from(pricingProjectTypes)
+      .where(eq(pricingProjectTypes.isActive, true))
+      .orderBy(asc(pricingProjectTypes.order))
+  );
+
+  // Batch queries in groups to reduce simultaneous connection requirements
+  const [baseRates, features, groups] = await Promise.all([
+    retryQuery(() =>
       db
         .select()
         .from(pricingBaseRates)
         .where(eq(pricingBaseRates.isActive, true))
-        .orderBy(asc(pricingBaseRates.order)),
+        .orderBy(asc(pricingBaseRates.order))
+    ),
+    retryQuery(() =>
       db
         .select()
         .from(pricingFeatures)
         .where(eq(pricingFeatures.isActive, true))
-        .orderBy(asc(pricingFeatures.order)),
+        .orderBy(asc(pricingFeatures.order))
+    ),
+    retryQuery(() =>
       db
         .select()
         .from(pricingMultiplierGroups)
         .where(eq(pricingMultiplierGroups.isActive, true))
-        .orderBy(asc(pricingMultiplierGroups.order)),
+        .orderBy(asc(pricingMultiplierGroups.order))
+    ),
+  ]);
+
+  // Fetch multiplier values and meta in parallel (these are typically smaller)
+  const [values, meta] = await Promise.all([
+    retryQuery(() =>
       db
         .select()
         .from(pricingMultiplierValues)
         .where(eq(pricingMultiplierValues.isActive, true))
-        .orderBy(asc(pricingMultiplierValues.order)),
+        .orderBy(asc(pricingMultiplierValues.order))
+    ),
+    retryQuery(() =>
       db
         .select()
         .from(pricingMeta)
         .where(eq(pricingMeta.isActive, true))
-        .orderBy(asc(pricingMeta.order)),
-    ]);
+        .orderBy(asc(pricingMeta.order))
+    ),
+  ]);
 
   // Group multiplier values by groupKey
   const valuesByGroup = new Map<string, typeof values>();
@@ -128,4 +200,3 @@ export async function getPricingModel(): Promise<PricingModel> {
     },
   };
 }
-
