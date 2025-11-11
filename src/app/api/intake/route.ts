@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { intakeFormSchema } from "#/lib/schemas";
-import { renderProposal } from "#/lib/proposal/renderProposal";
+import { renderProposal } from "#/lib/proposals/renderProposal";
 import { sendIntakeEmails } from "#/lib/email/sendEmail";
 import { createIntake } from "#/lib/db/intakes/intakes";
 import {

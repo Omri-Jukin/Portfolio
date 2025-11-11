@@ -6,7 +6,6 @@ import {
   Box,
   Typography,
   Button,
-  Grid,
   CircularProgress,
   Alert,
   Breadcrumbs,
@@ -442,16 +441,31 @@ export default function ProposalEditorPage() {
         <Box
           sx={{
             display: "flex",
+            flexDirection: { xs: "column", md: "row" },
             justifyContent: "space-between",
-            alignItems: "center",
+            alignItems: { xs: "flex-start", md: "center" },
             mb: 3,
+            gap: 2,
           }}
         >
-          <Typography variant="h4">
-            Proposal: {proposalData.proposal.clientName}
-          </Typography>
-          <Box sx={{ display: "flex", gap: 2 }}>
+          <Box>
+            <Typography variant="h4" gutterBottom={false}>
+              Proposal: {proposalData.proposal.clientName}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Status: <strong>{proposalData.proposal.status}</strong>
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 1.5,
+              justifyContent: { xs: "flex-start", md: "flex-end" },
+            }}
+          >
             <Button
+              variant="outlined"
               startIcon={<ArrowBackIcon />}
               onClick={() => {
                 if (hasUnsavedChanges) {
@@ -463,6 +477,7 @@ export default function ProposalEditorPage() {
                   router.push("/dashboard/proposals");
                 }
               }}
+              size="small"
             >
               Back
             </Button>
@@ -471,8 +486,9 @@ export default function ProposalEditorPage() {
               startIcon={<DownloadIcon />}
               onClick={handleExportPDF}
               disabled={exportPdfMutation.isFetching}
+              size="small"
             >
-              Export PDF
+              PDF
             </Button>
             <Button
               variant="outlined"
@@ -494,8 +510,9 @@ export default function ProposalEditorPage() {
                 }
               }}
               disabled={!hasUnsavedChanges || updateMutation.isPending}
+              size="small"
             >
-              {updateMutation.isPending ? "Saving..." : "Save Changes"}
+              {updateMutation.isPending ? "Saving..." : "Save"}
             </Button>
             <Button
               variant="contained"
@@ -503,12 +520,13 @@ export default function ProposalEditorPage() {
               startIcon={<SendIcon />}
               onClick={handleSendProposal}
               disabled={sendMutation.isPending || updateMutation.isPending}
+              size="small"
             >
               {sendMutation.isPending
                 ? "Sending..."
                 : updateMutation.isPending
                 ? "Saving..."
-                : "Send Proposal"}
+                : "Send"}
             </Button>
             <Button
               variant="contained"
@@ -527,6 +545,7 @@ export default function ProposalEditorPage() {
                 updateMutation.isPending ||
                 (!hasUnsavedChanges && saveAndSendState === "idle")
               }
+              size="small"
               sx={{
                 transition: "all 0.3s ease-in-out",
                 ...(saveAndSendState === "saving" && {
@@ -546,9 +565,15 @@ export default function ProposalEditorPage() {
           </Box>
         </Box>
 
-        <Grid container spacing={3}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            gap: 3,
+          }}
+        >
           {/* Left Sidebar - Details */}
-          <Box sx={{ xs: 12, md: 3 }}>
+          <Box sx={{ width: { xs: "100%", md: "25%" }, minWidth: { md: 280 } }}>
             <DetailsCard
               ref={detailsCardRef}
               proposal={proposalData.proposal}
@@ -558,7 +583,7 @@ export default function ProposalEditorPage() {
           </Box>
 
           {/* Main Content - Sections & Line Items */}
-          <Box sx={{ xs: 12, md: 6 }}>
+          <Box sx={{ flex: 1, minWidth: 0 }}>
             <ContentBuilder
               proposalId={proposalId}
               sections={proposalData.sections}
@@ -568,7 +593,7 @@ export default function ProposalEditorPage() {
           </Box>
 
           {/* Right Panel - Charges & Totals */}
-          <Box sx={{ xs: 12, md: 3 }}>
+          <Box sx={{ width: { xs: "100%", md: "25%" }, minWidth: { md: 280 } }}>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
               <ChargesPanel
                 proposalId={proposalId}
@@ -581,7 +606,7 @@ export default function ProposalEditorPage() {
               <TotalsPanel totals={totals} loading={totalsLoading} />
             </Box>
           </Box>
-        </Grid>
+        </Box>
 
         <Snackbar
           open={snackbar.open}

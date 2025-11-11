@@ -25,6 +25,8 @@ import {
   Select,
   Stack,
   FormControlLabel,
+  Tabs,
+  Tab,
 } from "@mui/material";
 import {
   Add as AddIcon,
@@ -32,6 +34,7 @@ import {
   Edit as EditIcon,
   DragIndicator as DragIndicatorIcon,
 } from "@mui/icons-material";
+import Tooltip from "@mui/material/Tooltip";
 import { api } from "$/trpc/client";
 import type { RouterOutputs } from "$/trpc/client";
 import { DndContext, closestCenter, type DragEndEvent } from "@dnd-kit/core";
@@ -105,6 +108,11 @@ export default function ContentBuilder({
   });
 
   const [lineItemDialogOpen, setLineItemDialogOpen] = useState(false);
+  const [addLineItemDialogOpen, setAddLineItemDialogOpen] = useState(false);
+  const [addLineItemSectionId, setAddLineItemSectionId] = useState<
+    string | null
+  >(null);
+  const [addLineItemTab, setAddLineItemTab] = useState(0);
   const [editingLineItem, setEditingLineItem] = useState<LineItem | null>(null);
   const [lineItemForm, setLineItemForm] = useState({
     label: "",
@@ -114,6 +122,13 @@ export default function ContentBuilder({
     isOptional: false,
     isSelected: true,
     taxClass: "",
+    featureKey: "",
+  });
+  const [customItemForm, setCustomItemForm] = useState({
+    label: "",
+    description: "",
+    quantity: "1",
+    unitPriceMinor: "0",
   });
   const [snackbar, setSnackbar] = useState<SnackbarProps>({
     open: false,
@@ -219,13 +234,68 @@ export default function ContentBuilder({
   };
 
   const handleAddLineItem = (sectionId?: string | null) => {
+    setAddLineItemSectionId(sectionId || null);
+    setAddLineItemDialogOpen(true);
+    setAddLineItemTab(0);
+    setCustomItemForm({
+      label: "",
+      description: "",
+      quantity: "1",
+      unitPriceMinor: "0",
+    });
+  };
+
+  const { data: proposal } = api.proposals.getById.useQuery(
+    { id: proposalId },
+    { enabled: !!proposalId }
+  );
+
+  const { data: projectTypes } = api.pricing.projectTypes.getAll.useQuery({
+    includeInactive: false,
+  });
+  const { data: features } = api.pricing.features.getAll.useQuery({
+    includeInactive: false,
+  });
+
+  const handleSelectPricingItem = (item: {
+    label: string;
+    unitPriceMinor: number;
+    featureKey?: string;
+    description?: string;
+  }) => {
     createLineItemMutation.mutate({
       proposalId,
-      sectionId: sectionId || null,
-      label: "New Line Item",
+      sectionId: addLineItemSectionId,
+      label: item.label,
+      description: item.description || null,
       quantity: 1,
-      unitPriceMinor: 0,
+      unitPriceMinor: item.unitPriceMinor,
+      featureKey: item.featureKey || null,
     });
+    setAddLineItemDialogOpen(false);
+  };
+
+  const handleCreateCustomItem = () => {
+    if (!customItemForm.label.trim()) {
+      setSnackbar({
+        open: true,
+        message: "Label is required",
+        severity: "error",
+      });
+      return;
+    }
+
+    createLineItemMutation.mutate({
+      proposalId,
+      sectionId: addLineItemSectionId,
+      label: customItemForm.label,
+      description: customItemForm.description || null,
+      quantity: parseFloat(customItemForm.quantity) || 1,
+      unitPriceMinor: Math.round(
+        parseFloat(customItemForm.unitPriceMinor) * 100
+      ),
+    });
+    setAddLineItemDialogOpen(false);
   };
 
   const getSectionLineItems = (sectionId: string) => {
@@ -246,6 +316,7 @@ export default function ContentBuilder({
       isOptional: item.isOptional,
       isSelected: item.isSelected,
       taxClass: item.taxClass || "",
+      featureKey: item.featureKey || "",
     });
     setLineItemDialogOpen(true);
   };
@@ -286,11 +357,19 @@ export default function ContentBuilder({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            mb: 2,
+            mb: 3,
           }}
         >
-          <Typography variant="h6">Content</Typography>
+          <Box>
+            <Typography variant="h6" gutterBottom={false}>
+              Content Builder
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              Organize your proposal with sections and line items
+            </Typography>
+          </Box>
           <Button
+            variant="contained"
             startIcon={<AddIcon />}
             onClick={handleAddSection}
             size="small"
@@ -300,10 +379,30 @@ export default function ContentBuilder({
         </Box>
 
         {sections.length === 0 && getUnsectionedLineItems().length === 0 && (
-          <Box sx={{ textAlign: "center", py: 4 }}>
-            <Typography color="text.secondary">
-              No sections or line items yet. Add a section to get started.
+          <Box
+            sx={{
+              textAlign: "center",
+              py: 6,
+              px: 2,
+              border: "2px dashed",
+              borderColor: "divider",
+              borderRadius: 2,
+            }}
+          >
+            <Typography variant="body1" color="text.secondary" gutterBottom>
+              No content yet
             </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Add a section to start building your proposal
+            </Typography>
+            <Button
+              variant="outlined"
+              startIcon={<AddIcon />}
+              onClick={handleAddSection}
+              size="small"
+            >
+              Create First Section
+            </Button>
           </Box>
         )}
 
@@ -319,92 +418,195 @@ export default function ContentBuilder({
               const sectionItems = getSectionLineItems(section.id);
               return (
                 <SortableSection key={section.id} section={section}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      mb: 1,
-                      pl: 4,
-                    }}
-                  >
-                    <Typography variant="subtitle1">{section.label}</Typography>
-                    <Box>
-                      <IconButton
-                        size="small"
-                        onClick={() => handleAddLineItem(section.id)}
+                  <Card variant="outlined" sx={{ pl: 4, position: "relative" }}>
+                    <CardContent>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "flex-start",
+                          mb: sectionItems.length > 0 ? 2 : 0,
+                        }}
                       >
-                        <AddIcon fontSize="small" />
-                      </IconButton>
-                      <IconButton
-                        size="small"
-                        onClick={() =>
-                          deleteSectionMutation.mutate({ id: section.id })
-                        }
-                        color="error"
-                      >
-                        <DeleteIcon fontSize="small" />
-                      </IconButton>
-                    </Box>
-                  </Box>
+                        <Box sx={{ flex: 1 }}>
+                          <Typography variant="subtitle1" fontWeight="medium">
+                            {section.label}
+                          </Typography>
+                          {section.description && (
+                            <Typography
+                              variant="caption"
+                              color="text.secondary"
+                              sx={{ mt: 0.5, display: "block" }}
+                            >
+                              {section.description}
+                            </Typography>
+                          )}
+                        </Box>
+                        <Box sx={{ display: "flex", gap: 0.5 }}>
+                          <Tooltip title="Add line item">
+                            <IconButton
+                              size="small"
+                              onClick={() => handleAddLineItem(section.id)}
+                              color="primary"
+                            >
+                              <AddIcon fontSize="small" />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Delete section">
+                            <IconButton
+                              size="small"
+                              onClick={() =>
+                                deleteSectionMutation.mutate({ id: section.id })
+                              }
+                              color="error"
+                            >
+                              <DeleteIcon fontSize="small" />
+                            </IconButton>
+                          </Tooltip>
+                        </Box>
+                      </Box>
 
-                  {sectionItems.length > 0 && (
-                    <Table size="small">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Label</TableCell>
-                          <TableCell align="right">Qty</TableCell>
-                          <TableCell align="right">Unit Price</TableCell>
-                          <TableCell align="right">Total</TableCell>
-                          <TableCell>Optional</TableCell>
-                          <TableCell>Actions</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {sectionItems.map((item) => (
-                          <TableRow key={item.id}>
-                            <TableCell>{item.label}</TableCell>
-                            <TableCell align="right">
-                              {Number(item.quantity)}
-                            </TableCell>
-                            <TableCell align="right">
-                              {(item.unitPriceMinor / 100).toFixed(2)}
-                            </TableCell>
-                            <TableCell align="right">
-                              {(
-                                (Number(item.quantity) * item.unitPriceMinor) /
-                                100
-                              ).toFixed(2)}
-                            </TableCell>
-                            <TableCell>
-                              <Checkbox
-                                checked={item.isOptional}
-                                size="small"
-                                disabled
-                              />
-                            </TableCell>
-                            <TableCell>
-                              <IconButton
-                                size="small"
-                                onClick={() => handleEditLineItem(item)}
+                      {sectionItems.length > 0 && (
+                        <Table size="small" sx={{ mt: 2 }}>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell sx={{ fontWeight: "medium" }}>
+                                Item
+                              </TableCell>
+                              <TableCell
+                                align="right"
+                                sx={{ fontWeight: "medium" }}
                               >
-                                <EditIcon fontSize="small" />
-                              </IconButton>
-                              <IconButton
-                                size="small"
-                                onClick={() =>
-                                  deleteLineItemMutation.mutate({ id: item.id })
-                                }
-                                color="error"
+                                Qty
+                              </TableCell>
+                              <TableCell
+                                align="right"
+                                sx={{ fontWeight: "medium" }}
                               >
-                                <DeleteIcon fontSize="small" />
-                              </IconButton>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  )}
+                                Unit Price
+                              </TableCell>
+                              <TableCell
+                                align="right"
+                                sx={{ fontWeight: "medium" }}
+                              >
+                                Total
+                              </TableCell>
+                              <TableCell
+                                align="center"
+                                sx={{ fontWeight: "medium" }}
+                              >
+                                Optional
+                              </TableCell>
+                              <TableCell
+                                align="center"
+                                sx={{ fontWeight: "medium" }}
+                              >
+                                Actions
+                              </TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {sectionItems.map((item) => (
+                              <TableRow key={item.id} hover>
+                                <TableCell>
+                                  <Typography variant="body2">
+                                    {item.label}
+                                  </Typography>
+                                  {item.description && (
+                                    <Typography
+                                      variant="caption"
+                                      color="text.secondary"
+                                      display="block"
+                                    >
+                                      {item.description}
+                                    </Typography>
+                                  )}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {Number(item.quantity)}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {(item.unitPriceMinor / 100).toFixed(2)}
+                                </TableCell>
+                                <TableCell
+                                  align="right"
+                                  sx={{ fontWeight: "medium" }}
+                                >
+                                  {(
+                                    (Number(item.quantity) *
+                                      item.unitPriceMinor) /
+                                    100
+                                  ).toFixed(2)}
+                                </TableCell>
+                                <TableCell align="center">
+                                  <Checkbox
+                                    checked={item.isOptional}
+                                    size="small"
+                                    disabled
+                                  />
+                                </TableCell>
+                                <TableCell align="center">
+                                  <Box
+                                    sx={{
+                                      display: "flex",
+                                      gap: 0.5,
+                                      justifyContent: "center",
+                                    }}
+                                  >
+                                    <Tooltip title="Edit">
+                                      <IconButton
+                                        size="small"
+                                        onClick={() => handleEditLineItem(item)}
+                                      >
+                                        <EditIcon fontSize="small" />
+                                      </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Delete">
+                                      <IconButton
+                                        size="small"
+                                        onClick={() =>
+                                          deleteLineItemMutation.mutate({
+                                            id: item.id,
+                                          })
+                                        }
+                                        color="error"
+                                      >
+                                        <DeleteIcon fontSize="small" />
+                                      </IconButton>
+                                    </Tooltip>
+                                  </Box>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      )}
+                      {sectionItems.length === 0 && (
+                        <Box
+                          sx={{
+                            textAlign: "center",
+                            py: 2,
+                            border: "1px dashed",
+                            borderColor: "divider",
+                            borderRadius: 1,
+                            mt: 2,
+                          }}
+                        >
+                          <Typography variant="caption" color="text.secondary">
+                            No items in this section
+                          </Typography>
+                          <Button
+                            size="small"
+                            startIcon={<AddIcon />}
+                            onClick={() => handleAddLineItem(section.id)}
+                            sx={{ mt: 1 }}
+                          >
+                            Add Item
+                          </Button>
+                        </Box>
+                      )}
+                    </CardContent>
+                  </Card>
                 </SortableSection>
               );
             })}
@@ -544,56 +746,330 @@ export default function ContentBuilder({
           </DialogActions>
         </Dialog>
 
+        {/* Add Line Item Dialog */}
+        <Dialog
+          open={addLineItemDialogOpen}
+          onClose={() => setAddLineItemDialogOpen(false)}
+          fullWidth
+          maxWidth="md"
+        >
+          <DialogTitle>Add Line Item</DialogTitle>
+          <DialogContent>
+            <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 2 }}>
+              <Tabs
+                value={addLineItemTab}
+                onChange={(_, newValue) => setAddLineItemTab(newValue)}
+              >
+                <Tab label="From Pricing Tables" />
+                <Tab label="Custom Billing Item" />
+              </Tabs>
+            </Box>
+
+            {addLineItemTab === 0 && (
+              <Box>
+                <Typography variant="subtitle2" gutterBottom sx={{ mb: 2 }}>
+                  Project Types
+                </Typography>
+                <Box sx={{ mb: 3 }}>
+                  {projectTypes && projectTypes.length > 0 ? (
+                    <Stack spacing={1}>
+                      {projectTypes.map((pt) => (
+                        <Card
+                          key={pt.key}
+                          variant="outlined"
+                          sx={{
+                            cursor: "pointer",
+                            "&:hover": { bgcolor: "action.hover" },
+                          }}
+                          onClick={() =>
+                            handleSelectPricingItem({
+                              label: pt.displayName,
+                              unitPriceMinor: Math.round(pt.baseRateIls * 100),
+                              featureKey: pt.key,
+                              description: `Base rate for ${pt.displayName.toLowerCase()}`,
+                            })
+                          }
+                        >
+                          <CardContent>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                              }}
+                            >
+                              <Box>
+                                <Typography variant="body1" fontWeight="medium">
+                                  {pt.displayName}
+                                </Typography>
+                                <Typography
+                                  variant="caption"
+                                  color="text.secondary"
+                                >
+                                  {pt.key}
+                                </Typography>
+                              </Box>
+                              <Typography variant="h6" color="primary">
+                                {proposal?.proposal?.currency || "ILS"}{" "}
+                                {pt.baseRateIls.toLocaleString()}
+                              </Typography>
+                            </Box>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </Stack>
+                  ) : (
+                    <Typography color="text.secondary">
+                      No project types available
+                    </Typography>
+                  )}
+                </Box>
+
+                <Typography
+                  variant="subtitle2"
+                  gutterBottom
+                  sx={{ mb: 2, mt: 3 }}
+                >
+                  Features
+                </Typography>
+                <Box>
+                  {features && features.length > 0 ? (
+                    <Stack spacing={1}>
+                      {features.map((feature) => (
+                        <Card
+                          key={feature.key}
+                          variant="outlined"
+                          sx={{
+                            cursor: "pointer",
+                            "&:hover": { bgcolor: "action.hover" },
+                          }}
+                          onClick={() =>
+                            handleSelectPricingItem({
+                              label: feature.displayName,
+                              unitPriceMinor: Math.round(
+                                feature.defaultCostIls * 100
+                              ),
+                              featureKey: feature.key,
+                              description: `Feature: ${feature.displayName}`,
+                            })
+                          }
+                        >
+                          <CardContent>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                              }}
+                            >
+                              <Box>
+                                <Typography variant="body1" fontWeight="medium">
+                                  {feature.displayName}
+                                </Typography>
+                                <Typography
+                                  variant="caption"
+                                  color="text.secondary"
+                                >
+                                  {feature.key}
+                                </Typography>
+                              </Box>
+                              <Typography variant="h6" color="primary">
+                                {proposal?.proposal?.currency || "ILS"}{" "}
+                                {feature.defaultCostIls.toLocaleString()}
+                              </Typography>
+                            </Box>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </Stack>
+                  ) : (
+                    <Typography color="text.secondary">
+                      No features available
+                    </Typography>
+                  )}
+                </Box>
+              </Box>
+            )}
+
+            {addLineItemTab === 1 && (
+              <Stack spacing={2}>
+                <TextField
+                  label="Label"
+                  fullWidth
+                  required
+                  value={customItemForm.label}
+                  onChange={(e) =>
+                    setCustomItemForm({
+                      ...customItemForm,
+                      label: e.target.value,
+                    })
+                  }
+                />
+
+                <TextField
+                  label="Description"
+                  fullWidth
+                  multiline
+                  rows={2}
+                  value={customItemForm.description}
+                  onChange={(e) =>
+                    setCustomItemForm({
+                      ...customItemForm,
+                      description: e.target.value,
+                    })
+                  }
+                />
+
+                <TextField
+                  label="Quantity"
+                  type="number"
+                  fullWidth
+                  required
+                  value={customItemForm.quantity}
+                  onChange={(e) =>
+                    setCustomItemForm({
+                      ...customItemForm,
+                      quantity: e.target.value,
+                    })
+                  }
+                  inputProps={{ min: 0, step: 0.01 }}
+                />
+
+                <TextField
+                  label="Unit Price"
+                  type="number"
+                  fullWidth
+                  required
+                  value={customItemForm.unitPriceMinor}
+                  onChange={(e) =>
+                    setCustomItemForm({
+                      ...customItemForm,
+                      unitPriceMinor: e.target.value,
+                    })
+                  }
+                  inputProps={{ min: 0, step: 0.01 }}
+                  helperText="Price in major units (e.g., 100 for 100.00)"
+                />
+              </Stack>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setAddLineItemDialogOpen(false)}>
+              Cancel
+            </Button>
+            {addLineItemTab === 1 && (
+              <Button
+                onClick={handleCreateCustomItem}
+                variant="contained"
+                disabled={createLineItemMutation.isPending}
+              >
+                Add Item
+              </Button>
+            )}
+          </DialogActions>
+        </Dialog>
+
         {getUnsectionedLineItems().length > 0 && (
           <Box sx={{ mt: 3 }}>
-            <Typography variant="subtitle1" gutterBottom>
-              Unsectioned Items
-            </Typography>
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Label</TableCell>
-                  <TableCell align="right">Qty</TableCell>
-                  <TableCell align="right">Unit Price</TableCell>
-                  <TableCell align="right">Total</TableCell>
-                  <TableCell>Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {getUnsectionedLineItems().map((item) => (
-                  <TableRow key={item.id}>
-                    <TableCell>{item.label}</TableCell>
-                    <TableCell align="right">{Number(item.quantity)}</TableCell>
-                    <TableCell align="right">
-                      {(item.unitPriceMinor / 100).toFixed(2)}
-                    </TableCell>
-                    <TableCell align="right">
-                      {(
-                        (Number(item.quantity) * item.unitPriceMinor) /
-                        100
-                      ).toFixed(2)}
-                    </TableCell>
-                    <TableCell>
-                      <IconButton
-                        size="small"
-                        onClick={() => handleEditLineItem(item)}
-                      >
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                      <IconButton
-                        size="small"
-                        onClick={() =>
-                          deleteLineItemMutation.mutate({ id: item.id })
-                        }
-                        color="error"
-                      >
-                        <DeleteIcon fontSize="small" />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            <Card variant="outlined">
+              <CardContent>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    mb: 2,
+                  }}
+                >
+                  <Box>
+                    <Typography variant="subtitle1" fontWeight="medium">
+                      Unsectioned Items
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      Items not assigned to any section
+                    </Typography>
+                  </Box>
+                </Box>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: "medium" }}>Label</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: "medium" }}>
+                        Qty
+                      </TableCell>
+                      <TableCell align="right" sx={{ fontWeight: "medium" }}>
+                        Unit Price
+                      </TableCell>
+                      <TableCell align="right" sx={{ fontWeight: "medium" }}>
+                        Total
+                      </TableCell>
+                      <TableCell align="center" sx={{ fontWeight: "medium" }}>
+                        Actions
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {getUnsectionedLineItems().map((item) => (
+                      <TableRow key={item.id} hover>
+                        <TableCell>
+                          <Typography variant="body2">{item.label}</Typography>
+                          {item.description && (
+                            <Typography
+                              variant="caption"
+                              color="text.secondary"
+                              display="block"
+                            >
+                              {item.description}
+                            </Typography>
+                          )}
+                        </TableCell>
+                        <TableCell align="right">
+                          {Number(item.quantity)}
+                        </TableCell>
+                        <TableCell align="right">
+                          {(item.unitPriceMinor / 100).toFixed(2)}
+                        </TableCell>
+                        <TableCell align="right" sx={{ fontWeight: "medium" }}>
+                          {(
+                            (Number(item.quantity) * item.unitPriceMinor) /
+                            100
+                          ).toFixed(2)}
+                        </TableCell>
+                        <TableCell align="center">
+                          <Box
+                            sx={{
+                              display: "flex",
+                              gap: 0.5,
+                              justifyContent: "center",
+                            }}
+                          >
+                            <Tooltip title="Edit">
+                              <IconButton
+                                size="small"
+                                onClick={() => handleEditLineItem(item)}
+                              >
+                                <EditIcon fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Delete">
+                              <IconButton
+                                size="small"
+                                onClick={() =>
+                                  deleteLineItemMutation.mutate({ id: item.id })
+                                }
+                                color="error"
+                              >
+                                <DeleteIcon fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
+                          </Box>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
           </Box>
         )}
 

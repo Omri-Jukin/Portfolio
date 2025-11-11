@@ -35,7 +35,6 @@ import {
 import Snackbar, { type SnackbarProps } from "~/Snackbar";
 import { format } from "date-fns";
 import type { RouterOutputs } from "$/trpc/client";
-import { ProposalDiscount, ProposalTax } from "#/lib/db";
 
 type ProposalSection =
   RouterOutputs["proposals"]["getByShareToken"]["sections"][0];
@@ -166,28 +165,52 @@ export default function PublicProposalPage() {
       isSelected: li.isSelected,
       taxClass: li.taxClass,
     })),
-    discounts: discounts.map((d: ProposalDiscount) => ({
-      id: d.id,
-      scope: d.scope,
-      sectionId: d.sectionId,
-      lineItemId: d.lineItemId,
-      type: d.type,
-      amountMinor: d.amountMinor ?? undefined,
-      percent: d.percent ? Number(d.percent) : undefined,
-      label: d.label,
-    })),
-    taxes: taxes.map((t: ProposalTax) => ({
-      id: t.id,
-      scope: t.scope,
-      sectionId: t.sectionId,
-      lineItemId: t.lineItemId,
-      kind: t.kind,
-      type: t.type,
-      rateOrAmount: Number(t.rateOrAmount),
-      orderIndex: t.orderIndex,
-      label: t.label,
-    })),
-    pricingMeta: pricingMeta || [],
+    discounts: discounts.map((d: (typeof discounts)[0]) => {
+      const percent =
+        d.percent !== null && d.percent !== undefined
+          ? typeof d.percent === "string"
+            ? Number(d.percent)
+            : d.percent
+          : null;
+      return {
+        id: d.id,
+        scope: d.scope,
+        sectionId: d.sectionId,
+        lineItemId: d.lineItemId,
+        type: d.type,
+        amountMinor: d.amountMinor ?? undefined,
+        percent: percent as number | null,
+        label: d.label,
+      };
+    }) as ProposalTotalsInput["discounts"],
+    taxes: taxes.map((t: (typeof taxes)[0]) => {
+      const rateOrAmount =
+        typeof t.rateOrAmount === "string"
+          ? Number(t.rateOrAmount)
+          : t.rateOrAmount;
+      return {
+        id: t.id,
+        scope: t.scope,
+        sectionId: t.sectionId,
+        lineItemId: t.lineItemId,
+        kind: t.kind,
+        type: t.type,
+        rateOrAmount: rateOrAmount as number,
+        orderIndex: t.orderIndex,
+        label: t.label,
+      };
+    }) as ProposalTotalsInput["taxes"],
+    pricingMeta: pricingMeta
+      ? (pricingMeta.map((m: (typeof pricingMeta)[0]) => ({
+          id: m.id,
+          key: m.key,
+          value: (m.value ?? {}) as unknown,
+          order: m.order,
+          isActive: m.isActive,
+          createdAt: new Date(m.createdAt as string),
+          updatedAt: new Date(m.updatedAt as string),
+        })) as ProposalTotalsInput["pricingMeta"])
+      : [],
   };
 
   const totals = calcProposalTotals(totalsInput);
@@ -428,12 +451,14 @@ export default function PublicProposalPage() {
                       ...proposalData,
                       events: [],
                     };
-                    const pdf = generateProposalPDF(
+                    const pdfBuffer = await generateProposalPDF(
                       pdfData as unknown as Parameters<
                         typeof generateProposalPDF
                       >[0]
                     );
-                    const pdfBlob = pdf.output("blob");
+                    const pdfBlob = new Blob([pdfBuffer], {
+                      type: "application/pdf",
+                    });
                     const url = URL.createObjectURL(pdfBlob);
                     const link = document.createElement("a");
                     link.href = url;

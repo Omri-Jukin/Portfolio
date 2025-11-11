@@ -211,12 +211,12 @@ export default function ChargesPanel({
     };
 
     return (
-      <ListItem
+      <Box
         ref={setNodeRef}
         style={style}
         sx={{
-          boxShadow: isDragging ? 2 : 0,
-          bgcolor: isDragging ? "action.hover" : "transparent",
+          position: "relative",
+          opacity: isDragging ? 0.5 : 1,
         }}
       >
         <Box
@@ -224,9 +224,13 @@ export default function ChargesPanel({
           {...attributes}
           {...listeners}
           sx={{
+            position: "absolute",
+            left: 8,
+            top: "50%",
+            transform: "translateY(-50%)",
             cursor: "grab",
             color: "text.secondary",
-            mr: 1,
+            zIndex: 1,
             display: "flex",
             alignItems: "center",
             "&:active": {
@@ -238,26 +242,36 @@ export default function ChargesPanel({
           <DragIndicatorIcon fontSize="small" />
         </Box>
         {children}
-      </ListItem>
+      </Box>
     );
   }
 
   return (
     <Card>
       <CardContent>
-        <Typography variant="h6" gutterBottom>
-          Charges
-        </Typography>
+        <Box sx={{ mb: 2 }}>
+          <Typography variant="h6" gutterBottom={false}>
+            Charges
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            Manage discounts and taxes
+          </Typography>
+        </Box>
 
-        <Tabs value={tabValue} onChange={(_, v) => setTabValue(v)}>
+        <Tabs
+          value={tabValue}
+          onChange={(_, v) => setTabValue(v)}
+          sx={{ borderBottom: 1, borderColor: "divider", mb: 2 }}
+        >
           <Tab label="Discounts" />
           <Tab label="Taxes" />
         </Tabs>
 
         {tabValue === 0 && (
-          <Box sx={{ mt: 2 }}>
-            <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 1 }}>
+          <Box>
+            <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
               <Button
+                variant="contained"
                 startIcon={<AddIcon />}
                 size="small"
                 onClick={() => setDiscountDialogOpen(true)}
@@ -266,14 +280,39 @@ export default function ChargesPanel({
               </Button>
             </Box>
             {discounts.length === 0 ? (
-              <Typography variant="body2" color="text.secondary">
-                No discounts applied
-              </Typography>
+              <Box
+                sx={{
+                  textAlign: "center",
+                  py: 3,
+                  border: "1px dashed",
+                  borderColor: "divider",
+                  borderRadius: 1,
+                }}
+              >
+                <Typography variant="body2" color="text.secondary">
+                  No discounts applied
+                </Typography>
+                <Button
+                  size="small"
+                  startIcon={<AddIcon />}
+                  onClick={() => setDiscountDialogOpen(true)}
+                  sx={{ mt: 1 }}
+                >
+                  Add First Discount
+                </Button>
+              </Box>
             ) : (
               <List dense>
                 {discounts.map((discount) => (
                   <ListItem
                     key={discount.id}
+                    sx={{
+                      border: "1px solid",
+                      borderColor: "divider",
+                      borderRadius: 1,
+                      mb: 1,
+                      bgcolor: "background.paper",
+                    }}
                     secondaryAction={
                       <IconButton
                         edge="end"
@@ -281,18 +320,28 @@ export default function ChargesPanel({
                         onClick={() =>
                           deleteDiscountMutation.mutate({ id: discount.id })
                         }
+                        color="error"
                       >
                         <DeleteIcon fontSize="small" />
                       </IconButton>
                     }
                   >
                     <ListItemText
-                      primary={discount.label}
-                      secondary={`${discount.scope} - ${
-                        discount.type === "percent"
-                          ? `${discount.percent}%`
-                          : `${(discount.amountMinor || 0) / 100}`
-                      }`}
+                      primary={
+                        <Typography variant="body2" fontWeight="medium">
+                          {discount.label}
+                        </Typography>
+                      }
+                      secondary={
+                        <Typography variant="caption" color="text.secondary">
+                          {discount.scope} •{" "}
+                          {discount.type === "percent"
+                            ? `${discount.percent}%`
+                            : `${(discount.amountMinor || 0) / 100} ${
+                                discount.scope === "overall" ? "" : ""
+                              }`}
+                        </Typography>
+                      }
                     />
                   </ListItem>
                 ))}
@@ -302,9 +351,10 @@ export default function ChargesPanel({
         )}
 
         {tabValue === 1 && (
-          <Box sx={{ mt: 2 }}>
-            <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 1 }}>
+          <Box>
+            <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
               <Button
+                variant="contained"
                 startIcon={<AddIcon />}
                 size="small"
                 onClick={() => setTaxDialogOpen(true)}
@@ -313,9 +363,27 @@ export default function ChargesPanel({
               </Button>
             </Box>
             {taxes.length === 0 ? (
-              <Typography variant="body2" color="text.secondary">
-                No taxes applied
-              </Typography>
+              <Box
+                sx={{
+                  textAlign: "center",
+                  py: 3,
+                  border: "1px dashed",
+                  borderColor: "divider",
+                  borderRadius: 1,
+                }}
+              >
+                <Typography variant="body2" color="text.secondary">
+                  No taxes applied
+                </Typography>
+                <Button
+                  size="small"
+                  startIcon={<AddIcon />}
+                  onClick={() => setTaxDialogOpen(true)}
+                  sx={{ mt: 1 }}
+                >
+                  Add First Tax
+                </Button>
+              </Box>
             ) : (
               <DndContext
                 collisionDetection={closestCenter}
@@ -328,23 +396,47 @@ export default function ChargesPanel({
                   <List dense>
                     {sortedTaxes.map((tax) => (
                       <SortableTaxItem key={tax.id} tax={tax}>
-                        <ListItemText
-                          primary={tax.label}
-                          secondary={`${tax.kind} - ${
-                            tax.type === "percent"
-                              ? `${tax.rateOrAmount}%`
-                              : `${tax.rateOrAmount}`
-                          }`}
-                        />
-                        <IconButton
-                          edge="end"
-                          size="small"
-                          onClick={() =>
-                            deleteTaxMutation.mutate({ id: tax.id })
+                        <ListItem
+                          sx={{
+                            border: "1px solid",
+                            borderColor: "divider",
+                            borderRadius: 1,
+                            mb: 1,
+                            bgcolor: "background.paper",
+                            pl: 5,
+                          }}
+                          secondaryAction={
+                            <IconButton
+                              edge="end"
+                              size="small"
+                              onClick={() =>
+                                deleteTaxMutation.mutate({ id: tax.id })
+                              }
+                              color="error"
+                            >
+                              <DeleteIcon fontSize="small" />
+                            </IconButton>
                           }
                         >
-                          <DeleteIcon fontSize="small" />
-                        </IconButton>
+                          <ListItemText
+                            primary={
+                              <Typography variant="body2" fontWeight="medium">
+                                {tax.label}
+                              </Typography>
+                            }
+                            secondary={
+                              <Typography
+                                variant="caption"
+                                color="text.secondary"
+                              >
+                                {tax.kind} •{" "}
+                                {tax.type === "percent"
+                                  ? `${tax.rateOrAmount}%`
+                                  : `${tax.rateOrAmount}`}
+                              </Typography>
+                            }
+                          />
+                        </ListItem>
                       </SortableTaxItem>
                     ))}
                   </List>

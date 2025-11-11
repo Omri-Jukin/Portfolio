@@ -5,6 +5,7 @@
  */
 
 import type { PricingMeta } from "../db/schema/schema.tables";
+import { TaxManager } from "./TaxManager";
 
 // ============================================
 // Types
@@ -184,52 +185,7 @@ function applyDiscounts(
   return { discountedMinor: currentAmount, breakdown };
 }
 
-/**
- * Apply taxes to a base amount
- * Returns the taxed amount and breakdown
- * Supports multi-tax stacks with orderIndex
- */
-function applyTaxes(
-  baseMinor: number,
-  taxes: ProposalTax[],
-  taxClass?: string | null
-): { taxedMinor: number; breakdown: TaxBreakdown[] } {
-  // Skip taxes if taxClass is exempt
-  if (taxClass === "exempt") {
-    return { taxedMinor: baseMinor, breakdown: [] };
-  }
-
-  // Sort taxes by orderIndex
-  const sortedTaxes = [...taxes].sort((a, b) => a.orderIndex - b.orderIndex);
-
-  let currentAmount = baseMinor;
-  const breakdown: TaxBreakdown[] = [];
-
-  for (const tax of sortedTaxes) {
-    let taxAmount = 0;
-
-    if (tax.type === "percent") {
-      taxAmount = roundHalfUp((currentAmount * tax.rateOrAmount) / 100);
-    } else {
-      // Fixed amount
-      taxAmount = roundHalfUp(tax.rateOrAmount);
-    }
-
-    // Withholding is negative, others are positive
-    if (tax.kind === "withholding") {
-      taxAmount = -taxAmount;
-    }
-
-    currentAmount += taxAmount;
-    breakdown.push({
-      label: tax.label,
-      amountMinor: taxAmount,
-      kind: tax.kind,
-    });
-  }
-
-  return { taxedMinor: currentAmount, breakdown };
-}
+// applyTaxes function removed - now using TaxManager.calculateTaxes
 
 // ============================================
 // Main Calculation Function
@@ -410,7 +366,7 @@ export function calcProposalTotals(
       taxTotalMinor = 0;
       grandTotalMinor = preTaxTotalMinor;
     } else {
-      const { taxedMinor, breakdown } = applyTaxes(
+      const { taxedMinor, breakdown } = TaxManager.calculateTaxes(
         preTaxTotalMinor,
         overallTaxes
       );
@@ -427,58 +383,14 @@ export function calcProposalTotals(
       taxTotalMinor = 0;
       grandTotalMinor = preTaxTotalMinor;
     } else {
-      // For tax inclusive, the price already includes tax
-      // Calculate the base amount by reverse-engineering the tax
-      // For a single tax: total = base * (1 + rate/100), so base = total / (1 + rate/100)
-      // For multiple taxes, we need to work backwards
-      const sortedTaxes = [...overallTaxes].sort(
-        (a, b) => a.orderIndex - b.orderIndex
+      // For tax inclusive, use TaxManager to extract tax from the total
+      const extraction = TaxManager.extractTaxFromInclusive(
+        preTaxTotalMinor,
+        overallTaxes
       );
-
-      if (sortedTaxes.length === 1 && sortedTaxes[0]!.type === "percent") {
-        // Simple case: single percentage tax
-        const tax = sortedTaxes[0]!;
-        const rate =
-          tax.kind === "withholding" ? -tax.rateOrAmount : tax.rateOrAmount;
-        const baseAmount = roundHalfUp(preTaxTotalMinor / (1 + rate / 100));
-        const taxAmount = preTaxTotalMinor - baseAmount;
-
-        taxBreakdown = [
-          {
-            label: tax.label,
-            amountMinor: tax.kind === "withholding" ? -taxAmount : taxAmount,
-            kind: tax.kind,
-          },
-        ];
-        taxTotalMinor = tax.kind === "withholding" ? -taxAmount : taxAmount;
-        grandTotalMinor = preTaxTotalMinor; // Total stays the same (already includes tax)
-      } else {
-        // Complex case: multiple taxes or fixed taxes
-        // For now, calculate as if exclusive to get tax breakdown, but don't add to total
-        // This is an approximation - proper reverse calculation for multiple stacked taxes is complex
-        let baseAmount = preTaxTotalMinor;
-
-        // Rough approximation: try to extract base by working backwards
-        // This is not perfect for multiple stacked taxes, but works for common cases
-        for (let i = sortedTaxes.length - 1; i >= 0; i--) {
-          const tax = sortedTaxes[i]!;
-          if (tax.type === "percent") {
-            const rate =
-              tax.kind === "withholding" ? -tax.rateOrAmount : tax.rateOrAmount;
-            baseAmount = roundHalfUp(baseAmount / (1 + rate / 100));
-          } else if (tax.type === "fixed") {
-            const taxAmount =
-              tax.kind === "withholding" ? -tax.rateOrAmount : tax.rateOrAmount;
-            baseAmount -= taxAmount;
-          }
-        }
-
-        // Now calculate taxes forward from the base to get breakdown
-        const { breakdown } = applyTaxes(baseAmount, overallTaxes);
-        taxBreakdown = breakdown;
-        taxTotalMinor = breakdown.reduce((sum, t) => sum + t.amountMinor, 0);
-        grandTotalMinor = preTaxTotalMinor; // Total stays the same (already includes tax)
-      }
+      taxBreakdown = extraction.breakdown;
+      taxTotalMinor = extraction.taxAmount;
+      grandTotalMinor = preTaxTotalMinor; // Total stays the same (already includes tax)
     }
   }
 

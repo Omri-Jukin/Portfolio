@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { router, procedure, adminProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
+import { eq } from "drizzle-orm";
+import { users } from "$/db/schema/schema.tables";
 import {
   createProposal,
   getProposals,
@@ -63,8 +65,10 @@ import { calcProposalTotals } from "$/pricing/calcProposalTotals";
 import { getPricingMeta } from "$/db/pricing/meta";
 import type { ProposalTotalsInput } from "$/pricing/calcProposalTotals";
 import { generateProposalPDF } from "$/utils/proposalPdfGenerator";
+import { TaxManager } from "$/pricing/TaxManager";
 import { sendProposalEmail } from "$/email/sendProposalEmail";
 import { generateShareToken } from "$/db/proposals/proposals";
+import { generateProposalFromIntake } from "$/proposals/generateFromIntake";
 
 export const proposalsRouter = router({
   // ============================================
@@ -129,9 +133,25 @@ export const proposalsRouter = router({
     if (!db) throw new Error("Database not available");
     if (!user) throw new TRPCError({ code: "UNAUTHORIZED" });
 
+    // Look up the user in the users table by email
+    // The session user.id is from NextAuth's user table (text),
+    // but proposals.created_by references users.id (UUID)
+    const dbUser = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, user.email))
+      .limit(1);
+
+    if (!dbUser.length) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: `User with email ${user.email} not found in users table. Please ensure your account exists in the users table.`,
+      });
+    }
+
     const proposal = await createProposal({
       ...opts.input,
-      createdBy: user.id,
+      createdBy: dbUser[0].id,
     });
 
     return {
@@ -141,6 +161,25 @@ export const proposalsRouter = router({
       validUntil: proposal.validUntil?.toISOString() ?? null,
     };
   }),
+
+  generateFromIntake: adminProcedure
+    .input(
+      z.object({
+        intakeId: z.string().uuid(),
+        proposalId: z.string().uuid(),
+      })
+    )
+    .mutation(async (opts) => {
+      const { db } = opts.ctx;
+      if (!db) throw new Error("Database not available");
+
+      const result = await generateProposalFromIntake(
+        opts.input.intakeId,
+        opts.input.proposalId
+      );
+
+      return result;
+    }),
 
   update: adminProcedure
     .input(
@@ -608,6 +647,17 @@ export const proposalsRouter = router({
       return calcProposalTotals(totalsInput);
     }),
 
+  getTaxExplanation: adminProcedure
+    .input(
+      z.object({
+        taxKind: z.enum(["vat", "surcharge", "withholding"]),
+      })
+    )
+    .query(async (opts) => {
+      const explanation = TaxManager.getTaxExplanation(opts.input.taxKind);
+      return { explanation };
+    }),
+
   // ============================================
   // Sections
   // ============================================
@@ -947,12 +997,11 @@ export const proposalsRouter = router({
           : [],
       };
 
-      const pdf = generateProposalPDF(pdfData, {
+      const pdfBuffer = await generateProposalPDF(pdfData, {
         includeInternalNotes: opts.input.includeInternalNotes,
         includeClientNotes: opts.input.includeClientNotes,
       });
 
-      const pdfBuffer = Buffer.from(pdf.output("arraybuffer"));
       const base64 = pdfBuffer.toString("base64");
 
       return {

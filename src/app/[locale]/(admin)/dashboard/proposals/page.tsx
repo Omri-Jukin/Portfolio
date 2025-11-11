@@ -438,39 +438,55 @@ export default function ProposalsPage() {
         <Box
           sx={{
             display: "flex",
+            flexDirection: { xs: "column", md: "row" },
             justifyContent: "space-between",
-            alignItems: "center",
+            alignItems: { xs: "flex-start", md: "center" },
             mb: 3,
+            gap: 2,
           }}
         >
-          <Typography variant="h4" color="text.primary">
-            Proposals
-          </Typography>
-          <Box sx={{ display: "flex", gap: 2 }}>
+          <Box>
+            <Typography variant="h4" color="text.primary" gutterBottom={false}>
+              Proposals
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Manage and track your client proposals
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 1.5,
+              justifyContent: { xs: "flex-start", md: "flex-end" },
+            }}
+          >
             {selectedProposals.length > 0 && (
               <Button
                 variant="contained"
                 color="error"
                 startIcon={<DeleteIcon />}
                 onClick={() => handleDeleteSelected()}
+                size="small"
               >
-                Delete {selectedProposals.length}{" "}
-                {selectedProposals.length === 1 ? "Proposal" : "Proposals"}
+                Delete {selectedProposals.length}
               </Button>
             )}
             <Button
               variant="outlined"
               startIcon={<AddIcon />}
               onClick={() => setCreateFromIntakeDialogOpen(true)}
+              size="small"
             >
-              Create from Intake
+              From Intake
             </Button>
             <Button
               variant="contained"
               startIcon={<AddIcon />}
               onClick={() => router.push(`/${locale}/dashboard/proposals/new`)}
+              size="small"
             >
-              Create Proposal
+              New Proposal
             </Button>
           </Box>
         </Box>

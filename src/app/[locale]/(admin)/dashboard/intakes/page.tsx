@@ -74,9 +74,26 @@ const AdminIntakesList = () => {
   const generateLinkMutation = api.intakes.generateCustomLink.useMutation();
   const deleteCustomLinkMutation = api.intakes.deleteCustomLink.useMutation();
   const deleteCustomLinksMutation = api.intakes.deleteCustomLinks.useMutation();
+  const generateFromIntakeMutation =
+    api.proposals.generateFromIntake.useMutation();
+
   const createProposalMutation = api.proposals.create.useMutation({
-    onSuccess: (proposal) => {
-      setSnackbarMessage("Proposal created successfully");
+    onSuccess: async (proposal) => {
+      // If proposal was created from an intake, generate content automatically
+      if (proposal.intakeId) {
+        try {
+          await generateFromIntakeMutation.mutateAsync({
+            intakeId: proposal.intakeId,
+            proposalId: proposal.id,
+          });
+          setSnackbarMessage("Proposal created and populated successfully");
+        } catch (error) {
+          console.error("Failed to generate proposal from intake:", error);
+          setSnackbarMessage("Proposal created, but auto-generation failed");
+        }
+      } else {
+        setSnackbarMessage("Proposal created successfully");
+      }
       setSnackbarOpen(true);
       router.push(`/${currentLocale}/dashboard/proposals/${proposal.id}`);
     },

@@ -29,12 +29,23 @@ export async function incrementOrdersForConflict<T extends PgTable>(
   }
 
   // Increment all rows with order >= newOrder
-  // Use sql template to reference the column and increment it
-  // Use the column reference directly (orderColumn is already a PgColumn)
-  await db
-    .update(table)
-    .set({
-      [orderColumn.name]: sql`${orderColumn} + 1`,
-    } as Record<string, SQL>)
-    .where(conditions.length > 1 ? and(...conditions) : conditions[0]!);
+  // Drizzle doesn't support dynamic column names in .set(), so we use raw SQL
+  const whereClause =
+    conditions.length > 1 ? and(...conditions) : conditions[0]!;
+
+  // Get the table name from the table's internal metadata
+  // Drizzle stores the table name in a symbol
+  const tableNameSymbol = Symbol.for("drizzle:Name");
+  const tableWithSymbol = table as unknown as Record<symbol, string>;
+  const tableName = tableWithSymbol[tableNameSymbol] || "unknown_table";
+  const columnName = orderColumn.name;
+
+  // Build the WHERE clause SQL using Drizzle's SQL builder
+  // Use sql template to embed the whereClause SQL object directly
+  // sql.identifier is used for safe table/column name quoting
+  await db.execute(
+    sql`UPDATE ${sql.identifier(tableName)} SET ${sql.identifier(
+      columnName
+    )} = ${sql.identifier(columnName)} + 1 WHERE ${whereClause}`
+  );
 }

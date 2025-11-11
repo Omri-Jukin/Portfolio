@@ -24,7 +24,7 @@ import type {
   IntakeNoteCategory,
 } from "$/db/schema/schema.types";
 import { intakeFormSchema } from "#/lib/schemas";
-import { renderProposal } from "#/lib/proposal/renderProposal";
+import { renderProposal } from "#/lib/proposals/renderProposal";
 import { sendIntakeEmails, sendCustomLinkEmail } from "#/lib/email/sendEmail";
 import { generateCustomIntakeLinkToken } from "#/lib/utils/sessionToken";
 import {
@@ -1192,7 +1192,37 @@ export const intakesRouter = router({
           });
 
         try {
-          const setting = await createCalculatorSetting(input);
+          // Convert Record<string, number> to { value: number } format if needed
+          let normalizedSettingValue: number | { value: number };
+          if (typeof input.settingValue === "number") {
+            normalizedSettingValue = input.settingValue;
+          } else if (
+            typeof input.settingValue === "object" &&
+            input.settingValue !== null &&
+            !Array.isArray(input.settingValue) &&
+            "value" in input.settingValue &&
+            typeof (input.settingValue as { value: number }).value === "number"
+          ) {
+            normalizedSettingValue = input.settingValue as { value: number };
+          } else if (
+            typeof input.settingValue === "object" &&
+            input.settingValue !== null &&
+            !Array.isArray(input.settingValue)
+          ) {
+            // It's a Record<string, number>, convert to { value: number }
+            const firstValue = Object.values(
+              input.settingValue as Record<string, number>
+            )[0];
+            normalizedSettingValue = { value: firstValue ?? 0 };
+          } else {
+            normalizedSettingValue = 0;
+          }
+
+          const normalizedInput = {
+            ...input,
+            settingValue: normalizedSettingValue,
+          };
+          const setting = await createCalculatorSetting(normalizedInput);
           return {
             ...setting,
             settingValue: setting.settingValue as unknown,
@@ -1240,7 +1270,45 @@ export const intakesRouter = router({
           });
 
         try {
-          const setting = await updateCalculatorSetting(id, updateData);
+          // Convert Record<string, number> to { value: number } format if needed
+          let normalizedSettingValue: number | { value: number } | undefined;
+          if (updateData.settingValue === undefined) {
+            normalizedSettingValue = undefined;
+          } else if (typeof updateData.settingValue === "number") {
+            normalizedSettingValue = updateData.settingValue;
+          } else if (
+            typeof updateData.settingValue === "object" &&
+            updateData.settingValue !== null &&
+            !Array.isArray(updateData.settingValue) &&
+            "value" in updateData.settingValue &&
+            typeof (updateData.settingValue as { value: number }).value ===
+              "number"
+          ) {
+            normalizedSettingValue = updateData.settingValue as {
+              value: number;
+            };
+          } else if (
+            typeof updateData.settingValue === "object" &&
+            updateData.settingValue !== null &&
+            !Array.isArray(updateData.settingValue)
+          ) {
+            // It's a Record<string, number>, convert to { value: number }
+            const firstValue = Object.values(
+              updateData.settingValue as Record<string, number>
+            )[0];
+            normalizedSettingValue = { value: firstValue ?? 0 };
+          } else {
+            normalizedSettingValue = 0;
+          }
+
+          const normalizedUpdateData = {
+            ...updateData,
+            settingValue: normalizedSettingValue,
+          };
+          const setting = await updateCalculatorSetting(
+            id,
+            normalizedUpdateData
+          );
           return {
             ...setting,
             settingValue: setting.settingValue as unknown,

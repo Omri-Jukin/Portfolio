@@ -36,8 +36,7 @@ export async function sendProposalEmail(
     // Generate PDF if requested
     let pdfBuffer: Buffer | undefined;
     if (includePDF) {
-      const pdf = generateProposalPDF(proposalData);
-      pdfBuffer = Buffer.from(pdf.output("arraybuffer"));
+      pdfBuffer = await generateProposalPDF(proposalData);
     }
 
     const emailResult = await emailManager.sendEmail({
