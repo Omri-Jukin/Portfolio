@@ -145,7 +145,7 @@ export default function ResumePage() {
             excludeSections: ["Professional Summary"],
           };
 
-          pdf = renderResumePDF(resumeData, renderOptions);
+          pdf = await renderResumePDF(resumeData, renderOptions);
         } else if (docType === "technicalPortfolio") {
           filename = `Omri Jukin - Technical Portfolio.pdf`;
 

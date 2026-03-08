@@ -75,6 +75,7 @@
     "contract": "Contrato",
     "freelance": "Freelance",
     "internship": "Pasantía",
+    "voluntary": "Voluntariado",
     "ongoing": "En Curso",
     "present": "Presente"
   },
@@ -400,6 +401,15 @@
     "checkOutResume": "Revisa mi currículum detallado o ponte en contacto para discutir oportunidades y colaboraciones.",
     "viewResume": "Ver Currículum",
     "experiences": [
+      {
+        "role": "CTO",
+        "time": "2024–Presente",
+        "company": "The Atheist Line, Israel",
+        "details": [
+          "Lidera la estrategia tecnológica y la infraestructura para un grupo voluntario de defensa del ateísmo",
+          "Construye y mantiene plataformas digitales para apoyar el compromiso comunitario"
+        ]
+      },
       {
         "role": "Ingeniero Full Stack",
         "time": "2024–2025",

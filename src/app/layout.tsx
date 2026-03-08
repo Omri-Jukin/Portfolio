@@ -5,6 +5,24 @@ import { inter } from "$/fonts";
 export const metadata: Metadata = {
   title: "Omri Jukin",
   description: "No gods, just logic. No bugs, just features.",
+  metadataBase: new URL("https://omrijukin.com"),
+  openGraph: {
+    title: "Omri Jukin",
+    description: "No gods, just logic. No bugs, just features.",
+    url: "https://omrijukin.com",
+    siteName: "Omri Jukin",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Omri Jukin",
+    description: "No gods, just logic. No bugs, just features.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 // Root layout - must have html and body tags per Next.js requirements

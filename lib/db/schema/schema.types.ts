@@ -152,7 +152,8 @@ export type EmploymentType =
   | "part-time"
   | "contract"
   | "freelance"
-  | "internship";
+  | "internship"
+  | "voluntary";
 export type ProjectStatus =
   | "completed"
   | "in-progress"
@@ -249,3 +250,13 @@ export type IntakeNoteCategory =
   | "general";
 
 export type DiscountType = "percent" | "fixed";
+
+// Proposal types
+export type ProposalStatus =
+  | "draft"
+  | "sent"
+  | "accepted"
+  | "declined"
+  | "expired";
+
+export type PriceDisplayMode = "hourly" | "fixed" | "both";

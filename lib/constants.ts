@@ -565,6 +565,7 @@ export const EMPLOYMENT_TYPES = {
   CONTRACT: "contract",
   FREELANCE: "freelance",
   INTERNSHIP: "internship",
+  VOLUNTARY: "voluntary",
 } as const;
 
 /**

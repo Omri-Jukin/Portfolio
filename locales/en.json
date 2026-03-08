@@ -75,6 +75,7 @@
     "contract": "Contract",
     "freelance": "Freelance",
     "internship": "Internship",
+    "voluntary": "Voluntary",
     "ongoing": "Ongoing",
     "present": "Present"
   },
@@ -459,6 +460,15 @@
     "checkOutResume": "Check out my detailed resume or get in touch to discuss opportunities and collaborations.",
     "viewResume": "View Resume",
     "experiences": [
+      {
+        "role": "CTO",
+        "time": "2024–Present",
+        "company": "The Atheist Line, Israel",
+        "details": [
+          "Leading technology strategy and infrastructure for a voluntary atheist advocacy group",
+          "Building and maintaining digital platforms to support community engagement"
+        ]
+      },
       {
         "role": "Full Stack Engineer",
         "time": "2024–2025",

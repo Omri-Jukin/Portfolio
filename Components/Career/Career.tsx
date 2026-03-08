@@ -54,7 +54,8 @@ export type Experience = {
     | "part-time"
     | "contract"
     | "freelance"
-    | "internship";
+    | "internship"
+    | "voluntary";
   technologies: string[];
   achievements: string[];
   responsibilities: string[];
@@ -90,6 +91,7 @@ const Career: React.FC<CareerProps> = () => {
       contract: "warning",
       freelance: "info",
       internship: "success",
+      voluntary: "info",
     };
     return colors[type as keyof typeof colors] || "default";
   };

@@ -154,6 +154,7 @@ export const employmentTypeSchema = z.enum([
   EMPLOYMENT_TYPES.CONTRACT,
   EMPLOYMENT_TYPES.FREELANCE,
   EMPLOYMENT_TYPES.INTERNSHIP,
+  EMPLOYMENT_TYPES.VOLUNTARY,
 ] as const);
 
 export const projectStatusSchema = z.enum([

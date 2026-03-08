@@ -13,7 +13,8 @@ export interface WorkExperienceFormData {
     | "part-time"
     | "contract"
     | "freelance"
-    | "internship";
+    | "internship"
+    | "voluntary";
   industry: string;
   companyUrl: string;
   logo: string;
@@ -47,4 +48,5 @@ export const employmentTypeOptions = [
   { value: "contract", label: "Contract", color: "#2196F3" },
   { value: "freelance", label: "Freelance", color: "#9C27B0" },
   { value: "internship", label: "Internship", color: "#607D8B" },
+  { value: "voluntary", label: "Voluntary", color: "#00BCD4" },
 ];

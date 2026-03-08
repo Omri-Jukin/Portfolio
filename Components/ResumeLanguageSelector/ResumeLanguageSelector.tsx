@@ -61,7 +61,7 @@ const languages = [
     name: "Hebrew",
     flag: "il",
     nativeName: "עברית",
-    available: false,
+    available: true,
   },
 ];
 

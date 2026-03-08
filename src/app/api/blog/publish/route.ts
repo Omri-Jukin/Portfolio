@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // Simple API key authentication for external clients
-const API_KEY =
-  process.env.BLOG_API_KEY || "your-secret-api-key-change-in-production";
+const API_KEY = process.env.BLOG_API_KEY ?? "";
+const isApiKeyConfigured =
+  API_KEY.length > 0 &&
+  !API_KEY.includes("your-secret-api-key-change-in-production");
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,6 +26,13 @@ export async function POST(request: NextRequest) {
     const { users } = await import("$/db/schema/schema.tables");
 
     // Get API key from headers
+    if (!isApiKeyConfigured) {
+      return NextResponse.json(
+        { error: "API key not configured" },
+        { status: 503 }
+      );
+    }
+
     const apiKey = request.headers.get("x-api-key");
 
     if (!apiKey || apiKey !== API_KEY) {
@@ -103,7 +112,8 @@ export async function GET() {
   // Skip execution during build time - more aggressive check
   if (
     !process.env.DATABASE_URL ||
-    (process.env.NODE_ENV === "production" && !process.env.VERCEL)
+    (process.env.NODE_ENV === "production" && !process.env.VERCEL) ||
+    !isApiKeyConfigured
   ) {
     return NextResponse.json(
       { error: "Service temporarily unavailable" },
