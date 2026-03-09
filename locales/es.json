@@ -402,12 +402,13 @@
     "viewResume": "Ver Currículum",
     "experiences": [
       {
-        "role": "CTO",
+        "role": "Director de Tecnología (CTO)",
         "time": "2024–Presente",
         "company": "The Atheist Line, Israel",
         "details": [
-          "Lidera la estrategia tecnológica y la infraestructura para un grupo voluntario de defensa del ateísmo",
-          "Construye y mantiene plataformas digitales para apoyar el compromiso comunitario"
+          "Impulsa la visión tecnológica y la estrategia para mejorar el compromiso comunitario y los esfuerzos de defensa",
+          "Diseña, desarrolla y mantiene plataformas digitales escalables para apoyar los objetivos organizacionales",
+          "Supervisa las operaciones técnicas y garantiza la fiabilidad y el rendimiento del sistema"
         ]
       },
       {
