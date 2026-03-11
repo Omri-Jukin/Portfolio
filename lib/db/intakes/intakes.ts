@@ -119,15 +119,33 @@ export const updateIntakeStatus = async (
   const oldStatus = currentIntake.status as IntakeStatus;
 
   // Update status
-  const updated = await dbClient
-    .update(intakes)
-    .set({
-      status: newStatus,
-      lastReviewedAt: new Date(),
-      updatedAt: new Date(),
-    })
-    .where(eq(intakes.id, id))
-    .returning();
+  let updated;
+  try {
+    updated = await dbClient
+      .update(intakes)
+      .set({
+        status: newStatus,
+        lastReviewedAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .where(eq(intakes.id, id))
+      .returning();
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+
+    // Check if it's a table not found error
+    if (
+      errorMessage.includes("does not exist") ||
+      errorMessage.includes("relation") ||
+      errorMessage.includes("table")
+    ) {
+      throw new Error(
+        `Database table not found. Please run database migrations: npm run db:push`
+      );
+    }
+
+    throw new Error(`Failed to update intake status: ${errorMessage}`);
+  }
 
   if (!updated.length) {
     throw new Error("Failed to update intake status.");
@@ -143,7 +161,18 @@ export const updateIntakeStatus = async (
     });
   } catch (historyError) {
     // Log but don't fail the status update if history logging fails
-    console.warn("Failed to log status history:", historyError);
+    const historyErrorMessage =
+      historyError instanceof Error
+        ? historyError.message
+        : String(historyError);
+
+    // Only warn if it's not a table not found error (which is expected if migrations haven't run)
+    if (
+      !historyErrorMessage.includes("does not exist") &&
+      !historyErrorMessage.includes("relation")
+    ) {
+      console.warn("Failed to log status history:", historyError);
+    }
   }
 
   return updated[0];

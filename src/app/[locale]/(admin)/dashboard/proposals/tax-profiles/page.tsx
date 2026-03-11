@@ -51,14 +51,12 @@ const TaxProfilesPage = () => {
     refetch,
   } = api.proposals.taxProfiles.list.useQuery();
 
-  const normalizedProfiles: TaxProfile[] = (profiles ?? []).map(
-    (profile: TaxProfile) => ({
-      ...profile,
-      createdAt: new Date(profile.createdAt as unknown as string),
-      updatedAt: new Date(profile.updatedAt as unknown as string),
-      taxLines: profile.taxLines ?? [],
-    })
-  ) as unknown as TaxProfile[];
+  const normalizedProfiles: TaxProfile[] = (profiles ?? []).map((profile) => ({
+    ...profile,
+    createdAt: new Date(profile.createdAt as string),
+    updatedAt: new Date(profile.updatedAt as string),
+    taxLines: profile.taxLines ?? [],
+  }));
 
   const createMutation = api.proposals.taxProfiles.create.useMutation({
     onSuccess: () => {

@@ -368,7 +368,7 @@
     "professionalSummary": "Ingénieur Logiciel Full-Stack avec 2+ ans d'expérience pratique en technologies web modernes et architecture propre. Actuellement à la recherche d'opportunités pour contribuer à des équipes innovantes construisant des systèmes évolutifs et des expériences utilisateur exceptionnelles.",
     "personalInfo": {
       "name": "Omri Jukin",
-      "title": "Ingénieur Logiciel Full-Stack",
+      "title": "Ingénieur Full-Stack | Next.js, TypeScript, Node.js | PostgreSQL, AWS | Architecture propre",
       "contacts": {
         "phone": "+972 52-334-4064",
         "email": "contact@omrijukin.com",
@@ -422,6 +422,13 @@
         "Vitest",
         "Storybook",
         "Tests"
+      ],
+      "aiTools": [
+        "OpenAI Codex",
+        "Cursor IDE",
+        "Claude Code",
+        "R&D assisté par IA",
+        "Prompt engineering"
       ]
     },
     "education": [
@@ -459,16 +466,6 @@
     "viewResume": "Voir CV",
     "experiences": [
       {
-        "role": "Directeur Technique (CTO)",
-        "time": "2025–Présent",
-        "company": "The Atheist Line, Israël",
-        "details": [
-          "Pilote la vision technologique et la stratégie pour renforcer l'engagement communautaire et les efforts de plaidoyer",
-          "Conçoit, développe et maintient des plateformes numériques évolutives pour soutenir les objectifs organisationnels",
-          "Supervise les opérations techniques et assure la fiabilité et les performances du système"
-        ]
-      },
-      {
         "role": "Ingénieur Full Stack",
         "time": "2024–2025",
         "company": "Abra Technologies, Israël",
@@ -476,6 +473,16 @@
           "Construit plateforme agrégeant données de marché de sources gouvernementales avec Next.js, tRPC et PostgreSQL",
           "Conçu bibliothèque de composants UI modulaire avec Storybook et TypeScript, atteignant une couverture de tests complète",
           "Optimisé algorithmes de traitement de données et requêtes de base de données, améliorant la latence système et les temps de réponse"
+        ]
+      },
+      {
+        "role": "Responsable Technique (CTO Bénévole)",
+        "time": "2025–Présent",
+        "company": "The Atheist Line, Israël",
+        "details": [
+          "Développement de logiciels sur mesure et conseil technique pour un groupe bénévole de défense de l'athéisme",
+          "Débogage et intégration d'outils tiers tout en construisant l'écosystème numérique de l'organisation",
+          "Garantie de la fiabilité des systèmes et conseil sur les plateformes web et l'infrastructure technique"
         ]
       },
       {

@@ -180,6 +180,14 @@ const SECTION_CONFIG = {
     secondaryRoute: null,
     secondaryButtonText: null,
   },
+  proposals: {
+    title: "Proposals",
+    description: "Create, manage, and send professional proposals to clients.",
+    route: "/dashboard/proposals",
+    buttonText: "Manage Proposals",
+    secondaryRoute: "/dashboard/proposals/templates",
+    secondaryButtonText: "Manage Templates",
+  },
 } as const;
 
 type SectionKey = keyof typeof SECTION_CONFIG;

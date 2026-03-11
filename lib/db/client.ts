@@ -3,6 +3,7 @@ import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
 import { Pool, neonConfig } from "@neondatabase/serverless";
 import * as schema from "./schema/schema.tables";
+import { encodeDatabaseUrl } from "../utils/dbConnection";
 
 // Global connection instances
 let globalConnection: ReturnType<typeof postgres> | null = null;
@@ -38,12 +39,26 @@ export async function getDB() {
 
   try {
     // Get database URL from environment (Cloudflare-compatible)
+    // Prefer DIRECT_DATABASE_URL for direct connections, fallback to DATABASE_URL (pooler)
     // Check multiple sources: process.env (populated by OpenNext), globalThis.__env, or direct process access
     const databaseUrl =
+      process.env.DIRECT_DATABASE_URL ||
       process.env.DATABASE_URL ||
+      (typeof globalThis !== "undefined" &&
+        (
+          globalThis as {
+            __env?: { DIRECT_DATABASE_URL?: string; DATABASE_URL?: string };
+          }
+        ).__env?.DIRECT_DATABASE_URL) ||
       (typeof globalThis !== "undefined" &&
         (globalThis as { __env?: { DATABASE_URL?: string } }).__env
           ?.DATABASE_URL) ||
+      (typeof process !== "undefined" &&
+        (
+          process as {
+            env?: { DIRECT_DATABASE_URL?: string; DATABASE_URL?: string };
+          }
+        ).env?.DIRECT_DATABASE_URL) ||
       (typeof process !== "undefined" &&
         (process as { env?: { DATABASE_URL?: string } }).env?.DATABASE_URL);
 
@@ -96,6 +111,9 @@ export async function getDB() {
       throw new Error("Database not available during build");
     }
 
+    // Encode password if it contains special characters (prevents SASL_SIGNATURE_MISMATCH)
+    const processedDatabaseUrl = encodeDatabaseUrl(databaseUrl);
+
     // Use Neon serverless driver for Cloudflare Workers (WebSocket support)
     if (isCloudflare) {
       // console.log("[DB] Using Neon serverless driver for Cloudflare Workers");
@@ -105,20 +123,46 @@ export async function getDB() {
 
       // IMPORTANT: Create a NEW Pool for each request in Cloudflare Workers
       // Global pools violate Workers' request isolation model
-      const pool = new Pool({ connectionString: databaseUrl });
+      const pool = new Pool({ connectionString: processedDatabaseUrl });
 
       return drizzleNeon(pool, { schema });
     }
 
     // Use postgres-js for local development and traditional Node.js environments
-    // console.log("[DB] Using postgres-js driver for Node.js");
+    // Following Supabase's recommended pattern: postgres(connectionString, { prepare: false })
+    // SSL is handled via sslmode=require in the connection string (added by encodeDatabaseUrl)
+
+    // Check if we need to recreate the connection (if URL changed or connection is invalid)
+    // This handles cases where the password encoding changed or connection was lost
     if (!globalConnection) {
-      globalConnection = postgres(databaseUrl, {
-        prepare: false,
-        max: 10,
-        idle_timeout: 20,
-        connect_timeout: 10,
+      // Supabase pattern: postgres(connectionString, { prepare: false })
+      // Additional options for connection pooling and reliability
+      globalConnection = postgres(processedDatabaseUrl, {
+        prepare: false, // Required for Supabase pooler (Transaction mode)
+        max: 10, // Connection pool size
+        idle_timeout: 20, // Close idle connections after 20s
+        connect_timeout: 10, // Connection timeout
+        // SSL is handled via sslmode=require in processedDatabaseUrl
       });
+    } else {
+      // Test if the existing connection is still valid
+      try {
+        await globalConnection`SELECT 1`;
+      } catch {
+        // Connection is invalid, recreate it
+        console.warn("[DB] Existing connection invalid, recreating...");
+        try {
+          await globalConnection.end();
+        } catch {
+          // Ignore errors when closing invalid connection
+        }
+        globalConnection = postgres(processedDatabaseUrl, {
+          prepare: false,
+          max: 10,
+          idle_timeout: 20,
+          connect_timeout: 10,
+        });
+      }
     }
 
     return drizzle(globalConnection, { schema });

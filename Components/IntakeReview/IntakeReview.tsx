@@ -41,10 +41,12 @@ import {
   ExpandMore as ExpandMoreIcon,
   Info as InfoIcon,
   Link as LinkIcon,
+  PictureAsPdf as PdfIcon,
 } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { api } from "$/trpc/client";
 import { ResponsiveBackground } from "~/ScrollingSections";
+import { useSnackbar } from "~/SnackbarProvider/SnackbarProvider";
 import type {
   IntakeData,
   IntakeListItem,
@@ -82,6 +84,7 @@ export default function IntakeReview({
   onBackToCards,
 }: IntakeReviewProps) {
   const router = useRouter();
+  const { showSnackbar } = useSnackbar();
 
   // Notes form state
   const [noteText, setNoteText] = useState("");
@@ -144,6 +147,63 @@ export default function IntakeReview({
       await utils.intakes.getById.invalidate({ id: intakeId });
     } catch (error) {
       console.error("Failed to update status:", error);
+    }
+  };
+
+  const handleExportPDF = async () => {
+    if (!selectedIntake) {
+      showSnackbar("No intake data available to export", "warning");
+      return;
+    }
+
+    try {
+      // Dynamically import to avoid edge bundling issues
+      const { generateIntakePDF } = await import(
+        "#/lib/utils/intakePdfGenerator"
+      );
+
+      // Generate PDF (now async for Hebrew support)
+      const pdf = await generateIntakePDF({
+        id: selectedIntake.id,
+        email: selectedIntake.email,
+        data: selectedIntake.data,
+        proposalMd: selectedIntake.proposalMd,
+        status: selectedIntake.status,
+        flagged: selectedIntake.flagged,
+        estimatedValue: selectedIntake.estimatedValue,
+        riskLevel: selectedIntake.riskLevel,
+        createdAt: selectedIntake.createdAt,
+        updatedAt: selectedIntake.updatedAt,
+        lastReviewedAt: selectedIntake.lastReviewedAt,
+        reminderDate: selectedIntake.reminderDate,
+        customLink: selectedIntake.customLink || null,
+        notes: selectedIntake.notes,
+        statusHistory: selectedIntake.statusHistory,
+      });
+
+      // Generate filename
+      const contact = selectedIntake.data?.contact as
+        | { firstName?: string; lastName?: string; fullName?: string }
+        | undefined;
+      const clientName =
+        contact?.fullName ||
+        `${contact?.firstName || ""} ${contact?.lastName || ""}`.trim() ||
+        selectedIntake.email.split("@")[0];
+      const sanitizedName = clientName
+        .replace(/[^a-z0-9]/gi, "_")
+        .toLowerCase();
+      const date = new Date().toISOString().split("T")[0];
+      const filename = `intake_${sanitizedName}_${date}.pdf`;
+
+      // Save PDF
+      pdf.save(filename);
+      showSnackbar("PDF exported successfully", "success");
+    } catch (error) {
+      console.error("Error exporting PDF:", error);
+      showSnackbar(
+        error instanceof Error ? error.message : "Failed to export PDF",
+        "error"
+      );
     }
   };
 
@@ -531,10 +591,11 @@ export default function IntakeReview({
             </Button>
             <Button
               variant="outlined"
-              startIcon={<AssignmentIcon />}
-              onClick={() => router.push(`/dashboard/intakes`)}
+              startIcon={<PdfIcon />}
+              onClick={handleExportPDF}
+              disabled={!selectedIntake}
             >
-              View in Old Admin
+              Export Intake PDF
             </Button>
           </Stack>
         </Card>

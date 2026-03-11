@@ -11,6 +11,9 @@ import {
   TableChart as CalculatorSettingsIcon,
   Apps as MoreIcon,
   Logout as LogoutIcon,
+  Article as ProposalsIcon,
+  FileCopy as TemplatesIcon,
+  Receipt as TaxProfilesIcon,
 } from "@mui/icons-material";
 import { useRouter, usePathname } from "next/navigation";
 import ProjectCostCalculator from "~/ProjectCostCalculator";
@@ -136,6 +139,24 @@ export default function AdminFAB() {
       icon: <SettingsIcon />,
       label: "Intake Templates",
       onClick: () => navigateTo("/dashboard/intake-templates"),
+      color: "default",
+    },
+    {
+      icon: <ProposalsIcon />,
+      label: "Proposals",
+      onClick: () => navigateTo("/dashboard/proposals"),
+      color: "secondary",
+    },
+    {
+      icon: <TemplatesIcon />,
+      label: "Proposal Templates",
+      onClick: () => navigateTo("/dashboard/proposals/templates"),
+      color: "default",
+    },
+    {
+      icon: <TaxProfilesIcon />,
+      label: "Tax Profiles",
+      onClick: () => navigateTo("/dashboard/proposals/tax-profiles"),
       color: "default",
     },
     {

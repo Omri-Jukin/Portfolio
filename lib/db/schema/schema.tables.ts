@@ -31,6 +31,8 @@ import {
   IntakeStatus,
   IntakeRiskLevel,
   IntakeNoteCategory,
+  ProposalStatus,
+  PriceDisplayMode,
 } from "./schema.types";
 
 // ============================================
@@ -794,3 +796,111 @@ export const pricingMeta = pgTable("pricing_meta", {
 
 export type PricingMeta = typeof pricingMeta.$inferSelect;
 export type NewPricingMeta = typeof pricingMeta.$inferInsert;
+
+// Proposal templates table
+export const proposalTemplates = pgTable("proposal_templates", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  name: text("name").notNull(),
+  description: text("description"),
+  content: jsonb("content").notNull(),
+  isDefault: boolean("is_default").notNull().default(false),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+export type ProposalTemplate = typeof proposalTemplates.$inferSelect;
+export type NewProposalTemplate = typeof proposalTemplates.$inferInsert;
+
+// Tax profiles table
+export const taxProfiles = pgTable("tax_profiles", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  name: text("name").notNull(),
+  description: text("description"),
+  taxLines: jsonb("tax_lines")
+    .notNull()
+    .default(sql`'[]'::jsonb`),
+  isDefault: boolean("is_default").notNull().default(false),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+export type TaxProfile = typeof taxProfiles.$inferSelect;
+export type NewTaxProfile = typeof taxProfiles.$inferInsert;
+
+// Proposals table
+export const proposals = pgTable(
+  "proposals",
+  {
+    id: uuid("id").primaryKey().notNull().defaultRandom(),
+    title: text("title").notNull(),
+    clientName: text("client_name").notNull(),
+    clientEmail: text("client_email").notNull(),
+    status: text("status").$type<ProposalStatus>().notNull().default("draft"),
+    shareToken: uuid("share_token"),
+    validUntil: timestamp("valid_until", { withTimezone: true }),
+    currency: text("currency").notNull().default("USD"),
+    priceDisplayMode: text("price_display_mode")
+      .$type<PriceDisplayMode>()
+      .notNull()
+      .default("fixed"),
+    content: jsonb("content")
+      .notNull()
+      .default(sql`'[]'::jsonb`),
+    charges: jsonb("charges")
+      .notNull()
+      .default(sql`'{}'::jsonb`),
+    discounts: jsonb("discounts")
+      .notNull()
+      .default(sql`'[]'::jsonb`),
+    taxes: jsonb("taxes")
+      .notNull()
+      .default(sql`'[]'::jsonb`),
+    metadata: jsonb("metadata")
+      .notNull()
+      .default(sql`'{}'::jsonb`),
+    intakeId: uuid("intake_id").references(() => intakes.id, {
+      onDelete: "set null",
+    }),
+    templateId: uuid("template_id").references(() => proposalTemplates.id, {
+      onDelete: "set null",
+    }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => ({
+    shareTokenUnique: unique().on(table.shareToken),
+  })
+);
+
+export type Proposal = typeof proposals.$inferSelect;
+export type NewProposal = typeof proposals.$inferInsert;
+
+// Proposal snapshots table (for accepted/declined proposals)
+export const proposalSnapshots = pgTable("proposal_snapshots", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  proposalId: uuid("proposal_id")
+    .notNull()
+    .references(() => proposals.id, { onDelete: "cascade" }),
+  snapshotData: jsonb("snapshot_data").notNull(),
+  acceptedAt: timestamp("accepted_at", { withTimezone: true }),
+  acceptedBy: text("accepted_by"),
+  declineReason: text("decline_reason"),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+export type ProposalSnapshot = typeof proposalSnapshots.$inferSelect;
+export type NewProposalSnapshot = typeof proposalSnapshots.$inferInsert;

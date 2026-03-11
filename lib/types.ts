@@ -870,6 +870,7 @@ export interface ResumeData {
     architecture: string[];
     databases: string[];
     cloudDevOps: string[];
+    aiTools?: string[];
     softSkills?: string[];
   };
   experience: Array<{

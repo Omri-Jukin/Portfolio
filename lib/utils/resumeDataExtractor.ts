@@ -56,6 +56,7 @@ export const extractResumeData = async (
       architecture: resumeData.technicalSkills.architecture,
       databases: resumeData.technicalSkills.databases,
       cloudDevOps: resumeData.technicalSkills.cloudDevOps,
+      aiTools: resumeData.technicalSkills.aiTools ?? [],
       softSkills: data.skills.categories.soft.skills.map(
         (skill: { description: string; name: string }) =>
           skill.description || skill.name

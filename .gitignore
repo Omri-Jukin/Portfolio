@@ -42,6 +42,7 @@ drizzle/
 /.open-next
 
 # IDE
+.cursor/
 .vscode/
 .idea/
 *.swp
@@ -59,20 +60,28 @@ drizzle/
 
 # scripts
 /scripts/*
-/scripts/migrations/*
+
 # Local wrangler tail script (not committed)
 scripts/wrangler-tail.local.js
 
 # roadmap
 /roadmap/*
-!/roadmap/.gitkeep
 
-# cursor
-.cursor/rules/*
-!.cursor/rules/.gitkeep
+# prompts
 /prompts/*
-!/prompts/.gitkeep
 
 # backups
 /backups/*
-!/backups/.gitkeep
+
+# docs
+*.md
+!README.md
+
+# playwright
+/test-results/*
+!/test-results/.gitkeep
+/playwright-report/*
+!/playwright-report/.gitkeep
+
+# wrangler
+/.wrangler

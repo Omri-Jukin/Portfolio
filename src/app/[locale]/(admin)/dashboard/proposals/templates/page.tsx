@@ -52,13 +52,13 @@ const ProposalTemplatesPage = () => {
   } = api.proposals.templates.list.useQuery();
 
   const normalizedTemplates: ProposalTemplate[] = (templates ?? []).map(
-    (template: ProposalTemplate) => ({
+    (template) => ({
       ...template,
-      createdAt: new Date(template.createdAt),
-      updatedAt: new Date(template.updatedAt),
+      createdAt: new Date(template.createdAt as string),
+      updatedAt: new Date(template.updatedAt as string),
       content: template.content ?? {},
     })
-  ) as ProposalTemplate[];
+  );
 
   const createMutation = api.proposals.templates.create.useMutation({
     onSuccess: () => {

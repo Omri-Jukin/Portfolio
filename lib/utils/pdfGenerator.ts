@@ -409,46 +409,63 @@ export async function renderResumePDF(
   let contactY = 37;
   // const iconSpacing = PDF_VISUAL_ELEMENTS.icons.spacing;
 
-  // Phone and Email
-  // Phone (clickable)
+  // Phone and Email (kept as plain text for ATS parsing)
   contactY = await addTextBlock(
     `Phone: ${data.person.contacts.phone}`,
     contactY,
     { fontSize: PDF_LAYOUT.FONT_SIZES.contacts }
   );
 
-  // Email (clickable)
   contactY = await addTextBlock(
     `Email: ${data.person.contacts.email}`,
     contactY,
     { fontSize: PDF_LAYOUT.FONT_SIZES.contacts }
   );
 
-  // Portfolio
-  if (data.person.contacts.portfolio) {
-    contactY = await addTextBlock(
-      `Portfolio: ${data.person.contacts.portfolio}`,
-      contactY,
-      { fontSize: PDF_LAYOUT.FONT_SIZES.contacts }
-    );
-  }
+  // Portfolio, GitHub, LinkedIn as clickable links (shortened; URLs in link annotations for ATS)
+  const links: { label: string; url: string }[] = [];
+  if (data.person.contacts.portfolio)
+    links.push({
+      label: "Portfolio",
+      url: data.person.contacts.portfolio.startsWith("http")
+        ? data.person.contacts.portfolio
+        : `https://${data.person.contacts.portfolio}`,
+    });
+  if (data.person.contacts.github)
+    links.push({
+      label: "GitHub",
+      url: data.person.contacts.github.startsWith("http")
+        ? data.person.contacts.github
+        : `https://${data.person.contacts.github}`,
+    });
+  if (data.person.contacts.linkedin)
+    links.push({
+      label: "LinkedIn",
+      url: data.person.contacts.linkedin.startsWith("http")
+        ? data.person.contacts.linkedin
+        : `https://${data.person.contacts.linkedin}`,
+    });
 
-  // GitHub
-  if (data.person.contacts.github) {
-    contactY = await addTextBlock(
-      `GitHub: ${data.person.contacts.github}`,
-      contactY,
-      { fontSize: PDF_LAYOUT.FONT_SIZES.contacts }
-    );
-  }
-
-  // LinkedIn
-  if (data.person.contacts.linkedin) {
-    contactY = await addTextBlock(
-      `LinkedIn: ${data.person.contacts.linkedin}`,
-      contactY,
-      { fontSize: PDF_LAYOUT.FONT_SIZES.contacts }
-    );
+  if (links.length > 0) {
+    doc.setFont(typography.font, "normal");
+    doc.setFontSize(PDF_LAYOUT.FONT_SIZES.contacts);
+    const sep = " | ";
+    let linkX = getStartX(0, pageWidth);
+    const linkY = contactY;
+    for (let i = 0; i < links.length; i++) {
+      const { label, url } = links[i];
+      const labelWidth = doc.getTextWidth(label);
+      doc.setTextColor(0, 0, 139); // Blue for links
+      doc.textWithLink(label, linkX, linkY, { url });
+      linkX += labelWidth;
+      if (i < links.length - 1) {
+        doc.setTextColor(0, 0, 0);
+        doc.text(sep, linkX, linkY);
+        linkX += doc.getTextWidth(sep);
+      }
+    }
+    doc.setTextColor(0, 0, 0);
+    contactY = linkY + PDF_LAYOUT.FONT_SIZES.contacts * 0.4 + 2;
   }
 
   // Reset text color for body
@@ -520,6 +537,14 @@ export async function renderResumePDF(
     if (data.tech.cloudDevOps.length > 0) {
       const cloudText = `Cloud & DevOps: ${data.tech.cloudDevOps.join(", ")}`;
       currentY = await addTextBlock(cloudText, currentY, {
+        fontSize: PDF_LAYOUT.FONT_SIZES.small,
+      });
+    }
+
+    // AI Tools
+    if (data.tech.aiTools && data.tech.aiTools.length > 0) {
+      const aiText = `AI & Tools: ${data.tech.aiTools.join(", ")}`;
+      currentY = await addTextBlock(aiText, currentY, {
         fontSize: PDF_LAYOUT.FONT_SIZES.small,
       });
     }
