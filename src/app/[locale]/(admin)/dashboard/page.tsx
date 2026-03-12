@@ -323,9 +323,26 @@ export default function AdminDashboard() {
   const [viewMode, setViewMode] = useState<"list" | "cards">("list");
 
   // Check authentication using tRPC
-  const { data: userData, error: authError } = api.auth.me.useQuery(undefined, {
+  const {
+    data: userData,
+    error: authError,
+    refetch: refetchAuth,
+  } = api.auth.me.useQuery(undefined, {
     retry: false,
+    refetchOnWindowFocus: false,
   });
+
+  // If auth/sections take too long (e.g. DB hung), show message instead of infinite spinner
+  const [loadTimedOut, setLoadTimedOut] = useState(false);
+  const LOAD_TIMEOUT_MS = 12_000;
+  useEffect(() => {
+    if (userData != null || authError != null) return;
+    const t = setTimeout(() => setLoadTimedOut(true), LOAD_TIMEOUT_MS);
+    return () => clearTimeout(t);
+  }, [userData, authError]);
+  useEffect(() => {
+    if (userData != null || authError != null) setLoadTimedOut(false);
+  }, [userData, authError]);
 
   // Get dashboard sections
   // Note: tRPC serializes Date objects to strings at runtime, but TypeScript types remain as Date
@@ -345,7 +362,7 @@ export default function AdminDashboard() {
         // Refetch sections to get updated order
         window.location.reload(); // Simple refresh for now
       },
-    }
+    },
   );
 
   // Load view mode preference from localStorage
@@ -365,7 +382,7 @@ export default function AdminDashboard() {
         typedDashboardSections.map((s) => ({
           sectionKey: s.sectionKey,
           displayOrder: s.displayOrder,
-        }))
+        })),
       );
     } else if (!sectionsLoading) {
       // Use default order if no sections found
@@ -379,7 +396,7 @@ export default function AdminDashboard() {
 
   const handleViewModeChange = (
     _event: React.MouseEvent<HTMLElement>,
-    newViewMode: "list" | "cards" | null
+    newViewMode: "list" | "cards" | null,
   ) => {
     if (newViewMode !== null) {
       setViewMode(newViewMode);
@@ -436,8 +453,47 @@ export default function AdminDashboard() {
     updateOrderMutation.mutate({ sections });
   };
 
-  // Show loading while checking authentication
+  // Show loading while checking authentication (or timeout message if DB/server is slow)
   if (!userData && !authError) {
+    if (loadTimedOut) {
+      return (
+        <Box
+          key="timeout"
+          id="timeout"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+            gap: 2,
+            px: 2,
+          }}
+        >
+          <Typography variant="h6" color="text.secondary" textAlign="center">
+            Connection is taking too long. The database may be slow or
+            unavailable.
+          </Typography>
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <Button
+              variant="contained"
+              onClick={() => {
+                setLoadTimedOut(false);
+                void refetchAuth();
+              }}
+            >
+              Retry
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => router.push(`/${locale}/login`)}
+            >
+              Back to login
+            </Button>
+          </Box>
+        </Box>
+      );
+    }
     return (
       <Box
         key="loading"
@@ -485,7 +541,7 @@ export default function AdminDashboard() {
 
   // Sort sections by display order
   const sortedSections = [...sections].sort(
-    (a, b) => a.displayOrder - b.displayOrder
+    (a, b) => a.displayOrder - b.displayOrder,
   );
 
   // Determine sorting strategy based on view mode
@@ -686,7 +742,7 @@ export default function AdminDashboard() {
                         typedDashboardSections.map((s) => ({
                           sectionKey: s.sectionKey,
                           displayOrder: s.displayOrder,
-                        }))
+                        })),
                       );
                     }
                   }}

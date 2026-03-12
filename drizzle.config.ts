@@ -3,10 +3,17 @@ import { encodeDatabaseUrl } from "./lib/utils/dbConnection";
 
 // Parse DATABASE_URL and ensure SSL is configured properly
 function getDatabaseConfig() {
-  // Prefer DIRECT_DATABASE_URL for migrations (direct connection is more reliable)
-  // Pooler connections can hang during schema introspection
-  const databaseUrl =
-    process.env.DIRECT_DATABASE_URL || process.env.DATABASE_URL || "";
+  // For db:push we need Session-mode pooler (port 5432). Transaction mode (6543) causes
+  // drizzle-kit to hang on "Pulling schema from database" (known Drizzle + Supabase issue).
+  let databaseUrl =
+    process.env.SESSION_DATABASE_URL ||
+    process.env.DIRECT_DATABASE_URL ||
+    process.env.DATABASE_URL ||
+    "";
+  // If only DATABASE_URL is set and it uses Transaction pooler (6543), use Session port (5432) for migrations
+  if (databaseUrl && databaseUrl.includes(":6543/")) {
+    databaseUrl = databaseUrl.replace(":6543/", ":5432/");
+  }
 
   if (!databaseUrl) {
     throw new Error(

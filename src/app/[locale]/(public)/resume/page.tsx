@@ -1,101 +1,79 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Box,
   Typography,
   Card,
   CardContent,
-  LinearProgress,
   Chip,
   Stack,
   Link,
-  Button,
-  Divider,
   Snackbar,
   Alert,
-  useTheme,
-  useMediaQuery,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  CircularProgress,
+  Button,
 } from "@mui/material";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import MotionWrapper from "~/MotionWrapper";
 import GradientButton from "~/Button/Button";
 import { useRouter } from "next/navigation";
-import { GitHub as GitHubIcon } from "@mui/icons-material";
-import ResumeLanguageSelector from "#/Components/ResumeLanguageSelector";
+import { Download as DownloadIcon } from "@mui/icons-material";
 import { RESUME_TEMPLATE_MAPPING } from "#/lib/constants";
-import { pdfThemeColors } from "#/lib/styles";
-import type { ResumeTemplate, PDFTheme } from "#/lib/types";
-import { SkeletonText } from "./SkeletonText";
-import type jsPDF from "jspdf";
-
-// Map ResumeTemplate to PDFTheme using constants
-const mapTemplateToPDFTheme = (template: ResumeTemplate): PDFTheme => {
-  return RESUME_TEMPLATE_MAPPING[template];
-};
-
-// Import SxProps for proper typing
-import type { SxProps, Theme } from "@mui/material";
+import type { PDFTheme } from "#/lib/types";
 import { extractResumeData } from "#/lib/utils/resumeDataExtractor";
+import { RESUME_DATA_EN } from "#/lib/data/resumeData";
 import dynamic from "next/dynamic";
-// Import all locales statically (required for build-time)
-import enLocale from "%/en.json";
-import esLocale from "%/es.json";
-import frLocale from "%/fr.json";
-import heLocale from "%/he.json";
 
-const localeDataMap = {
-  en: enLocale,
-  es: esLocale,
-  fr: frLocale,
-  he: heLocale,
-};
+const DEFAULT_RESUME_TEMPLATE = "indigo" as const;
+const mapTemplateToPDFTheme = (): PDFTheme =>
+  RESUME_TEMPLATE_MAPPING[DEFAULT_RESUME_TEMPLATE];
 
-// Dynamically import heavy components to improve build performance
 const GalaxyCard = dynamic(
   () =>
     import("#/Components/HeavyComponents").then((mod) => ({
       default: mod.GalaxyCard,
     })),
-  { ssr: false }
+  { ssr: false },
 );
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/effect-fade";
 
-export type TechnicalSkill = {
-  name: string;
-  level: number;
-  technologies: string[];
-};
+const RESUME_LANGUAGES = [
+  { code: "en", label: "English" },
+  { code: "es", label: "Español" },
+  { code: "fr", label: "Français" },
+  { code: "he", label: "עברית" },
+] as const;
 
-export type SoftSkill = {
-  name: string;
-  level: number;
-  description: string;
-};
-
-export type Project = {
-  title: string;
-  description: string;
-  link: string;
-};
+function SectionTitle({ children }: { children: React.ReactNode }) {
+  return (
+    <Typography
+      variant="h6"
+      component="h2"
+      sx={{
+        color: "primary.main",
+        fontWeight: 600,
+        mb: 2,
+        "&:not(:first-of-type)": { mt: 4 },
+      }}
+    >
+      {children}
+    </Typography>
+  );
+}
 
 export default function ResumePage() {
   const t = useTranslations("resume");
   const skillsT = useTranslations("skills");
   const projectsT = useTranslations("projects");
   const router = useRouter();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const locale = useLocale();
 
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [isGenerating, setIsGenerating] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] =
-    useState<ResumeTemplate>("modern");
   const [snackbar, setSnackbar] = useState<{
     open: boolean;
     message: string;
@@ -106,103 +84,38 @@ export default function ResumePage() {
     severity: "info",
   });
 
-  const handleLanguageSelect = (languageCode: string) => {
-    setSelectedLanguage(languageCode);
-  };
+  const resumeData = useMemo(
+    () => (locale === "en" ? RESUME_DATA_EN : null),
+    [locale]
+  );
 
-  const handleGenerateDocuments = async (options: {
-    language: string;
-    documentTypes: string[];
-    customization: {
-      includeCodeExamples: boolean;
-      includeTechnicalChallenges: boolean;
-      includeArchitectureDetails: boolean;
-    };
-  }) => {
+  const handleDownloadResume = async () => {
     try {
       setIsGenerating(true);
-
-      // Generate documents based on selected types
-      for (const docType of options.documentTypes) {
-        let filename: string;
-        let pdf: jsPDF;
-
-        if (docType === "condensedResume") {
-          filename = `Omri Jukin - Resume.pdf`;
-
-          // Extract resume data for the selected language
-          const resumeData = await extractResumeData(options.language);
-
-          // Generate PDF (dynamically import to avoid edge bundling)
-          const { renderResumePDF } = await import("#/lib/utils/pdfGenerator");
-
-          // Configure render options based on language and template
-          const renderOptions = {
-            rtl: options.language === "he",
-            theme: mapTemplateToPDFTheme(selectedTemplate),
-            maxBulletsPerRole: 3,
-            maxProjects: 4,
-            excludeSections: ["Professional Summary"],
-          };
-
-          pdf = await renderResumePDF(resumeData, renderOptions);
-        } else if (docType === "technicalPortfolio") {
-          filename = `Omri Jukin - Technical Portfolio.pdf`;
-
-          // Get locale data from statically imported locales
-          const localeData =
-            localeDataMap[options.language as keyof typeof localeDataMap] ||
-            localeDataMap.en;
-
-          // Extract technical portfolio data
-          const { extractTechnicalPortfolioData } = await import(
-            "#/lib/utils/technicalPortfolioExtractor"
-          );
-          // Type assertion needed because locale JSON structure is more flexible
-          const technicalPortfolioData = extractTechnicalPortfolioData(
-            localeData as Parameters<typeof extractTechnicalPortfolioData>[0]
-          );
-
-          // Generate technical portfolio PDF
-          const { generateTechnicalPortfolioPDF } = await import(
-            "#/lib/utils/technicalPortfolioGenerator"
-          );
-
-          const technicalOptions = {
-            theme: mapTemplateToPDFTheme(selectedTemplate),
-            includeCodeExamples: options.customization.includeCodeExamples,
-            includeChallenges: options.customization.includeTechnicalChallenges,
-            includeArchitecture:
-              options.customization.includeArchitectureDetails,
-            rtl: options.language === "he",
-          };
-
-          pdf = generateTechnicalPortfolioPDF(
-            technicalPortfolioData,
-            technicalOptions
-          );
-        } else {
-          filename = `Omri Jukin - ${docType}.pdf`;
-          // Handle other document types if needed
-          continue;
-        }
-
-        // Download the PDF
-        pdf.save(filename);
-      }
-
+      const data = await extractResumeData(selectedLanguage);
+      const { renderResumePDF } = await import("#/lib/utils/pdfGenerator");
+      const pdf = await renderResumePDF(data, {
+        rtl: selectedLanguage === "he",
+        theme: mapTemplateToPDFTheme(),
+        maxBulletsPerRole: 5,
+        maxProjects: 4,
+        excludeSections: ["Professional Summary"],
+      });
+      pdf.save("Omri Jukin - Resume.pdf");
       setSnackbar({
         open: true,
-        message: `${
-          options.documentTypes.length
-        } document(s) generated successfully in ${options.language.toUpperCase()}!`,
+        message:
+          t("languageSelector.download") +
+          " (" +
+          selectedLanguage.toUpperCase() +
+          ")",
         severity: "success",
       });
     } catch (error) {
-      console.error("Error generating documents:", error);
+      console.error("Error generating resume:", error);
       setSnackbar({
         open: true,
-        message: "Error generating documents. Please try again.",
+        message: "Error generating resume. Please try again.",
         severity: "error",
       });
     } finally {
@@ -210,477 +123,479 @@ export default function ResumePage() {
     }
   };
 
-  // DOM-based preview style helper using PDF theme constants
-  const getTemplatePreviewSx = (tpl: ResumeTemplate) => {
-    const pdfTheme = mapTemplateToPDFTheme(tpl);
-    const themeColors = pdfThemeColors.getThemeColors(pdfTheme);
-    const isSelected = selectedTemplate === tpl;
-    const base = {
-      width: 200,
-      height: 280,
-      borderRadius: 1,
-      border: "1px solid",
-      borderColor: isSelected ? themeColors.accent : "divider",
-      borderWidth: isSelected ? 3 : 1,
-      position: "relative" as const,
-      overflow: "hidden",
-      bgcolor: "background.paper",
-      boxShadow: isSelected
-        ? `0 8px 32px ${themeColors.accent}40`
-        : "0 4px 20px rgba(0, 0, 0, 0.1)",
-      transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-      cursor: "pointer",
-      "&:hover": {
-        transform: "translateY(-4px)",
-        boxShadow: "0 12px 40px rgba(0, 0, 0, 0.15)",
-      },
-    };
-    const header = {
-      position: "absolute" as const,
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: 40, // Match PDF header height ratio
-      backgroundColor: themeColors.headerBg,
-    };
-
-    // Create template-specific styles using PDF theme constants
-    const result: SxProps<Theme> = {
-      ...base,
-      "&::before": {
-        content: '""',
-        ...header,
-      },
-    };
-
-    // Add accent stripe for themes that have it
-    if (themeColors.headerAccent) {
-      result["&::after"] = {
-        content: '""',
-        position: "absolute" as const,
-        top: 40,
-        left: 0,
-        width: "100%",
-        height: 2,
-        backgroundColor: themeColors.headerAccent,
-      };
-    }
-
-    return result;
-  };
-
   const handleCloseSnackbar = () => {
     setSnackbar((prev) => ({ ...prev, open: false }));
   };
 
+  // English: render full resume from typed data
+  if (resumeData) {
+    return (
+      <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: "900px", mx: "auto" }}>
+        <MotionWrapper variant="fadeIn" duration={0.8} delay={0.2}>
+          <Box sx={{ textAlign: "center", mb: 4 }}>
+            <Typography
+              variant="h1"
+              component="h1"
+              sx={{ fontSize: { xs: "2rem", md: "2.5rem" }, fontWeight: "bold", mb: 1 }}
+            >
+              {t("title")}
+            </Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+              {t("description")}
+            </Typography>
+          </Box>
+        </MotionWrapper>
+
+        <MotionWrapper variant="slideUp" duration={0.5} delay={0.3}>
+          <Card
+            sx={{
+              mb: 4,
+              backgroundColor: "background.paper",
+              opacity: isGenerating ? 0.7 : 1,
+            }}
+          >
+            <CardContent sx={{ p: 3 }}>
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                spacing={2}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <FormControl sx={{ minWidth: 180 }} size="medium">
+                  <InputLabel id="resume-language-label">
+                    {t("languageSelector.title")}
+                  </InputLabel>
+                  <Select
+                    labelId="resume-language-label"
+                    value={selectedLanguage}
+                    label={t("languageSelector.title")}
+                    onChange={(e) => setSelectedLanguage(e.target.value)}
+                  >
+                    {RESUME_LANGUAGES.map(({ code, label }) => (
+                      <MenuItem key={code} value={code}>
+                        {label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <Button
+                  variant="contained"
+                  size="large"
+                  startIcon={
+                    isGenerating ? (
+                      <CircularProgress size={20} color="inherit" />
+                    ) : (
+                      <DownloadIcon />
+                    )
+                  }
+                  onClick={handleDownloadResume}
+                  disabled={isGenerating}
+                  sx={{
+                    px: 3,
+                    py: 1.5,
+                    textTransform: "none",
+                    fontSize: "1rem",
+                    fontWeight: 600,
+                  }}
+                >
+                  {isGenerating
+                    ? t("languageSelector.generating")
+                    : t("languageSelector.download")}
+                </Button>
+              </Stack>
+            </CardContent>
+          </Card>
+        </MotionWrapper>
+
+        <Box component="article" sx={{ mb: 6 }}>
+          {/* Header */}
+          <MotionWrapper variant="slideUp" duration={0.6} delay={0.4}>
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="h4" component="h1" fontWeight="bold" gutterBottom>
+                {resumeData.person.name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                {resumeData.person.contacts.location}
+              </Typography>
+              <Typography variant="body2">
+                Phone: {resumeData.person.contacts.phone}
+              </Typography>
+              <Typography variant="body2">
+                Email: {resumeData.person.contacts.email}
+              </Typography>
+            </Box>
+          </MotionWrapper>
+
+          {/* Headline */}
+          {resumeData.headline && (
+            <MotionWrapper variant="slideUp" duration={0.6} delay={0.5}>
+              <Typography
+                variant="subtitle1"
+                sx={{ color: "primary.main", fontWeight: 600, mb: 2 }}
+              >
+                {resumeData.headline}
+              </Typography>
+            </MotionWrapper>
+          )}
+
+          {/* Summary */}
+          <MotionWrapper variant="slideUp" duration={0.6} delay={0.55}>
+            <SectionTitle>Summary</SectionTitle>
+            <Typography variant="body1" sx={{ lineHeight: 1.7, mb: 2 }}>
+              {resumeData.summary}
+            </Typography>
+          </MotionWrapper>
+
+          {/* Core Skills */}
+          {resumeData.coreSkills && resumeData.coreSkills.length > 0 && (
+            <MotionWrapper variant="slideUp" duration={0.6} delay={0.6}>
+              <SectionTitle>Core Skills</SectionTitle>
+              <Stack spacing={1.5}>
+                {resumeData.coreSkills.map((cat, i) => (
+                  <Box key={i}>
+                    <Typography variant="body2" fontWeight="600" sx={{ mb: 0.5 }}>
+                      {cat.category}
+                    </Typography>
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      {cat.items.map((item, j) => (
+                        <Chip
+                          key={j}
+                          label={item}
+                          size="small"
+                          variant="outlined"
+                          sx={{ fontSize: "0.75rem" }}
+                        />
+                      ))}
+                    </Box>
+                  </Box>
+                ))}
+              </Stack>
+            </MotionWrapper>
+          )}
+
+          {/* Professional Experience */}
+          <MotionWrapper variant="slideUp" duration={0.6} delay={0.65}>
+            <SectionTitle>Professional Experience</SectionTitle>
+            <Stack spacing={3}>
+              {resumeData.experience.map((exp, i) => (
+                <Box key={i}>
+                  <Typography variant="subtitle1" fontWeight="600">
+                    {exp.role}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {exp.company} | {exp.period}
+                  </Typography>
+                  <Box component="ul" sx={{ m: 0, pl: 2.5, mt: 1 }}>
+                    {exp.bullets.map((bullet, j) => (
+                      <Typography
+                        key={j}
+                        component="li"
+                        variant="body2"
+                        sx={{ mb: 0.5, lineHeight: 1.6 }}
+                      >
+                        {bullet}
+                      </Typography>
+                    ))}
+                  </Box>
+                </Box>
+              ))}
+            </Stack>
+          </MotionWrapper>
+
+          {/* Selected Projects */}
+          {resumeData.projects && resumeData.projects.length > 0 && (
+            <MotionWrapper variant="slideUp" duration={0.6} delay={0.7}>
+              <SectionTitle>Selected Projects</SectionTitle>
+              <Stack spacing={3}>
+                {resumeData.projects.map((proj, i) => (
+                  <Box key={i}>
+                    <Typography variant="subtitle1" fontWeight="600">
+                      {proj.name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Personal Project
+                    </Typography>
+                    <Typography variant="body2" sx={{ mb: 1 }}>
+                      {proj.line}
+                    </Typography>
+                    <Box component="ul" sx={{ m: 0, pl: 2.5, mb: 1 }}>
+                      {proj.bullets?.map((bullet, j) => (
+                        <Typography
+                          key={j}
+                          component="li"
+                          variant="body2"
+                          sx={{ mb: 0.5, lineHeight: 1.6 }}
+                        >
+                          {bullet}
+                        </Typography>
+                      ))}
+                    </Box>
+                    {proj.url && (
+                      <Link
+                        href={proj.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        variant="body2"
+                        sx={{ display: "inline-block" }}
+                      >
+                        {proj.url}
+                      </Link>
+                    )}
+                  </Box>
+                ))}
+              </Stack>
+            </MotionWrapper>
+          )}
+
+          {/* Education */}
+          {resumeData.education && resumeData.education.length > 0 && (
+            <MotionWrapper variant="slideUp" duration={0.6} delay={0.75}>
+              <SectionTitle>Education</SectionTitle>
+              <Stack spacing={2}>
+                {resumeData.education.map((edu, i) => (
+                  <Box key={i}>
+                    <Typography variant="subtitle1" fontWeight="600">
+                      {edu.degree}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {edu.institution} | {edu.period}
+                    </Typography>
+                  </Box>
+                ))}
+              </Stack>
+            </MotionWrapper>
+          )}
+
+          {/* Additional Experience */}
+          {resumeData.additionalExperience &&
+            resumeData.additionalExperience.length > 0 && (
+              <MotionWrapper variant="slideUp" duration={0.6} delay={0.8}>
+                <SectionTitle>Additional Experience</SectionTitle>
+                <Stack spacing={2}>
+                  {resumeData.additionalExperience.map((exp, i) => (
+                    <Box key={i}>
+                      <Typography variant="subtitle1" fontWeight="600">
+                        {exp.role}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {exp.company} | {exp.period}
+                      </Typography>
+                      <Box component="ul" sx={{ m: 0, pl: 2.5, mt: 1 }}>
+                        {exp.bullets.map((bullet, j) => (
+                          <Typography
+                            key={j}
+                            component="li"
+                            variant="body2"
+                            sx={{ mb: 0.5, lineHeight: 1.6 }}
+                          >
+                            {bullet}
+                          </Typography>
+                        ))}
+                      </Box>
+                    </Box>
+                  ))}
+                </Stack>
+              </MotionWrapper>
+            )}
+
+          {/* Links */}
+          {resumeData.links && resumeData.links.length > 0 && (
+            <MotionWrapper variant="slideUp" duration={0.6} delay={0.85}>
+              <SectionTitle>Links</SectionTitle>
+              <Stack spacing={0.5}>
+                {resumeData.links.map((link, i) => (
+                  <Link
+                    key={i}
+                    href={link.url.startsWith("http") ? link.url : `https://${link.url}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="body2"
+                    sx={{ display: "inline-block" }}
+                  >
+                    {link.label}: {link.url}
+                  </Link>
+                ))}
+              </Stack>
+            </MotionWrapper>
+          )}
+        </Box>
+
+        <MotionWrapper variant="slideUp" duration={0.8} delay={0.9}>
+          <GalaxyCard sx={{ minHeight: "fit-content", height: "fit-content" }}>
+            <MotionWrapper variant="slideUp" duration={0.8} delay={1}>
+              <Box
+                sx={{
+                  p: 4,
+                  textAlign: "center",
+                  borderRadius: 3,
+                  position: "relative",
+                  overflow: "hidden",
+                  background: "transparent",
+                  color: "#fff",
+                  boxShadow: "0 4px 32px 0 rgba(58,28,113,0.25)",
+                  "& > *": { position: "relative", zIndex: 1 },
+                }}
+              >
+                <Typography
+                  variant="h4"
+                  component="p"
+                  sx={{
+                    mb: 2,
+                    fontWeight: "bold",
+                    textShadow: "0 2px 8px rgba(58,28,113,0.25)",
+                    letterSpacing: 1,
+                  }}
+                >
+                  {t("letsBuildTogether")}
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    mb: 3,
+                    opacity: 0.92,
+                    textShadow: "0 1px 4px rgba(58,28,113,0.18)",
+                  }}
+                >
+                  {t("readyToDiscuss")}
+                </Typography>
+                <GradientButton
+                  onClick={() => router.push("/contact")}
+                  variant="gradient"
+                  gradient="linear-gradient(to right, #FF0000, #000000)"
+                  opacity="0.8"
+                  sx={{
+                    color: "white",
+                    fontWeight: "bold",
+                    position: "absolute",
+                    zIndex: 1,
+                    right: "1%",
+                    bottom: "5%",
+                  }}
+                >
+                  {t("getInTouch")}
+                </GradientButton>
+              </Box>
+            </MotionWrapper>
+          </GalaxyCard>
+        </MotionWrapper>
+
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert
+            onClose={handleCloseSnackbar}
+            severity={snackbar.severity}
+            sx={{ width: "100%" }}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
+      </Box>
+    );
+  }
+
+  // Non-English: fallback to legacy layout (skills + projects from translations)
+  type TechnicalSkill = {
+    name: string;
+    level: number;
+    technologies: string[];
+  };
+  type SoftSkill = { name: string; level: number; description: string };
+  type Project = { title: string; description: string; link: string };
+
   return (
     <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: "1400px", mx: "auto" }}>
-      {/* Header */}
       <MotionWrapper variant="fadeIn" duration={0.8} delay={0.2}>
         <Box sx={{ textAlign: "center", mb: 6 }}>
           <Typography
             variant="h1"
             component="h1"
-            sx={{
-              fontSize: { xs: "2rem", md: "3rem" },
-              fontWeight: "bold",
-              mb: 2,
-            }}
+            sx={{ fontSize: { xs: "2rem", md: "3rem" }, fontWeight: "bold", mb: 2 }}
           >
             {t("title")}
           </Typography>
-
           <Typography
             variant="h5"
             component="p"
-            sx={{
-              color: "text.secondary",
-              fontWeight: "normal",
-              mb: 3,
-            }}
+            sx={{ color: "text.secondary", fontWeight: "normal", mb: 3 }}
           >
             {t("description")}
           </Typography>
         </Box>
       </MotionWrapper>
 
-      {/* Interactive Language Selector */}
-      <ResumeLanguageSelector
-        onLanguageSelect={handleLanguageSelect}
-        onGenerateDocuments={handleGenerateDocuments}
-        isLoading={isGenerating}
-        selectedLanguage={selectedLanguage}
-      />
-
-      {/* Template selector with previews */}
-      <MotionWrapper variant="slideUp" duration={0.8} delay={0.5}>
+      <MotionWrapper variant="slideUp" duration={0.5} delay={0.3}>
         <Card
           sx={{
             mb: 6,
             backgroundColor: "background.paper",
-            opacity: isGenerating ? 0.2 : 0.8,
+            opacity: isGenerating ? 0.7 : 1,
           }}
         >
-          <CardContent sx={{ p: 4 }}>
-            <Typography variant="h5" sx={{ color: "primary.main", mb: 2 }}>
-              {t("templateSelector.title")}
-            </Typography>
-            <Typography variant="body2" sx={{ color: "text.secondary", mb: 3 }}>
-              {t("templateSelector.subtitle")}
-            </Typography>
-            {isMobile ? (
-              // Mobile SwiperJS Carousel
-              <Box
+          <CardContent sx={{ p: 3 }}>
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              spacing={2}
+              alignItems="center"
+              justifyContent="center"
+            >
+              <FormControl sx={{ minWidth: 180 }} size="medium">
+                <InputLabel id="resume-language-label">
+                  {t("languageSelector.title")}
+                </InputLabel>
+                <Select
+                  labelId="resume-language-label"
+                  value={selectedLanguage}
+                  label={t("languageSelector.title")}
+                  onChange={(e) => setSelectedLanguage(e.target.value)}
+                >
+                  {RESUME_LANGUAGES.map(({ code, label }) => (
+                    <MenuItem key={code} value={code}>
+                      {label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <Button
+                variant="contained"
+                size="large"
+                startIcon={
+                  isGenerating ? (
+                    <CircularProgress size={20} color="inherit" />
+                  ) : (
+                    <DownloadIcon />
+                  )
+                }
+                onClick={handleDownloadResume}
+                disabled={isGenerating}
                 sx={{
-                  width: "100%",
-                  maxWidth: 400,
-                  mx: "auto",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  "& .swiper": {
-                    width: "100%",
-                    maxWidth: 320,
-                    margin: "0 auto",
-                  },
-                  "& .swiper-slide": {
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  },
+                  px: 3,
+                  py: 1.5,
+                  textTransform: "none",
+                  fontSize: "1rem",
+                  fontWeight: 600,
                 }}
               >
-                <Swiper
-                  modules={[Navigation, Pagination]}
-                  spaceBetween={20}
-                  slidesPerView={1}
-                  navigation={{
-                    nextEl: ".swiper-button-next",
-                    prevEl: ".swiper-button-prev",
-                  }}
-                  pagination={{
-                    clickable: true,
-                    el: ".swiper-pagination",
-                  }}
-                  loop={true}
-                  allowSlideNext={true}
-                  allowSlidePrev={true}
-                  centeredSlides={true}
-                  grabCursor={true}
-                  effect="slide"
-                  speed={400}
-                  style={
-                    {
-                      "--swiper-navigation-color": theme.palette.primary.main,
-                      "--swiper-pagination-color": theme.palette.primary.main,
-                      "--swiper-navigation-size": "24px",
-                      "--swiper-navigation-sides-offset": "10px",
-                    } as React.CSSProperties
-                  }
-                >
-                  {[
-                    "modern",
-                    "elegant",
-                    "tech",
-                    "creative",
-                    "minimal",
-                    "teal",
-                    "indigo",
-                    "rose",
-                    "corporate",
-                    "startup",
-                    "academic",
-                  ].map((tpl) => (
-                    <SwiperSlide key={tpl}>
-                      <Box
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedTemplate(tpl as ResumeTemplate);
-                        }}
-                        onTouchEnd={(e) => {
-                          e.stopPropagation();
-                          setSelectedTemplate(tpl as ResumeTemplate);
-                        }}
-                        sx={{
-                          p: 2,
-                          width: "100%",
-                        }}
-                      >
-                        <Typography
-                          variant="subtitle2"
-                          sx={{ mb: 1, textAlign: "center" }}
-                        >
-                          {t(`templateSelector.templateNames.${tpl}`)}
-                        </Typography>
-                        {/* DOM-based preview box (no PDF/iframe) */}
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            width: "100%",
-                          }}
-                        >
-                          <Box sx={getTemplatePreviewSx(tpl as ResumeTemplate)}>
-                            <Box
-                              sx={{
-                                p: 1.5,
-                                position: "absolute",
-                                top: 36,
-                                left: "50%",
-                                transform: "translateX(-50%)",
-                                textAlign: "center",
-                                width: "100%",
-                              }}
-                            >
-                              <SkeletonText />
-                              <SkeletonText />
-                              <SkeletonText />
-                              <SkeletonText />
-                              <SkeletonText />
-                              <SkeletonText />
-                              <Box sx={{ mt: 1.5 }}>
-                                <Box
-                                  sx={{
-                                    mt: 0.5,
-                                    width: 160,
-                                    height: 6,
-                                    bgcolor: "grey.300",
-                                    mx: "auto",
-                                  }}
-                                />
-                                <Box
-                                  sx={{
-                                    mt: 0.5,
-                                    width: 110,
-                                    height: 6,
-                                    bgcolor: "grey.200",
-                                    mx: "auto",
-                                  }}
-                                />
-                              </Box>
-                            </Box>
-                          </Box>
-                        </Box>
-                      </Box>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-              </Box>
-            ) : (
-              // Desktop SwiperJS Carousel with 3 cards
-              <Box
-                sx={{
-                  width: "100%",
-                  maxWidth: 900,
-                  mx: "auto",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  "& .swiper": {
-                    width: "100%",
-                    margin: "0 auto",
-                    padding: "0 20px",
-                  },
-                  "& .swiper-slide": {
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "auto",
-                    width: "auto !important",
-                  },
-                  "& .swiper-wrapper": {
-                    alignItems: "center",
-                  },
-                }}
-              >
-                <Swiper
-                  modules={[Navigation, Pagination]}
-                  spaceBetween={30}
-                  slidesPerView={3}
-                  breakpoints={{
-                    1400: {
-                      slidesPerView: 4,
-                      spaceBetween: 30,
-                    },
-                    1200: {
-                      slidesPerView: 3,
-                      spaceBetween: 30,
-                    },
-                    900: {
-                      slidesPerView: 2,
-                      spaceBetween: 25,
-                    },
-                    600: {
-                      slidesPerView: 2,
-                      spaceBetween: 20,
-                    },
-                  }}
-                  navigation={{
-                    nextEl: ".swiper-button-next-desktop",
-                    prevEl: ".swiper-button-prev-desktop",
-                  }}
-                  pagination={{
-                    clickable: true,
-                    el: ".swiper-pagination-desktop",
-                  }}
-                  loop={true}
-                  centeredSlides={false}
-                  grabCursor={true}
-                  effect="slide"
-                  allowSlideNext={true}
-                  allowSlidePrev={true}
-                  speed={400}
-                  style={
-                    {
-                      "--swiper-navigation-color": theme.palette.primary.main,
-                      "--swiper-pagination-color": theme.palette.primary.main,
-                      "--swiper-navigation-size": "24px",
-                      "--swiper-navigation-sides-offset": "10px",
-                    } as React.CSSProperties
-                  }
-                >
-                  {[
-                    "modern",
-                    "elegant",
-                    "tech",
-                    "creative",
-                    "minimal",
-                    "teal",
-                    "indigo",
-                    "rose",
-                    "corporate",
-                    "startup",
-                    "academic",
-                  ].map((tpl) => (
-                    <SwiperSlide key={tpl}>
-                      <Box
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedTemplate(tpl as ResumeTemplate);
-                        }}
-                        onTouchEnd={(e) => {
-                          e.stopPropagation();
-                          setSelectedTemplate(tpl as ResumeTemplate);
-                        }}
-                        sx={{
-                          cursor: "pointer",
-                          border:
-                            selectedTemplate === tpl
-                              ? "3px solid"
-                              : "1px solid",
-                          borderColor:
-                            selectedTemplate === tpl
-                              ? "primary.main"
-                              : "divider",
-                          borderRadius: 3,
-                          p: 2,
-                          width: { xs: 200, sm: 220, md: 240 },
-                          minWidth: 200,
-                          transition: "all 0.2s ease-in-out",
-                          "&:hover": {
-                            transform: "translateY(-2px)",
-                            boxShadow: 3,
-                            borderColor: "primary.light",
-                          },
-                        }}
-                      >
-                        <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                          {t(`templateSelector.templateNames.${tpl}`)}
-                        </Typography>
-                        {/* DOM-based preview box (no PDF/iframe) */}
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            mt: 1,
-                          }}
-                        >
-                          <Box sx={getTemplatePreviewSx(tpl as ResumeTemplate)}>
-                            <Box
-                              sx={{
-                                p: 1.5,
-                                position: "absolute",
-                                top: 36,
-                                left: "50%",
-                                transform: "translateX(-50%)",
-                                textAlign: "start",
-                                width: "100%",
-                              }}
-                            >
-                              <SkeletonText />
-                              <SkeletonText />
-                              <SkeletonText />
-                              <Box
-                                sx={{
-                                  mt: 1.5,
-                                  display: "flex",
-                                  justifyContent: "flex-start",
-                                  gap: 1,
-                                  width: "100%",
-                                }}
-                              >
-                                <SkeletonText />
-                                <SkeletonText />
-                                <SkeletonText />
-                                <SkeletonText />
-                                <SkeletonText />
-                              </Box>
-                            </Box>
-                          </Box>
-                        </Box>
-                      </Box>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-              </Box>
-            )}
+                {isGenerating
+                  ? t("languageSelector.generating")
+                  : t("languageSelector.download")}
+              </Button>
+            </Stack>
           </CardContent>
         </Card>
       </MotionWrapper>
 
-      {/* Professional Summary
-      <MotionWrapper variant="slideUp" duration={0.8} delay={0.4}>
-        <Card
-          sx={{
-            mb: 6,
-            backgroundColor: "background.paper",
-            opacity: isGenerating ? 0.5 : 0.8,
-          }}
-        >
-          <CardContent sx={{ p: 4 }}>
-            <Typography
-              variant="h4"
-              component="h2"
-              gutterBottom
-              sx={{ color: "primary.main" }}
-            >
-              {t("professionalSummary")}
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                lineHeight: 1.7,
-                fontSize: "1.1rem",
-                whiteSpace: "pre-line",
-              }}
-            >
-              {t("experience")}
-            </Typography>
-          </CardContent>
-        </Card>
-      </MotionWrapper> */}
-
-      {/* Skills Section */}
-      <MotionWrapper variant="slideUp" duration={0.8} delay={0.6}>
-        <Typography
-          variant="h3"
-          component="h2"
-          gutterBottom
-          sx={{ color: "primary.main", mb: 4 }}
-        >
-          {skillsT("title")}
-        </Typography>
-      </MotionWrapper>
+      <Typography
+        variant="h3"
+        component="h2"
+        gutterBottom
+        sx={{ color: "primary.main", mb: 4 }}
+      >
+        {skillsT("title")}
+      </Typography>
 
       <Box
         sx={{
@@ -690,144 +605,84 @@ export default function ResumePage() {
           mb: 6,
         }}
       >
-        {/* Technical Skills */}
         <Box sx={{ flex: 1 }}>
-          <MotionWrapper variant="slideUp" duration={0.8} delay={0.8}>
-            <Card sx={{ height: "100%", backgroundColor: "background.paper" }}>
-              <CardContent sx={{ p: 3 }}>
-                <Typography
-                  variant="h5"
-                  component="h3"
-                  gutterBottom
-                  sx={{ color: "secondary.main" }}
-                >
-                  {skillsT("categories.technical.title")}
-                </Typography>
-                <Stack spacing={3}>
-                  {skillsT
-                    .raw("categories.technical.skills")
-                    .map((skill: TechnicalSkill, index: number) => (
-                      <Box key={index}>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            mb: 1,
-                          }}
-                        >
-                          <Typography variant="body2" fontWeight="medium">
-                            {skill.name}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {skill.level}%
-                          </Typography>
-                        </Box>
-                        <LinearProgress
-                          variant="determinate"
-                          value={skill.level}
-                          sx={{
-                            height: 6,
-                            borderRadius: 3,
-                            backgroundColor: "grey.200",
-                            "& .MuiLinearProgress-bar": {
-                              borderRadius: 3,
-                              backgroundColor: "secondary.main",
-                            },
-                          }}
-                        />
-                        <Box
-                          sx={{
-                            mt: 1,
-                            display: "flex",
-                            flexWrap: "wrap",
-                            gap: 0.5,
-                          }}
-                        >
-                          {skill.technologies.map((tech, techIndex) => (
-                            <Chip
-                              key={techIndex}
-                              label={tech}
-                              size="small"
-                              variant="outlined"
-                              sx={{ fontSize: "0.7rem" }}
-                            />
-                          ))}
-                        </Box>
+          <Card sx={{ height: "100%", backgroundColor: "background.paper" }}>
+            <CardContent sx={{ p: 3 }}>
+              <Typography
+                variant="h5"
+                component="h3"
+                gutterBottom
+                sx={{ color: "secondary.main" }}
+              >
+                {skillsT("categories.technical.title")}
+              </Typography>
+              <Stack spacing={2}>
+                {skillsT
+                  .raw("categories.technical.skills")
+                  .map((skill: TechnicalSkill, index: number) => (
+                    <Box key={index}>
+                      <Typography variant="body2" fontWeight="medium">
+                        {skill.name}
+                      </Typography>
+                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mt: 1 }}>
+                        {skill.technologies.map((tech, techIndex) => (
+                          <Chip
+                            key={techIndex}
+                            label={tech}
+                            size="small"
+                            variant="outlined"
+                            sx={{ fontSize: "0.7rem" }}
+                          />
+                        ))}
                       </Box>
-                    ))}
-                </Stack>
-              </CardContent>
-            </Card>
-          </MotionWrapper>
+                    </Box>
+                  ))}
+              </Stack>
+            </CardContent>
+          </Card>
         </Box>
-
-        {/* Soft Skills */}
         <Box sx={{ flex: 1 }}>
-          <MotionWrapper variant="slideUp" duration={0.8} delay={1.0}>
-            <Card sx={{ height: "100%", backgroundColor: "background.paper" }}>
-              <CardContent sx={{ p: 3 }}>
-                <Typography
-                  variant="h5"
-                  component="h3"
-                  gutterBottom
-                  sx={{ color: "info.main" }}
-                >
-                  {skillsT("categories.soft.title")}
-                </Typography>
-                <Stack spacing={2}>
-                  {skillsT
-                    .raw("categories.soft.skills")
-                    .map((skill: SoftSkill, index: number) => (
-                      <Box
-                        key={index}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Box>
-                          <Typography variant="body1" fontWeight="medium">
-                            {skill.name}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {skill.description}
-                          </Typography>
-                        </Box>
-                        <Chip
-                          label={`${skill.level}%`}
-                          size="small"
-                          sx={{
-                            backgroundColor: "info.main",
-                            color: "white",
-                            fontWeight: "medium",
-                          }}
-                        />
-                      </Box>
-                    ))}
-                </Stack>
-              </CardContent>
-            </Card>
-          </MotionWrapper>
+          <Card sx={{ height: "100%", backgroundColor: "background.paper" }}>
+            <CardContent sx={{ p: 3 }}>
+              <Typography
+                variant="h5"
+                component="h3"
+                gutterBottom
+                sx={{ color: "info.main" }}
+              >
+                {skillsT("categories.soft.title")}
+              </Typography>
+              <Stack spacing={2}>
+                {skillsT
+                  .raw("categories.soft.skills")
+                  .map((skill: SoftSkill, index: number) => (
+                    <Box key={index}>
+                      <Typography variant="body1" fontWeight="medium">
+                        {skill.name}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {skill.description}
+                      </Typography>
+                    </Box>
+                  ))}
+              </Stack>
+            </CardContent>
+          </Card>
         </Box>
       </Box>
 
-      {/* Projects Section */}
-      <MotionWrapper variant="slideUp" duration={0.8} delay={1.4}>
-        <Typography
-          variant="h3"
-          component="h2"
-          gutterBottom
-          sx={{ color: "primary.main", mb: 2 }}
-        >
-          {projectsT("title")}
-        </Typography>
-        <Typography variant="body1" sx={{ color: "text.secondary", mb: 4 }}>
-          {projectsT("subtitle")}
-        </Typography>
-      </MotionWrapper>
+      <Typography
+        variant="h3"
+        component="h2"
+        gutterBottom
+        sx={{ color: "primary.main", mb: 2 }}
+      >
+        {projectsT("title")}
+      </Typography>
+      <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
+        {projectsT("subtitle")}
+      </Typography>
 
-      {/* Projects */}
       <Box
         sx={{
           display: "flex",
@@ -842,122 +697,43 @@ export default function ResumePage() {
             sx={{ flex: { xs: "1", md: "1 1 calc(50% - 16px)" } }}
             key={index}
           >
-            <MotionWrapper
-              variant="slideUp"
-              duration={0.8}
-              delay={1.6 + index * 0.2}
+            <Card
+              sx={{
+                height: "100%",
+                backgroundColor: "background.paper",
+                "&:hover": {
+                  transform: "translateY(-4px)",
+                  transition: "all 0.3s ease-in-out",
+                  boxShadow: 4,
+                },
+              }}
             >
-              <Card
-                sx={{
-                  height: "100%",
-                  backgroundColor: "background.paper",
-                  "&:hover": {
-                    transform: "translateY(-4px)",
-                    transition: "all 0.3s ease-in-out",
-                    boxShadow: 4,
-                  },
-                }}
-              >
-                <CardContent sx={{ p: 4 }}>
-                  <Typography
-                    variant="h5"
-                    component="h3"
-                    gutterBottom
-                    sx={{ color: "primary.main" }}
-                  >
-                    {project.title}
-                  </Typography>
-                  <Typography variant="body1" sx={{ mb: 3, lineHeight: 1.6 }}>
-                    {project.description}
-                  </Typography>
-
-                  <Divider sx={{ my: 2 }} />
-
-                  <Box sx={{ display: "flex", gap: 2 }}>
-                    <Button
-                      component={Link}
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      variant="outlined"
-                      startIcon={<GitHubIcon />}
-                      size="small"
-                      sx={{ textTransform: "none" }}
-                    >
-                      {t("viewCode")}
-                    </Button>
-                  </Box>
-                </CardContent>
-              </Card>
-            </MotionWrapper>
+              <CardContent sx={{ p: 4 }}>
+                <Typography
+                  variant="h5"
+                  component="h3"
+                  gutterBottom
+                  sx={{ color: "primary.main" }}
+                >
+                  {project.title}
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 3, lineHeight: 1.6 }}>
+                  {project.description}
+                </Typography>
+                <Link
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="body2"
+                >
+                  {project.link}
+                </Link>
+              </CardContent>
+            </Card>
           </Box>
         ))}
       </Box>
 
-      {/* Call to Action - Galaxy Card */}
-      <MotionWrapper variant="slideUp" duration={0.8} delay={1.8}>
-        <GalaxyCard sx={{ minHeight: "fit-content", height: "fit-content" }}>
-          <MotionWrapper variant="slideUp" duration={0.8} delay={2.0}>
-            <Box
-              sx={{
-                p: 4,
-                textAlign: "center",
-                borderRadius: 3,
-                position: "relative",
-                overflow: "hidden",
-                background: `transparent`,
-                color: "#fff",
-                boxShadow: "0 4px 32px 0 rgba(58,28,113,0.25)",
-                "& > *": {
-                  position: "relative",
-                  zIndex: 1,
-                },
-              }}
-            >
-              <Typography
-                variant="h4"
-                component="p"
-                sx={{
-                  mb: 2,
-                  fontWeight: "bold",
-                  textShadow: "0 2px 8px rgba(58,28,113,0.25)",
-                  letterSpacing: 1,
-                }}
-              >
-                {t("letsBuildTogether")}
-              </Typography>
-              <Typography
-                variant="h6"
-                sx={{
-                  mb: 3,
-                  opacity: 0.92,
-                  textShadow: "0 1px 4px rgba(58,28,113,0.18)",
-                }}
-              >
-                {t("readyToDiscuss")}
-              </Typography>
-              <GradientButton
-                onClick={() => router.push("/contact")}
-                variant="gradient"
-                gradient="linear-gradient(to right, #FF0000, #000000)"
-                opacity="0.8"
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  position: "absolute",
-                  zIndex: 1,
-                  right: "1%",
-                  bottom: "5%",
-                }}
-              >
-                {t("getInTouch")}
-              </GradientButton>
-            </Box>
-          </MotionWrapper>
-        </GalaxyCard>
-      </MotionWrapper>
-
-      {/* Snackbar for notifications */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}

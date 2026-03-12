@@ -1,4 +1,5 @@
-//! Import locale data - SINGLE SOURCE OF TRUTH
+//! English resume: typed TypeScript source. Other locales: locale JSON.
+import { RESUME_DATA_EN } from "../data/resumeData";
 import enData from "../../locales/en.json";
 import esData from "../../locales/es.json";
 import frData from "../../locales/fr.json";
@@ -23,13 +24,14 @@ export type eduType = (typeof localeData.en.resume.education)[0];
 export const extractResumeData = async (
   language: string = "en"
 ): Promise<ResumeData> => {
+  // English: use typed resume data (single source of truth)
+  if (language === "en") {
+    return RESUME_DATA_EN;
+  }
+
   const data = localeData[language as keyof typeof localeData] || localeData.en;
 
-  //! ===================================================
-  //! SINGLE SOURCE OF TRUTH - ALL DATA FROM LOCALE FILES
-  //! ===================================================
-  //! All resume data now comes from locales/[language].json
-
+  // Other locales: map from locale JSON (legacy)
   const resumeData = data.resume;
 
   return {

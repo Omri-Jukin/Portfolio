@@ -14,21 +14,30 @@ interface AuthenticatedUser {
   role: string;
 }
 
+const DB_CONTEXT_TIMEOUT_MS = 6000;
+
 export async function createContext({
   req,
   resHeaders,
 }: FetchCreateContextFnOptions) {
-  // Create database client
+  // Create database client (with timeout so dashboard never hangs indefinitely)
   let db: Awaited<ReturnType<typeof getDB>> | null;
 
   try {
-    // Use Supabase PostgreSQL database (both local and production)
-    db = await getDB();
-
-    // getDB() may return null during build time
-    // (no logging needed - this is expected during build)
+    const dbPromise = getDB();
+    const timeoutPromise = new Promise<null>((_, reject) =>
+      setTimeout(
+        () => reject(new Error("Database connection timeout")),
+        DB_CONTEXT_TIMEOUT_MS,
+      ),
+    );
+    db = await Promise.race([dbPromise, timeoutPromise]);
   } catch (error) {
     console.error("Failed to create database client:", error);
+
+    const isTimeout =
+      error instanceof Error &&
+      error.message === "Database connection timeout";
 
     // During build time, allow the app to continue without database connection
     const isBuildTime =
@@ -44,24 +53,23 @@ export async function createContext({
         error.message.includes("Database not available during build"))
     ) {
       // Skipping database connection during build time
-      // Return a mock database client for build time
       db = getMockDB();
+    } else if (isTimeout) {
+      // Timeout: continue without DB so auth/session still work; dashboard can show default sections
+      console.error("Database connection timed out - continuing without DB");
+      db = null;
     } else {
       console.error(
-        "CRITICAL: Database connection failed - this is required for the app to function"
+        "CRITICAL: Database connection failed - this is required for the app to function",
       );
 
-      // In production, don't throw - return null db and let endpoints handle it
-      // This prevents HTML error pages from being returned
       if (process.env.NODE_ENV === "production") {
-        // Continuing without database connection - endpoints will handle errors
         db = null;
       } else {
-        // Database connection is mandatory - throw error to prevent app from running
         throw new Error(
           `Database connection failed: ${
             error instanceof Error ? error.message : "Unknown error"
-          }`
+          }`,
         );
       }
     }

@@ -114,6 +114,14 @@ export async function getDB() {
     // Encode password if it contains special characters (prevents SASL_SIGNATURE_MISMATCH)
     const processedDatabaseUrl = encodeDatabaseUrl(databaseUrl);
 
+    // Log which host we're using (no credentials) so you can verify new vs old Supabase project
+    try {
+      const u = new URL(processedDatabaseUrl);
+      console.log("[DB] Connecting to host:", u.hostname, "port:", u.port || "5432");
+    } catch {
+      // ignore
+    }
+
     // Use Neon serverless driver for Cloudflare Workers (WebSocket support)
     if (isCloudflare) {
       // console.log("[DB] Using Neon serverless driver for Cloudflare Workers");

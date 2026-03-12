@@ -847,7 +847,43 @@ export type ResponsiveProps<T> = T | ResponsiveValue<T>;
 // ========================
 
 /**
- * Resume data structure for PDF generation
+ * Core skills category for resume
+ */
+export interface CoreSkillCategory {
+  category: string;
+  items: string[];
+}
+
+/**
+ * Additional experience role (e.g., Senior Customer Service Representative)
+ */
+export interface AdditionalExperienceRole {
+  role: string;
+  company: string;
+  period: string;
+  bullets: string[];
+}
+
+/**
+ * Resume project with optional bullets
+ */
+export interface ResumeProject {
+  name: string;
+  line: string;
+  url?: string;
+  bullets?: string[];
+}
+
+/**
+ * Resume link with visible URL
+ */
+export interface ResumeLink {
+  label: string;
+  url: string;
+}
+
+/**
+ * Resume data structure for PDF generation and page rendering
  */
 export interface ResumeData {
   meta?: { title?: string; author?: string };
@@ -863,8 +899,13 @@ export interface ResumeData {
       location?: string;
     };
   };
+  /** Single-line headline (e.g., "Full Stack Engineer | TypeScript, React/Next.js...") */
+  headline?: string;
   summary: string;
-  tech: {
+  /** Category-based skills (Languages, Frontend, Backend, etc.) */
+  coreSkills?: CoreSkillCategory[];
+  /** Legacy flat tech arrays (for non-English fallback) */
+  tech?: {
     frontend: string[];
     backend: string[];
     architecture: string[];
@@ -881,22 +922,23 @@ export interface ResumeData {
     bullets: string[];
     stackLine?: string;
   }>;
-  projects: Array<{
-    name: string;
-    line: string;
-    url?: string;
-  }> | null;
+  projects: ResumeProject[] | null;
   education: Array<{
     degree: string;
     institution: string;
     location: string;
     period: string;
     gpa?: string;
-    achievements: string[];
-    coursework: string[];
-    projects: string[];
+    achievements?: string[];
+    coursework?: string[];
+    projects?: string[];
   }>;
+  /** Legacy: single string for additional activities */
   additional?: string;
+  /** Structured additional experience (e.g., Senior Customer Service Representative) */
+  additionalExperience?: AdditionalExperienceRole[];
+  /** Links with visible URLs */
+  links?: ResumeLink[];
 }
 
 /**

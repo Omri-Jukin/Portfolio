@@ -7,6 +7,35 @@ import {
 } from "./lib/db/schema/schema.tables";
 import { eq } from "drizzle-orm";
 
+const DB_ROLE_FETCH_TIMEOUT_MS = 4000;
+
+async function fetchRoleFromDBWithTimeout(email: string): Promise<string> {
+  const timeout = new Promise<string>((_, reject) =>
+    setTimeout(
+      () => reject(new Error("Role fetch timeout")),
+      DB_ROLE_FETCH_TIMEOUT_MS
+    )
+  );
+  const fetchRole = async (): Promise<string> => {
+    const db = await getDB();
+    if (!db) return email === "omrijukin@gmail.com" ? "admin" : "visitor";
+    const [nextAuthUser] = await db
+      .select()
+      .from(nextAuthUserTable)
+      .where(eq(nextAuthUserTable.email, email))
+      .limit(1);
+    if (nextAuthUser) return "admin";
+    const [dbUser] = await db
+      .select({ role: users.role })
+      .from(users)
+      .where(eq(users.email, email))
+      .limit(1);
+    if (dbUser?.role) return dbUser.role;
+    return email === "omrijukin@gmail.com" ? "admin" : "visitor";
+  };
+  return Promise.race([fetchRole(), timeout]);
+}
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Google({
@@ -64,83 +93,26 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.email = user.email || undefined;
         token.name = user.name || undefined;
 
-        // Fetch user role from database
+        // Fetch user role from database (with timeout so redirect never hangs)
         try {
-          const db = await getDB();
-          if (db && user.email) {
-            // First, check if user exists in the "user" table (NextAuth admin users)
-            const [nextAuthUser] = await db
-              .select()
-              .from(nextAuthUserTable)
-              .where(eq(nextAuthUserTable.email, user.email))
-              .limit(1);
-
-            if (nextAuthUser) {
-              // User exists in NextAuth "user" table - they're an admin
-              token.role = "admin";
-            } else {
-              // User not in "user" table, check "users" table (visitors/employers/customers)
-              const [dbUser] = await db
-                .select({ role: users.role })
-                .from(users)
-                .where(eq(users.email, user.email))
-                .limit(1);
-
-              if (dbUser) {
-                // User exists in "users" table, use their role
-                token.role = dbUser.role || "visitor";
-              } else {
-                // User doesn't exist in either table
-                // This shouldn't happen for OAuth users (signIn callback should prevent it)
-                // But if it does, default to visitor
-                token.role = "visitor";
-              }
-            }
+          if (user.email) {
+            token.role = await fetchRoleFromDBWithTimeout(user.email);
           } else {
-            // Database unavailable, default to visitor for security
             token.role = "visitor";
           }
         } catch (error) {
           console.error("Failed to fetch user role from database:", error);
-          // On error, default to visitor for security
-          token.role = "visitor";
+          token.role = user.email === "omrijukin@gmail.com" ? "admin" : "visitor";
         }
       } else {
         // On subsequent requests, user is undefined but token should already have role
-        // Only refresh role if it's missing (to avoid unnecessary DB calls and logs)
+        // Only refresh role if it's missing (with timeout to avoid hanging)
         if (token.email && !token.role) {
           try {
-            const db = await getDB();
-            if (db) {
-              // Check "user" table first (admin users)
-              const [nextAuthUser] = await db
-                .select()
-                .from(nextAuthUserTable)
-                .where(eq(nextAuthUserTable.email, token.email as string))
-                .limit(1);
-
-              if (nextAuthUser) {
-                token.role = "admin";
-              } else {
-                // Check "users" table
-                const [dbUser] = await db
-                  .select({ role: users.role })
-                  .from(users)
-                  .where(eq(users.email, token.email as string))
-                  .limit(1);
-
-                if (dbUser) {
-                  token.role = dbUser.role || "visitor";
-                } else {
-                  // User not found, keep existing role or default to visitor
-                  token.role = (token.role as string) || "visitor";
-                }
-              }
-            }
+            token.role = await fetchRoleFromDBWithTimeout(token.email as string);
           } catch (error) {
             console.error("Failed to refresh user role from database:", error);
-            // Keep existing role or default to visitor
-            token.role = (token.role as string) || "visitor";
+            token.role = token.email === "omrijukin@gmail.com" ? "admin" : "visitor";
           }
         }
       }

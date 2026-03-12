@@ -12,14 +12,18 @@ describe("Resume Data Extractor", () => {
     expect(data.meta).toBeDefined();
     expect(data.person).toBeDefined();
     expect(data.experience).toBeDefined();
-    expect(data.tech).toBeDefined();
     expect(data.projects).toBeDefined();
 
-    expect(data.meta?.title).toBe("Omri Jukin");
+    expect(data.meta?.title).toBe("Omri Jukin - Resume");
+    expect(data.meta?.author).toBe("Omri Jukin");
     expect(data.person.name).toBe("Omri Jukin");
+    expect(data.headline).toContain("Full Stack Engineer");
+    expect(data.coreSkills).toBeInstanceOf(Array);
+    expect(data.coreSkills!.length).toBeGreaterThan(0);
     expect(data.experience).toBeInstanceOf(Array);
-    expect(data.tech.frontend).toBeInstanceOf(Array);
     expect(data.projects).toBeInstanceOf(Array);
+    expect(data.links).toBeInstanceOf(Array);
+    expect(data.additionalExperience).toBeInstanceOf(Array);
   });
 
   test("should extract resume data for Spanish", async () => {
