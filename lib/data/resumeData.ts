@@ -88,7 +88,7 @@ export const RESUME_DATA_EN: ResumeData = {
       ],
     },
     {
-      role: "Technical Lead (Volunteer)",
+      role: "Technical Lead (Volunteer CTO)",
       company: "The Atheist Line, Israel",
       period: "2025–Present",
       bullets: [
