@@ -86,8 +86,31 @@ export default function ResumePage() {
 
   const resumeData = useMemo(
     () => (locale === "en" ? RESUME_DATA_EN : null),
-    [locale]
+    [locale],
   );
+
+  const headerProfileLinks = useMemo(() => {
+    if (!resumeData) {
+      return [];
+    }
+
+    const linksByLabel = new Map(
+      (resumeData.links ?? []).map((link) => [link.label.toLowerCase(), link.url]),
+    );
+
+    const portfolio = linksByLabel.get("portfolio") ?? resumeData.person.contacts.portfolio;
+    const linkedin = linksByLabel.get("linkedin") ?? resumeData.person.contacts.linkedin;
+    const github = linksByLabel.get("github") ?? resumeData.person.contacts.github;
+
+    return [
+      { label: "Portfolio", url: portfolio },
+      { label: "LinkedIn", url: linkedin },
+      { label: "GitHub", url: github },
+    ].filter(
+      (item): item is { label: string; url: string } =>
+        Boolean(item.url && item.url.trim().length > 0),
+    );
+  }, [resumeData]);
 
   const handleDownloadResume = async () => {
     try {
@@ -214,15 +237,33 @@ export default function ResumePage() {
               <Typography variant="h4" component="h1" fontWeight="bold" gutterBottom>
                 {resumeData.person.name}
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                {resumeData.person.contacts.location}
-              </Typography>
-              <Typography variant="body2">
-                Phone: {resumeData.person.contacts.phone}
-              </Typography>
-              <Typography variant="body2">
-                Email: {resumeData.person.contacts.email}
-              </Typography>
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                spacing={{ xs: 0.5, sm: 2 }}
+                sx={{ mb: 0.5 }}
+              >
+                <Typography variant="body2">Phone: {resumeData.person.contacts.phone}</Typography>
+                <Typography variant="body2">Email: {resumeData.person.contacts.email}</Typography>
+              </Stack>
+              <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
+                {headerProfileLinks.map((profileLink) => {
+                  const href = profileLink.url.startsWith("http")
+                    ? profileLink.url
+                    : `https://${profileLink.url}`;
+
+                  return (
+                    <Link
+                      key={profileLink.label}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      variant="body2"
+                    >
+                      {profileLink.label}: {profileLink.url}
+                    </Link>
+                  );
+                })}
+              </Stack>
             </Box>
           </MotionWrapper>
 
@@ -250,10 +291,10 @@ export default function ResumePage() {
           {resumeData.coreSkills && resumeData.coreSkills.length > 0 && (
             <MotionWrapper variant="slideUp" duration={0.6} delay={0.6}>
               <SectionTitle>Core Skills</SectionTitle>
-              <Stack spacing={1.5}>
+              <Stack spacing={1}>
                 {resumeData.coreSkills.map((cat, i) => (
                   <Box key={i}>
-                    <Typography variant="body2" fontWeight="600" sx={{ mb: 0.5 }}>
+                    <Typography variant="body2" fontWeight="600" sx={{ mb: 0.25 }}>
                       {cat.category}
                     </Typography>
                     <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
@@ -306,19 +347,19 @@ export default function ResumePage() {
           {resumeData.projects && resumeData.projects.length > 0 && (
             <MotionWrapper variant="slideUp" duration={0.6} delay={0.7}>
               <SectionTitle>Selected Projects</SectionTitle>
-              <Stack spacing={3}>
+              <Stack spacing={2.25}>
                 {resumeData.projects.map((proj, i) => (
                   <Box key={i}>
-                    <Typography variant="subtitle1" fontWeight="600">
+                    <Typography variant="subtitle1" fontWeight="600" sx={{ mb: 0.25 }}>
                       {proj.name}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
                       Personal Project
                     </Typography>
-                    <Typography variant="body2" sx={{ mb: 1 }}>
+                    <Typography variant="body2" sx={{ mb: 0.5 }}>
                       {proj.line}
                     </Typography>
-                    <Box component="ul" sx={{ m: 0, pl: 2.5, mb: 1 }}>
+                    <Box component="ul" sx={{ m: 0, pl: 2.5, mb: 0.5 }}>
                       {proj.bullets?.map((bullet, j) => (
                         <Typography
                           key={j}
@@ -399,25 +440,6 @@ export default function ResumePage() {
             )}
 
           {/* Links */}
-          {resumeData.links && resumeData.links.length > 0 && (
-            <MotionWrapper variant="slideUp" duration={0.6} delay={0.85}>
-              <SectionTitle>Links</SectionTitle>
-              <Stack spacing={0.5}>
-                {resumeData.links.map((link, i) => (
-                  <Link
-                    key={i}
-                    href={link.url.startsWith("http") ? link.url : `https://${link.url}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    variant="body2"
-                    sx={{ display: "inline-block" }}
-                  >
-                    {link.label}: {link.url}
-                  </Link>
-                ))}
-              </Stack>
-            </MotionWrapper>
-          )}
         </Box>
 
         <MotionWrapper variant="slideUp" duration={0.8} delay={0.9}>

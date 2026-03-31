@@ -370,57 +370,41 @@ export async function renderResumePDF(
     { fontSize: PDF_LAYOUT.FONT_SIZES.contacts }
   );
 
-  // Links in header: when data.links exists, defer to Links section at end; else show in header (legacy)
-  if (!data.links || data.links.length === 0) {
-    const legacyLinks: { label: string; url: string }[] = [];
-    if (data.person.contacts.portfolio)
-      legacyLinks.push({
-        label: "Portfolio",
-        url: data.person.contacts.portfolio.startsWith("http")
-          ? data.person.contacts.portfolio
-          : `https://${data.person.contacts.portfolio}`,
-      });
-    if (data.person.contacts.github)
-      legacyLinks.push({
-        label: "GitHub",
-        url: data.person.contacts.github.startsWith("http")
-          ? data.person.contacts.github
-          : `https://${data.person.contacts.github}`,
-      });
-    if (data.person.contacts.linkedin)
-      legacyLinks.push({
-        label: "LinkedIn",
-        url: data.person.contacts.linkedin.startsWith("http")
-          ? data.person.contacts.linkedin
-          : `https://${data.person.contacts.linkedin}`,
-      });
+  // Header links (Portfolio, LinkedIn, GitHub) with links data as first source.
+  const linksByLabel = new Map(
+    (data.links ?? []).map((link) => [link.label.toLowerCase(), link.url]),
+  );
+  const headerLinks: { label: string; url: string }[] = [];
+  const pushHeaderLink = (label: string, fallback?: string) => {
+    const resolved = linksByLabel.get(label.toLowerCase()) ?? fallback;
+    if (!resolved || resolved.trim().length === 0) return;
+    headerLinks.push({
+      label,
+      url: resolved.startsWith("http") ? resolved : `https://${resolved}`,
+    });
+  };
 
-    if (legacyLinks.length > 0) {
-      doc.setFont(typography.font, "normal");
-      doc.setFontSize(PDF_LAYOUT.FONT_SIZES.contacts);
-      const linkY = contactY;
-      const x = getStartX(0, pageWidth);
-      let offsetX = 0;
-      for (let i = 0; i < legacyLinks.length; i++) {
-        const { label, url } = legacyLinks[i];
-        doc.setTextColor(0, 0, 139);
-        doc.textWithLink(label, x + offsetX, linkY, { url });
-        offsetX += doc.getTextWidth(label);
-        if (i < legacyLinks.length - 1) {
-          doc.setTextColor(0, 0, 0);
-          const sep = " | ";
-          doc.text(sep, x + offsetX, linkY);
-          offsetX += doc.getTextWidth(sep);
-        }
-      }
-      doc.setTextColor(0, 0, 0);
-      contactY = linkY + PDF_LAYOUT.FONT_SIZES.contacts * 0.4 + 2;
+  pushHeaderLink("Portfolio", data.person.contacts.portfolio);
+  pushHeaderLink("LinkedIn", data.person.contacts.linkedin);
+  pushHeaderLink("GitHub", data.person.contacts.github);
+
+  if (headerLinks.length > 0) {
+    doc.setFont(typography.font, "normal");
+    doc.setFontSize(PDF_LAYOUT.FONT_SIZES.contacts);
+    for (const headerLink of headerLinks) {
+      const linkText = `${headerLink.label}: ${headerLink.url}`;
+      doc.setTextColor(0, 0, 139);
+      contactY = await addTextBlock(linkText, contactY, {
+        fontSize: PDF_LAYOUT.FONT_SIZES.contacts,
+        linkUrl: headerLink.url,
+      });
     }
+    doc.setTextColor(0, 0, 0);
   }
 
   // Reset text color for body
   doc.setTextColor(...theme.text);
-  currentY = Math.max(60, contactY); // Start body content after contact info
+  currentY = Math.max(60, contactY); // Start body content after header info
 
   // Summary
   if (
@@ -660,24 +644,6 @@ export async function renderResumePDF(
       currentY = await addTextBlock(data.additional!, currentY, {
         fontSize: PDF_LAYOUT.FONT_SIZES.small,
       });
-    });
-  }
-
-  // Links (visible URLs, clickable)
-  if (data.links && data.links.length > 0 && !isRTL) {
-    await addSection("Links", async () => {
-      doc.setFont(typography.font, "normal");
-      doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
-      for (const link of data.links!) {
-        const url = link.url.startsWith("http") ? link.url : `https://${link.url}`;
-        const text = `${link.label}: ${url}`;
-        doc.setTextColor(0, 0, 139);
-        currentY = await addTextBlock(text, currentY, {
-          fontSize: PDF_LAYOUT.FONT_SIZES.small,
-          linkUrl: url,
-        });
-        doc.setTextColor(...theme.text);
-      }
     });
   }
 
