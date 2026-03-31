@@ -16,7 +16,7 @@ export const RESUME_DATA_EN: ResumeData = {
     title: "Full Stack Engineer",
     contacts: {
       phone: "+972 52-334-4064",
-      email: "contact@omrijukin.com",
+      email: "omrijukin@gmail.com",
       portfolio: "https://omrijukin.com",
       github: "https://github.com/Omri-Jukin",
       linkedin: "https://www.linkedin.com/in/omri-jukin/",
@@ -76,6 +76,17 @@ export const RESUME_DATA_EN: ResumeData = {
   ],
   experience: [
     {
+      role: "Technical Lead (Volunteer CTO)",
+      company: "The Atheist Line, Israel",
+      period: "2025–Present",
+      bullets: [
+        "Lead the organization’s technical direction, infrastructure, and digital operations as the primary hands-on builder.",
+        "Plan and build internal and public-facing systems to improve operational structure, documentation, and team workflows.",
+        "Own technical decision-making across the website, project and task tracking, platform integrations, and evaluation of a new telephony system.",
+        "Establish the technical foundations for future tooling, including content management, internal workflows, automation, analytics, and team-facing operational systems.",
+      ],
+    },
+    {
       role: "Full Stack Engineer",
       company: "Abra Technologies, Israel",
       period: "2024–2025",
@@ -85,17 +96,6 @@ export const RESUME_DATA_EN: ResumeData = {
         "Built an internal component library to support reusable UI development and frontend consistency.",
         "Used Storybook for component documentation and validation, and wrote dedicated tests for individual components.",
         "Supported the project foundation with a focus on maintainable frontend architecture and scalable implementation patterns.",
-      ],
-    },
-    {
-      role: "Technical Lead (Volunteer CTO)",
-      company: "The Atheist Line, Israel",
-      period: "2025–Present",
-      bullets: [
-        "Leading the setup of the organization's technical infrastructure and digital operations, as the primary builder.",
-        "Planning and building internal and public-facing systems to improve operational structure, documentation, and team workflows.",
-        "Driving initiatives around the official website, project and task tracking, platform integrations, and evaluation of a new telephony system.",
-        "Establishing technical foundations for future tooling including content management, internal workflows, automation, analytics, and team-facing operational systems.",
       ],
     },
     {
