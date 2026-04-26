@@ -26,6 +26,8 @@ export function getSecurityHeaders(): Record<string, string> {
     "form-action 'self'",
     "frame-ancestors 'none'",
     "upgrade-insecure-requests",
+    //allow calendly.com
+    "script-src 'self' https://calendly.com",
   ];
 
   // Add report-uri in production if configured
