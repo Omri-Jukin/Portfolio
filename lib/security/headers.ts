@@ -20,7 +20,7 @@ export function getSecurityHeaders(): Record<string, string> {
     "img-src 'self' data: https: blob:",
     "font-src 'self' https://fonts.gstatic.com data:",
     "connect-src 'self' https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://cloudflareinsights.com",
-    "frame-src 'self' https://accounts.google.com",
+    "frame-src 'self' https://accounts.google.com https://calendly.com https://*.calendly.com",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
