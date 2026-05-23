@@ -1,7 +1,50 @@
 import { Project } from "./Portfolio.type";
 
+export const FEATURED_PORTFOLIO_PROJECT_IDS = [
+  "socially",
+  "clipwhisperer",
+  "snow-hq",
+  "portfolio-platform",
+] as const;
+
 export const PORTFOLIO_CONSTANTS = {
   PROJECTS: [
+    {
+      id: "socially",
+      title: "Socially",
+      subtitle: "Creator Operations Platform",
+      description:
+        "A creator operations platform focused on cross-platform content workflows, publishing flows, analytics, and creator-facing operations.",
+      technologies: [
+        "React Native",
+        "TypeScript",
+        "Supabase",
+        "Cloudflare",
+      ],
+      githubUrl: "https://github.com/Omri-Jukin",
+      problem:
+        "Creator teams need a unified operations layer for publishing, analytics, and workflow management instead of fragmented tooling.",
+      solution:
+        "Designed and implemented a TypeScript-based platform spanning mobile frontend, backend services, authentication, and integration boundaries for scalable creator workflows.",
+      architecture:
+        "React Native client with Supabase-backed services and Cloudflare-based infrastructure, structured for maintainability, release safety, and future platform integrations.",
+      keyFeatures: [
+        "Cross-platform creator operations workflows",
+        "Publishing and analytics-oriented product structure",
+        "Auth and integration boundaries designed for scale",
+        "End-to-end technical ownership from architecture to delivery",
+      ],
+      codeExamples: [],
+      technicalChallenges: [
+        {
+          title: "Cross-platform workflow modeling",
+          description:
+            "Creator operations span mobile UX, backend services, and external integrations that must stay coherent as the product grows.",
+          solution:
+            "Structured the system around clear service boundaries, typed contracts, and workflow models that can evolve without breaking core operations.",
+        },
+      ],
+    },
     {
       id: "clipwhisperer",
       title: "ClipWhisperer",
@@ -268,37 +311,35 @@ export const customerRouter = router({
       ],
     },
     {
-      id: "portfolio-website",
-      title: "Portfolio Website",
-      subtitle: "Modern, Responsive Portfolio with Internationalization",
+      id: "portfolio-platform",
+      title: "Portfolio Platform",
+      subtitle: "Public site with authenticated CMS and backoffice",
       description:
-        "A sophisticated portfolio website featuring internationalization, dark mode, smooth animations, and a fully functional blog with content management capabilities.",
+        "A multilingual portfolio platform with a polished public experience and a maintainable CMS for content, career data, and technical case studies.",
       technologies: [
-        "Next.js 15",
-        "React 19",
+        "Next.js",
         "TypeScript",
-        "Material-UI",
-        "Framer Motion",
-        "i18n",
-        "Cloudflare Workers",
         "tRPC",
+        "Drizzle ORM",
+        "Supabase",
+        "NextAuth",
+        "next-intl",
       ],
       githubUrl: "https://github.com/Omri-Jukin/Portfolio",
       liveUrl: "https://omrijukin.com",
       problem:
-        "Traditional portfolio websites lack modern user experience features, internationalization support, and proper content management. Developers need a showcase that demonstrates technical skills while being accessible to global audiences.",
+        "A portfolio site needs both a recruiter-friendly public experience and a maintainable way to manage content, career data, and technical case studies without duplicating state across tools.",
       solution:
-        "Built a cutting-edge portfolio using Next.js 15 with App Router, implemented comprehensive internationalization, created smooth animations with Framer Motion, and deployed on Cloudflare Workers for global performance.",
+        "Built a modular Next.js platform with locale-aware public pages, RBAC-protected admin routes, Postgres-backed APIs, and section-driven homepage composition.",
       architecture:
-        "Next.js application with App Router, internationalization using next-intl, Material-UI theming system, Framer Motion animations, and tRPC for type-safe APIs. Deployed on Cloudflare Workers using OpenNext for edge computing.",
+        "Public i18n site plus authenticated CMS/backoffice, Drizzle-backed Postgres schema, tRPC procedures for content operations, and reusable section components for homepage composition.",
       keyFeatures: [
-        "Multi-language support (EN, ES, FR, HE)",
-        "Dark/Light theme switching",
-        "Smooth page transitions",
-        "Responsive design system",
-        "Blog CMS with admin panel",
-        "Contact form management",
-        "Performance optimization",
+        "Locale-aware public site (EN, ES, FR, HE)",
+        "RBAC-protected CMS and dashboard",
+        "Type-safe tRPC content APIs",
+        "Modular homepage section composition",
+        "Resume and technical portfolio generation",
+        "Deployment-ready Next.js App Router structure",
       ],
       codeExamples: [
         {

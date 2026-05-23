@@ -1,78 +1,88 @@
 import React from "react";
-import { ArrowForward as ArrowForwardIcon } from "@mui/icons-material";
+import {
+  ArrowForward as ArrowForwardIcon,
+  Email as EmailIcon,
+  GitHub as GitHubIcon,
+  LinkedIn as LinkedInIcon,
+  Description as DescriptionIcon,
+} from "@mui/icons-material";
+import { Link, Stack } from "@mui/material";
 import { useTranslations } from "next-intl";
+import { PROFILE_LINKS } from "$/constants";
 import MotionWrapper from "../MotionWrapper/MotionWrapper";
 import {
   ContactContainer,
   ContactTitle,
   ContactSubtitle,
   ContactDescription,
+  ContactActions,
+  ContactActionButton,
 } from "./Contact.style";
 import { CONTACT_CONSTANTS } from "./Contact.const";
 import type { ContactProps } from "./Contact.type";
-import dynamic from "next/dynamic";
-
-// Dynamically import heavy components to improve build performance
-const GalaxyCard = dynamic(
-  () =>
-    import("#/Components/HeavyComponents").then((mod) => ({
-      default: mod.GalaxyCard,
-    })),
-  { ssr: false }
-);
-import { type GalaxyCardProps } from "../GalaxyCard/GalaxyCard";
-import { NeonButton } from "..";
 
 const Contact: React.FC<ContactProps> = ({ locale = "en", onContactClick }) => {
   const t = useTranslations("contact");
 
-  const galaxyProps: GalaxyCardProps = {
-    offset: { x: 5 },
-    id: CONTACT_CONSTANTS.SECTION_ID,
-  };
-
   return (
-    <GalaxyCard
-      id={CONTACT_CONSTANTS.SECTION_ID}
-      sx={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-      {...galaxyProps}
-    >
-      <ContactContainer id={`${CONTACT_CONSTANTS.SECTION_ID}-container`}>
-        <MotionWrapper
-          variant="fadeInUp"
-          duration={CONTACT_CONSTANTS.ANIMATION.TITLE_DURATION}
-        >
-          <ContactTitle id={`${CONTACT_CONSTANTS.SECTION_ID}-title`}>
-            {t("title")}
-          </ContactTitle>
-          <ContactSubtitle id={`${CONTACT_CONSTANTS.SECTION_ID}-subtitle`}>
-            {t("subtitle")}
-          </ContactSubtitle>
-          <ContactDescription
-            id={`${CONTACT_CONSTANTS.SECTION_ID}-description`}
-          >
-            {t("description")}
-          </ContactDescription>
-          <NeonButton
-            href={`/${locale}/contact`}
-            variant="contained"
-            size="large"
-            endIcon={<ArrowForwardIcon />}
-            onClick={onContactClick}
-            id={`${CONTACT_CONSTANTS.SECTION_ID}-button`}
-          >
-            {t("button")}
-          </NeonButton>
-        </MotionWrapper>
-      </ContactContainer>
-    </GalaxyCard>
+    <ContactContainer id={CONTACT_CONSTANTS.SECTION_ID}>
+      <MotionWrapper
+        variant="fadeInUp"
+        duration={CONTACT_CONSTANTS.ANIMATION.TITLE_DURATION}
+      >
+        <ContactTitle id={`${CONTACT_CONSTANTS.SECTION_ID}-title`}>
+          {t("title")}
+        </ContactTitle>
+        <ContactSubtitle id={`${CONTACT_CONSTANTS.SECTION_ID}-subtitle`}>
+          {t("subtitle")}
+        </ContactSubtitle>
+        <ContactDescription id={`${CONTACT_CONSTANTS.SECTION_ID}-description`}>
+          {t("description")}
+        </ContactDescription>
+
+        <ContactActions>
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} useFlexGap flexWrap="wrap">
+            <Link href={`mailto:${PROFILE_LINKS.EMAIL}`} underline="none">
+              <ContactActionButton variant="contained" startIcon={<EmailIcon />}>
+                {t("emailLabel")}
+              </ContactActionButton>
+            </Link>
+            <Link
+              href={PROFILE_LINKS.LINKEDIN}
+              target="_blank"
+              rel="noopener noreferrer"
+              underline="none"
+            >
+              <ContactActionButton variant="outlined" startIcon={<LinkedInIcon />}>
+                {t("linkedinLabel")}
+              </ContactActionButton>
+            </Link>
+            <Link
+              href={PROFILE_LINKS.GITHUB}
+              target="_blank"
+              rel="noopener noreferrer"
+              underline="none"
+            >
+              <ContactActionButton variant="outlined" startIcon={<GitHubIcon />}>
+                {t("githubLabel")}
+              </ContactActionButton>
+            </Link>
+            <Link href={`/${locale}/resume`} underline="none">
+              <ContactActionButton variant="outlined" startIcon={<DescriptionIcon />}>
+                {t("resumeLabel")}
+              </ContactActionButton>
+            </Link>
+            <ContactActionButton
+              variant="text"
+              endIcon={<ArrowForwardIcon />}
+              onClick={onContactClick}
+            >
+              {t("button")}
+            </ContactActionButton>
+          </Stack>
+        </ContactActions>
+      </MotionWrapper>
+    </ContactContainer>
   );
 };
 

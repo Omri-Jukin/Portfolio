@@ -72,22 +72,30 @@ export const extractResumeData = async (
       bullets: exp.details,
     })),
     projects: data.projects.projects
-      .filter((project: projectType) => project.title !== "Portfolio Website")
+      .filter((project: projectType) => project.id !== "portfolio-platform")
       .map((project: projectType) => ({
         name: project.title,
-        line: project.description,
-        url: project.link,
+        line: project.summary,
+        url: project.githubUrl,
       })),
-    education: resumeData.education.map((edu: eduType) => ({
-      degree: edu.degree,
-      institution: edu.institution,
-      location: edu.location,
-      period: edu.period,
-      gpa: edu.gpa || undefined,
-      achievements: edu.achievements,
-      coursework: edu.coursework,
-      projects: edu.projects,
-    })),
+    education: resumeData.education.map((edu: eduType) => {
+      const entry = edu as eduType & {
+        gpa?: string;
+        achievements?: string[];
+        coursework?: string[];
+        projects?: string[];
+      };
+      return {
+        degree: entry.degree,
+        institution: entry.institution,
+        location: entry.location,
+        period: entry.period,
+        ...(entry.gpa ? { gpa: entry.gpa } : {}),
+        ...(entry.achievements?.length ? { achievements: entry.achievements } : {}),
+        ...(entry.coursework?.length ? { coursework: entry.coursework } : {}),
+        ...(entry.projects?.length ? { projects: entry.projects } : {}),
+      };
+    }),
     additional: data.additionalActivities,
   };
 };

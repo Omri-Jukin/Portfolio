@@ -32,9 +32,9 @@ export default function ClientLayout({
   const pathname = usePathname();
   const isRTL = locale === "he";
 
-  // Opacity is a percentage of scroll progress: 0.2 at top, 0.05 at bottom
+  // Subtle background globe — lower opacity for readability
   const progress = useScrollPosition().scrollProgress;
-  const scrollProgress = 0.2 - 0.15 * progress; // 0.2 (top) -> 0.05 (bottom)
+  const scrollProgress = 0.08 - 0.05 * progress;
 
   // Check if current page is an example page
   const isExamplePage = pathname?.includes("/examples");
@@ -241,8 +241,9 @@ export default function ClientLayout({
               flexDirection: "column",
               width: "100%",
               marginTop: "4rem",
-              maxWidth: "calc(100vw - 4rem)",
+              maxWidth: "100%",
               mx: "auto",
+              px: { xs: 0, md: 1 },
               background: "transparent",
             }}
           >

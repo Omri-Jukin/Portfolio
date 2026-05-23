@@ -1,0 +1,5 @@
+import { SECTION_IDS } from "$/constants";
+
+export const ENGINEERING_STRENGTHS_CONSTANTS = {
+  SECTION_ID: SECTION_IDS.ENGINEERING_STRENGTHS,
+} as const;

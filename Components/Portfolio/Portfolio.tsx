@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Box,
   Typography,
@@ -17,6 +17,7 @@ import {
   Star as StarIcon,
   People as PeopleIcon,
 } from "@mui/icons-material";
+import { useTranslations } from "next-intl";
 import MotionWrapper from "../MotionWrapper/MotionWrapper";
 import { PORTFOLIO_CONSTANTS } from "./Portfolio.const";
 import {
@@ -36,34 +37,52 @@ import {
   AccordionDetailsRoot,
   TechChip,
   CodeExampleBox,
+  CodeBlockPre,
   ProblemSolution,
   ArchitectureSection,
   StyledList,
 } from "./Portfolio.style";
-import type { PortfolioProps } from "./Portfolio.type";
+import type { PortfolioProps, TechnicalChallenge as PortfolioTechnicalChallenge } from "./Portfolio.type";
 import { api } from "$/trpc/client";
 import { format } from "date-fns";
 import type {
   ProjectStatus,
   ProjectType,
-  TechnicalChallenge,
   CodeExample,
   ProjectStatusColor,
   ProjectTypeColor,
   IProject,
 } from "#/lib";
 
-const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
+const Portfolio: React.FC<PortfolioProps> = ({
+  className,
+  preferStatic = true,
+  featuredProjectIds,
+  expandFromHash = false,
+  showHeader = true,
+}) => {
+  const t = useTranslations("portfolio");
   const [expandedProject, setExpandedProject] = useState<string | false>(false);
 
-  // Fetch projects from database
   const {
     data: projects = [],
     isLoading,
     error,
-  } = api.projects.getAll.useQuery({
-    visibleOnly: true,
-  });
+  } = api.projects.getAll.useQuery(
+    { visibleOnly: true },
+    { enabled: !preferStatic }
+  );
+
+  useEffect(() => {
+    if (!expandFromHash) {
+      return;
+    }
+
+    const hash = window.location.hash.slice(1);
+    if (hash) {
+      setExpandedProject(hash);
+    }
+  }, [expandFromHash]);
 
   const handleAccordionChange =
     (projectId: string) =>
@@ -98,21 +117,6 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
     const end = endDate ? format(new Date(endDate), "MMM yyyy") : "Ongoing";
     return `${start} - ${end}`;
   };
-
-  if (isLoading) {
-    return (
-      <PortfolioContainer className={className}>
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          minHeight="400px"
-        >
-          <CircularProgress />
-        </Box>
-      </PortfolioContainer>
-    );
-  }
 
   // Transform database projects to IProject format
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -154,12 +158,44 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
     descriptionTranslations: project.descriptionTranslations || null,
   });
 
-  // Use database data if available, fallback to static
-  const projectsData =
-    projects.length > 0
+  const isUsingDatabase = !preferStatic && projects.length > 0;
+
+  const projectsData = useMemo(() => {
+    const source = isUsingDatabase
       ? projects.map(transformProject)
       : PORTFOLIO_CONSTANTS.PROJECTS;
-  const isUsingDatabase = projects.length > 0;
+
+    if (!featuredProjectIds?.length) {
+      return source;
+    }
+
+    const byId = new Map(source.map((project) => [project.id, project]));
+    return featuredProjectIds
+      .map((id) => byId.get(id))
+      .filter((project): project is (typeof source)[number] => Boolean(project));
+  }, [featuredProjectIds, isUsingDatabase, projects]);
+
+  const getChallengeLabel = (challenge: PortfolioTechnicalChallenge) =>
+    challenge.problem ??
+    challenge.description ??
+    challenge.title ??
+    challenge.challenge ??
+    "";
+
+  if (!preferStatic && isLoading) {
+    return (
+      <PortfolioContainer className={className}>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          minHeight="400px"
+        >
+          <CircularProgress />
+        </Box>
+      </PortfolioContainer>
+    );
+  }
 
   const ProjectsData = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -186,7 +222,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
       return (
         <Grid key={projectId} component="div">
           <MotionWrapper variant="fadeInUp" duration={0.8} delay={index * 0.2}>
-            <ProjectCard elevation={3}>
+            <ProjectCard elevation={0} id={projectId}>
               <ProjectHeader>
                 <Box sx={{ flexGrow: 1 }}>
                   <Box
@@ -311,7 +347,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                         GitHub
                       </Button>
                     )}
-                    {liveUrl && (
+                    {liveUrl && !String(liveUrl).includes("[") && (
                       <Button
                         variant="contained"
                         startIcon={<LaunchIcon />}
@@ -323,7 +359,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                         Live Demo
                       </Button>
                     )}
-                    {demoUrl && (
+                    {demoUrl && !String(demoUrl).includes("[") && (
                       <Button
                         variant="outlined"
                         startIcon={<LaunchIcon />}
@@ -345,7 +381,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                 onChange={handleAccordionChange(projectId)}
               >
                 <AccordionSummaryRoot expandIcon={<ExpandMoreIcon />}>
-                  <Typography variant="h6">Technical Details</Typography>
+                  <Typography variant="h6">{t("technicalDetails")}</Typography>
                 </AccordionSummaryRoot>
                 <AccordionDetailsRoot>
                   {/* Key Features */}
@@ -361,7 +397,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                         }}
                       >
                         <StarIcon color="primary" />
-                        Key Features
+                        {t("keyFeatures")}
                       </Typography>
                       <Box
                         sx={{
@@ -390,7 +426,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                   )}
 
                   {/* Problem & Solution */}
-                  {!isUsingDatabase && (
+                  {typeof project.problem === "string" && (
                     <>
                       <ProblemSolution sx={{ mb: 4 }}>
                         <Typography
@@ -403,7 +439,51 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                           }}
                         >
                           <BugReportIcon color="secondary" />
-                          Problem Statement
+                          {t("problemSolution")}
+                        </Typography>
+                        <Typography variant="body2" sx={{ mb: 2 }}>
+                          {project.problem}
+                        </Typography>
+                        <Typography variant="body2" sx={{ mb: 2 }}>
+                          <strong>{t("approach")}</strong> {project.solution}
+                        </Typography>
+                      </ProblemSolution>
+
+                      <ArchitectureSection sx={{ mb: 4 }}>
+                        <Typography
+                          variant="h6"
+                          sx={{
+                            mb: 2,
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                          }}
+                        >
+                          <ArchitectureIcon color="info" />
+                          {t("architecture")}
+                        </Typography>
+                        <Typography variant="body2">
+                          {project.architecture}
+                        </Typography>
+                      </ArchitectureSection>
+                    </>
+                  )}
+
+                  {typeof project.problem === "object" &&
+                    project.problem !== null && (
+                    <>
+                      <ProblemSolution sx={{ mb: 4 }}>
+                        <Typography
+                          variant="h6"
+                          sx={{
+                            mb: 2,
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                          }}
+                        >
+                          <BugReportIcon color="secondary" />
+                          {t("problemSolution")}
                         </Typography>
                         <Typography variant="body2" sx={{ mb: 3 }}>
                           <strong>{project.problem?.title}</strong>
@@ -431,7 +511,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                           }}
                         >
                           <ArchitectureIcon color="primary" />
-                          Solution Approach
+                          {t("approach")}
                         </Typography>
                         <Typography variant="body2">
                           <strong>Approach:</strong>{" "}
@@ -464,7 +544,6 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                         </Typography>
                       </ProblemSolution>
 
-                      {/* Architecture */}
                       <ArchitectureSection sx={{ mb: 4 }}>
                         <Typography
                           variant="h6"
@@ -476,7 +555,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                           }}
                         >
                           <ArchitectureIcon color="info" />
-                          Technical Architecture
+                          {t("architecture")}
                         </Typography>
                         <Typography variant="body2">
                           <strong>Overview:</strong>{" "}
@@ -530,11 +609,11 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                         }}
                       >
                         <BugReportIcon color="warning" />
-                        Technical Challenges
+                        {t("technicalChallenges")}
                       </Typography>
                       {technicalChallenges.map(
                         (
-                          challenge: TechnicalChallenge,
+                          challenge: PortfolioTechnicalChallenge,
                           challengeIndex: number
                         ) => (
                           <Box
@@ -552,10 +631,10 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                               fontWeight="bold"
                               gutterBottom
                             >
-                              Challenge: {challenge.problem}
+                              {t("challenge")} {getChallengeLabel(challenge)}
                             </Typography>
                             <Typography variant="body2">
-                              Solution: {challenge.solution}
+                              {t("solution")} {challenge.solution}
                             </Typography>
                           </Box>
                         )
@@ -575,7 +654,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                           gap: 1,
                         }}
                       >
-                        Code Examples
+                        {t("codeExamples")}
                       </Typography>
                       {codeExamples.map(
                         (example: CodeExample, exampleIndex: number) => (
@@ -584,34 +663,22 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
                               variant="subtitle2"
                               fontWeight="bold"
                               gutterBottom
+                              color="text.primary"
                             >
                               {example.title}
                             </Typography>
-                            <Typography variant="body2" sx={{ mb: 2 }}>
-                              {example.explanation}
-                            </Typography>
-                            <Box
-                              component="pre"
-                              sx={{
-                                backgroundColor: "grey.100",
-                                p: 2,
-                                borderRadius: 1,
-                                overflow: "auto",
-                                fontSize: "0.875rem",
-                                border: 1,
-                                borderColor: "grey.300",
-                              }}
-                            >
-                              <code>{example.code}</code>
-                            </Box>
                             {example.explanation && (
                               <Typography
                                 variant="body2"
-                                sx={{ mt: 2, fontStyle: "italic" }}
+                                color="text.secondary"
+                                sx={{ mb: 2 }}
                               >
                                 {example.explanation}
                               </Typography>
                             )}
+                            <CodeBlockPre>
+                              <code>{example.code}</code>
+                            </CodeBlockPre>
                           </CodeExampleBox>
                         )
                       )}
@@ -633,17 +700,18 @@ const Portfolio: React.FC<PortfolioProps> = ({ className }) => {
   return (
     <PortfolioContainer className={className}>
       <MotionWrapper variant="fadeInUp" duration={0.8}>
-        <PortfolioHeader>
-          <PortfolioTitle variant="h2" gutterBottom>
-            Technical Portfolio
-          </PortfolioTitle>
-          <PortfolioSubtitle variant="h5">
-            Detailed project showcase with technical implementations,
-            problem-solving approaches, and code examples
-          </PortfolioSubtitle>
-        </PortfolioHeader>
+        {showHeader && (
+          <PortfolioHeader>
+            <PortfolioTitle variant="h2" gutterBottom>
+              {t("title")}
+            </PortfolioTitle>
+            <PortfolioSubtitle variant="h5">
+              {t("subtitle")}
+            </PortfolioSubtitle>
+          </PortfolioHeader>
+        )}
 
-        <Grid container spacing={4}>
+        <Grid container spacing={3}>
           <ProjectsData />
         </Grid>
       </MotionWrapper>

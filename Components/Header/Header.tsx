@@ -1,15 +1,16 @@
 "use client";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, IconButton, Link, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import DarkModeToggle from "~/DarkModeToggle/DarkModeToggle";
 import LanguageSwitcher from "~/LanguageSwitcher/LanguageSwitcher";
 import { HeaderProps } from "./Header.type";
 import { AppBar, Toolbar } from "./Header.style";
 import Image from "next/image";
-import { useTheme } from "@mui/material/styles";
-import { baseTheme } from "!/theme";
 import { useRouter } from "next/navigation";
-import { Button } from "..";
+import { useLocale, useTranslations } from "next-intl";
+import { HOMEPAGE_NAV_ITEMS, PROFILE_LINKS } from "$/constants";
 
 export default function Header({
   isDarkMode = false,
@@ -18,8 +19,9 @@ export default function Header({
 }: HeaderProps) {
   const [isClient, setIsClient] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const theme = useTheme();
   const router = useRouter();
+  const locale = useLocale();
+  const t = useTranslations("common");
 
   useEffect(() => {
     setIsClient(true);
@@ -27,66 +29,100 @@ export default function Header({
   }, []);
 
   const handleLogoClick = () => {
-    window.location.href = "/";
+    window.location.href = `/${locale}`;
   };
 
-  const handleCalendlyClick = () => {
-    router.push("/meeting");
+  const handleResumeClick = () => {
+    router.push(`/${locale}/resume`);
   };
 
-  const gradientStyles = {
-    background: baseTheme.conicGradients.galaxy,
+  const handleSectionClick = (sectionId: string) => {
+    const isHome = window.location.pathname === `/${locale}` || window.location.pathname === `/${locale}/`;
+    if (isHome) {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+        return;
+      }
+    }
+    router.push(`/${locale}/#${sectionId}`);
   };
 
   if (!mounted || !isClient) return null;
 
   return (
     <AppBar position="fixed" color="transparent" elevation={0} dir="ltr">
-      <Toolbar>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+      <Toolbar sx={{ justifyContent: "space-between", gap: 2 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2, minWidth: 0 }}>
           <Image
             src="/logo.png"
             alt="Logo"
-            width={48}
-            height={48}
+            width={40}
+            height={40}
             onClick={handleLogoClick}
+            style={{ cursor: "pointer" }}
           />
-          <Typography variant="h6">
-            {isMobile ? "Omri Jukin" : "Omri Jukin — Full Stack Developer"}
+          <Typography variant="h6" sx={{ fontSize: { xs: "0.95rem", md: "1rem" }, fontWeight: 700 }}>
+            {isMobile ? "Omri Jukin" : "Omri Jukin — Fullstack Engineer"}
           </Typography>
         </Box>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          {isClient && !isMobile && (
-            <Button
-              onClick={handleCalendlyClick}
-              style={{
-                background: gradientStyles.background,
-                color: theme.palette.calendly.contrastText,
-                border: "none",
-                borderRadius: "0.5rem",
-                padding: "0.75rem 1.5rem",
-                fontSize: "0.875rem",
-                fontWeight: "600",
-                cursor: "pointer",
-                transition: "all 0.2s ease-in-out",
-                boxShadow: "0 4px 12px rgba(255, 107, 107, 0.3)",
-                transform: "translateY(0)",
-                textTransform: "none",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow =
-                  "0 6px 16px rgba(255, 107, 107, 0.4)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow =
-                  "0 4px 12px rgba(255, 107, 107, 0.3)";
-              }}
-            >
-              Let&apos;s Talk!
-            </Button>
+
+        <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 1, md: 2 } }}>
+          {!isMobile &&
+            HOMEPAGE_NAV_ITEMS.map((item) => (
+              <Link
+                key={item.sectionId}
+                component="button"
+                underline="hover"
+                color="text.secondary"
+                onClick={() => handleSectionClick(item.sectionId)}
+                sx={{
+                  border: "none",
+                  background: "none",
+                  cursor: "pointer",
+                  font: "inherit",
+                  fontSize: "0.875rem",
+                  fontWeight: 600,
+                }}
+              >
+                {t(item.labelKey)}
+              </Link>
+            ))}
+
+          <Button
+            variant="contained"
+            size="small"
+            onClick={handleResumeClick}
+            sx={{ textTransform: "none", fontWeight: 600, display: { xs: "none", sm: "inline-flex" } }}
+          >
+            {t("resume")}
+          </Button>
+
+          {!isMobile && (
+            <>
+              <IconButton
+                component="a"
+                href={PROFILE_LINKS.GITHUB}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+                size="small"
+              >
+                <GitHubIcon fontSize="small" />
+              </IconButton>
+              <IconButton
+                component="a"
+                href={PROFILE_LINKS.LINKEDIN}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                size="small"
+              >
+                <LinkedInIcon fontSize="small" />
+              </IconButton>
+            </>
           )}
+
           <DarkModeToggle onToggle={onThemeToggle} isDark={isDarkMode} />
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <LanguageSwitcher />

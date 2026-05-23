@@ -238,6 +238,13 @@ export const SOCIAL_PLATFORMS = {
 /**
  * Social media colors for different platforms
  */
+export const PROFILE_LINKS = {
+  GITHUB: "https://github.com/Omri-Jukin",
+  LINKEDIN: "https://www.linkedin.com/in/omri-jukin/",
+  EMAIL: "omrijukin@gmail.com",
+  PORTFOLIO: "https://omrijukin.com",
+} as const;
+
 export const SOCIAL_COLORS = {
   [SOCIAL_PLATFORMS.GITHUB]: "#181717",
   [SOCIAL_PLATFORMS.LINKEDIN]: "#0077B5",
@@ -291,14 +298,24 @@ export const VALID_LOCALES = Object.values(LOCALES);
  */
 export const SECTION_IDS = {
   HERO: "hero-section",
+  CREDIBILITY: "credibility-section",
   ABOUT: "about-section",
   CAREER: "career-section",
   PROJECTS: "projects-section",
+  ENGINEERING_STRENGTHS: "engineering-strengths-section",
   CONTACT: "contact-section",
   SERVICES: "services-section",
   SKILLS: "skills-section",
   RESUME: "resume-section",
 } as const;
+
+export const HOME_SECTION_WIDTH = "1100px";
+
+export const HOMEPAGE_NAV_ITEMS = [
+  { labelKey: "projects", sectionId: SECTION_IDS.PROJECTS },
+  { labelKey: "career", sectionId: SECTION_IDS.CAREER },
+  { labelKey: "contact", sectionId: SECTION_IDS.CONTACT },
+] as const;
 
 // ========================
 // FORM CONSTANTS

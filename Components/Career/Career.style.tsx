@@ -142,29 +142,22 @@ export const CareerSwiperContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-export const ExperienceCard = styled(Card)(({ theme }) => ({
-  backgroundColor: theme.palette.background.paper,
-  opacity: 0.75,
-  border: `1px solid ${theme.palette.divider}`,
-  height: "100%",
-  minHeight: "400px",
+export const ExperienceTimeline = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
-  transition: "all 0.3s ease-in-out",
-  boxSizing: "border-box",
-  margin: theme.spacing(1, 0),
-  "&:hover": {
-    borderColor: theme.palette.primary.main,
-    transform: "translateY(-4px)",
-    zIndex: 1,
-  },
+  gap: theme.spacing(2),
+  width: "100%",
+  maxWidth: "860px",
+  margin: "0 auto",
+}));
 
-  [theme.breakpoints.down("sm")]: {
-    margin: theme.spacing(1, 0.5),
-    width: "100%",
-    maxWidth: "100%",
-    minHeight: "350px",
-  },
+export const ExperienceCard = styled(Card)(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
+  border: `1px solid ${theme.palette.divider}`,
+  display: "flex",
+  flexDirection: "column",
+  boxShadow: "none",
+  borderRadius: theme.spacing(1.5),
 }));
 
 export const ExperienceHeader = styled(Box)(({ theme }) => ({
@@ -181,23 +174,9 @@ export const ExperienceTime = styled(Box)(({ theme }) => ({
   marginBottom: theme.spacing(3),
 }));
 
-export const ExperienceDetails = styled(Box)(({ theme }) => ({
+export const ExperienceDetails = styled(Box)(() => ({
   display: "flex",
   flexDirection: "column",
-  gap: theme.spacing(2),
-  flex: 1,
-
-  "& .detail-text": {
-    wordBreak: "break-word",
-    overflowWrap: "break-word",
-    lineHeight: 1.6,
-    maxHeight: "4.8em",
-    overflow: "hidden",
-    display: "-webkit-box",
-    WebkitLineClamp: 3,
-    WebkitBoxOrient: "vertical",
-    textOverflow: "ellipsis",
-  },
 }));
 
 export const CallToActionBox = styled(Box)(({ theme }) => ({

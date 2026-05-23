@@ -1,4 +1,2 @@
-export { default } from "./Certifications";
-export * from "./Certifications.style";
-export * from "./Certifications.type";
-export * from "./Certifications.const";
+export { default } from "./Certifications";
+export type { CertificationsProps, Certification } from "./Certifications.type";

@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "עמרי חוקין - מפתח Full Stack",
-    "description": "מפתח Full Stack המתמחה ב-React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB וארכיטקטורת מיקרו-שירותים"
+    "title": "Omri Jukin — Fullstack Engineer",
+    "description": "Fullstack Engineer building scalable web systems with TypeScript, Next.js, Node.js, and PostgreSQL. End-to-end products, internal systems, and production-ready delivery."
   },
   "login": {
     "title": "התחברות מנהל",
@@ -96,28 +96,40 @@
     "present": "נוכחי"
   },
   "common": {
-    "language": "שפה",
-    "home": "בית",
-    "about": "אודות",
-    "contact": "צור קשר",
-    "blog": "בלוג",
-    "career": "קריירה",
-    "education": "השכלה",
-    "certifications": "הסמכות",
-    "resume": "קורות חיים",
-    "projects": "פרויקטים",
-    "skills": "כישורים",
-    "description": "אני מהנדס FullStack המתמחה בפיתוח web full-stack, ארכיטקטורת מערכות מתקדמות וטכנולוגיות מודרניות כולל React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB ומיקרו-שירותים."
+    "language": "Language",
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "blog": "Blog",
+    "career": "Career",
+    "education": "Education",
+    "certifications": "Certifications",
+    "resume": "Resume",
+    "projects": "Projects",
+    "skills": "Skills",
+    "description": "Fullstack Engineer building TypeScript web systems end to end — frontend, backend, data, integrations, and operational workflows."
   },
   "hero": {
-    "titleRow1": "אני לא מוכר תוכנה.",
-    "titleRow2": "אני מהנדס אבולוציה של העתיד",
-    "subtitle": "אני לא רק מפתח—אני חזון. אני לא רק בונה תוכנה; אני מהנדס אבולוציה. העבודה שלי לא עוסקת ביצירת מוצרים; היא עוסקת בעיצוב העתיד. כרגע מחפש הזדמנויות במשרה מלאה להשפיע לטווח הארוך.",
-    "profileAlt": "עמרי חוקין",
-    "exploreButton": "חקור עבודה",
-    "resumeButton": "קורות חיים",
-    "careerButton": "קריירה",
-    "cta": "בואו נהנדס את העתיד יחד"
+    "name": "Omri Jukin",
+    "roleLine": "Fullstack Engineer · Web Solutions Engineer",
+    "headline": "Building scalable web systems with TypeScript, Next.js, Node.js, and PostgreSQL.",
+    "subtitle": "I build end-to-end products and internal systems across frontend, backend, data, integrations, and operational workflows — with a focus on maintainability, clean architecture, and production readiness.",
+    "profileAlt": "Omri Jukin",
+    "stack": [
+      "TypeScript",
+      "React / Next.js",
+      "Node.js",
+      "PostgreSQL",
+      "tRPC",
+      "CI/CD",
+      "Supabase",
+      "Cloudflare"
+    ],
+    "resumeButton": "Resume",
+    "projectsButton": "Projects",
+    "contactButton": "Contact",
+    "githubLabel": "GitHub",
+    "linkedinLabel": "LinkedIn"
   },
   "examples": {
     "title": "דוגמאות אינטראקטיביות",
@@ -150,74 +162,10 @@
     }
   },
   "about": {
-    "title": "מי אני",
-    "subtitle": "חקור את ערכת הכלים היצירתית שלי",
-    "description": "אני מהנדס FullStack נלהב ומעצב שמאמין שחוויות דיגיטליות נהדרות מגיעות מהשילוב המושלם של מומחיות טכנית וחזון יצירתי. עם שנים של ניסיון ביצירת אפליקציות web full-stack, למדתי שהפתרונות הטובים ביותר הם אלה שלא רק עובדים בצורה מושלמת, אלא גם משמחים משתמשים בכל אינטראקציה.",
-    "mySkills": "הכישורים שלי",
-    "skillDetailsTitle": "פרטי כישורים",
-    "experience": "ניסיון:",
-    "years": "שנים:",
-    "technologies": "טכנולוגיות:",
-    "examples": "דוגמאות:",
-    "readyToWork": "מוכן לעבוד ביחד?",
-    "letsDiscuss": "בואו נדון איך הכישורים והניסיון שלי יכולים לעזור להביא את הפרויקט שלך לחיים.",
-    "cta": "צפה בקורות החיים שלי",
-    "skills": {
-      "codeConjurer": "מכשף קוד",
-      "brandArchitect": "ארכיטקט מותג",
-      "designDreamer": "חולם עיצוב"
-    },
-    "skillDetails": {
-      "codeConjurer": {
-        "title": "מכשף קוד",
-        "description": "אני הופך דרישות מורכבות לפתרונות אלגנטיים ומתקדמים. המומחיות שלי מקיפה את כל ערימת הפיתוח, מממשקי frontend מגיבים ועד מערכות backend חזקות וארכיטקטורות מסדי נתונים יעילות.",
-        "experience": "מתקדם",
-        "technologies": [
-          "React",
-          "Node.js",
-          "TypeScript",
-          "Next.js",
-          "tRPC",
-          "PostgreSQL",
-          "MongoDB"
-        ],
-        "examples": [
-          "פלטפורמות מיקרו-שירותים",
-          "מערכות CRM",
-          "פתרונות מסחר אלקטרוני"
-        ],
-        "years": "5+ שנים"
-      },
-      "brandArchitect": {
-        "title": "ארכיטקט מותג",
-        "description": "אני מעצב ומממש חוויות מותג מקיפות שמהדהדות עם משתמשים. הגישה שלי משלבת מצוינות טכנית עם חשיבה עיצובית יצירתית ליצירת אינטראקציות דיגיטליות בלתי נשכחות.",
-        "experience": "מתקדם",
-        "technologies": [
-          "Material-UI",
-          "Tailwind CSS",
-          "Framer Motion",
-          "מערכות עיצוב"
-        ],
-        "examples": [
-          "אתרי פורטפוליו",
-          "מערכות זהות מותג",
-          "חוויות אינטראקטיביות"
-        ],
-        "years": "3+ שנים"
-      },
-      "designDreamer": {
-        "title": "חולם עיצוב",
-        "description": "אני יוצר חוויות משתמש אינטואיטיביות שמגשרות על הפער בין פונקציונליות לאסתטיקה. העיצובים שלי מקדמים שימושיות תוך שמירה על משיכה חזותית ועקביות מותג.",
-        "experience": "מתקדם",
-        "technologies": ["עיצוב UX/UI", "אב-טיפוס", "מחקר משתמשים", "נגישות"],
-        "examples": [
-          "עיצובי ממשק משתמש",
-          "אבות-טיפוס אינטראקטיביים",
-          "שיפורי נגישות"
-        ],
-        "years": "4+ שנים"
-      }
-    }
+    "title": "About",
+    "subtitle": "Hands-on engineer across product and platform work",
+    "description": "I'm a fullstack engineer focused on TypeScript-based systems — from public-facing applications to internal tooling, content workflows, and operational platforms. My professional experience includes full-stack work at Abra Technologies and technical leadership at The Atheist Line, where I own architecture, implementation, integrations, and production readiness.",
+    "ctaButton": "View Resume"
   },
   "qa": {
     "title": "שאלות מהירות",
@@ -274,32 +222,81 @@
     ]
   },
   "projects": {
-    "title": "פרויקטים מובילים",
-    "subtitle": "מבט על העבודה שלי",
+    "title": "Featured Projects",
+    "subtitle": "Engineering case studies across product and platform work",
+    "viewCaseStudy": "View case study",
+    "viewCode": "View code",
+    "viewLive": "Live demo",
+    "labels": {
+      "problem": "Problem",
+      "stack": "Stack",
+      "architecture": "Architecture",
+      "role": "My role",
+      "proof": "Proof"
+    },
     "projects": [
       {
-        "title": "Snow HQ",
-        "description": "פרויקט אישי - CRM עם אנליטיקה בזמן אמת וזרמי עבודה אוטומטיים - Next.js, tRPC, Drizzle ORM, PostgreSQL",
-        "link": "https://github.com/Omri-Jukin/Snow",
-        "type": "personal"
+        "id": "socially",
+        "title": "Socially",
+        "summary": "Creator operations platform",
+        "audience": "Content creators and operations teams",
+        "problem": "Cross-platform publishing, analytics, and creator-facing operations need a unified system instead of fragmented tooling.",
+        "stack": ["React Native", "TypeScript", "Supabase", "Cloudflare"],
+        "architecture": "Mobile frontend, backend services, auth boundaries, and integration-ready data models for scalable creator workflows.",
+        "role": "End-to-end technical direction across product architecture, implementation, and release readiness.",
+        "proof": "[ADD IMPACT]",
+        "githubUrl": "https://github.com/Omri-Jukin",
+        "liveUrl": "[ADD DEMO LINK]",
+        "caseStudyUrl": "/resume#socially"
       },
       {
-        "title": "אתר פורטפוליו",
-        "description": "פרויקט אישי - אתר פורטפוליו מודרני ומגיב עם בינאום, מצב כהה ואנימציות - Next.js, TypeScript, Material-UI, Framer Motion",
-        "link": "https://omrijukin.com",
-        "type": "personal"
-      },
-      {
+        "id": "clipwhisperer",
         "title": "ClipWhisperer",
-        "description": "פרויקט אישי - פלטפורמת מיקרו-שירותים לעיבוד וידאו אוטומטי עם קריינות AI - TypeScript, Node.js, מיקרו-שירותים",
-        "link": "https://github.com/ClipWhisperer",
-        "type": "personal"
+        "summary": "Microservices video automation platform",
+        "audience": "Automated short-form video workflows",
+        "problem": "Manual video generation pipelines are slow, error-prone, and hard to scale across processing, storage, and delivery.",
+        "stack": ["Node.js", "TypeScript", "Supabase", "AWS", "FFmpeg"],
+        "architecture": "Hub-based orchestration with queue-driven jobs, service separation, and cloud-integrated processing steps.",
+        "role": "Platform design and hands-on implementation across orchestration, media processing, and service boundaries.",
+        "proof": "Production-oriented microservices structure with clear operational ownership per service.",
+        "githubUrl": "https://github.com/ClipWhisperer",
+        "liveUrl": "[ADD DEMO LINK]",
+        "caseStudyUrl": "/resume#clipwhisperer"
       },
       {
-        "title": "מנהל מיקרו-שירותים",
-        "description": "פרויקט אישי - כלי CLI לניהול אקוסיסטם מיקרו-שירותים עם זרמי עבודה אוטומטיים - TypeScript, Node.js, ארכיטקטורת CLI",
-        "link": "https://github.com/ClipWhisperer/Utils",
-        "type": "personal"
+        "id": "snow-hq",
+        "title": "Snow HQ",
+        "summary": "Multi-tenant CRM system",
+        "audience": "Teams needing tenant-aware customer workflows",
+        "problem": "CRM workflows need tenant separation, permissions, dashboards, and maintainable full-stack delivery.",
+        "stack": ["Next.js", "tRPC", "PostgreSQL", "Drizzle ORM"],
+        "architecture": "Type-safe APIs, tenant-aware data modeling, RBAC, and real-time dashboard flows.",
+        "role": "Full-stack implementation across frontend, backend, and database layers.",
+        "proof": "Live demo available.",
+        "githubUrl": "https://github.com/Omri-Jukin/Snow",
+        "liveUrl": "https://snow-hq.vercel.app",
+        "caseStudyUrl": "/resume#snow-hq"
+      },
+      {
+        "id": "portfolio-platform",
+        "title": "Portfolio Platform",
+        "summary": "Public site with authenticated CMS/backoffice",
+        "audience": "Personal portfolio and content operations",
+        "problem": "A portfolio site needs both a polished public experience and a maintainable way to manage content, career data, and technical case studies.",
+        "stack": [
+          "Next.js",
+          "TypeScript",
+          "tRPC",
+          "Drizzle",
+          "Supabase",
+          "NextAuth"
+        ],
+        "architecture": "Public i18n site plus RBAC-protected admin CMS, Postgres-backed content APIs, and modular section-driven homepage composition.",
+        "role": "Sole builder — architecture, implementation, content workflows, and deployment.",
+        "proof": "This site, including its private CMS and operational tooling.",
+        "githubUrl": "https://github.com/Omri-Jukin",
+        "liveUrl": "https://omrijukin.com",
+        "caseStudyUrl": "/resume#portfolio-platform"
       }
     ]
   },
@@ -319,118 +316,118 @@
     "solution": "פתרון:"
   },
   "contact": {
-    "title": "בואו נתחבר",
-    "subtitle": "מוכן להביא רעיון חדש לחיים?",
-    "description": "אני תמיד נרגש לדון בהזדמנויות חדשות, שיתופי פעולה או פשוט לשוחח על טכנולוגיה.\nהשאר לי הודעה ובואו ניצור משהו מדהים יחד...",
-    "button": "התחל שיחה",
+    "title": "Contact",
+    "subtitle": "Open to fullstack and web solutions engineering roles.",
+    "description": "Reach out for roles, technical conversations, or to review my work. Email and LinkedIn are the fastest ways to connect.",
+    "button": "Send a message",
+    "emailLabel": "Email",
+    "linkedinLabel": "LinkedIn",
+    "githubLabel": "GitHub",
+    "resumeLabel": "Resume",
     "form": {
-      "title": "צור קשר",
-      "description": "יש לך פרויקט בראש? בואו נדון איך נוכל להביא את הרעיונות שלך לחיים. מלא את טופס יצירת הקשר ואני אחזור אליך בהקדם האפשרי.",
-      "name": "השם שלי",
-      "email": "האימייל שלי",
-      "phone": "הטלפון שלי",
-      "subject": "נושא",
-      "message": "ההודעה שלי",
-      "submit": "שלח הודעה",
-      "sending": "שולח...",
-      "success": "ההודעה נשלחה בהצלחה!",
-      "error": "משהו השתבש. אנא נסה שוב."
+      "title": "Get in Touch",
+      "description": "Have a project in mind ? Let's discuss how we can bring your ideas to life. Fill out the contact form and I'll get back to you as soon as possible.",
+      "name": "My Name",
+      "email": "My Email",
+      "phone": "My Phone",
+      "subject": "Subject",
+      "message": "My Message",
+      "submit": "Send Message",
+      "sending": "Sending...",
+      "success": "Message sent successfully!",
+      "error": "Something went wrong. Please try again."
     },
     "info": {
-      "title": "פרטי יצירת קשר",
-      "email": "אימייל",
+      "title": "Contact Information",
+      "email": "Email",
       "emailValue": "omrijukin@gmail.com",
-      "phone": "טלפון",
+      "phone": "Phone",
       "phoneValue": "+972 52-334-4064",
-      "timezone": "אזור זמן",
-      "timezoneValue": "GMT+2 (ישראל)",
-      "location": "מיקום",
-      "locationValue": "ישראל"
+      "timezone": "Timezone",
+      "timezoneValue": "GMT+2 (Israel)",
+      "location": "Location",
+      "locationValue": "Israel"
     },
     "social": {
-      "title": "התחבר ברשתות חברתיות",
+      "title": "Connect on Social",
       "email": {
-        "title": "אימייל",
+        "title": "Email",
         "username": "omrijukin@gmail.com",
-        "button": "בואו נתחבר!"
+        "button": "Let's connect!"
       },
       "phone": {
-        "title": "טלפון",
+        "title": "Phone",
         "username": "+972 52-334-4064",
-        "button": "תקרא לי!"
+        "button": "Call me!"
       },
       "github": {
         "title": "GitHub",
         "username": "@Omri-Jukin",
-        "button": "התחבר"
+        "button": "Connect"
       },
       "linkedin": {
         "title": "LinkedIn",
         "username": "@omri-jukin",
-        "button": "התחבר"
+        "button": "Connect"
       },
       "whatsapp": {
         "title": "WhatsApp",
         "username": "Omri Jukin",
-        "button": "התחבר"
+        "button": "Connect"
       },
       "telegram": {
         "title": "Telegram",
         "username": "Omri Jukin",
-        "button": "התחבר"
+        "button": "Connect"
       }
     },
     "additional": {
-      "title": "מידע נוסף",
-      "website": "אתר: אתר אישי",
-      "timezone": "אזור זמן: Asia/Jerusalem",
-      "citizenship": "אזרחות: ישראלית"
+      "title": "Additional Information",
+      "website": "Website: Personal Website",
+      "timezone": "Timezone: Asia/Jerusalem",
+      "citizenship": "Citizenship: Israeli"
     }
   },
   "career": {
-    "title": "קריירה",
-    "subtitle": "המסע המקצועי והניסיון שלי",
-    "description": "המסע המקצועי שלי",
-    "experience": "יש לי ניסיון מעשי בפיתוח full-stack, ניהול צוותים ושיפור תהליכים בחברות טכנולוגיה וביטוח מובילות.",
-    "keyAchievements": "הישגים מרכזיים ואחריות",
-    "interestedInLearning": "מעוניין לחקור יותר?",
-    "checkOutResume": "בדוק את קורות החיים המפורטים שלי או צור קשר כדי לדון בהזדמנויות ושיתופי פעולה.",
-    "viewResume": "צפה בקורות חיים",
+    "title": "Experience",
+    "subtitle": "Ownership across product, platform, and implementation",
+    "description": "Hands-on engineering roles with responsibility for architecture, delivery, and production readiness.",
+    "experience": "I have hands-on experience in full-stack development, team management, and process improvement at leading technology and insurance companies.",
+    "keyAchievements": "Key responsibilities",
+    "interestedInLearning": "Want the full picture?",
+    "checkOutResume": "View my resume for complete project history, skills, and contact details.",
+    "viewResume": "View Resume",
     "experiences": [
       {
-        "role": "מהנדס Full Stack",
+        "role": "Technical Lead (Volunteer CTO)",
+        "time": "2025–Present",
+        "company": "The Atheist Line",
+        "details": [
+          "Define and lead the technical direction of the organization's digital ecosystem as the primary hands-on engineer.",
+          "Design and build public-facing and internal systems spanning website architecture, content workflows, internal tooling, and team-facing operational processes.",
+          "Own end-to-end technical planning and implementation across architecture, integrations, automation opportunities, CI/CD, and production readiness.",
+          "Drive the system from zero-to-one by establishing the technical foundations for content management, internal workflows, analytics, and future operational tooling."
+        ]
+      },
+      {
+        "role": "Full Stack Engineer",
         "time": "2024–2025",
-        "company": "Abra Technologies, ישראל",
+        "company": "Abra Technologies",
         "details": [
-          "בניתי פלטפורמה לאיסוף נתוני שוק ממקורות ממשלתיים באמצעות Next.js, tRPC ו-PostgreSQL",
-          "עיצבתי ספריית רכיבי UI מודולרית עם Storybook ו-TypeScript, השגתי כיסוי בדיקות מקיף",
-          "אופטמתי אלגוריתמי עיבוד נתונים ושאילתות מסד נתונים, שיפרתי זמן התגובה של המערכת"
+          "Worked on the early development of an internal government data platform supporting data aggregation, insights, and analytical workflows.",
+          "Built reusable UI components and an internal component library to support consistency and scalable frontend development.",
+          "Used Storybook for component documentation and validation, and wrote component-level tests to improve maintainability and development confidence.",
+          "Contributed to frontend architecture and participated in architecture and technology discussions during the project's early foundation."
         ]
       },
       {
-        "role": "מוביל טכנולוגיה (התנדבות CTO)",
-        "time": "2025–הווה",
-        "company": "הקו האתאיסטי, ישראל",
-        "details": [
-          "מפתח תוכנה מותאמת ומספק ייעוץ טכנולוגי לקבוצת התנדבות לקידום אתאיזם",
-          "מתקן באגים ומשלב כלים צדדיים תוך בניית המערכת הדיגיטלית של הארגון",
-          "מבטיח אמינות מערכת ומתמחה בפלטפורמות web ותשתיות טכנולוגיות"
-        ]
-      },
-      {
-        "role": "מתכנת כללי עסק",
+        "role": "Business Rules Configuration Specialist",
         "time": "2023–2024",
-        "company": "חברת הביטוח מנורה מבטחים, ישראל",
-        "details": ["ארכיטקטתי מערכת חוקה עסקית לניהול כללי פוליסות ותצורות"]
-      },
-      {
-        "role": "נציג שירות לקוחות בכיר",
-        "time": "2021–2023",
-        "company": "חברת הביטוח מנורה מבטחים, ישראל",
+        "company": "Menora Mivtachim Insurance Company",
         "details": [
-          "ניהול 17 נציגי שירות.",
-          "ניהול 5 נציגי גבייה.",
-          "הכשרתי חברי צוות ושיפרתי איכות השירות באמצעות תהליכים מובנים"
+          "Configured and maintained business rules within an internal system used to manage insurance product logic.",
+          "Defined rule behavior for different insurance products based on business and operational requirements.",
+          "Supported policy-related configuration across product workflows with a focus on correctness and consistency."
         ]
       }
     ]
@@ -592,7 +589,6 @@
         "selectTypes": "בחר סוגי מסמכים",
         "condensedResume": "קורות חיים מקוצרים",
         "technicalPortfolio": "פורטפוליו טכני",
-
         "portfolioCustomization": "התאמה אישית של פורטפוליו",
         "includeCodeExamples": "כלול דוגמאות קוד",
         "includeTechnicalChallenges": "כלול אתגרים טכניים",
@@ -724,18 +720,48 @@
     "title": "שפות",
     "subtitle": "שפות התכנות והדיבור שלי",
     "programming": [
-      { "name": "TypeScript", "level": "מתקדם" },
-      { "name": "JavaScript", "level": "מתקדם" },
-      { "name": "SQL", "level": "מתקדם" },
-      { "name": "HTML/CSS", "level": "מתקדם" },
-      { "name": "Java", "level": "בינוני" },
-      { "name": "C#", "level": "בינוני" },
-      { "name": "Python", "level": "מתחיל" }
+      {
+        "name": "TypeScript",
+        "level": "מתקדם"
+      },
+      {
+        "name": "JavaScript",
+        "level": "מתקדם"
+      },
+      {
+        "name": "SQL",
+        "level": "מתקדם"
+      },
+      {
+        "name": "HTML/CSS",
+        "level": "מתקדם"
+      },
+      {
+        "name": "Java",
+        "level": "בינוני"
+      },
+      {
+        "name": "C#",
+        "level": "בינוני"
+      },
+      {
+        "name": "Python",
+        "level": "מתחיל"
+      }
     ],
     "spoken": [
-      { "name": "עברית", "level": "שפת אם" },
-      { "name": "אנגלית", "level": "מקצועי" },
-      { "name": "ספרדית", "level": "מתחיל" }
+      {
+        "name": "עברית",
+        "level": "שפת אם"
+      },
+      {
+        "name": "אנגלית",
+        "level": "מקצועי"
+      },
+      {
+        "name": "ספרדית",
+        "level": "מתחיל"
+      }
     ]
   },
   "additionalActivities": "דיונים פתוחים, נאומים פומביים, תקשורת מדעית, קוסם חובב.",
@@ -844,20 +870,40 @@
     }
   },
   "footer": {
-    "title": "אודות",
-    "children": "אני מהנדס FullStack שבונה מערכות מתקדמות וחוויות web מודרניות עם ארכיטקטורה נקייה ופתרונות מעשיים.",
-    "linksTitle": "קישורים מהירים",
+    "title": "About",
+    "children": "Fullstack Engineer building TypeScript web systems - public products, internal tooling, and production-ready delivery.",
+    "linksTitle": "Quick Links",
     "links": [
-      { "label": "דף הבית", "href": "/" },
-      { "label": "קריירה", "href": "/career" },
-      { "label": "הסמכות ותעודות", "href": "/certifications" },
-      { "label": "תיק טכני", "href": "/technical-portfolio" },
-      { "label": "קורות חיים", "href": "/resume" },
-      { "label": "בלוג", "href": "/blog" },
-      { "label": "צור קשר", "href": "/contact" },
-      { "label": "דוגמאות", "href": "/examples" }
+      {
+        "label": "Home",
+        "href": "/"
+      },
+      {
+        "label": "Career",
+        "href": "/career"
+      },
+      {
+        "label": "Education",
+        "href": "/education"
+      },
+      {
+        "label": "Resume",
+        "href": "/resume"
+      },
+      {
+        "label": "Blog",
+        "href": "/blog"
+      },
+      {
+        "label": "Contact",
+        "href": "/contact"
+      },
+      {
+        "label": "Examples",
+        "href": "/examples"
+      }
     ],
-    "socialTitle": "חברתי",
+    "socialTitle": "Social",
     "social": [
       {
         "label": "GitHub",
@@ -875,17 +921,17 @@
         "icon": "Telegram"
       }
     ],
-    "contactTitle": "צור קשר",
+    "contactTitle": "Contact",
     "contact": [
       {
-        "label": "אימייל",
+        "label": "Email",
         "href": "mailto:omrijukin@gmail.com",
-        "icon": "אימייל"
+        "icon": "Email"
       },
       {
-        "label": "טלפון",
+        "label": "Phone",
         "href": "tel:+9720523344064",
-        "icon": "טלפון"
+        "icon": "Phone"
       },
       {
         "label": "WhatsApp",
@@ -893,7 +939,7 @@
         "icon": "WhatsApp"
       }
     ],
-    "copyright": "עמרי יוקין. כל הזכויות שמורות."
+    "copyright": "Omri Jukin. All rights reserved."
   },
   "technicalPortfolio": {
     "title": "תיק טכני",
@@ -1321,7 +1367,6 @@
           ]
         }
       },
-
       "technicalChallenges": {
         "title": "אתגרים טכניים ופתרונות",
         "description": "בעיות טכניות מורכבות שנפתרו ופתרונות חדשניים שיושמו",
@@ -1494,5 +1539,83 @@
       "permanentlyDelete": "אתה עומד למחוק לצמיתות את הכניסה עבור:",
       "cannotBeUndone": "פעולה זו לא ניתנת לביטול. כל ההערות הקשורות, היסטוריית הסטטוס והתזכורות יימחקו גם כן."
     }
+  },
+  "credibility": {
+    "title": "At a glance",
+    "subtitle": "Quick proof for recruiters and engineering managers",
+    "items": [
+      {
+        "label": "Experience",
+        "value": "~2 years professional engineering at Abra Technologies, plus Volunteer CTO / Technical Lead at The Atheist Line (2025–Present)."
+      },
+      {
+        "label": "Core stack",
+        "value": "TypeScript, React/Next.js, Node.js, PostgreSQL."
+      },
+      {
+        "label": "Systems built",
+        "value": "Public-facing web apps, internal tooling, CRM/CMS workflows, component libraries, CI/CD pipelines, and integrations."
+      }
+    ],
+    "signalsTitle": "Trust signals",
+    "signals": [
+      "Storybook + component testing for reusable UI at Abra Technologies",
+      "Zero-to-one platform ownership as technical lead at The Atheist Line",
+      "Multi-service architecture and orchestration in ClipWhisperer"
+    ]
+  },
+  "engineeringStrengths": {
+    "title": "Engineering strengths",
+    "subtitle": "Where I do my best work across the stack",
+    "categories": [
+      {
+        "title": "Frontend systems",
+        "items": [
+          "React / Next.js applications and App Router architecture",
+          "Reusable UI and internal component libraries",
+          "Storybook documentation and component-level testing"
+        ]
+      },
+      {
+        "title": "Backend & API design",
+        "items": [
+          "Node.js services and REST/tRPC APIs",
+          "Auth flows, integrations, and service boundaries",
+          "Type-safe contracts between frontend and backend"
+        ]
+      },
+      {
+        "title": "Data modeling",
+        "items": [
+          "PostgreSQL schema design and query modeling",
+          "Multi-tenant and permissions-aware data structures",
+          "Drizzle ORM and migration-safe patterns"
+        ]
+      },
+      {
+        "title": "DevOps & release safety",
+        "items": [
+          "GitHub Actions CI/CD pipelines",
+          "Docker-based local and deployment workflows",
+          "Production-readiness and release discipline"
+        ]
+      },
+      {
+        "title": "Internal tooling & ops",
+        "items": [
+          "CMS/backoffice and content workflows",
+          "Operational dashboards and team-facing tooling",
+          "Automation for repeatable internal processes"
+        ]
+      },
+      {
+        "title": "Integrations & automation",
+        "items": [
+          "Supabase, Cloudflare, and AWS service integration",
+          "Queue-based jobs and workflow automation",
+          "AI-assisted tooling where it improves operations"
+        ]
+      }
+    ]
   }
 }

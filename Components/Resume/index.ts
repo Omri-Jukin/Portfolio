@@ -1,5 +1,4 @@
-export { default } from "./Resume";
-export * from "./Resume";
-export * from "./Resume.type";
-export * from "./Resume.const";
-export * from "./Resume.style";
+export { default as FullResumeTab } from "./FullResumeTab";
+export { default as ResumePdfToolbar } from "./ResumePdfToolbar";
+export type { FullResumeTabProps } from "./FullResumeTab";
+export type { ResumePdfToolbarProps } from "./ResumePdfToolbar";

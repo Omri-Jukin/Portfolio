@@ -1,165 +1,168 @@
-import styled from "@emotion/styled";
-import { Box, Typography, Card, Chip, List, ListItem } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { Box, Typography, Card, Chip, List, ListItem, Button } from "@mui/material";
+import { HOME_SECTION_WIDTH } from "$/constants";
 
-export const EducationContainer = styled(Box)`
-  padding: 80px 0;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  min-height: 100vh;
-`;
+export const EducationContainer = styled(Box)(({ theme }) => ({
+  width: "100%",
+  maxWidth: HOME_SECTION_WIDTH,
+  margin: "0 auto",
+  padding: theme.spacing(3, 2, 5),
+  boxSizing: "border-box",
+  [theme.breakpoints.up("md")]: {
+    padding: theme.spacing(4, 3, 6),
+  },
+}));
 
-export const EducationContent = styled(Box)`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-`;
+export const EducationContent = styled(Box)(() => ({
+  width: "100%",
+}));
 
-export const EducationHeader = styled(Box)`
-  text-align: center;
-  margin-bottom: 60px;
-`;
+export const EducationHeader = styled(Box)(({ theme }) => ({
+  textAlign: "center",
+  marginBottom: theme.spacing(4),
+}));
 
-export const EducationTitle = styled(Typography)`
-  font-size: 3rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 16px;
-`;
+export const EducationTitle = styled(Typography)(({ theme }) => ({
+  fontSize: "clamp(1.75rem, 3vw, 2.5rem)",
+  fontWeight: 700,
+  color: theme.palette.text.primary,
+  marginBottom: theme.spacing(1),
+}));
 
-export const EducationSubtitle = styled(Typography)`
-  font-size: 1.25rem;
-  color: #64748b;
-  margin-bottom: 24px;
-`;
+export const EducationSubtitle = styled(Typography)(({ theme }) => ({
+  fontSize: "1rem",
+  color: theme.palette.text.secondary,
+  marginBottom: theme.spacing(1.5),
+}));
 
-export const EducationDescription = styled(Typography)`
-  font-size: 1.1rem;
-  color: #475569;
-  max-width: 800px;
-  margin: 0 auto;
-  line-height: 1.7;
-`;
+export const EducationDescription = styled(Typography)(({ theme }) => ({
+  fontSize: "1.05rem",
+  color: theme.palette.text.secondary,
+  maxWidth: "760px",
+  margin: "0 auto",
+  lineHeight: 1.65,
+}));
 
-export const EducationSection = styled(Box)`
-  margin-bottom: 60px;
-`;
+export const EducationSection = styled(Box)(({ theme }) => ({
+  marginBottom: theme.spacing(4),
+}));
 
-export const SectionTitle = styled(Typography)`
-  font-size: 2rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 32px;
-  text-align: center;
-`;
+export const SectionTitle = styled(Typography)(({ theme }) => ({
+  fontSize: "1.35rem",
+  fontWeight: 700,
+  color: theme.palette.text.primary,
+  marginBottom: theme.spacing(2),
+  textAlign: "center",
+}));
 
-export const DegreeCard = styled(Card)`
-  padding: 32px;
-  margin-bottom: 24px;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+export const DegreeCard = styled(Card)(({ theme }) => ({
+  padding: theme.spacing(3),
+  marginBottom: theme.spacing(2),
+  borderRadius: theme.spacing(1.5),
+  border: `1px solid ${theme.palette.divider}`,
+  backgroundColor: theme.palette.background.paper,
+  boxShadow: "none",
+}));
 
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
-  }
-`;
+export const DegreeHeader = styled(Box)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
+}));
 
-export const DegreeHeader = styled(Box)`
-  margin-bottom: 24px;
-`;
+export const DegreeTitle = styled(Typography)(({ theme }) => ({
+  fontSize: "1.25rem",
+  fontWeight: 700,
+  color: theme.palette.text.primary,
+  marginBottom: theme.spacing(0.5),
+}));
 
-export const DegreeTitle = styled(Typography)`
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 8px;
-`;
+export const InstitutionName = styled(Typography)(({ theme }) => ({
+  fontSize: "1rem",
+  color: theme.palette.primary.main,
+  fontWeight: 600,
+  marginBottom: theme.spacing(0.5),
+}));
 
-export const InstitutionName = styled(Typography)`
-  font-size: 1.1rem;
-  color: #667eea;
-  font-weight: 500;
-  margin-bottom: 4px;
-`;
+export const DegreeDetails = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexWrap: "wrap",
+  gap: theme.spacing(1),
+  marginBottom: theme.spacing(1),
+}));
 
-export const DegreeDetails = styled(Box)`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 16px;
-`;
+export const DetailChip = styled(Chip)(({ theme }) => ({
+  fontWeight: 500,
+  borderColor: theme.palette.divider,
+}));
 
-export const DetailChip = styled(Chip)`
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  font-weight: 500;
-`;
+export const AchievementList = styled(List)(({ theme }) => ({
+  marginTop: theme.spacing(1),
+  padding: 0,
+}));
 
-export const AchievementList = styled(List)`
-  margin-top: 16px;
-`;
+export const AchievementItem = styled(ListItem)(({ theme }) => ({
+  paddingLeft: 0,
+  paddingRight: 0,
+  color: theme.palette.text.secondary,
+  display: "list-item",
+  listStyleType: "disc",
+  marginLeft: theme.spacing(2.5),
+}));
 
-export const AchievementItem = styled(ListItem)`
-  padding-left: 0;
-  padding-right: 0;
+export const CourseworkGrid = styled(Box)(({ theme }) => ({
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+  gap: theme.spacing(1),
+  marginTop: theme.spacing(1),
+}));
 
-  &::before {
-    content: "✓";
-    color: #10b981;
-    font-weight: bold;
-    margin-right: 8px;
-  }
-`;
+export const CourseChip = styled(Chip)(({ theme }) => ({
+  borderColor: theme.palette.divider,
+  color: theme.palette.text.secondary,
+}));
 
-export const CourseworkGrid = styled(Box)`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 12px;
-  margin-top: 16px;
-`;
+export const CertificationCard = styled(Card)(({ theme }) => ({
+  padding: theme.spacing(2.5),
+  marginBottom: theme.spacing(1.5),
+  borderRadius: theme.spacing(1.5),
+  border: `1px solid ${theme.palette.divider}`,
+  borderLeft: `4px solid ${theme.palette.primary.main}`,
+  backgroundColor: theme.palette.background.paper,
+  boxShadow: "none",
+}));
 
-export const CourseChip = styled(Chip)`
-  background: #f1f5f9;
-  color: #475569;
-  border: 1px solid #e2e8f0;
-`;
+export const CertificationHeader = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  gap: theme.spacing(1),
+  marginBottom: theme.spacing(0.5),
+  flexWrap: "wrap",
+}));
 
-export const CertificationCard = styled(Card)`
-  padding: 24px;
-  margin-bottom: 16px;
-  border-radius: 12px;
-  border-left: 4px solid #667eea;
-  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
-`;
+export const CertificationName = styled(Typography)(({ theme }) => ({
+  fontSize: "1.05rem",
+  fontWeight: 700,
+  color: theme.palette.text.primary,
+}));
 
-export const CertificationHeader = styled(Box)`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-`;
+export const CertificationStatus = styled(Chip)(({ theme }) => ({
+  backgroundColor: theme.palette.success.main,
+  color: theme.palette.success.contrastText,
+  fontSize: "0.75rem",
+}));
 
-export const CertificationName = styled(Typography)`
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #1e293b;
-`;
+export const CertificationDetails = styled(Typography)(({ theme }) => ({
+  color: theme.palette.text.secondary,
+  fontSize: "0.92rem",
+}));
 
-export const CertificationStatus = styled(Chip)`
-  background: #10b981;
-  color: white;
-  font-size: 0.75rem;
-`;
+export const CTAButton = styled(Box)(({ theme }) => ({
+  textAlign: "center",
+  marginTop: theme.spacing(4),
+}));
 
-export const CertificationDetails = styled(Typography)`
-  color: #64748b;
-  font-size: 0.9rem;
-`;
-
-export const CTAButton = styled(Box)`
-  text-align: center;
-  margin-top: 60px;
-`;
+export const EducationCTAButton = styled(Button)(({ theme }) => ({
+  textTransform: "none",
+  fontWeight: 600,
+  borderRadius: theme.spacing(1),
+}));

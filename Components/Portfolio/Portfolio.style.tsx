@@ -10,17 +10,16 @@ import {
 } from "@mui/material";
 
 export const PortfolioContainer = styled(Box)(({ theme }) => ({
-  maxWidth: "1200px",
+  maxWidth: "1100px",
   margin: "0 auto",
-  padding: theme.spacing(3),
-  [theme.breakpoints.down("sm")]: {
-    padding: theme.spacing(2),
-  },
+  padding: theme.spacing(0, 0, 3),
+  width: "100%",
+  boxSizing: "border-box",
 }));
 
 export const PortfolioHeader = styled(Box)(({ theme }) => ({
   textAlign: "center",
-  marginBottom: theme.spacing(6),
+  marginBottom: theme.spacing(4),
 }));
 
 export const PortfolioTitle = styled(Typography, {
@@ -44,16 +43,14 @@ export const PortfolioSubtitle = styled(Typography, {
 }));
 
 export const ProjectCard = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(4),
-  borderRadius: theme.spacing(2),
-  boxShadow: theme.shadows[3],
-  transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
-  "&:hover": {
-    transform: "translateY(-2px)",
-    boxShadow: theme.shadows[6],
-  },
+  padding: theme.spacing(3),
+  borderRadius: theme.spacing(1.5),
+  border: `1px solid ${theme.palette.divider}`,
+  backgroundColor: theme.palette.background.paper,
+  boxShadow: "none",
+  scrollMarginTop: theme.spacing(10),
   [theme.breakpoints.down("sm")]: {
-    padding: theme.spacing(3),
+    padding: theme.spacing(2.5),
   },
 }));
 
@@ -140,18 +137,41 @@ export const TechChip = styled(Chip)(({ theme }) => ({
 }));
 
 export const CodeExampleBox = styled(Box)(({ theme }) => ({
-  backgroundColor: theme.palette.grey[50],
-  border: `1px solid ${theme.palette.grey[300]}`,
+  backgroundColor:
+    theme.palette.mode === "dark"
+      ? theme.palette.grey[900]
+      : theme.palette.grey[50],
+  color: theme.palette.text.primary,
+  border: `1px solid ${theme.palette.divider}`,
   borderRadius: theme.spacing(1),
   padding: theme.spacing(2),
   marginTop: theme.spacing(2),
-  fontFamily: "monospace",
-  fontSize: "0.9rem",
-  overflow: "auto",
   "& pre": {
     margin: 0,
     whiteSpace: "pre-wrap",
     wordBreak: "break-word",
+  },
+}));
+
+export const CodeBlockPre = styled("pre")(({ theme }) => ({
+  margin: 0,
+  padding: theme.spacing(2),
+  borderRadius: theme.spacing(1),
+  overflow: "auto",
+  fontSize: "0.875rem",
+  fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+  lineHeight: 1.5,
+  whiteSpace: "pre-wrap",
+  wordBreak: "break-word",
+  backgroundColor:
+    theme.palette.mode === "dark"
+      ? theme.palette.grey[800]
+      : theme.palette.grey[100],
+  color: theme.palette.text.primary,
+  border: `1px solid ${theme.palette.divider}`,
+  "& code": {
+    color: "inherit",
+    fontFamily: "inherit",
   },
 }));
 

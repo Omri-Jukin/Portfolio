@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "Omri Jukin",
-    "description": "Full-Stack Software Engineer | Next.js, Node.js & TypeScript | AWS & PostgreSQL | Clean Architecture & Scalable Systems"
+    "title": "Omri Jukin — Fullstack Engineer",
+    "description": "Fullstack Engineer building scalable web systems with TypeScript, Next.js, Node.js, and PostgreSQL. End-to-end products, internal systems, and production-ready delivery."
   },
   "login": {
     "title": "Admin Login",
@@ -107,17 +107,107 @@
     "resume": "Resume",
     "projects": "Projects",
     "skills": "Skills",
-    "description": "I'm a FullStack Engineer specializing in full-stack web development, scalable systems architecture, and modern technologies including React, Node.js, TypeScript, Next.js, tRPC, PostgreSQL, MongoDB, and microservices."
+    "description": "Fullstack Engineer building TypeScript web systems end to end — frontend, backend, data, integrations, and operational workflows."
   },
   "hero": {
-    "titleRow1": "I Don't Sell Software.",
-    "titleRow2": "I Engineer the Evolution of the Future",
-    "subtitle": "I'm not just a developer—I'm a visionary. I don't just build software; I engineer evolution. My work isn't about creating products; it's about shaping the future. Currently seeking full-time opportunities to make a lasting impact.",
+    "name": "Omri Jukin",
+    "roleLine": "Fullstack Engineer · Web Solutions Engineer",
+    "headline": "Building scalable web systems with TypeScript, Next.js, Node.js, and PostgreSQL.",
+    "subtitle": "I build end-to-end products and internal systems across frontend, backend, data, integrations, and operational workflows — with a focus on maintainability, clean architecture, and production readiness.",
     "profileAlt": "Omri Jukin",
-    "exploreButton": "Explore work",
+    "stack": [
+      "TypeScript",
+      "React / Next.js",
+      "Node.js",
+      "PostgreSQL",
+      "tRPC",
+      "CI/CD",
+      "Supabase",
+      "Cloudflare"
+    ],
     "resumeButton": "Resume",
-    "careerButton": "Career",
-    "cta": "Let's engineer the future together"
+    "projectsButton": "Projects",
+    "contactButton": "Contact",
+    "githubLabel": "GitHub",
+    "linkedinLabel": "LinkedIn"
+  },
+  "credibility": {
+    "title": "At a glance",
+    "subtitle": "Quick proof for recruiters and engineering managers",
+    "items": [
+      {
+        "label": "Experience",
+        "value": "~2 years professional engineering at Abra Technologies, plus Volunteer CTO / Technical Lead at The Atheist Line (2025–Present)."
+      },
+      {
+        "label": "Core stack",
+        "value": "TypeScript, React/Next.js, Node.js, PostgreSQL."
+      },
+      {
+        "label": "Systems built",
+        "value": "Public-facing web apps, internal tooling, CRM/CMS workflows, component libraries, CI/CD pipelines, and integrations."
+      }
+    ],
+    "signalsTitle": "Trust signals",
+    "signals": [
+      "Storybook + component testing for reusable UI at Abra Technologies",
+      "Zero-to-one platform ownership as technical lead at The Atheist Line",
+      "Multi-service architecture and orchestration in ClipWhisperer"
+    ]
+  },
+  "engineeringStrengths": {
+    "title": "Engineering strengths",
+    "subtitle": "Where I do my best work across the stack",
+    "categories": [
+      {
+        "title": "Frontend systems",
+        "items": [
+          "React / Next.js applications and App Router architecture",
+          "Reusable UI and internal component libraries",
+          "Storybook documentation and component-level testing"
+        ]
+      },
+      {
+        "title": "Backend & API design",
+        "items": [
+          "Node.js services and REST/tRPC APIs",
+          "Auth flows, integrations, and service boundaries",
+          "Type-safe contracts between frontend and backend"
+        ]
+      },
+      {
+        "title": "Data modeling",
+        "items": [
+          "PostgreSQL schema design and query modeling",
+          "Multi-tenant and permissions-aware data structures",
+          "Drizzle ORM and migration-safe patterns"
+        ]
+      },
+      {
+        "title": "DevOps & release safety",
+        "items": [
+          "GitHub Actions CI/CD pipelines",
+          "Docker-based local and deployment workflows",
+          "Production-readiness and release discipline"
+        ]
+      },
+      {
+        "title": "Internal tooling & ops",
+        "items": [
+          "CMS/backoffice and content workflows",
+          "Operational dashboards and team-facing tooling",
+          "Automation for repeatable internal processes"
+        ]
+      },
+      {
+        "title": "Integrations & automation",
+        "items": [
+          "Supabase, Cloudflare, and AWS service integration",
+          "Queue-based jobs and workflow automation",
+          "AI-assisted tooling where it improves operations"
+        ]
+      }
+    ]
   },
   "examples": {
     "title": "Interactive Examples",
@@ -150,137 +240,10 @@
     }
   },
   "about": {
-    "title": "Who I Am",
-    "subtitle": "EXPLORE MY CREATIVE TOOLKIT",
-    "description": "I'm a passionate FullStack Engineer and designer who believes that great digital experiences come from the perfect blend of technical expertise and creative vision. With years of experience crafting full-stack web applications, I've learned that the best solutions are those that not only work flawlessly but also delight users at every interaction.",
-    "mySkills": "My Skills",
-    "skillDetailsTitle": "Skill Details",
-    "experience": "Experience:",
-    "years": "Years:",
-    "technologies": "Technologies:",
-    "examples": "Examples:",
-    "readyToWork": "Seeking New Opportunities?",
-    "letsDiscuss": "I'm actively looking for full-time positions where I can contribute my expertise and drive innovation. Let's discuss how my skills and experience can add value to your team.",
-    "cta": "View My Resume",
-    "ctaButton": "Get In Touch",
-    "skillsTitle": "My Technical Skills",
-    "skills": {
-      "codeConjurer": "CODE CONJURER",
-      "brandArchitect": "BRAND ARCHITECT",
-      "designDreamer": "DESIGN DREAMER"
-    },
-    "skillDetails": {
-      "codeConjurer": {
-        "title": "CODE CONJURER",
-        "description": "I transform complex requirements into elegant, scalable solutions. My expertise spans the entire development stack, from responsive frontend interfaces to robust backend systems and efficient database architectures.",
-        "experience": "Advanced",
-        "technologies": [
-          "React",
-          "Node.js",
-          "TypeScript",
-          "Next.js",
-          "tRPC",
-          "PostgreSQL",
-          "MongoDB"
-        ],
-        "examples": [
-          "Microservices platforms",
-          "CRM systems",
-          "E-commerce solutions"
-        ],
-        "years": "5+ years"
-      },
-      "brandArchitect": {
-        "title": "BRAND ARCHITECT",
-        "description": "I design and implement comprehensive brand experiences that resonate with users. My approach combines technical excellence with creative design thinking to create memorable digital interactions.",
-        "experience": "Advanced",
-        "technologies": [
-          "Material-UI",
-          "Tailwind CSS",
-          "Framer Motion",
-          "Design Systems"
-        ],
-        "examples": [
-          "Portfolio websites",
-          "Brand identity systems",
-          "Interactive experiences"
-        ],
-        "years": "3+ years"
-      },
-      "designDreamer": {
-        "title": "DESIGN DREAMER",
-        "description": "I create intuitive user experiences that bridge the gap between functionality and aesthetics. My designs prioritize usability while maintaining visual appeal and brand consistency.",
-        "experience": "Advanced",
-        "technologies": [
-          "UX/UI Design",
-          "Prototyping",
-          "User Research",
-          "Accessibility"
-        ],
-        "examples": [
-          "User interface designs",
-          "Interactive prototypes",
-          "Accessibility improvements"
-        ],
-        "years": "4+ years"
-      },
-      "problemSolver": {
-        "title": "PROBLEM SOLVER",
-        "description": "I identify and solve complex issues with a systematic approach. My expertise lies in analyzing problems, developing effective solutions, and implementing them with precision.",
-        "experience": "Advanced",
-        "technologies": ["Problem Solving", "System Design", "Debugging"],
-        "examples": [
-          "Performance optimization",
-          "Error handling",
-          "System architecture"
-        ],
-        "years": "5+ years"
-      },
-      "teamPlayer": {
-        "title": "TEAM PLAYER",
-        "description": "I collaborate effectively with cross-functional teams to deliver high-quality results. My expertise lies in communication, conflict resolution, and fostering a positive work environment.",
-        "experience": "Advanced",
-        "technologies": [
-          "Team Collaboration",
-          "Conflict Resolution",
-          "Communication"
-        ],
-        "examples": [
-          "Project management",
-          "Team building",
-          "Cross-functional collaboration"
-        ],
-        "years": "5+ years"
-      },
-      "innovationArchitect": {
-        "title": "INNOVATION ARCHITECT",
-        "description": "I design and implement innovative solutions that push the boundaries of technology. My expertise lies in identifying opportunities, developing creative ideas, and implementing them with precision.",
-        "experience": "Advanced",
-        "technologies": [
-          "Innovation",
-          "Creative Design",
-          "Product Development"
-        ],
-        "examples": [
-          "New product development",
-          "Creative solutions",
-          "Innovative design"
-        ],
-        "years": "5+ years"
-      },
-      "digitalStoryteller": {
-        "title": "DIGITAL STORYTELLER",
-        "description": "I create engaging digital experiences that tell stories and connect with users. My expertise lies in storytelling, user experience, and visual design.",
-        "experience": "Advanced",
-        "technologies": ["User Experience", "Visual Design", "Storytelling"],
-        "examples": [
-          "Interactive experiences",
-          "User interface designs",
-          "Visual storytelling"
-        ],
-        "years": "5+ years"
-      }
-    }
+    "title": "About",
+    "subtitle": "Hands-on engineer across product and platform work",
+    "description": "I'm a fullstack engineer focused on TypeScript-based systems — from public-facing applications to internal tooling, content workflows, and operational platforms. My professional experience includes full-stack work at Abra Technologies and technical leadership at The Atheist Line, where I own architecture, implementation, integrations, and production readiness.",
+    "ctaButton": "View Resume"
   },
   "qa": {
     "title": "Rapid Q&A",
@@ -338,37 +301,87 @@
   },
   "projects": {
     "title": "Featured Projects",
-    "subtitle": "A glimpse into my work",
+    "subtitle": "Engineering case studies across product and platform work",
+    "viewCaseStudy": "View case study",
+    "viewCode": "View code",
+    "viewLive": "Live demo",
+    "labels": {
+      "problem": "Problem",
+      "stack": "Stack",
+      "architecture": "Architecture",
+      "role": "My role",
+      "proof": "Proof"
+    },
     "projects": [
       {
-        "title": "Snow HQ",
-        "description": "Personal Project - CRM with real-time analytics and automated workflows - Next.js, tRPC, Drizzle ORM, PostgreSQL",
-        "link": "https://github.com/Omri-Jukin/Snow",
-        "type": "personal"
+        "id": "socially",
+        "title": "Socially",
+        "summary": "Creator operations platform",
+        "audience": "Content creators and operations teams",
+        "problem": "Cross-platform publishing, analytics, and creator-facing operations need a unified system instead of fragmented tooling.",
+        "stack": ["React Native", "TypeScript", "Supabase", "Cloudflare"],
+        "architecture": "Mobile frontend, backend services, auth boundaries, and integration-ready data models for scalable creator workflows.",
+        "role": "End-to-end technical direction across product architecture, implementation, and release readiness.",
+        "proof": "[ADD IMPACT]",
+        "githubUrl": "https://github.com/Omri-Jukin",
+        "liveUrl": "[ADD DEMO LINK]",
+        "caseStudyUrl": "/resume#socially"
       },
       {
-        "title": "Portfolio Website",
-        "description": "Personal Project - Modern responsive portfolio with i18n, dark mode, animations - Next.js, TypeScript, Material-UI, Framer Motion",
-        "link": "https://omrijukin.com",
-        "type": "personal"
-      },
-      {
+        "id": "clipwhisperer",
         "title": "ClipWhisperer",
-        "description": "Personal Project - Microservices platform for automated video processing with AI narration - TypeScript, Node.js, microservices",
-        "link": "https://github.com/ClipWhisperer",
-        "type": "personal"
+        "summary": "Microservices video automation platform",
+        "audience": "Automated short-form video workflows",
+        "problem": "Manual video generation pipelines are slow, error-prone, and hard to scale across processing, storage, and delivery.",
+        "stack": ["Node.js", "TypeScript", "Supabase", "AWS", "FFmpeg"],
+        "architecture": "Hub-based orchestration with queue-driven jobs, service separation, and cloud-integrated processing steps.",
+        "role": "Platform design and hands-on implementation across orchestration, media processing, and service boundaries.",
+        "proof": "Production-oriented microservices structure with clear operational ownership per service.",
+        "githubUrl": "https://github.com/ClipWhisperer",
+        "liveUrl": "[ADD DEMO LINK]",
+        "caseStudyUrl": "/resume#clipwhisperer"
       },
       {
-        "title": "Microservices Manager",
-        "description": "Personal Project - CLI tool for microservices ecosystem management with automated workflows - TypeScript, Node.js, CLI architecture",
-        "link": "https://github.com/ClipWhisperer/Utils",
-        "type": "personal"
+        "id": "snow-hq",
+        "title": "Snow HQ",
+        "summary": "Multi-tenant CRM system",
+        "audience": "Teams needing tenant-aware customer workflows",
+        "problem": "CRM workflows need tenant separation, permissions, dashboards, and maintainable full-stack delivery.",
+        "stack": ["Next.js", "tRPC", "PostgreSQL", "Drizzle ORM"],
+        "architecture": "Type-safe APIs, tenant-aware data modeling, RBAC, and real-time dashboard flows.",
+        "role": "Full-stack implementation across frontend, backend, and database layers.",
+        "proof": "Live demo available.",
+        "githubUrl": "https://github.com/Omri-Jukin/Snow",
+        "liveUrl": "https://snow-hq.vercel.app",
+        "caseStudyUrl": "/resume#snow-hq"
+      },
+      {
+        "id": "portfolio-platform",
+        "title": "Portfolio Platform",
+        "summary": "Public site with authenticated CMS/backoffice",
+        "audience": "Personal portfolio and content operations",
+        "problem": "A portfolio site needs both a polished public experience and a maintainable way to manage content, career data, and technical case studies.",
+        "stack": [
+          "Next.js",
+          "TypeScript",
+          "tRPC",
+          "Drizzle",
+          "Supabase",
+          "NextAuth"
+        ],
+        "architecture": "Public i18n site plus RBAC-protected admin CMS, Postgres-backed content APIs, and modular section-driven homepage composition.",
+        "role": "Sole builder — architecture, implementation, content workflows, and deployment.",
+        "proof": "This site, including its private CMS and operational tooling.",
+        "githubUrl": "https://github.com/Omri-Jukin",
+        "liveUrl": "https://omrijukin.com",
+        "caseStudyUrl": "/resume#portfolio-platform"
       }
     ]
   },
   "portfolio": {
     "title": "Technical Portfolio",
-    "subtitle": "Detailed project showcase with technical implementations, problem-solving approaches, and code examples",
+    "subtitle": "Engineering case studies with architecture notes, implementation details, and selected code examples",
+    "resumeCta": "Full Resume",
     "viewCode": "View Code",
     "liveDemo": "Live Demo",
     "technicalDetails": "Technical Details & Implementation",
@@ -382,10 +395,14 @@
     "solution": "Solution:"
   },
   "contact": {
-    "title": "Let's Connect",
-    "subtitle": "Ready to bring a new idea to life?",
-    "description": "I'm always excited to discuss new opportunities, collaborations, or just chat about technology.\nDrop me a message and let's create something amazing together...",
-    "button": "Start a conversation",
+    "title": "Contact",
+    "subtitle": "Open to fullstack and web solutions engineering roles.",
+    "description": "Reach out for roles, technical conversations, or to review my work. Email and LinkedIn are the fastest ways to connect.",
+    "button": "Send a message",
+    "emailLabel": "Email",
+    "linkedinLabel": "LinkedIn",
+    "githubLabel": "GitHub",
+    "resumeLabel": "Resume",
     "form": {
       "title": "Get in Touch",
       "description": "Have a project in mind ? Let's discuss how we can bring your ideas to life. Fill out the contact form and I'll get back to you as soon as possible.",
@@ -451,82 +468,68 @@
     }
   },
   "career": {
-    "title": "Career",
-    "subtitle": "My professional journey and experience",
-    "description": "My professional journey",
+    "title": "Experience",
+    "subtitle": "Ownership across product, platform, and implementation",
+    "description": "Hands-on engineering roles with responsibility for architecture, delivery, and production readiness.",
     "experience": "I have hands-on experience in full-stack development, team management, and process improvement at leading technology and insurance companies.",
-    "keyAchievements": "Key Achievements & Responsibilities",
-    "interestedInLearning": "Interested in Exploring More ?",
-    "checkOutResume": "Check out my detailed resume or get in touch to discuss opportunities and collaborations.",
+    "keyAchievements": "Key responsibilities",
+    "interestedInLearning": "Want the full picture?",
+    "checkOutResume": "View my resume for complete project history, skills, and contact details.",
     "viewResume": "View Resume",
     "experiences": [
       {
+        "role": "Technical Lead (Volunteer CTO)",
+        "time": "2025–Present",
+        "company": "The Atheist Line",
+        "details": [
+          "Define and lead the technical direction of the organization's digital ecosystem as the primary hands-on engineer.",
+          "Design and build public-facing and internal systems spanning website architecture, content workflows, internal tooling, and team-facing operational processes.",
+          "Own end-to-end technical planning and implementation across architecture, integrations, automation opportunities, CI/CD, and production readiness.",
+          "Drive the system from zero-to-one by establishing the technical foundations for content management, internal workflows, analytics, and future operational tooling."
+        ]
+      },
+      {
         "role": "Full Stack Engineer",
         "time": "2024–2025",
-        "company": "Abra Technologies, Israel",
+        "company": "Abra Technologies",
         "details": [
-          "Built platform aggregating market data from government sources using Next.js, tRPC, and PostgreSQL",
-          "Designed modular UI component library with Storybook and TypeScript, achieving comprehensive test coverage",
-          "Optimized data processing algorithms and database queries, improving system latency and response times"
+          "Worked on the early development of an internal government data platform supporting data aggregation, insights, and analytical workflows.",
+          "Built reusable UI components and an internal component library to support consistency and scalable frontend development.",
+          "Used Storybook for component documentation and validation, and wrote component-level tests to improve maintainability and development confidence.",
+          "Contributed to frontend architecture and participated in architecture and technology discussions during the project's early foundation."
         ]
       },
       {
-        "role": "Technology Lead (Voluntary CTO)",
-        "time": "2025–Present",
-        "company": "The Atheist Line, Israel",
-        "details": [
-          "Developing custom software and providing technical consultation for a voluntary advocacy group",
-          "Debugging and integrating third-party tools while building the organization's digital ecosystem",
-          "Ensuring system reliability and advising on web platforms and technical infrastructure"
-        ]
-      },
-      {
-        "role": "Business rule configurator",
+        "role": "Business Rules Configuration Specialist",
         "time": "2023–2024",
-        "company": "Menora Mivtachim Insurance Company, Israel",
+        "company": "Menora Mivtachim Insurance Company",
         "details": [
-          "Architected business constitution system managing policy rules and configurations"
-        ]
-      },
-      {
-        "role": "Senior Customer Service Representative",
-        "time": "2021–2023",
-        "company": "Menora Mivtachim Insurance Company, Israel",
-        "details": [
-          "Management 17 service representatives.",
-          "Management of 5 collections representatives.",
-          "Trained team members and improved service quality through structured processes"
+          "Configured and maintained business rules within an internal system used to manage insurance product logic.",
+          "Defined rule behavior for different insurance products based on business and operational requirements.",
+          "Supported policy-related configuration across product workflows with a focus on correctness and consistency."
         ]
       }
     ]
   },
   "education": {
     "title": "Education",
-    "subtitle": "My academic background and continuous learning",
-    "description": "My educational journey and ongoing professional development",
-    "academicBackground": "I have a strong foundation in computer science and continuous learning through certifications and hands-on experience.",
-    "keyAchievements": "Key Academic Achievements & Certifications",
+    "subtitle": "Formal education from my resume",
+    "description": "Degrees and professional training listed on my resume.",
+    "academicBackground": "Formal education",
+    "keyAchievements": "Key Academic Achievements",
     "interestedInLearning": "Interested in Learning More?",
     "checkOutResume": "Check out my detailed resume or get in touch to discuss opportunities and collaborations.",
-    "viewResume": "View Resume",
-    "certifications": [
-      {
-        "name": "AWS Certified Solutions Architect",
-        "issuer": "Amazon Web Services",
-        "date": "2023",
-        "status": "Active"
-      },
-      {
-        "name": "Google Cloud Professional Developer",
-        "issuer": "Google Cloud",
-        "date": "2023",
-        "status": "Active"
-      }
-    ]
+    "viewResume": "View Resume"
   },
   "resume": {
     "title": "Resume",
+    "pageSubtitle": "Full resume and engineering case studies — choose the view that fits your review.",
     "description": "My professional experience and skills",
+    "tabs": {
+      "label": "Resume views",
+      "fullResume": "Full Resume",
+      "caseStudies": "Case Studies"
+    },
     "networkingSummary": "Download my resume to learn more about my background",
     "experience": "Full Stack Developer",
     "professionalSummary": "Full-Stack Software Engineer with 2+ years of hands-on experience in modern web technologies and scalable Systems. Currently seeking opportunities to contribute to innovative teams building scalable systems and exceptional user experiences, mostly focusing on products that innovate and improve the everyday lives of others.",
@@ -597,54 +600,15 @@
     "education": [
       {
         "degree": "Practical Electrical Engineering Diploma",
-        "institution": "Air Force Technological College - Be'er Sheva",
-        "location": "Be'er Sheva, Israel",
-        "period": "2015-2017",
-        "gpa": "87",
-        "achievements": [],
-        "coursework": [
-          "Data Structures and Algorithms",
-          "Computer Networks",
-          "Digital Signal Processing",
-          "Microprocessors and Embedded Systems"
-        ],
-        "projects": [
-          "Smart Home Automation System",
-          "Digital Image Processing Application"
-        ]
+        "institution": "Air Force Technological College",
+        "location": "",
+        "period": "2015–2017"
       },
       {
         "degree": "Full Stack Engineering Course",
-        "institution": "CodeCademy",
-        "location": "Online",
-        "period": "2020-2021",
-        "gpa": "90",
-        "achievements": ["Completed the course with a score of 90%"],
-        "coursework": [
-          "HTML",
-          "CSS",
-          "JavaScript",
-          "React",
-          "Node.js",
-          "Express.js",
-          "PostgreSQL",
-          "MongoDB",
-          "tRPC",
-          "SQL",
-          "Drizzle ORM",
-          "Microservices",
-          "Monolithic Systems",
-          "API Design",
-          "System Integration",
-          "Performance Optimization",
-          "Scalable Architecture"
-        ],
-        "projects": [
-          "Portfolio Website",
-          "Snow HQ",
-          "ClipWhisperer",
-          "Microservices Manager"
-        ]
+        "institution": "Codecademy",
+        "location": "",
+        "period": "2020–2021"
       }
     ],
     "viewCode": "View Code",
@@ -828,72 +792,23 @@
   },
   "additionalActivities": "Open debates, public speaking, science communication, hobbyist magician.",
   "certifications": {
-    "title": "Certifications & Achievements",
-    "subtitle": "Professional credentials and technical certifications that validate my expertise",
+    "title": "Education & Credentials",
+    "subtitle": "Formal education listed on my resume",
+    "ssotNote": "Content is sourced from my resume data — not placeholder certifications.",
+    "educationCredential": "Education",
+    "viewResumeHint": "For the full resume view including experience and projects:",
+    "viewResume": "View Resume",
     "verify": "Verify Certificate",
-    "credentialId": "Credential ID",
-    "categories": {
-      "technical": "Technical",
-      "cloud": "Cloud",
-      "security": "Security",
-      "project-management": "Project Management",
-      "design": "Design",
-      "other": "Other"
-    },
-    "list": [
-      {
-        "id": "practical-electrical-engineering",
-        "name": "Practical Electrical Engineering Diploma",
-        "issuer": "Air Force Technological College",
-        "issueDate": "2017-06-01",
-        "description": "Comprehensive electrical engineering program covering electrical fundamentals, system design, and programming fundamentals.",
-        "skills": ["Electrical Engineering", "System Design", "Programming"],
-        "category": "technical",
-        "icon": "🎓"
-      },
-      {
-        "id": "full-stack-development",
-        "name": "Full Stack Development Specialization",
-        "issuer": "Self-Directed Learning & Professional Experience",
-        "issueDate": "2020-01-01",
-        "description": "Advanced expertise in full-stack development through hands-on experience building scalable applications with modern technologies and frameworks.",
-        "skills": [
-          "React",
-          "Next.js",
-          "Node.js",
-          "TypeScript",
-          "PostgreSQL",
-          "MongoDB"
-        ],
-        "category": "technical",
-        "icon": "💻"
-      },
-      {
-        "id": "microservices-architecture",
-        "name": "Microservices Architecture",
-        "issuer": "Professional Experience",
-        "issueDate": "2023-01-01",
-        "description": "Extensive experience designing and implementing microservices architectures for enterprise-level applications, including service orchestration and inter-service communication.",
-        "skills": [
-          "Microservices",
-          "API Design",
-          "System Architecture",
-          "Service Orchestration"
-        ],
-        "category": "technical",
-        "icon": "🏗️"
-      }
-    ]
+    "credentialId": "Credential ID"
   },
   "footer": {
     "title": "About",
-    "children": "I'm a FullStack Engineer building scalable systems and modern web experiences with clean architecture and practical solutions.",
+    "children": "Fullstack Engineer building TypeScript web systems - public products, internal tooling, and production-ready delivery.",
     "linksTitle": "Quick Links",
     "links": [
       { "label": "Home", "href": "/" },
       { "label": "Career", "href": "/career" },
-      { "label": "Certifications", "href": "/certifications" },
-      { "label": "Technical Portfolio", "href": "/technical-portfolio" },
+      { "label": "Education", "href": "/education" },
       { "label": "Resume", "href": "/resume" },
       { "label": "Blog", "href": "/blog" },
       { "label": "Contact", "href": "/contact" },

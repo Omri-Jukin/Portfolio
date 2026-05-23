@@ -40,16 +40,22 @@ export { default as AdminFAB } from "./AdminFAB/AdminFAB";
 
 // New section components
 export { default as Hero } from "./Hero";
+export { default as Credibility } from "./Credibility";
 export { default as About } from "./About";
 export { default as QA } from "./QA";
 export { default as Services } from "./Services";
 export { default as Career } from "./Career";
+export { default as EngineeringStrengths } from "./EngineeringStrengths";
 export { default as Certifications } from "./Certifications";
 export { default as Projects } from "./Projects";
 export { default as Contact } from "./Contact";
+export { default as ContactPage } from "./Contact/ContactPage";
+export { default as PublicPageShell } from "./PublicPageShell";
+export { default as MeetingPage } from "./Meeting/MeetingPage";
 export { default as ResumeLanguageSelector } from "./ResumeLanguageSelector";
-export { default as CondensedResume } from "./Resume";
+export { FullResumeTab, ResumePdfToolbar } from "./Resume";
 export { default as Portfolio } from "./Portfolio";
+export { FEATURED_PORTFOLIO_PROJECT_IDS } from "./Portfolio/Portfolio.const";
 
 // Provider exports
 export * from "./Providers";
@@ -94,10 +100,10 @@ export type { QAProps, QAItem } from "./QA";
 export type { ServicesProps, Service } from "./Services";
 export type { CareerProps, Experience } from "./Career";
 export type { CertificationsProps, Certification } from "./Certifications";
-export type { ProjectsProps, Project } from "./Projects";
+export type { ProjectsProps, FeaturedProject } from "./Projects";
 export type { ContactProps, ContactData } from "./Contact";
 export type { ResumeLanguageSelectorProps } from "./ResumeLanguageSelector";
-export type { CondensedResumeProps } from "./Resume";
+export type { FullResumeTabProps, ResumePdfToolbarProps } from "./Resume";
 export type { PortfolioProps, Project as PortfolioProject } from "./Portfolio";
 
 // Additional type exports for newly added components

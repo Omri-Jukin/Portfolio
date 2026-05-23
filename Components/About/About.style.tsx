@@ -1,29 +1,19 @@
 import { styled } from "@mui/material/styles";
 import { Box, Typography, Chip } from "@mui/material";
+import { HOME_SECTION_WIDTH } from "$/constants";
 
 export const AboutContainer = styled(Box)(({ theme }) => ({
-  minHeight: "100vh",
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  justifyContent: "center",
-  padding: theme.spacing(4, 2.5, 4, 2.5),
   width: "100%",
-  maxWidth: "100vw",
+  maxWidth: HOME_SECTION_WIDTH,
+  margin: "0 auto",
+  padding: theme.spacing(3, 2, 4),
   boxSizing: "border-box",
 
   [theme.breakpoints.up("md")]: {
-    padding: theme.spacing(6, 5, 6, 5),
-  },
-
-  [theme.breakpoints.down("md")]: {
-    minHeight: "auto",
-    padding: theme.spacing(4, 2, 4, 2),
-    justifyContent: "flex-start",
-  },
-
-  [theme.breakpoints.down("sm")]: {
-    padding: theme.spacing(3, 1.5, 3, 1.5),
+    padding: theme.spacing(4, 3, 5),
   },
 }));
 
@@ -41,18 +31,18 @@ export const AboutTitle = styled(Typography)(({ theme }) => ({
 export const AboutSubtitle = styled(Typography)(({ theme }) => ({
   fontSize: "1rem",
   textAlign: "center",
-  marginBottom: theme.spacing(4),
+  marginBottom: theme.spacing(2),
   color: theme.palette.text.secondary,
   textTransform: "uppercase",
   letterSpacing: "1px",
 }));
 
 export const AboutDescription = styled(Typography)(({ theme }) => ({
-  maxWidth: "800px",
+  maxWidth: "760px",
   margin: "0 auto",
-  lineHeight: 1.8,
+  lineHeight: 1.65,
   textAlign: "center",
-  fontSize: "1.1rem",
+  fontSize: "1.05rem",
   color: theme.palette.text.secondary,
 }));
 

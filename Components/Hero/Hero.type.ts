@@ -1,17 +1,19 @@
 import { StaticImageData } from "next/image";
 
 export interface HeroProps {
-  onExploreClick?: () => void;
-  onAboutClick?: () => void;
-  onCareerClick?: () => void;
+  onProjectsClick?: () => void;
+  onResumeClick?: () => void;
+  onContactClick?: () => void;
   profileSrc?: StaticImageData;
   ownerName?: string;
 }
 
 export interface HeroData {
-  title: string;
+  name: string;
+  roleLine: string;
+  headline: string;
   subtitle: string;
-  exploreButton: string;
   resumeButton: string;
-  careerButton: string;
+  projectsButton: string;
+  contactButton: string;
 }
