@@ -158,6 +158,8 @@
     "db:apply-migration": "npx tsx scripts/apply-migration-drizzle.ts",
     "db:fix-proposals": "npx tsx scripts/add-proposals-columns.ts",
     "seed:database": "npx tsx scripts/seed-database.ts",
+    "seed:recruiter-content": "npx tsx scripts/seed-recruiter-content.ts",
+    "db:seed-recruiter-content": "npm run db:push && npm run seed:recruiter-content",
     "seed:email-templates": "npx tsx scripts/seed-email-templates.ts",
     "seed:calculator-settings": "npx tsx scripts/seed-calculator-settings.ts",
     "seed:pricing-discounts": "npx tsx scripts/seed-pricing-discounts.ts",
@@ -166,15 +168,15 @@
     "migrate:pricing": "npx tsx scripts/migrate-to-dynamic-pricing.ts",
     "add:calculator-section": "npx tsx scripts/add-calculator-settings-section.ts",
     "test:db": "npx tsx scripts/test-db-connection.ts",
-    "enable:rls": "npx tsx scripts/enable-rls.ts",
     "reset:password": "npx tsx scripts/reset-admin-password.ts",
     "set:secrets": "node scripts/set-cloudflare-secrets.js",
     "tail": "node scripts/wrangler-tail.local.js",
     "//7": "— git —",
     "gitgraph": "git log --graph --decorate --oneline --all",
     "//8": "— Push and RLS —",
-    "push:rls": "drizzle-kit push && npx tsx scripts/enable-rls.ts",
-    "migrate:rls": "drizzle-kit migrate && npx tsx scripts/enable-rls.ts"
+    "enable:rls": "npx tsx scripts/enable-rls.ts",
+    "push:rls": "drizzle-kit push && npm run enable:rls",
+    "migrate:rls": "drizzle-kit migrate && npm run enable:rls"
   },
   "imports": {
     "@/*": "./src/*",

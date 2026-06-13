@@ -515,12 +515,6 @@ export default function CustomLinkIntakeForm({
 
   const isFormDisabled = state.isSubmitting || state.isSubmitted;
 
-  // Get the locale from the current path
-  const locale =
-    typeof window !== "undefined"
-      ? window.location.pathname.split("/")[1] || "en"
-      : "en";
-
   if (state.isSubmitted) {
     return (
       <ResponsiveBackground>
@@ -569,7 +563,7 @@ export default function CustomLinkIntakeForm({
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => router.push(`/${locale}`)}
+                  onClick={() => router.push("/")}
                 >
                   {t("customLink.returnHome")}
                 </Button>
@@ -611,7 +605,7 @@ export default function CustomLinkIntakeForm({
                       variant="outlined"
                       size="small"
                       startIcon={<RateReviewIcon />}
-                      onClick={() => router.push(`/${locale}/dashboard/review`)}
+                      onClick={() => router.push("/dashboard/review")}
                       sx={{
                         textTransform: "none",
                         fontSize: "0.875rem",

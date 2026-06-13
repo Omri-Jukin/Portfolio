@@ -186,6 +186,7 @@ export default function Footer() {
   const links = t.raw("links");
   const social = t.raw("social");
   const contact = t.raw("contact");
+
   return (
     <FooterComponent
       title={t("title")}

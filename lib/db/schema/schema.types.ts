@@ -4,6 +4,20 @@ export type Post = typeof Tables.blogPosts.$inferSelect;
 export type User = typeof Tables.users.$inferSelect;
 export type Inquiry = typeof Tables.contactInquiries.$inferSelect;
 
+export type PublicContentBlockDB = typeof Tables.publicContentBlocks.$inferSelect;
+export type PublicContentBlock = Omit<
+  PublicContentBlockDB,
+  "createdAt" | "updatedAt"
+> & {
+  createdAt: string;
+  updatedAt: string | null;
+};
+export type NewPublicContentBlock =
+  typeof Tables.publicContentBlocks.$inferInsert;
+export type UpdatePublicContentBlock = Partial<
+  Omit<typeof Tables.publicContentBlocks.$inferSelect, "id" | "createdAt">
+>;
+
 // Database certification type (what comes from DB)
 export type CertificationDB = typeof Tables.certifications.$inferSelect;
 
@@ -230,6 +244,16 @@ export type DataType =
   | "json"
   | "deleted"
   | "cancelled";
+
+export type PublicContentBlockType =
+  | "section"
+  | "hero"
+  | "metric"
+  | "card"
+  | "link"
+  | "question"
+  | "list"
+  | "cta";
 
 // Intake types
 export type IntakeStatus =

@@ -1,4 +1,4 @@
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Box, Chip, Link, Stack, Typography } from "@mui/material";
 import {
   GitHub as GitHubIcon,
@@ -23,7 +23,6 @@ import type { FeaturedProject } from "./Projects.type";
 
 const Projects: React.FC = () => {
   const t = useTranslations("projects");
-  const locale = useLocale();
   const projects = t.raw("projects") as FeaturedProject[];
 
   return (
@@ -114,7 +113,7 @@ const Projects: React.FC = () => {
                   </Link>
                 )}
                 <Link
-                  href={`/${locale}${project.caseStudyUrl}`}
+                  href={project.caseStudyUrl}
                   style={{ textDecoration: "none" }}
                 >
                   <ProjectButton

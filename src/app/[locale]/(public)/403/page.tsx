@@ -2,13 +2,10 @@
 
 import { Box, Typography, Button } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useParams } from "next/navigation";
 import { Lock as LockIcon } from "@mui/icons-material";
 
 export default function ForbiddenPage() {
   const router = useRouter();
-  const params = useParams();
-  const locale = (params?.locale as string) || "en";
 
   return (
     <Box
@@ -30,7 +27,7 @@ export default function ForbiddenPage() {
       </Typography>
       <Button
         variant="contained"
-        onClick={() => router.push(`/${locale}`)}
+        onClick={() => router.push("/")}
       >
         Back to home
       </Button>

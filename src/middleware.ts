@@ -10,18 +10,40 @@ import { canAccessAdminSync } from "#/lib/auth/rbac";
 const intlMiddleware = createMiddleware({
   locales: ["en", "es", "fr", "he"],
   defaultLocale: "en",
-  localePrefix: "always",
+  localePrefix: "never",
 });
+
+const supportedLocales = ["en", "es", "fr", "he"] as const;
+const localeCookieName = "NEXT_LOCALE";
 
 export default async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
+  const pathSegments = pathname.split("/");
+  const prefixedLocale = pathSegments[1];
+  const hasLocaleCookie = Boolean(request.cookies.get(localeCookieName)?.value);
 
-  // Protect all /[locale]/dashboard routes
-  // Note: Dashboard routes are organized under (dashboard) route group but URLs remain /[locale]/dashboard
-  const dashboardRouteRegex = /^\/(en|es|fr|he)\/dashboard(\/|$)/;
+  if (supportedLocales.includes(prefixedLocale as (typeof supportedLocales)[number])) {
+    const cleanPath = `/${pathSegments.slice(2).join("/")}`.replace(/\/$/, "") || "/";
+    const redirectUrl = new URL(cleanPath, request.url);
+    redirectUrl.search = request.nextUrl.search;
+
+    const response = NextResponse.redirect(redirectUrl);
+    response.cookies.set(localeCookieName, prefixedLocale, {
+      path: "/",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 365,
+    });
+
+    return response;
+  }
+
+  if (!hasLocaleCookie) {
+    request.cookies.set(localeCookieName, "en");
+  }
+
+  // Protect all dashboard routes.
+  const dashboardRouteRegex = /^\/dashboard(\/|$)/;
   if (dashboardRouteRegex.test(pathname)) {
-    const locale = pathname.split("/")[1] || "en";
-
     try {
       // Check if session cookie exists (might be set but not yet decoded)
       const cookies = request.cookies;
@@ -44,7 +66,7 @@ export default async function middleware(request: NextRequest) {
         }
 
         // No session cookie and no token - redirect to login
-        const loginUrl = new URL(`/${locale}/login`, request.url);
+        const loginUrl = new URL("/login", request.url);
         loginUrl.searchParams.set("redirectTo", pathname);
         return NextResponse.redirect(loginUrl);
       }
@@ -55,7 +77,7 @@ export default async function middleware(request: NextRequest) {
       // Check if role can access admin panel
       if (!canAccessAdminSync(role)) {
         // User doesn't have admin access, redirect to 403 or home
-        const forbiddenUrl = new URL(`/${locale}/403`, request.url);
+        const forbiddenUrl = new URL("/403", request.url);
         return NextResponse.redirect(forbiddenUrl);
       }
 
@@ -63,25 +85,29 @@ export default async function middleware(request: NextRequest) {
     } catch (error) {
       console.error("Middleware auth error:", error);
       // On error, redirect to login for security
-      const loginUrl = new URL(`/${locale}/login`, request.url);
+      const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("redirectTo", pathname);
       return NextResponse.redirect(loginUrl);
     }
   }
 
   // Protect intake route - validate meeting parameters, custom token, or slug
-  const intakeRouteRegex = /^\/(en|es|fr|he)\/intake(\/.*)?$/;
+  const intakeRouteRegex = /^\/intake(\/.*)?$/;
   if (intakeRouteRegex.test(pathname)) {
+    if (pathname === "/intake") {
+      return intlMiddleware(request);
+    }
+
     const cookieHeader = request.headers.get("cookie");
     const intakeSessionToken = cookieHeader
       ?.split(";")
       .find((c) => c.trim().startsWith("intake-session-token="))
       ?.split("=")[1];
 
-    // Check for slug-based route: /[locale]/intake/[slug]
+    // Check for slug-based route: /intake/[slug]
     // Note: We can't do database queries in middleware (Edge Runtime limitation)
     // Validation will be done in the page component instead
-    const slugMatch = pathname.match(/^\/(en|es|fr|he)\/intake\/([^\/]+)$/);
+    const slugMatch = pathname.match(/^\/intake\/([^\/]+)$/);
     if (slugMatch) {
       // For slug-based routes, just allow the request to proceed
       // The page component will handle validation and show not-found if invalid
@@ -133,16 +159,14 @@ export default async function middleware(request: NextRequest) {
 
     // Require at least email and eventUri for meeting-based access
     if (!inviteeEmail || !eventUri) {
-      const locale = pathname.split("/")[1] || "en";
-      const meetingUrl = new URL(`/${locale}/meeting`, request.url);
+      const meetingUrl = new URL("/meeting", request.url);
       return NextResponse.redirect(meetingUrl);
     }
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(inviteeEmail)) {
-      const locale = pathname.split("/")[1] || "en";
-      const meetingUrl = new URL(`/${locale}/meeting`, request.url);
+      const meetingUrl = new URL("/meeting", request.url);
       return NextResponse.redirect(meetingUrl);
     }
 
@@ -167,8 +191,7 @@ export default async function middleware(request: NextRequest) {
       return response;
     } catch {
       // Failed to generate token - redirect to meeting
-      const locale = pathname.split("/")[1] || "en";
-      const meetingUrl = new URL(`/${locale}/meeting`, request.url);
+      const meetingUrl = new URL("/meeting", request.url);
       return NextResponse.redirect(meetingUrl);
     }
   }

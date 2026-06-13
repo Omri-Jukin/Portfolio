@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   Alert,
   Box,
@@ -21,14 +22,15 @@ import { ContactFormField, ContactFormPanel } from "./Contact.style";
 
 const ContactMessageForm: React.FC = () => {
   const t = useTranslations("contact");
+  const searchParams = useSearchParams();
   const submitContactForm = api.emails.submitContactForm.useMutation();
 
   const [formData, setFormData] = useState<ContactFormData>({
     name: "",
     email: "",
     phone: "",
-    subject: "",
-    message: "",
+    subject: searchParams.get("subject") ?? "",
+    message: searchParams.get("message") ?? "",
   });
   const [errors, setErrors] = useState<Partial<ContactFormData>>({});
   const [state, setState] = useState<ContactFormState>({
@@ -118,7 +120,7 @@ const ContactMessageForm: React.FC = () => {
         {t("form.title")}
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-        {t("form.description")}
+        Tell me about the role, team, stack, and ownership expectations - or send a focused technical brief if this is a selected project conversation.
       </Typography>
 
       {state.error && (

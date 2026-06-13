@@ -1,14 +1,18 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { inter } from "$/fonts";
 
+const siteDescription =
+  "Full-stack TypeScript engineer building production-ready web systems with Next.js, React, Node.js, PostgreSQL, Supabase, tRPC, Drizzle, and Cloudflare. Open to engineering roles.";
+
 export const metadata: Metadata = {
-  title: "Omri Jukin",
-  description: "No gods, just logic. No bugs, just features.",
+  title: "Omri Jukin — Full-Stack TypeScript Engineer",
+  description: siteDescription,
   metadataBase: new URL("https://omrijukin.com"),
   openGraph: {
-    title: "Omri Jukin",
-    description: "No gods, just logic. No bugs, just features.",
+    title: "Omri Jukin — Full-Stack TypeScript Engineer",
+    description:
+      "Production-minded full-stack engineer building TypeScript systems across frontend, backend, data, integrations, internal tools, and deployment.",
     url: "https://omrijukin.com",
     siteName: "Omri Jukin",
     locale: "en_US",
@@ -16,8 +20,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Omri Jukin",
-    description: "No gods, just logic. No bugs, just features.",
+    title: "Omri Jukin — Full-Stack TypeScript Engineer",
+    description:
+      "Production-minded full-stack engineer building TypeScript systems across frontend, backend, data, integrations, internal tools, and deployment.",
   },
   robots: {
     index: true,
@@ -25,8 +30,12 @@ export const metadata: Metadata = {
   },
 };
 
-// Root layout - must have html and body tags per Next.js requirements
-// The [locale]/layout.tsx will set lang and dir attributes via client-side script
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{

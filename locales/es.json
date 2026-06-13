@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "Omri Jukin — Fullstack Engineer",
-    "description": "Fullstack Engineer building scalable web systems with TypeScript, Next.js, Node.js, and PostgreSQL. End-to-end products, internal systems, and production-ready delivery."
+    "title": "Omri Jukin — Full-Stack TypeScript Engineer",
+    "description": "Full-stack TypeScript engineer building production-ready web systems with Next.js, React, Node.js, PostgreSQL, Supabase, tRPC, Drizzle, and Cloudflare. Open to engineering roles."
   },
   "login": {
     "title": "Inicio de Sesión de Administrador",
@@ -244,9 +244,7 @@
         "stack": ["React Native", "TypeScript", "Supabase", "Cloudflare"],
         "architecture": "Mobile frontend, backend services, auth boundaries, and integration-ready data models for scalable creator workflows.",
         "role": "End-to-end technical direction across product architecture, implementation, and release readiness.",
-        "proof": "[ADD IMPACT]",
-        "githubUrl": "https://github.com/Omri-Jukin",
-        "liveUrl": "[ADD DEMO LINK]",
+        "proof": "Product architecture and release-readiness plan for a creator operations platform; public demo is not available yet.",
         "caseStudyUrl": "/resume#socially"
       },
       {
@@ -258,9 +256,7 @@
         "stack": ["Node.js", "TypeScript", "Supabase", "AWS", "FFmpeg"],
         "architecture": "Hub-based orchestration with queue-driven jobs, service separation, and cloud-integrated processing steps.",
         "role": "Platform design and hands-on implementation across orchestration, media processing, and service boundaries.",
-        "proof": "Production-oriented microservices structure with clear operational ownership per service.",
-        "githubUrl": "https://github.com/ClipWhisperer",
-        "liveUrl": "[ADD DEMO LINK]",
+        "proof": "Production-oriented microservices structure with queue-driven orchestration, media-processing boundaries, and cloud-integrated processing steps.",
         "caseStudyUrl": "/resume#clipwhisperer"
       },
       {
@@ -272,9 +268,7 @@
         "stack": ["Next.js", "tRPC", "PostgreSQL", "Drizzle ORM"],
         "architecture": "Type-safe APIs, tenant-aware data modeling, RBAC, and real-time dashboard flows.",
         "role": "Full-stack implementation across frontend, backend, and database layers.",
-        "proof": "Live demo available.",
-        "githubUrl": "https://github.com/Omri-Jukin/Snow",
-        "liveUrl": "https://snow-hq.vercel.app",
+        "proof": "Multi-tenant CRM with RBAC-aware data modeling, type-safe tRPC APIs, Drizzle schema modeling, and dashboard flows.",
         "caseStudyUrl": "/resume#snow-hq"
       },
       {
@@ -294,7 +288,6 @@
         "architecture": "Public i18n site plus RBAC-protected admin CMS, Postgres-backed content APIs, and modular section-driven homepage composition.",
         "role": "Sole builder — architecture, implementation, content workflows, and deployment.",
         "proof": "This site, including its private CMS and operational tooling.",
-        "githubUrl": "https://github.com/Omri-Jukin",
         "liveUrl": "https://omrijukin.com",
         "caseStudyUrl": "/resume#portfolio-platform"
       }
@@ -317,8 +310,8 @@
   },
   "contact": {
     "title": "Contact",
-    "subtitle": "Open to fullstack and web solutions engineering roles.",
-    "description": "Reach out for roles, technical conversations, or to review my work. Email and LinkedIn are the fastest ways to connect.",
+    "subtitle": "Open to full-stack TypeScript engineering roles.",
+    "description": "For recruiters and hiring managers: send the role, stack, team context, and ownership expectations. Email and LinkedIn are the fastest ways to connect.",
     "button": "Send a message",
     "emailLabel": "Email",
     "linkedinLabel": "LinkedIn",
@@ -326,7 +319,7 @@
     "resumeLabel": "Resume",
     "form": {
       "title": "Get in Touch",
-      "description": "Have a project in mind ? Let's discuss how we can bring your ideas to life. Fill out the contact form and I'll get back to you as soon as possible.",
+      "description": "Tell me about the role, team, stack, and ownership expectations - or send a focused technical brief if this is a selected project conversation.",
       "name": "My Name",
       "email": "My Email",
       "phone": "My Phone",
@@ -399,7 +392,7 @@
     "viewResume": "View Resume",
     "experiences": [
       {
-        "role": "Technical Lead (Volunteer CTO)",
+        "role": "Technical Lead",
         "time": "2025–Present",
         "company": "The Atheist Line",
         "details": [
@@ -458,10 +451,16 @@
   },
   "resume": {
     "title": "Currículum",
+    "pageSubtitle": "Currículum completo y casos de estudio de ingeniería: elige la vista que mejor encaje con tu revisión.",
     "description": "Mi experiencia profesional y habilidades",
+    "tabs": {
+      "label": "Vistas del currículum",
+      "fullResume": "Currículum completo",
+      "caseStudies": "Casos de estudio"
+    },
     "networkingSummary": "Descarga mi currículum para aprender más sobre mi experiencia",
     "experience": "Desarrollador Full Stack",
-    "professionalSummary": "Ingeniero de Software Full-Stack con 2+ años de experiencia práctica en tecnologías web modernas y arquitectura limpia. Actualmente busco oportunidades para contribuir a equipos innovadores que construyen sistemas escalables y experiencias de usuario excepcionales.",
+    "professionalSummary": "Full-Stack TypeScript Engineer with 3+ years of hands-on professional experience building production-minded web systems across frontend, backend, data, integrations, and internal tooling. Strongest in Next.js, React, Node.js, PostgreSQL, Supabase, tRPC/Drizzle-style type-safe systems, and product-platform ownership. Looking for teams where I can own meaningful full-stack work and help ship maintainable systems.",
     "personalInfo": {
       "name": "Omri Jukin",
       "title": "Ingeniero Full-Stack | Next.js, TypeScript, Node.js | PostgreSQL, AWS | Arquitectura limpia",
@@ -843,15 +842,11 @@
         "href": "/resume"
       },
       {
-        "label": "Blog",
-        "href": "/blog"
-      },
-      {
         "label": "Contact",
         "href": "/contact"
       },
       {
-        "label": "Examples",
+        "label": "UI Lab",
         "href": "/examples"
       }
     ],
@@ -1429,7 +1424,7 @@
   },
   "calendly": {
     "title": "Programar una Reunión",
-    "description": "Hablemos de tu proyecto, exploremos oportunidades de colaboración o tengamos una conversación técnica. Estoy aquí para ayudar a dar vida a tus ideas.",
+    "description": "Para reclutadores y responsables de contratación: comparte el rol, el stack, el contexto del equipo y las expectativas de ownership. También puedo revisar conversaciones técnicas seleccionadas cuando el alcance sea claro.",
     "booking": {
       "title": "Detalles de la Reunión",
       "description": "Elige un momento que te funcione mejor. Todas las reuniones se realizan por videollamada con capacidades de compartir pantalla.",
@@ -1455,20 +1450,20 @@
       "description": "Esto es lo que puedes esperar de nuestra reunión para asegurar que aprovechemos al máximo nuestro tiempo juntos.",
       "items": [
         {
-          "title": "Discusión del Proyecto",
-          "description": "Profundizaremos en los requisitos de tu proyecto, desafíos técnicos y resultados deseados. Trae cualquier pregunta o problema específico que te gustaría resolver."
+          "title": "Contexto del Rol",
+          "description": "Comparte el rol, la estructura del equipo, el dominio del producto, el proceso de entrevistas y cómo se vería el ownership en la posición."
         },
         {
           "title": "Consulta Técnica",
           "description": "Proporcionaré asesoramiento experto sobre decisiones de arquitectura, recomendaciones de stack tecnológico y mejores prácticas basadas en tu caso de uso específico."
         },
         {
-          "title": "Oportunidades de Colaboración",
-          "description": "Explora oportunidades de asociación potenciales, proyectos freelance o posibilidades de colaboración a largo plazo que se alineen con tus objetivos."
+          "title": "Conversación de Encaje",
+          "description": "Podemos comparar las necesidades del rol con mi experiencia en TypeScript full-stack, plataformas de producto y entrega en producción."
         },
         {
           "title": "Próximos Pasos",
-          "description": "Definiremos pasos claros, cronogramas y entregables para avanzar con tu proyecto o colaboración."
+          "description": "Acordaremos material de seguimiento, logística de entrevistas o un brief técnico enfocado cuando ese sea el siguiente paso correcto."
         }
       ]
     }
@@ -1582,7 +1577,7 @@
     "items": [
       {
         "label": "Experience",
-        "value": "~2 years professional engineering at Abra Technologies, plus Volunteer CTO / Technical Lead at The Atheist Line (2025–Present)."
+        "value": "3+ years of hands-on professional engineering across 2024–2026 and counting, plus Technical Lead ownership at The Atheist Line (2025–Present)."
       },
       {
         "label": "Core stack",

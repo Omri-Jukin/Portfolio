@@ -59,7 +59,6 @@ export interface FullResumeTabProps {
 
 const FullResumeTab: React.FC<FullResumeTabProps> = ({
   resumeData,
-  locale,
   headerProfileLinks,
   letsBuildTogether,
   readyToDiscuss,
@@ -304,7 +303,7 @@ const FullResumeTab: React.FC<FullResumeTabProps> = ({
           </Typography>
           <Button
             variant="contained"
-            onClick={() => router.push(`/${locale}/contact`)}
+            onClick={() => router.push("/contact")}
             sx={{ textTransform: "none", fontWeight: 600 }}
           >
             {getInTouch}

@@ -9,7 +9,7 @@ import { HeaderProps } from "./Header.type";
 import { AppBar, Toolbar } from "./Header.style";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { HOMEPAGE_NAV_ITEMS, PROFILE_LINKS } from "$/constants";
 
 export default function Header({
@@ -20,7 +20,6 @@ export default function Header({
   const [isClient, setIsClient] = useState(false);
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
-  const locale = useLocale();
   const t = useTranslations("common");
 
   useEffect(() => {
@@ -29,15 +28,15 @@ export default function Header({
   }, []);
 
   const handleLogoClick = () => {
-    window.location.href = `/${locale}`;
+    window.location.href = "/";
   };
 
   const handleResumeClick = () => {
-    router.push(`/${locale}/resume`);
+    router.push("/resume");
   };
 
   const handleSectionClick = (sectionId: string) => {
-    const isHome = window.location.pathname === `/${locale}` || window.location.pathname === `/${locale}/`;
+    const isHome = window.location.pathname === "/";
     if (isHome) {
       const element = document.getElementById(sectionId);
       if (element) {
@@ -45,7 +44,7 @@ export default function Header({
         return;
       }
     }
-    router.push(`/${locale}/#${sectionId}`);
+    router.push(`/#${sectionId}`);
   };
 
   if (!mounted || !isClient) return null;

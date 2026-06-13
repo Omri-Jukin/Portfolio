@@ -25,13 +25,14 @@ export const DEFAULT_SECTIONS = [
   { sectionKey: "discounts", displayOrder: 6, enabled: true },
   { sectionKey: "intakes", displayOrder: 7, enabled: true },
   { sectionKey: "emails", displayOrder: 8, enabled: true },
-  { sectionKey: "workExperience", displayOrder: 9, enabled: true },
-  { sectionKey: "projects", displayOrder: 10, enabled: true },
-  { sectionKey: "skills", displayOrder: 11, enabled: true },
-  { sectionKey: "education", displayOrder: 12, enabled: true },
-  { sectionKey: "certifications", displayOrder: 13, enabled: true },
-  { sectionKey: "services", displayOrder: 14, enabled: true },
-  { sectionKey: "testimonials", displayOrder: 15, enabled: true },
+  { sectionKey: "publicContent", displayOrder: 9, enabled: true },
+  { sectionKey: "workExperience", displayOrder: 10, enabled: true },
+  { sectionKey: "projects", displayOrder: 11, enabled: true },
+  { sectionKey: "skills", displayOrder: 12, enabled: true },
+  { sectionKey: "education", displayOrder: 13, enabled: true },
+  { sectionKey: "certifications", displayOrder: 14, enabled: true },
+  { sectionKey: "services", displayOrder: 15, enabled: true },
+  { sectionKey: "testimonials", displayOrder: 16, enabled: true },
 ];
 
 /**

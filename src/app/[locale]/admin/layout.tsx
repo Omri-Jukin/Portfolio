@@ -10,22 +10,19 @@ interface AdminLayoutProps {
 
 export default async function AdminLayout({
   children,
-  params,
 }: AdminLayoutProps) {
-  const { locale } = await params;
-
   // Check session and role server-side
   const session = await auth();
 
   if (!session || !session.user) {
-    redirect(`/${locale}/login`);
+    redirect("/login");
   }
 
   const role = (session.user.role as string) || "visitor";
 
   // Check if user has admin access
   if (!canAccessAdminSync(role)) {
-    redirect(`/${locale}/403`);
+    redirect("/403");
   }
 
   // User is authenticated and has admin role, render layout

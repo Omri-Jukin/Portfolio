@@ -76,7 +76,7 @@ export const extractResumeData = async (
       .map((project: projectType) => ({
         name: project.title,
         line: project.summary,
-        url: project.githubUrl,
+        url: project.caseStudyUrl,
       })),
     education: resumeData.education.map((edu: eduType) => {
       const entry = edu as eduType & {

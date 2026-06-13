@@ -35,7 +35,7 @@ const Education: React.FC<EducationProps> = () => {
   const degrees = getResumeData(locale).education;
 
   const handleResumeClick = () => {
-    router.push(`/${locale}/resume`);
+    router.push("/resume");
   };
 
   return (

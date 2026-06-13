@@ -2,7 +2,7 @@
  * Typed resume data — single source of truth for English resume content.
  * Used by resume page and PDF generator.
  *
- * Wording preserved exactly from approved CV. Do not paraphrase.
+ * Recruiter-facing resume wording used by the public resume page and PDF generator.
  */
 import type { ResumeData } from "../types";
 
@@ -13,7 +13,7 @@ export const RESUME_DATA_EN: ResumeData = {
   },
   person: {
     name: "Omri Jukin",
-    title: "Full Stack Engineer",
+    title: "Full-Stack TypeScript Engineer",
     contacts: {
       phone: "+972 52-334-4064",
       email: "omrijukin@gmail.com",
@@ -24,9 +24,9 @@ export const RESUME_DATA_EN: ResumeData = {
     },
   },
   headline:
-    "Full Stack Engineer | TypeScript, React/Next.js, Node.js, PostgreSQL, CI/CD",
+    "Full-Stack TypeScript Engineer | Next.js, React, Node.js, PostgreSQL, Supabase, CI/CD",
   summary:
-    "Full Stack Engineer focused on building TypeScript-based products and systems end to end across frontend, backend, data, and integrations. Strongest in React/Next.js, Node.js, and PostgreSQL, with a systems-minded approach to architecture, maintainability, reusable UI, secure application flows, and release-safe engineering practices including CI/CD and production-readiness workflows.",
+    "Full-Stack TypeScript Engineer with 3+ years of hands-on professional experience building production-minded web systems across frontend, backend, data, integrations, and internal tooling. Strongest in Next.js, React, Node.js, PostgreSQL, Supabase, tRPC/Drizzle-style type-safe systems, and product-platform ownership. Looking for teams where I can own meaningful full-stack work and help ship maintainable systems.",
   coreSkills: [
     {
       category: "Languages",
@@ -80,14 +80,14 @@ export const RESUME_DATA_EN: ResumeData = {
   ],
   experience: [
     {
-      role: "Technical Lead (Volunteer CTO)",
+      role: "Technical Lead",
       company: "The Atheist Line",
       period: "2025–Present",
       bullets: [
-        "Define and lead the technical direction of the organization’s digital ecosystem as the primary hands-on engineer.",
-        "Design and build public-facing and internal systems spanning website architecture, content workflows, internal tooling, and team-facing operational processes.",
-        "Own end-to-end technical planning and implementation across architecture, integrations, automation opportunities, CI/CD, and production readiness.",
-        "Drive the system from zero-to-one by establishing the technical foundations for content management, internal workflows, analytics, and future operational tooling.",
+        "Volunteer technical leadership role for a 17-person organization, serving as the primary technical owner for technical decisions, implementation planning, and digital operations.",
+        "Define and lead the technical direction of the organization's digital ecosystem across public-facing and internal systems.",
+        "Own zero-to-one architecture and implementation for website architecture, content workflows, internal tooling, team operations, integrations, automation opportunities, CI/CD, analytics foundations, and production readiness.",
+        "Translate organizational needs from design, publishing, community, and operations roles into maintainable technical workflows.",
       ],
     },
     {
@@ -116,7 +116,6 @@ export const RESUME_DATA_EN: ResumeData = {
     {
       name: "Socially",
       line: "Creator operations platform built with React Native, Supabase, Cloudflare, and TypeScript.",
-      url: "https://github.com/Omri-Jukin",
       bullets: [
         "Building a creator operations platform focused on cross-platform content workflows, publishing flows, analytics, and creator-facing operations.",
         "Design the system across mobile frontend, backend services, data models, authentication, and platform integration boundaries.",
@@ -127,7 +126,6 @@ export const RESUME_DATA_EN: ResumeData = {
     {
       name: "ClipWhisperer",
       line: "Microservices-based video automation platform built with Node.js, Supabase, AWS, and cloud infrastructure.",
-      url: "https://github.com/ClipWhisperer",
       bullets: [
         "Built a service-oriented platform for automating short-form video generation workflows across orchestration, storage, processing, and delivery.",
         "Designed a hub-based orchestration flow to coordinate multiple services through state-driven processing steps.",
@@ -138,7 +136,6 @@ export const RESUME_DATA_EN: ResumeData = {
     {
       name: "Snow HQ",
       line: "Multi-tenant CRM system built with Next.js, tRPC, and PostgreSQL.",
-      url: "https://github.com/Omri-Jukin/Snow",
       bullets: [
         "Built a multi-tenant CRM system with authentication, role-based access, dashboards, reporting, and invoicing-oriented workflows.",
         "Implemented the product across frontend, backend, and database layers using Next.js, tRPC, and PostgreSQL.",

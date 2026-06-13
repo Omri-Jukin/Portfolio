@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "../globals.css";
 import "flag-icons/css/flag-icons.min.css";
 import { NextIntlClientProvider } from "next-intl";
-import { inter } from "$/fonts";
 import ClientLayout from "&/ClientLayout/ClientLayout";
 import { getMessages, getTranslations } from "next-intl/server";
 import StructuredData from "./structured-data";
@@ -22,36 +21,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: t("title"),
     description: t("description"),
     keywords: [
-      "full stack developer",
-      "full stack developer",
-      "software developer",
-      "software architect",
-      "web development",
-      "web developer",
-      "react developer",
-      "next.js developer",
-      "typescript developer",
-      "javascript developer",
-      "html developer",
-      "css developer",
-      "tailwind developer",
-      "node.js developer",
-      "express developer",
-      "mongodb developer",
-      "mysql developer",
-      "postgresql developer",
-      "python developer",
-      "java developer",
-      "c# developer",
-      "portfolio",
-      "omri jukin",
-      "omri jukin portfolio",
-      "omri jukin fullstack developer",
-      "omri jukin full stack developer",
-      "omri jukin web developer",
-      "omri jukin react developer",
-      "omri jukin next.js developer",
-      "omri jukin typescript developer",
+      "full-stack engineer",
+      "TypeScript engineer",
+      "Next.js developer",
+      "React developer",
+      "Node.js developer",
+      "PostgreSQL",
+      "Supabase",
+      "tRPC",
+      "Drizzle",
+      "internal tools",
+      "Omri Jukin",
     ],
     authors: [{ name: "Omri Jukin" }],
     creator: "Omri Jukin",
@@ -64,12 +44,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     metadataBase: new URL("https://omrijukin.com"),
     alternates: {
       canonical: "/",
-      languages: {
-        en: "/en",
-        es: "/es",
-        fr: "/fr",
-        he: "/he",
-      },
     },
     openGraph: {
       title: t("title"),
@@ -101,29 +75,26 @@ export default async function RootLayout({ children, params }: Props) {
   const { locale } = await params;
   const messages = await getMessages({ locale });
 
-  // Define RTL locales explicitly to avoid hydration issues
   const rtlLocales = ["he", "ar", "fa", "ur"];
   const isRTL = rtlLocales.includes(locale);
+  const direction = isRTL ? "rtl" : "ltr";
 
   return (
-    <html lang={locale} dir={isRTL ? "rtl" : "ltr"}>
-      <head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
-        />
-        <StructuredData locale={locale} />
-      </head>
-      <body className={`${inter.variable} antialiased`}>
-        <SessionProvider>
-          <NextIntlClientProvider locale={locale} messages={messages}>
-            <ClientLayout>
-              {children}
-              <AdminFAB />
-            </ClientLayout>
-          </NextIntlClientProvider>
-        </SessionProvider>
-      </body>
-    </html>
+    <>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `document.documentElement.lang=${JSON.stringify(locale)};document.documentElement.dir=${JSON.stringify(direction)};`,
+        }}
+      />
+      <StructuredData />
+      <SessionProvider>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <ClientLayout>
+            {children}
+            <AdminFAB />
+          </ClientLayout>
+        </NextIntlClientProvider>
+      </SessionProvider>
+    </>
   );
 }

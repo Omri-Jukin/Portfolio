@@ -36,8 +36,10 @@ export const getLanguageName = (locale: Locale) => {
 
 export const getTargetPath = (targetLocale: Locale, pathname: string) => {
   const segments = pathname.split("/");
-  // Remove empty first segment and the current locale (second segment)
-  const pathWithoutLocale = segments.slice(2).join("/");
-  // Return the new path with the target locale
-  return `/${targetLocale}/${pathWithoutLocale}`;
+  const maybeLocale = segments[1];
+  const pathWithoutLocale = AVAILABLE_LOCALES.includes(maybeLocale as Locale)
+    ? `/${segments.slice(2).join("/")}`
+    : pathname;
+
+  return pathWithoutLocale.replace(/\/$/, "") || "/";
 };

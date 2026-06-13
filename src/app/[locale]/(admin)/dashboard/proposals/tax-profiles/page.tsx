@@ -17,7 +17,7 @@ import {
   Stack,
 } from "@mui/material";
 import { api } from "$/trpc/client";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   Add as AddIcon,
   Edit as EditIcon,
@@ -30,8 +30,6 @@ import { TaxProfile } from "#/lib/db";
 
 const TaxProfilesPage = () => {
   const router = useRouter();
-  const pathname = usePathname();
-  const locale = (pathname.split("/")[1] as "en" | "es" | "fr" | "he") || "en";
   const { showSnackbar } = useSnackbar();
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -159,7 +157,7 @@ const TaxProfilesPage = () => {
         <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 3 }}>
           <Button
             startIcon={<ArrowBackIcon />}
-            onClick={() => router.push(`/${locale}/dashboard/proposals`)}
+            onClick={() => router.push("/dashboard/proposals")}
           >
             Back to Proposals
           </Button>
@@ -277,8 +275,9 @@ const TaxProfilesPage = () => {
                 }
               />
               <Typography variant="body2" color="text.secondary">
-                Tax lines configuration coming soon. This will allow you to
-                define tax rates and calculations for this profile.
+                Tax line editing is not connected in this admin view. Use the
+                profile name, description, and default flag until tax-line rules
+                are wired.
               </Typography>
             </Stack>
           </DialogContent>

@@ -22,7 +22,7 @@ import {
   InputLabel,
 } from "@mui/material";
 import { api } from "$/trpc/client";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import {
   Add as AddIcon,
@@ -59,8 +59,6 @@ const getStatusColor = (status: string) => {
 
 const ProposalsListPage = () => {
   const router = useRouter();
-  const pathname = usePathname();
-  const locale = (pathname.split("/")[1] as "en" | "es" | "fr" | "he") || "en";
   const { showSnackbar } = useSnackbar();
 
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -98,7 +96,7 @@ const ProposalsListPage = () => {
       onSuccess: (data) => {
         const token = data.token;
         if (token) {
-          const url = `${window.location.origin}/${locale}/p/${token}`;
+          const url = `${window.location.origin}/p/${token}`;
           setShareUrl(url);
           setShareDialogOpen(true);
         }
@@ -122,12 +120,12 @@ const ProposalsListPage = () => {
   };
 
   const handleView = (id: string) => {
-    router.push(`/${locale}/dashboard/proposals/${id}`);
+    router.push(`/dashboard/proposals/${id}`);
     handleMenuClose();
   };
 
   const handleEdit = (id: string) => {
-    router.push(`/${locale}/dashboard/proposals/${id}`);
+    router.push(`/dashboard/proposals/${id}`);
     handleMenuClose();
   };
 
@@ -153,20 +151,20 @@ const ProposalsListPage = () => {
   };
 
   const handleSend = () => {
-    // TODO: Implement send proposal
-    showSnackbar("Send proposal feature coming soon", "info");
+    showSnackbar("Proposal sending is not connected in this admin view", "info");
     handleMenuClose();
   };
 
   const handleExportPDF = () => {
-    // TODO: Implement PDF export
-    showSnackbar("PDF export feature coming soon", "info");
+    showSnackbar(
+      "Use the proposal editor PDF export from the proposal detail page",
+      "info",
+    );
     handleMenuClose();
   };
 
   const handleDuplicate = () => {
-    // TODO: Implement duplicate
-    showSnackbar("Duplicate feature coming soon", "info");
+    showSnackbar("Duplicate proposal is not available in this admin view", "info");
     handleMenuClose();
   };
 
@@ -324,7 +322,7 @@ const ProposalsListPage = () => {
           <Button
             variant="contained"
             startIcon={<AddIcon />}
-            onClick={() => router.push(`/${locale}/dashboard/proposals/new`)}
+            onClick={() => router.push("/dashboard/proposals/new")}
           >
             Create Proposal
           </Button>

@@ -1,47 +1,34 @@
-import { getTranslations } from "next-intl/server";
-
-export default async function StructuredData({ locale }: { locale: string }) {
-  const t = await getTranslations({ locale, namespace: "metadata" });
-
+export default function StructuredData() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Person",
     name: "Omri Jukin",
-    jobTitle: "Full Stack Developer",
-    description: t("description"),
+    jobTitle: "Full-Stack TypeScript Engineer",
+    description:
+      "Full-stack engineer building production-ready TypeScript systems across frontend, backend, data, auth, integrations, internal tools, and deployment.",
     url: "https://omrijukin.com",
     sameAs: [
       "https://github.com/Omri-Jukin",
-      "https://linkedin.com/in/omrijukin",
+      "https://www.linkedin.com/in/omri-jukin/",
     ],
     knowsAbout: [
-      "Full Stack Development",
-      "React",
-      "Next.js",
+      "Full-stack TypeScript engineering",
       "TypeScript",
+      "Next.js",
+      "React",
       "Node.js",
-      "Web Development",
-      "UI/UX Design",
-      "Angular",
       "PostgreSQL",
-      "MongoDB",
-      "Docker",
-      "AWS SES",
-      "AWS S3",
-      "AWS Polly",
-      "Prometheus",
-      "Git",
-      "GitHub",
-      "GitLab",
+      "Supabase",
+      "tRPC",
+      "Drizzle",
+      "Internal tools",
+      "Deployment workflows",
     ],
     hasOccupation: {
       "@type": "Occupation",
-      name: "Full Stack Developer",
-      description: "Developing web applications with modern technologies",
-    },
-    worksFor: {
-      "@type": "Organization",
-      name: "Freelance",
+      name: "Full-Stack TypeScript Engineer",
+      description:
+        "Building production-ready TypeScript systems across product, platform, internal tools, and integrations.",
     },
   };
 

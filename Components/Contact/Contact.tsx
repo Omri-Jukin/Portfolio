@@ -21,7 +21,7 @@ import {
 import { CONTACT_CONSTANTS } from "./Contact.const";
 import type { ContactProps } from "./Contact.type";
 
-const Contact: React.FC<ContactProps> = ({ locale = "en", onContactClick }) => {
+const Contact: React.FC<ContactProps> = ({ onContactClick }) => {
   const t = useTranslations("contact");
 
   return (
@@ -67,7 +67,7 @@ const Contact: React.FC<ContactProps> = ({ locale = "en", onContactClick }) => {
                 {t("githubLabel")}
               </ContactActionButton>
             </Link>
-            <Link href={`/${locale}/resume`} underline="none">
+            <Link href="/resume" underline="none">
               <ContactActionButton variant="outlined" startIcon={<DescriptionIcon />}>
                 {t("resumeLabel")}
               </ContactActionButton>

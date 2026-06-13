@@ -216,7 +216,7 @@ const ExamplesPage: React.FC = () => {
             fontWeight: "bold",
           }}
         >
-          Portfolio Showcase & Examples
+          UI Lab
         </Typography>
 
         <Typography
@@ -229,9 +229,9 @@ const ExamplesPage: React.FC = () => {
             mx: "auto",
           }}
         >
-          Explore my full-stack development capabilities through interactive
-          examples, showcasing React, TypeScript, Three.js, animations, and
-          modern web technologies using components I have built.
+          Small interaction experiments - not the main engineering proof. For
+          production systems, review the homepage proof sections and case
+          studies.
         </Typography>
 
         <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>

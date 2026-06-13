@@ -15,7 +15,8 @@ import {
   CardActions,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 import DataGrid from "~/DataGrid/DataGrid";
 import { ClientOnly } from "~/ClientOnly";
 import { DndContext, closestCenter, type DragEndEvent } from "@dnd-kit/core";
@@ -96,6 +97,15 @@ const SECTION_CONFIG = {
       "Create, edit, and send styled emails to clients. Manage templates with HTML/CSS editing.",
     route: "/dashboard/emails",
     buttonText: "Manage Email Templates",
+    secondaryRoute: null,
+    secondaryButtonText: null,
+  },
+  publicContent: {
+    title: "Public Content",
+    description:
+      "Edit homepage section copy, proof links, common questions, CTAs, and public-page content blocks.",
+    route: "/dashboard/public-content",
+    buttonText: "Manage Public Content",
     secondaryRoute: null,
     secondaryButtonText: null,
   },
@@ -314,8 +324,7 @@ function SortableSectionCard({
 
 export default function AdminDashboard() {
   const router = useRouter();
-  const params = useParams();
-  const locale = (params?.locale as string) || "en";
+  const utils = api.useUtils();
   const [isEditing, setIsEditing] = useState(false);
   const [sections, setSections] = useState<
     Array<{ sectionKey: string; displayOrder: number }>
@@ -410,18 +419,23 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (authError) {
       console.error("Authentication error:", authError);
-      router.push(`/${locale}/login`);
+      router.push("/login");
     }
-  }, [authError, router, locale]);
+  }, [authError, router]);
 
-  const logoutMutation = api.auth.logout.useMutation({
-    onSuccess: () => {
-      router.push(`/${locale}/login`);
-    },
-  });
+  const logoutMutation = api.auth.logout.useMutation();
 
-  const handleLogout = () => {
-    logoutMutation.mutate();
+  const handleLogout = async () => {
+    try {
+      await logoutMutation.mutateAsync();
+      await signOut({ redirect: false, callbackUrl: "/login" });
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      await utils.auth.me.invalidate();
+      router.replace("/login");
+      router.refresh();
+    }
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -486,7 +500,7 @@ export default function AdminDashboard() {
             </Button>
             <Button
               variant="outlined"
-              onClick={() => router.push(`/${locale}/login`)}
+              onClick={() => router.push("/login")}
             >
               Back to login
             </Button>
@@ -531,7 +545,7 @@ export default function AdminDashboard() {
         <Button
           key="error-button"
           variant="contained"
-          onClick={() => router.push(`/${locale}/login`)}
+          onClick={() => router.push("/login")}
         >
           Go to Login
         </Button>
@@ -652,7 +666,7 @@ export default function AdminDashboard() {
                   key={`section-button-${sectionKey}`}
                   variant="contained"
                   size={viewMode === "cards" ? "small" : "medium"}
-                  onClick={() => router.push(`/${locale}${config.route!}`)}
+                  onClick={() => router.push(config.route!)}
                 >
                   {config.buttonText}
                 </Button>
@@ -663,7 +677,7 @@ export default function AdminDashboard() {
                   variant="outlined"
                   size={viewMode === "cards" ? "small" : "medium"}
                   onClick={() =>
-                    router.push(`/${locale}${config.secondaryRoute!}`)
+                    router.push(config.secondaryRoute!)
                   }
                 >
                   {config.secondaryButtonText}

@@ -10,7 +10,7 @@ export interface FeaturedProject {
   architecture: string;
   role: string;
   proof: string;
-  githubUrl: string;
+  githubUrl?: string;
   liveUrl?: string;
   caseStudyUrl: string;
 }

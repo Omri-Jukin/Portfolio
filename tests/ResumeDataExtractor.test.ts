@@ -5,6 +5,9 @@ import {
 } from "../lib/utils/resumeDataExtractor";
 
 describe("Resume Data Extractor", () => {
+  const recruiterTitle = "Omri Jukin \u2014 Full-Stack TypeScript Engineer";
+  const hebrewName = "\u05e2\u05de\u05e8\u05d9 \u05d7\u05d5\u05e7\u05d9\u05df";
+
   test("should extract resume data for English", async () => {
     const data = await extractResumeData("en");
 
@@ -17,7 +20,7 @@ describe("Resume Data Extractor", () => {
     expect(data.meta?.title).toBe("Omri Jukin - Resume");
     expect(data.meta?.author).toBe("Omri Jukin");
     expect(data.person.name).toBe("Omri Jukin");
-    expect(data.headline).toContain("Full Stack Engineer");
+    expect(data.headline).toContain("Full-Stack TypeScript Engineer");
     expect(data.coreSkills).toBeInstanceOf(Array);
     expect(data.coreSkills!.length).toBeGreaterThan(0);
     expect(data.experience).toBeInstanceOf(Array);
@@ -30,7 +33,7 @@ describe("Resume Data Extractor", () => {
     const data = await extractResumeData("es");
 
     expect(data).toBeDefined();
-    expect(data.meta?.title).toBe("Omri Jukin - Desarrollador Full Stack");
+    expect(data.meta?.title).toBe(recruiterTitle);
     expect(data.person.name).toBe("Omri Jukin");
   });
 
@@ -38,7 +41,7 @@ describe("Resume Data Extractor", () => {
     const data = await extractResumeData("fr");
 
     expect(data).toBeDefined();
-    expect(data.meta?.title).toBe("Omri Jukin - Développeur Full Stack");
+    expect(data.meta?.title).toBe(recruiterTitle);
     expect(data.person.name).toBe("Omri Jukin");
   });
 
@@ -46,15 +49,15 @@ describe("Resume Data Extractor", () => {
     const data = await extractResumeData("he");
 
     expect(data).toBeDefined();
-    expect(data.meta?.title).toBe("עמרי חוקין - מפתח Full Stack");
-    expect(data.person.name).toBe("עמרי חוקין");
+    expect(data.meta?.title).toBe(recruiterTitle);
+    expect(data.person.name).toBe(hebrewName);
   });
 
   test("should fallback to English for invalid language", async () => {
     const data = await extractResumeData("invalid");
 
     expect(data).toBeDefined();
-    expect(data.meta?.title).toBe("Omri Jukin");
+    expect(data.meta?.title).toBe(recruiterTitle);
     expect(data.person.name).toBe("Omri Jukin");
   });
 

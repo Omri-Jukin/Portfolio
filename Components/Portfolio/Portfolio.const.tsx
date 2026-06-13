@@ -21,7 +21,6 @@ export const PORTFOLIO_CONSTANTS = {
         "Supabase",
         "Cloudflare",
       ],
-      githubUrl: "https://github.com/Omri-Jukin",
       problem:
         "Creator teams need a unified operations layer for publishing, analytics, and workflow management instead of fragmented tooling.",
       solution:
@@ -60,7 +59,6 @@ export const PORTFOLIO_CONSTANTS = {
         "Docker",
         "Kubernetes",
       ],
-      githubUrl: "https://github.com/ClipWhisperer",
       problem:
         "Traditional video processing workflows are manual, time-consuming, and require significant human intervention. Content creators need an automated solution that can process videos, add AI-generated narration, and render final content efficiently.",
       solution:
@@ -145,8 +143,6 @@ eventBus.on('video.processed', async (data) => {
         "Real-time Analytics",
         "Material-UI",
       ],
-      githubUrl: "https://github.com/Omri-Jukin/Snow",
-      liveUrl: "https://snow-hq.vercel.app",
       problem:
         "Traditional CRM systems lack real-time insights and require manual data entry and workflow management. Sales teams need immediate visibility into customer interactions and automated processes to improve efficiency.",
       solution:
@@ -230,7 +226,6 @@ export const customerRouter = router({
         "Image Processing",
         "Responsive Design",
       ],
-      githubUrl: "https://github.com/Omri-Jukin/Clothest",
       problem:
         "People struggle to organize their clothing, make outfit decisions, and track what they own. They need an intelligent system that can categorize items, suggest combinations, and help manage their wardrobe efficiently.",
       solution:
@@ -325,7 +320,6 @@ export const customerRouter = router({
         "NextAuth",
         "next-intl",
       ],
-      githubUrl: "https://github.com/Omri-Jukin/Portfolio",
       liveUrl: "https://omrijukin.com",
       problem:
         "A portfolio site needs both a recruiter-friendly public experience and a maintainable way to manage content, career data, and technical case studies without duplicating state across tools.",

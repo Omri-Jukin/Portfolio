@@ -31,7 +31,7 @@ export interface Project {
   subtitle: string;
   description: string;
   technologies: string[];
-  githubUrl: string;
+  githubUrl?: string;
   liveUrl?: string;
   problem: string;
   solution: string;

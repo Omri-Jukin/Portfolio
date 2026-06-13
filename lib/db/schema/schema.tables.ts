@@ -33,6 +33,7 @@ import {
   IntakeNoteCategory,
   ProposalStatus,
   PriceDisplayMode,
+  PublicContentBlockType,
 } from "./schema.types";
 
 // ============================================
@@ -193,6 +194,47 @@ export const contactInquiries = pgTable("contact_inquiries", {
     .$defaultFn(() => new Date()),
   updatedAt: timestamp("updated_at", { withTimezone: true }),
 });
+
+// Editable public-page copy and structured content blocks.
+export const publicContentBlocks = pgTable(
+  "public_content_blocks",
+  {
+    id: text("id").primaryKey().notNull(),
+    page: text("page").notNull(),
+    locale: text("locale").notNull().default("en"),
+    sectionKey: text("section_key").notNull(),
+    blockKey: text("block_key").notNull(),
+    blockType: text("block_type").$type<PublicContentBlockType>().notNull(),
+    title: text("title"),
+    subtitle: text("subtitle"),
+    body: text("body"),
+    href: text("href"),
+    ctaLabel: text("cta_label"),
+    items: jsonb("items").$type<unknown[]>().notNull().default([]),
+    metadata: jsonb("metadata")
+      .$type<Record<string, unknown>>()
+      .notNull()
+      .default({}),
+    displayOrder: integer("display_order").notNull().default(0),
+    isVisible: boolean("is_visible").notNull().default(true),
+    isFeatured: boolean("is_featured").notNull().default(false),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .$defaultFn(() => new Date()),
+    updatedAt: timestamp("updated_at", { withTimezone: true }),
+    createdBy: uuid("created_by")
+      .notNull()
+      .references(() => users.id),
+  },
+  (table) => ({
+    uniquePublicContentBlock: unique().on(
+      table.page,
+      table.locale,
+      table.sectionKey,
+      table.blockKey
+    ),
+  })
+);
 
 // Certifications table for professional credentials
 export const certifications = pgTable("certifications", {

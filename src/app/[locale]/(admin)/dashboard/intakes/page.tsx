@@ -33,7 +33,7 @@ import {
   Chip,
 } from "@mui/material";
 import { api } from "$/trpc/client";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { useTheme, useMediaQuery } from "@mui/material";
 import {
@@ -52,9 +52,21 @@ import {
 import TokenOutlinedIcon from "@mui/icons-material/TokenOutlined";
 import { ClientOnly } from "~/ClientOnly";
 
+type AdminIntakeLocale = "en" | "es" | "fr" | "he";
+
+type CustomLinkFormData = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  organizationName: string;
+  organizationWebsite: string;
+  expiresInDays: number;
+  locale: AdminIntakeLocale;
+  hiddenSections: string[];
+};
+
 const AdminIntakesList = () => {
   const router = useRouter();
-  const pathname = usePathname();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const {
@@ -88,9 +100,7 @@ const AdminIntakesList = () => {
     },
   });
 
-  // Get current locale from pathname
-  const currentLocale =
-    (pathname.split("/")[1] as "en" | "es" | "fr" | "he") || "en";
+  const currentLocale: AdminIntakeLocale = "en";
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [generatedLink, setGeneratedLink] = useState<string | null>(null);
@@ -102,7 +112,7 @@ const AdminIntakesList = () => {
   );
   const [formError, setFormError] = useState<string | null>(null);
   const [copyButtonClicked, setCopyButtonClicked] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CustomLinkFormData>({
     email: "",
     firstName: "",
     lastName: "",
@@ -534,7 +544,7 @@ const AdminIntakesList = () => {
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      locale: e.target.value as "en" | "es" | "fr" | "he",
+                      locale: e.target.value as AdminIntakeLocale,
                     })
                   }
                 >
@@ -1430,7 +1440,7 @@ const AdminIntakesList = () => {
                           (typeof window !== "undefined"
                             ? window.location.origin
                             : "http://localhost:3000");
-                        const fullLink = `${baseUrl}/${currentLocale}/intake/${link.slug}`;
+                        const fullLink = `${baseUrl}/intake/${link.slug}`;
                         const isExpired = link.isExpired;
                         const clientName =
                           [link.firstName, link.lastName]
@@ -1658,12 +1668,12 @@ const AdminIntakesList = () => {
                                       );
                                       if (matchingIntake) {
                                         router.push(
-                                          `/${currentLocale}/dashboard/review?id=${matchingIntake.id}`
+                                          `/dashboard/review?id=${matchingIntake.id}`
                                         );
                                       } else {
                                         // Navigate to review page - will show all intakes
                                         router.push(
-                                          `/${currentLocale}/dashboard/review`
+                                          "/dashboard/review"
                                         );
                                       }
                                     }}
@@ -1782,7 +1792,7 @@ const AdminIntakesList = () => {
                                 component="button"
                                 onClick={() =>
                                   router.push(
-                                    `/${currentLocale}/dashboard/intakes/${intake.id}`
+                                    `/dashboard/intakes/${intake.id}`
                                   )
                                 }
                                 sx={{

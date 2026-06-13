@@ -423,8 +423,8 @@ export const proposalsRouter = router({
 
       try {
         const proposal = await getProposalById(opts.input.id);
-        // TODO: Implement email sending
-        // For now, just update status to "sent"
+        // Sending currently records status only; outbound email delivery is
+        // handled outside this mutation.
         const updated = await updateProposal({
           id: proposal.id,
           status: "sent",
@@ -469,8 +469,8 @@ export const proposalsRouter = router({
           });
         }
 
-        // TODO: Implement PDF generation
-        // For now, return proposal data
+        // PDF generation is handled by the admin editor export flow; this
+        // endpoint returns proposal data.
         return {
           proposal: {
             ...proposal,

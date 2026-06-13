@@ -98,9 +98,8 @@ export async function emitAudit(entry: {
       console.log("[AUDIT]", JSON.stringify(logEntry, null, 2));
     }
 
-    // TODO: Create audit_logs table and write to database
-    // For now, this provides the interface and console logging
-    // The actual database table can be added later if needed
+    // Audit persistence is not wired in this build; keep the interface stable
+    // and log in development.
   } catch (error) {
     // Don't throw errors from audit logging - it should never break the main flow
     console.error("[AUDIT] Failed to emit audit log:", error);

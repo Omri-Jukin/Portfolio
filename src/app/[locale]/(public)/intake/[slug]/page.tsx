@@ -1,6 +1,15 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { getCustomLinkBySlug } from "#/lib/db/intakes/customLinks";
 import CustomLinkIntakeForm from "./CustomLinkIntakeForm";
+
+export const metadata: Metadata = {
+  title: "Private Intake Link",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 interface CustomLinkPageProps {
   params: Promise<{

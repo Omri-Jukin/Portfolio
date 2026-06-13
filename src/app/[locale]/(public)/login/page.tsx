@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import {
   Box,
@@ -17,14 +17,12 @@ import { Lock as LockIcon, Google as GoogleIcon } from "@mui/icons-material";
 import * as Common from "~/Common/Common.style";
 
 export default function LoginPage() {
-  const params = useParams();
   const searchParams = useSearchParams();
-  const locale = (params?.locale as string) || "en";
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // Get redirectTo from query params (set by middleware) or default to dashboard
-  const redirectTo = searchParams.get("redirectTo") || `/${locale}/dashboard`;
+  const redirectTo = searchParams.get("redirectTo") || "/dashboard";
 
   const handleGoogleSignIn = async () => {
     try {

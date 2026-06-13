@@ -23,7 +23,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { api } from "$/trpc/client";
-import { useRouter, usePathname, useParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import {
   Save as SaveIcon,
   Send as SendIcon,
@@ -64,9 +64,7 @@ const PRICE_DISPLAY_MODE_TITLE = "Price display mode";
 
 const ProposalEditorPage = () => {
   const router = useRouter();
-  const pathname = usePathname();
   const params = useParams();
-  const locale = (pathname.split("/")[1] as "en" | "es" | "fr" | "he") || "en";
   const proposalId = params?.id as string;
   const { showSnackbar } = useSnackbar();
 
@@ -78,7 +76,7 @@ const ProposalEditorPage = () => {
   const createMutation = api.proposals.create.useMutation({
     onSuccess: (data) => {
       showSnackbar("Proposal created successfully", "success");
-      router.push(`/${locale}/dashboard/proposals/${data.id}`);
+      router.push(`/dashboard/proposals/${data.id}`);
     },
     onError: (error) => {
       showSnackbar(error.message || "Failed to create proposal", "error");
@@ -108,7 +106,7 @@ const ProposalEditorPage = () => {
   const deleteMutation = api.proposals.delete.useMutation({
     onSuccess: () => {
       showSnackbar("Proposal deleted successfully", "success");
-      router.push(`/${locale}/dashboard/proposals`);
+      router.push("/dashboard/proposals");
     },
     onError: (error) => {
       showSnackbar(error.message || "Failed to delete proposal", "error");
@@ -119,7 +117,7 @@ const ProposalEditorPage = () => {
     api.proposals.generateShareToken.useMutation({
       onSuccess: (data) => {
         if (data.token) {
-          const url = `${window.location.origin}/${locale}/p/${data.token}`;
+          const url = `${window.location.origin}/p/${data.token}`;
           setShareUrl(url);
           setShareDialogOpen(true);
         }
@@ -172,8 +170,7 @@ const ProposalEditorPage = () => {
   };
 
   const handleSend = () => {
-    // TODO: Implement send proposal
-    showSnackbar("Send proposal feature coming soon", "info");
+    showSnackbar("Proposal sending is not connected in this admin view", "info");
   };
 
   const handleDelete = () => {
@@ -285,7 +282,7 @@ const ProposalEditorPage = () => {
         <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 3 }}>
           <Button
             startIcon={<ArrowBackIcon />}
-            onClick={() => router.push(`/${locale}/dashboard/proposals`)}
+            onClick={() => router.push("/dashboard/proposals")}
           >
             Back
           </Button>
@@ -454,22 +451,25 @@ const ProposalEditorPage = () => {
 
           <TabPanel value={tabValue} index={1}>
             <Typography variant="body1" color="text.secondary">
-              Content builder coming soon. This will allow you to add sections
-              and line items to your proposal.
+              Proposal sections are edited through the summary fields in this
+              version. Structured section editing is not connected in this admin
+              view.
             </Typography>
           </TabPanel>
 
           <TabPanel value={tabValue} index={2}>
             <Typography variant="body1" color="text.secondary">
-              Charges configuration coming soon. This will allow you to
-              configure pricing for your proposal.
+              Proposal charges are managed through the existing pricing fields
+              and proposal data. Dedicated charge-line editing is not connected
+              in this admin view.
             </Typography>
           </TabPanel>
 
           <TabPanel value={tabValue} index={3}>
             <Typography variant="body1" color="text.secondary">
-              Totals preview coming soon. This will show the complete pricing
-              breakdown including subtotals, discounts, taxes, and grand total.
+              Use the saved proposal data and PDF export for pricing review.
+              Dedicated totals breakdown editing is not connected in this admin
+              view.
             </Typography>
           </TabPanel>
         </Card>

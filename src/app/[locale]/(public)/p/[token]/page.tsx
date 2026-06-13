@@ -84,8 +84,7 @@ const PublicProposalPage = () => {
   };
 
   const handleExportPDF = () => {
-    // TODO: Implement PDF export
-    showSnackbar("PDF export feature coming soon", "info");
+    showSnackbar("PDF export is unavailable in this shared proposal view", "info");
   };
 
   if (isLoading) {
@@ -238,8 +237,7 @@ const PublicProposalPage = () => {
             </Typography>
             <Divider sx={{ my: 2 }} />
             <Typography variant="body2" color="text.secondary">
-              Proposal content sections will be displayed here. Content builder
-              coming soon.
+              Proposal content sections are not included in this shared view.
             </Typography>
           </CardContent>
         </Card>
@@ -251,8 +249,8 @@ const PublicProposalPage = () => {
             </Typography>
             <Divider sx={{ my: 2 }} />
             <Typography variant="body2" color="text.secondary">
-              Pricing breakdown will be displayed here. Totals calculation
-              coming soon.
+              Pricing totals are shown when they are included in the shared
+              proposal.
             </Typography>
           </CardContent>
         </Card>

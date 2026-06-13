@@ -20,6 +20,7 @@ import { servicesRouter } from "./routers/services";
 import { testimonialsRouter } from "./routers/testimonials";
 import { rolesRouter } from "./routers/roles";
 import { proposalsRouter } from "./routers/proposals";
+import { publicContentRouter } from "./routers/publicContent";
 
 export const appRouter = router({
   blog: blogRouter,
@@ -43,6 +44,7 @@ export const appRouter = router({
   testimonials: testimonialsRouter,
   roles: rolesRouter,
   proposals: proposalsRouter,
+  publicContent: publicContentRouter,
 });
 
 export type AppRouter = typeof appRouter;

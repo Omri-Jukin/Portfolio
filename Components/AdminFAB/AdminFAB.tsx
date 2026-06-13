@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Fab, Tooltip, Box } from "@mui/material";
 import {
   Calculate as CalculateIcon,
@@ -16,6 +16,7 @@ import {
   Receipt as TaxProfilesIcon,
 } from "@mui/icons-material";
 import { useRouter, usePathname } from "next/navigation";
+import { getSession, signOut } from "next-auth/react";
 import ProjectCostCalculator from "~/ProjectCostCalculator";
 import { api } from "$/trpc/client";
 
@@ -29,9 +30,32 @@ interface QuickAccessButton {
 export default function AdminFAB() {
   const router = useRouter();
   const pathname = usePathname();
+  const utils = api.useUtils();
   const [hovered, setHovered] = useState(false);
   const [calculatorOpen, setCalculatorOpen] = useState(false);
+  const [hasLoggedOut, setHasLoggedOut] = useState(false);
+  const [sessionStatus, setSessionStatus] = useState<
+    "loading" | "authenticated" | "unauthenticated"
+  >("loading");
   const calculatorButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    let isCurrent = true;
+
+    getSession()
+      .then((session) => {
+        if (!isCurrent) return;
+        setSessionStatus(session ? "authenticated" : "unauthenticated");
+      })
+      .catch(() => {
+        if (!isCurrent) return;
+        setSessionStatus("unauthenticated");
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, []);
 
   // Check if user is authenticated
   // Use enabled: false initially to prevent automatic query, then check session first
@@ -41,17 +65,35 @@ export default function AdminFAB() {
     error: authError,
     isError: isAuthError,
   } = api.auth.me.useQuery(undefined, {
+    enabled: sessionStatus === "authenticated" && !hasLoggedOut,
     retry: false,
     refetchOnWindowFocus: false,
     // Don't retry on error - if auth fails, user is not logged in
     retryOnMount: false,
   });
 
-  // Extract locale from pathname
-  const locale = pathname.split("/")[1] || "en";
+  const logoutMutation = api.auth.logout.useMutation();
+
+  const handleLogout = async () => {
+    setHasLoggedOut(true);
+    setSessionStatus("unauthenticated");
+    setHovered(false);
+    setCalculatorOpen(false);
+
+    try {
+      await logoutMutation.mutateAsync();
+      await signOut({ redirect: false, callbackUrl: "/login" });
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      await utils.auth.me.invalidate();
+      router.replace("/login");
+      router.refresh();
+    }
+  };
 
   // Don't show FAB on login page
-  if (pathname.includes("/login")) {
+  if (hasLoggedOut || pathname.includes("/login")) {
     return null;
   }
 
@@ -60,46 +102,7 @@ export default function AdminFAB() {
   const intakeId = intakeIdMatch ? intakeIdMatch[1] : undefined;
 
   const navigateTo = (path: string) => {
-    router.push(`/${locale}${path}`);
-  };
-
-  const logoutMutation = api.auth.logout.useMutation({
-    onSuccess: () => {
-      // Redirect to login after successful logout
-      router.push(`/${locale}/login`);
-    },
-    onError: () => {
-      // Still redirect even if there's an error
-      router.push(`/${locale}/login`);
-    },
-  });
-
-  const handleLogout = async () => {
-    try {
-      // Call NextAuth signout endpoint to clear all cookies
-      // NextAuth v5 uses GET request to /api/auth/signout
-      // This will automatically clear:
-      // - next-auth.session-token (main auth cookie with JWT)
-      // - next-auth.csrf-token (CSRF protection)
-      // - next-auth.callback-url (OAuth redirect URL)
-      const response = await fetch("/api/auth/signout", {
-        method: "GET",
-        credentials: "include", // Important: include cookies in the request
-      });
-
-      if (!response.ok) {
-        // NextAuth signout returned non-OK status, but continue with redirect
-      }
-
-      // Wait for the signout to complete, then redirect
-      // The redirect will happen via the mutation's onSuccess callback
-      logoutMutation.mutate();
-    } catch (error) {
-      console.error("Logout error:", error);
-      // Still try to logout via tRPC and redirect
-      // Even if NextAuth signout fails, try to redirect to login
-      logoutMutation.mutate();
-    }
+    router.push(path);
   };
 
   const quickAccessButtons: QuickAccessButton[] = [
@@ -176,20 +179,32 @@ export default function AdminFAB() {
   // - User has admin role OR is the specific admin email
   const hasAuthError = !!authError || isAuthError;
   const hasUserData = !!userData?.user;
+  const isSessionLoading = sessionStatus === "loading";
   const isAdminUser =
     hasUserData &&
     (userData.user.role === "admin" ||
       userData.user.email === "omrijukin@gmail.com");
 
   const isAuthenticated =
-    !authLoading && !hasAuthError && hasUserData && isAdminUser;
+    !isSessionLoading &&
+    !authLoading &&
+    !hasAuthError &&
+    hasUserData &&
+    isAdminUser;
 
   // Don't render FAB if:
   // - Auth is still loading (wait for result)
   // - There's an authentication error (user is not logged in)
   // - No user data (user is not authenticated)
   // - User is not an admin
-  if (authLoading || hasAuthError || !hasUserData || !isAdminUser) {
+  if (
+    isSessionLoading ||
+    sessionStatus !== "authenticated" ||
+    authLoading ||
+    hasAuthError ||
+    !hasUserData ||
+    !isAdminUser
+  ) {
     return null;
   }
 

@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "Omri Jukin — Fullstack Engineer",
-    "description": "Fullstack Engineer building scalable web systems with TypeScript, Next.js, Node.js, and PostgreSQL. End-to-end products, internal systems, and production-ready delivery."
+    "title": "Omri Jukin — Full-Stack TypeScript Engineer",
+    "description": "Full-stack TypeScript engineer building production-ready web systems with Next.js, React, Node.js, PostgreSQL, Supabase, tRPC, Drizzle, and Cloudflare. Open to engineering roles."
   },
   "login": {
     "title": "Admin Login",
@@ -137,7 +137,7 @@
     "items": [
       {
         "label": "Experience",
-        "value": "~2 years professional engineering at Abra Technologies, plus Volunteer CTO / Technical Lead at The Atheist Line (2025–Present)."
+        "value": "3+ years of hands-on professional engineering across 2024–2026 and counting, plus Technical Lead ownership at The Atheist Line (2025–Present)."
       },
       {
         "label": "Core stack",
@@ -280,20 +280,20 @@
     "subtitle": "What I bring to the table",
     "services": [
       {
-        "title": "Craft your future",
-        "description": "I build scalable, modern applications that grow with your business needs.",
+        "title": "Internal tools that replace spreadsheet chaos",
+        "description": "Dashboards, CRM workflows, admin panels, CMS/backoffice systems, and operational tools built around how teams actually work.",
         "buttonText": "See Work",
         "buttonVariant": "primary"
       },
       {
-        "title": "Skills that shine",
-        "description": "I offer full-stack expertise from frontend finesse to backend brilliance.",
+        "title": "Full-stack product foundations",
+        "description": "Next.js apps with typed APIs, PostgreSQL schemas, auth, permissions, integrations, and deployment paths that can survive real usage.",
         "buttonText": "Discover",
         "buttonVariant": "secondary"
       },
       {
-        "title": "Feedback fuels growth",
-        "description": "I provide continuous improvement through user feedback and iterative development.",
+        "title": "Automation and integration workflows",
+        "description": "Supabase, Cloudflare, AWS, queues, AI-assisted tooling, and repeatable workflows that reduce manual operations.",
         "buttonText": "Get in Touch",
         "buttonVariant": "primary"
       }
@@ -322,9 +322,7 @@
         "stack": ["React Native", "TypeScript", "Supabase", "Cloudflare"],
         "architecture": "Mobile frontend, backend services, auth boundaries, and integration-ready data models for scalable creator workflows.",
         "role": "End-to-end technical direction across product architecture, implementation, and release readiness.",
-        "proof": "[ADD IMPACT]",
-        "githubUrl": "https://github.com/Omri-Jukin",
-        "liveUrl": "[ADD DEMO LINK]",
+        "proof": "Product architecture and release-readiness plan for a creator operations platform; public demo is not available yet.",
         "caseStudyUrl": "/resume#socially"
       },
       {
@@ -336,9 +334,7 @@
         "stack": ["Node.js", "TypeScript", "Supabase", "AWS", "FFmpeg"],
         "architecture": "Hub-based orchestration with queue-driven jobs, service separation, and cloud-integrated processing steps.",
         "role": "Platform design and hands-on implementation across orchestration, media processing, and service boundaries.",
-        "proof": "Production-oriented microservices structure with clear operational ownership per service.",
-        "githubUrl": "https://github.com/ClipWhisperer",
-        "liveUrl": "[ADD DEMO LINK]",
+        "proof": "Production-oriented microservices structure with queue-driven orchestration, media-processing boundaries, and cloud-integrated processing steps.",
         "caseStudyUrl": "/resume#clipwhisperer"
       },
       {
@@ -350,9 +346,7 @@
         "stack": ["Next.js", "tRPC", "PostgreSQL", "Drizzle ORM"],
         "architecture": "Type-safe APIs, tenant-aware data modeling, RBAC, and real-time dashboard flows.",
         "role": "Full-stack implementation across frontend, backend, and database layers.",
-        "proof": "Live demo available.",
-        "githubUrl": "https://github.com/Omri-Jukin/Snow",
-        "liveUrl": "https://snow-hq.vercel.app",
+        "proof": "Multi-tenant CRM with RBAC-aware data modeling, type-safe tRPC APIs, Drizzle schema modeling, and dashboard flows.",
         "caseStudyUrl": "/resume#snow-hq"
       },
       {
@@ -372,7 +366,6 @@
         "architecture": "Public i18n site plus RBAC-protected admin CMS, Postgres-backed content APIs, and modular section-driven homepage composition.",
         "role": "Sole builder — architecture, implementation, content workflows, and deployment.",
         "proof": "This site, including its private CMS and operational tooling.",
-        "githubUrl": "https://github.com/Omri-Jukin",
         "liveUrl": "https://omrijukin.com",
         "caseStudyUrl": "/resume#portfolio-platform"
       }
@@ -396,8 +389,8 @@
   },
   "contact": {
     "title": "Contact",
-    "subtitle": "Open to fullstack and web solutions engineering roles.",
-    "description": "Reach out for roles, technical conversations, or to review my work. Email and LinkedIn are the fastest ways to connect.",
+    "subtitle": "Open to full-stack TypeScript engineering roles.",
+    "description": "For recruiters and hiring managers: send the role, stack, team context, and ownership expectations. Email and LinkedIn are the fastest ways to connect.",
     "button": "Send a message",
     "emailLabel": "Email",
     "linkedinLabel": "LinkedIn",
@@ -405,7 +398,7 @@
     "resumeLabel": "Resume",
     "form": {
       "title": "Get in Touch",
-      "description": "Have a project in mind ? Let's discuss how we can bring your ideas to life. Fill out the contact form and I'll get back to you as soon as possible.",
+      "description": "Tell me about the role, team, stack, and ownership expectations - or send a focused technical brief if this is a selected project conversation.",
       "name": "My Name",
       "email": "My Email",
       "phone": "My Phone",
@@ -478,14 +471,14 @@
     "viewResume": "View Resume",
     "experiences": [
       {
-        "role": "Technical Lead (Volunteer CTO)",
+        "role": "Technical Lead",
         "time": "2025–Present",
         "company": "The Atheist Line",
         "details": [
-          "Define and lead the technical direction of the organization's digital ecosystem as the primary hands-on engineer.",
-          "Design and build public-facing and internal systems spanning website architecture, content workflows, internal tooling, and team-facing operational processes.",
-          "Own end-to-end technical planning and implementation across architecture, integrations, automation opportunities, CI/CD, and production readiness.",
-          "Drive the system from zero-to-one by establishing the technical foundations for content management, internal workflows, analytics, and future operational tooling."
+          "Volunteer technical leadership role for a 17-person organization, serving as the primary technical owner for technical decisions, implementation planning, and digital operations.",
+          "Define and lead the technical direction of the organization's digital ecosystem across public-facing and internal systems.",
+          "Own zero-to-one architecture and implementation for website architecture, content workflows, internal tooling, team operations, integrations, automation opportunities, CI/CD, analytics foundations, and production readiness.",
+          "Translate organizational needs from design, publishing, community, and operations roles into maintainable technical workflows."
         ]
       },
       {
@@ -532,10 +525,10 @@
     },
     "networkingSummary": "Download my resume to learn more about my background",
     "experience": "Full Stack Developer",
-    "professionalSummary": "Full-Stack Software Engineer with 2+ years of hands-on experience in modern web technologies and scalable Systems. Currently seeking opportunities to contribute to innovative teams building scalable systems and exceptional user experiences, mostly focusing on products that innovate and improve the everyday lives of others.",
+    "professionalSummary": "Full-Stack TypeScript Engineer with 3+ years of hands-on professional experience building production-minded web systems across frontend, backend, data, integrations, and internal tooling. Strongest in Next.js, React, Node.js, PostgreSQL, Supabase, tRPC/Drizzle-style type-safe systems, and product-platform ownership. Looking for teams where I can own meaningful full-stack work and help ship maintainable systems.",
     "personalInfo": {
       "name": "Omri Jukin",
-      "title": "Full-Stack Software Engineer | Next.js, TypeScript, Node.js | PostgreSQL, AWS | Scalable Systems",
+      "title": "Full-Stack TypeScript Engineer | Next.js, React, Node.js | PostgreSQL, Supabase | Product-Platform Ownership",
       "contacts": {
         "phone": "+972 52-334-4064",
         "email": "contact@omrijukin.com",
@@ -810,9 +803,8 @@
       { "label": "Career", "href": "/career" },
       { "label": "Education", "href": "/education" },
       { "label": "Resume", "href": "/resume" },
-      { "label": "Blog", "href": "/blog" },
       { "label": "Contact", "href": "/contact" },
-      { "label": "Examples", "href": "/examples" }
+      { "label": "UI Lab", "href": "/examples" }
     ],
     "socialTitle": "Social",
     "social": [
@@ -1322,7 +1314,7 @@
   },
   "calendly": {
     "title": "Schedule a Meeting",
-    "description": "Let's discuss your project, explore collaboration opportunities, or have a technical conversation. I'm here to help bring your ideas to life.",
+    "description": "For recruiters and hiring managers: share the role, stack, team context, and ownership expectations. I can also review selected technical conversations when the scope is clear.",
     "booking": {
       "title": "Meeting Details",
       "description": "Choose a time that works best for you. All meetings are conducted via video call with screen sharing capabilities.",
@@ -1348,20 +1340,20 @@
       "description": "Here's what you can expect from our meeting to ensure we make the most of our time together.",
       "items": [
         {
-          "title": "Project Discussion",
-          "description": "We'll dive deep into your project requirements, technical challenges, and desired outcomes. Bring any questions or specific problems you'd like to solve."
+          "title": "Role Context",
+          "description": "Share the role, team shape, product domain, interview process, and what ownership would look like in the position."
         },
         {
           "title": "Technical Consultation",
           "description": "I'll provide expert advice on architecture decisions, technology stack recommendations, and best practices based on your specific use case."
         },
         {
-          "title": "Collaboration Opportunities",
-          "description": "Explore potential partnership opportunities, freelance projects, or long-term collaboration possibilities that align with your goals."
+          "title": "Fit Discussion",
+          "description": "We can compare the role's needs with my full-stack TypeScript, product-platform, and production delivery experience."
         },
         {
           "title": "Next Steps",
-          "description": "We'll outline clear next steps, timelines, and deliverables to move forward with your project or collaboration."
+          "description": "We'll agree on follow-up material, interview logistics, or a focused technical brief when that is the right next step."
         }
       ]
     }

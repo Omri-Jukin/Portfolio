@@ -43,7 +43,9 @@ export default function LanguageSwitcher() {
     }
 
     const targetPath = getTargetPath(newLocale, pathname);
-    router.push(targetPath);
+    document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; samesite=lax`;
+    router.replace(targetPath);
+    router.refresh();
     handleClose();
   };
 

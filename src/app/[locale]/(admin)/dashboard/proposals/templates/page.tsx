@@ -17,7 +17,7 @@ import {
   Stack,
 } from "@mui/material";
 import { api } from "$/trpc/client";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   Add as AddIcon,
   Edit as EditIcon,
@@ -30,8 +30,6 @@ import { ProposalTemplate } from "#/lib/db";
 
 const ProposalTemplatesPage = () => {
   const router = useRouter();
-  const pathname = usePathname();
-  const locale = (pathname.split("/")[1] as "en" | "es" | "fr" | "he") || "en";
   const { showSnackbar } = useSnackbar();
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -151,7 +149,7 @@ const ProposalTemplatesPage = () => {
         <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 3 }}>
           <Button
             startIcon={<ArrowBackIcon />}
-            onClick={() => router.push(`/${locale}/dashboard/proposals`)}
+            onClick={() => router.push("/dashboard/proposals")}
           >
             Back to Proposals
           </Button>
@@ -272,9 +270,9 @@ const ProposalTemplatesPage = () => {
                 }
               />
               <Typography variant="body2" color="text.secondary">
-                Template content configuration coming soon. This will allow you
-                to define the structure and default content for proposals
-                created from this template.
+                Template content editing is not connected in this admin view.
+                Use the template name, description, and default flag until
+                structured content rules are wired.
               </Typography>
             </Stack>
           </DialogContent>

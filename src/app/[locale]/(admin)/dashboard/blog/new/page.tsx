@@ -22,13 +22,11 @@ import {
 } from "@mui/material";
 import { CloudUpload, Delete } from "@mui/icons-material";
 import { api } from "$/trpc/client";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Snackbar from "~/Snackbar";
 
 const AdminBlogNew = () => {
   const router = useRouter();
-  const params = useParams();
-  const locale = (params?.locale as string) || "en";
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -64,7 +62,7 @@ const AdminBlogNew = () => {
         severity: "success",
       });
       setTimeout(() => {
-        router.push(`/${locale}/dashboard/blog`);
+        router.push("/dashboard/blog");
       }, 2000);
     },
     onError: (error) => {
@@ -552,7 +550,7 @@ const AdminBlogNew = () => {
           <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end" }}>
             <Button
               variant="outlined"
-              onClick={() => router.push(`/${locale}/dashboard/blog`)}
+              onClick={() => router.push("/dashboard/blog")}
               disabled={createPostMutation.isPending}
             >
               Cancel
