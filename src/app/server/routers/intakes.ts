@@ -273,7 +273,7 @@ export const intakesRouter = router({
         (process.env.NODE_ENV === "production"
           ? "https://omrijukin.com"
           : "http://localhost:3000");
-      const link = `${baseUrl}/${input.locale}/intake/${slug}`;
+      const link = `${baseUrl}/services/intake/${slug}`;
 
       // Send email to client with the custom link
       const emailResult = await sendCustomLinkEmail(

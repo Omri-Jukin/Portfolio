@@ -27,6 +27,16 @@ const ALLOWED_VIDEO_TYPES = [
 
 // Storage bucket name for blog media
 const BLOG_MEDIA_BUCKET = "blog-media";
+const ALLOWED_FOLDERS = new Set(["blog", "projects", "public-content"]);
+
+function getSafeFolder(value: FormDataEntryValue | null) {
+  if (typeof value !== "string" || !value.trim()) {
+    return "blog";
+  }
+
+  const folder = value.trim();
+  return ALLOWED_FOLDERS.has(folder) ? folder : null;
+}
 
 export async function POST(request: NextRequest) {
   // Require admin access
@@ -43,10 +53,17 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
-    const folder = (formData.get("folder") as string) || "blog"; // Default to blog folder
+    const folder = getSafeFolder(formData.get("folder"));
 
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
+    }
+
+    if (!folder) {
+      return NextResponse.json(
+        { error: "Invalid upload folder" },
+        { status: 400 }
+      );
     }
 
     // Determine file type and max size

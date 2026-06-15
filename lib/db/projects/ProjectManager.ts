@@ -1,4 +1,4 @@
-import { eq, asc, desc, and, sql, count } from "drizzle-orm";
+import { eq, asc, desc, and, or, sql, count } from "drizzle-orm";
 import { getDB } from "../client";
 import { projects } from "../schema/schema.tables";
 import { ProjectStatus, ProjectType } from "../schema/schema.types";
@@ -14,11 +14,86 @@ import { IProject, TechnicalChallenge, CodeExample } from "#/lib";
 import {
   ProjectArchitecture,
   ProjectProblem,
+  ProjectProofLink,
   ProjectSolution,
 } from "#/lib/types";
 
 // Helper function to get database client
 const getDbClient = async () => getDB();
+
+const normalizeProofLinks = (value: unknown): ProjectProofLink[] => {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .filter(
+      (item): item is ProjectProofLink =>
+        typeof item === "object" &&
+        item !== null &&
+        "label" in item &&
+        "href" in item &&
+        typeof item.label === "string" &&
+        typeof item.href === "string"
+    )
+    .map((item) => ({
+      label: item.label,
+      href: item.href,
+      ...(typeof item.description === "string"
+        ? { description: item.description }
+        : {}),
+    }));
+};
+
+const normalizeProblem = (value: unknown): ProjectProblem | null => {
+  if (!value) {
+    return null;
+  }
+
+  if (typeof value === "string") {
+    return {
+      title: "Problem",
+      description: value,
+      impact: "",
+    };
+  }
+
+  return value as ProjectProblem;
+};
+
+const normalizeSolution = (value: unknown): ProjectSolution | null => {
+  if (!value) {
+    return null;
+  }
+
+  if (typeof value === "string") {
+    return {
+      approach: value,
+      methodology: "",
+      keyDecisions: [],
+    };
+  }
+
+  return value as ProjectSolution;
+};
+
+const normalizeArchitecture = (value: unknown): ProjectArchitecture | null => {
+  if (!value) {
+    return null;
+  }
+
+  if (typeof value === "string") {
+    return {
+      overview: value,
+      components: [],
+      dataFlow: "",
+      technologies: [],
+      patterns: [],
+    };
+  }
+
+  return value as ProjectArchitecture;
+};
 
 const transformDbToApi = (dbProject: ProjectDB): IProject => {
   // Map status to API ProjectStatus, excluding "deleted"
@@ -110,9 +185,19 @@ const transformDbToApi = (dbProject: ProjectDB): IProject => {
     clientName: dbProject.clientName,
     budget: dbProject.budget,
     isFeatured: dbProject.isFeatured,
-    problem: dbProject.problem as ProjectProblem | null,
-    solution: dbProject.solution as ProjectSolution | null,
-    architecture: dbProject.architecture as ProjectArchitecture | null,
+    isOpenSource: dbProject.isOpenSource,
+    isResumeFeatured: dbProject.isResumeFeatured,
+    caseStudySlug: dbProject.caseStudySlug,
+    hiringSignal: dbProject.hiringSignal,
+    constraints: dbProject.constraints,
+    decisions: dbProject.decisions,
+    outcome: dbProject.outcome,
+    caseStudyRole: dbProject.caseStudyRole,
+    proofLinks: normalizeProofLinks(dbProject.proofLinks),
+    privateRepoNote: dbProject.privateRepoNote,
+    problem: normalizeProblem(dbProject.problem),
+    solution: normalizeSolution(dbProject.solution),
+    architecture: normalizeArchitecture(dbProject.architecture),
     titleTranslations: dbProject.titleTranslations || null,
     descriptionTranslations: dbProject.descriptionTranslations || null,
     createdAt: dbProject.createdAt.toISOString(),
@@ -142,6 +227,27 @@ export class ProjectManager {
       .select()
       .from(projects)
       .where(eq(projects.id, id))
+      .limit(1);
+
+    return result[0] ? transformDbToApi(result[0]) : null;
+  }
+
+  static async getBySlug(
+    slug: string,
+    visibleOnly = true
+  ): Promise<IProject | null> {
+    const conditions = [
+      or(eq(projects.id, slug), eq(projects.caseStudySlug, slug)),
+    ];
+    if (visibleOnly) {
+      conditions.push(eq(projects.isVisible, true));
+    }
+
+    const db = await getDbClient();
+    const result = await db
+      .select()
+      .from(projects)
+      .where(and(...conditions))
       .limit(1);
 
     return result[0] ? transformDbToApi(result[0]) : null;
@@ -210,6 +316,22 @@ export class ProjectManager {
 
   static async getFeatured(visibleOnly = true): Promise<IProject[]> {
     const conditions = [eq(projects.isFeatured, true)];
+    if (visibleOnly) {
+      conditions.push(eq(projects.isVisible, true));
+    }
+
+    const db = await getDbClient();
+    const results = await db
+      .select()
+      .from(projects)
+      .where(and(...conditions))
+      .orderBy(asc(projects.displayOrder), desc(projects.startDate));
+
+    return results.map(transformDbToApi);
+  }
+
+  static async getResumeFeatured(visibleOnly = true): Promise<IProject[]> {
+    const conditions = [eq(projects.isResumeFeatured, true)];
     if (visibleOnly) {
       conditions.push(eq(projects.isVisible, true));
     }
@@ -324,6 +446,15 @@ export class ProjectManager {
 
     return await this.update(id, {
       isFeatured: !current.isFeatured,
+    });
+  }
+
+  static async toggleResumeFeatured(id: string): Promise<IProject | null> {
+    const current = await this.getById(id);
+    if (!current) return null;
+
+    return await this.update(id, {
+      isResumeFeatured: !current.isResumeFeatured,
     });
   }
 
@@ -478,6 +609,9 @@ export class ProjectManager {
     }
     if (filters?.isFeatured !== undefined) {
       conditions.push(eq(projects.isFeatured, filters.isFeatured));
+    }
+    if (filters?.isResumeFeatured !== undefined) {
+      conditions.push(eq(projects.isResumeFeatured, filters.isResumeFeatured));
     }
     if (filters?.isOpenSource !== undefined) {
       conditions.push(eq(projects.isOpenSource, filters.isOpenSource));

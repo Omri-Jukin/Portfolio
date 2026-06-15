@@ -12,9 +12,8 @@ export async function GET() {
     const db = await getDB();
     diagnostics.database = db ? "connected" : "not-configured";
   } catch (error) {
+    console.error("[health] Database check failed:", error);
     diagnostics.database = "error";
-    diagnostics.databaseError =
-      error instanceof Error ? error.message : "unknown error";
   }
 
   return NextResponse.json(

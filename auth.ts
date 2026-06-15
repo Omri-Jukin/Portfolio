@@ -54,14 +54,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async redirect({ url, baseUrl }) {
       // If the URL is the signIn page, redirect to dashboard instead
       if (url.includes("/login") || url.includes("/signin")) {
-        return `${baseUrl}/en/dashboard`;
+        return `${baseUrl}/dashboard`;
       }
 
       // If redirect URL is provided and is relative, use it
       if (url.startsWith("/")) {
         // Don't redirect to login/signin pages
         if (url.includes("/login") || url.includes("/signin")) {
-          const dashboardUrl = `${baseUrl}/en/dashboard`;
+          const dashboardUrl = `${baseUrl}/dashboard`;
           return dashboardUrl;
         }
         return `${baseUrl}${url}`;
@@ -71,13 +71,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (url.startsWith(baseUrl)) {
         // Don't redirect to login/signin pages
         if (url.includes("/login") || url.includes("/signin")) {
-          return `${baseUrl}/en/dashboard`;
+          return `${baseUrl}/dashboard`;
         }
         return url;
       }
 
       // Default redirect to dashboard
-      return `${baseUrl}/en/dashboard`;
+      return `${baseUrl}/dashboard`;
     },
     async session({ session, token }) {
       // Add custom fields to session from JWT token

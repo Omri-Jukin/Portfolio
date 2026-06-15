@@ -22,10 +22,7 @@ export async function GET(request: NextRequest) {
       nodeEnv: process.env.NODE_ENV,
       hasJwtSecret:
         !!process.env.JWT_SECRET && process.env.JWT_SECRET !== "JWT_SECRET_KEY",
-      jwtSecretLength: process.env.JWT_SECRET?.length || 0,
       hasDatabaseUrl: !!process.env.DATABASE_URL,
-      databaseUrlPrefix:
-        process.env.DATABASE_URL?.substring(0, 20) || "not-set",
       hasEmailProvider: !!process.env.EMAIL_PROVIDER,
       emailProvider: process.env.EMAIL_PROVIDER || "not-set",
       hasGmailUser: !!process.env.GMAIL_USER,

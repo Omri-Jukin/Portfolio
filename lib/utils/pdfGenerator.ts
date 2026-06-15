@@ -561,6 +561,35 @@ export async function renderResumePDF(
   }
 
   // Education
+  if (data.certifications && data.certifications.length > 0) {
+    await addSection("Certifications", async () => {
+      for (const certification of data.certifications!.slice(0, 4)) {
+        doc.setFont(typography.font, "bold");
+        doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
+        currentY = await addTextBlock(certification.name, currentY, {
+          fontSize: PDF_LAYOUT.FONT_SIZES.small,
+          fontWeight: "bold",
+          linkUrl: certification.url,
+        });
+
+        doc.setFont(typography.font, "normal");
+        const issuerLine = [
+          certification.issuer,
+          certification.period,
+          certification.skills?.slice(0, 4).join(", "),
+        ]
+          .filter(Boolean)
+          .join(" | ");
+
+        currentY = await addTextBlock(issuerLine, currentY, {
+          fontSize: PDF_LAYOUT.FONT_SIZES.small,
+        });
+        currentY += 2;
+      }
+    });
+  }
+
+  // Education
   if (data.education && data.education.length > 0) {
     await addSection("Education", async () => {
       const educationList = isRTL ? data.education.slice(0, 1) : data.education;

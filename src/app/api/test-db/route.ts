@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDB } from "$/db/client";
 import { sql } from "drizzle-orm";
-import { UserStatus, UserRole } from "#/lib";
 import { requireAdminAccess } from "$/api/auth";
 
 /**
@@ -37,18 +36,9 @@ export async function GET(request: NextRequest) {
     // Test 1: Simple query
     const testResult = await db.execute(sql`SELECT 1 as test`);
 
-    // Test 2: Check users table
-    const usersResult = await db.execute(
-      sql`SELECT id, email, role, status FROM users LIMIT 5`
-    );
-
-    // Convert results to arrays for both driver types
     const testRows = Array.isArray(testResult)
       ? testResult
       : (testResult as { rows?: Record<string, unknown>[] }).rows || [];
-    const usersRows = Array.isArray(usersResult)
-      ? usersResult
-      : (usersResult as { rows?: Record<string, unknown>[] }).rows || [];
 
     return NextResponse.json(
       {
@@ -56,12 +46,6 @@ export async function GET(request: NextRequest) {
         message: "Database connection successful",
         tests: {
           simpleQuery: testRows.length > 0,
-          usersFound: usersRows.length,
-          userEmails: usersRows.map((u: Record<string, unknown>) => ({
-            email: u.email as string,
-            role: u.role as UserRole,
-            status: u.status as UserStatus,
-          })),
         },
         timestamp: new Date().toISOString(),
       },

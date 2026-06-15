@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { router, procedure, editorProcedure } from "../trpc";
 import { PublicContentBlockManager } from "$/db/publicContent/PublicContentBlockManager";
+import { canEditContentSync } from "#/lib/auth/rbac";
 
 const PublicContentBlockTypeSchema = z.enum([
   "section",
@@ -31,6 +32,10 @@ const UpdatePublicContentBlockSchema = z.object({
   isFeatured: z.boolean().optional(),
 });
 
+function canReadHiddenContent(role: string | undefined) {
+  return canEditContentSync(role || "visitor");
+}
+
 export const publicContentRouter = router({
   getByPage: procedure
     .input(
@@ -40,8 +45,11 @@ export const publicContentRouter = router({
         visibleOnly: z.boolean().default(true),
       })
     )
-    .query(async ({ input }) => {
-      return PublicContentBlockManager.getByPage(input);
+    .query(async ({ input, ctx }) => {
+      return PublicContentBlockManager.getByPage({
+        ...input,
+        visibleOnly: input.visibleOnly || !canReadHiddenContent(ctx.user?.role),
+      });
     }),
 
   getBySection: procedure
@@ -53,8 +61,11 @@ export const publicContentRouter = router({
         visibleOnly: z.boolean().default(true),
       })
     )
-    .query(async ({ input }) => {
-      return PublicContentBlockManager.getBySection(input);
+    .query(async ({ input, ctx }) => {
+      return PublicContentBlockManager.getBySection({
+        ...input,
+        visibleOnly: input.visibleOnly || !canReadHiddenContent(ctx.user?.role),
+      });
     }),
 
   getAllAdmin: editorProcedure.query(async () => {
@@ -70,5 +81,21 @@ export const publicContentRouter = router({
     )
     .mutation(async ({ input }) => {
       return PublicContentBlockManager.update(input.id, input.data);
+    }),
+
+  reorder: editorProcedure
+    .input(
+      z.object({
+        updates: z.array(
+          z.object({
+            id: z.string().min(1),
+            displayOrder: z.number().int().min(0),
+          })
+        ),
+      })
+    )
+    .mutation(async ({ input }) => {
+      await PublicContentBlockManager.updateDisplayOrder(input.updates);
+      return { success: true };
     }),
 });

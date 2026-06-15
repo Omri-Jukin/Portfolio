@@ -1,5 +1,4 @@
 import { EmailManager } from "../../backend/email/EmailManager";
-import { formatDateTimeDDMMYYYY } from "~/IntakeReview/dateUtils";
 
 const emailManager = new EmailManager();
 const EMAIL_FROM = process.env.EMAIL_FROM || "intake@omrijukin.com";
@@ -24,10 +23,16 @@ function renderReminderEmailHTML(intakeData: {
     }`.trim() ||
     intakeData.email;
 
-  const reminderDateStr = formatDateTimeDDMMYYYY(intakeData.reminderDate);
+  const reminderDateStr = new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(intakeData.reminderDate);
   const intakeUrl = `${
     process.env.NEXT_PUBLIC_BASE_URL || "https://omrijukin.com"
-  }/admin/review?id=${intakeData.id}`;
+  }/dashboard/intakes/${intakeData.id}`;
 
   return `
     <!DOCTYPE html>

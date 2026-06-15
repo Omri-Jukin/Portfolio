@@ -617,6 +617,12 @@ export const codeExampleSchema = z.object({
     .max(DB_LIMITS.EXPLANATION_MAX_LENGTH, "Explanation too long"),
 });
 
+export const projectProofLinkSchema = z.object({
+  label: z.string().min(1, "Label is required").max(120, "Label too long"),
+  href: z.string().min(1, "URL is required").max(500, "URL too long"),
+  description: z.string().max(300, "Description too long").optional(),
+});
+
 export const projectCreateSchema = z.object({
   title: z
     .string()
@@ -661,6 +667,27 @@ export const projectCreateSchema = z.object({
   displayOrder: displayOrderSchema,
   isVisible: visibilitySchema,
   isFeatured: featuredSchema,
+  isOpenSource: z.boolean().default(false),
+  isResumeFeatured: z.boolean().default(false),
+  caseStudySlug: z
+    .string()
+    .regex(
+      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+      "Slug must use lowercase letters, numbers, and hyphens"
+    )
+    .max(120, "Slug too long")
+    .optional()
+    .or(z.literal("")),
+  hiringSignal: z.string().max(300, "Hiring signal too long").optional(),
+  constraints: z.array(z.string().min(1).max(300)).default([]),
+  decisions: z.array(z.string().min(1).max(300)).default([]),
+  outcome: z.string().max(1000, "Outcome too long").optional(),
+  caseStudyRole: z.string().max(300, "Case-study role too long").optional(),
+  proofLinks: z.array(projectProofLinkSchema).default([]),
+  privateRepoNote: z
+    .string()
+    .max(1000, "Private repo note too long")
+    .optional(),
   titleTranslations: translationsSchema,
   descriptionTranslations: translationsSchema,
 });

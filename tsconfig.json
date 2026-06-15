@@ -22,12 +22,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "#/*": ["./*"],
-      "~/*": ["./Components/*"],
       "$/*": ["./lib/*"],
-      "%/*": ["./locales/*"],
-      "^/*": ["./public/*"],
-      "!/*": ["./theme/*"],
-      "&/*": ["./Components/Providers/*"]
+      "^/*": ["./public/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
