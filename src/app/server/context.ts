@@ -1,6 +1,7 @@
 // Do not load dotenv in the Worker. Environment comes from Cloudflare.
 
 import { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
+import { getToken } from "next-auth/jwt";
 import { getDB, getMockDB } from "$/db/client";
 import { auth } from "../../../auth";
 
@@ -15,6 +16,50 @@ interface AuthenticatedUser {
 }
 
 const DB_CONTEXT_TIMEOUT_MS = 6000;
+const OWNER_ADMIN_EMAIL = "omrijukin@gmail.com";
+
+function resolveRole(email: string, role?: string) {
+  return role || (email === OWNER_ADMIN_EMAIL ? "admin" : "visitor");
+}
+
+function getUserFromSession(sessionUser: {
+  id?: string;
+  email?: string | null;
+  name?: string | null;
+  role?: string;
+}): AuthenticatedUser {
+  const name = sessionUser.name || "";
+
+  const email = sessionUser.email || "";
+
+  return {
+    id: sessionUser.id || "",
+    email,
+    name,
+    firstName: name.split(" ")[0] || "",
+    lastName: name.split(" ").slice(1).join(" ") || "",
+    role: resolveRole(email, sessionUser.role),
+  };
+}
+
+function getUserFromToken(token: Record<string, unknown>): AuthenticatedUser {
+  const name = typeof token.name === "string" ? token.name : "";
+  const email = typeof token.email === "string" ? token.email : "";
+  const role = typeof token.role === "string" ? token.role : undefined;
+  const id =
+    (typeof token.sub === "string" && token.sub) ||
+    (typeof token.id === "string" && token.id) ||
+    "";
+
+  return {
+    id,
+    email,
+    name,
+    firstName: name.split(" ")[0] || "",
+    lastName: name.split(" ").slice(1).join(" ") || "",
+    role: resolveRole(email, role),
+  };
+}
 
 export async function createContext({
   req,
@@ -80,21 +125,27 @@ export async function createContext({
 
   try {
     const session = await auth();
-
     if (session?.user) {
-      // Transform Auth.js session user to our AuthenticatedUser type
-      user = {
-        id: session.user.id,
-        email: session.user.email || "",
-        name: session.user.name || "",
-        firstName: session.user.name?.split(" ")[0] || "",
-        lastName: session.user.name?.split(" ").slice(1).join(" ") || "",
-        role: session.user.role || "admin",
-      };
+      user = getUserFromSession(session.user);
     }
   } catch (error) {
-    console.error("Failed to get session:", error);
-    // Continue without user - endpoints will handle authentication
+    console.error("Failed to get Auth.js session:", error);
+  }
+
+  if (!user) {
+    try {
+      const token = await getToken({
+        req,
+        secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
+        cookieName: "next-auth.session-token",
+      });
+
+      if (token) {
+        user = getUserFromToken(token);
+      }
+    } catch (error) {
+      console.error("Failed to get session token:", error);
+    }
   }
 
   // Extract origin from request for URL generation
