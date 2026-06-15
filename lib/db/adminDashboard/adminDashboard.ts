@@ -1,6 +1,6 @@
 import { DbClient, getDB } from "../client";
 import { adminDashboardSections } from "../schema/schema.tables";
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 
 export interface AdminDashboardSection {
   id: string;
@@ -17,22 +17,19 @@ export interface UpdateSectionOrderInput {
 
 // Default sections in default order
 export const DEFAULT_SECTIONS = [
-  { sectionKey: "pendingUsers", displayOrder: 1, enabled: true },
-  { sectionKey: "roles", displayOrder: 2, enabled: true },
-  { sectionKey: "blog", displayOrder: 3, enabled: true },
-  { sectionKey: "calculatorSettings", displayOrder: 4, enabled: true },
-  { sectionKey: "pricing", displayOrder: 5, enabled: true },
-  { sectionKey: "discounts", displayOrder: 6, enabled: true },
-  { sectionKey: "intakes", displayOrder: 7, enabled: true },
-  { sectionKey: "emails", displayOrder: 8, enabled: true },
-  { sectionKey: "publicContent", displayOrder: 9, enabled: true },
-  { sectionKey: "workExperience", displayOrder: 10, enabled: true },
-  { sectionKey: "projects", displayOrder: 11, enabled: true },
-  { sectionKey: "skills", displayOrder: 12, enabled: true },
-  { sectionKey: "education", displayOrder: 13, enabled: true },
-  { sectionKey: "certifications", displayOrder: 14, enabled: true },
-  { sectionKey: "services", displayOrder: 15, enabled: true },
-  { sectionKey: "testimonials", displayOrder: 16, enabled: true },
+  { sectionKey: "publicContent", displayOrder: 1, enabled: true },
+  { sectionKey: "projects", displayOrder: 2, enabled: true },
+  { sectionKey: "workExperience", displayOrder: 3, enabled: true },
+  { sectionKey: "skills", displayOrder: 4, enabled: true },
+  { sectionKey: "blog", displayOrder: 5, enabled: true },
+  { sectionKey: "roles", displayOrder: 6, enabled: true },
+  { sectionKey: "calculatorSettings", displayOrder: 7, enabled: true },
+  { sectionKey: "pricing", displayOrder: 8, enabled: true },
+  { sectionKey: "discounts", displayOrder: 9, enabled: true },
+  { sectionKey: "intakes", displayOrder: 10, enabled: true },
+  { sectionKey: "emails", displayOrder: 11, enabled: true },
+  { sectionKey: "education", displayOrder: 12, enabled: true },
+  { sectionKey: "certifications", displayOrder: 13, enabled: true },
 ];
 
 /**
@@ -50,11 +47,9 @@ export async function initializeDashboardSections(): Promise<void> {
   }
 
   try {
-    // Type assertion: we know it's a valid Drizzle client
-    const dbClient = db as DbClient;
-    const existing =
-      await // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for build-time handling
-      ((dbClient as any).query as any).adminDashboardSections.findMany({});
+    const existing = await (db as DbClient)
+      .select({ sectionKey: adminDashboardSections.sectionKey })
+      .from(adminDashboardSections);
 
     if (existing.length === 0) {
       // No sections exist, insert all defaults
@@ -69,9 +64,7 @@ export async function initializeDashboardSections(): Promise<void> {
     }
 
     // Some sections exist - check for missing ones and add them
-    const existingKeys = new Set(
-      existing.map((s: { sectionKey: string }) => s.sectionKey)
-    );
+    const existingKeys = new Set(existing.map((s) => s.sectionKey));
     const missingSections = DEFAULT_SECTIONS.filter(
       (section) => !existingKeys.has(section.sectionKey)
     );
@@ -113,39 +106,13 @@ export async function getDashboardSections(): Promise<AdminDashboardSection[]> {
   await initializeDashboardSections();
 
   try {
-    if (!("query" in db)) {
-      throw new Error(
-        "Database connection unavailable. Please try again later."
-      );
-    }
-    // Type assertion: after null/query checks, we know it's a valid Drizzle client
-    const sections =
-      await // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for build-time handling
-      ((db as any).query as any).adminDashboardSections.findMany({
-        orderBy: (
-          sections: typeof adminDashboardSections,
-          {
-            asc,
-          }: {
-            asc: (
-              column: typeof adminDashboardSections.displayOrder
-            ) => unknown;
-          }
-        ) => [asc(sections.displayOrder)],
-        where: (
-          sections: typeof adminDashboardSections,
-          {
-            eq,
-          }: {
-            eq: (
-              column: typeof adminDashboardSections.enabled,
-              value: boolean
-            ) => unknown;
-          }
-        ) => eq(sections.enabled, true),
-      });
+    const sections = await (db as DbClient)
+      .select()
+      .from(adminDashboardSections)
+      .where(eq(adminDashboardSections.enabled, true))
+      .orderBy(asc(adminDashboardSections.displayOrder));
 
-    return sections.map((section: typeof adminDashboardSections) => ({
+    return sections.map((section) => ({
       id: section.id,
       sectionKey: section.sectionKey,
       displayOrder: section.displayOrder,
@@ -204,7 +171,7 @@ export async function getSectionByKey(
   const db = await getDB();
 
   // Handle build-time scenarios where db might be null
-  if (!db || !("query" in db)) {
+  if (!db) {
     console.warn(
       "Database not available during build, skipping section lookup"
     );
@@ -213,12 +180,11 @@ export async function getSectionByKey(
 
   await initializeDashboardSections();
 
-  // Type assertion: after null/query checks, we know it's a valid Drizzle client
-  const section =
-    await // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Type assertion needed for build-time handling
-    ((db as any).query as any).adminDashboardSections.findFirst({
-      where: eq(adminDashboardSections.sectionKey, sectionKey),
-    });
+  const [section] = await (db as DbClient)
+    .select()
+    .from(adminDashboardSections)
+    .where(eq(adminDashboardSections.sectionKey, sectionKey))
+    .limit(1);
 
   if (!section) return null;
 

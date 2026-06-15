@@ -143,7 +143,7 @@ export default function DashboardPage() {
   const enabledSections = useMemo(
     () =>
       (sections ?? [])
-        .filter((section) => section.enabled)
+        .filter((section) => section.enabled && SECTION_COPY[section.sectionKey]?.href)
         .sort((a, b) => a.displayOrder - b.displayOrder),
     [sections]
   );

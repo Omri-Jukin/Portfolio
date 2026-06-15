@@ -152,25 +152,6 @@ export async function getDB() {
         connect_timeout: 10, // Connection timeout
         // SSL is handled via sslmode=require in processedDatabaseUrl
       });
-    } else {
-      // Test if the existing connection is still valid
-      try {
-        await globalConnection`SELECT 1`;
-      } catch {
-        // Connection is invalid, recreate it
-        console.warn("[DB] Existing connection invalid, recreating...");
-        try {
-          await globalConnection.end();
-        } catch {
-          // Ignore errors when closing invalid connection
-        }
-        globalConnection = postgres(processedDatabaseUrl, {
-          prepare: false,
-          max: 10,
-          idle_timeout: 20,
-          connect_timeout: 10,
-        });
-      }
     }
 
     return drizzle(globalConnection, { schema });
