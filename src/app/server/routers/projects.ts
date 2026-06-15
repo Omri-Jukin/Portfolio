@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { router, procedure, editorProcedure } from "../trpc";
+import { canEditContentSync } from "#/lib/auth/rbac";
 
 const publicProcedure = procedure;
 import { ProjectManager } from "$/db/projects/ProjectManager";
@@ -44,6 +45,15 @@ const CodeExampleSchema = z.object({
     .max(1000, "Explanation too long"),
 });
 
+const ProjectProofLinkSchema = z.object({
+  label: z.string().min(1, "Label is required").max(120, "Label too long"),
+  href: z.string().min(1, "URL is required").max(500, "URL too long"),
+  description: z.string().max(300, "Description too long").optional(),
+});
+
+const optionalText = (max: number, message: string) =>
+  z.string().max(max, message).optional().or(z.literal(""));
+
 const CreateProjectSchema = z.object({
   title: z.string().min(1, "Title is required").max(200, "Title too long"),
   subtitle: z
@@ -83,6 +93,23 @@ const CreateProjectSchema = z.object({
   isVisible: z.boolean().default(true),
   isFeatured: z.boolean().default(false),
   isOpenSource: z.boolean().default(false),
+  isResumeFeatured: z.boolean().default(false),
+  caseStudySlug: z
+    .string()
+    .regex(
+      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+      "Slug must use lowercase letters, numbers, and hyphens"
+    )
+    .max(120, "Slug too long")
+    .optional()
+    .or(z.literal("")),
+  hiringSignal: optionalText(300, "Hiring signal too long"),
+  constraints: z.array(z.string().min(1).max(300)).default([]),
+  decisions: z.array(z.string().min(1).max(300)).default([]),
+  outcome: optionalText(1000, "Outcome too long"),
+  caseStudyRole: optionalText(300, "Case study role too long"),
+  proofLinks: z.array(ProjectProofLinkSchema).default([]),
+  privateRepoNote: optionalText(1000, "Private repo note too long"),
   titleTranslations: z.record(z.string(), z.string()).optional(),
   descriptionTranslations: z.record(z.string(), z.string()).optional(),
 });
@@ -103,8 +130,37 @@ const ProjectFiltersSchema = z.object({
   technology: z.string().optional(),
   isVisible: z.boolean().optional(),
   isFeatured: z.boolean().optional(),
+  isResumeFeatured: z.boolean().optional(),
   isOpenSource: z.boolean().optional(),
 });
+
+function emptyToUndefined(value: string | undefined) {
+  return value === "" ? undefined : value;
+}
+
+function cleanProjectInput<T extends z.infer<typeof UpdateProjectSchema>>(
+  input: T
+) {
+  return {
+    ...input,
+    githubUrl: emptyToUndefined(input.githubUrl),
+    liveUrl: emptyToUndefined(input.liveUrl),
+    demoUrl: emptyToUndefined(input.demoUrl),
+    documentationUrl: emptyToUndefined(input.documentationUrl),
+    caseStudySlug: emptyToUndefined(input.caseStudySlug),
+    hiringSignal: emptyToUndefined(input.hiringSignal),
+    outcome: emptyToUndefined(input.outcome),
+    caseStudyRole: emptyToUndefined(input.caseStudyRole),
+    privateRepoNote: emptyToUndefined(input.privateRepoNote),
+  };
+}
+
+function getVisibleOnlyForPublicRead(
+  requestedVisibleOnly: boolean,
+  role: string | undefined
+) {
+  return requestedVisibleOnly || !canEditContentSync(role || "visitor");
+}
 
 export const projectsRouter = router({
   // Public routes (for displaying projects)
@@ -117,26 +173,30 @@ export const projectsRouter = router({
         category: z.string().optional(),
       })
     )
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
+      const visibleOnly = getVisibleOnlyForPublicRead(
+        input.visibleOnly,
+        ctx.user?.role
+      );
       if (input.status) {
         return await ProjectManager.getByStatus(
           input.status,
-          input.visibleOnly
+          visibleOnly
         );
       }
       if (input.projectType) {
         return await ProjectManager.getByType(
           input.projectType,
-          input.visibleOnly
+          visibleOnly
         );
       }
       if (input.category) {
         return await ProjectManager.getByCategory(
           input.category,
-          input.visibleOnly
+          visibleOnly
         );
       }
-      return await ProjectManager.getAll(input.visibleOnly);
+      return await ProjectManager.getAll(visibleOnly);
     }),
 
   getById: publicProcedure
@@ -160,6 +220,15 @@ export const projectsRouter = router({
       return project;
     }),
 
+  getBySlug: publicProcedure
+    .input(z.object({ slug: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const userRole = ctx.user?.role || "visitor";
+      const canSeeAll = userRole === "admin" || userRole === "editor";
+
+      return await ProjectManager.getBySlug(input.slug, !canSeeAll);
+    }),
+
   getByStatus: publicProcedure
     .input(
       z.object({
@@ -167,8 +236,11 @@ export const projectsRouter = router({
         visibleOnly: z.boolean().default(true),
       })
     )
-    .query(async ({ input }) => {
-      return await ProjectManager.getByStatus(input.status, input.visibleOnly);
+    .query(async ({ input, ctx }) => {
+      return await ProjectManager.getByStatus(
+        input.status,
+        getVisibleOnlyForPublicRead(input.visibleOnly, ctx.user?.role)
+      );
     }),
 
   getByType: publicProcedure
@@ -178,10 +250,10 @@ export const projectsRouter = router({
         visibleOnly: z.boolean().default(true),
       })
     )
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
       return await ProjectManager.getByType(
         input.projectType,
-        input.visibleOnly
+        getVisibleOnlyForPublicRead(input.visibleOnly, ctx.user?.role)
       );
     }),
 
@@ -192,10 +264,10 @@ export const projectsRouter = router({
         visibleOnly: z.boolean().default(true),
       })
     )
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
       return await ProjectManager.getByCategory(
         input.category,
-        input.visibleOnly
+        getVisibleOnlyForPublicRead(input.visibleOnly, ctx.user?.role)
       );
     }),
 
@@ -205,8 +277,22 @@ export const projectsRouter = router({
         visibleOnly: z.boolean().default(true),
       })
     )
-    .query(async ({ input }) => {
-      return await ProjectManager.getFeatured(input.visibleOnly);
+    .query(async ({ input, ctx }) => {
+      return await ProjectManager.getFeatured(
+        getVisibleOnlyForPublicRead(input.visibleOnly, ctx.user?.role)
+      );
+    }),
+
+  getResumeFeatured: publicProcedure
+    .input(
+      z.object({
+        visibleOnly: z.boolean().default(true),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      return await ProjectManager.getResumeFeatured(
+        getVisibleOnlyForPublicRead(input.visibleOnly, ctx.user?.role)
+      );
     }),
 
   getOpenSource: publicProcedure
@@ -215,8 +301,10 @@ export const projectsRouter = router({
         visibleOnly: z.boolean().default(true),
       })
     )
-    .query(async ({ input }) => {
-      return await ProjectManager.getOpenSource(input.visibleOnly);
+    .query(async ({ input, ctx }) => {
+      return await ProjectManager.getOpenSource(
+        getVisibleOnlyForPublicRead(input.visibleOnly, ctx.user?.role)
+      );
     }),
 
   getStatistics: publicProcedure.query(async () => {
@@ -242,14 +330,8 @@ export const projectsRouter = router({
   create: editorProcedure
     .input(CreateProjectSchema)
     .mutation(async ({ input, ctx }) => {
-      // Convert empty string URLs to undefined
       const cleanInput = {
-        ...input,
-        githubUrl: input.githubUrl === "" ? undefined : input.githubUrl,
-        liveUrl: input.liveUrl === "" ? undefined : input.liveUrl,
-        demoUrl: input.demoUrl === "" ? undefined : input.demoUrl,
-        documentationUrl:
-          input.documentationUrl === "" ? undefined : input.documentationUrl,
+        ...cleanProjectInput(input),
         createdBy: ctx.user.id,
       };
 
@@ -284,18 +366,7 @@ export const projectsRouter = router({
         });
       }
 
-      // Convert empty string URLs to undefined
-      const cleanData = {
-        ...input.data,
-        githubUrl:
-          input.data.githubUrl === "" ? undefined : input.data.githubUrl,
-        liveUrl: input.data.liveUrl === "" ? undefined : input.data.liveUrl,
-        demoUrl: input.data.demoUrl === "" ? undefined : input.data.demoUrl,
-        documentationUrl:
-          input.data.documentationUrl === ""
-            ? undefined
-            : input.data.documentationUrl,
-      };
+      const cleanData = cleanProjectInput(input.data);
 
       return await ProjectManager.update(input.id, cleanData);
     }),
@@ -354,6 +425,16 @@ export const projectsRouter = router({
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input }) => {
       const updated = await ProjectManager.toggleFeatured(input.id);
+      if (!updated) {
+        throw new Error("Project not found");
+      }
+      return updated;
+    }),
+
+  toggleResumeFeatured: editorProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input }) => {
+      const updated = await ProjectManager.toggleResumeFeatured(input.id);
       if (!updated) {
         throw new Error("Project not found");
       }

@@ -1,5 +1,8 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { verifyIntakeSessionToken } from "#/lib/utils/sessionToken";
+
+const MAX_COOKIE_AGE_SECONDS = 30 * 24 * 60 * 60;
 
 /**
  * Route Handler to set the intake session cookie
@@ -14,13 +17,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Token is required" }, { status: 400 });
     }
 
-    // Set the session cookie
+    const payload = await verifyIntakeSessionToken(token);
+    if (!payload) {
+      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+    }
+
+    const requestedMaxAge =
+      typeof maxAge === "number" && Number.isFinite(maxAge) ? maxAge : null;
+    const safeMaxAge = Math.min(
+      Math.max(requestedMaxAge ?? MAX_COOKIE_AGE_SECONDS, 60),
+      MAX_COOKIE_AGE_SECONDS
+    );
+
     const cookieStore = await cookies();
     cookieStore.set("intake-session-token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: maxAge || 30 * 24 * 60 * 60, // 30 days default
+      maxAge: safeMaxAge,
       path: "/",
     });
 

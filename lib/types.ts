@@ -480,6 +480,16 @@ export interface IProject
   clientName: string | null;
   budget: string | null;
   isFeatured: boolean;
+  isOpenSource: boolean;
+  isResumeFeatured: boolean;
+  caseStudySlug: string | null;
+  hiringSignal: string | null;
+  constraints: string[];
+  decisions: string[];
+  outcome: string | null;
+  caseStudyRole: string | null;
+  proofLinks: ProjectProofLink[];
+  privateRepoNote: string | null;
   problem: ProjectProblem | null;
   solution: ProjectSolution | null;
   architecture: ProjectArchitecture | null;
@@ -507,6 +517,12 @@ export type ProjectArchitecture = {
   patterns: string[];
   scalability?: string;
   security?: string;
+};
+
+export type ProjectProofLink = {
+  label: string;
+  href: string;
+  description?: string;
 };
 
 export type TCodeExamples = SimpleCodeExample[];
@@ -868,10 +884,19 @@ export interface AdditionalExperienceRole {
  * Resume project with optional bullets
  */
 export interface ResumeProject {
+  id?: string;
   name: string;
   line: string;
   url?: string;
   bullets?: string[];
+}
+
+export interface ResumeCertification {
+  name: string;
+  issuer: string;
+  period?: string;
+  url?: string;
+  skills?: string[];
 }
 
 /**
@@ -923,6 +948,7 @@ export interface ResumeData {
     stackLine?: string;
   }>;
   projects: ResumeProject[] | null;
+  certifications?: ResumeCertification[];
   education: Array<{
     degree: string;
     institution: string;

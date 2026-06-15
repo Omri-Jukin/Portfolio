@@ -4,9 +4,9 @@ A professional, full‑stack personal portfolio and blog built with Next.js and 
 
 ## Highlights
 
-- Visual hero with a full cobe globe and a prominent profile photo
+- Recruiter-focused public routes with CMS-backed content and case-study pages
 - Type‑safe APIs (tRPC) with Drizzle ORM on Cloudflare D1
-- Internationalization with `next-intl`; accessible, responsive UI with MUI
+- Tailwind-based UI with accessible, responsive public and admin surfaces
 - Secure secrets via Cloudflare environment bindings
 
 ## Tech Stack

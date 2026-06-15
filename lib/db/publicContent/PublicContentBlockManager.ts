@@ -23,6 +23,29 @@ function transformBlock(block: PublicContentBlockDB): PublicContentBlock {
 }
 
 export class PublicContentBlockManager {
+  static async create(block: NewPublicContentBlock): Promise<PublicContentBlock> {
+    const db = await getDB();
+    const now = new Date();
+
+    await db.insert(publicContentBlocks).values({
+      ...block,
+      createdAt: block.createdAt ?? now,
+      updatedAt: block.updatedAt ?? now,
+    });
+
+    const [row] = await db
+      .select()
+      .from(publicContentBlocks)
+      .where(eq(publicContentBlocks.id, block.id))
+      .limit(1);
+
+    if (!row) {
+      throw new Error("Failed to create public content block");
+    }
+
+    return transformBlock(row);
+  }
+
   static async getByPage({
     page,
     locale = "en",
@@ -117,5 +140,30 @@ export class PublicContentBlockManager {
       .limit(1);
 
     return row ? transformBlock(row) : null;
+  }
+
+  static async updateDisplayOrder(
+    updates: Array<{ id: string; displayOrder: number }>
+  ): Promise<void> {
+    const db = await getDB();
+
+    await Promise.all(
+      updates.map((update) =>
+        db
+          .update(publicContentBlocks)
+          .set({ displayOrder: update.displayOrder, updatedAt: new Date() })
+          .where(eq(publicContentBlocks.id, update.id))
+      )
+    );
+  }
+
+  static async delete(id: string): Promise<boolean> {
+    const db = await getDB();
+    const deleted = await db
+      .delete(publicContentBlocks)
+      .where(eq(publicContentBlocks.id, id))
+      .returning();
+
+    return deleted.length > 0;
   }
 }

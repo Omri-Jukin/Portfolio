@@ -84,7 +84,7 @@ export const RESUME_DATA_EN: ResumeData = {
       company: "The Atheist Line",
       period: "2025–Present",
       bullets: [
-        "Volunteer technical leadership role for a 17-person organization, serving as the primary technical owner for technical decisions, implementation planning, and digital operations.",
+        "Volunteer technical leadership role serving as the primary hands-on engineer for technical decisions, implementation planning, and the organization's digital ecosystem.",
         "Define and lead the technical direction of the organization's digital ecosystem across public-facing and internal systems.",
         "Own zero-to-one architecture and implementation for website architecture, content workflows, internal tooling, team operations, integrations, automation opportunities, CI/CD, analytics foundations, and production readiness.",
         "Translate organizational needs from design, publishing, community, and operations roles into maintainable technical workflows.",

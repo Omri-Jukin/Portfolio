@@ -9,6 +9,7 @@ import {
   primaryKey,
   numeric,
   unique,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import {
@@ -308,63 +309,88 @@ export const workExperiences = pgTable("work_experiences", {
 });
 
 // Projects table for portfolio showcase
-export const projects = pgTable("projects", {
-  id: text("id").primaryKey().notNull(),
-  title: text("title").notNull(),
-  subtitle: text("subtitle").notNull(),
-  description: text("description").notNull(),
-  longDescription: text("long_description"),
-  technologies: text("technologies").array().notNull().default([]),
-  categories: text("categories").array().notNull().default([]),
-  status: text("status").$type<ProjectStatus>().notNull().default("completed"),
-  projectType: text("project_type").$type<ProjectType>().notNull(),
-  startDate: timestamp("start_date", { withTimezone: true }).notNull(),
-  endDate: timestamp("end_date", { withTimezone: true }),
-  githubUrl: text("github_url"),
-  liveUrl: text("live_url"),
-  demoUrl: text("demo_url"),
-  documentationUrl: text("documentation_url"),
-  images: text("images").array().notNull().default([]),
-  keyFeatures: text("key_features").array().notNull().default([]),
-  technicalChallenges: text("technical_challenges")
-    .$type<Array<{ challenge: string; solution: string }> | string[]>()
-    .notNull()
-    .default(sql`'[]'::text`),
-  codeExamples: text("code_examples")
-    .$type<
-      | Array<{
-          title: string;
-          language: string;
-          code: string;
-          explanation: string;
-        }>
-      | string[]
-    >()
-    .notNull()
-    .default(sql`'[]'::text`),
-  teamSize: integer("team_size"),
-  myRole: text("my_role"),
-  clientName: text("client_name"),
-  budget: text("budget"),
-  displayOrder: integer("display_order").notNull().default(0),
-  isVisible: boolean("is_visible").notNull().default(true),
-  isFeatured: boolean("is_featured").notNull().default(false),
-  isOpenSource: boolean("is_open_source").notNull().default(false),
-  problem: text("problem"),
-  solution: text("solution"),
-  architecture: text("architecture"),
-  titleTranslations: text("title_translations").$type<Record<string, string>>(),
-  descriptionTranslations: text("description_translations").$type<
-    Record<string, string>
-  >(),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .notNull()
-    .$defaultFn(() => new Date()),
-  updatedAt: timestamp("updated_at", { withTimezone: true }),
-  createdBy: uuid("created_by")
-    .notNull()
-    .references(() => users.id),
-});
+export const projects = pgTable(
+  "projects",
+  {
+    id: text("id").primaryKey().notNull(),
+    title: text("title").notNull(),
+    subtitle: text("subtitle").notNull(),
+    description: text("description").notNull(),
+    longDescription: text("long_description"),
+    technologies: text("technologies").array().notNull().default([]),
+    categories: text("categories").array().notNull().default([]),
+    status: text("status")
+      .$type<ProjectStatus>()
+      .notNull()
+      .default("completed"),
+    projectType: text("project_type").$type<ProjectType>().notNull(),
+    startDate: timestamp("start_date", { withTimezone: true }).notNull(),
+    endDate: timestamp("end_date", { withTimezone: true }),
+    githubUrl: text("github_url"),
+    liveUrl: text("live_url"),
+    demoUrl: text("demo_url"),
+    documentationUrl: text("documentation_url"),
+    images: text("images").array().notNull().default([]),
+    keyFeatures: text("key_features").array().notNull().default([]),
+    technicalChallenges: text("technical_challenges")
+      .$type<Array<{ challenge: string; solution: string }> | string[]>()
+      .notNull()
+      .default(sql`'[]'::text`),
+    codeExamples: text("code_examples")
+      .$type<
+        | Array<{
+            title: string;
+            language: string;
+            code: string;
+            explanation: string;
+          }>
+        | string[]
+      >()
+      .notNull()
+      .default(sql`'[]'::text`),
+    teamSize: integer("team_size"),
+    myRole: text("my_role"),
+    clientName: text("client_name"),
+    budget: text("budget"),
+    displayOrder: integer("display_order").notNull().default(0),
+    isVisible: boolean("is_visible").notNull().default(true),
+    isFeatured: boolean("is_featured").notNull().default(false),
+    isOpenSource: boolean("is_open_source").notNull().default(false),
+    isResumeFeatured: boolean("is_resume_featured").notNull().default(false),
+    caseStudySlug: text("case_study_slug"),
+    hiringSignal: text("hiring_signal"),
+    constraints: text("constraints").array().notNull().default([]),
+    decisions: text("decisions").array().notNull().default([]),
+    outcome: text("outcome"),
+    caseStudyRole: text("case_study_role"),
+    proofLinks: jsonb("proof_links")
+      .$type<Array<{ label: string; href: string; description?: string }>>()
+      .notNull()
+      .default([]),
+    privateRepoNote: text("private_repo_note"),
+    problem: text("problem"),
+    solution: text("solution"),
+    architecture: text("architecture"),
+    titleTranslations: text("title_translations").$type<
+      Record<string, string>
+    >(),
+    descriptionTranslations: text("description_translations").$type<
+      Record<string, string>
+    >(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .$defaultFn(() => new Date()),
+    updatedAt: timestamp("updated_at", { withTimezone: true }),
+    createdBy: uuid("created_by")
+      .notNull()
+      .references(() => users.id),
+  },
+  (table) => ({
+    caseStudySlugUnique: uniqueIndex("projects_case_study_slug_unique").on(
+      table.caseStudySlug
+    ),
+  })
+);
 
 // Skills table for technical competencies
 export const skills = pgTable("skills", {

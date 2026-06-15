@@ -46,6 +46,19 @@ export interface ProjectFormData {
   isVisible: boolean;
   isFeatured: boolean;
   isOpenSource: boolean;
+  isResumeFeatured: boolean;
+  caseStudySlug: string;
+  hiringSignal: string;
+  constraints: string[];
+  decisions: string[];
+  outcome: string;
+  caseStudyRole: string;
+  proofLinks: Array<{
+    label: string;
+    href: string;
+    description?: string;
+  }>;
+  privateRepoNote: string;
 }
 
 export interface ProjectStatistics {
@@ -78,5 +91,6 @@ export interface ProjectFilters {
   technology?: string;
   isVisible?: boolean;
   isFeatured?: boolean;
+  isResumeFeatured?: boolean;
   isOpenSource?: boolean;
 }

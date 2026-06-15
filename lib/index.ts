@@ -359,37 +359,6 @@ export type {
 } from "./schemas";
 
 // ========================
-// STYLES
-// ========================
-
-export * from "./styles";
-export {
-  // Breakpoint utilities
-  breakpoints,
-
-  // Animation keyframes
-  animations,
-
-  // Common mixins
-  mixins,
-
-  // Component styles
-  componentStyles,
-
-  // Theme utilities
-  themeUtils,
-
-  // Gradient presets
-  gradients,
-
-  // Shadow presets
-  shadows,
-
-  // Z-index scale
-  zIndex,
-} from "./styles";
-
-// ========================
 // CONVENIENCE EXPORTS
 // ========================
 

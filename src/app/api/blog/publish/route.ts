@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
       slug,
       content,
       excerpt: excerpt || null,
-      status: "published", // Auto-publish posts from API
+      status: "draft",
       tags: tags ? (Array.isArray(tags) ? tags : [tags]) : undefined,
       imageUrl: imageUrl || null,
       imageAlt: imageAlt || null,
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
         status: newPost.status,
         publishedAt: newPost.publishedAt,
       },
-      message: "Blog post published successfully!",
+      message: "Blog post created as a draft.",
     });
   } catch (error) {
     console.error("API publish error:", error);
