@@ -34,6 +34,14 @@ const quickTasks = [
     tone: "success" as const,
   },
   {
+    title: "Resume PDF header and summary",
+    description:
+      "Name, title, headline, contact links, and professional summary used by the public resume page and generated PDF.",
+    href: "/dashboard/public-content",
+    badge: "Resume PDF",
+    tone: "accent" as const,
+  },
+  {
     title: "Skills shown to recruiters",
     description:
       "Technical strengths, skill group ordering, related projects, proficiency labels, and visibility.",
@@ -64,7 +72,7 @@ const dataMap = [
   {
     label: "public_content_blocks",
     body:
-      "Editable page copy and flexible homepage blocks. Use this for text, CTAs, proof locker items, and homepage section order.",
+      "Editable page copy and flexible public blocks. Use this for homepage text, CTAs, proof locker items, homepage order, and resume PDF profile copy.",
   },
   {
     label: "projects",

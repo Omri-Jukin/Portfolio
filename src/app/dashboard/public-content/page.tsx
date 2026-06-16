@@ -106,6 +106,7 @@ function sectionLabel(value: string) {
     "proof-links": "Proof Locker",
     "common-questions": "Common Questions",
     contact: "Contact",
+    profile: "Resume Profile",
   };
 
   return labels[value] ?? titleCase(value);

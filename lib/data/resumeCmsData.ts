@@ -2,6 +2,7 @@ import { RESUME_DATA_EN } from "./resumeData";
 import { CertificationsService } from "$/db/certifications/certifications";
 import { EducationManager } from "$/db/Education/EducationManager";
 import { ProjectManager } from "$/db/projects/ProjectManager";
+import { PublicContentBlockManager } from "$/db/publicContent/PublicContentBlockManager";
 import { SkillManager } from "$/db/skills/SkillManager";
 import { WorkExperienceManager } from "$/db/workExperiences/WorkExperienceManager";
 import type { Certification, Education, Skill, WorkExperience } from "$/db/schema/schema.types";
@@ -126,8 +127,86 @@ function groupSkills(skills: Skill[]): ResumeData["coreSkills"] {
   }));
 }
 
+type ResumeProfileMetadata = {
+  name?: unknown;
+  title?: unknown;
+  phone?: unknown;
+  email?: unknown;
+  portfolio?: unknown;
+  github?: unknown;
+  linkedin?: unknown;
+  location?: unknown;
+  links?: unknown;
+};
+
+function stringValue(value: unknown) {
+  return typeof value === "string" && value.trim() ? value.trim() : undefined;
+}
+
+function parseResumeLinks(value: unknown): ResumeData["links"] | undefined {
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+
+  const links = value
+    .map((item) => {
+      if (!item || typeof item !== "object") {
+        return null;
+      }
+
+      const candidate = item as { label?: unknown; url?: unknown };
+      const label = stringValue(candidate.label);
+      const url = stringValue(candidate.url);
+
+      return label && url ? { label, url } : null;
+    })
+    .filter((item): item is NonNullable<typeof item> => item !== null);
+
+  return links.length > 0 ? links : undefined;
+}
+
+function applyResumeProfileBlocks(
+  base: ResumeData,
+  blocks: Awaited<ReturnType<typeof PublicContentBlockManager.getBySection>>
+): ResumeData {
+  const profile = blocks.find((block) => block.blockKey === "profile");
+  const summary = blocks.find((block) => block.blockKey === "summary");
+  const metadata = (profile?.metadata ?? {}) as ResumeProfileMetadata;
+  const links = parseResumeLinks(metadata.links);
+
+  return {
+    ...base,
+    meta: {
+      ...base.meta,
+      title: profile?.title ?? base.meta?.title,
+      author: stringValue(metadata.name) ?? base.meta?.author,
+    },
+    person: {
+      ...base.person,
+      name: stringValue(metadata.name) ?? base.person.name,
+      title: profile?.subtitle ?? base.person.title,
+      contacts: {
+        ...base.person.contacts,
+        phone: stringValue(metadata.phone) ?? base.person.contacts.phone,
+        email: stringValue(metadata.email) ?? base.person.contacts.email,
+        portfolio:
+          stringValue(metadata.portfolio) ?? base.person.contacts.portfolio,
+        github: stringValue(metadata.github) ?? base.person.contacts.github,
+        linkedin:
+          stringValue(metadata.linkedin) ?? base.person.contacts.linkedin,
+        location:
+          stringValue(metadata.location) ?? base.person.contacts.location,
+      },
+    },
+    headline: profile?.body ?? base.headline,
+    summary: summary?.body ?? base.summary,
+    links: links ?? base.links,
+  };
+}
+
 export async function getResumeDataFromCms(): Promise<ResumeData> {
   const [
+    resumeProfileResult,
     workExperienceResult,
     topSkillsResult,
     resumeProjectsResult,
@@ -136,6 +215,12 @@ export async function getResumeDataFromCms(): Promise<ResumeData> {
     educationResult,
     certificationsResult,
   ] = await Promise.allSettled([
+    PublicContentBlockManager.getBySection({
+      page: "resume",
+      sectionKey: "profile",
+      locale: "en",
+      visibleOnly: true,
+    }),
     WorkExperienceManager.getAll(true),
     SkillManager.getTopSkills(40, true),
     ProjectManager.getResumeFeatured(true),
@@ -145,6 +230,7 @@ export async function getResumeDataFromCms(): Promise<ResumeData> {
     CertificationsService.getAll(true),
   ]);
 
+  const resumeProfileBlocks = settledValue(resumeProfileResult, []);
   const workExperiences = settledValue(workExperienceResult, []);
   const skills = settledValue(topSkillsResult, []);
   const resumeProjects = settledValue(resumeProjectsResult, []);
@@ -160,7 +246,7 @@ export async function getResumeDataFromCms(): Promise<ResumeData> {
         ? featuredProjects
         : visibleProjects;
 
-  return {
+  return applyResumeProfileBlocks({
     ...RESUME_DATA_EN,
     coreSkills: skills.length > 0 ? groupSkills(skills) : RESUME_DATA_EN.coreSkills,
     experience:
@@ -177,5 +263,5 @@ export async function getResumeDataFromCms(): Promise<ResumeData> {
       certifications.length > 0
         ? certifications.map(mapCertification)
         : RESUME_DATA_EN.certifications,
-  };
+  }, resumeProfileBlocks);
 }
