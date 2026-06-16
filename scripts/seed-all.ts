@@ -276,6 +276,7 @@ async function seedPublicContentBlocks(
         github: "https://github.com/Omri-Jukin",
         linkedin: "https://www.linkedin.com/in/omri-jukin/",
         location: "",
+        pdfDateFormat: "month-year",
         links: [
           { label: "Portfolio", url: "https://omrijukin.com" },
           { label: "LinkedIn", url: "https://www.linkedin.com/in/omri-jukin/" },

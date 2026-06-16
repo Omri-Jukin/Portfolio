@@ -584,9 +584,7 @@ export const workExperienceCreateSchema = z.object({
 
 export const workExperienceUpdateSchema = workExperienceCreateSchema
   .partial()
-  .extend({
-    id: z.string().uuid(),
-  });
+  .strict();
 
 export const technicalChallengeSchema = z.object({
   challenge: z

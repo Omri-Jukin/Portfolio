@@ -911,7 +911,11 @@ export interface ResumeLink {
  * Resume data structure for PDF generation and page rendering
  */
 export interface ResumeData {
-  meta?: { title?: string; author?: string };
+  meta?: {
+    title?: string;
+    author?: string;
+    pdfDateFormat?: "month-year" | "year";
+  };
   person: {
     name: string;
     title: string;

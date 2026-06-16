@@ -375,6 +375,19 @@ function CertificationCards({
   );
 }
 
+function getPdfDateFormat(
+  blocks: ResumePdfOverview["profileBlocks"]
+): "month-year" | "year" {
+  const profile = blocks.find((block) => block.blockKey === "profile");
+  const metadata = profile?.metadata;
+
+  return metadata &&
+    typeof metadata === "object" &&
+    (metadata as { pdfDateFormat?: unknown }).pdfDateFormat === "year"
+    ? "year"
+    : "month-year";
+}
+
 export default function ResumePdfDashboardPage() {
   const [notice, setNotice] = React.useState<Notice>(null);
   const {
@@ -398,6 +411,18 @@ export default function ResumePdfDashboardPage() {
       });
     },
   });
+  const dateFormatMutation = api.resumePdf.toggleDateFormat.useMutation({
+    onSuccess: () => {
+      refetch();
+      setNotice({ tone: "success", message: "PDF date format updated." });
+    },
+    onError: (mutationError) => {
+      setNotice({
+        tone: "error",
+        message: `Failed to update PDF date format: ${mutationError.message}`,
+      });
+    },
+  });
 
   const toggle = (type: ResumePdfItemType, id: string) => {
     setNotice(null);
@@ -414,6 +439,7 @@ export default function ResumePdfDashboardPage() {
         ...data.certifications.filter((item) => item.isResumeFeatured),
       ].length
     : 0;
+  const pdfDateFormat = data ? getPdfDateFormat(data.profileBlocks) : "month-year";
 
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -465,9 +491,24 @@ export default function ResumePdfDashboardPage() {
             </Card>
             <Card className="p-4">
               <p className="font-mono text-xs uppercase text-muted-foreground">
-                Output
+                PDF dates
               </p>
-              <p className="mt-2 font-display text-3xl font-semibold">PDF</p>
+              <p className="mt-2 font-display text-3xl font-semibold">
+                {pdfDateFormat === "year" ? "Years" : "Months"}
+              </p>
+              <Button
+                className="mt-3"
+                variant="outline"
+                onClick={() => {
+                  setNotice(null);
+                  dateFormatMutation.mutate();
+                }}
+                disabled={dateFormatMutation.isPending}
+              >
+                {pdfDateFormat === "year"
+                  ? "Show months in PDF"
+                  : "Use years only"}
+              </Button>
             </Card>
           </div>
 

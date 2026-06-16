@@ -137,6 +137,7 @@ type ResumeProfileMetadata = {
   linkedin?: unknown;
   location?: unknown;
   links?: unknown;
+  pdfDateFormat?: unknown;
 };
 
 function stringValue(value: unknown) {
@@ -180,6 +181,10 @@ function applyResumeProfileBlocks(
       ...base.meta,
       title: profile?.title ?? base.meta?.title,
       author: stringValue(metadata.name) ?? base.meta?.author,
+      pdfDateFormat:
+        stringValue(metadata.pdfDateFormat) === "year"
+          ? "year"
+          : "month-year",
     },
     person: {
       ...base.person,

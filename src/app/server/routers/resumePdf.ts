@@ -125,4 +125,38 @@ export const resumePdfRouter = router({
         }
       }
     }),
+
+  toggleDateFormat: editorProcedure.mutation(async () => {
+    const blocks = await PublicContentBlockManager.getBySection({
+      page: "resume",
+      sectionKey: "profile",
+      locale: "en",
+      visibleOnly: false,
+    });
+    const profile = blocks.find((block) => block.blockKey === "profile");
+
+    if (!profile) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Resume profile block not found",
+      });
+    }
+
+    const metadata =
+      profile.metadata && typeof profile.metadata === "object"
+        ? profile.metadata
+        : {};
+    const currentFormat =
+      (metadata as { pdfDateFormat?: unknown }).pdfDateFormat === "year"
+        ? "year"
+        : "month-year";
+    const nextFormat = currentFormat === "year" ? "month-year" : "year";
+
+    return PublicContentBlockManager.update(profile.id, {
+      metadata: {
+        ...metadata,
+        pdfDateFormat: nextFormat,
+      },
+    });
+  }),
 });

@@ -341,10 +341,7 @@ export default function WorkExperiencesAdminPage() {
     if (editingExperience) {
       updateMutation.mutate({
         id: editingExperience.id,
-        data: {
-          ...submitData,
-          id: editingExperience.id,
-        },
+        data: submitData,
       });
     } else {
       createMutation.mutate(submitData);
