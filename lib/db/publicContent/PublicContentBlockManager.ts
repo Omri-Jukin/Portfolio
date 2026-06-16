@@ -123,6 +123,17 @@ export class PublicContentBlockManager {
     return rows.map(transformBlock);
   }
 
+  static async getById(id: string): Promise<PublicContentBlock | null> {
+    const db = await getDB();
+    const [row] = await db
+      .select()
+      .from(publicContentBlocks)
+      .where(eq(publicContentBlocks.id, id))
+      .limit(1);
+
+    return row ? transformBlock(row) : null;
+  }
+
   static async update(
     id: string,
     updates: Partial<Omit<NewPublicContentBlock, "id" | "createdAt">>

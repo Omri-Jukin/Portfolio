@@ -576,6 +576,7 @@ export const workExperienceCreateSchema = z.object({
   displayOrder: displayOrderSchema,
   isVisible: visibilitySchema,
   isFeatured: featuredSchema,
+  isResumeFeatured: z.boolean().default(false),
   roleTranslations: translationsSchema,
   companyTranslations: translationsSchema,
   descriptionTranslations: translationsSchema,
@@ -718,6 +719,7 @@ export const skillCreateSchema = z.object({
   displayOrder: displayOrderSchema,
   isVisible: visibilitySchema,
   isFeatured: featuredSchema,
+  isResumeFeatured: z.boolean().default(false),
 });
 
 export const skillUpdateSchema = skillCreateSchema.partial().extend({
@@ -751,6 +753,7 @@ export const certificationCreateSchema = z.object({
   displayOrder: displayOrderSchema,
   isVisible: visibilitySchema,
   isFeatured: featuredSchema,
+  isResumeFeatured: z.boolean().default(false),
 });
 
 export const certificationUpdateSchema = certificationCreateSchema
@@ -792,6 +795,7 @@ export const educationCreateSchema = z.object({
   displayOrder: displayOrderSchema,
   isVisible: visibilitySchema,
   isFeatured: featuredSchema,
+  isResumeFeatured: z.boolean().default(false),
 });
 
 export const educationUpdateSchema = educationCreateSchema.partial().extend({

@@ -17,6 +17,7 @@ config({ path: ".env" });
 
 import { closeDB, getDB } from "../lib/db/client";
 import {
+  certifications,
   education,
   projects,
   publicContentBlocks,
@@ -26,6 +27,7 @@ import {
   workExperiences,
 } from "../lib/db/schema/schema.tables";
 import type {
+  NewCertification,
   NewEducation,
   NewProject,
   NewPublicContentBlock,
@@ -120,6 +122,7 @@ async function seedWorkExperiences(
       displayOrder: 1,
       isVisible: true,
       isFeatured: true,
+      isResumeFeatured: true,
       createdBy,
       updatedAt: now,
     },
@@ -150,6 +153,7 @@ async function seedWorkExperiences(
       displayOrder: 2,
       isVisible: true,
       isFeatured: true,
+      isResumeFeatured: true,
       createdBy,
       updatedAt: now,
     },
@@ -173,6 +177,7 @@ async function seedWorkExperiences(
       displayOrder: 3,
       isVisible: true,
       isFeatured: false,
+      isResumeFeatured: true,
       createdBy,
       updatedAt: now,
     },
@@ -202,6 +207,7 @@ async function seedWorkExperiences(
       displayOrder: 4,
       isVisible: true,
       isFeatured: false,
+      isResumeFeatured: false,
       createdBy,
       updatedAt: now,
     },
@@ -993,6 +999,7 @@ async function seedSkills(
       projects: ["the-atheist-line-technical-lead", "portfolio-platform"],
       lastUsed: now,
       isVisible: true,
+      isResumeFeatured: true,
       displayOrder: 1,
       createdBy,
       updatedAt: now,
@@ -1011,6 +1018,7 @@ async function seedSkills(
       projects: ["portfolio-platform", "snow-hq", "socially"],
       lastUsed: now,
       isVisible: true,
+      isResumeFeatured: true,
       displayOrder: 2,
       createdBy,
       updatedAt: now,
@@ -1029,6 +1037,7 @@ async function seedSkills(
       projects: ["portfolio-platform", "snow-hq"],
       lastUsed: now,
       isVisible: true,
+      isResumeFeatured: true,
       displayOrder: 3,
       createdBy,
       updatedAt: now,
@@ -1047,6 +1056,7 @@ async function seedSkills(
       projects: ["portfolio-platform", "snow-hq", "clipwhisperer"],
       lastUsed: now,
       isVisible: true,
+      isResumeFeatured: true,
       displayOrder: 4,
       createdBy,
       updatedAt: now,
@@ -1065,6 +1075,7 @@ async function seedSkills(
       projects: ["the-atheist-line-technical-lead", "portfolio-platform", "snow-hq"],
       lastUsed: now,
       isVisible: true,
+      isResumeFeatured: true,
       displayOrder: 5,
       createdBy,
       updatedAt: now,
@@ -1104,6 +1115,7 @@ async function seedEducation(
       extracurriculars: [],
       location: "Israel",
       isVisible: true,
+      isResumeFeatured: true,
       displayOrder: 1,
       createdBy,
       updatedAt: now,
@@ -1123,6 +1135,7 @@ async function seedEducation(
       extracurriculars: [],
       location: "Remote",
       isVisible: true,
+      isResumeFeatured: true,
       displayOrder: 2,
       createdBy,
       updatedAt: now,
@@ -1140,6 +1153,54 @@ async function seedEducation(
   }
 
   console.log(`Education: upserted ${rows.length}`);
+}
+
+async function seedCertifications(
+  db: NonNullable<Awaited<ReturnType<typeof getDB>>>,
+  createdBy: string
+) {
+  const rows: NewCertification[] = [
+    {
+      id: "cert-impact-cyber-diploma",
+      name: "Cyber Security Diploma - Offensive & Defensive",
+      issuer: "Impact College",
+      description:
+        "Diploma program in cyber security covering offensive and defensive foundations across network security, system hardening, incident response, penetration testing, and ethical hacking.",
+      category: "cybersecurity",
+      status: "in-progress",
+      skills: [
+        "Cybersecurity",
+        "Offensive Security",
+        "Defensive Security",
+        "Network Security",
+        "Incident Response",
+      ],
+      issueDate: new Date("2025-09-01"),
+      expiryDate: null,
+      credentialId: null,
+      verificationUrl:
+        "https://campus.impact-college.co.il/courses/network-and-computer-fundamentals-1-4/learn/about",
+      icon: "shield",
+      color: "#003366",
+      displayOrder: 1,
+      isVisible: true,
+      isResumeFeatured: true,
+      createdBy,
+      updatedAt: now,
+    },
+  ];
+
+  for (const row of rows) {
+    await db
+      .insert(certifications)
+      .values(row)
+      .onConflictDoUpdate({
+        target: certifications.id,
+        set: { ...row, updatedAt: now },
+      });
+  }
+
+  console.log(`Certifications: upserted ${rows.length}`);
 }
 
 async function seedServices(
@@ -1212,6 +1273,7 @@ async function seed() {
     await seedProjects(db, createdBy);
     await seedSkills(db, createdBy);
     await seedEducation(db, createdBy);
+    await seedCertifications(db, createdBy);
     await seedServices(db, createdBy);
 
     console.log("Seed completed.");

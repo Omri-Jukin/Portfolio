@@ -210,8 +210,6 @@ export async function getResumeDataFromCms(): Promise<ResumeData> {
     workExperienceResult,
     topSkillsResult,
     resumeProjectsResult,
-    featuredProjectsResult,
-    visibleProjectsResult,
     educationResult,
     certificationsResult,
   ] = await Promise.allSettled([
@@ -221,47 +219,43 @@ export async function getResumeDataFromCms(): Promise<ResumeData> {
       locale: "en",
       visibleOnly: true,
     }),
-    WorkExperienceManager.getAll(true),
-    SkillManager.getTopSkills(40, true),
+    WorkExperienceManager.getResumeFeatured(true),
+    SkillManager.getResumeFeatured(true),
     ProjectManager.getResumeFeatured(true),
-    ProjectManager.getFeatured(true),
-    ProjectManager.getAll(true),
-    EducationManager.getAll(true),
-    CertificationsService.getAll(true),
+    EducationManager.getResumeFeatured(true),
+    CertificationsService.getResumeFeatured(true),
   ]);
 
-  const resumeProfileBlocks = settledValue(resumeProfileResult, []);
-  const workExperiences = settledValue(workExperienceResult, []);
-  const skills = settledValue(topSkillsResult, []);
-  const resumeProjects = settledValue(resumeProjectsResult, []);
-  const featuredProjects = settledValue(featuredProjectsResult, []);
-  const visibleProjects = settledValue(visibleProjectsResult, []);
-  const education = settledValue(educationResult, []);
-  const certifications = settledValue(certificationsResult, []);
-
-  const selectedProjects =
-    resumeProjects.length > 0
-      ? resumeProjects
-      : featuredProjects.length > 0
-        ? featuredProjects
-        : visibleProjects;
+  const resumeProfileBlocks = settledValue(resumeProfileResult, []).filter(
+    (block) => block.isFeatured
+  );
+  const workExperiences =
+    workExperienceResult.status === "fulfilled"
+      ? workExperienceResult.value.map(mapWorkExperience)
+      : RESUME_DATA_EN.experience;
+  const skills =
+    topSkillsResult.status === "fulfilled"
+      ? groupSkills(topSkillsResult.value)
+      : RESUME_DATA_EN.coreSkills;
+  const resumeProjects =
+    resumeProjectsResult.status === "fulfilled"
+      ? resumeProjectsResult.value.map(mapProject)
+      : RESUME_DATA_EN.projects;
+  const education =
+    educationResult.status === "fulfilled"
+      ? educationResult.value.map(mapEducation)
+      : RESUME_DATA_EN.education;
+  const certifications =
+    certificationsResult.status === "fulfilled"
+      ? certificationsResult.value.map(mapCertification)
+      : RESUME_DATA_EN.certifications;
 
   return applyResumeProfileBlocks({
     ...RESUME_DATA_EN,
-    coreSkills: skills.length > 0 ? groupSkills(skills) : RESUME_DATA_EN.coreSkills,
-    experience:
-      workExperiences.length > 0
-        ? workExperiences.map(mapWorkExperience)
-        : RESUME_DATA_EN.experience,
-    projects:
-      selectedProjects.length > 0
-        ? selectedProjects.map(mapProject)
-        : RESUME_DATA_EN.projects,
-    education:
-      education.length > 0 ? education.map(mapEducation) : RESUME_DATA_EN.education,
-    certifications:
-      certifications.length > 0
-        ? certifications.map(mapCertification)
-        : RESUME_DATA_EN.certifications,
+    coreSkills: skills,
+    experience: workExperiences,
+    projects: resumeProjects,
+    education,
+    certifications,
   }, resumeProfileBlocks);
 }

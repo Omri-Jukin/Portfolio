@@ -225,6 +225,19 @@ export const workExperiencesRouter = router({
       return updated;
     }),
 
+  toggleResumeFeatured: editorProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input }) => {
+      const updated = await WorkExperienceManager.toggleResumeFeatured(input.id);
+      if (!updated) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Work experience not found",
+        });
+      }
+      return updated;
+    }),
+
   // Bulk operations
   bulkUpdate: editorProcedure
     .input(

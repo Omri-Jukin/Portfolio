@@ -34,6 +34,7 @@ export const certifications: Certification[] = [
     color: "#003366",
     displayOrder: 1,
     isVisible: true,
+    isResumeFeatured: true,
     createdAt: "2025-09-01T12:00:00.000Z",
     updatedAt: null,
     createdBy: "user-admin-id",
@@ -84,6 +85,7 @@ const CreateCertificationSchema = z.object({
   color: z.string().max(20).optional(),
   displayOrder: z.number().int().min(0).default(0),
   isVisible: z.boolean().default(true),
+  isResumeFeatured: z.boolean().default(false),
   nameTranslations: z.record(z.string(), z.string()).optional(),
   descriptionTranslations: z.record(z.string(), z.string()).optional(),
   issuerTranslations: z.record(z.string(), z.string()).optional(),
@@ -256,6 +258,16 @@ export const certificationsRouter = router({
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input }) => {
       const updated = await CertificationsService.toggleVisibility(input.id);
+      if (!updated) {
+        throw new Error("Certification not found");
+      }
+      return updated;
+    }),
+
+  toggleResumeFeatured: editorProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input }) => {
+      const updated = await CertificationsService.toggleResumeFeatured(input.id);
       if (!updated) {
         throw new Error("Certification not found");
       }

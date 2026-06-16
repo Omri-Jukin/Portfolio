@@ -118,6 +118,26 @@ export class SkillManager {
     return results.map(transformDbToApi);
   }
 
+  static async getResumeFeatured(visibleOnly = true): Promise<Skill[]> {
+    const db = await getDbClient();
+    const conditions = [eq(skills.isResumeFeatured, true)];
+    if (visibleOnly) {
+      conditions.push(eq(skills.isVisible, true));
+    }
+
+    const results = await db
+      .select()
+      .from(skills)
+      .where(and(...conditions))
+      .orderBy(
+        asc(skills.displayOrder),
+        desc(skills.proficiencyLevel),
+        asc(skills.name)
+      );
+
+    return results.map(transformDbToApi);
+  }
+
   static async getRecentlyUsed(
     monthsBack = 12,
     visibleOnly = true
@@ -212,6 +232,15 @@ export class SkillManager {
 
     return await this.update(id, {
       isVisible: !current.isVisible,
+    });
+  }
+
+  static async toggleResumeFeatured(id: string): Promise<Skill | null> {
+    const current = await this.getById(id);
+    if (!current) return null;
+
+    return await this.update(id, {
+      isResumeFeatured: !current.isResumeFeatured,
     });
   }
 

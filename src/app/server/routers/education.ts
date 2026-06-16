@@ -216,5 +216,16 @@ export const educationRouter = router({
       });
     }),
 
-  // Note: isFeatured functionality removed as it's not in the database schema
+  toggleResumeFeatured: editorProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input }) => {
+      try {
+        return await EducationManager.toggleResumeFeatured(input.id);
+      } catch {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Education record not found",
+        });
+      }
+    }),
 });

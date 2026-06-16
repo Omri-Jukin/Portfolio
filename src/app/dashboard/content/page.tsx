@@ -34,10 +34,10 @@ const quickTasks = [
     tone: "success" as const,
   },
   {
-    title: "Resume PDF header and summary",
+    title: "Resume PDF management",
     description:
-      "Name, title, headline, contact links, and professional summary used by the public resume page and generated PDF.",
-    href: "/dashboard/public-content",
+      "Choose the profile blocks, roles, projects, skills, education, and credentials included in the generated PDF.",
+    href: "/dashboard/resume-pdf",
     badge: "Resume PDF",
     tone: "accent" as const,
   },

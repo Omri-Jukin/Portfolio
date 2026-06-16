@@ -46,6 +46,7 @@ const CreateSkillSchema = z.object({
   projects: z.array(z.string()).default([]),
   lastUsed: z.coerce.date(),
   isVisible: z.boolean().default(true),
+  isResumeFeatured: z.boolean().default(false),
   displayOrder: z.number().int().min(0).default(0),
   nameTranslations: z.record(z.string(), z.string()).optional(),
   descriptionTranslations: z.record(z.string(), z.string()).optional(),
@@ -274,6 +275,16 @@ export const skillsRouter = router({
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input }) => {
       const updated = await SkillManager.toggleVisibility(input.id);
+      if (!updated) {
+        throw new Error("Skill not found");
+      }
+      return updated;
+    }),
+
+  toggleResumeFeatured: editorProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input }) => {
+      const updated = await SkillManager.toggleResumeFeatured(input.id);
       if (!updated) {
         throw new Error("Skill not found");
       }

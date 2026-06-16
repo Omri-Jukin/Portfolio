@@ -257,6 +257,7 @@ export const certifications = pgTable("certifications", {
   color: text("color"),
   displayOrder: integer("display_order").notNull().default(0),
   isVisible: boolean("is_visible").notNull().default(true),
+  isResumeFeatured: boolean("is_resume_featured").notNull().default(false),
   nameTranslations: text("name_translations").$type<Record<string, string>>(),
   descriptionTranslations: text("description_translations").$type<
     Record<string, string>
@@ -292,6 +293,7 @@ export const workExperiences = pgTable("work_experiences", {
   displayOrder: integer("display_order").notNull().default(0),
   isVisible: boolean("is_visible").notNull().default(true),
   isFeatured: boolean("is_featured").notNull().default(false),
+  isResumeFeatured: boolean("is_resume_featured").notNull().default(false),
   roleTranslations: text("role_translations").$type<Record<string, string>>(),
   companyTranslations: text("company_translations").$type<
     Record<string, string>
@@ -411,6 +413,7 @@ export const skills = pgTable("skills", {
   projects: text("projects").array().notNull().default([]),
   lastUsed: timestamp("last_used", { withTimezone: true }).notNull(),
   isVisible: boolean("is_visible").notNull().default(true),
+  isResumeFeatured: boolean("is_resume_featured").notNull().default(false),
   displayOrder: integer("display_order").notNull().default(0),
   nameTranslations: text("name_translations").$type<Record<string, string>>(),
   descriptionTranslations: text("description_translations").$type<
@@ -448,6 +451,7 @@ export const education = pgTable("education", {
   certificateUrl: text("certificate_url"),
   transcript: text("transcript"),
   isVisible: boolean("is_visible").notNull().default(true),
+  isResumeFeatured: boolean("is_resume_featured").notNull().default(false),
   displayOrder: integer("display_order").notNull().default(0),
   institutionTranslations: text("institution_translations").$type<
     Record<string, string>

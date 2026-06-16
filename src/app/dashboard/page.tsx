@@ -52,6 +52,11 @@ const SECTION_COPY: Record<
     description: "Edit page copy and jump into structured content tables.",
     href: "/dashboard/content",
   },
+  resumePdf: {
+    title: "Resume PDF",
+    description: "Manage which CMS records are included in the generated PDF.",
+    href: "/dashboard/resume-pdf",
+  },
   projects: {
     title: "Projects",
     description: "Manage portfolio projects and case-study proof.",

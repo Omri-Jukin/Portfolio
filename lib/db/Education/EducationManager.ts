@@ -29,6 +29,7 @@ const transformDbToApi = (
   certificateUrl: dbRecord.certificateUrl,
   transcript: dbRecord.transcript,
   isVisible: dbRecord.isVisible,
+  isResumeFeatured: dbRecord.isResumeFeatured,
   displayOrder: dbRecord.displayOrder,
   institutionTranslations: dbRecord.institutionTranslations || {},
   degreeTranslations: dbRecord.degreeTranslations || {},
@@ -98,7 +99,6 @@ export class EducationManager {
   }
 
   static async getFeatured(visibleOnly = true): Promise<Education[]> {
-    // Since isFeatured doesn't exist in the schema, return all visible education
     const conditions = visibleOnly ? [eq(education.isVisible, true)] : [];
 
     const db = await getDbClient();
@@ -108,6 +108,24 @@ export class EducationManager {
       .select()
       .from(education)
       .where(conditions.length > 0 ? and(...conditions) : undefined)
+      .orderBy(desc(education.startDate), asc(education.displayOrder));
+
+    return results.map(transformDbToApi);
+  }
+
+  static async getResumeFeatured(visibleOnly = true): Promise<Education[]> {
+    const conditions = [eq(education.isResumeFeatured, true)];
+    if (visibleOnly) {
+      conditions.push(eq(education.isVisible, true));
+    }
+
+    const db = await getDbClient();
+    if (!db) throw new Error("Database connection failed");
+
+    const results = await db
+      .select()
+      .from(education)
+      .where(and(...conditions))
       .orderBy(desc(education.startDate), asc(education.displayOrder));
 
     return results.map(transformDbToApi);
@@ -243,6 +261,17 @@ export class EducationManager {
     }
 
     return transformDbToApi(result[0]);
+  }
+
+  static async toggleResumeFeatured(id: string): Promise<Education> {
+    const current = await this.getById(id);
+    if (!current) {
+      throw new Error("Education record not found");
+    }
+
+    return await this.update(id, {
+      isResumeFeatured: !current.isResumeFeatured,
+    });
   }
 
   static async delete(id: string): Promise<boolean> {

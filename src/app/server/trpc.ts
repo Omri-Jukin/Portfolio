@@ -41,6 +41,7 @@ const auditLoggingMiddleware = t.middleware(async function auditLog(opts) {
       pricing: "pricing",
       discounts: "discount",
       adminDashboard: "admin_dashboard",
+      resumePdf: "system",
     };
 
     const pathParts = path.split(".");
@@ -55,6 +56,8 @@ const auditLoggingMiddleware = t.middleware(async function auditLog(opts) {
       submit: "create",
       toggleVisibility: "update",
       toggleFeatured: "update",
+      toggleResumeFeatured: "update",
+      toggleInclusion: "update",
       reorder: "update",
       bulkUpdate: "update",
       bulkDelete: "delete",

@@ -18,18 +18,19 @@ export interface UpdateSectionOrderInput {
 // Default sections in default order
 export const DEFAULT_SECTIONS = [
   { sectionKey: "publicContent", displayOrder: 1, enabled: true },
-  { sectionKey: "projects", displayOrder: 2, enabled: true },
-  { sectionKey: "workExperience", displayOrder: 3, enabled: true },
-  { sectionKey: "skills", displayOrder: 4, enabled: true },
-  { sectionKey: "blog", displayOrder: 5, enabled: true },
-  { sectionKey: "roles", displayOrder: 6, enabled: true },
-  { sectionKey: "calculatorSettings", displayOrder: 7, enabled: true },
-  { sectionKey: "pricing", displayOrder: 8, enabled: true },
-  { sectionKey: "discounts", displayOrder: 9, enabled: true },
-  { sectionKey: "intakes", displayOrder: 10, enabled: true },
-  { sectionKey: "emails", displayOrder: 11, enabled: true },
-  { sectionKey: "education", displayOrder: 12, enabled: true },
-  { sectionKey: "certifications", displayOrder: 13, enabled: true },
+  { sectionKey: "resumePdf", displayOrder: 2, enabled: true },
+  { sectionKey: "projects", displayOrder: 3, enabled: true },
+  { sectionKey: "workExperience", displayOrder: 4, enabled: true },
+  { sectionKey: "skills", displayOrder: 5, enabled: true },
+  { sectionKey: "blog", displayOrder: 6, enabled: true },
+  { sectionKey: "roles", displayOrder: 7, enabled: true },
+  { sectionKey: "calculatorSettings", displayOrder: 8, enabled: true },
+  { sectionKey: "pricing", displayOrder: 9, enabled: true },
+  { sectionKey: "discounts", displayOrder: 10, enabled: true },
+  { sectionKey: "intakes", displayOrder: 11, enabled: true },
+  { sectionKey: "emails", displayOrder: 12, enabled: true },
+  { sectionKey: "education", displayOrder: 13, enabled: true },
+  { sectionKey: "certifications", displayOrder: 14, enabled: true },
 ];
 
 /**

@@ -120,6 +120,27 @@ export class WorkExperienceManager {
     return results.map(transformDbToApi);
   }
 
+  static async getResumeFeatured(visibleOnly = true): Promise<WorkExperience[]> {
+    const db = getDbClient();
+    const conditions = [eq(workExperiences.isResumeFeatured, true)];
+    if (visibleOnly) {
+      conditions.push(eq(workExperiences.isVisible, true));
+    }
+
+    const results = await (
+      await db
+    )
+      .select()
+      .from(workExperiences)
+      .where(and(...conditions))
+      .orderBy(
+        desc(workExperiences.startDate),
+        asc(workExperiences.displayOrder)
+      );
+
+    return results.map(transformDbToApi);
+  }
+
   static async create(
     workExperience: Omit<NewWorkExperience, "id" | "createdAt">
   ): Promise<WorkExperience> {
@@ -218,6 +239,15 @@ export class WorkExperienceManager {
 
     return await this.update(id, {
       isFeatured: !current.isFeatured,
+    });
+  }
+
+  static async toggleResumeFeatured(id: string): Promise<WorkExperience | null> {
+    const current = await this.getById(id);
+    if (!current) return null;
+
+    return await this.update(id, {
+      isResumeFeatured: !current.isResumeFeatured,
     });
   }
 

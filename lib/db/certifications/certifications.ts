@@ -78,6 +78,24 @@ export class CertificationsService {
     return results.map(transformDbToApi);
   }
 
+  static async getResumeFeatured(visibleOnly = true): Promise<Certification[]> {
+    const conditions = [eq(certifications.isResumeFeatured, true)];
+    if (visibleOnly) {
+      conditions.push(eq(certifications.isVisible, true));
+    }
+
+    const results = await db
+      .select()
+      .from(certifications)
+      .where(and(...conditions))
+      .orderBy(
+        asc(certifications.displayOrder),
+        desc(certifications.issueDate)
+      );
+
+    return results.map(transformDbToApi);
+  }
+
   static async create(
     certification: Omit<NewCertification, "id" | "createdAt">
   ): Promise<Certification> {
@@ -149,6 +167,15 @@ export class CertificationsService {
 
     return await this.update(id, {
       isVisible: !current.isVisible,
+    });
+  }
+
+  static async toggleResumeFeatured(id: string): Promise<Certification | null> {
+    const current = await this.getById(id);
+    if (!current) return null;
+
+    return await this.update(id, {
+      isResumeFeatured: !current.isResumeFeatured,
     });
   }
 
