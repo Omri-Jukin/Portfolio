@@ -302,9 +302,6 @@ export default function CertificationsAdminPage() {
       icon: formData.icon || undefined,
       isVisible: formData.isVisible,
       displayOrder: formData.displayOrder,
-      nameTranslations: {},
-      descriptionTranslations: {},
-      issuerTranslations: {},
     };
 
     if (editingCertification) {

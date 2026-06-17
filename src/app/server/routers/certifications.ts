@@ -100,6 +100,34 @@ const ReorderCertificationsSchema = z.array(
   })
 );
 
+function hasTranslationEntries(value?: Record<string, string>) {
+  return !!value && Object.keys(value).length > 0;
+}
+
+function cleanCertificationInput<T extends z.infer<typeof UpdateCertificationSchema>>(
+  input: T
+) {
+  const cleanInput = {
+    ...input,
+    verificationUrl:
+      input.verificationUrl === "" ? undefined : input.verificationUrl,
+  };
+
+  if (!hasTranslationEntries(cleanInput.nameTranslations)) {
+    delete cleanInput.nameTranslations;
+  }
+
+  if (!hasTranslationEntries(cleanInput.descriptionTranslations)) {
+    delete cleanInput.descriptionTranslations;
+  }
+
+  if (!hasTranslationEntries(cleanInput.issuerTranslations)) {
+    delete cleanInput.issuerTranslations;
+  }
+
+  return cleanInput;
+}
+
 export const certificationsRouter = router({
   // Public routes (for displaying certifications)
   getAll: publicProcedure
@@ -166,11 +194,8 @@ export const certificationsRouter = router({
   create: editorProcedure
     .input(CreateCertificationSchema)
     .mutation(async ({ input, ctx }) => {
-      // Convert empty string URLs to undefined
       const cleanInput = {
-        ...input,
-        verificationUrl:
-          input.verificationUrl === "" ? undefined : input.verificationUrl,
+        ...cleanCertificationInput(input),
         createdBy: ctx.user.id,
       };
 
@@ -205,14 +230,7 @@ export const certificationsRouter = router({
         });
       }
 
-      // Convert empty string URLs to undefined
-      const cleanData = {
-        ...input.data,
-        verificationUrl:
-          input.data.verificationUrl === ""
-            ? undefined
-            : input.data.verificationUrl,
-      };
+      const cleanData = cleanCertificationInput(input.data);
 
       return await CertificationsService.update(input.id, cleanData);
     }),
@@ -294,8 +312,9 @@ export const certificationsRouter = router({
       })
     )
     .mutation(async ({ input }) => {
+      const cleanUpdates = cleanCertificationInput(input.updates);
       const results = await Promise.all(
-        input.ids.map((id) => CertificationsService.update(id, input.updates))
+        input.ids.map((id) => CertificationsService.update(id, cleanUpdates))
       );
       return results.filter(Boolean);
     }),

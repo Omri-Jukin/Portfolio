@@ -331,7 +331,10 @@ export const skillsRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      const results = await SkillManager.bulkUpdate(input.ids, input.updates);
+      const results = await SkillManager.bulkUpdate(
+        input.ids,
+        cleanSkillInput(input.updates)
+      );
       return results;
     }),
 

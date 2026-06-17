@@ -483,8 +483,6 @@ export default function ProjectsAdminPage() {
       caseStudyRole: formData.caseStudyRole,
       proofLinks,
       privateRepoNote: formData.privateRepoNote,
-      titleTranslations: {},
-      descriptionTranslations: {},
     };
 
     if (editingProject) {

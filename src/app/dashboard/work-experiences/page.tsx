@@ -333,9 +333,6 @@ export default function WorkExperiencesAdminPage() {
       displayOrder: formData.displayOrder,
       isVisible: formData.isVisible,
       isFeatured: formData.isFeatured,
-      roleTranslations: {},
-      companyTranslations: {},
-      descriptionTranslations: {},
     };
 
     if (editingExperience) {

@@ -138,10 +138,14 @@ function emptyToUndefined(value: string | undefined) {
   return value === "" ? undefined : value;
 }
 
+function hasTranslationEntries(value?: Record<string, string>) {
+  return !!value && Object.keys(value).length > 0;
+}
+
 function cleanProjectInput<T extends z.infer<typeof UpdateProjectSchema>>(
   input: T
 ) {
-  return {
+  const cleanInput = {
     ...input,
     githubUrl: emptyToUndefined(input.githubUrl),
     liveUrl: emptyToUndefined(input.liveUrl),
@@ -153,6 +157,16 @@ function cleanProjectInput<T extends z.infer<typeof UpdateProjectSchema>>(
     caseStudyRole: emptyToUndefined(input.caseStudyRole),
     privateRepoNote: emptyToUndefined(input.privateRepoNote),
   };
+
+  if (!hasTranslationEntries(cleanInput.titleTranslations)) {
+    delete cleanInput.titleTranslations;
+  }
+
+  if (!hasTranslationEntries(cleanInput.descriptionTranslations)) {
+    delete cleanInput.descriptionTranslations;
+  }
+
+  return cleanInput;
 }
 
 function getVisibleOnlyForPublicRead(
@@ -450,7 +464,10 @@ export const projectsRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      const results = await ProjectManager.bulkUpdate(input.ids, input.updates);
+      const results = await ProjectManager.bulkUpdate(
+        input.ids,
+        cleanProjectInput(input.updates)
+      );
       return results;
     }),
 

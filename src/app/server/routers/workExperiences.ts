@@ -20,6 +20,35 @@ const WorkExperienceFiltersSchema = z.object({
   isCurrent: z.boolean().optional(),
 });
 
+function hasTranslationEntries(value?: Record<string, string>) {
+  return !!value && Object.keys(value).length > 0;
+}
+
+function cleanWorkExperienceInput<
+  T extends z.infer<typeof workExperienceUpdateSchema>
+>(
+  input: T
+) {
+  const cleanInput = {
+    ...input,
+    companyUrl: input.companyUrl === "" ? undefined : input.companyUrl,
+  };
+
+  if (!hasTranslationEntries(cleanInput.roleTranslations)) {
+    delete cleanInput.roleTranslations;
+  }
+
+  if (!hasTranslationEntries(cleanInput.companyTranslations)) {
+    delete cleanInput.companyTranslations;
+  }
+
+  if (!hasTranslationEntries(cleanInput.descriptionTranslations)) {
+    delete cleanInput.descriptionTranslations;
+  }
+
+  return cleanInput;
+}
+
 export const workExperiencesRouter = router({
   // Public routes (for displaying work experiences)
   getAll: publicProcedure
@@ -111,10 +140,8 @@ export const workExperiencesRouter = router({
   create: editorProcedure
     .input(workExperienceCreateSchema)
     .mutation(async ({ input, ctx }) => {
-      // Convert empty string URLs to undefined
       const cleanInput = {
-        ...input,
-        companyUrl: input.companyUrl === "" ? undefined : input.companyUrl,
+        ...cleanWorkExperienceInput(input),
         createdBy: ctx.user.id,
       };
 
@@ -149,12 +176,7 @@ export const workExperiencesRouter = router({
         });
       }
 
-      // Convert empty string URLs to undefined
-      const cleanData = {
-        ...input.data,
-        companyUrl:
-          input.data.companyUrl === "" ? undefined : input.data.companyUrl,
-      };
+      const cleanData = cleanWorkExperienceInput(input.data);
 
       return await WorkExperienceManager.update(input.id, cleanData);
     }),
@@ -249,7 +271,7 @@ export const workExperiencesRouter = router({
     .mutation(async ({ input }) => {
       const results = await WorkExperienceManager.bulkUpdate(
         input.ids,
-        input.updates
+        cleanWorkExperienceInput(input.updates)
       );
       return results;
     }),
