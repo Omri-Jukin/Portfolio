@@ -2,7 +2,9 @@
 
 import { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 import { getToken } from "next-auth/jwt";
+import { eq } from "drizzle-orm";
 import { getDB, getMockDB } from "$/db/client";
+import { users } from "$/db/schema/schema.tables";
 import { auth } from "../../../auth";
 
 // User type for authentication
@@ -59,6 +61,50 @@ function getUserFromToken(token: Record<string, unknown>): AuthenticatedUser {
     lastName: name.split(" ").slice(1).join(" ") || "",
     role: resolveRole(email, role),
   };
+}
+
+async function resolvePortfolioUser(
+  db: Awaited<ReturnType<typeof getDB>> | null,
+  sessionUser: AuthenticatedUser | null,
+): Promise<AuthenticatedUser | null> {
+  if (!db || !sessionUser?.email) {
+    return sessionUser;
+  }
+
+  try {
+    const [portfolioUser] = await db
+      .select({
+        id: users.id,
+        email: users.email,
+        firstName: users.firstName,
+        lastName: users.lastName,
+        role: users.role,
+      })
+      .from(users)
+      .where(eq(users.email, sessionUser.email))
+      .limit(1);
+
+    if (!portfolioUser) {
+      return sessionUser;
+    }
+
+    const name =
+      `${portfolioUser.firstName} ${portfolioUser.lastName}`.trim() ||
+      sessionUser.name;
+
+    return {
+      ...sessionUser,
+      id: portfolioUser.id,
+      email: portfolioUser.email,
+      name,
+      firstName: portfolioUser.firstName || sessionUser.firstName,
+      lastName: portfolioUser.lastName || sessionUser.lastName,
+      role: resolveRole(portfolioUser.email, portfolioUser.role),
+    };
+  } catch (error) {
+    console.error("Failed to resolve portfolio user:", error);
+    return sessionUser;
+  }
 }
 
 export async function createContext({
@@ -147,6 +193,8 @@ export async function createContext({
       console.error("Failed to get session token:", error);
     }
   }
+
+  user = await resolvePortfolioUser(db, user);
 
   // Extract origin from request for URL generation
   const origin =
