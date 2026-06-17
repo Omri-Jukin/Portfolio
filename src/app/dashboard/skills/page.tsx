@@ -354,8 +354,6 @@ export default function SkillsAdminPage() {
       lastUsed: new Date(formData.lastUsed),
       isVisible: formData.isVisible,
       displayOrder: formData.displayOrder,
-      nameTranslations: {},
-      descriptionTranslations: {},
     };
 
     if (editingSkill) {

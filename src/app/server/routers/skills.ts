@@ -72,6 +72,27 @@ const SkillFiltersSchema = z.object({
   usedRecently: z.boolean().optional(),
 });
 
+function hasTranslationEntries(value?: Record<string, string>) {
+  return !!value && Object.keys(value).length > 0;
+}
+
+function cleanSkillInput<T extends {
+  nameTranslations?: Record<string, string>;
+  descriptionTranslations?: Record<string, string>;
+}>(input: T) {
+  const cleanInput = { ...input };
+
+  if (!hasTranslationEntries(cleanInput.nameTranslations)) {
+    delete cleanInput.nameTranslations;
+  }
+
+  if (!hasTranslationEntries(cleanInput.descriptionTranslations)) {
+    delete cleanInput.descriptionTranslations;
+  }
+
+  return cleanInput;
+}
+
 export const skillsRouter = router({
   // Public routes (for displaying skills)
   getAll: publicProcedure
@@ -196,7 +217,7 @@ export const skillsRouter = router({
     .input(CreateSkillSchema)
     .mutation(async ({ input, ctx }) => {
       const cleanInput = {
-        ...input,
+        ...cleanSkillInput(input),
         createdBy: ctx.user.id,
       };
 
@@ -231,7 +252,7 @@ export const skillsRouter = router({
         });
       }
 
-      return await SkillManager.update(input.id, input.data);
+      return await SkillManager.update(input.id, cleanSkillInput(input.data));
     }),
 
   delete: editorProcedure
