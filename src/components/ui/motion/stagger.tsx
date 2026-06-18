@@ -38,7 +38,7 @@ export function Stagger({
 
   return (
     <motion.div
-      initial="hidden"
+      initial={false}
       whileInView="show"
       viewport={{ once: true, margin: "-10% 0px" }}
       variants={{

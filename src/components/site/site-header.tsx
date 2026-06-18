@@ -59,7 +59,7 @@ export function SiteHeader() {
           : "border-b border-transparent bg-transparent"
       )}
     >
-      <Container className="flex h-16 items-center justify-between gap-4">
+      <Container className="flex min-h-16 flex-wrap items-center justify-between gap-x-4 gap-y-2 py-3 md:flex-nowrap md:py-0">
         <Link
           href="/"
           className="font-display text-sm font-semibold text-foreground"
@@ -67,8 +67,11 @@ export function SiteHeader() {
           Omri Jukin
         </Link>
 
-        <nav aria-label="Primary navigation" className="hidden md:block">
-          <ul className="flex items-center gap-1">
+        <nav
+          aria-label="Primary navigation"
+          className="order-last -mx-1 w-full overflow-x-auto md:order-none md:mx-0 md:w-auto md:overflow-visible"
+        >
+          <ul className="flex min-w-max items-center gap-1 px-1 md:min-w-0 md:px-0">
             {navItems.map((item) => (
               <li key={item.href}>
                 <Link
@@ -104,7 +107,7 @@ export function SiteHeader() {
           <ThemeToggle />
           <Link
             href="/resume"
-            className="inline-flex h-8 items-center justify-center rounded-md bg-accent px-3 text-xs font-medium text-accent-foreground shadow-[var(--shadow-subtle)] transition-[background-color,transform] duration-150 hover:bg-accent/90 motion-safe:hover:-translate-y-px"
+            className="hidden h-8 items-center justify-center rounded-md bg-accent px-3 text-xs font-medium text-accent-foreground shadow-[var(--shadow-subtle)] transition-[background-color,transform] duration-150 hover:bg-accent/90 motion-safe:hover:-translate-y-px sm:inline-flex"
           >
             Resume
           </Link>

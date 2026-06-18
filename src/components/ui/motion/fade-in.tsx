@@ -22,7 +22,6 @@ interface FadeInProps extends MotionSafeDivProps {
 export function FadeIn({
   className,
   delay = 0,
-  y = 12,
   children,
   ...props
 }: FadeInProps) {
@@ -38,7 +37,7 @@ export function FadeIn({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y }}
+      initial={false}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10% 0px" }}
       transition={{ duration: 0.25, delay, ease: "easeOut" }}

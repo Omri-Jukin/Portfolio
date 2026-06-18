@@ -329,26 +329,26 @@ export default async function HomePage() {
             return (
               <Section key={sectionKey} className="pt-14 sm:pt-20 lg:pt-24">
                 <Container>
-                  <FadeIn className="max-w-5xl">
+                  <FadeIn className="min-w-0 max-w-5xl">
                     <p className="mb-4 font-mono text-xs font-semibold uppercase text-accent">
                       {content.hero.eyebrow}
                     </p>
-                    <h1 className="font-display text-5xl font-semibold leading-tight text-foreground sm:text-6xl">
+                    <h1 className="max-w-[22rem] font-display text-[1.75rem] font-semibold leading-[1.15] text-foreground [overflow-wrap:anywhere] sm:max-w-full sm:text-6xl sm:leading-tight">
                       {content.hero.title}
                     </h1>
-                    <p className="mt-6 max-w-3xl text-lg leading-8 text-muted-foreground">
+                    <p className="mt-5 max-w-[22rem] text-base leading-7 text-muted-foreground [overflow-wrap:anywhere] sm:mt-6 sm:max-w-3xl sm:text-lg sm:leading-8">
                       {content.hero.subtitle}
                     </p>
-                    <div className="mt-8 flex flex-wrap gap-3">
+                    <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                       <Link
                         href="/resume"
-                        className="inline-flex h-11 items-center rounded-md bg-accent px-5 text-sm font-medium text-accent-foreground transition-[background-color,transform] hover:bg-accent/90 motion-safe:hover:-translate-y-px"
+                        className="inline-flex h-11 w-full items-center justify-center rounded-md bg-accent px-5 text-sm font-medium text-accent-foreground transition-[background-color,transform] hover:bg-accent/90 motion-safe:hover:-translate-y-px sm:w-auto"
                       >
                         Download Resume (PDF)
                       </Link>
                       <Link
                         href="#work"
-                        className="inline-flex h-11 items-center rounded-md border border-border px-5 text-sm font-medium transition-colors hover:bg-muted"
+                        className="inline-flex h-11 w-full items-center justify-center rounded-md border border-border px-5 text-sm font-medium transition-colors hover:bg-muted sm:w-auto"
                       >
                         View work
                       </Link>
@@ -356,7 +356,7 @@ export default async function HomePage() {
                         href={PROFILE_LINKS.GITHUB}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex h-11 items-center rounded-md px-3 text-sm font-medium text-accent hover:underline"
+                        className="inline-flex h-11 w-full items-center justify-center rounded-md px-3 text-sm font-medium text-accent hover:underline sm:w-auto"
                       >
                         GitHub
                       </a>
@@ -364,7 +364,7 @@ export default async function HomePage() {
                         href={PROFILE_LINKS.LINKEDIN}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex h-11 items-center rounded-md px-3 text-sm font-medium text-accent hover:underline"
+                        className="inline-flex h-11 w-full items-center justify-center rounded-md px-3 text-sm font-medium text-accent hover:underline sm:w-auto"
                       >
                         LinkedIn
                       </a>
@@ -406,7 +406,7 @@ export default async function HomePage() {
                   <Stagger className="mt-10 grid gap-4 md:grid-cols-2" delayChildren={0.08}>
                     {projects.map((project) => (
                       <StaggerItem key={project.title}>
-                        <Card className="group flex min-h-80 flex-col justify-between p-5 transition-[border-color,transform] hover:border-accent/50 motion-safe:hover:-translate-y-1">
+                        <Card className="group flex flex-col justify-between p-4 transition-[border-color,transform] hover:border-accent/50 motion-safe:hover:-translate-y-1 sm:p-5 md:min-h-80">
                           <div>
                             <div className="flex flex-wrap items-center gap-2">
                               <Badge tone="accent">
@@ -643,16 +643,16 @@ export default async function HomePage() {
                           </p>
                         ) : null}
                       </div>
-                      <div className="flex flex-wrap gap-3">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                         <Link
                           href="/contact"
-                          className="inline-flex h-11 items-center rounded-md bg-accent px-5 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent/90"
+                          className="inline-flex h-11 w-full items-center justify-center rounded-md bg-accent px-5 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent/90 sm:w-auto"
                         >
                           Contact
                         </Link>
                         <Link
                           href="/resume"
-                          className="inline-flex h-11 items-center rounded-md border border-border px-5 text-sm font-medium transition-colors hover:bg-muted"
+                          className="inline-flex h-11 w-full items-center justify-center rounded-md border border-border px-5 text-sm font-medium transition-colors hover:bg-muted sm:w-auto"
                         >
                           Resume
                         </Link>
