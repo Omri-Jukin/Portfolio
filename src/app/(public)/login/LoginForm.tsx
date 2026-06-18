@@ -35,7 +35,7 @@ export function LoginForm() {
   };
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="mx-auto w-full max-w-xs sm:max-w-sm">
       <CardHeader className="text-center">
         <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full border border-border bg-muted">
           <svg
@@ -64,7 +64,7 @@ export function LoginForm() {
           </Alert>
         ) : null}
         <Button
-          className="w-full"
+          className="w-full min-w-0 whitespace-normal"
           size="lg"
           onClick={handleGoogleSignIn}
           disabled={isLoading}

@@ -142,7 +142,7 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <label className="grid gap-1.5">
+    <label className="grid min-w-0 gap-1.5">
       <span className="text-sm font-medium text-foreground">{label}</span>
       {children}
     </label>
@@ -400,13 +400,13 @@ export default function PublicContentAdminPage() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="w-full min-w-0">
       <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="font-mono text-xs font-semibold uppercase text-accent">
             CMS
           </p>
-          <h1 className="mt-2 font-display text-3xl font-semibold">
+          <h1 className="mt-2 font-display text-2xl font-semibold sm:text-3xl">
             Public Content
           </h1>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">
@@ -478,7 +478,7 @@ export default function PublicContentAdminPage() {
                     <p className="font-mono text-xs uppercase text-muted-foreground">
                       Drag section
                     </p>
-                    <h2 className="mt-1 font-display text-xl font-semibold">
+                    <h2 className="mt-1 break-words font-display text-xl font-semibold">
                       {meta.title}
                     </h2>
                     <p className="mt-1 text-xs text-muted-foreground">
@@ -568,7 +568,7 @@ export default function PublicContentAdminPage() {
                 ))}
               </div>
               {groupBlocks[0]?.sectionKey === "selected-work" ? (
-                <div className="mt-4 rounded-md border border-border bg-muted/20 p-4">
+                  <div className="mt-4 min-w-0 rounded-md border border-border bg-muted/20 p-4">
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                       <p className="font-mono text-xs uppercase text-muted-foreground">
@@ -580,13 +580,13 @@ export default function PublicContentAdminPage() {
                     </div>
                     <Link
                       href="/dashboard/projects"
-                      className="inline-flex h-10 shrink-0 items-center justify-center rounded-md border border-border bg-background px-4 text-sm font-medium shadow-[var(--shadow-subtle)] transition-colors hover:border-accent/50 hover:bg-accent/10"
+                      className="inline-flex h-10 w-full shrink-0 items-center justify-center rounded-md border border-border bg-background px-4 text-sm font-medium shadow-[var(--shadow-subtle)] transition-colors hover:border-accent/50 hover:bg-accent/10 sm:w-auto"
                     >
                       Edit projects
                     </Link>
                   </div>
                   {featuredProjects.length > 0 ? (
-                    <div className="mt-4 grid gap-3 md:grid-cols-2">
+                    <div className="mt-4 grid min-w-0 gap-3 md:grid-cols-2">
                       {featuredProjects.map((project) => (
                         <Card key={project.id} className="p-4">
                           <div className="flex flex-wrap items-center gap-2">
@@ -599,7 +599,7 @@ export default function PublicContentAdminPage() {
                               <Badge tone="success">Featured</Badge>
                             ) : null}
                           </div>
-                          <h4 className="mt-3 font-display text-lg font-semibold">
+                          <h4 className="mt-3 break-words font-display text-lg font-semibold">
                             {project.title}
                           </h4>
                           <p className="mt-2 text-sm text-muted-foreground">
@@ -607,7 +607,7 @@ export default function PublicContentAdminPage() {
                               project.subtitle ||
                               project.description}
                           </p>
-                          <div className="mt-4 flex flex-wrap gap-3 text-sm">
+                          <div className="mt-4 grid gap-3 text-sm sm:flex sm:flex-wrap">
                             <Link
                               href={getProjectHref(project)}
                               className="font-medium text-accent underline-offset-4 hover:underline"
@@ -639,7 +639,7 @@ export default function PublicContentAdminPage() {
 
       {dragKind && dragCursor ? (
         <div
-          className="pointer-events-none fixed z-50 w-80 rounded-md border border-accent/60 bg-background/95 p-4 shadow-lg"
+          className="pointer-events-none fixed z-50 w-[min(20rem,calc(100vw-2rem))] rounded-md border border-accent/60 bg-background/95 p-4 shadow-lg"
           style={{
             left: dragCursor.x + 14,
             top: dragCursor.y + 14,
@@ -648,7 +648,7 @@ export default function PublicContentAdminPage() {
           <p className="font-mono text-xs uppercase text-accent">
             Moving {dragKind === "group" ? "section" : "block"}
           </p>
-          <p className="mt-1 font-display text-lg font-semibold">
+          <p className="mt-1 break-words font-display text-lg font-semibold">
             {dragKind === "group"
               ? sectionLabel(getSectionKeyFromGroupKey(draggedGroupKey))
               : orderedBlocks.find((block) => block.id === draggedBlockId)
@@ -665,13 +665,13 @@ export default function PublicContentAdminPage() {
         onOpenChange={(open) => {
           if (!open) handleClose();
         }}
-        className="max-w-4xl"
+        className="max-w-4xl p-0"
       >
-        <DialogHeader>
+        <DialogHeader className="mb-0 border-b border-border p-4 sm:p-6">
           <DialogTitle>Edit Public Content</DialogTitle>
         </DialogHeader>
         {formData ? (
-          <div className="grid gap-4">
+          <div className="grid max-h-[calc(100dvh-8rem)] min-w-0 gap-4 overflow-y-auto overflow-x-hidden px-4 py-5 sm:max-h-[75vh] sm:px-6">
             <Field label="Title">
               <Input
                 value={formData.title}
@@ -693,7 +693,7 @@ export default function PublicContentAdminPage() {
                 onChange={(event) => updateField("body", event.target.value)}
               />
             </Field>
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid min-w-0 gap-4 md:grid-cols-2">
               <Field label="Href">
                 <Input
                   value={formData.href}
@@ -718,8 +718,8 @@ export default function PublicContentAdminPage() {
                 }
               />
             </Field>
-            <div className="flex flex-wrap gap-5">
-              <label className="inline-flex items-center gap-2 text-sm">
+            <div className="flex min-w-0 flex-wrap gap-5">
+              <label className="inline-flex min-w-0 items-center gap-2 text-sm">
                 <Checkbox
                   checked={formData.isVisible}
                   onChange={(event) =>
@@ -728,7 +728,7 @@ export default function PublicContentAdminPage() {
                 />
                 Visible
               </label>
-              <label className="inline-flex items-center gap-2 text-sm">
+              <label className="inline-flex min-w-0 items-center gap-2 text-sm">
                 <Checkbox
                   checked={formData.isFeatured}
                   onChange={(event) =>
@@ -756,11 +756,15 @@ export default function PublicContentAdminPage() {
                 className="min-h-32 font-mono text-xs"
               />
             </Field>
-            <div className="flex justify-end gap-2 border-t border-border pt-4">
-              <Button variant="quiet" onClick={handleClose}>
+            <div className="sticky bottom-0 -mx-4 -mb-5 grid gap-2 border-t border-border bg-popover p-4 sm:-mx-6 sm:-mb-5 sm:flex sm:justify-end">
+              <Button className="w-full sm:w-auto" variant="quiet" onClick={handleClose}>
                 Cancel
               </Button>
-              <Button onClick={handleSave} disabled={updateMutation.isPending}>
+              <Button
+                className="w-full sm:w-auto"
+                onClick={handleSave}
+                disabled={updateMutation.isPending}
+              >
                 {updateMutation.isPending ? "Saving" : "Save"}
               </Button>
             </div>

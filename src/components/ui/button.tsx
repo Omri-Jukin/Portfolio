@@ -38,6 +38,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       type={type}
       className={cn(
         "inline-flex shrink-0 items-center justify-center rounded-md font-medium transition-[background-color,border-color,color,opacity,transform] duration-150 ease-out",
+        "max-w-full",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         "disabled:pointer-events-none disabled:opacity-50 motion-safe:hover:-translate-y-px motion-safe:active:translate-y-0",
         variantClasses[variant],

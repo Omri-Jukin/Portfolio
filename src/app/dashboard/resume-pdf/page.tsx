@@ -64,22 +64,22 @@ function SectionCard({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-md border border-border p-4">
+    <section className="min-w-0 rounded-md border border-border p-4">
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <h2 className="font-display text-xl font-semibold">{title}</h2>
+        <div className="min-w-0">
+          <h2 className="break-words font-display text-xl font-semibold">{title}</h2>
           <p className="mt-2 text-sm leading-6 text-muted-foreground">
             {description}
           </p>
         </div>
         <Link
           href={editHref}
-          className="inline-flex h-10 shrink-0 items-center justify-center rounded-md border border-border bg-background px-4 text-sm font-medium shadow-[var(--shadow-subtle)] transition-colors hover:border-accent/50 hover:bg-accent/10"
+          className="inline-flex h-10 w-full shrink-0 items-center justify-center rounded-md border border-border bg-background px-4 text-sm font-medium shadow-[var(--shadow-subtle)] transition-colors hover:border-accent/50 hover:bg-accent/10 sm:w-auto"
         >
           Edit source
         </Link>
       </div>
-      <div className="grid gap-3">{children}</div>
+      <div className="grid min-w-0 gap-3">{children}</div>
     </section>
   );
 }
@@ -94,13 +94,18 @@ function InclusionFooter({
   disabled: boolean;
 }) {
   return (
-    <CardFooter className="justify-between">
+    <CardFooter className="flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
       {included ? (
         <Badge tone="success">Included in PDF</Badge>
       ) : (
         <Badge tone="warning">Excluded from PDF</Badge>
       )}
-      <Button variant="outline" onClick={onToggle} disabled={disabled}>
+      <Button
+        className="w-full sm:w-auto"
+        variant="outline"
+        onClick={onToggle}
+        disabled={disabled}
+      >
         {included ? "Remove from PDF" : "Add to PDF"}
       </Button>
     </CardFooter>
@@ -442,13 +447,13 @@ export default function ResumePdfDashboardPage() {
   const pdfDateFormat = data ? getPdfDateFormat(data.profileBlocks) : "month-year";
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="w-full min-w-0">
       <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
+        <div className="min-w-0">
           <p className="font-mono text-xs font-semibold uppercase text-accent">
             CMS
           </p>
-          <h1 className="mt-2 font-display text-3xl font-semibold">
+          <h1 className="mt-2 font-display text-2xl font-semibold sm:text-3xl">
             Resume PDF
           </h1>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">
@@ -458,7 +463,7 @@ export default function ResumePdfDashboardPage() {
         </div>
         <Link
           href="/resume"
-          className="inline-flex h-10 items-center justify-center rounded-md border border-border bg-background px-4 text-sm font-medium shadow-[var(--shadow-subtle)] transition-colors hover:border-accent/50 hover:bg-accent/10"
+          className="inline-flex h-10 w-full items-center justify-center rounded-md border border-border bg-background px-4 text-sm font-medium shadow-[var(--shadow-subtle)] transition-colors hover:border-accent/50 hover:bg-accent/10 sm:w-auto"
         >
           Preview resume
         </Link>
@@ -512,8 +517,8 @@ export default function ResumePdfDashboardPage() {
             </Card>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
-            <div className="space-y-6">
+          <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,22.5rem)]">
+            <div className="min-w-0 space-y-6">
               <SectionCard
                 title="Profile and Summary"
                 description="Controls the resume header, headline, contacts, and summary copy."
@@ -551,7 +556,7 @@ export default function ResumePdfDashboardPage() {
               </SectionCard>
             </div>
 
-            <aside className="space-y-6">
+            <aside className="min-w-0 space-y-6">
               <SectionCard
                 title="Skills"
                 description="Skill chips grouped into the PDF skills sidebar."

@@ -240,7 +240,7 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <label className="grid gap-1.5">
+    <label className="grid min-w-0 gap-1.5">
       <span className="text-sm font-medium text-foreground">{label}</span>
       {children}
     </label>
@@ -504,13 +504,13 @@ export default function ProjectsAdminPage() {
     !isSaving;
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="w-full min-w-0">
       <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="font-mono text-xs font-semibold uppercase text-accent">
             CMS
           </p>
-          <h1 className="mt-2 font-display text-3xl font-semibold">
+          <h1 className="mt-2 font-display text-2xl font-semibold sm:text-3xl">
             Projects
           </h1>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">
@@ -518,7 +518,9 @@ export default function ProjectsAdminPage() {
             homepage featuring, and resume PDF inclusion.
           </p>
         </div>
-        <Button onClick={() => handleOpenDialog()}>Add Project</Button>
+        <Button className="w-full sm:w-auto" onClick={() => handleOpenDialog()}>
+          Add Project
+        </Button>
       </div>
 
       <NoticeBanner notice={notice} />
@@ -597,10 +599,11 @@ export default function ProjectsAdminPage() {
                   {project.outcome ? <p>{project.outcome}</p> : null}
                 </div>
               </CardContent>
-              <CardFooter className="flex-wrap justify-between">
-                <div className="flex flex-wrap gap-2">
+              <CardFooter className="flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+                <div className="grid gap-2 sm:flex sm:flex-wrap">
                   <Button
                     variant="quiet"
+                    className="w-full sm:w-auto"
                     onClick={() =>
                       toggleVisibilityMutation.mutate({ id: project.id })
                     }
@@ -610,6 +613,7 @@ export default function ProjectsAdminPage() {
                   </Button>
                   <Button
                     variant="quiet"
+                    className="w-full sm:w-auto"
                     onClick={() =>
                       toggleFeaturedMutation.mutate({ id: project.id })
                     }
@@ -619,6 +623,7 @@ export default function ProjectsAdminPage() {
                   </Button>
                   <Button
                     variant="quiet"
+                    className="w-full sm:w-auto"
                     onClick={() =>
                       toggleResumeFeaturedMutation.mutate({ id: project.id })
                     }
@@ -627,15 +632,17 @@ export default function ProjectsAdminPage() {
                     {project.isResumeFeatured ? "Remove PDF" : "PDF"}
                   </Button>
                 </div>
-                <div className="flex gap-2">
+                <div className="grid gap-2 sm:flex">
                   <Button
                     variant="outline"
+                    className="w-full sm:w-auto"
                     onClick={() => handleOpenDialog(project)}
                   >
                     Edit
                   </Button>
                   <Button
                     variant="destructive"
+                    className="w-full sm:w-auto"
                     onClick={() => setDeleteConfirmOpen(project.id)}
                   >
                     Delete
@@ -652,16 +659,16 @@ export default function ProjectsAdminPage() {
         onOpenChange={(open) => {
           if (!open) handleCloseDialog();
         }}
-        className="max-w-5xl"
+        className="max-w-5xl p-0"
       >
-        <DialogHeader>
-          <DialogTitle>
+        <DialogHeader className="mb-0 border-b border-border p-4 sm:p-6">
+          <DialogTitle className="text-lg sm:text-xl">
             {editingProject ? "Edit Project" : "Add Project"}
           </DialogTitle>
         </DialogHeader>
 
-        <div className="grid max-h-[75vh] gap-5 overflow-y-auto pr-1">
-          <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid max-h-[calc(100dvh-8rem)] min-w-0 gap-5 overflow-y-auto overflow-x-hidden px-4 py-5 sm:max-h-[75vh] sm:px-6">
+          <div className="grid min-w-0 gap-4 md:grid-cols-2">
             <Field label="Title">
               <Input
                 value={formData.title}
@@ -697,7 +704,7 @@ export default function ProjectsAdminPage() {
             />
           </Field>
 
-          <div className="grid gap-4 md:grid-cols-4">
+          <div className="grid min-w-0 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Field label="Status">
               <Select
                 value={formData.status}
@@ -745,7 +752,7 @@ export default function ProjectsAdminPage() {
             </Field>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-4">
+          <div className="grid min-w-0 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Field label="GitHub URL">
               <Input
                 value={formData.githubUrl}
@@ -776,7 +783,7 @@ export default function ProjectsAdminPage() {
             </Field>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid min-w-0 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <Field label="Team size">
               <Input
                 type="number"
@@ -803,7 +810,7 @@ export default function ProjectsAdminPage() {
             </Field>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid min-w-0 gap-4 md:grid-cols-2">
             <Field label="Budget">
               <Input
                 value={formData.budget}
@@ -822,7 +829,7 @@ export default function ProjectsAdminPage() {
             </Field>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid min-w-0 gap-4 md:grid-cols-2">
             {(["technologies", "categories", "keyFeatures", "images"] as const).map(
               (field) => (
                 <ArrayEditor
@@ -840,11 +847,11 @@ export default function ProjectsAdminPage() {
             )}
           </div>
 
-          <div className="rounded-md border border-border p-4">
+          <div className="min-w-0 rounded-md border border-border p-4">
             <h2 className="font-display text-lg font-semibold">
               Case study and PDF signals
             </h2>
-            <div className="mt-4 grid gap-4 md:grid-cols-2">
+            <div className="mt-4 grid min-w-0 gap-4 md:grid-cols-2">
               <Field label="Case-study slug">
                 <Input
                   value={formData.caseStudySlug}
@@ -877,7 +884,7 @@ export default function ProjectsAdminPage() {
                 onChange={(event) => updateField("outcome", event.target.value)}
               />
             </Field>
-            <div className="mt-4 grid gap-4 md:grid-cols-2">
+            <div className="mt-4 grid min-w-0 gap-4 md:grid-cols-2">
               {(["constraints", "decisions"] as const).map((field) => (
                 <ArrayEditor
                   key={field}
@@ -911,7 +918,7 @@ export default function ProjectsAdminPage() {
             </Field>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid min-w-0 gap-4 md:grid-cols-2">
             <Field label="Technical challenges JSON">
               <Textarea
                 value={formData.technicalChallengesJson}
@@ -932,14 +939,17 @@ export default function ProjectsAdminPage() {
             </Field>
           </div>
 
-          <div className="grid gap-3 md:grid-cols-4">
+          <div className="grid min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {[
               ["isVisible", "Visible"],
               ["isFeatured", "Homepage featured"],
               ["isResumeFeatured", "Resume PDF"],
               ["isOpenSource", "Open source"],
             ].map(([field, label]) => (
-              <label key={field} className="inline-flex items-center gap-2 text-sm">
+              <label
+                key={field}
+                className="inline-flex min-w-0 items-center gap-2 text-sm"
+              >
                 <Checkbox
                   checked={Boolean(formData[field as keyof ProjectFormData])}
                   onChange={(event) =>
@@ -954,11 +964,11 @@ export default function ProjectsAdminPage() {
             ))}
           </div>
 
-          <div className="flex justify-end gap-2 border-t border-border pt-4">
-            <Button variant="quiet" onClick={handleCloseDialog}>
+          <div className="sticky bottom-0 -mx-4 -mb-5 grid gap-2 border-t border-border bg-popover p-4 sm:-mx-6 sm:-mb-5 sm:flex sm:justify-end">
+            <Button className="w-full sm:w-auto" variant="quiet" onClick={handleCloseDialog}>
               Cancel
             </Button>
-            <Button onClick={handleSubmit} disabled={!canSubmit}>
+            <Button className="w-full sm:w-auto" onClick={handleSubmit} disabled={!canSubmit}>
               {isSaving ? "Saving" : editingProject ? "Update" : "Create"}
             </Button>
           </div>
@@ -1014,11 +1024,11 @@ function ArrayEditor({
   removeItem: (item: string) => void;
 }) {
   return (
-    <div>
+    <div className="min-w-0">
       <span className="text-sm font-medium text-foreground">
         {arrayFieldLabels[field]}
       </span>
-      <div className="mt-1.5 flex gap-2">
+      <div className="mt-1.5 grid min-w-0 gap-2 sm:flex">
         <Input
           value={inputValue}
           onChange={(event) => setInputValue(event.target.value)}
@@ -1029,16 +1039,21 @@ function ArrayEditor({
             }
           }}
         />
-        <Button variant="outline" onClick={addItem} disabled={!inputValue.trim()}>
+        <Button
+          className="w-full sm:w-auto"
+          variant="outline"
+          onClick={addItem}
+          disabled={!inputValue.trim()}
+        >
           Add
         </Button>
       </div>
-      <div className="mt-3 flex flex-wrap gap-2">
+      <div className="mt-3 flex min-w-0 flex-wrap gap-2">
         {items.map((item) => (
           <button
             key={item}
             type="button"
-            className="rounded-md border border-border bg-muted px-2 py-1 font-mono text-xs text-muted-foreground transition-colors hover:border-destructive/50 hover:text-destructive"
+            className="max-w-full break-words rounded-md border border-border bg-muted px-2 py-1 text-left font-mono text-xs text-muted-foreground transition-colors hover:border-destructive/50 hover:text-destructive"
             onClick={() => removeItem(item)}
           >
             {item} x

@@ -18,7 +18,7 @@ export function Dialog({
   return (
     <div
       role="presentation"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 p-3 backdrop-blur-sm sm:p-6"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto overflow-x-hidden bg-background/70 p-2 backdrop-blur-sm sm:items-center sm:p-6"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) onOpenChange?.(false);
       }}
@@ -27,7 +27,7 @@ export function Dialog({
         role="dialog"
         aria-modal="true"
         className={cn(
-          "max-h-[calc(100vh-2rem)] w-full max-w-3xl overflow-y-auto rounded-lg border border-border bg-popover p-5 text-popover-foreground shadow-xl sm:max-h-[calc(100vh-3rem)] sm:p-6",
+          "my-2 max-h-[calc(100dvh-1rem)] w-full max-w-[calc(100vw-1rem)] overflow-y-auto overflow-x-hidden rounded-lg border border-border bg-popover p-4 text-popover-foreground shadow-xl sm:my-0 sm:max-h-[calc(100vh-3rem)] sm:max-w-3xl sm:p-6",
           className
         )}
         {...props}

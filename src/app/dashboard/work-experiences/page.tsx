@@ -359,7 +359,7 @@ export default function WorkExperiencesAdminPage() {
     !isSaving;
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="w-full min-w-0">
       <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="font-mono text-xs font-semibold uppercase text-accent">

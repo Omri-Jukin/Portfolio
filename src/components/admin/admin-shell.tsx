@@ -27,14 +27,17 @@ export function AdminShell({
   className,
 }: AdminShellProps) {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen overflow-x-clip bg-background text-foreground">
       <header className="border-b border-border bg-background/90 backdrop-blur">
-        <Container className="flex min-h-16 flex-wrap items-center justify-between gap-4 py-3">
+        <Container className="flex min-h-16 min-w-0 flex-wrap items-center justify-between gap-x-4 gap-y-2 py-3">
           <Link href="/dashboard" className="font-display font-semibold">
             Omri CMS
           </Link>
-          <nav aria-label="Dashboard navigation" className="order-3 w-full lg:order-2 lg:w-auto">
-            <ul className="flex gap-1 overflow-x-auto">
+          <nav
+            aria-label="Dashboard navigation"
+            className="order-3 w-full max-w-full overflow-x-auto lg:order-2 lg:w-auto"
+          >
+            <ul className="flex min-w-max gap-1 px-0.5">
               {navItems.map((item) => (
                 <li key={item.href}>
                   <Link
@@ -53,12 +56,14 @@ export function AdminShell({
         </Container>
       </header>
 
-      <Container className={cn("py-8", className)}>
-        <div className="mb-8 max-w-3xl space-y-2">
+      <Container className={cn("min-w-0 py-6 sm:py-8", className)}>
+        <div className="mb-6 max-w-3xl space-y-2 sm:mb-8">
           <p className="font-mono text-xs font-medium uppercase text-accent">
             Admin
           </p>
-          <h1 className="font-display text-3xl font-semibold">{title}</h1>
+          <h1 className="font-display text-2xl font-semibold sm:text-3xl">
+            {title}
+          </h1>
           <p className="text-sm leading-6 text-muted-foreground">
             {description}
           </p>
