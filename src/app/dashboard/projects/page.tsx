@@ -13,6 +13,7 @@ import {
   Checkbox,
   Chip,
   Dialog,
+  EditableChipList,
   DialogHeader,
   DialogTitle,
   EmptyState,
@@ -418,6 +419,28 @@ export default function ProjectsAdminPage() {
       ...prev,
       [field]: prev[field].filter((item) => item !== itemToRemove),
     }));
+  };
+
+  const handleUpdateArrayItem = (
+    field: ArrayField,
+    currentValue: string,
+    nextValue: string
+  ) => {
+    const value = nextValue.trim();
+    if (!value) return;
+
+    setFormData((prev) => {
+      if (prev[field].some((item) => item === value && item !== currentValue)) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        [field]: prev[field].map((item) =>
+          item === currentValue ? value : item
+        ),
+      };
+    });
   };
 
   const handleSubmit = () => {
@@ -841,6 +864,9 @@ export default function ProjectsAdminPage() {
                     setArrayInput((prev) => ({ ...prev, [field]: value }))
                   }
                   addItem={() => handleAddArrayItem(field)}
+                  updateItem={(currentValue, nextValue) =>
+                    handleUpdateArrayItem(field, currentValue, nextValue)
+                  }
                   removeItem={(item) => handleRemoveArrayItem(field, item)}
                 />
               )
@@ -895,6 +921,9 @@ export default function ProjectsAdminPage() {
                     setArrayInput((prev) => ({ ...prev, [field]: value }))
                   }
                   addItem={() => handleAddArrayItem(field)}
+                  updateItem={(currentValue, nextValue) =>
+                    handleUpdateArrayItem(field, currentValue, nextValue)
+                  }
                   removeItem={(item) => handleRemoveArrayItem(field, item)}
                 />
               ))}
@@ -1014,6 +1043,7 @@ function ArrayEditor({
   inputValue,
   setInputValue,
   addItem,
+  updateItem,
   removeItem,
 }: {
   field: ArrayField;
@@ -1021,45 +1051,18 @@ function ArrayEditor({
   inputValue: string;
   setInputValue: (value: string) => void;
   addItem: () => void;
+  updateItem: (currentValue: string, nextValue: string) => void;
   removeItem: (item: string) => void;
 }) {
   return (
-    <div className="min-w-0">
-      <span className="text-sm font-medium text-foreground">
-        {arrayFieldLabels[field]}
-      </span>
-      <div className="mt-1.5 grid min-w-0 gap-2 sm:flex">
-        <Input
-          value={inputValue}
-          onChange={(event) => setInputValue(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              event.preventDefault();
-              addItem();
-            }
-          }}
-        />
-        <Button
-          className="w-full sm:w-auto"
-          variant="outline"
-          onClick={addItem}
-          disabled={!inputValue.trim()}
-        >
-          Add
-        </Button>
-      </div>
-      <div className="mt-3 flex min-w-0 flex-wrap gap-2">
-        {items.map((item) => (
-          <button
-            key={item}
-            type="button"
-            className="max-w-full break-words rounded-md border border-border bg-muted px-2 py-1 text-left font-mono text-xs text-muted-foreground transition-colors hover:border-destructive/50 hover:text-destructive"
-            onClick={() => removeItem(item)}
-          >
-            {item} x
-          </button>
-        ))}
-      </div>
-    </div>
+    <EditableChipList
+      label={arrayFieldLabels[field]}
+      items={items}
+      inputValue={inputValue}
+      onInputChange={setInputValue}
+      onAdd={addItem}
+      onUpdate={updateItem}
+      onRemove={removeItem}
+    />
   );
 }

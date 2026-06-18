@@ -10,11 +10,44 @@ import type {
   ResumeData,
   PDFRenderOptions,
   EnhancedPDFRenderOptions,
+  ResumePdfSectionKey,
 } from "../types";
 import { renderTextToPDF, safeString, containsHebrew } from "./pdfTextRenderer";
 
 //! Re-export types for backward compatibility
 export type { ResumeData, PDFRenderOptions as RenderOptions };
+
+const DEFAULT_PDF_SECTION_ORDER: ResumePdfSectionKey[] = [
+  "summary",
+  "skills",
+  "experience",
+  "projects",
+  "certifications",
+  "education",
+  "additionalExperience",
+];
+
+function getPdfSectionOrder(
+  sectionOrder: ResumePdfSectionKey[] | undefined
+): ResumePdfSectionKey[] {
+  const allowed = new Set<ResumePdfSectionKey>(DEFAULT_PDF_SECTION_ORDER);
+  const seen = new Set<ResumePdfSectionKey>();
+  const ordered: ResumePdfSectionKey[] = [];
+
+  if (Array.isArray(sectionOrder)) {
+    for (const item of sectionOrder) {
+      if (allowed.has(item) && !seen.has(item)) {
+        ordered.push(item);
+        seen.add(item);
+      }
+    }
+  }
+
+  return [
+    ...ordered,
+    ...DEFAULT_PDF_SECTION_ORDER.filter((item) => !seen.has(item)),
+  ];
+}
 
 /** Render Resume PDF Function
  * @param data - Resume data
@@ -406,6 +439,285 @@ export async function renderResumePDF(
   doc.setTextColor(...theme.text);
   currentY = Math.max(60, contactY); // Start body content after header info
 
+  if (data.meta?.pdfSectionOrder) {
+    const sectionRenderers: Record<ResumePdfSectionKey, () => Promise<void>> = {
+      summary: async () => {
+        if (
+          (options as PDFRenderOptions).excludeSections?.includes(
+            "Professional Summary"
+          )
+        ) {
+          doc.setFont(typography.font, "normal");
+          doc.setFontSize(PDF_LAYOUT.FONT_SIZES.body);
+          currentY = await addTextBlock(data.summary, currentY, {
+            fontSize: PDF_LAYOUT.FONT_SIZES.body,
+          });
+          currentY += spacing.sectionGap;
+          return;
+        }
+
+        await addSection("Summary", async () => {
+          doc.setFont(typography.font, "normal");
+          doc.setFontSize(PDF_LAYOUT.FONT_SIZES.body);
+          currentY = await addTextBlock(data.summary, currentY, {
+            fontSize: PDF_LAYOUT.FONT_SIZES.body,
+          });
+        });
+      },
+      skills: async () => {
+        const hasCoreSkills = Boolean(data.coreSkills?.length);
+        const hasLegacySkills = Boolean(
+          data.tech &&
+            [
+              data.tech.frontend,
+              data.tech.backend,
+              data.tech.architecture,
+              data.tech.databases,
+              data.tech.cloudDevOps,
+              data.tech.aiTools,
+            ].some((items) => items && items.length > 0)
+        );
+
+        if (!hasCoreSkills && !hasLegacySkills) return;
+
+        const skillsSectionTitle = data.coreSkills
+          ? "Core Skills"
+          : "Technical Skills";
+
+        await addSection(skillsSectionTitle, async () => {
+          doc.setFont(typography.font, "normal");
+          doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
+
+          if (data.coreSkills && data.coreSkills.length > 0) {
+            for (const cat of data.coreSkills) {
+              const text = `${cat.category}: ${cat.items.join(", ")}`;
+              currentY = await addTextBlock(text, currentY, {
+                fontSize: PDF_LAYOUT.FONT_SIZES.small,
+              });
+            }
+          } else if (data.tech) {
+            const skillRows = [
+              ["Frontend", data.tech.frontend],
+              ["Backend", data.tech.backend],
+              ["Architecture", data.tech.architecture],
+              ["Databases", data.tech.databases],
+              ["Cloud & DevOps", data.tech.cloudDevOps],
+              ["AI & Tools", data.tech.aiTools],
+            ] as const;
+
+            for (const [label, items] of skillRows) {
+              if (items?.length) {
+                currentY = await addTextBlock(
+                  `${label}: ${items.join(", ")}`,
+                  currentY,
+                  { fontSize: PDF_LAYOUT.FONT_SIZES.small }
+                );
+              }
+            }
+          }
+        });
+      },
+      experience: async () => {
+        if (data.experience.length === 0) return;
+
+        await addSection("Professional Experience", async () => {
+          for (const [index, exp] of data.experience.entries()) {
+            if (index >= maxExperiences) break;
+
+            doc.setFont(typography.font, "bold");
+            doc.setFontSize(PDF_LAYOUT.FONT_SIZES.body);
+            currentY = await addTextBlock(
+              `${exp.role} - ${exp.company}`,
+              currentY,
+              {
+                fontSize: PDF_LAYOUT.FONT_SIZES.body,
+                fontWeight: "bold",
+              }
+            );
+
+            doc.setFont(typography.font, "normal");
+            doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
+            currentY = await addTextBlock(exp.period, currentY, {
+              fontSize: PDF_LAYOUT.FONT_SIZES.small,
+            });
+
+            const maxBullets = Math.min(exp.bullets.length, maxBulletsPerRole);
+            for (let i = 0; i < maxBullets; i++) {
+              currentY = await addTextBlock(`- ${exp.bullets[i]}`, currentY, {
+                fontSize: PDF_LAYOUT.FONT_SIZES.small,
+                indent: 3,
+                maxWidth: pageWidth - 5,
+              });
+            }
+            currentY += spacing.experienceGap;
+          }
+        });
+      },
+      projects: async () => {
+        if (!data.projects || data.projects.length === 0) return;
+        if (checkNewPage(60)) addNewPage();
+
+        await addSection("Selected Projects", async () => {
+          const maxProjectsCount = Math.min(data.projects!.length, maxProjects);
+
+          for (let i = 0; i < maxProjectsCount; i++) {
+            const project = data.projects![i];
+
+            doc.setFont(typography.font, "bold");
+            doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
+            currentY = await addTextBlock(`- ${project.name}`, currentY, {
+              fontSize: PDF_LAYOUT.FONT_SIZES.small,
+              fontWeight: "bold",
+            });
+
+            doc.setFont(typography.font, "normal");
+            currentY = await addTextBlock(project.line, currentY, {
+              fontSize: PDF_LAYOUT.FONT_SIZES.small,
+              indent: 3,
+              maxWidth: pageWidth - 5,
+            });
+
+            if (project.bullets && project.bullets.length > 0) {
+              const maxProjectBullets = Math.min(project.bullets.length, 4);
+              for (let b = 0; b < maxProjectBullets; b++) {
+                currentY = await addTextBlock(
+                  `  - ${project.bullets[b]}`,
+                  currentY,
+                  {
+                    fontSize: PDF_LAYOUT.FONT_SIZES.small,
+                    indent: 3,
+                    maxWidth: pageWidth - 5,
+                  }
+                );
+              }
+            }
+            currentY += 1;
+          }
+        });
+      },
+      education: async () => {
+        if (!data.education || data.education.length === 0) return;
+
+        await addSection("Education", async () => {
+          const educationList = isRTL
+            ? data.education.slice(0, 1)
+            : data.education;
+
+          for (const [index, edu] of educationList.entries()) {
+            doc.setFont(typography.font, "bold");
+            doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
+            currentY = await addTextBlock(edu.degree, currentY, {
+              fontSize: PDF_LAYOUT.FONT_SIZES.small,
+              fontWeight: "bold",
+            });
+
+            doc.setFont(typography.font, "normal");
+            doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
+            currentY = await addTextBlock(edu.institution, currentY, {
+              fontSize: PDF_LAYOUT.FONT_SIZES.small,
+            });
+
+            const gpaText = edu.gpa ? `GPA: ${edu.gpa}` : "";
+            currentY = await addTextBlock(
+              `${edu.period}${gpaText ? ` | ${gpaText}` : ""}`,
+              currentY,
+              { fontSize: PDF_LAYOUT.FONT_SIZES.small }
+            );
+
+            if (edu.achievements && edu.achievements.length > 0 && index === 0) {
+              const achievementsText = edu.achievements.slice(0, 2).join(", ");
+              doc.setFont(typography.font, "normal");
+              doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
+              currentY = await addTextBlock(`Key: ${achievementsText}`, currentY, {
+                fontSize: PDF_LAYOUT.FONT_SIZES.small,
+              });
+            }
+
+            currentY += 4;
+          }
+        });
+      },
+      certifications: async () => {
+        if (!data.certifications || data.certifications.length === 0) return;
+        const certifications = data.certifications;
+
+        await addSection("Certifications", async () => {
+          for (const certification of certifications.slice(0, 4)) {
+            doc.setFont(typography.font, "bold");
+            doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
+            currentY = await addTextBlock(certification.name, currentY, {
+              fontSize: PDF_LAYOUT.FONT_SIZES.small,
+              fontWeight: "bold",
+              linkUrl: certification.url,
+            });
+
+            doc.setFont(typography.font, "normal");
+            const issuerLine = [
+              certification.issuer,
+              certification.period,
+              certification.skills?.slice(0, 4).join(", "),
+            ]
+              .filter(Boolean)
+              .join(" | ");
+
+            currentY = await addTextBlock(issuerLine, currentY, {
+              fontSize: PDF_LAYOUT.FONT_SIZES.small,
+            });
+            currentY += 2;
+          }
+        });
+      },
+      additionalExperience: async () => {
+        if (isRTL) return;
+
+        if (data.additionalExperience && data.additionalExperience.length > 0) {
+          await addSection("Additional Experience", async () => {
+            for (const exp of data.additionalExperience!) {
+              doc.setFont(typography.font, "bold");
+              doc.setFontSize(PDF_LAYOUT.FONT_SIZES.body);
+              currentY = await addTextBlock(
+                `${exp.role} - ${exp.company}`,
+                currentY,
+                {
+                  fontSize: PDF_LAYOUT.FONT_SIZES.body,
+                  fontWeight: "bold",
+                }
+              );
+
+              doc.setFont(typography.font, "normal");
+              doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
+              currentY = await addTextBlock(exp.period, currentY, {
+                fontSize: PDF_LAYOUT.FONT_SIZES.small,
+              });
+
+              const maxBullets = Math.min(exp.bullets.length, maxBulletsPerRole);
+              for (let i = 0; i < maxBullets; i++) {
+                currentY = await addTextBlock(`- ${exp.bullets[i]}`, currentY, {
+                  fontSize: PDF_LAYOUT.FONT_SIZES.small,
+                  indent: 3,
+                  maxWidth: pageWidth - 5,
+                });
+              }
+              currentY += spacing.experienceGap;
+            }
+          });
+        } else if (data.additional) {
+          await addSection("Additional Activities", async () => {
+            doc.setFont(typography.font, "normal");
+            doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
+            currentY = await addTextBlock(data.additional!, currentY, {
+              fontSize: PDF_LAYOUT.FONT_SIZES.small,
+            });
+          });
+        }
+      },
+    };
+
+    for (const section of getPdfSectionOrder(data.meta.pdfSectionOrder)) {
+      await sectionRenderers[section]();
+    }
+  } else {
+
   // Summary
   if (
     (options as PDFRenderOptions).excludeSections?.includes(
@@ -674,6 +986,7 @@ export async function renderResumePDF(
         fontSize: PDF_LAYOUT.FONT_SIZES.small,
       });
     });
+  }
   }
 
   // Add section

@@ -16,6 +16,7 @@ import {
   LoadingState,
 } from "@/components/ui";
 import { api, type RouterOutputs } from "$/trpc/client";
+import type { ResumePdfSectionKey } from "$/types";
 
 type ResumePdfOverview = RouterOutputs["resumePdf"]["getOverview"];
 type ResumePdfItemType =
@@ -30,6 +31,56 @@ type Notice = {
   tone: "success" | "error";
   message: string;
 } | null;
+
+type ManagedResumePdfSectionKey = Exclude<
+  ResumePdfSectionKey,
+  "additionalExperience"
+>;
+
+const MANAGED_PDF_SECTION_KEYS: ManagedResumePdfSectionKey[] = [
+  "summary",
+  "skills",
+  "experience",
+  "projects",
+  "education",
+  "certifications",
+];
+
+const PDF_SECTION_DETAILS: Record<
+  ManagedResumePdfSectionKey,
+  { title: string; description: string; editHref: string }
+> = {
+  summary: {
+    title: "Profile and Summary",
+    description: "Controls the resume header, headline, contacts, and summary copy.",
+    editHref: "/dashboard/public-content",
+  },
+  skills: {
+    title: "Skills",
+    description: "Skill chips grouped into the PDF skills section.",
+    editHref: "/dashboard/skills",
+  },
+  experience: {
+    title: "Experience",
+    description: "Roles shown in the professional experience section.",
+    editHref: "/dashboard/work-experiences",
+  },
+  projects: {
+    title: "Selected Work",
+    description: "Projects shown in the selected work section of the PDF.",
+    editHref: "/dashboard/projects",
+  },
+  education: {
+    title: "Education",
+    description: "Education records shown in the PDF background section.",
+    editHref: "/dashboard/education",
+  },
+  certifications: {
+    title: "Certifications",
+    description: "Credentials shown in the PDF background section.",
+    editHref: "/dashboard/certifications",
+  },
+};
 
 function formatMonth(value: Date | string) {
   return format(new Date(value), "MMM yyyy");
@@ -80,6 +131,96 @@ function SectionCard({
         </Link>
       </div>
       <div className="grid min-w-0 gap-3">{children}</div>
+    </section>
+  );
+}
+
+function getManagedSectionOrder(
+  sectionOrder: ResumePdfSectionKey[]
+): ManagedResumePdfSectionKey[] {
+  const managed = new Set<ResumePdfSectionKey>(MANAGED_PDF_SECTION_KEYS);
+  const seen = new Set<ManagedResumePdfSectionKey>();
+  const ordered: ManagedResumePdfSectionKey[] = [];
+
+  for (const section of sectionOrder) {
+    if (!managed.has(section)) continue;
+    const managedSection = section as ManagedResumePdfSectionKey;
+    if (seen.has(managedSection)) continue;
+    ordered.push(managedSection);
+    seen.add(managedSection);
+  }
+
+  return [
+    ...ordered,
+    ...MANAGED_PDF_SECTION_KEYS.filter((section) => !seen.has(section)),
+  ];
+}
+
+function SectionOrderPanel({
+  sectionOrder,
+  onMove,
+  disabled,
+}: {
+  sectionOrder: ManagedResumePdfSectionKey[];
+  onMove: (section: ManagedResumePdfSectionKey, direction: -1 | 1) => void;
+  disabled: boolean;
+}) {
+  return (
+    <section className="mb-6 rounded-md border border-border p-4">
+      <div className="mb-4">
+        <p className="font-mono text-xs font-semibold uppercase text-accent">
+          PDF layout
+        </p>
+        <h2 className="mt-1 font-display text-xl font-semibold">
+          Section order
+        </h2>
+        <p className="mt-2 text-sm leading-6 text-muted-foreground">
+          Move whole PDF sections before downloading the generated resume.
+        </p>
+      </div>
+
+      <div className="grid gap-2">
+        {sectionOrder.map((section, index) => {
+          const details = PDF_SECTION_DETAILS[section];
+
+          return (
+            <div
+              key={section}
+              className="grid min-w-0 gap-3 rounded-md border border-border bg-card p-3 sm:grid-cols-[minmax(0,1fr)_auto]"
+            >
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge>Order {index + 1}</Badge>
+                  <p className="font-display text-base font-semibold">
+                    {details.title}
+                  </p>
+                </div>
+                <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                  {details.description}
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => onMove(section, -1)}
+                  disabled={disabled || index === 0}
+                >
+                  Up
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => onMove(section, 1)}
+                  disabled={disabled || index === sectionOrder.length - 1}
+                >
+                  Down
+                </Button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </section>
   );
 }
@@ -428,10 +569,46 @@ export default function ResumePdfDashboardPage() {
       });
     },
   });
+  const sectionOrderMutation = api.resumePdf.updateSectionOrder.useMutation({
+    onSuccess: () => {
+      refetch();
+      setNotice({ tone: "success", message: "PDF section order updated." });
+    },
+    onError: (mutationError) => {
+      setNotice({
+        tone: "error",
+        message: `Failed to update PDF section order: ${mutationError.message}`,
+      });
+    },
+  });
 
   const toggle = (type: ResumePdfItemType, id: string) => {
     setNotice(null);
     toggleMutation.mutate({ type, id });
+  };
+
+  const moveSection = (
+    section: ManagedResumePdfSectionKey,
+    direction: -1 | 1
+  ) => {
+    if (!data) return;
+
+    const sectionOrder = getManagedSectionOrder(data.pdfSectionOrder);
+    const currentIndex = sectionOrder.indexOf(section);
+    const nextIndex = currentIndex + direction;
+
+    if (currentIndex < 0 || nextIndex < 0 || nextIndex >= sectionOrder.length) {
+      return;
+    }
+
+    const nextOrder = [...sectionOrder];
+    [nextOrder[currentIndex], nextOrder[nextIndex]] = [
+      nextOrder[nextIndex],
+      nextOrder[currentIndex],
+    ];
+
+    setNotice(null);
+    sectionOrderMutation.mutate({ sectionOrder: nextOrder });
   };
 
   const includedCount = data
@@ -445,6 +622,91 @@ export default function ResumePdfDashboardPage() {
       ].length
     : 0;
   const pdfDateFormat = data ? getPdfDateFormat(data.profileBlocks) : "month-year";
+  const managedSectionOrder = data
+    ? getManagedSectionOrder(data.pdfSectionOrder)
+    : MANAGED_PDF_SECTION_KEYS;
+  const sectionCards = data
+    ? {
+        summary: (
+          <SectionCard
+            title={PDF_SECTION_DETAILS.summary.title}
+            description={PDF_SECTION_DETAILS.summary.description}
+            editHref={PDF_SECTION_DETAILS.summary.editHref}
+          >
+            <ProfileBlocks
+              blocks={data.profileBlocks}
+              toggle={toggle}
+              disabled={toggleMutation.isPending}
+            />
+          </SectionCard>
+        ),
+        skills: (
+          <SectionCard
+            title={PDF_SECTION_DETAILS.skills.title}
+            description={PDF_SECTION_DETAILS.skills.description}
+            editHref={PDF_SECTION_DETAILS.skills.editHref}
+          >
+            <SkillCards
+              items={data.skills}
+              toggle={toggle}
+              disabled={toggleMutation.isPending}
+            />
+          </SectionCard>
+        ),
+        experience: (
+          <SectionCard
+            title={PDF_SECTION_DETAILS.experience.title}
+            description={PDF_SECTION_DETAILS.experience.description}
+            editHref={PDF_SECTION_DETAILS.experience.editHref}
+          >
+            <ExperienceCards
+              items={data.workExperiences}
+              toggle={toggle}
+              disabled={toggleMutation.isPending}
+            />
+          </SectionCard>
+        ),
+        projects: (
+          <SectionCard
+            title={PDF_SECTION_DETAILS.projects.title}
+            description={PDF_SECTION_DETAILS.projects.description}
+            editHref={PDF_SECTION_DETAILS.projects.editHref}
+          >
+            <ProjectCards
+              items={data.projects}
+              toggle={toggle}
+              disabled={toggleMutation.isPending}
+            />
+          </SectionCard>
+        ),
+        education: (
+          <SectionCard
+            title={PDF_SECTION_DETAILS.education.title}
+            description={PDF_SECTION_DETAILS.education.description}
+            editHref={PDF_SECTION_DETAILS.education.editHref}
+          >
+            <EducationCards
+              items={data.education}
+              toggle={toggle}
+              disabled={toggleMutation.isPending}
+            />
+          </SectionCard>
+        ),
+        certifications: (
+          <SectionCard
+            title={PDF_SECTION_DETAILS.certifications.title}
+            description={PDF_SECTION_DETAILS.certifications.description}
+            editHref={PDF_SECTION_DETAILS.certifications.editHref}
+          >
+            <CertificationCards
+              items={data.certifications}
+              toggle={toggle}
+              disabled={toggleMutation.isPending}
+            />
+          </SectionCard>
+        ),
+      } satisfies Record<ManagedResumePdfSectionKey, React.ReactNode>
+    : null;
 
   return (
     <div className="w-full min-w-0">
@@ -517,82 +779,20 @@ export default function ResumePdfDashboardPage() {
             </Card>
           </div>
 
-          <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,22.5rem)]">
-            <div className="min-w-0 space-y-6">
-              <SectionCard
-                title="Profile and Summary"
-                description="Controls the resume header, headline, contacts, and summary copy."
-                editHref="/dashboard/public-content"
-              >
-                <ProfileBlocks
-                  blocks={data.profileBlocks}
-                  toggle={toggle}
-                  disabled={toggleMutation.isPending}
-                />
-              </SectionCard>
+          <SectionOrderPanel
+            sectionOrder={managedSectionOrder}
+            onMove={moveSection}
+            disabled={sectionOrderMutation.isPending}
+          />
 
-              <SectionCard
-                title="Experience"
-                description="Roles shown in the professional experience section."
-                editHref="/dashboard/work-experiences"
-              >
-                <ExperienceCards
-                  items={data.workExperiences}
-                  toggle={toggle}
-                  disabled={toggleMutation.isPending}
-                />
-              </SectionCard>
-
-              <SectionCard
-                title="Selected Work"
-                description="Projects shown in the selected work section of the PDF."
-                editHref="/dashboard/projects"
-              >
-                <ProjectCards
-                  items={data.projects}
-                  toggle={toggle}
-                  disabled={toggleMutation.isPending}
-                />
-              </SectionCard>
-            </div>
-
-            <aside className="min-w-0 space-y-6">
-              <SectionCard
-                title="Skills"
-                description="Skill chips grouped into the PDF skills sidebar."
-                editHref="/dashboard/skills"
-              >
-                <SkillCards
-                  items={data.skills}
-                  toggle={toggle}
-                  disabled={toggleMutation.isPending}
-                />
-              </SectionCard>
-
-              <SectionCard
-                title="Education"
-                description="Education records shown in the PDF background section."
-                editHref="/dashboard/education"
-              >
-                <EducationCards
-                  items={data.education}
-                  toggle={toggle}
-                  disabled={toggleMutation.isPending}
-                />
-              </SectionCard>
-
-              <SectionCard
-                title="Certifications"
-                description="Credentials shown in the PDF background section."
-                editHref="/dashboard/certifications"
-              >
-                <CertificationCards
-                  items={data.certifications}
-                  toggle={toggle}
-                  disabled={toggleMutation.isPending}
-                />
-              </SectionCard>
-            </aside>
+          <div className="grid min-w-0 gap-6">
+            {sectionCards
+              ? managedSectionOrder.map((section) => (
+                  <React.Fragment key={section}>
+                    {sectionCards[section]}
+                  </React.Fragment>
+                ))
+              : null}
           </div>
         </>
       )}

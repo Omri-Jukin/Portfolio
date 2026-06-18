@@ -8,6 +8,7 @@ export * from "./code-block";
 export * from "./container";
 export * from "./dialog";
 export * from "./dropdown-menu";
+export * from "./editable-chip-list";
 export * from "./form";
 export * from "./input";
 export * from "./section-header";

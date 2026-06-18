@@ -915,6 +915,7 @@ export interface ResumeData {
     title?: string;
     author?: string;
     pdfDateFormat?: "month-year" | "year";
+    pdfSectionOrder?: ResumePdfSectionKey[];
   };
   person: {
     name: string;
@@ -970,6 +971,15 @@ export interface ResumeData {
   /** Links with visible URLs */
   links?: ResumeLink[];
 }
+
+export type ResumePdfSectionKey =
+  | "summary"
+  | "skills"
+  | "experience"
+  | "projects"
+  | "education"
+  | "certifications"
+  | "additionalExperience";
 
 /**
  * PDF render options

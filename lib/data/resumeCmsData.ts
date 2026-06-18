@@ -6,7 +6,17 @@ import { PublicContentBlockManager } from "$/db/publicContent/PublicContentBlock
 import { SkillManager } from "$/db/skills/SkillManager";
 import { WorkExperienceManager } from "$/db/workExperiences/WorkExperienceManager";
 import type { Certification, Education, Skill, WorkExperience } from "$/db/schema/schema.types";
-import type { IProject, ResumeData } from "$/types";
+import type { IProject, ResumeData, ResumePdfSectionKey } from "$/types";
+
+const DEFAULT_PDF_SECTION_ORDER = [
+  "summary",
+  "skills",
+  "experience",
+  "projects",
+  "certifications",
+  "education",
+  "additionalExperience",
+] satisfies NonNullable<ResumeData["meta"]>["pdfSectionOrder"];
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   month: "short",
@@ -138,6 +148,7 @@ type ResumeProfileMetadata = {
   location?: unknown;
   links?: unknown;
   pdfDateFormat?: unknown;
+  pdfSectionOrder?: unknown;
 };
 
 function stringValue(value: unknown) {
@@ -166,6 +177,27 @@ function parseResumeLinks(value: unknown): ResumeData["links"] | undefined {
   return links.length > 0 ? links : undefined;
 }
 
+function parsePdfSectionOrder(value: unknown): ResumePdfSectionKey[] {
+  const allowed = new Set<ResumePdfSectionKey>(DEFAULT_PDF_SECTION_ORDER);
+  const seen = new Set<ResumePdfSectionKey>();
+  const ordered: ResumePdfSectionKey[] = [];
+
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      if (typeof item !== "string") continue;
+      const section = item as ResumePdfSectionKey;
+      if (!allowed.has(section) || seen.has(section)) continue;
+      ordered.push(section);
+      seen.add(section);
+    }
+  }
+
+  return [
+    ...ordered,
+    ...DEFAULT_PDF_SECTION_ORDER.filter((item) => !seen.has(item)),
+  ];
+}
+
 function applyResumeProfileBlocks(
   base: ResumeData,
   blocks: Awaited<ReturnType<typeof PublicContentBlockManager.getBySection>>
@@ -185,6 +217,7 @@ function applyResumeProfileBlocks(
         stringValue(metadata.pdfDateFormat) === "year"
           ? "year"
           : "month-year",
+      pdfSectionOrder: parsePdfSectionOrder(metadata.pdfSectionOrder),
     },
     person: {
       ...base.person,

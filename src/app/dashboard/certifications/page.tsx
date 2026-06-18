@@ -13,6 +13,7 @@ import {
   Checkbox,
   Chip,
   Dialog,
+  EditableChipList,
   DialogHeader,
   DialogTitle,
   EmptyState,
@@ -283,6 +284,26 @@ export default function CertificationsAdminPage() {
       ...prev,
       skills: prev.skills.filter((skill) => skill !== skillToRemove),
     }));
+  };
+
+  const handleUpdateSkill = (currentValue: string, nextValue: string) => {
+    const value = nextValue.trim();
+    if (!value) return;
+
+    setFormData((prev) => {
+      if (
+        prev.skills.some((skill) => skill === value && skill !== currentValue)
+      ) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        skills: prev.skills.map((skill) =>
+          skill === currentValue ? value : skill
+        ),
+      };
+    });
   };
 
   const handleSubmit = () => {
@@ -590,41 +611,16 @@ export default function CertificationsAdminPage() {
             />
           </Field>
 
-          <div>
-            <span className="text-sm font-medium text-foreground">Skills</span>
-            <div className="mt-1.5 flex gap-2">
-              <Input
-                value={skillInput}
-                onChange={(event) => setSkillInput(event.target.value)}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter") {
-                    event.preventDefault();
-                    handleAddSkill();
-                  }
-                }}
-                placeholder="Add skill"
-              />
-              <Button
-                variant="outline"
-                onClick={handleAddSkill}
-                disabled={!skillInput.trim()}
-              >
-                Add
-              </Button>
-            </div>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {formData.skills.map((skill) => (
-                <button
-                  key={skill}
-                  type="button"
-                  className="rounded-md border border-border bg-muted px-2 py-1 font-mono text-xs text-muted-foreground transition-colors hover:border-destructive/50 hover:text-destructive"
-                  onClick={() => handleRemoveSkill(skill)}
-                >
-                  {skill} x
-                </button>
-              ))}
-            </div>
-          </div>
+          <EditableChipList
+            label="Skills"
+            items={formData.skills}
+            inputValue={skillInput}
+            onInputChange={setSkillInput}
+            onAdd={handleAddSkill}
+            onUpdate={handleUpdateSkill}
+            onRemove={handleRemoveSkill}
+            placeholder="Add skill"
+          />
 
           <div className="grid gap-4 md:grid-cols-[1fr_180px] md:items-end">
             <label className="inline-flex items-center gap-2 text-sm">

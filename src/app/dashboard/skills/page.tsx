@@ -13,6 +13,7 @@ import {
   Checkbox,
   Chip,
   Dialog,
+  EditableChipList,
   DialogHeader,
   DialogTitle,
   EmptyState,
@@ -337,6 +338,28 @@ export default function SkillsAdminPage() {
     }));
   };
 
+  const handleUpdateArrayItem = (
+    field: ArrayField,
+    currentValue: string,
+    nextValue: string
+  ) => {
+    const value = nextValue.trim();
+    if (!value) return;
+
+    setFormData((prev) => {
+      if (prev[field].some((item) => item === value && item !== currentValue)) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        [field]: prev[field].map((item) =>
+          item === currentValue ? value : item
+        ),
+      };
+    });
+  };
+
   const handleSubmit = () => {
     const submitData = {
       name: formData.name,
@@ -606,47 +629,20 @@ export default function SkillsAdminPage() {
           <div className="grid gap-4 md:grid-cols-3">
             {(["relatedSkills", "certifications", "projects"] as const).map(
               (field) => (
-                <div key={field}>
-                  <span className="text-sm font-medium text-foreground">
-                    {arrayFieldLabels[field]}
-                  </span>
-                  <div className="mt-1.5 flex gap-2">
-                    <Input
-                      value={arrayInput[field]}
-                      onChange={(event) =>
-                        setArrayInput((prev) => ({
-                          ...prev,
-                          [field]: event.target.value,
-                        }))
-                      }
-                      onKeyDown={(event) => {
-                        if (event.key === "Enter") {
-                          event.preventDefault();
-                          handleAddArrayItem(field);
-                        }
-                      }}
-                    />
-                    <Button
-                      variant="outline"
-                      onClick={() => handleAddArrayItem(field)}
-                      disabled={!arrayInput[field].trim()}
-                    >
-                      Add
-                    </Button>
-                  </div>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {formData[field].map((item) => (
-                      <button
-                        key={item}
-                        type="button"
-                        className="rounded-md border border-border bg-muted px-2 py-1 font-mono text-xs text-muted-foreground transition-colors hover:border-destructive/50 hover:text-destructive"
-                        onClick={() => handleRemoveArrayItem(field, item)}
-                      >
-                        {item} x
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                <EditableChipList
+                  key={field}
+                  label={arrayFieldLabels[field]}
+                  items={formData[field]}
+                  inputValue={arrayInput[field]}
+                  onInputChange={(value) =>
+                    setArrayInput((prev) => ({ ...prev, [field]: value }))
+                  }
+                  onAdd={() => handleAddArrayItem(field)}
+                  onUpdate={(currentValue, nextValue) =>
+                    handleUpdateArrayItem(field, currentValue, nextValue)
+                  }
+                  onRemove={(item) => handleRemoveArrayItem(field, item)}
+                />
               )
             )}
           </div>

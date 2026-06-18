@@ -7,6 +7,7 @@ import { ProjectManager } from "$/db/projects/ProjectManager";
 import { PublicContentBlockManager } from "$/db/publicContent/PublicContentBlockManager";
 import { SkillManager } from "$/db/skills/SkillManager";
 import { WorkExperienceManager } from "$/db/workExperiences/WorkExperienceManager";
+import type { ResumePdfSectionKey } from "$/types";
 
 const ResumePdfItemTypeSchema = z.enum([
   "profileBlock",
@@ -16,6 +17,64 @@ const ResumePdfItemTypeSchema = z.enum([
   "education",
   "certification",
 ]);
+
+const ResumePdfSectionKeySchema = z.enum([
+  "summary",
+  "skills",
+  "experience",
+  "projects",
+  "education",
+  "certifications",
+  "additionalExperience",
+]);
+
+const DEFAULT_PDF_SECTION_ORDER: ResumePdfSectionKey[] = [
+  "summary",
+  "skills",
+  "experience",
+  "projects",
+  "certifications",
+  "education",
+  "additionalExperience",
+];
+
+function normalizePdfSectionOrder(value: unknown): ResumePdfSectionKey[] {
+  const allowed = new Set<ResumePdfSectionKey>(DEFAULT_PDF_SECTION_ORDER);
+  const seen = new Set<ResumePdfSectionKey>();
+  const ordered: ResumePdfSectionKey[] = [];
+
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      if (typeof item !== "string") continue;
+      const section = item as ResumePdfSectionKey;
+      if (!allowed.has(section) || seen.has(section)) continue;
+      ordered.push(section);
+      seen.add(section);
+    }
+  }
+
+  return [
+    ...ordered,
+    ...DEFAULT_PDF_SECTION_ORDER.filter((item) => !seen.has(item)),
+  ];
+}
+
+async function getResumeProfileBlock() {
+  const blocks = await PublicContentBlockManager.getBySection({
+    page: "resume",
+    sectionKey: "profile",
+    locale: "en",
+    visibleOnly: false,
+  });
+
+  return blocks.find((block) => block.blockKey === "profile") ?? null;
+}
+
+function getBlockMetadata(block: { metadata: unknown }) {
+  return block.metadata && typeof block.metadata === "object"
+    ? block.metadata
+    : {};
+}
 
 export const resumePdfRouter = router({
   getOverview: editorProcedure.query(async () => {
@@ -39,6 +98,8 @@ export const resumePdfRouter = router({
       EducationManager.getAll(false),
       CertificationsService.getAll(false),
     ]);
+    const profile = profileBlocks.find((block) => block.blockKey === "profile");
+    const metadata = profile ? getBlockMetadata(profile) : {};
 
     return {
       profileBlocks,
@@ -47,6 +108,9 @@ export const resumePdfRouter = router({
       skills,
       education,
       certifications,
+      pdfSectionOrder: normalizePdfSectionOrder(
+        (metadata as { pdfSectionOrder?: unknown }).pdfSectionOrder
+      ),
     };
   }),
 
@@ -127,13 +191,7 @@ export const resumePdfRouter = router({
     }),
 
   toggleDateFormat: editorProcedure.mutation(async () => {
-    const blocks = await PublicContentBlockManager.getBySection({
-      page: "resume",
-      sectionKey: "profile",
-      locale: "en",
-      visibleOnly: false,
-    });
-    const profile = blocks.find((block) => block.blockKey === "profile");
+    const profile = await getResumeProfileBlock();
 
     if (!profile) {
       throw new TRPCError({
@@ -142,10 +200,7 @@ export const resumePdfRouter = router({
       });
     }
 
-    const metadata =
-      profile.metadata && typeof profile.metadata === "object"
-        ? profile.metadata
-        : {};
+    const metadata = getBlockMetadata(profile);
     const currentFormat =
       (metadata as { pdfDateFormat?: unknown }).pdfDateFormat === "year"
         ? "year"
@@ -159,4 +214,31 @@ export const resumePdfRouter = router({
       },
     });
   }),
+
+  updateSectionOrder: editorProcedure
+    .input(
+      z.object({
+        sectionOrder: z.array(ResumePdfSectionKeySchema).min(1),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const profile = await getResumeProfileBlock();
+
+      if (!profile) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Resume profile block not found",
+        });
+      }
+
+      const metadata = getBlockMetadata(profile);
+      const pdfSectionOrder = normalizePdfSectionOrder(input.sectionOrder);
+
+      return PublicContentBlockManager.update(profile.id, {
+        metadata: {
+          ...metadata,
+          pdfSectionOrder,
+        },
+      });
+    }),
 });
