@@ -18,7 +18,7 @@ export function SectionHeader({
   return (
     <div className={cn("max-w-3xl space-y-3", className)} {...props}>
       {eyebrow ? (
-        <p className="font-mono text-xs font-semibold uppercase tracking-normal text-accent">
+        <p className="font-mono text-xs font-semibold uppercase tracking-normal text-cherry">
           {eyebrow}
         </p>
       ) : null}

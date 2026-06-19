@@ -38,9 +38,9 @@ export function Stagger({
 
   return (
     <motion.div
-      initial={false}
+      initial="hidden"
       whileInView="show"
-      viewport={{ once: true, margin: "-10% 0px" }}
+      viewport={{ once: true, margin: "-12% 0px" }}
       variants={{
         hidden: {},
         show: {
@@ -78,11 +78,12 @@ export function StaggerItem({
   return (
     <motion.div
       variants={{
-        hidden: { opacity: 0, y: 12 },
+        hidden: { opacity: 0, y: 18, scale: 0.985 },
         show: {
           opacity: 1,
           y: 0,
-          transition: { duration: 0.25, ease: "easeOut" },
+          scale: 1,
+          transition: { duration: 0.42, ease: [0.22, 1, 0.36, 1] },
         },
       }}
       className={cn(className)}

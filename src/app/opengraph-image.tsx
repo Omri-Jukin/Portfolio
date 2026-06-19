@@ -17,8 +17,8 @@ export default function OpenGraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#0b0f14",
-          color: "#f8fafc",
+          background: "#080a12",
+          color: "#f5f7fb",
           padding: "72px",
           fontFamily: "Arial, sans-serif",
         }}
@@ -28,14 +28,14 @@ export default function OpenGraphImage() {
             display: "flex",
             alignItems: "center",
             gap: "14px",
-            color: "#60a5fa",
+            color: "#ff4d67",
             fontSize: "24px",
             letterSpacing: "2px",
             textTransform: "uppercase",
           }}
         >
           <span>Omri Jukin</span>
-          <span style={{ color: "#64748b" }}>Portfolio</span>
+          <span style={{ color: "#5b8cff" }}>Portfolio</span>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
@@ -53,7 +53,7 @@ export default function OpenGraphImage() {
             style={{
               maxWidth: "850px",
               margin: 0,
-              color: "#cbd5e1",
+              color: "#d6dceb",
               fontSize: "32px",
               lineHeight: 1.3,
             }}
@@ -67,11 +67,11 @@ export default function OpenGraphImage() {
           style={{
             display: "flex",
             justifyContent: "space-between",
-            color: "#94a3b8",
+            color: "#a7b0c2",
             fontSize: "24px",
           }}
         >
-          <span>Case studies · Resume · CMS-backed portfolio</span>
+          <span>Case studies - Resume - CMS-backed portfolio</span>
           <span>omrijukin.com</span>
         </div>
       </div>

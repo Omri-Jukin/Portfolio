@@ -4,59 +4,75 @@
 
 :root {
   color-scheme: light;
-  --background: #f7f7f3;
-  --foreground: #171717;
+  --background: #f7f5ee;
+  --foreground: #171a18;
   --card: #ffffff;
-  --card-foreground: #171717;
+  --card-foreground: #171a18;
   --popover: #ffffff;
-  --popover-foreground: #171717;
-  --primary: #0f172a;
-  --primary-foreground: #f8fafc;
-  --secondary: #e8e6df;
-  --secondary-foreground: #171717;
-  --muted: #eceae3;
-  --muted-foreground: #66645d;
-  --accent: #2563eb;
+  --popover-foreground: #171a18;
+  --primary: #171a18;
+  --primary-foreground: #f7f5ee;
+  --secondary: #e9e4d8;
+  --secondary-foreground: #171a18;
+  --muted: #ece8dc;
+  --muted-foreground: #626960;
+  --accent: #1d4ed8;
   --accent-foreground: #ffffff;
-  --destructive: #b42318;
+  --sapphire: #1d4ed8;
+  --sapphire-foreground: #ffffff;
+  --ruby: #74070e;
+  --ruby-foreground: #ffffff;
+  --cherry: #74070e;
+  --cherry-foreground: #ffffff;
+  --destructive: #74070e;
   --destructive-foreground: #ffffff;
-  --success: #067647;
+  --success: #1d4ed8;
   --success-foreground: #ffffff;
-  --warning: #b54708;
+  --warning: #9a5b13;
   --warning-foreground: #ffffff;
-  --border: #d8d6cc;
-  --input: #d8d6cc;
-  --ring: #2563eb;
+  --border: #d8d4c7;
+  --input: #d8d4c7;
+  --ring: #1d4ed8;
+  --gem-line: rgba(29, 78, 216, 0.2);
+  --gem-shine: rgba(116, 7, 14, 0.18);
   --radius: 0.625rem;
-  --shadow-subtle: 0 1px 0 rgba(23, 23, 23, 0.04);
+  --shadow-subtle: 0 1px 0 rgba(23, 26, 24, 0.05);
 }
 
 .dark {
   color-scheme: dark;
-  --background: #09090b;
-  --foreground: #f4f4f5;
-  --card: #101012;
-  --card-foreground: #f4f4f5;
-  --popover: #111113;
-  --popover-foreground: #f4f4f5;
-  --primary: #f4f4f5;
-  --primary-foreground: #09090b;
-  --secondary: #1d1d20;
-  --secondary-foreground: #f4f4f5;
-  --muted: #1a1a1d;
-  --muted-foreground: #a1a1aa;
-  --accent: #3b82f6;
-  --accent-foreground: #ffffff;
-  --destructive: #f97066;
-  --destructive-foreground: #09090b;
-  --success: #32d583;
-  --success-foreground: #09090b;
-  --warning: #fdb022;
-  --warning-foreground: #09090b;
-  --border: #29292d;
-  --input: #303035;
-  --ring: #60a5fa;
-  --shadow-subtle: 0 1px 0 rgba(255, 255, 255, 0.04);
+  --background: #080a12;
+  --foreground: #f5f7fb;
+  --card: #101421;
+  --card-foreground: #f5f7fb;
+  --popover: #101421;
+  --popover-foreground: #f5f7fb;
+  --primary: #f5f7fb;
+  --primary-foreground: #080a12;
+  --secondary: #151b2b;
+  --secondary-foreground: #f5f7fb;
+  --muted: #151b2b;
+  --muted-foreground: #a7b0c2;
+  --accent: #5b8cff;
+  --accent-foreground: #061126;
+  --sapphire: #5b8cff;
+  --sapphire-foreground: #061126;
+  --ruby: #ff4d67;
+  --ruby-foreground: #1b0305;
+  --cherry: #ff6b75;
+  --cherry-foreground: #1b0305;
+  --destructive: #ff6b75;
+  --destructive-foreground: #1b0305;
+  --success: #93c5fd;
+  --success-foreground: #061126;
+  --warning: #e6b450;
+  --warning-foreground: #140f04;
+  --border: #25304a;
+  --input: #303b59;
+  --ring: #5b8cff;
+  --gem-line: rgba(91, 140, 255, 0.22);
+  --gem-shine: rgba(255, 77, 103, 0.2);
+  --shadow-subtle: 0 1px 0 rgba(245, 247, 251, 0.04);
 }
 
 @theme inline {
@@ -74,6 +90,12 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-sapphire: var(--sapphire);
+  --color-sapphire-foreground: var(--sapphire-foreground);
+  --color-ruby: var(--ruby);
+  --color-ruby-foreground: var(--ruby-foreground);
+  --color-cherry: var(--cherry);
+  --color-cherry-foreground: var(--cherry-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-success: var(--success);
@@ -94,13 +116,38 @@
 
 body {
   min-height: 100vh;
-  background: var(--background);
+  background:
+    radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--sapphire) 13%, transparent), transparent 28rem),
+    radial-gradient(circle at 88% 18%, color-mix(in srgb, var(--ruby) 10%, transparent), transparent 24rem),
+    var(--background);
   color: var(--foreground);
   font-family: var(--font-body), "Inter", system-ui, -apple-system, sans-serif;
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(118deg, transparent 0 17%, var(--gem-line) 17.08%, transparent 17.28%),
+    linear-gradient(118deg, transparent 0 18.1%, var(--gem-shine) 18.15%, transparent 18.32%),
+    linear-gradient(35deg, transparent 0 63%, var(--gem-line) 63.08%, transparent 63.28%),
+    linear-gradient(35deg, transparent 0 64.1%, var(--gem-shine) 64.15%, transparent 64.3%),
+    linear-gradient(152deg, transparent 0 72%, var(--gem-line) 72.08%, transparent 72.25%),
+    linear-gradient(152deg, transparent 0 73%, var(--gem-shine) 73.04%, transparent 73.18%);
+  opacity: 0.62;
+  mask-image: linear-gradient(to bottom, #000, #000 68%, transparent);
+}
+
+body > * {
+  position: relative;
+  z-index: 1;
 }
 
 html {
@@ -129,6 +176,89 @@ html {
   outline-offset: 2px;
 }
 
+.cursor-press {
+  --press-x: 0px;
+  --press-y: 0px;
+  --press-rotate-x: 0deg;
+  --press-rotate-y: 0deg;
+  transform: perspective(700px) translate3d(0, 0, 0) rotateX(0deg)
+    rotateY(0deg) scale(1);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.gem-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.gem-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(128deg, transparent 0 58%, color-mix(in srgb, var(--sapphire) 18%, transparent) 58.1%, transparent 58.5%),
+    linear-gradient(128deg, transparent 0 59%, color-mix(in srgb, var(--ruby) 16%, transparent) 59.08%, transparent 59.24%),
+    radial-gradient(circle at 78% 22%, color-mix(in srgb, var(--sapphire) 16%, transparent), transparent 18rem);
+  opacity: 0.85;
+}
+
+.gem-band {
+  position: relative;
+  overflow: hidden;
+}
+
+.gem-band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(115deg, transparent 0 34%, color-mix(in srgb, var(--sapphire) 18%, transparent) 34.08%, transparent 34.25%),
+    linear-gradient(115deg, transparent 0 34.8%, color-mix(in srgb, var(--ruby) 14%, transparent) 34.86%, transparent 35.02%);
+  opacity: 0.7;
+}
+
+.gem-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.gem-card::before,
+.gem-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 220ms ease-out;
+}
+
+.gem-card::before {
+  background:
+    linear-gradient(132deg, transparent 0 64%, color-mix(in srgb, var(--sapphire) 28%, transparent) 64.08%, transparent 64.28%),
+    linear-gradient(132deg, transparent 0 65%, color-mix(in srgb, var(--ruby) 18%, transparent) 65.06%, transparent 65.22%);
+}
+
+.gem-card::after {
+  background: radial-gradient(circle at 88% 0%, color-mix(in srgb, var(--sapphire) 18%, transparent), transparent 12rem);
+}
+
+.gem-card:hover::before,
+.gem-card:hover::after,
+.gem-card:focus-within::before,
+.gem-card:focus-within::after {
+  opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cursor-press:hover {
+    transform: perspective(700px) translate3d(var(--press-x), var(--press-y), 0)
+      rotateX(var(--press-rotate-x)) rotateY(var(--press-rotate-y)) scale(0.985);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -141,5 +271,18 @@ html {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.001ms !important;
+  }
+
+  .cursor-press,
+  .cursor-press:hover {
+    transform: none !important;
+  }
+
+  body::before,
+  .gem-hero::before,
+  .gem-band::before,
+  .gem-card::before,
+  .gem-card::after {
+    display: none;
   }
 }

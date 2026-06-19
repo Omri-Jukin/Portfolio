@@ -1,6 +1,14 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Badge, Card, Chip, Container, Section, SectionHeader } from "@/components/ui";
+import {
+  Badge,
+  Card,
+  Chip,
+  Container,
+  CursorPressLink,
+  Section,
+  SectionHeader,
+} from "@/components/ui";
 import { FadeIn, Stagger, StaggerItem } from "@/components/ui/motion";
 import { PROFILE_LINKS } from "$/constants";
 import {
@@ -409,10 +417,10 @@ export default async function HomePage() {
         switch (sectionKey) {
           case "hero":
             return (
-              <Section key={sectionKey} className="pt-14 sm:pt-20 lg:pt-24">
+              <Section key={sectionKey} className="gem-hero pt-14 sm:pt-20 lg:pt-24">
                 <Container>
                   <FadeIn className="min-w-0 max-w-5xl">
-                    <p className="mb-4 font-mono text-xs font-semibold uppercase text-accent">
+                    <p className="mb-4 font-mono text-xs font-semibold uppercase text-cherry">
                       {content.hero.eyebrow}
                     </p>
                     <h1 className="max-w-[22rem] font-display text-[1.75rem] font-semibold leading-[1.15] text-foreground [overflow-wrap:anywhere] sm:max-w-full sm:text-6xl sm:leading-tight">
@@ -422,34 +430,34 @@ export default async function HomePage() {
                       {content.hero.subtitle}
                     </p>
                     <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                      <Link
+                      <CursorPressLink
                         href="/resume"
-                        className="inline-flex h-11 w-full items-center justify-center rounded-md bg-accent px-5 text-sm font-medium text-accent-foreground transition-[background-color,transform] hover:bg-accent/90 motion-safe:hover:-translate-y-px sm:w-auto"
+                        className="inline-flex h-11 w-full items-center justify-center rounded-md bg-accent px-5 text-sm font-medium text-accent-foreground shadow-[var(--shadow-subtle)] transition-[background-color,border-color,color,transform] duration-200 ease-out hover:bg-accent/90 sm:w-auto"
                       >
                         Download Resume (PDF)
-                      </Link>
-                      <Link
+                      </CursorPressLink>
+                      <CursorPressLink
                         href="#work"
-                        className="inline-flex h-11 w-full items-center justify-center rounded-md border border-border px-5 text-sm font-medium transition-colors hover:bg-muted sm:w-auto"
+                        className="inline-flex h-11 w-full items-center justify-center rounded-md border border-border px-5 text-sm font-medium shadow-[var(--shadow-subtle)] transition-[background-color,border-color,color,transform] duration-200 ease-out hover:border-accent/50 hover:bg-muted sm:w-auto"
                       >
                         View work
-                      </Link>
-                      <a
+                      </CursorPressLink>
+                      <CursorPressLink
                         href={PROFILE_LINKS.GITHUB}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex h-11 w-full items-center justify-center rounded-md px-3 text-sm font-medium text-accent hover:underline sm:w-auto"
+                        className="inline-flex h-11 w-full items-center justify-center rounded-md px-3 text-sm font-medium text-accent transition-[color,transform] duration-200 hover:underline sm:w-auto"
                       >
                         GitHub
-                      </a>
-                      <a
+                      </CursorPressLink>
+                      <CursorPressLink
                         href={PROFILE_LINKS.LINKEDIN}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex h-11 w-full items-center justify-center rounded-md px-3 text-sm font-medium text-accent hover:underline sm:w-auto"
+                        className="inline-flex h-11 w-full items-center justify-center rounded-md px-3 text-sm font-medium text-accent transition-[color,transform] duration-200 hover:underline sm:w-auto"
                       >
                         LinkedIn
-                      </a>
+                      </CursorPressLink>
                     </div>
                   </FadeIn>
                 </Container>
@@ -457,7 +465,7 @@ export default async function HomePage() {
             );
           case "what-i-can-own":
             return (
-              <section key={sectionKey} className="border-y border-border bg-muted/30">
+              <section key={sectionKey} className="gem-band border-y border-border bg-muted/30">
                 <Container>
                   <Stagger className="grid divide-y divide-border sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4">
                     {content.metrics.map((metric) => (
@@ -488,7 +496,7 @@ export default async function HomePage() {
                   <Stagger className="mt-10 grid gap-4 md:grid-cols-2" delayChildren={0.08}>
                     {projects.map((project) => (
                       <StaggerItem key={project.title}>
-                        <Card className="group flex flex-col justify-between p-4 transition-[border-color,transform] hover:border-accent/50 motion-safe:hover:-translate-y-1 sm:p-5 md:min-h-80">
+                        <Card className="gem-card group flex flex-col justify-between p-4 transition-[border-color,transform] hover:border-accent/50 motion-safe:hover:-translate-y-1 sm:p-5 md:min-h-80">
                           <div>
                             <div className="flex flex-wrap items-center gap-2">
                               <Badge tone="accent">
@@ -560,7 +568,7 @@ export default async function HomePage() {
                       : fallbackExperienceCards
                     ).map((experience) => (
                       <StaggerItem key={experience.title}>
-                        <Card className="p-5">
+                        <Card className="gem-card p-5">
                           <h3 className="font-display text-xl font-semibold">
                             {experience.title}
                           </h3>
@@ -600,7 +608,7 @@ export default async function HomePage() {
                     {(strengthCards.length > 0 ? strengthCards : fallbackStrengths).map(
                       (strength) => (
                         <StaggerItem key={strength.title}>
-                          <Card className="flex h-full flex-col p-5">
+                          <Card className="gem-card flex h-full flex-col p-5">
                             <h3 className="font-display text-xl font-semibold">
                               {strength.title}
                             </h3>
@@ -625,7 +633,7 @@ export default async function HomePage() {
             );
           case "proof-links":
             return (
-              <Section key={sectionKey} className="border-y border-border bg-muted/30">
+              <Section key={sectionKey} className="gem-band border-y border-border bg-muted/30">
                 <Container>
                   <FadeIn>
                     <SectionHeader
@@ -644,7 +652,7 @@ export default async function HomePage() {
                     >
                       {proofLinks.map((item) => (
                         <StaggerItem key={`${item.title}-${item.href}`}>
-                          <Card className="group flex h-full flex-col p-5 transition-[border-color,transform] hover:border-accent/50 motion-safe:hover:-translate-y-1">
+                          <Card className="gem-card group flex h-full flex-col p-5 transition-[border-color,transform] hover:border-accent/50 motion-safe:hover:-translate-y-1">
                             <h3 className="font-display text-xl font-semibold">
                               {item.title}
                             </h3>
@@ -669,15 +677,15 @@ export default async function HomePage() {
                   {proofActions.length > 0 ? (
                     <FadeIn className="mt-6 flex flex-wrap gap-3">
                       {proofActions.map((item) => (
-                        <Link
+                        <CursorPressLink
                           key={`${item.title}-${item.href}`}
                           href={item.href}
                           target={item.href.startsWith("/") ? undefined : "_blank"}
                           rel={item.href.startsWith("/") ? undefined : "noreferrer"}
-                          className="inline-flex h-8 max-w-full shrink-0 items-center justify-center rounded-md border border-border bg-background px-3 text-xs font-medium text-foreground shadow-[var(--shadow-subtle)] transition-[background-color,border-color,color,transform] duration-150 ease-out hover:border-accent/50 hover:bg-accent/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-safe:hover:-translate-y-px motion-safe:active:translate-y-0"
+                          className="inline-flex h-8 max-w-full shrink-0 items-center justify-center rounded-md border border-border bg-background px-3 text-xs font-medium text-foreground shadow-[var(--shadow-subtle)] transition-[background-color,border-color,color,transform] duration-200 ease-out hover:border-accent/50 hover:bg-accent/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                         >
                           {item.cta ?? item.title}
-                        </Link>
+                        </CursorPressLink>
                       ))}
                     </FadeIn>
                   ) : null}
@@ -702,7 +710,7 @@ export default async function HomePage() {
                     {(questions.length > 0 ? questions : fallbackQuestions).map(
                       (question) => (
                         <StaggerItem key={question.title}>
-                          <Card className="h-full p-5">
+                          <Card className="gem-card h-full p-5">
                             <h3 className="font-display text-lg font-semibold">
                               {question.title}
                             </h3>
@@ -721,10 +729,10 @@ export default async function HomePage() {
             return (
               <Section key={sectionKey} id="contact-section" className="border-t border-border">
                 <Container>
-                  <Card className="p-6 sm:p-8">
+                  <Card className="gem-card p-6 sm:p-8">
                     <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
                       <div>
-                        <p className="font-mono text-xs font-semibold uppercase text-accent">
+                        <p className="font-mono text-xs font-semibold uppercase text-cherry">
                           Contact
                         </p>
                         <h2 className="mt-2 font-display text-3xl font-semibold">
@@ -741,18 +749,18 @@ export default async function HomePage() {
                         ) : null}
                       </div>
                       <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                        <Link
+                        <CursorPressLink
                           href="/contact"
-                          className="inline-flex h-11 w-full items-center justify-center rounded-md bg-accent px-5 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent/90 sm:w-auto"
+                          className="inline-flex h-11 w-full items-center justify-center rounded-md bg-accent px-5 text-sm font-medium text-accent-foreground shadow-[var(--shadow-subtle)] transition-[background-color,border-color,color,transform] duration-200 ease-out hover:bg-accent/90 sm:w-auto"
                         >
                           Contact
-                        </Link>
-                        <Link
+                        </CursorPressLink>
+                        <CursorPressLink
                           href="/resume"
-                          className="inline-flex h-11 w-full items-center justify-center rounded-md border border-border px-5 text-sm font-medium transition-colors hover:bg-muted sm:w-auto"
+                          className="inline-flex h-11 w-full items-center justify-center rounded-md border border-border px-5 text-sm font-medium shadow-[var(--shadow-subtle)] transition-[background-color,border-color,color,transform] duration-200 ease-out hover:border-accent/50 hover:bg-muted sm:w-auto"
                         >
                           Resume
-                        </Link>
+                        </CursorPressLink>
                       </div>
                     </div>
                   </Card>

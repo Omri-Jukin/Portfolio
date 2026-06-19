@@ -6,6 +6,7 @@ export * from "./checkbox";
 export * from "./chip";
 export * from "./code-block";
 export * from "./container";
+export * from "./cursor-press-link";
 export * from "./dialog";
 export * from "./dropdown-menu";
 export * from "./editable-chip-list";

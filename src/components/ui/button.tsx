@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
@@ -8,6 +10,33 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
+}
+
+type CursorPressVars = React.CSSProperties & {
+  "--press-x"?: string;
+  "--press-y"?: string;
+  "--press-rotate-x"?: string;
+  "--press-rotate-y"?: string;
+};
+
+const resetPressVars: CursorPressVars = {
+  "--press-x": "0px",
+  "--press-y": "0px",
+  "--press-rotate-x": "0deg",
+  "--press-rotate-y": "0deg",
+};
+
+function getPressVars(event: React.PointerEvent<HTMLElement>): CursorPressVars {
+  const rect = event.currentTarget.getBoundingClientRect();
+  const x = (event.clientX - rect.left) / rect.width - 0.5;
+  const y = (event.clientY - rect.top) / rect.height - 0.5;
+
+  return {
+    "--press-x": `${x * 4}px`,
+    "--press-y": `${y * 3}px`,
+    "--press-rotate-x": `${y * -5}deg`,
+    "--press-rotate-y": `${x * 6}deg`,
+  };
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
@@ -30,23 +59,51 @@ const sizeClasses: Record<ButtonSize, string> = {
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { className, variant = "solid", size = "md", type = "button", ...props },
+    {
+      className,
+      variant = "solid",
+      size = "md",
+      type = "button",
+      style,
+      onPointerMove,
+      onPointerDown,
+      onPointerLeave,
+      ...props
+    },
     ref
-  ) => (
-    <button
-      ref={ref}
-      type={type}
-      className={cn(
-        "inline-flex shrink-0 items-center justify-center rounded-md font-medium transition-[background-color,border-color,color,opacity,transform] duration-150 ease-out",
-        "max-w-full",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-        "disabled:pointer-events-none disabled:opacity-50 motion-safe:hover:-translate-y-px motion-safe:active:translate-y-0",
-        variantClasses[variant],
-        sizeClasses[size],
-        className
-      )}
-      {...props}
-    />
-  )
+  ) => {
+    const [pressVars, setPressVars] =
+      React.useState<CursorPressVars>(resetPressVars);
+
+    return (
+      <button
+        ref={ref}
+        type={type}
+        style={{ ...style, ...pressVars }}
+        className={cn(
+          "cursor-press inline-flex shrink-0 items-center justify-center rounded-md font-medium transition-[background-color,border-color,color,opacity,transform] duration-200 ease-out",
+          "max-w-full",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+          "disabled:pointer-events-none disabled:opacity-50",
+          variantClasses[variant],
+          sizeClasses[size],
+          className
+        )}
+        onPointerMove={(event) => {
+          setPressVars(getPressVars(event));
+          onPointerMove?.(event);
+        }}
+        onPointerDown={(event) => {
+          setPressVars(getPressVars(event));
+          onPointerDown?.(event);
+        }}
+        onPointerLeave={(event) => {
+          setPressVars(resetPressVars);
+          onPointerLeave?.(event);
+        }}
+        {...props}
+      />
+    );
+  }
 );
 Button.displayName = "Button";
