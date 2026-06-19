@@ -12,6 +12,7 @@ import {
   CardTitle,
   Checkbox,
   Chip,
+  CursorPressLink,
   Dialog,
   EditableChipList,
   DialogHeader,
@@ -348,7 +349,7 @@ export default function CertificationsAdminPage() {
     <div className="w-full min-w-0">
       <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="font-mono text-xs font-semibold uppercase text-accent">
+          <p className="font-mono text-xs font-semibold uppercase text-ruby">
             CMS
           </p>
           <h1 className="mt-2 font-display text-3xl font-semibold">
@@ -438,14 +439,15 @@ export default function CertificationsAdminPage() {
                     <p>Credential: {certification.credentialId}</p>
                   ) : null}
                   {certification.verificationUrl ? (
-                    <a
+                    <CursorPressLink
                       href={certification.verificationUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="font-medium text-accent underline-offset-4 hover:underline"
+                      size="sm"
+                      className="w-fit"
                     >
                       Verification URL
-                    </a>
+                    </CursorPressLink>
                   ) : null}
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2">

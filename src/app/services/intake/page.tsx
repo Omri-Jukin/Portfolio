@@ -1,6 +1,5 @@
-import Link from "next/link";
 import type { Metadata } from "next";
-import { Card, Container, Section, SectionHeader } from "@/components/ui";
+import { Card, Container, CursorPressLink, Section, SectionHeader } from "@/components/ui";
 import { PROFILE_LINKS } from "$/constants";
 
 export const metadata: Metadata = {
@@ -27,18 +26,15 @@ export default function ServicesIntakePage() {
             expectations, and interview process.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
-            <a
+            <CursorPressLink
               href={`mailto:${PROFILE_LINKS.EMAIL}`}
-              className="inline-flex h-10 items-center rounded-md bg-accent px-4 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent/90"
+              variant="solid"
             >
               Email Omri
-            </a>
-            <Link
-              href="/contact"
-              className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium transition-colors hover:bg-muted"
-            >
+            </CursorPressLink>
+            <CursorPressLink href="/contact">
               Open contact page
-            </Link>
+            </CursorPressLink>
           </div>
         </Card>
       </Container>

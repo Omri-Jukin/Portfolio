@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { format } from "date-fns";
 import {
   Badge,
@@ -10,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
   Chip,
+  CursorPressLink,
   Dialog,
   DialogHeader,
   DialogTitle,
@@ -41,7 +41,7 @@ export default function BlogAdminPage() {
     <div className="w-full min-w-0">
       <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="font-mono text-xs font-semibold uppercase text-accent">
+          <p className="font-mono text-xs font-semibold uppercase text-ruby">
             CMS
           </p>
           <h1 className="mt-2 font-display text-3xl font-semibold">Blog</h1>
@@ -50,12 +50,9 @@ export default function BlogAdminPage() {
             metadata.
           </p>
         </div>
-        <Link
-          href="/dashboard/blog/new"
-          className="inline-flex h-10 items-center rounded-md bg-accent px-4 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent/90"
-        >
+        <CursorPressLink href="/dashboard/blog/new" variant="solid">
           Create Post
-        </Link>
+        </CursorPressLink>
       </div>
 
       {isLoading ? (
@@ -86,12 +83,9 @@ export default function BlogAdminPage() {
                   </p>
                 ) : null}
                 <div className="flex flex-wrap gap-2">
-                  <Link
-                    href={`/dashboard/blog/${post.id}/edit`}
-                    className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium transition-colors hover:bg-muted"
-                  >
+                  <CursorPressLink href={`/dashboard/blog/${post.id}/edit`}>
                     Edit
-                  </Link>
+                  </CursorPressLink>
                   <Button
                     variant="destructive"
                     onClick={() => setPostToDelete(post.id)}
@@ -100,12 +94,9 @@ export default function BlogAdminPage() {
                     Delete
                   </Button>
                   {post.status === "published" ? (
-                    <Link
-                      href={`/blog/${post.slug}`}
-                      className="inline-flex h-10 items-center rounded-md px-4 text-sm font-medium text-accent underline-offset-4 hover:underline"
-                    >
+                    <CursorPressLink href={`/blog/${post.slug}`} variant="ghost">
                       View public
-                    </Link>
+                    </CursorPressLink>
                   ) : null}
                 </div>
               </CardContent>

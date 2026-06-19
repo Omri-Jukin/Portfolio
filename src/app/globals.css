@@ -220,6 +220,29 @@ html {
   opacity: 0.7;
 }
 
+.gem-admin {
+  position: relative;
+}
+
+.gem-admin::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(122deg, transparent 0 24%, color-mix(in srgb, var(--sapphire) 13%, transparent) 24.08%, transparent 24.25%),
+    linear-gradient(122deg, transparent 0 24.8%, color-mix(in srgb, var(--ruby) 10%, transparent) 24.85%, transparent 25%),
+    linear-gradient(42deg, transparent 0 76%, color-mix(in srgb, var(--sapphire) 10%, transparent) 76.08%, transparent 76.24%);
+  opacity: 0.5;
+  mask-image: linear-gradient(to bottom, #000, #000 58%, transparent);
+}
+
+.gem-admin > * {
+  position: relative;
+  z-index: 1;
+}
+
 .gem-card {
   position: relative;
   overflow: hidden;
@@ -279,6 +302,7 @@ html {
   }
 
   body::before,
+  .gem-admin::before,
   .gem-hero::before,
   .gem-band::before,
   .gem-card::before,

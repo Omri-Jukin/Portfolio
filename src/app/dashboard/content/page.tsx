@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   Badge,
   Card,
@@ -6,6 +5,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CursorPressLink,
 } from "@/components/ui";
 
 const quickTasks = [
@@ -100,7 +100,7 @@ export default function ContentWorkspacePage() {
   return (
     <div className="w-full min-w-0">
       <div className="mb-8 max-w-3xl">
-        <p className="font-mono text-xs font-semibold uppercase text-accent">
+        <p className="font-mono text-xs font-semibold uppercase text-ruby">
           CMS
         </p>
         <h1 className="mt-2 font-display text-3xl font-semibold">
@@ -123,19 +123,13 @@ export default function ContentWorkspacePage() {
               <CardDescription>{task.description}</CardDescription>
             </CardHeader>
             <CardContent className="mt-auto flex flex-wrap gap-3">
-              <Link
-                href={task.href}
-                className="text-sm font-medium text-accent underline-offset-4 hover:underline"
-              >
+              <CursorPressLink href={task.href} size="sm">
                 Open
-              </Link>
+              </CursorPressLink>
               {task.secondaryHref ? (
-                <Link
-                  href={task.secondaryHref}
-                  className="text-sm font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-                >
+                <CursorPressLink href={task.secondaryHref} size="sm" variant="quiet">
                   Open certifications
-                </Link>
+                </CursorPressLink>
               ) : null}
             </CardContent>
           </Card>

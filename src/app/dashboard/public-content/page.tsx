@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import {
   Badge,
@@ -11,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
   Checkbox,
+  CursorPressLink,
   Dialog,
   DialogHeader,
   DialogTitle,
@@ -403,7 +403,7 @@ export default function PublicContentAdminPage() {
     <div className="w-full min-w-0">
       <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="font-mono text-xs font-semibold uppercase text-accent">
+          <p className="font-mono text-xs font-semibold uppercase text-ruby">
             CMS
           </p>
           <h1 className="mt-2 font-display text-2xl font-semibold sm:text-3xl">
@@ -578,12 +578,12 @@ export default function PublicContentAdminPage() {
                         Featured projects shown on the homepage
                       </h3>
                     </div>
-                    <Link
+                    <CursorPressLink
                       href="/dashboard/projects"
-                      className="inline-flex h-10 w-full shrink-0 items-center justify-center rounded-md border border-border bg-background px-4 text-sm font-medium shadow-[var(--shadow-subtle)] transition-colors hover:border-accent/50 hover:bg-accent/10 sm:w-auto"
+                      className="w-full sm:w-auto"
                     >
                       Edit projects
-                    </Link>
+                    </CursorPressLink>
                   </div>
                   {featuredProjects.length > 0 ? (
                     <div className="mt-4 grid min-w-0 gap-3 md:grid-cols-2">
@@ -608,18 +608,19 @@ export default function PublicContentAdminPage() {
                               project.description}
                           </p>
                           <div className="mt-4 grid gap-3 text-sm sm:flex sm:flex-wrap">
-                            <Link
+                            <CursorPressLink
                               href={getProjectHref(project)}
-                              className="font-medium text-accent underline-offset-4 hover:underline"
+                              size="sm"
                             >
                               View case study
-                            </Link>
-                            <Link
+                            </CursorPressLink>
+                            <CursorPressLink
                               href="/dashboard/projects"
-                              className="font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+                              size="sm"
+                              variant="quiet"
                             >
                               Edit project
-                            </Link>
+                            </CursorPressLink>
                           </div>
                         </Card>
                       ))}
@@ -645,7 +646,7 @@ export default function PublicContentAdminPage() {
             top: dragCursor.y + 14,
           }}
         >
-          <p className="font-mono text-xs uppercase text-accent">
+          <p className="font-mono text-xs uppercase text-ruby">
             Moving {dragKind === "group" ? "section" : "block"}
           </p>
           <p className="mt-1 break-words font-display text-lg font-semibold">

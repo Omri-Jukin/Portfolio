@@ -1,7 +1,6 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Badge, Chip, Container, Section } from "@/components/ui";
+import { Badge, Chip, Container, CursorPressLink, Section } from "@/components/ui";
 import { getPostBySlug } from "$/db/blog/blog";
 
 export const dynamic = "force-dynamic";
@@ -75,12 +74,9 @@ export default async function BlogPostPage({ params }: BlogPostParams) {
     <Section className="pt-14 sm:pt-20">
       <Container>
         <article className="mx-auto max-w-3xl">
-          <Link
-            href="/blog"
-            className="mb-8 inline-flex text-sm font-medium text-accent underline-offset-4 hover:underline"
-          >
+          <CursorPressLink href="/blog" size="sm" className="mb-8">
             Back to notes
-          </Link>
+          </CursorPressLink>
 
           <div className="flex flex-wrap items-center gap-2">
             <Badge tone="accent">{dateFormatter.format(publishedDate)}</Badge>

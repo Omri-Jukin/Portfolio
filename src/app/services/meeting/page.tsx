@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { Button, Card, CardContent, Container, Section, SectionHeader } from "@/components/ui";
+import { Card, CardContent, Container, CursorPressLink, Section, SectionHeader } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Private Meeting - Omri Jukin",
@@ -20,9 +19,9 @@ export default function ServicesMeetingPage() {
             title="Schedule a scoped project call"
             subtitle="This booking route is intentionally unlisted and excluded from public search."
           />
-          <Link href="/contact">
-            <Button variant="outline">Contact instead</Button>
-          </Link>
+          <CursorPressLink href="/contact">
+            Contact instead
+          </CursorPressLink>
         </div>
 
         <Card className="mt-8 overflow-hidden">

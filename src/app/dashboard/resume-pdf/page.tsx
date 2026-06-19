@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import * as React from "react";
 import { format } from "date-fns";
 import {
@@ -12,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
   Chip,
+  CursorPressLink,
   EmptyState,
   LoadingState,
 } from "@/components/ui";
@@ -123,12 +123,9 @@ function SectionCard({
             {description}
           </p>
         </div>
-        <Link
-          href={editHref}
-          className="inline-flex h-10 w-full shrink-0 items-center justify-center rounded-md border border-border bg-background px-4 text-sm font-medium shadow-[var(--shadow-subtle)] transition-colors hover:border-accent/50 hover:bg-accent/10 sm:w-auto"
-        >
+        <CursorPressLink href={editHref} className="w-full sm:w-auto">
           Edit source
-        </Link>
+        </CursorPressLink>
       </div>
       <div className="grid min-w-0 gap-3">{children}</div>
     </section>
@@ -168,7 +165,7 @@ function SectionOrderPanel({
   return (
     <section className="mb-6 rounded-md border border-border p-4">
       <div className="mb-4">
-        <p className="font-mono text-xs font-semibold uppercase text-accent">
+        <p className="font-mono text-xs font-semibold uppercase text-ruby">
           PDF layout
         </p>
         <h2 className="mt-1 font-display text-xl font-semibold">
@@ -712,7 +709,7 @@ export default function ResumePdfDashboardPage() {
     <div className="w-full min-w-0">
       <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="min-w-0">
-          <p className="font-mono text-xs font-semibold uppercase text-accent">
+          <p className="font-mono text-xs font-semibold uppercase text-ruby">
             CMS
           </p>
           <h1 className="mt-2 font-display text-2xl font-semibold sm:text-3xl">
@@ -723,12 +720,9 @@ export default function ResumePdfDashboardPage() {
             generates the downloadable PDF.
           </p>
         </div>
-        <Link
-          href="/resume"
-          className="inline-flex h-10 w-full items-center justify-center rounded-md border border-border bg-background px-4 text-sm font-medium shadow-[var(--shadow-subtle)] transition-colors hover:border-accent/50 hover:bg-accent/10 sm:w-auto"
-        >
+        <CursorPressLink href="/resume" className="w-full sm:w-auto">
           Preview resume
-        </Link>
+        </CursorPressLink>
       </div>
 
       <NoticeBanner notice={notice} />
