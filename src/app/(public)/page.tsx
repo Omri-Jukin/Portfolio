@@ -42,6 +42,19 @@ type ProofLinkItem = {
   cta?: string;
 };
 
+type RawProofLinkItem = {
+  title?: unknown;
+  label?: unknown;
+  body?: unknown;
+  description?: unknown;
+  href?: unknown;
+  cta?: unknown;
+};
+
+type RawProofLinkWithHref = RawProofLinkItem & {
+  href: string;
+};
+
 type HomeSectionKey =
   | "hero"
   | "what-i-can-own"
@@ -230,15 +243,73 @@ function getProofLinks(blocks: PublicContentBlock[]): ProofLinkItem[] {
     return [];
   }
 
-  return proofBlock.items.filter(
-    (item): item is ProofLinkItem =>
-      typeof item === "object" &&
-      item !== null &&
-      "title" in item &&
-      "href" in item &&
-      typeof item.title === "string" &&
-      typeof item.href === "string"
+  return proofBlock.items
+    .filter(
+      (item): item is RawProofLinkWithHref =>
+        typeof item === "object" &&
+        item !== null &&
+        "href" in item &&
+        typeof item.href === "string"
+    )
+    .map((item) => {
+      const title =
+        typeof item.title === "string"
+          ? item.title
+          : typeof item.label === "string"
+            ? item.label
+            : "";
+      const body =
+        typeof item.body === "string"
+          ? item.body
+          : typeof item.description === "string"
+            ? item.description
+            : undefined;
+
+      return {
+        title,
+        body,
+        href: item.href,
+        cta: typeof item.cta === "string" ? item.cta : undefined,
+      };
+    })
+    .filter((item) => item.title);
+}
+
+function getProofActions(blocks: PublicContentBlock[]): ProofLinkItem[] {
+  const proofBlock = blocks.find(
+    (block) => block.sectionKey === "proof-links" && block.blockType === "list"
   );
+  const actions =
+    typeof proofBlock?.metadata === "object" &&
+    proofBlock.metadata !== null &&
+    "actions" in proofBlock.metadata &&
+    Array.isArray(proofBlock.metadata.actions)
+      ? proofBlock.metadata.actions
+      : [];
+
+  return actions
+    .filter(
+      (item): item is RawProofLinkWithHref =>
+        typeof item === "object" &&
+        item !== null &&
+        "href" in item &&
+        typeof item.href === "string"
+    )
+    .map((item) => {
+      const title =
+        typeof item.title === "string"
+          ? item.title
+          : typeof item.label === "string"
+            ? item.label
+            : "";
+
+      return {
+        title,
+        href: item.href,
+        cta: typeof item.cta === "string" ? item.cta : title,
+      };
+    })
+    .filter((item) => item.title);
 }
 
 async function getHomeContent(): Promise<HomeContent> {
@@ -313,7 +384,18 @@ export default async function HomePage() {
   const strengthsSection = getSectionBlock(content.blocks, "technical-strengths");
   const strengthCards = getSectionCards(content.blocks, "technical-strengths");
   const proofSection = getSectionBlock(content.blocks, "proof-links");
-  const proofLinks = getProofLinks(content.blocks);
+  const allProofLinks = getProofLinks(content.blocks);
+  const explicitProofActions = getProofActions(content.blocks);
+  const proofLinks =
+    explicitProofActions.length > 0 ? allProofLinks : allProofLinks.slice(0, 4);
+  const proofActions =
+    explicitProofActions.length > 0
+      ? explicitProofActions
+      : allProofLinks.slice(4).map((item) => ({
+          title: item.title,
+          href: item.href,
+          cta: item.cta ?? item.title,
+        }));
   const questionsSection = getSectionBlock(content.blocks, "common-questions");
   const questions = getSectionQuestions(content.blocks);
   const contactSection = getSectionBlock(content.blocks, "contact");
@@ -557,12 +639,12 @@ export default async function HomePage() {
                   </FadeIn>
                   {proofLinks.length > 0 ? (
                     <Stagger
-                      className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3"
+                      className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4"
                       delayChildren={0.08}
                     >
                       {proofLinks.map((item) => (
                         <StaggerItem key={`${item.title}-${item.href}`}>
-                          <Card className="flex h-full flex-col p-5">
+                          <Card className="group flex h-full flex-col p-5 transition-[border-color,transform] hover:border-accent/50 motion-safe:hover:-translate-y-1">
                             <h3 className="font-display text-xl font-semibold">
                               {item.title}
                             </h3>
@@ -575,7 +657,7 @@ export default async function HomePage() {
                               href={item.href}
                               target={item.href.startsWith("/") ? undefined : "_blank"}
                               rel={item.href.startsWith("/") ? undefined : "noreferrer"}
-                              className="mt-5 text-sm font-medium text-accent underline-offset-4 hover:underline"
+                              className="mt-5 text-sm font-medium text-accent underline-offset-4 group-hover:underline"
                             >
                               {item.cta ?? "Open"}
                             </Link>
@@ -583,6 +665,21 @@ export default async function HomePage() {
                         </StaggerItem>
                       ))}
                     </Stagger>
+                  ) : null}
+                  {proofActions.length > 0 ? (
+                    <FadeIn className="mt-6 flex flex-wrap gap-3">
+                      {proofActions.map((item) => (
+                        <Link
+                          key={`${item.title}-${item.href}`}
+                          href={item.href}
+                          target={item.href.startsWith("/") ? undefined : "_blank"}
+                          rel={item.href.startsWith("/") ? undefined : "noreferrer"}
+                          className="inline-flex h-8 max-w-full shrink-0 items-center justify-center rounded-md border border-border bg-background px-3 text-xs font-medium text-foreground shadow-[var(--shadow-subtle)] transition-[background-color,border-color,color,transform] duration-150 ease-out hover:border-accent/50 hover:bg-accent/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-safe:hover:-translate-y-px motion-safe:active:translate-y-0"
+                        >
+                          {item.cta ?? item.title}
+                        </Link>
+                      ))}
+                    </FadeIn>
                   ) : null}
                 </Container>
               </Section>

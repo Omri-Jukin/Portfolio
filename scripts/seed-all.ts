@@ -585,9 +585,9 @@ async function seedPublicContentBlocks(
       sectionKey: "proof-links",
       blockKey: "section",
       blockType: "section",
-      title: "Resume, GitHub, and Case Studies",
+      title: "Proof and review paths",
       subtitle:
-        "The fastest links for reviewing my work, background, and implementation history.",
+        "Fast ways to evaluate my work.",
       displayOrder: 50,
       isVisible: true,
       createdBy,
@@ -602,42 +602,57 @@ async function seedPublicContentBlocks(
       blockType: "list",
       items: [
         {
-          title: "Resume",
-          body: "Full experience, skills, education, and project history in one place.",
+          title: "Resume + PDF",
+          body:
+            "Full experience, skills, education, and selected projects. Open the resume page to generate the current PDF.",
           href: "/resume",
           cta: "Open resume",
         },
         {
-          title: "Snow HQ case study",
-          body: "Multi-tenant CRM with tRPC, PostgreSQL, Drizzle, RBAC-aware modeling, and dashboard flows.",
-          href: "/projects/snow-hq",
-          cta: "View case study",
-        },
-        {
-          title: "ClipWhisperer architecture",
-          body: "Queue-driven video automation platform with service boundaries and cloud processing.",
-          href: "/projects/clipwhisperer",
-          cta: "View architecture notes",
-        },
-        {
-          title: "Portfolio platform",
-          body: "Public portfolio site plus authenticated CMS/backoffice, content APIs, and modular homepage composition.",
+          title: "Portfolio Platform",
+          body:
+            "This site as proof: public portfolio, authenticated CMS/backoffice, content APIs, structured resume/project data, and recruiter-facing flows.",
           href: "/projects/portfolio-platform",
-          cta: "View system notes",
+          cta: "View platform proof",
         },
+        {
+          title: "Snow HQ",
+          body:
+            "Private CRM proof: tenant-aware data, RBAC-aware modeling, dashboards, reporting, and invoicing-oriented workflows.",
+          href: "/projects/snow-hq",
+          cta: "View CRM case study",
+        },
+        {
+          title: "ClipWhisperer",
+          body:
+            "Backend/platform proof: queue-driven automation, workers, media processing, storage, orchestration, and delivery boundaries.",
+          href: "/projects/clipwhisperer",
+          cta: "View architecture",
+        },
+      ],
+      metadata: {
+        actions: [
         {
           title: "GitHub",
-          body: "Code, experiments, project repositories, and implementation history.",
+          body: "Code, experiments, implementation history, and public technical work where available.",
           href: "https://github.com/Omri-Jukin",
           cta: "Open GitHub",
         },
         {
           title: "LinkedIn",
-          body: "Professional profile and fastest recruiter-friendly contact path.",
+          body: "Professional profile, work history, and recruiter-friendly contact path.",
           href: "https://www.linkedin.com/in/omri-jukin/",
           cta: "Open LinkedIn",
         },
-      ],
+        {
+          title: "Contact",
+          body:
+            "For role conversations, send the role, stack, team context, ownership expectations, and location or remote expectations.",
+          href: "/contact",
+          cta: "Start a conversation",
+        },
+        ],
+      },
       displayOrder: 51,
       isVisible: true,
       createdBy,
