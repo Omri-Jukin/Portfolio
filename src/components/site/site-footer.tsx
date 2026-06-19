@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { Container } from "@/components/ui/container";
+import { CursorPressLink } from "@/components/ui/cursor-press-link";
 import { PROFILE_LINKS } from "$/constants";
 
 export function SiteFooter() {
@@ -16,34 +16,31 @@ export function SiteFooter() {
               roles where ownership and production judgment matter.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link
+              <CursorPressLink
                 href={`mailto:${PROFILE_LINKS.EMAIL}`}
-                className="text-sm font-medium text-accent underline-offset-4 hover:underline"
+                size="sm"
               >
                 {PROFILE_LINKS.EMAIL}
-              </Link>
-              <Link
-                href="/resume"
-                className="text-sm font-medium text-accent underline-offset-4 hover:underline"
-              >
+              </CursorPressLink>
+              <CursorPressLink href="/resume" size="sm">
                 Resume PDF
-              </Link>
-              <Link
+              </CursorPressLink>
+              <CursorPressLink
                 href={PROFILE_LINKS.GITHUB}
                 target="_blank"
                 rel="noreferrer"
-                className="text-sm font-medium text-accent underline-offset-4 hover:underline"
+                size="sm"
               >
                 GitHub
-              </Link>
-              <Link
+              </CursorPressLink>
+              <CursorPressLink
                 href={PROFILE_LINKS.LINKEDIN}
                 target="_blank"
                 rel="noreferrer"
-                className="text-sm font-medium text-accent underline-offset-4 hover:underline"
+                size="sm"
               >
                 LinkedIn
-              </Link>
+              </CursorPressLink>
             </div>
           </div>
 

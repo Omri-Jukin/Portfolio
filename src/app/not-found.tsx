@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { Button, Container, Section, SectionHeader } from "@/components/ui";
+import { Container, CursorPressLink, Section, SectionHeader } from "@/components/ui";
 
 export default function NotFoundPage() {
   return (
@@ -11,12 +10,12 @@ export default function NotFoundPage() {
           subtitle="The route does not exist, or it was removed during the portfolio route cleanup."
         />
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/">
-            <Button>Go home</Button>
-          </Link>
-          <Link href="/contact">
-            <Button variant="outline">Contact Omri</Button>
-          </Link>
+          <CursorPressLink href="/" variant="solid">
+            Go home
+          </CursorPressLink>
+          <CursorPressLink href="/contact">
+            Contact Omri
+          </CursorPressLink>
         </div>
       </Container>
     </Section>

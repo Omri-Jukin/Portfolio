@@ -530,7 +530,7 @@ export default function ProjectsAdminPage() {
     <div className="w-full min-w-0">
       <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="font-mono text-xs font-semibold uppercase text-accent">
+          <p className="font-mono text-xs font-semibold uppercase text-ruby">
             CMS
           </p>
           <h1 className="mt-2 font-display text-2xl font-semibold sm:text-3xl">

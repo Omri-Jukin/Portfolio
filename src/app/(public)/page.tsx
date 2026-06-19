@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import {
   Badge,
@@ -432,13 +431,17 @@ export default async function HomePage() {
                     <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                       <CursorPressLink
                         href="/resume"
-                        className="inline-flex h-11 w-full items-center justify-center rounded-md bg-accent px-5 text-sm font-medium text-accent-foreground shadow-[var(--shadow-subtle)] transition-[background-color,border-color,color,transform] duration-200 ease-out hover:bg-accent/90 sm:w-auto"
+                        variant="solid"
+                        size="lg"
+                        className="w-full sm:w-auto"
                       >
                         Download Resume (PDF)
                       </CursorPressLink>
                       <CursorPressLink
                         href="#work"
-                        className="inline-flex h-11 w-full items-center justify-center rounded-md border border-border px-5 text-sm font-medium shadow-[var(--shadow-subtle)] transition-[background-color,border-color,color,transform] duration-200 ease-out hover:border-accent/50 hover:bg-muted sm:w-auto"
+                        variant="outline"
+                        size="lg"
+                        className="w-full sm:w-auto"
                       >
                         View work
                       </CursorPressLink>
@@ -446,7 +449,9 @@ export default async function HomePage() {
                         href={PROFILE_LINKS.GITHUB}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex h-11 w-full items-center justify-center rounded-md px-3 text-sm font-medium text-accent transition-[color,transform] duration-200 hover:underline sm:w-auto"
+                        variant="ghost"
+                        size="lg"
+                        className="w-full sm:w-auto"
                       >
                         GitHub
                       </CursorPressLink>
@@ -454,7 +459,9 @@ export default async function HomePage() {
                         href={PROFILE_LINKS.LINKEDIN}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex h-11 w-full items-center justify-center rounded-md px-3 text-sm font-medium text-accent transition-[color,transform] duration-200 hover:underline sm:w-auto"
+                        variant="ghost"
+                        size="lg"
+                        className="w-full sm:w-auto"
                       >
                         LinkedIn
                       </CursorPressLink>
@@ -496,7 +503,7 @@ export default async function HomePage() {
                   <Stagger className="mt-10 grid gap-4 md:grid-cols-2" delayChildren={0.08}>
                     {projects.map((project) => (
                       <StaggerItem key={project.title}>
-                        <Card className="gem-card group flex flex-col justify-between p-4 transition-[border-color,transform] hover:border-accent/50 motion-safe:hover:-translate-y-1 sm:p-5 md:min-h-80">
+                        <Card className="group flex flex-col justify-between p-4 transition-[border-color,transform] hover:border-accent/50 motion-safe:hover:-translate-y-1 sm:p-5 md:min-h-80">
                           <div>
                             <div className="flex flex-wrap items-center gap-2">
                               <Badge tone="accent">
@@ -524,21 +531,23 @@ export default async function HomePage() {
                             </div>
                           </div>
                           <div className="mt-8 flex flex-wrap gap-3">
-                            <Link
+                            <CursorPressLink
                               href={projectHref(project)}
-                              className="text-sm font-medium text-accent underline-offset-4 group-hover:underline"
+                              variant="solid"
+                              size="sm"
                             >
                               Case study
-                            </Link>
+                            </CursorPressLink>
                             {project.liveUrl ? (
-                              <a
+                              <CursorPressLink
                                 href={project.liveUrl}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="text-sm font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+                                variant="outline"
+                                size="sm"
                               >
                                 Live link
-                              </a>
+                              </CursorPressLink>
                             ) : null}
                           </div>
                         </Card>
@@ -568,7 +577,7 @@ export default async function HomePage() {
                       : fallbackExperienceCards
                     ).map((experience) => (
                       <StaggerItem key={experience.title}>
-                        <Card className="gem-card p-5">
+                        <Card className="p-5">
                           <h3 className="font-display text-xl font-semibold">
                             {experience.title}
                           </h3>
@@ -608,7 +617,7 @@ export default async function HomePage() {
                     {(strengthCards.length > 0 ? strengthCards : fallbackStrengths).map(
                       (strength) => (
                         <StaggerItem key={strength.title}>
-                          <Card className="gem-card flex h-full flex-col p-5">
+                          <Card className="flex h-full flex-col p-5">
                             <h3 className="font-display text-xl font-semibold">
                               {strength.title}
                             </h3>
@@ -616,12 +625,14 @@ export default async function HomePage() {
                               {strength.body}
                             </p>
                             {strength.href ? (
-                              <Link
+                              <CursorPressLink
                                 href={strength.href}
-                                className="mt-5 text-sm font-medium text-accent underline-offset-4 hover:underline"
+                                variant="outline"
+                                size="sm"
+                                className="mt-5"
                               >
                                 {strength.ctaLabel ?? "Review proof"}
-                              </Link>
+                              </CursorPressLink>
                             ) : null}
                           </Card>
                         </StaggerItem>
@@ -652,7 +663,7 @@ export default async function HomePage() {
                     >
                       {proofLinks.map((item) => (
                         <StaggerItem key={`${item.title}-${item.href}`}>
-                          <Card className="gem-card group flex h-full flex-col p-5 transition-[border-color,transform] hover:border-accent/50 motion-safe:hover:-translate-y-1">
+                          <Card className="group flex h-full flex-col p-5 transition-[border-color,transform] hover:border-accent/50 motion-safe:hover:-translate-y-1">
                             <h3 className="font-display text-xl font-semibold">
                               {item.title}
                             </h3>
@@ -661,14 +672,16 @@ export default async function HomePage() {
                                 {item.body}
                               </p>
                             ) : null}
-                            <Link
+                            <CursorPressLink
                               href={item.href}
                               target={item.href.startsWith("/") ? undefined : "_blank"}
                               rel={item.href.startsWith("/") ? undefined : "noreferrer"}
-                              className="mt-5 text-sm font-medium text-accent underline-offset-4 group-hover:underline"
+                              variant="outline"
+                              size="sm"
+                              className="mt-5"
                             >
                               {item.cta ?? "Open"}
-                            </Link>
+                            </CursorPressLink>
                           </Card>
                         </StaggerItem>
                       ))}
@@ -682,7 +695,8 @@ export default async function HomePage() {
                           href={item.href}
                           target={item.href.startsWith("/") ? undefined : "_blank"}
                           rel={item.href.startsWith("/") ? undefined : "noreferrer"}
-                          className="inline-flex h-8 max-w-full shrink-0 items-center justify-center rounded-md border border-border bg-background px-3 text-xs font-medium text-foreground shadow-[var(--shadow-subtle)] transition-[background-color,border-color,color,transform] duration-200 ease-out hover:border-accent/50 hover:bg-accent/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                          variant="outline"
+                          size="sm"
                         >
                           {item.cta ?? item.title}
                         </CursorPressLink>
@@ -710,7 +724,7 @@ export default async function HomePage() {
                     {(questions.length > 0 ? questions : fallbackQuestions).map(
                       (question) => (
                         <StaggerItem key={question.title}>
-                          <Card className="gem-card h-full p-5">
+                          <Card className="h-full p-5">
                             <h3 className="font-display text-lg font-semibold">
                               {question.title}
                             </h3>
@@ -729,7 +743,7 @@ export default async function HomePage() {
             return (
               <Section key={sectionKey} id="contact-section" className="border-t border-border">
                 <Container>
-                  <Card className="gem-card p-6 sm:p-8">
+                  <Card className="p-6 sm:p-8">
                     <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
                       <div>
                         <p className="font-mono text-xs font-semibold uppercase text-cherry">
@@ -751,13 +765,17 @@ export default async function HomePage() {
                       <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                         <CursorPressLink
                           href="/contact"
-                          className="inline-flex h-11 w-full items-center justify-center rounded-md bg-accent px-5 text-sm font-medium text-accent-foreground shadow-[var(--shadow-subtle)] transition-[background-color,border-color,color,transform] duration-200 ease-out hover:bg-accent/90 sm:w-auto"
+                          variant="solid"
+                          size="lg"
+                          className="w-full sm:w-auto"
                         >
                           Contact
                         </CursorPressLink>
                         <CursorPressLink
                           href="/resume"
-                          className="inline-flex h-11 w-full items-center justify-center rounded-md border border-border px-5 text-sm font-medium shadow-[var(--shadow-subtle)] transition-[background-color,border-color,color,transform] duration-200 ease-out hover:border-accent/50 hover:bg-muted sm:w-auto"
+                          variant="outline"
+                          size="lg"
+                          className="w-full sm:w-auto"
                         >
                           Resume
                         </CursorPressLink>

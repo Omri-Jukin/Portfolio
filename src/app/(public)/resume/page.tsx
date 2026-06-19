@@ -1,6 +1,13 @@
-import Link from "next/link";
 import type { Metadata } from "next";
-import { Badge, Card, Chip, Container, Section, SectionHeader } from "@/components/ui";
+import {
+  Badge,
+  Card,
+  Chip,
+  Container,
+  CursorPressLink,
+  Section,
+  SectionHeader,
+} from "@/components/ui";
 import { PROFILE_LINKS } from "$/constants";
 import { getResumeDataFromCms } from "$/data/resumeCmsData";
 import { ResumePdfDownloadButton } from "./ResumePdfDownloadButton";
@@ -29,28 +36,31 @@ export default async function ResumePage() {
             subtitle={resume.headline ?? resume.person.title}
           />
           <div className="mt-6 flex flex-wrap gap-3">
-            <a
+            <CursorPressLink
               href={`mailto:${PROFILE_LINKS.EMAIL}`}
-              className="text-sm font-medium text-accent underline-offset-4 hover:underline"
+              variant="outline"
+              size="sm"
             >
               {PROFILE_LINKS.EMAIL}
-            </a>
-            <a
+            </CursorPressLink>
+            <CursorPressLink
               href={PROFILE_LINKS.GITHUB}
               target="_blank"
               rel="noreferrer"
-              className="text-sm font-medium text-accent underline-offset-4 hover:underline"
+              variant="outline"
+              size="sm"
             >
               GitHub
-            </a>
-            <a
+            </CursorPressLink>
+            <CursorPressLink
               href={PROFILE_LINKS.LINKEDIN}
               target="_blank"
               rel="noreferrer"
-              className="text-sm font-medium text-accent underline-offset-4 hover:underline"
+              variant="outline"
+              size="sm"
             >
               LinkedIn
-            </a>
+            </CursorPressLink>
           </div>
           <div className="mt-8">
             <ResumePdfDownloadButton resume={resume} />
@@ -124,14 +134,16 @@ export default async function ResumePage() {
                           </ul>
                         ) : null}
                         {project.url ? (
-                          <a
+                          <CursorPressLink
                             href={project.url}
                             target={project.url.startsWith("/") ? undefined : "_blank"}
                             rel={project.url.startsWith("/") ? undefined : "noreferrer"}
-                            className="mt-3 inline-flex text-sm font-medium text-accent underline-offset-4 hover:underline"
+                            variant="outline"
+                            size="sm"
+                            className="mt-3"
                           >
                             {project.url.startsWith("/") ? "Case study" : "Project link"}
-                          </a>
+                          </CursorPressLink>
                         ) : null}
                       </article>
                     ))}
@@ -174,18 +186,20 @@ export default async function ResumePage() {
               <Card className="p-5">
                 <h2 className="font-display text-xl font-semibold">Proof</h2>
                 <div className="mt-4 grid gap-3">
-                  <Link
+                  <CursorPressLink
                     href="/#work"
-                    className="text-sm font-medium text-accent underline-offset-4 hover:underline"
+                    variant="outline"
+                    size="sm"
                   >
                     Selected work
-                  </Link>
-                  <Link
+                  </CursorPressLink>
+                  <CursorPressLink
                     href="/contact"
-                    className="text-sm font-medium text-accent underline-offset-4 hover:underline"
+                    variant="outline"
+                    size="sm"
                   >
                     Contact
-                  </Link>
+                  </CursorPressLink>
                 </div>
               </Card>
             </aside>

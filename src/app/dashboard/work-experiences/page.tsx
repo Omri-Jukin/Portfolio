@@ -12,6 +12,7 @@ import {
   CardTitle,
   Checkbox,
   Chip,
+  CursorPressLink,
   Dialog,
   EditableChipList,
   DialogHeader,
@@ -385,7 +386,7 @@ export default function WorkExperiencesAdminPage() {
     <div className="w-full min-w-0">
       <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="font-mono text-xs font-semibold uppercase text-accent">
+          <p className="font-mono text-xs font-semibold uppercase text-ruby">
             CMS
           </p>
           <h1 className="mt-2 font-display text-3xl font-semibold">
@@ -485,14 +486,15 @@ export default function WorkExperiencesAdminPage() {
                   </p>
                   <p>Industry: {experience.industry}</p>
                   {experience.companyUrl ? (
-                    <a
+                    <CursorPressLink
                       href={experience.companyUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="font-medium text-accent underline-offset-4 hover:underline"
+                      size="sm"
+                      className="w-fit"
                     >
                       Company website
-                    </a>
+                    </CursorPressLink>
                   ) : null}
                 </div>
               </CardContent>

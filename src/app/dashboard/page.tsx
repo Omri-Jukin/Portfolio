@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { api } from "$/trpc/client";
@@ -13,6 +12,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CursorPressLink,
   EmptyState,
   LoadingState,
 } from "@/components/ui";
@@ -256,12 +256,9 @@ export default function DashboardPage() {
           <Button variant="outline" onClick={handleLogout}>
             Logout
           </Button>
-          <Link
-            href="/"
-            className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
-          >
+          <CursorPressLink href="/">
             View site
-          </Link>
+          </CursorPressLink>
         </CardContent>
       </Card>
 
@@ -329,12 +326,9 @@ export default function DashboardPage() {
                 </CardHeader>
                 <CardContent className="mt-auto">
                   {copy.href ? (
-                    <Link
-                      href={copy.href}
-                      className="text-sm font-medium text-accent underline-offset-4 hover:underline"
-                    >
+                    <CursorPressLink href={copy.href} size="sm">
                       Open section
-                    </Link>
+                    </CursorPressLink>
                   ) : (
                     <span className="text-sm text-muted-foreground">
                       No direct page yet
@@ -354,7 +348,7 @@ export default function DashboardPage() {
             top: dragCursor.y + 14,
           }}
         >
-          <p className="font-mono text-xs uppercase text-accent">
+          <p className="font-mono text-xs uppercase text-ruby">
             Moving dashboard card
           </p>
           <p className="mt-1 font-display text-lg font-semibold">

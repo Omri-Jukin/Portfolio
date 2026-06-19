@@ -8,6 +8,7 @@ import {
   CardTitle,
   Chip,
   Container,
+  CursorPressLink,
   EmptyState,
   Section,
   SectionHeader,
@@ -90,12 +91,14 @@ export default async function BlogPage() {
                     <p className="max-w-3xl text-sm leading-6 text-muted-foreground">
                       {post.excerpt ?? post.content.slice(0, 220)}
                     </p>
-                    <Link
+                    <CursorPressLink
                       href={`/blog/${post.slug}`}
-                      className="mt-4 inline-flex text-sm font-medium text-accent underline-offset-4 hover:underline"
+                      variant="outline"
+                      size="sm"
+                      className="mt-4"
                     >
                       Read note
-                    </Link>
+                    </CursorPressLink>
                   </CardContent>
                 </Card>
               ))}

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import {
   Card,
@@ -7,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
   Container,
+  CursorPressLink,
 } from "@/components/ui";
 
 export const metadata: Metadata = {
@@ -28,12 +28,9 @@ export default function ForbiddenPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Link
-            href="/"
-            className="inline-flex h-10 items-center justify-center rounded-md bg-accent px-4 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent/90"
-          >
+          <CursorPressLink href="/" variant="solid">
             Back to home
-          </Link>
+          </CursorPressLink>
         </CardContent>
       </Card>
     </Container>

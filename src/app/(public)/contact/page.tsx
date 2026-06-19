@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Card, Container, Section, SectionHeader } from "@/components/ui";
+import {
+  Card,
+  Container,
+  CursorPressLink,
+  Section,
+  SectionHeader,
+} from "@/components/ui";
 import { PROFILE_LINKS } from "$/constants";
 import { ContactForm } from "./ContactForm";
 
@@ -34,26 +40,30 @@ export default function ContactPage() {
                 Best for role details, project context, and written technical
                 briefs.
               </p>
-              <a
+              <CursorPressLink
                 href={`mailto:${PROFILE_LINKS.EMAIL}`}
-                className="mt-5 inline-flex text-sm font-medium text-accent underline-offset-4 hover:underline"
+                variant="outline"
+                size="sm"
+                className="mt-5"
               >
                 {PROFILE_LINKS.EMAIL}
-              </a>
+              </CursorPressLink>
             </Card>
             <Card className="p-5">
               <h2 className="font-display text-xl font-semibold">LinkedIn</h2>
               <p className="mt-3 leading-7 text-muted-foreground">
                 Best for recruiter outreach, role fit, and quick scheduling.
               </p>
-              <a
+              <CursorPressLink
                 href={PROFILE_LINKS.LINKEDIN}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-5 inline-flex text-sm font-medium text-accent underline-offset-4 hover:underline"
+                variant="outline"
+                size="sm"
+                className="mt-5"
               >
                 Open LinkedIn
-              </a>
+              </CursorPressLink>
             </Card>
           </div>
         </div>

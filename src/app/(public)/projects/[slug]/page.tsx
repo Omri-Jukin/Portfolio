@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
@@ -6,6 +5,7 @@ import {
   Card,
   Chip,
   Container,
+  CursorPressLink,
   Section,
   SectionHeader,
 } from "@/components/ui";
@@ -258,44 +258,48 @@ export default async function ProjectCaseStudyPage({
                 <h2 className="font-display text-xl font-semibold">Links</h2>
                 <div className="mt-4 grid gap-3">
                   {project.proofLinks.map((link) => (
-                    <a
+                    <CursorPressLink
                       key={`${link.label}-${link.href}`}
                       href={link.href}
                       target={link.href.startsWith("/") ? undefined : "_blank"}
                       rel={
                         link.href.startsWith("/") ? undefined : "noreferrer"
                       }
-                      className="text-sm font-medium text-accent underline-offset-4 hover:underline"
+                      variant="outline"
+                      size="sm"
                     >
                       {link.label}
-                    </a>
+                    </CursorPressLink>
                   ))}
                   {project.liveUrl ? (
-                    <a
+                    <CursorPressLink
                       href={project.liveUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-sm font-medium text-accent underline-offset-4 hover:underline"
+                      variant="outline"
+                      size="sm"
                     >
                       Live site
-                    </a>
+                    </CursorPressLink>
                   ) : null}
                   {project.githubUrl ? (
-                    <a
+                    <CursorPressLink
                       href={project.githubUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-sm font-medium text-accent underline-offset-4 hover:underline"
+                      variant="outline"
+                      size="sm"
                     >
                       GitHub
-                    </a>
+                    </CursorPressLink>
                   ) : null}
-                  <Link
+                  <CursorPressLink
                     href={`/contact?${contactParams.toString()}`}
-                    className="text-sm font-medium text-accent underline-offset-4 hover:underline"
+                    variant="solid"
+                    size="sm"
                   >
                     Discuss this work
-                  </Link>
+                  </CursorPressLink>
                 </div>
               </Card>
             </aside>

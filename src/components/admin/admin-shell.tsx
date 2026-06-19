@@ -27,8 +27,8 @@ export function AdminShell({
   className,
 }: AdminShellProps) {
   return (
-    <div className="min-h-screen overflow-x-clip bg-background text-foreground">
-      <header className="border-b border-border bg-background/90 backdrop-blur">
+    <div className="gem-admin min-h-screen overflow-x-clip bg-background text-foreground">
+      <header className="gem-band border-b border-border bg-background/90 backdrop-blur">
         <Container className="flex min-h-16 min-w-0 flex-wrap items-center justify-between gap-x-4 gap-y-2 py-3">
           <Link href="/dashboard" className="font-display font-semibold">
             Omri CMS
@@ -58,7 +58,7 @@ export function AdminShell({
 
       <Container className={cn("min-w-0 py-6 sm:py-8", className)}>
         <div className="mb-6 max-w-3xl space-y-2 sm:mb-8">
-          <p className="font-mono text-xs font-medium uppercase text-accent">
+          <p className="font-mono text-xs font-medium uppercase text-ruby">
             Admin
           </p>
           <h1 className="font-display text-2xl font-semibold sm:text-3xl">
