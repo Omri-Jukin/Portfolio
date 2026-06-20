@@ -1,13 +1,11 @@
 import { ImageResponse } from "next/og";
 
-export const size = {
+const size = {
   width: 1200,
   height: 630,
 };
 
-export const contentType = "image/png";
-
-type OpenGraphImageParams = {
+type ProjectOpenGraphImageParams = {
   params: Promise<{ slug: string }>;
 };
 
@@ -19,9 +17,10 @@ function titleFromSlug(slug: string) {
     .join(" ");
 }
 
-export default async function ProjectOpenGraphImage({
-  params,
-}: OpenGraphImageParams) {
+export async function GET(
+  _request: Request,
+  { params }: ProjectOpenGraphImageParams
+) {
   const { slug } = await params;
   const title = titleFromSlug(slug) || "Project Case Study";
 
@@ -76,8 +75,8 @@ export default async function ProjectOpenGraphImage({
               lineHeight: 1.3,
             }}
           >
-            Full-stack TypeScript engineering proof: product flow, architecture,
-            data boundaries, and shipped implementation.
+            Full-stack TypeScript engineering proof: product flow,
+            architecture, data boundaries, and shipped implementation.
           </p>
         </div>
 

@@ -44,8 +44,8 @@ export function SiteFooter() {
             </div>
           </div>
 
-          <p className="font-mono text-xs leading-6 text-muted-foreground">
-            This site: Next.js 15 / tRPC / Drizzle / Postgres / Cloudflare
+          <p className="font-mono text-xs leading-6 text-muted-foreground text-right font-bold">
+            Product-led engineering, built with care.
           </p>
         </div>
       </Container>

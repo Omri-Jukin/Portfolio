@@ -50,6 +50,7 @@ export default async function BlogPage() {
         <Container>
           <SectionHeader
             eyebrow="Notes"
+            headingLevel={1}
             title="Engineering notes"
             subtitle="Short-form technical writing on architecture, full-stack systems, product workflows, and implementation trade-offs."
           />

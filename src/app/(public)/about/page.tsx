@@ -32,6 +32,7 @@ export default function AboutPage() {
         <Container>
           <SectionHeader
             eyebrow="About"
+            headingLevel={1}
             title="Full-stack engineer focused on production systems and practical ownership."
             subtitle="I work best where frontend, backend, data, integrations, and operational tooling need to move together."
           />

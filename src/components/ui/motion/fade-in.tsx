@@ -3,6 +3,7 @@
 import * as React from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useMotionGate } from "./motion-gate";
 
 type MotionSafeDivProps = Omit<
   React.HTMLAttributes<HTMLDivElement>,
@@ -27,6 +28,7 @@ export function FadeIn({
   ...props
 }: FadeInProps) {
   const reducedMotion = useReducedMotion();
+  const motionGate = useMotionGate();
 
   if (reducedMotion) {
     return (
@@ -39,9 +41,14 @@ export function FadeIn({
   return (
     <motion.div
       initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
+      animate={motionGate.enabled ? undefined : { opacity: 0, y }}
+      whileInView={motionGate.enabled ? { opacity: 1, y: 0 } : undefined}
       viewport={{ once: true, margin: "-12% 0px" }}
-      transition={{ duration: 0.45, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{
+        duration: 0.45 * motionGate.durationScale,
+        delay,
+        ease: [0.22, 1, 0.36, 1],
+      }}
       className={cn(className)}
       {...props}
     >

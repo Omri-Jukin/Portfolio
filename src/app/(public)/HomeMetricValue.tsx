@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useCountUp } from "@/components/ui/motion";
+import { useCountUp, useMotionGate } from "@/components/ui/motion";
 
 interface HomeMetricValueProps {
   value: string;
@@ -13,16 +13,17 @@ export function HomeMetricValue({ value }: HomeMetricValueProps) {
   const match = numericMetricPattern.exec(value.trim());
   const [hasStarted, setHasStarted] = React.useState(false);
   const ref = React.useRef<HTMLSpanElement>(null);
+  const motionGate = useMotionGate();
   const target = match ? Number(match[1]) : 0;
   const suffix = match?.[2] ?? "";
   const count = useCountUp(target, {
-    duration: 1000,
-    enabled: hasStarted && Boolean(match),
+    duration: 1300,
+    enabled: motionGate.enabled && hasStarted && Boolean(match),
   });
 
   React.useEffect(() => {
     const element = ref.current;
-    if (!element || !match) return;
+    if (!element || !match || !motionGate.enabled) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -36,7 +37,7 @@ export function HomeMetricValue({ value }: HomeMetricValueProps) {
 
     observer.observe(element);
     return () => observer.disconnect();
-  }, [match]);
+  }, [match, motionGate.enabled]);
 
   if (!match) {
     return <span>{value}</span>;

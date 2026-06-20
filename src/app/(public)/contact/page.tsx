@@ -25,6 +25,7 @@ export default function ContactPage() {
       <Container>
         <SectionHeader
           eyebrow="Contact"
+          headingLevel={1}
           title="Send the role, system, or technical context."
           subtitle="Email or LinkedIn are the best paths for recruiter conversations and focused technical discussions."
         />

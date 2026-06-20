@@ -20,12 +20,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const projects = await ProjectManager.getAll(true);
     const posts = await getPublishedPosts();
-    const projectEntries = projects.map((project) => ({
-      url: `${siteUrl}/projects/${project.caseStudySlug ?? project.id}`,
-      lastModified: project.updatedAt ? new Date(project.updatedAt) : now,
-      changeFrequency: "monthly" as const,
-      priority: 0.7,
-    }));
+    const projectEntries = projects
+      .filter((project) => project.caseStudySlug)
+      .map((project) => ({
+        url: `${siteUrl}/projects/${project.caseStudySlug}`,
+        lastModified: project.updatedAt ? new Date(project.updatedAt) : now,
+        changeFrequency: "monthly" as const,
+        priority: 0.7,
+      }));
     const postEntries = posts.map((post) => ({
       url: `${siteUrl}/blog/${post.slug}`,
       lastModified: post.updatedAt ? new Date(post.updatedAt) : now,

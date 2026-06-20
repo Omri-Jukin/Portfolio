@@ -32,6 +32,7 @@ export default async function ResumePage() {
         <Container>
           <SectionHeader
             eyebrow="Resume"
+            headingLevel={1}
             title={resume.person.name}
             subtitle={resume.headline ?? resume.person.title}
           />
