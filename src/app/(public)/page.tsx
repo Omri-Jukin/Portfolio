@@ -8,7 +8,13 @@ import {
   Section,
   SectionHeader,
 } from "@/components/ui";
-import { FadeIn, Stagger, StaggerItem } from "@/components/ui/motion";
+import {
+  FadeIn,
+  HomeMotionGate,
+  Stagger,
+  StaggerItem,
+} from "@/components/ui/motion";
+import { JsonLd } from "@/components/seo/json-ld";
 import { PROFILE_LINKS } from "$/constants";
 import {
   PublicContentBlockManager,
@@ -410,14 +416,48 @@ export default async function HomePage() {
   const experienceSection = getSectionBlock(content.blocks, "experience");
   const experienceCards = getSectionCards(content.blocks, "experience");
   const sectionOrder = getHomeSectionOrder(content.blocks);
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: "Omri Jukin",
+      url: PROFILE_LINKS.PORTFOLIO,
+      sameAs: [PROFILE_LINKS.GITHUB, PROFILE_LINKS.LINKEDIN],
+      jobTitle: "Full-Stack TypeScript Engineer",
+      email: `mailto:${PROFILE_LINKS.EMAIL}`,
+      knowsAbout: [
+        "Next.js",
+        "React",
+        "Node.js",
+        "TypeScript",
+        "PostgreSQL",
+        "tRPC",
+        "Drizzle ORM",
+        "Supabase",
+      ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "Omri Jukin Portfolio",
+      url: PROFILE_LINKS.PORTFOLIO,
+      author: {
+        "@type": "Person",
+        name: "Omri Jukin",
+      },
+      inLanguage: "en",
+    },
+  ];
 
   return (
     <>
+      <JsonLd data={structuredData} />
       <ReloadTerminalIntro />
-      {sectionOrder.map((sectionKey) => {
-        switch (sectionKey) {
-          case "hero":
-            return (
+      <HomeMotionGate>
+        {sectionOrder.map((sectionKey) => {
+          switch (sectionKey) {
+            case "hero":
+              return (
               <Section key={sectionKey} className="gem-hero pt-14 sm:pt-20 lg:pt-24">
                 <Container>
                   <FadeIn className="min-w-0 max-w-5xl">
@@ -787,10 +827,11 @@ export default async function HomePage() {
                 </Container>
               </Section>
             );
-          default:
-            return null;
-        }
-      })}
+            default:
+              return null;
+          }
+        })}
+      </HomeMotionGate>
     </>
   );
 }

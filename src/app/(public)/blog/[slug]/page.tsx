@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Badge, Chip, Container, CursorPressLink, Section } from "@/components/ui";
+import { JsonLd } from "@/components/seo/json-ld";
+import { PROFILE_LINKS } from "$/constants";
 import { getPostBySlug } from "$/db/blog/blog";
 
 export const dynamic = "force-dynamic";
@@ -69,41 +71,65 @@ export default async function BlogPostPage({ params }: BlogPostParams) {
   }
 
   const publishedDate = post.publishedAt ?? post.createdAt;
+  const canonicalUrl = `${PROFILE_LINKS.PORTFOLIO}/blog/${post.slug}`;
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt ?? post.content.slice(0, 160),
+    url: canonicalUrl,
+    datePublished: publishedDate.toISOString(),
+    dateModified: (post.updatedAt ?? publishedDate).toISOString(),
+    author: {
+      "@type": "Person",
+      name: post.author,
+      url: PROFILE_LINKS.PORTFOLIO,
+    },
+    publisher: {
+      "@type": "Person",
+      name: "Omri Jukin",
+    },
+    keywords: post.tags?.join(", "),
+    inLanguage: "en",
+  };
 
   return (
-    <Section className="pt-14 sm:pt-20">
-      <Container>
-        <article className="mx-auto max-w-3xl">
-          <CursorPressLink href="/blog" size="sm" className="mb-8">
-            Back to notes
-          </CursorPressLink>
+    <>
+      <JsonLd data={structuredData} />
+      <Section className="pt-14 sm:pt-20">
+        <Container>
+          <article className="mx-auto max-w-3xl">
+            <CursorPressLink href="/blog" size="sm" className="mb-8">
+              Back to notes
+            </CursorPressLink>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge tone="accent">{dateFormatter.format(publishedDate)}</Badge>
-            {post.tags?.map((tag) => (
-              <Chip key={tag}>{tag}</Chip>
-            ))}
-          </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge tone="accent">{dateFormatter.format(publishedDate)}</Badge>
+              {post.tags?.map((tag) => (
+                <Chip key={tag}>{tag}</Chip>
+              ))}
+            </div>
 
-          <h1 className="mt-5 font-display text-4xl font-semibold leading-tight sm:text-5xl">
-            {post.title}
-          </h1>
+            <h1 className="mt-5 font-display text-4xl font-semibold leading-tight sm:text-5xl">
+              {post.title}
+            </h1>
 
-          <p className="mt-4 font-mono text-xs uppercase text-muted-foreground">
-            By {post.author}
-          </p>
-
-          {post.excerpt ? (
-            <p className="mt-6 text-lg leading-8 text-muted-foreground">
-              {post.excerpt}
+            <p className="mt-4 font-mono text-xs uppercase text-muted-foreground">
+              By {post.author}
             </p>
-          ) : null}
 
-          <div className="mt-10 whitespace-pre-line text-base leading-8 text-foreground">
-            {post.content}
-          </div>
-        </article>
-      </Container>
-    </Section>
+            {post.excerpt ? (
+              <p className="mt-6 text-lg leading-8 text-muted-foreground">
+                {post.excerpt}
+              </p>
+            ) : null}
+
+            <div className="mt-10 whitespace-pre-line text-base leading-8 text-foreground">
+              {post.content}
+            </div>
+          </article>
+        </Container>
+      </Section>
+    </>
   );
 }

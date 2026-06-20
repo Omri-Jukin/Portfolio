@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { completeHomeIntroMotionGate } from "@/components/ui/motion";
 
 const SESSION_KEY = "portfolio:reload-terminal-intro:v2";
 const COMMAND = "~/omri.dev $ load proof --role=full-stack-engineer";
@@ -29,6 +30,42 @@ type TerminalChar = {
   line: "command" | "ready";
   index: number;
 };
+
+type PanelBubble = {
+  id: string;
+  left: number;
+  top: number;
+  size: number;
+  driftX: number;
+  rise: number;
+  delay: number;
+  duration: number;
+};
+
+const PANEL_BUBBLES: PanelBubble[] = [
+  { id: "b0", left: 8, top: 78, size: 9, driftX: -36, rise: 170, delay: 0.04, duration: 1.5 },
+  { id: "b1", left: 13, top: 42, size: 5, driftX: -18, rise: 132, delay: 0.08, duration: 1.25 },
+  { id: "b2", left: 18, top: 64, size: 13, driftX: 22, rise: 188, delay: 0.02, duration: 1.55 },
+  { id: "b3", left: 23, top: 30, size: 7, driftX: -12, rise: 145, delay: 0.16, duration: 1.3 },
+  { id: "b4", left: 28, top: 83, size: 11, driftX: 34, rise: 210, delay: 0.1, duration: 1.65 },
+  { id: "b5", left: 34, top: 53, size: 6, driftX: -28, rise: 150, delay: 0.18, duration: 1.35 },
+  { id: "b6", left: 39, top: 74, size: 15, driftX: 16, rise: 230, delay: 0.06, duration: 1.7 },
+  { id: "b7", left: 45, top: 38, size: 8, driftX: 40, rise: 166, delay: 0.2, duration: 1.45 },
+  { id: "b8", left: 51, top: 86, size: 10, driftX: -22, rise: 205, delay: 0.14, duration: 1.6 },
+  { id: "b9", left: 57, top: 58, size: 6, driftX: 24, rise: 156, delay: 0.24, duration: 1.32 },
+  { id: "b10", left: 63, top: 76, size: 14, driftX: -40, rise: 224, delay: 0.12, duration: 1.68 },
+  { id: "b11", left: 69, top: 34, size: 7, driftX: 18, rise: 142, delay: 0.26, duration: 1.38 },
+  { id: "b12", left: 75, top: 66, size: 12, driftX: -14, rise: 196, delay: 0.18, duration: 1.58 },
+  { id: "b13", left: 81, top: 45, size: 5, driftX: 36, rise: 136, delay: 0.3, duration: 1.25 },
+  { id: "b14", left: 87, top: 80, size: 11, driftX: -30, rise: 214, delay: 0.22, duration: 1.62 },
+  { id: "b15", left: 92, top: 56, size: 8, driftX: 12, rise: 174, delay: 0.34, duration: 1.42 },
+  { id: "b16", left: 6, top: 22, size: 4, driftX: 18, rise: 120, delay: 0.32, duration: 1.18 },
+  { id: "b17", left: 16, top: 18, size: 6, driftX: -20, rise: 150, delay: 0.38, duration: 1.3 },
+  { id: "b18", left: 31, top: 20, size: 4, driftX: 26, rise: 128, delay: 0.42, duration: 1.2 },
+  { id: "b19", left: 48, top: 16, size: 7, driftX: -16, rise: 170, delay: 0.36, duration: 1.36 },
+  { id: "b20", left: 66, top: 19, size: 5, driftX: 20, rise: 146, delay: 0.44, duration: 1.24 },
+  { id: "b21", left: 83, top: 24, size: 6, driftX: -24, rise: 158, delay: 0.4, duration: 1.32 },
+];
 
 function shouldShowIntro(reducedMotion: boolean | null) {
   if (reducedMotion) return false;
@@ -152,6 +189,46 @@ function TerminalLine({
   );
 }
 
+function TerminalPanelBubbles({ active }: { active: boolean }) {
+  if (!active) return null;
+
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-visible">
+      {PANEL_BUBBLES.map((bubble) => (
+        <motion.span
+          key={bubble.id}
+          aria-hidden="true"
+          className="absolute rounded-full border border-accent/40 bg-accent/20 shadow-[0_0_22px_color-mix(in_srgb,var(--accent)_32%,transparent)]"
+          initial={{
+            opacity: 0,
+            scale: 0.4,
+            x: 0,
+            y: 0,
+          }}
+          animate={{
+            opacity: [0, 0.8, 0.62, 0],
+            scale: [0.35, 1, 0.9, 0.55],
+            x: [0, bubble.driftX * 0.35, bubble.driftX],
+            y: [0, -bubble.rise * 0.55, -bubble.rise],
+          }}
+          transition={{
+            duration: bubble.duration,
+            delay: bubble.delay,
+            ease: [0.22, 1, 0.36, 1],
+            times: [0, 0.2, 0.68, 1],
+          }}
+          style={{
+            left: `${bubble.left}%`,
+            top: `${bubble.top}%`,
+            height: bubble.size,
+            width: bubble.size,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export function ReloadTerminalIntro() {
   const reducedMotion = useReducedMotion();
   const [visible, setVisible] = React.useState(false);
@@ -161,12 +238,14 @@ export function ReloadTerminalIntro() {
 
   const dismiss = React.useCallback(() => {
     clearIntroBootCover();
+    completeHomeIntroMotionGate();
     setVisible(false);
   }, []);
 
   React.useEffect(() => {
     if (!shouldShowIntro(reducedMotion)) {
       clearIntroBootCover();
+      completeHomeIntroMotionGate();
       return;
     }
 
@@ -233,7 +312,7 @@ export function ReloadTerminalIntro() {
         aria-hidden="true"
         className="home-intro-boot-cover fixed inset-0 z-[99] place-items-center bg-background px-4 text-foreground"
       >
-        <div className="relative w-full max-w-[min(42rem,calc(100vw-2rem))] overflow-hidden rounded-lg border border-border bg-card px-4 py-5 font-mono text-card-foreground shadow-2xl shadow-black/10 dark:shadow-black/40 sm:px-6 sm:py-6">
+        <div className="relative w-full max-w-[min(42rem,calc(100vw-2rem))] overflow-hidden rounded-lg border border-border bg-card px-4 py-5 font-mono text-card-foreground sm:px-6 sm:py-6">
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent" />
           <div className="min-h-[5.5rem] text-[0.78rem] leading-7 sm:text-sm">
             <span className="inline-block h-4 w-2 translate-y-0.5 bg-accent home-intro-boot-cover__cursor" />
@@ -241,7 +320,7 @@ export function ReloadTerminalIntro() {
         </div>
       </div>
 
-      <AnimatePresence initial={false}>
+      <AnimatePresence initial={false} onExitComplete={completeHomeIntroMotionGate}>
         {visible ? (
           <motion.div
             aria-label="Portfolio loading intro"
@@ -253,17 +332,13 @@ export function ReloadTerminalIntro() {
             onPointerDown={dismiss}
           >
             <motion.div
-              className="relative w-full max-w-[min(42rem,calc(100vw-2rem))] overflow-hidden rounded-lg border border-border bg-card px-4 py-5 font-mono text-card-foreground shadow-2xl shadow-black/10 dark:shadow-black/40 sm:px-6 sm:py-6"
+              className="relative w-full max-w-[min(42rem,calc(100vw-2rem))] rounded-lg px-4 py-5 font-mono text-card-foreground sm:px-6 sm:py-6"
               initial={{ y: 14, scale: 0.982 }}
               animate={
                 dissolving
                   ? {
                       y: -4,
                       scale: 0.988,
-                      borderColor:
-                        "color-mix(in srgb, var(--border) 25%, transparent)",
-                      backgroundColor:
-                        "color-mix(in srgb, var(--card) 70%, transparent)",
                     }
                   : { y: 0, scale: 1 }
               }
@@ -277,6 +352,34 @@ export function ReloadTerminalIntro() {
                 dismiss();
               }}
             >
+              <motion.div
+                aria-hidden="true"
+                className="absolute inset-0 rounded-lg border border-border bg-card"
+                animate={
+                  dissolving
+                    ? {
+                        opacity: 0,
+                        scaleY: 0.86,
+                        y: -18,
+                        borderColor:
+                          "color-mix(in srgb, var(--accent) 18%, transparent)",
+                        backgroundColor:
+                          "color-mix(in srgb, var(--card) 28%, transparent)",
+                      }
+                    : {
+                        opacity: 1,
+                        scaleY: 1,
+                        y: 0,
+                        borderColor: "var(--border)",
+                        backgroundColor: "var(--card)",
+                      }
+                }
+                transition={{
+                  duration: dissolving ? 1.28 : 0.58,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              />
+              <TerminalPanelBubbles active={dissolving} />
               <motion.div
                 className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent"
                 initial={{ opacity: 0, scaleX: 0.18 }}
@@ -292,7 +395,7 @@ export function ReloadTerminalIntro() {
                 }}
               />
 
-              <div className="relative min-h-[5.5rem] text-[0.78rem] leading-7 sm:text-sm">
+              <div className="relative z-10 min-h-[5.5rem] text-[0.78rem] leading-7 sm:text-sm">
                 <TerminalLine
                   line="command"
                   text={typedText}

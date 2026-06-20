@@ -3,6 +3,7 @@
 import * as React from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useMotionGate } from "./motion-gate";
 
 type MotionSafeDivProps = Omit<
   React.HTMLAttributes<HTMLDivElement>,
@@ -22,11 +23,12 @@ interface StaggerProps extends MotionSafeDivProps {
 export function Stagger({
   className,
   delayChildren = 0,
-  staggerChildren = 0.06,
+  staggerChildren = 0.15,
   children,
   ...props
 }: StaggerProps) {
   const reducedMotion = useReducedMotion();
+  const motionGate = useMotionGate();
 
   if (reducedMotion) {
     return (
@@ -39,14 +41,15 @@ export function Stagger({
   return (
     <motion.div
       initial="hidden"
-      whileInView="show"
+      animate={motionGate.enabled ? undefined : "hidden"}
+      whileInView={motionGate.enabled ? "show" : undefined}
       viewport={{ once: true, margin: "-12% 0px" }}
       variants={{
         hidden: {},
         show: {
           transition: {
             delayChildren,
-            staggerChildren,
+            staggerChildren: staggerChildren * motionGate.durationScale,
           },
         },
       }}
@@ -66,6 +69,7 @@ export function StaggerItem({
   ...props
 }: StaggerItemProps) {
   const reducedMotion = useReducedMotion();
+  const motionGate = useMotionGate();
 
   if (reducedMotion) {
     return (
@@ -83,7 +87,10 @@ export function StaggerItem({
           opacity: 1,
           y: 0,
           scale: 1,
-          transition: { duration: 0.42, ease: [0.22, 1, 0.36, 1] },
+          transition: {
+            duration: 0.42 * motionGate.durationScale,
+            ease: [0.22, 1, 0.36, 1],
+          },
         },
       }}
       className={cn(className)}

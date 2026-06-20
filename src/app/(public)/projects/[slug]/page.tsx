@@ -9,6 +9,8 @@ import {
   Section,
   SectionHeader,
 } from "@/components/ui";
+import { JsonLd } from "@/components/seo/json-ld";
+import { PROFILE_LINKS } from "$/constants";
 import { ProjectManager } from "$/db/projects/ProjectManager";
 
 export const dynamic = "force-dynamic";
@@ -45,6 +47,10 @@ export async function generateMetadata({
       description,
       alternates: {
         canonical: `/projects/${canonicalSlug}`,
+      },
+      robots: {
+        index: Boolean(project.caseStudySlug),
+        follow: true,
       },
       openGraph: {
         title: `${project.title} - Case Study - Omri Jukin`,
@@ -111,13 +117,36 @@ export default async function ProjectCaseStudyPage({
       ? [{ id: "repository", label: "Repository" }]
       : []),
   ];
+  const canonicalUrl = `${PROFILE_LINKS.PORTFOLIO}/projects/${canonicalSlug}`;
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: project.title,
+    headline: project.title,
+    description: project.hiringSignal || project.subtitle || project.description,
+    url: canonicalUrl,
+    author: {
+      "@type": "Person",
+      name: "Omri Jukin",
+      url: PROFILE_LINKS.PORTFOLIO,
+    },
+    creator: {
+      "@type": "Person",
+      name: "Omri Jukin",
+    },
+    dateModified: project.updatedAt ?? project.createdAt,
+    keywords: [...project.technologies, ...project.categories].join(", "),
+    inLanguage: "en",
+  };
 
   return (
     <>
+      <JsonLd data={structuredData} />
       <Section className="pt-10 pb-8 sm:pt-14 sm:pb-10 lg:pt-16 lg:pb-12">
         <Container>
           <SectionHeader
             eyebrow="Case study"
+            headingLevel={1}
             title={project.title}
             subtitle={project.hiringSignal || project.subtitle || project.description}
           />
