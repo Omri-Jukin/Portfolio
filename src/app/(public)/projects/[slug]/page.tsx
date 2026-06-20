@@ -258,8 +258,8 @@ export default async function ProjectCaseStudyPage({
               ) : null}
             </div>
 
-            <aside className="space-y-4">
-              <Card className="sticky top-24 p-5">
+            <aside className="space-y-4 lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto lg:pr-1">
+              <Card className="p-5">
                 <h2 className="font-display text-xl font-semibold">
                   Contents
                 </h2>
