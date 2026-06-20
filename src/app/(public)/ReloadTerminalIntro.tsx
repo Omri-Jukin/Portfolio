@@ -24,6 +24,12 @@ function clearIntroBootCover() {
   document.documentElement.removeAttribute("data-home-intro");
 }
 
+function shouldRenderInitialIntro() {
+  if (typeof document === "undefined") return false;
+
+  return document.documentElement.dataset.homeIntro === "pending";
+}
+
 type TerminalChar = {
   id: string;
   char: string;
@@ -231,7 +237,7 @@ function TerminalPanelBubbles({ active }: { active: boolean }) {
 
 export function ReloadTerminalIntro() {
   const reducedMotion = useReducedMotion();
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = React.useState(shouldRenderInitialIntro);
   const [typedText, setTypedText] = React.useState("");
   const [readyVisible, setReadyVisible] = React.useState(false);
   const [dissolving, setDissolving] = React.useState(false);

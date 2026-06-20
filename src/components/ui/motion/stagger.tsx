@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useMotionGate } from "./motion-gate";
 
@@ -29,6 +29,13 @@ export function Stagger({
 }: StaggerProps) {
   const reducedMotion = useReducedMotion();
   const motionGate = useMotionGate();
+  const ref = React.useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-12% 0px" });
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   if (reducedMotion) {
     return (
@@ -38,10 +45,13 @@ export function Stagger({
     );
   }
 
+  const isVisible = !mounted || (motionGate.enabled && inView);
+
   return (
     <motion.div
-      initial={motionGate.enabled ? false : "hidden"}
-      animate={motionGate.enabled ? "show" : "hidden"}
+      ref={ref}
+      initial={false}
+      animate={isVisible ? "show" : "hidden"}
       variants={{
         hidden: {},
         show: {
