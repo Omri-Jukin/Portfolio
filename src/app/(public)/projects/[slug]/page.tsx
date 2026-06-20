@@ -114,7 +114,7 @@ export default async function ProjectCaseStudyPage({
 
   return (
     <>
-      <Section className="pt-14 sm:pt-20">
+      <Section className="pt-10 pb-8 sm:pt-14 sm:pb-10 lg:pt-16 lg:pb-12">
         <Container>
           <SectionHeader
             eyebrow="Case study"
@@ -131,9 +131,9 @@ export default async function ProjectCaseStudyPage({
         </Container>
       </Section>
 
-      <Section className="pt-0">
+      <Section className="pt-0 pb-16 sm:pb-20 lg:pb-24">
         <Container>
-          <article className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">
+          <article className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">
             <div className="space-y-4">
               <Card id="problem" className="scroll-mt-24 p-5">
                 <h2 className="font-display text-2xl font-semibold">

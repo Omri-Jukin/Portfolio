@@ -682,7 +682,7 @@ export default function ProjectsAdminPage() {
         onOpenChange={(open) => {
           if (!open) handleCloseDialog();
         }}
-        className="max-w-5xl p-0"
+        className="flex max-w-5xl flex-col overflow-hidden p-0"
       >
         <DialogHeader className="mb-0 border-b border-border p-4 sm:p-6">
           <DialogTitle className="text-lg sm:text-xl">
@@ -690,7 +690,7 @@ export default function ProjectsAdminPage() {
           </DialogTitle>
         </DialogHeader>
 
-        <div className="grid max-h-[calc(100dvh-8rem)] min-w-0 gap-5 overflow-y-auto overflow-x-hidden px-4 py-5 sm:max-h-[75vh] sm:px-6">
+        <div className="grid min-h-0 flex-1 gap-5 overflow-y-auto overflow-x-hidden px-4 py-5 sm:px-6">
           <div className="grid min-w-0 gap-4 md:grid-cols-2">
             <Field label="Title">
               <Input
@@ -993,14 +993,15 @@ export default function ProjectsAdminPage() {
             ))}
           </div>
 
-          <div className="sticky bottom-0 -mx-4 -mb-5 grid gap-2 border-t border-border bg-popover p-4 sm:-mx-6 sm:-mb-5 sm:flex sm:justify-end">
-            <Button className="w-full sm:w-auto" variant="quiet" onClick={handleCloseDialog}>
-              Cancel
-            </Button>
-            <Button className="w-full sm:w-auto" onClick={handleSubmit} disabled={!canSubmit}>
-              {isSaving ? "Saving" : editingProject ? "Update" : "Create"}
-            </Button>
-          </div>
+        </div>
+
+        <div className="grid gap-2 border-t border-border bg-popover p-4 sm:flex sm:justify-end sm:p-6">
+          <Button className="w-full sm:w-auto" variant="quiet" onClick={handleCloseDialog}>
+            Cancel
+          </Button>
+          <Button className="w-full sm:w-auto" onClick={handleSubmit} disabled={!canSubmit}>
+            {isSaving ? "Saving" : editingProject ? "Update" : "Create"}
+          </Button>
         </div>
       </Dialog>
 
