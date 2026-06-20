@@ -41,8 +41,7 @@ export function Stagger({
   return (
     <motion.div
       initial="hidden"
-      animate={motionGate.enabled ? undefined : "hidden"}
-      whileInView={motionGate.enabled ? "show" : undefined}
+      animate={motionGate.enabled ? "show" : "hidden"}
       viewport={{ once: true, margin: "-12% 0px" }}
       variants={{
         hidden: {},
