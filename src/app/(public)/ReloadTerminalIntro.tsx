@@ -244,7 +244,6 @@ export function ReloadTerminalIntro() {
 
   const dismiss = React.useCallback(() => {
     clearIntroBootCover();
-    completeHomeIntroMotionGate();
     setVisible(false);
   }, []);
 
