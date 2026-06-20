@@ -19,6 +19,7 @@ export function HomeMetricValue({ value }: HomeMetricValueProps) {
   const count = useCountUp(target, {
     duration: 1300,
     enabled: motionGate.enabled && hasStarted && Boolean(match),
+    idleValue: 0,
   });
 
   React.useEffect(() => {
@@ -45,7 +46,7 @@ export function HomeMetricValue({ value }: HomeMetricValueProps) {
 
   return (
     <span ref={ref}>
-      {hasStarted ? count : target}
+      {hasStarted ? count : 0}
       {suffix}
     </span>
   );

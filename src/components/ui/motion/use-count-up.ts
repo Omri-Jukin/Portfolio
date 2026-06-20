@@ -5,15 +5,16 @@ import * as React from "react";
 interface CountUpOptions {
   duration?: number;
   enabled?: boolean;
+  idleValue?: number;
 }
 
 export function useCountUp(target: number, options: CountUpOptions = {}) {
-  const { duration = 1000, enabled = true } = options;
-  const [value, setValue] = React.useState(enabled ? 0 : target);
+  const { duration = 1000, enabled = true, idleValue = target } = options;
+  const [value, setValue] = React.useState(enabled ? 0 : idleValue);
 
   React.useEffect(() => {
     if (!enabled) {
-      setValue(target);
+      setValue(idleValue);
       return;
     }
 
@@ -43,7 +44,7 @@ export function useCountUp(target: number, options: CountUpOptions = {}) {
 
     frame = window.requestAnimationFrame(tick);
     return () => window.cancelAnimationFrame(frame);
-  }, [duration, enabled, target]);
+  }, [duration, enabled, idleValue, target]);
 
   return value;
 }
