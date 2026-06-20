@@ -62,6 +62,7 @@ drizzle/
 /scripts/*
 !/scripts/seed-recruiter-content.ts
 !/scripts/seed-all.ts
+!/scripts/seed-core-skills.ts
 
 # Local wrangler tail script (not committed)
 scripts/wrangler-tail.local.js

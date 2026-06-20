@@ -139,6 +139,7 @@
     "db:apply-migration": "npx tsx scripts/apply-migration-drizzle.ts",
     "db:fix-proposals": "npx tsx scripts/add-proposals-columns.ts",
     "seed:all": "npx tsx scripts/seed-all.ts",
+    "seed:core-skills": "npx tsx scripts/seed-core-skills.ts",
     "db:seed": "npm run db:push && npm run seed:all",
     "test:db": "npx tsx scripts/test-db-connection.ts",
     "reset:password": "npx tsx scripts/reset-admin-password.ts",

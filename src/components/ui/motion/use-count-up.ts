@@ -23,6 +23,8 @@ export function useCountUp(target: number, options: CountUpOptions = {}) {
       return;
     }
 
+    setValue(0);
+
     let frame = 0;
     let startTime: number | null = null;
 
