@@ -17,6 +17,7 @@ import {
 import { ProjectManager } from "$/db/projects/ProjectManager";
 import type { IProject } from "$/types";
 import { HomeMetricValue } from "./HomeMetricValue";
+import { ReloadTerminalIntro } from "./ReloadTerminalIntro";
 
 export const dynamic = "force-dynamic";
 
@@ -412,6 +413,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <ReloadTerminalIntro />
       {sectionOrder.map((sectionKey) => {
         switch (sectionKey) {
           case "hero":

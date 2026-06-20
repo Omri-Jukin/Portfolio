@@ -171,6 +171,29 @@ html {
   color: var(--foreground);
 }
 
+.home-intro-boot-cover {
+  display: none;
+}
+
+html[data-home-intro="pending"] .home-intro-boot-cover {
+  display: grid;
+}
+
+.home-intro-boot-cover__cursor {
+  animation: home-intro-boot-cursor 700ms ease-in-out infinite;
+}
+
+@keyframes home-intro-boot-cursor {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.25;
+  }
+}
+
 :focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
