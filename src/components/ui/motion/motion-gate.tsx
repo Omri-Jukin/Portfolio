@@ -20,6 +20,10 @@ function shouldWaitForHomeIntro() {
   return document.documentElement.dataset.homeIntro === "pending";
 }
 
+function getInitialMotionEnabled() {
+  return !shouldWaitForHomeIntro();
+}
+
 export function completeHomeIntroMotionGate() {
   if (typeof window === "undefined") return;
 
@@ -31,7 +35,7 @@ export function useMotionGate() {
 }
 
 export function HomeMotionGate({ children }: { children: React.ReactNode }) {
-  const [enabled, setEnabled] = React.useState(false);
+  const [enabled, setEnabled] = React.useState(getInitialMotionEnabled);
 
   React.useEffect(() => {
     if (!shouldWaitForHomeIntro()) {
@@ -43,8 +47,10 @@ export function HomeMotionGate({ children }: { children: React.ReactNode }) {
       setEnabled(true);
     };
 
+    const fallbackTimer = window.setTimeout(handleIntroFinished, 6500);
     window.addEventListener(HOME_INTRO_EVENT, handleIntroFinished);
     return () => {
+      window.clearTimeout(fallbackTimer);
       window.removeEventListener(HOME_INTRO_EVENT, handleIntroFinished);
     };
   }, []);

@@ -41,8 +41,7 @@ export function FadeIn({
   return (
     <motion.div
       initial={{ opacity: 0, y }}
-      animate={motionGate.enabled ? undefined : { opacity: 0, y }}
-      whileInView={motionGate.enabled ? { opacity: 1, y: 0 } : undefined}
+      animate={motionGate.enabled ? { opacity: 1, y: 0 } : { opacity: 0, y }}
       viewport={{ once: true, margin: "-12% 0px" }}
       transition={{
         duration: 0.45 * motionGate.durationScale,
