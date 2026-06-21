@@ -13,6 +13,7 @@ const TYPE_DURATION_MS = 1700;
 const READY_DELAY_MS = 2480;
 const DISSOLVE_DELAY_MS = 3180;
 const AUTO_DISMISS_DELAY_MS = TOTAL_DURATION_MS;
+const COMMAND_MOBILE_BREAK_INDEX = COMMAND.indexOf(" --role");
 
 type WindowWithInitialPath = Window & {
   __PORTFOLIO_INITIAL_PATH__?: string;
@@ -177,14 +178,23 @@ function TerminalLine({
   );
 
   return (
-    <p className="min-h-[1.75rem] break-words">
-      {items.map((item) => (
-        <TerminalCharacter
-          key={item.id}
-          item={item}
-          dissolving={dissolving}
-        />
-      ))}
+    <p className="min-h-[1.5rem] break-words [overflow-wrap:anywhere] sm:min-h-[1.75rem]">
+      {items.map((item) =>
+        line === "command" && item.index === COMMAND_MOBILE_BREAK_INDEX ? (
+          <React.Fragment key={item.id}>
+            <span className="hidden sm:inline">
+              <TerminalCharacter item={item} dissolving={dissolving} />
+            </span>
+            <br className="sm:hidden" />
+          </React.Fragment>
+        ) : (
+          <TerminalCharacter
+            key={item.id}
+            item={item}
+            dissolving={dissolving}
+          />
+        )
+      )}
     </p>
   );
 }
@@ -309,11 +319,11 @@ export function ReloadTerminalIntro() {
     <>
       <div
         aria-hidden="true"
-        className="home-intro-boot-cover fixed inset-0 z-[99] place-items-center bg-background px-4 text-foreground"
+        className="home-intro-boot-cover fixed inset-0 z-[99] place-items-center bg-background px-2 text-foreground sm:px-4"
       >
-        <div className="relative w-full max-w-[min(42rem,calc(100vw-2rem))] overflow-hidden rounded-lg border border-border bg-card px-4 py-5 font-mono text-card-foreground sm:px-6 sm:py-6">
+        <div className="relative w-full max-w-[min(42rem,calc(100vw-1rem))] overflow-hidden rounded-lg border border-border bg-card px-3 py-4 font-mono text-card-foreground sm:max-w-[min(42rem,calc(100vw-2rem))] sm:px-6 sm:py-6">
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent" />
-          <div className="min-h-[5.5rem] text-[0.78rem] leading-7 sm:text-sm">
+          <div className="min-h-[4.75rem] text-[0.68rem] leading-6 sm:min-h-[5.5rem] sm:text-sm sm:leading-7">
             <span className="inline-block h-4 w-2 translate-y-0.5 bg-accent home-intro-boot-cover__cursor" />
           </div>
         </div>
@@ -323,7 +333,7 @@ export function ReloadTerminalIntro() {
         {visible ? (
           <motion.div
             aria-label="Portfolio loading intro"
-            className="fixed inset-0 z-[100] grid cursor-pointer place-items-center bg-background px-4 text-foreground"
+            className="fixed inset-0 z-[100] grid cursor-pointer place-items-center bg-background px-2 text-foreground sm:px-4"
             initial={{ opacity: 1 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -331,7 +341,7 @@ export function ReloadTerminalIntro() {
             onPointerDown={dismiss}
           >
             <motion.div
-              className="relative w-full max-w-[min(42rem,calc(100vw-2rem))] rounded-lg px-4 py-5 font-mono text-card-foreground sm:px-6 sm:py-6"
+              className="relative w-full max-w-[min(42rem,calc(100vw-1rem))] rounded-lg px-3 py-4 font-mono text-card-foreground sm:max-w-[min(42rem,calc(100vw-2rem))] sm:px-6 sm:py-6"
               initial={{ y: 14, scale: 0.982 }}
               animate={
                 dissolving
@@ -394,7 +404,7 @@ export function ReloadTerminalIntro() {
                 }}
               />
 
-              <div className="relative z-10 min-h-[5.5rem] text-[0.78rem] leading-7 sm:text-sm">
+              <div className="relative z-10 min-h-[4.75rem] text-[0.68rem] leading-6 sm:min-h-[5.5rem] sm:text-sm sm:leading-7">
                 <TerminalLine
                   line="command"
                   text={typedText}
