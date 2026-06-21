@@ -13,7 +13,6 @@ const TYPE_DURATION_MS = 1700;
 const READY_DELAY_MS = 2480;
 const DISSOLVE_DELAY_MS = 3180;
 const AUTO_DISMISS_DELAY_MS = TOTAL_DURATION_MS;
-const COMMAND_MOBILE_BREAK_INDEX = COMMAND.indexOf(" --role");
 
 type WindowWithInitialPath = Window & {
   __PORTFOLIO_INITIAL_PATH__?: string;
@@ -179,22 +178,13 @@ function TerminalLine({
 
   return (
     <p className="min-h-[1.5rem] break-words [overflow-wrap:anywhere] sm:min-h-[1.75rem]">
-      {items.map((item) =>
-        line === "command" && item.index === COMMAND_MOBILE_BREAK_INDEX ? (
-          <React.Fragment key={item.id}>
-            <span className="hidden sm:inline">
-              <TerminalCharacter item={item} dissolving={dissolving} />
-            </span>
-            <br className="sm:hidden" />
-          </React.Fragment>
-        ) : (
-          <TerminalCharacter
-            key={item.id}
-            item={item}
-            dissolving={dissolving}
-          />
-        )
-      )}
+      {items.map((item) => (
+        <TerminalCharacter
+          key={item.id}
+          item={item}
+          dissolving={dissolving}
+        />
+      ))}
     </p>
   );
 }
