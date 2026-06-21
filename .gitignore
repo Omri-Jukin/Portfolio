@@ -79,6 +79,7 @@ scripts/wrangler-tail.local.js
 # docs
 *.md
 !README.md
+!docs/openclaw-portfolio-crud-api-guide.md
 
 # playwright
 /test-results/*

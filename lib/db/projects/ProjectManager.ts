@@ -45,12 +45,30 @@ const normalizeProofLinks = (value: unknown): ProjectProofLink[] => {
     }));
 };
 
+const parseJsonObject = <T>(value: string): T | null => {
+  try {
+    const parsed = JSON.parse(value) as unknown;
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+      return parsed as T;
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+};
+
 const normalizeProblem = (value: unknown): ProjectProblem | null => {
   if (!value) {
     return null;
   }
 
   if (typeof value === "string") {
+    const parsed = parseJsonObject<ProjectProblem>(value);
+    if (parsed) {
+      return parsed;
+    }
+
     return {
       title: "Problem",
       description: value,
@@ -67,6 +85,11 @@ const normalizeSolution = (value: unknown): ProjectSolution | null => {
   }
 
   if (typeof value === "string") {
+    const parsed = parseJsonObject<ProjectSolution>(value);
+    if (parsed) {
+      return parsed;
+    }
+
     return {
       approach: value,
       methodology: "",
@@ -83,6 +106,11 @@ const normalizeArchitecture = (value: unknown): ProjectArchitecture | null => {
   }
 
   if (typeof value === "string") {
+    const parsed = parseJsonObject<ProjectArchitecture>(value);
+    if (parsed) {
+      return parsed;
+    }
+
     return {
       overview: value,
       components: [],
