@@ -41,7 +41,7 @@
     "NEXTAUTH_URL": "https://omrijukin.com",
 
     // Email Configuration (Non-sensitive)
-    "EMAIL_PROVIDER": "gmail",
+    "EMAIL_PROVIDER": "resend",
     "EMAIL_FROM": "intake@omrijukin.com",
     "EMAIL_BCC": "omrijukin@gmail.com",
     "ADMIN_EMAIL": "contact@omrijukin.com",

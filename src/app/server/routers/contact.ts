@@ -7,12 +7,23 @@ import {
   updateContactInquiry,
   deleteContactInquiry,
 } from "$/db/contact/contact";
+import { EmailManager } from "#/backend/email/EmailManager";
 import {
   checkRateLimit,
   contactFormRateLimiter,
 } from "#/lib/rateLimit/rateLimiter";
 import { getRateLimitIdentifier } from "#/lib/rateLimit/rateLimiter";
 import { TRPCError } from "@trpc/server";
+
+let emailManager: EmailManager | null = null;
+
+const getEmailManager = () => {
+  if (!emailManager) {
+    emailManager = new EmailManager();
+  }
+
+  return emailManager;
+};
 
 export const contactRouter = router({
   // Submit contact form (public)
@@ -45,7 +56,59 @@ export const contactRouter = router({
         });
       }
 
-      return await createContactInquiry(input);
+      const inquiry = await createContactInquiry(input);
+      const emailData = {
+        ...input,
+        phone: "Not provided",
+      };
+
+      const [adminNotification, userConfirmation] = await Promise.allSettled([
+        getEmailManager().sendContactFormNotification(emailData),
+        getEmailManager().sendContactFormConfirmation(emailData),
+      ]);
+      const emailFailures: string[] = [];
+
+      if (
+        adminNotification.status === "rejected" ||
+        !adminNotification.value.success
+      ) {
+        const error =
+          adminNotification.status === "rejected"
+            ? adminNotification.reason
+            : adminNotification.value.error;
+
+        emailFailures.push("admin notification");
+        console.error(
+          "Contact inquiry saved but admin email delivery failed:",
+          error
+        );
+      }
+
+      if (
+        userConfirmation.status === "rejected" ||
+        !userConfirmation.value.success
+      ) {
+        const error =
+          userConfirmation.status === "rejected"
+            ? userConfirmation.reason
+            : userConfirmation.value.error;
+
+        emailFailures.push("visitor confirmation");
+        console.error(
+          "Contact inquiry saved but confirmation email delivery failed:",
+          error
+        );
+      }
+
+      if (emailFailures.length > 0) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message:
+            "Your message was saved, but email delivery failed. Please try again or email me directly.",
+        });
+      }
+
+      return inquiry;
     }),
 
   // Admin routes (require admin role)

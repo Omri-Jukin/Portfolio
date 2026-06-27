@@ -11,7 +11,7 @@ export interface EmailData {
 export interface ContactFormEmailData {
   name: string;
   email: string;
-  phone: string;
+  phone?: string;
   subject: string;
   message: string;
 }
@@ -23,7 +23,9 @@ export class EmailManager {
   constructor() {
     this.defaultFromEmail =
       process.env.SES_FROM_EMAIL || "contact@omrijukin.com";
-    this.emailProvider = process.env.EMAIL_PROVIDER || "gmail";
+    this.emailProvider =
+      process.env.EMAIL_PROVIDER ||
+      (process.env.RESEND_API_KEY ? "resend" : "gmail");
   }
 
   /**
