@@ -615,6 +615,57 @@ export class EmailManager {
     `;
   }
 
+  private escapeHtml(value: string): string {
+    return value
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  private generateLetterEmailTemplate({
+    title,
+    body,
+    details,
+    footer,
+  }: {
+    title: string;
+    body: string;
+    details?: string;
+    footer: string;
+  }): string {
+    return `
+      <!doctype html>
+      <html lang="en">
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>${title}</title>
+        </head>
+        <body style="margin:0;padding:0;background:#f7f5ee;color:#171a18;font-family:Georgia,'Times New Roman',serif;">
+          <div style="width:100%;padding:32px 12px;background:#f7f5ee;">
+            <div style="width:100%;max-width:620px;margin:0 auto;background:rgba(226,225,207,0.3);border:1px solid #d8d4c7;border-radius:8px;">
+              <div style="padding:38px 42px;">
+                <p style="margin:0 0 28px;color:#626960;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;">Omri Jukin</p>
+                <h1 style="margin:0 0 22px;color:#171a18;font-family:Arial,Helvetica,sans-serif;font-size:24px;line-height:1.3;letter-spacing:0;">${title}</h1>
+                ${body}
+                ${
+                  details
+                    ? `<div style="margin:28px 0;padding:18px 20px;background:#f7f5ee;border-left:4px solid #74070e;border-radius:6px;font-family:Arial,Helvetica,sans-serif;">${details}</div>`
+                    : ""
+                }
+              </div>
+              <div style="padding:16px 42px 28px;color:#626960;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;">
+                ${footer}
+              </div>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+  }
+
   /**
    * Send contact form notification to admin
    */
@@ -622,74 +673,47 @@ export class EmailManager {
     contactData: ContactFormEmailData
   ): Promise<{ success: boolean; messageId?: string; error?: string }> {
     const adminEmail = process.env.ADMIN_EMAIL || "omrijukin@gmail.com";
-
-    const content = `
-      <h2>🎉 New Contact Form Submission</h2>
-      
-      <p>You've received a new message from your portfolio website!</p>
-      
-      <div class="highlight-box">
-        <h3>👤 Contact Details</h3>
-        
-        <p><strong>👤 Name:</strong> ${contactData.name}</p>
-        <p><strong>📧 Email:</strong> <a href="mailto:${
-          contactData.email
-        }" style="color: #667eea; text-decoration: none;">${
-      contactData.email
-    }</a></p>
-        <p><strong>📞 Phone:</strong> <a href="tel:${
-          contactData.phone
-        }" style="color: #667eea; text-decoration: none;">${
-      contactData.phone
-    }</a></p>
-        <p><strong>📝 Subject:</strong> ${contactData.subject}</p>
-      </div>
-      
-      <div class="message-box">
-        <h3>💬 Message</h3>
-        <div style="white-space: pre-wrap; line-height: 1.6;">
-          ${contactData.message.replace(/\n/g, "<br>")}
-        </div>
-      </div>
-      
-      <p style="margin-top: 24px;">
-        <a href="mailto:${contactData.email}" class="contact-info">Reply to ${
-      contactData.name
-    }</a>
-        <a href="tel:${contactData.phone}" class="contact-info">Call ${
-      contactData.name
-    }</a>
-      </p>
-    `;
-
-    const htmlBody = this.generateEmailTemplate(
-      content,
-      "New Contact Form Submission"
+    const safeName = this.escapeHtml(contactData.name);
+    const safeEmail = this.escapeHtml(contactData.email);
+    const safeSubject = this.escapeHtml(contactData.subject);
+    const safeMessage = this.escapeHtml(contactData.message).replace(
+      /\n/g,
+      "<br>"
     );
+    const submittedAt = new Date().toLocaleString();
 
-    const textBody = `
-🎉 New Contact Form Submission
+    const htmlBody = this.generateLetterEmailTemplate({
+      title: `New inquiry from ${safeName}`,
+      body: `
+        <p style="margin:0 0 18px;color:#2d312d;font-size:17px;line-height:1.75;">A new message came through the portfolio contact form.</p>
+        <p style="margin:0 0 18px;color:#2d312d;font-size:17px;line-height:1.75;">Reply directly to continue the conversation with ${safeName}.</p>
+      `,
+      details: `
+        <p style="margin:0 0 10px;color:#626960;font-size:14px;line-height:1.7;"><strong style="color:#171a18;">Name:</strong> ${safeName}</p>
+        <p style="margin:0 0 10px;color:#626960;font-size:14px;line-height:1.7;"><strong style="color:#171a18;">Email:</strong> <a href="mailto:${safeEmail}" style="color:#1d4ed8;">${safeEmail}</a></p>
+        <p style="margin:0 0 10px;color:#626960;font-size:14px;line-height:1.7;"><strong style="color:#171a18;">Subject:</strong> ${safeSubject}</p>
+        <p style="margin:0 0 16px;color:#626960;font-size:14px;line-height:1.7;"><strong style="color:#171a18;">Submitted:</strong> ${this.escapeHtml(submittedAt)}</p>
+        <p style="margin:0 0 8px;color:#171a18;font-size:14px;line-height:1.7;"><strong>Message</strong></p>
+        <p style="margin:0;color:#626960;font-size:14px;line-height:1.7;">${safeMessage}</p>
+      `,
+      footer: `Portfolio admin notification from <a href="https://omrijukin.com/contact" style="color:#1d4ed8;">omrijukin.com/contact</a>.`,
+    });
 
-You've received a new message from your portfolio website!
+    const textBody = `New portfolio inquiry
 
-👤 Contact Details:
-- 👤 Name: ${contactData.name}
-- 📧 Email: ${contactData.email}
-- 📞 Phone: ${contactData.phone}
-- 📝 Subject: ${contactData.subject}
+Name: ${contactData.name}
+Email: ${contactData.email}
+Subject: ${contactData.subject}
+Submitted: ${submittedAt}
 
-💬 Message:
+Message:
 ${contactData.message}
-
----
-This message was sent from your portfolio contact form.
-Time: ${new Date().toLocaleString()}
-    `;
+`;
 
     return this.sendEmail({
       to: adminEmail,
       from: this.defaultFromEmail,
-      subject: `🎉 New Contact Form Submission: ${contactData.subject}`,
+      subject: `New portfolio inquiry: ${contactData.subject}`,
       htmlBody,
       textBody,
     });
@@ -701,70 +725,48 @@ Time: ${new Date().toLocaleString()}
   async sendContactFormConfirmation(
     contactData: ContactFormEmailData
   ): Promise<{ success: boolean; messageId?: string; error?: string }> {
-    const content = `
-      <h2>✨ Thank you for your message!</h2>
-      
-      <p>Dear <strong>${contactData.name}</strong>,</p>
-      
-      <p>Thank you for reaching out to me! I've received your message and I'm excited to connect with you. I'll review your inquiry and get back to you as soon as possible.</p>
-      
-      <div class="highlight-box">
-        <h3>📋 Your Message Details</h3>
-        <p><strong>📝 Subject:</strong> ${contactData.subject}</p>
-        <p><strong>💬 Message:</strong></p>
-        <div class="message-box">
-          <div style="white-space: pre-wrap; line-height: 1.6; font-family: inherit;">
-            ${contactData.message}
-          </div>
-        </div>
-      </div>
-      
-      <p>I typically respond within <strong>24-48 hours</strong>. If you have any urgent matters or need immediate assistance, please don't hesitate to reach out through other channels.</p>
-      
-      <p>In the meantime, feel free to explore my portfolio to learn more about my work and expertise!</p>
-      
-      <div style="text-align: center; margin: 32px 0;">
-        <a href="https://omrijukin.com" style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">
-          👨‍💻 Visit My Portfolio
-        </a>
-      </div>
-      
-      <p>Looking forward to our conversation!</p>
-    `;
-
-    const htmlBody = this.generateEmailTemplate(
-      content,
-      "Thank you for your message"
+    const safeName = this.escapeHtml(contactData.name);
+    const safeSubject = this.escapeHtml(contactData.subject);
+    const safeMessage = this.escapeHtml(contactData.message).replace(
+      /\n/g,
+      "<br>"
     );
 
-    const textBody = `
-✨ Thank you for your message!
+    const htmlBody = this.generateLetterEmailTemplate({
+      title: "Your message came through.",
+      body: `
+        <p style="margin:0 0 18px;color:#2d312d;font-size:17px;line-height:1.75;">Hi ${safeName},</p>
+        <p style="margin:0 0 18px;color:#2d312d;font-size:17px;line-height:1.75;">Thanks for the thoughtful note. I received your message and will review the role context before replying.</p>
+        <p style="margin:0 0 18px;color:#2d312d;font-size:17px;line-height:1.75;">The most useful follow-up context is the team shape, stack, ownership expectations, timeline, and why the role needs a full-stack TypeScript engineer.</p>
+      `,
+      details: `
+        <p style="margin:0 0 10px;color:#626960;font-size:14px;line-height:1.7;"><strong style="color:#171a18;">Subject:</strong> ${safeSubject}</p>
+        <p style="margin:0 0 8px;color:#171a18;font-size:14px;line-height:1.7;"><strong>Your submitted message</strong></p>
+        <p style="margin:0;color:#626960;font-size:14px;line-height:1.7;">${safeMessage}</p>
+      `,
+      footer: `Portfolio: <a href="https://omrijukin.com" style="color:#1d4ed8;">omrijukin.com</a>`,
+    });
 
-Dear ${contactData.name},
+    const textBody = `Your message came through.
 
-Thank you for reaching out to me! I've received your message and I'm excited to connect with you. I'll review your inquiry and get back to you as soon as possible.
+Hi ${contactData.name},
 
-📋 Your Message Details:
-- 📝 Subject: ${contactData.subject}
-- 💬 Message: ${contactData.message}
+Thanks for the thoughtful note. I received your message and will review the role context before replying.
 
-I typically respond within 24-48 hours. If you have any urgent matters or need immediate assistance, please don't hesitate to reach out through other channels.
+Subject: ${contactData.subject}
 
-In the meantime, feel free to explore my portfolio to learn more about my work and expertise!
+Your submitted message:
+${contactData.message}
 
-👨‍💻 Visit My Portfolio: https://omrijukin.com
-
-Looking forward to our conversation!
-
-      Best regards,
-      Omri Jukin
-      Full Stack Developer | Data Management
-    `;
+Best,
+Omri
+Portfolio: https://omrijukin.com
+`;
 
     return this.sendEmail({
       to: contactData.email,
       from: this.defaultFromEmail,
-      subject: "✨ Thank you for your message - Omri Jukin",
+      subject: "Your message came through - Omri Jukin",
       htmlBody,
       textBody,
     });

@@ -87,6 +87,11 @@ const SECTION_COPY: Record<
     description: "Review intake forms and custom intake links.",
     href: "/dashboard/intakes",
   },
+  contactInquiries: {
+    title: "Contact Inquiries",
+    description: "Review public contact form messages and reply context.",
+    href: "/dashboard/contact-inquiries",
+  },
   calculatorSettings: {
     title: "Calculator Settings",
     description: "Manage pricing calculator settings.",

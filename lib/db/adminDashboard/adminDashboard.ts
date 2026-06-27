@@ -28,9 +28,10 @@ export const DEFAULT_SECTIONS = [
   { sectionKey: "pricing", displayOrder: 9, enabled: true },
   { sectionKey: "discounts", displayOrder: 10, enabled: true },
   { sectionKey: "intakes", displayOrder: 11, enabled: true },
-  { sectionKey: "emails", displayOrder: 12, enabled: true },
-  { sectionKey: "education", displayOrder: 13, enabled: true },
-  { sectionKey: "certifications", displayOrder: 14, enabled: true },
+  { sectionKey: "contactInquiries", displayOrder: 12, enabled: true },
+  { sectionKey: "emails", displayOrder: 13, enabled: true },
+  { sectionKey: "education", displayOrder: 14, enabled: true },
+  { sectionKey: "certifications", displayOrder: 15, enabled: true },
 ];
 
 /**
