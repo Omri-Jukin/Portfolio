@@ -1,62 +1,26 @@
 # Email Service Configuration
 
-This email service supports multiple providers with automatic fallback. Here are the setup instructions for each provider:
+This email service supports multiple API-based providers with automatic fallback.
 
-## 🟢 Gmail SMTP (FREE & RECOMMENDED)
+## Resend
 
-Gmail offers free SMTP access with the following limits:
+Modern email API with a simple developer experience.
 
-- **500 emails per day** for regular Gmail accounts
-- **2000 emails per day** for Google Workspace accounts
-- **100 recipients per email**
-- **25MB attachment limit**
+```env
+EMAIL_PROVIDER=resend
+RESEND_API_KEY=re_your_resend_api_key_here
+SES_FROM_EMAIL=noreply@yourdomain.com
+ADMIN_EMAIL=admin@yourdomain.com
+```
 
-### Setup Instructions:
+Free tier:
 
-1. **Enable 2-Factor Authentication** on your Gmail account
-2. **Generate an App Password**:
+- 3,000 emails per month
+- 100 emails per day
 
-   - Go to [Google Account Security](https://myaccount.google.com/security)
-   - Click "2-Step Verification"
-   - Scroll down to "App passwords"
-   - Generate a new app password for "Mail"
-   - Copy the 16-character password
+## AWS SES
 
-3. **Configure Environment Variables**:
-   ```env
-   EMAIL_PROVIDER=gmail
-   GMAIL_USER=your-email@gmail.com
-   GMAIL_APP_PASSWORD=your_16_character_app_password
-   SES_FROM_EMAIL=your-email@gmail.com
-   ADMIN_EMAIL=your-email@gmail.com
-   ```
-
-### Pros:
-
-- ✅ **Completely FREE**
-- ✅ **No credit card required**
-- ✅ **High deliverability** (Gmail's reputation)
-- ✅ **Easy setup** (just need app password)
-- ✅ **Good daily limits** for most use cases
-
-### Cons:
-
-- ❌ **Daily sending limits**
-- ❌ **Must use Gmail as sender** (can set reply-to)
-- ❌ **Google branding** in email headers
-
----
-
-## 🟡 AWS SES (PAY-AS-YOU-GO)
-
-Amazon Simple Email Service - Professional grade email service.
-
-### Setup Instructions:
-
-1. **Create AWS Account** and set up SES
-2. **Verify your domain** or email address
-3. **Request production access** (starts in sandbox mode)
-4. **Create IAM credentials** with SES permissions
+Amazon Simple Email Service is a low-cost production email service.
 
 ```env
 EMAIL_PROVIDER=ses
@@ -67,46 +31,16 @@ SES_FROM_EMAIL=noreply@yourdomain.com
 ADMIN_EMAIL=admin@yourdomain.com
 ```
 
-### Pricing:
+Setup:
 
-- **$0.10 per 1,000 emails**
-- **First 62,000 emails per month FREE** (if sent from EC2)
+1. Create an AWS account and configure SES.
+2. Verify your domain or email address.
+3. Request production access if needed.
+4. Create IAM credentials with SES send permissions.
 
----
-
-## 🟡 Resend (RECOMMENDED FOR PRODUCTION)
-
-Modern email API with excellent developer experience.
-
-### Setup Instructions:
-
-1. **Sign up** at [resend.com](https://resend.com)
-2. **Verify your domain**
-3. **Get API key** from dashboard
-
-```env
-EMAIL_PROVIDER=resend
-RESEND_API_KEY=re_your_resend_api_key_here
-SES_FROM_EMAIL=noreply@yourdomain.com
-ADMIN_EMAIL=admin@yourdomain.com
-```
-
-### Free Tier:
-
-- **3,000 emails per month FREE**
-- **100 emails per day**
-
----
-
-## 🟡 SendGrid (POPULAR CHOICE)
+## SendGrid
 
 Reliable email delivery service by Twilio.
-
-### Setup Instructions:
-
-1. **Sign up** at [sendgrid.com](https://sendgrid.com)
-2. **Verify your domain**
-3. **Create API key**
 
 ```env
 EMAIL_PROVIDER=sendgrid
@@ -115,110 +49,51 @@ SES_FROM_EMAIL=noreply@yourdomain.com
 ADMIN_EMAIL=admin@yourdomain.com
 ```
 
-### Free Tier:
+## MailChannels
 
-- **100 emails per day FREE**
-
----
-
-## 🔴 MailChannels (CLOUDFLARE WORKERS ONLY)
-
-Free email service for Cloudflare Workers.
+Free email service for Cloudflare Workers deployments.
 
 ```env
 EMAIL_PROVIDER=mailchannels
 MAILCHANNELS_API_KEY=your_mailchannels_api_key_here
+SES_FROM_EMAIL=noreply@yourdomain.com
+ADMIN_EMAIL=admin@yourdomain.com
 ```
 
-**Note**: Only works when deployed on Cloudflare Workers.
+## Development Setup
 
----
+For local development, Resend is the simplest API-based option:
 
-## 🚀 Quick Setup for Development
+```env
+EMAIL_PROVIDER=resend
+RESEND_API_KEY=re_your_resend_api_key_here
+SES_FROM_EMAIL=onboarding@resend.dev
+ADMIN_EMAIL=your-email@example.com
+```
 
-For quick testing, use Gmail SMTP:
-
-1. **Use your personal Gmail**:
-
-   ```env
-   EMAIL_PROVIDER=gmail
-   GMAIL_USER=your.personal.email@gmail.com
-   GMAIL_APP_PASSWORD=abcd efgh ijkl mnop
-   SES_FROM_EMAIL=your.personal.email@gmail.com
-   ADMIN_EMAIL=your.personal.email@gmail.com
-   ```
-
-2. **Test the contact form** - emails will be sent from your Gmail account
-
----
-
-## 🔧 Fallback Configuration
+## Fallback Configuration
 
 The service automatically tries providers in this order:
 
-1. **Primary provider** (configured in `EMAIL_PROVIDER`)
-2. **Gmail** (if credentials available)
-3. **AWS SES** (if credentials available)
-4. **Resend** (if API key available)
-5. **SendGrid** (if API key available)
-6. **MailChannels** (if API key available)
+1. Primary provider configured by `EMAIL_PROVIDER`
+2. AWS SES if credentials are available
+3. Resend if `RESEND_API_KEY` is available
+4. SendGrid if `SENDGRID_API_KEY` is available
+5. MailChannels
 
----
+## Security Notes
 
-## 🔒 Security Notes
+- Store API keys in environment variables.
+- Never commit secrets to git.
+- Use different keys for development and production.
+- Rotate keys regularly.
 
-### Gmail:
-
-- ✅ **Use App Passwords** - never use your main password
-- ✅ **Enable 2FA** - required for app passwords
-- ✅ **Rotate passwords** periodically
-
-### API Keys:
-
-- ✅ **Store in environment variables**
-- ✅ **Never commit to git**
-- ✅ **Use different keys** for dev/prod
-- ✅ **Rotate regularly**
-
----
-
-## 📊 Recommended Setup by Use Case
-
-### **Personal Portfolio/Blog**:
-
-→ **Gmail SMTP** (500 emails/day is plenty)
-
-### **Small Business**:
-
-→ **Resend** (3,000 emails/month free)
-
-### **Growing Startup**:
-
-→ **AWS SES** (pay-as-you-go, scales infinitely)
-
-### **Enterprise**:
-
-→ **AWS SES** or **SendGrid** (dedicated IPs, advanced features)
-
----
-
-## 🛠️ Testing
+## Testing
 
 Test your email configuration:
 
 ```bash
-# Using the built-in test endpoint
 curl -X POST http://localhost:3000/api/trpc/emails.checkEmailServiceStatus
 ```
 
----
-
-## 📈 Monitoring
-
-The service logs detailed information about:
-
-- ✅ **Successful sends** with message IDs
-- ❌ **Failed attempts** with error details
-- 🔄 **Fallback attempts** when primary provider fails
-
-Check your application logs for email delivery status.
+The service logs successful sends, failed attempts, and fallback attempts.

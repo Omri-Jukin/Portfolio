@@ -25,7 +25,7 @@ export class EmailManager {
       process.env.SES_FROM_EMAIL || "contact@omrijukin.com";
     this.emailProvider =
       process.env.EMAIL_PROVIDER ||
-      (process.env.RESEND_API_KEY ? "resend" : "gmail");
+      (process.env.RESEND_API_KEY ? "resend" : "mailchannels");
   }
 
   /**
@@ -48,7 +48,6 @@ export class EmailManager {
       );
 
       const fallbackProviders = [
-        "gmail",
         "ses",
         "resend",
         "sendgrid",
@@ -87,8 +86,6 @@ export class EmailManager {
     provider: string
   ): Promise<{ success: boolean; messageId?: string; error?: string }> {
     switch (provider) {
-      case "gmail":
-        return this.sendEmailWithGmail(emailData);
       case "ses":
         return this.sendEmailWithSES(emailData);
       case "resend":
@@ -99,60 +96,6 @@ export class EmailManager {
         return this.sendEmailWithMailChannels(emailData);
       default:
         return { success: false, error: `Unknown email provider: ${provider}` };
-    }
-  }
-
-  /**
-   * Send email using Gmail SMTP (Free option)
-   */
-  private async sendEmailWithGmail(
-    emailData: EmailData
-  ): Promise<{ success: boolean; messageId?: string; error?: string }> {
-    const gmailUser = process.env.GMAIL_USER;
-    const gmailAppPassword = process.env.GMAIL_APP_PASSWORD;
-
-    if (!gmailUser || !gmailAppPassword) {
-      return { success: false, error: "Gmail SMTP credentials not configured" };
-    }
-
-    try {
-      // Dynamically import nodemailer to avoid loading it if not needed
-      const nodemailer = await import("nodemailer");
-
-      const transporter = nodemailer.default.createTransport({
-        service: "gmail",
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false, // Use TLS
-        auth: {
-          user: gmailUser,
-          pass: gmailAppPassword, // App-specific password, not your regular password
-        },
-      });
-
-      const mailOptions = {
-        from: `"${emailData.from.split("@")[0]}" <${gmailUser}>`, // Always use the Gmail address as sender
-        to: emailData.to,
-        subject: emailData.subject,
-        html: emailData.htmlBody,
-        ...(emailData.textBody && { text: emailData.textBody }),
-        // Add reply-to if different from Gmail
-        ...(emailData.from !== gmailUser && { replyTo: emailData.from }),
-      };
-
-      const info = await transporter.sendMail(mailOptions);
-
-      return {
-        success: true,
-        messageId: info.messageId,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: `Gmail SMTP error: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
-      };
     }
   }
 
