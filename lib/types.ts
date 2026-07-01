@@ -920,6 +920,7 @@ export interface ResumeData {
   person: {
     name: string;
     title: string;
+    photoUrl?: string;
     contacts: {
       phone: string;
       email: string;
@@ -980,6 +981,9 @@ export type ResumePdfSectionKey =
   | "education"
   | "certifications"
   | "additionalExperience";
+
+export type ResumePdfLayoutType = "ats" | "visual";
+export type ResumePdfEngine = "server" | "react-pdf";
 
 /**
  * PDF render options

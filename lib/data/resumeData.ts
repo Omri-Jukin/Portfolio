@@ -1,5 +1,5 @@
 /**
- * Typed resume data — single source of truth for English resume content.
+ * Typed resume data - single source of truth for English resume content.
  * Used by resume page and PDF generator.
  *
  * Recruiter-facing resume wording used by the public resume page and PDF generator.
@@ -14,6 +14,7 @@ export const RESUME_DATA_EN: ResumeData = {
   person: {
     name: "Omri Jukin",
     title: "Full-Stack TypeScript Engineer",
+    photoUrl: "/profile-photo.png",
     contacts: {
       phone: "+972 52-334-4064",
       email: "omrijukin@gmail.com",
@@ -26,121 +27,116 @@ export const RESUME_DATA_EN: ResumeData = {
   headline:
     "Full-Stack TypeScript Engineer | Next.js, React, Node.js, PostgreSQL, Supabase, CI/CD",
   summary:
-    "Full-Stack TypeScript Engineer with 3+ years of hands-on professional experience building production-minded web systems across frontend, backend, data, integrations, and internal tooling. Strongest in Next.js, React, Node.js, PostgreSQL, Supabase, tRPC/Drizzle-style type-safe systems, and product-platform ownership. Looking for teams where I can own meaningful full-stack work and help ship maintainable systems.",
+    "Full-Stack TypeScript Engineer with 3+ years of professional experience across React/Next.js frontends, Node.js backends, PostgreSQL/Supabase data models, internal tooling, and production-minded delivery. I work best where product context, API/data boundaries, implementation, and maintainability all matter.",
   coreSkills: [
     {
       category: "Languages",
-      items: ["TypeScript", "Python", "Java", "C#", "JavaScript"],
+      items: ["TypeScript", "JavaScript", "Python", "Java", "C#"],
     },
     {
       category: "Frontend",
       items: [
         "React",
         "Next.js",
+        "Tailwind CSS",
+        "Material UI",
+        "Storybook",
         "React Native",
         "Angular",
-        "Material UI",
-        "Tailwind CSS",
-        "Storybook",
       ],
     },
     {
       category: "Backend",
       items: [
         "Node.js",
-        "Express.js",
         "tRPC",
-        "Payload CMS",
-        "Auth.js",
         "REST APIs",
         "API Design",
+        "Auth.js",
+        "Payload CMS",
+        "Express.js",
       ],
     },
     {
       category: "Databases",
-      items: ["PostgreSQL", "MongoDB", "Drizzle ORM", "Data Modeling"],
+      items: ["PostgreSQL", "Supabase", "Drizzle ORM", "MongoDB", "Data Modeling"],
     },
     {
-      category: "Cloud / Infrastructure / DevOps",
+      category: "Cloud / DevOps",
       items: [
+        "Cloudflare",
         "Docker",
         "Docker Compose",
         "GitHub Actions",
         "CI/CD",
-        "Supabase",
-        "Cloudflare",
         "Traefik",
         "Git",
       ],
     },
     {
       category: "Testing / Tooling",
-      items: ["Jest", "Vitest"],
+      items: ["Jest", "Vitest", "Component Testing"],
     },
   ],
   experience: [
     {
       role: "Technical Lead",
       company: "The Atheist Line",
-      period: "2025–Present",
+      period: "2025-Present",
       bullets: [
-        "Volunteer technical leadership role serving as the primary hands-on engineer for technical decisions, implementation planning, and the organization's digital ecosystem.",
-        "Define and lead the technical direction of the organization's digital ecosystem across public-facing and internal systems.",
-        "Own zero-to-one architecture and implementation for website architecture, content workflows, internal tooling, team operations, integrations, automation opportunities, CI/CD, analytics foundations, and production readiness.",
-        "Translate organizational needs from design, publishing, community, and operations roles into maintainable technical workflows.",
+        "Serve as primary hands-on engineer for technical direction, implementation planning, and digital ecosystem ownership.",
+        "Own architecture and implementation across website, content workflows, internal tooling, integrations, CI/CD, analytics foundations, and production readiness.",
+        "Translate needs from design, publishing, community, and operations into maintainable technical workflows.",
       ],
     },
     {
       role: "Full Stack Engineer",
       company: "Abra Technologies",
-      period: "2024–2025",
+      period: "2024-2025",
       bullets: [
-        "Worked on the early development of an internal government data platform supporting data aggregation, insights, and analytical workflows.",
-        "Built reusable UI components and an internal component library to support consistency and scalable frontend development.",
-        "Used Storybook for component documentation and validation, and wrote component-level tests to improve maintainability and development confidence.",
-        "Contributed to frontend architecture and participated in architecture and technology discussions during the project’s early foundation.",
+        "Helped build an early internal government data platform for aggregation, insights, and analytical workflows.",
+        "Built reusable React/TypeScript UI components and component-library foundations for scalable frontend delivery.",
+        "Used Storybook and component-level tests to document, validate, and maintain reusable UI work.",
+        "Contributed to frontend architecture and early technology decisions.",
       ],
     },
     {
       role: "Business Rules Configuration Specialist",
       company: "Menora Mivtachim Insurance Company",
-      period: "2023–2024",
+      period: "2023-2024",
       bullets: [
-        "Configured and maintained business rules within an internal system used to manage insurance product logic.",
-        "Defined rule behavior for different insurance products based on business and operational requirements.",
-        "Supported policy-related configuration across product workflows with a focus on correctness and consistency.",
+        "Configured internal business rules for insurance product logic and policy-related workflows.",
+        "Defined rule behavior from business and operational requirements with focus on correctness and consistency.",
+        "Supported operational configuration in systems where rule accuracy affected product workflows.",
       ],
     },
   ],
   projects: [
     {
-      name: "Socially",
-      line: "Creator operations platform built with React Native, Supabase, Cloudflare, and TypeScript.",
+      name: "Portfolio Platform",
+      line: "Production Next.js portfolio and CMS built with TypeScript, tRPC, Drizzle, Supabase, and Auth.js.",
       bullets: [
-        "Building a creator operations platform focused on cross-platform content workflows, publishing flows, analytics, and creator-facing operations.",
-        "Design the system across mobile frontend, backend services, data models, authentication, and platform integration boundaries.",
-        "Work across React Native, Supabase, and Cloudflare-based services to structure the product for scalable workflows and future platform integrations.",
-        "Own the product’s end-to-end technical direction with a focus on maintainability, release safety, and production readiness.",
-      ],
-    },
-    {
-      name: "ClipWhisperer",
-      line: "Microservices-based video automation platform built with Node.js, Supabase, AWS, and cloud infrastructure.",
-      bullets: [
-        "Built a service-oriented platform for automating short-form video generation workflows across orchestration, storage, processing, and delivery.",
-        "Designed a hub-based orchestration flow to coordinate multiple services through state-driven processing steps.",
-        "Implemented queue-based jobs, FFmpeg-based media processing, storage handling, and cloud-integrated service communication.",
-        "Structured the system as maintainable services with clear operational responsibilities.",
+        "Built public pages, authenticated dashboard workflows, content APIs, and structured resume/project data.",
+        "Designed data and API boundaries with tRPC, Drizzle, Supabase/PostgreSQL, and CMS-backed content flows.",
+        "Own recruiter-facing pages, admin tooling, contact flows, deployment wiring, and generated resume output.",
       ],
     },
     {
       name: "Snow HQ",
-      line: "Multi-tenant CRM system built with Next.js, tRPC, and PostgreSQL.",
+      line: "Multi-tenant CRM system built with Next.js, tRPC, PostgreSQL, and Drizzle ORM.",
       bullets: [
-        "Built a multi-tenant CRM system with authentication, role-based access, dashboards, reporting, and invoicing-oriented workflows.",
-        "Implemented the product across frontend, backend, and database layers using Next.js, tRPC, and PostgreSQL.",
-        "Designed the system around tenant separation, permissions, and real-time data flows.",
-        "Structured the application for maintainability and future expansion across tenant-aware workflows.",
+        "Built tenant-aware CRM workflows across UI, APIs, data models, dashboards, and invoicing-oriented flows.",
+        "Modeled tenant ownership, permissions, and RBAC assumptions as first-class application boundaries.",
+        "Structured the system for maintainable dashboard workflows and future expansion.",
+      ],
+    },
+    {
+      name: "ClipWhisperer",
+      line: "Queue-driven video automation platform built with Node.js, TypeScript, Supabase, AWS, and FFmpeg.",
+      bullets: [
+        "Built automation architecture for short-form video generation across orchestration, processing, storage, and delivery.",
+        "Used queue-driven jobs and hub-based orchestration for long-running media workflows.",
+        "Separated FFmpeg processing, cloud storage, and service communication boundaries for maintainability.",
       ],
     },
   ],
@@ -149,20 +145,20 @@ export const RESUME_DATA_EN: ResumeData = {
       degree: "Practical Electrical Engineering Diploma",
       institution: "Air Force Technological College",
       location: "",
-      period: "2015–2017",
+      period: "2015-2017",
     },
     {
       degree: "Full Stack Engineering Course",
       institution: "Codecademy",
       location: "",
-      period: "2020–2021",
+      period: "2020-2021",
     },
   ],
   additionalExperience: [
     {
       role: "Senior Customer Service Representative",
       company: "Menora Mivtachim Insurance Company",
-      period: "2021–2023",
+      period: "2021-2023",
       bullets: [
         "Managed day-to-day operations for a 17-person service team and oversaw 5 collections representatives.",
         "Trained team members and supported service-quality improvement through structured processes.",

@@ -15,7 +15,7 @@ export function DropdownMenuContent({
   return (
     <div
       className={cn(
-        "absolute right-0 z-50 mt-2 min-w-44 rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-lg",
+        "absolute left-0 top-full z-50 mt-2 min-w-44 rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-lg",
         className
       )}
       {...props}

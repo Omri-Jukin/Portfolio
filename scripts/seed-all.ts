@@ -93,9 +93,9 @@ async function seedWorkExperiences(
       description:
         "Volunteer technical leadership role serving as the primary hands-on engineer for technical direction, implementation planning, and the organization's digital ecosystem.",
       achievements: [
-        "Defined the technical direction for public-facing and internal systems.",
-        "Established zero-to-one architecture for website, content, tooling, analytics, CI/CD, and production readiness.",
-        "Translated organizational needs across design, publishing, community, and operations roles into maintainable technical workflows.",
+        "Serve as primary hands-on engineer for technical direction, implementation planning, and digital ecosystem ownership.",
+        "Own architecture and implementation across website, content workflows, internal tooling, integrations, CI/CD, analytics foundations, and production readiness.",
+        "Translate needs from design, publishing, community, and operations into maintainable technical workflows.",
       ],
       technologies: [
         "Technical leadership",
@@ -136,10 +136,10 @@ async function seedWorkExperiences(
       description:
         "Worked on the early development of an internal government data platform supporting data aggregation, insights, and analytical workflows.",
       achievements: [
-        "Built reusable UI components and internal component-library foundations.",
-        "Used Storybook for component documentation and validation.",
-        "Wrote component-level tests to improve maintainability and development confidence.",
-        "Contributed to frontend architecture and early technical decisions.",
+        "Helped build an early internal government data platform for aggregation, insights, and analytical workflows.",
+        "Built reusable React/TypeScript UI components and component-library foundations for scalable frontend delivery.",
+        "Used Storybook and component-level tests to document, validate, and maintain reusable UI work.",
+        "Contributed to frontend architecture and early technology decisions.",
       ],
       technologies: ["React", "TypeScript", "Storybook", "Component testing"],
       responsibilities: [
@@ -167,8 +167,9 @@ async function seedWorkExperiences(
       description:
         "Configured and maintained internal business rules used to manage insurance product logic.",
       achievements: [
-        "Defined rule behavior for different insurance products based on operational requirements.",
-        "Supported policy-related configuration with a focus on correctness and consistency.",
+        "Configured internal business rules for insurance product logic and policy-related workflows.",
+        "Defined rule behavior from business and operational requirements with focus on correctness and consistency.",
+        "Supported operational configuration in systems where rule accuracy affected product workflows.",
       ],
       technologies: ["Business rules", "Configuration", "Operational systems"],
       responsibilities: ["Rule configuration", "Product logic", "Operational correctness"],
@@ -276,6 +277,7 @@ async function seedPublicContentBlocks(
         github: "https://github.com/Omri-Jukin",
         linkedin: "https://www.linkedin.com/in/omri-jukin/",
         location: "",
+        photoUrl: "/profile-photo.png",
         pdfDateFormat: "month-year",
         links: [
           { label: "Portfolio", url: "https://omrijukin.com" },
@@ -298,7 +300,7 @@ async function seedPublicContentBlocks(
       blockType: "section",
       title: "Professional Summary",
       body:
-        "Full-Stack TypeScript Engineer with 3+ years of hands-on professional experience building production-minded web systems across frontend, backend, data, integrations, and internal tooling. Strongest in Next.js, React, Node.js, PostgreSQL, Supabase, tRPC/Drizzle-style type-safe systems, and product-platform ownership. Looking for teams where I can own meaningful full-stack work and help ship maintainable systems.",
+        "Full-Stack TypeScript Engineer with 3+ years of professional experience across React/Next.js frontends, Node.js backends, PostgreSQL/Supabase data models, internal tooling, and production-minded delivery. I work best where product context, API/data boundaries, implementation, and maintainability all matter.",
       items: [],
       metadata: {},
       displayOrder: 3,
@@ -790,12 +792,12 @@ async function seedProjects(
         "Avoid duplicating structured career data into freeform content blocks.",
       ],
       decisions: [
-        "Kept structured tables as source of truth for projects, work, skills, education, and certifications.",
-        "Used public content blocks only for editorial homepage copy.",
-        "Made resume PDF generation consume CMS data directly.",
+        "Built public pages, authenticated dashboard workflows, content APIs, and structured resume/project data.",
+        "Designed data and API boundaries with tRPC, Drizzle, Supabase/PostgreSQL, and CMS-backed content flows.",
+        "Own recruiter-facing pages, admin tooling, contact flows, deployment wiring, and generated resume output.",
       ],
       outcome:
-        "Recruiter-facing portfolio content, public case studies, and the downloadable resume can now be maintained from the same CMS-backed data model.",
+        "Production Next.js portfolio and CMS with recruiter-facing public pages and private content workflows.",
       caseStudyRole:
         "Sole full-stack engineer across architecture, UI, data modeling, CMS workflows, and deployment.",
       proofLinks: [
@@ -842,7 +844,7 @@ async function seedProjects(
       isVisible: true,
       isFeatured: true,
       isOpenSource: false,
-      isResumeFeatured: true,
+      isResumeFeatured: false,
       caseStudySlug: "socially",
       hiringSignal:
         "Creator operations platform work showing product architecture, mobile/frontend direction, backend boundaries, and release planning.",
@@ -906,12 +908,12 @@ async function seedProjects(
         "Keep processing services separable from orchestration and storage concerns.",
       ],
       decisions: [
-        "Used queue-driven jobs for media processing and delivery steps.",
-        "Separated hub orchestration from FFmpeg processing boundaries.",
-        "Kept cloud storage and service communication explicit in the architecture.",
+        "Built automation architecture for short-form video generation across orchestration, processing, storage, and delivery.",
+        "Used queue-driven jobs and hub-based orchestration for long-running media workflows.",
+        "Separated FFmpeg processing, cloud storage, and service communication boundaries for maintainability.",
       ],
       outcome:
-        "A production-oriented automation architecture for repeatable short-form video generation workflows.",
+        "Queue-driven video automation platform with clear orchestration, processing, storage, and delivery boundaries.",
       caseStudyRole:
         "Platform designer and implementation owner across orchestration, media processing, and service boundaries.",
       proofLinks: [],
@@ -961,12 +963,12 @@ async function seedProjects(
         "Support operational dashboard workflows without weakening RBAC assumptions.",
       ],
       decisions: [
-        "Modeled tenant ownership and permissions as first-class data concerns.",
-        "Used typed APIs to keep dashboard flows aligned with backend contracts.",
-        "Kept invoicing-oriented workflows inside the same tenant-aware architecture.",
+        "Built tenant-aware CRM workflows across UI, APIs, data models, dashboards, and invoicing-oriented flows.",
+        "Modeled tenant ownership, permissions, and RBAC assumptions as first-class application boundaries.",
+        "Structured the system for maintainable dashboard workflows and future expansion.",
       ],
       outcome:
-        "A private full-stack CRM foundation with RBAC-aware data modeling and dashboard-oriented workflows.",
+        "Multi-tenant CRM system with RBAC-aware data modeling and dashboard-oriented workflows.",
       caseStudyRole:
         "Full-stack engineer across frontend, API, database modeling, and dashboard workflows.",
       proofLinks: [],

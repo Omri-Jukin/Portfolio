@@ -1,18 +1,17 @@
 import jsPDF from "jspdf";
 import {
-  PDF_THEMES,
   PDF_LAYOUT,
   PDF_LAYOUT_VARIANTS,
-  PDF_VISUAL_ELEMENTS,
+  PDF_THEMES,
   PDF_TYPOGRAPHY_VARIANTS,
 } from "../constants";
 import type {
-  ResumeData,
-  PDFRenderOptions,
   EnhancedPDFRenderOptions,
+  PDFRenderOptions,
+  ResumeData,
   ResumePdfSectionKey,
 } from "../types";
-import { renderTextToPDF, safeString, containsHebrew } from "./pdfTextRenderer";
+import { containsHebrew, renderTextToPDF, safeString } from "./pdfTextRenderer";
 
 //! Re-export types for backward compatibility
 export type { ResumeData, PDFRenderOptions as RenderOptions };
@@ -22,10 +21,35 @@ const DEFAULT_PDF_SECTION_ORDER: ResumePdfSectionKey[] = [
   "skills",
   "experience",
   "projects",
-  "certifications",
-  "education",
   "additionalExperience",
+  "education",
+  "certifications",
 ];
+
+const RESUME_PDF_LAYOUT = {
+  fontSizes: {
+    name: 18,
+    headline: 10,
+    contact: 8.2,
+    section: 10.5,
+    body: 9.2,
+    small: 8.5,
+    hook: 8.6,
+  },
+  spacing: {
+    headerGap: 3,
+    sectionGap: 3.4,
+    titleGap: 1.6,
+    paragraphGap: 1.2,
+    itemGap: 1.5,
+    bulletGap: 0.8,
+  },
+  colors: {
+    text: [20, 24, 31] as [number, number, number],
+    muted: [72, 80, 95] as [number, number, number],
+    hookBg: [245, 247, 250] as [number, number, number],
+  },
+} as const;
 
 function getPdfSectionOrder(
   sectionOrder: ResumePdfSectionKey[] | undefined
@@ -49,32 +73,118 @@ function getPdfSectionOrder(
   ];
 }
 
+function normalizeUrl(value: string | undefined) {
+  if (!value?.trim()) return undefined;
+  return value.startsWith("http") ? value : `https://${value}`;
+}
+
+function uniqueNonEmpty(values: Array<string | undefined>) {
+  const seen = new Set<string>();
+  const result: string[] = [];
+
+  for (const value of values) {
+    const trimmed = value?.trim();
+    if (!trimmed || seen.has(trimmed)) continue;
+    seen.add(trimmed);
+    result.push(trimmed);
+  }
+
+  return result;
+}
+
+function buildRecruiterSnapshot(data: ResumeData) {
+  const content = [
+    data.headline,
+    data.summary,
+    ...(data.coreSkills ?? []).flatMap((category) => category.items),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+  const stack = [
+    "TypeScript",
+    "React",
+    "Next.js",
+    "Node.js",
+    "PostgreSQL",
+    "Supabase",
+  ].filter((skill) => content.includes(skill.toLowerCase()));
+
+  return uniqueNonEmpty([
+    stack.join(", ") || data.person.title,
+    "frontend, backend, data, CMS/backoffice workflows, internal tooling, CI/CD",
+    "product-minded full-stack delivery",
+  ]).join(" | ");
+}
+
+function getCompactSummary(summary: string) {
+  const normalized = summary.replace(/\s+/g, " ").trim();
+  if (!normalized) return "";
+
+  const sentences =
+    normalized.match(/[^.!?]+[.!?]+/g)?.map((sentence) => sentence.trim()) ?? [
+      normalized,
+    ];
+  const selected: string[] = [];
+  const maxChars = 280;
+
+  for (const sentence of sentences) {
+    const next = [...selected, sentence].join(" ");
+    if (selected.length >= 2 || next.length > maxChars) break;
+    selected.push(sentence);
+  }
+
+  const result = selected.length > 0 ? selected.join(" ") : sentences[0];
+  if (result.length <= maxChars) return result;
+
+  const truncated = result.slice(0, maxChars + 1);
+  return `${truncated.slice(0, truncated.lastIndexOf(" ")).trim()}.`;
+}
+
 /** Render Resume PDF Function
  * @param data - Resume data
  * @param opts - PDF render options
  * @returns PDF document
  */
-
 export async function renderResumePDF(
   data: ResumeData,
   opts: PDFRenderOptions | EnhancedPDFRenderOptions = {}
 ): Promise<jsPDF> {
-  const options = {
-    rtl: opts.rtl || false,
-    theme: opts.theme || "corporate",
-    maxBulletsPerRole: opts.maxBulletsPerRole || 3,
-    maxProjects: opts.maxProjects || 4,
-    // Enhanced options
-    layoutVariant: (opts as EnhancedPDFRenderOptions).layoutVariant || "single",
-    typography: (opts as EnhancedPDFRenderOptions).typography || "sansSerif",
-    visualElements: {
-      icons: false, // Disabled by default
-      borders: false, // Disabled by default
-      shadows: false, // Disabled by default
-      gradients: false, // Disabled by default
-      patterns: false, // Disabled by default
-    },
-    customSpacing: (opts as EnhancedPDFRenderOptions).customSpacing,
+  const themeName = opts.theme ?? "blueGrey";
+  const layoutVariantName =
+    (opts as EnhancedPDFRenderOptions).layoutVariant ?? "single";
+  const typographyName =
+    (opts as EnhancedPDFRenderOptions).typography ?? "sansSerif";
+  const theme = PDF_THEMES[themeName];
+  const layoutVariant = PDF_LAYOUT_VARIANTS[layoutVariantName];
+  const typography = PDF_TYPOGRAPHY_VARIANTS[typographyName];
+  const margins = PDF_LAYOUT.MARGINS;
+  const pageWidth = PDF_LAYOUT.A4.w - margins.x * 2;
+  const pageHeight = PDF_LAYOUT.A4.h;
+  const isRTL = opts.rtl ?? false;
+  const defaultAlign: "left" | "right" = isRTL ? "right" : "left";
+  const maxBulletsPerRole = isRTL
+    ? Math.min(opts.maxBulletsPerRole ?? 3, 2)
+    : opts.maxBulletsPerRole ?? 4;
+  const maxProjects = isRTL ? 1 : opts.maxProjects ?? 3;
+  const maxExperiences = isRTL ? 2 : data.experience.length;
+  const customSpacing = (opts as EnhancedPDFRenderOptions).customSpacing;
+  let currentY = margins.y;
+
+  const spacing = {
+    sectionGap:
+      customSpacing?.sectionGap ??
+      ("spacing" in layoutVariant
+        ? layoutVariant.spacing?.sectionGap
+        : undefined) ??
+      RESUME_PDF_LAYOUT.spacing.sectionGap,
+    paragraphGap:
+      customSpacing?.paragraphGap ?? RESUME_PDF_LAYOUT.spacing.paragraphGap,
+    bulletGap: customSpacing?.bulletGap ?? RESUME_PDF_LAYOUT.spacing.bulletGap,
+    experienceGap:
+      customSpacing?.experienceGap ?? RESUME_PDF_LAYOUT.spacing.itemGap,
+    titleGap: RESUME_PDF_LAYOUT.spacing.titleGap,
+    headerGap: RESUME_PDF_LAYOUT.spacing.headerGap,
   };
 
   const doc = new jsPDF({ unit: "mm", format: "a4" });
@@ -86,43 +196,30 @@ export async function renderResumePDF(
     });
   }
 
-  const theme = PDF_THEMES[options.theme];
-  const layoutVariant = PDF_LAYOUT_VARIANTS[options.layoutVariant];
-  const typography = PDF_TYPOGRAPHY_VARIANTS[options.typography];
-  const margins = PDF_LAYOUT.MARGINS;
-  const pageWidth = PDF_LAYOUT.A4.w - margins.x * 2;
-  const pageHeight = PDF_LAYOUT.A4.h;
-  const isRTL = options.rtl;
-  const defaultAlign: "left" | "right" = isRTL ? "right" : "left";
-  const maxBulletsPerRole = isRTL
-    ? Math.min(options.maxBulletsPerRole, 2)
-    : options.maxBulletsPerRole;
-  const maxProjects = isRTL ? 1 : options.maxProjects;
-  const maxExperiences = isRTL ? 2 : data.experience.length;
-  let currentY = margins.y;
-
-  /**
-   * Compute start X based on RTL and indentation
-   */
   const getStartX = (indent = 0, maxWidth = pageWidth) =>
     isRTL
       ? PDF_LAYOUT.A4.w - margins.x - maxWidth - indent
       : margins.x + indent;
 
-  /**
-   * Add text with Hebrew-aware rendering
-   */
+  const getLineHeight = (fontSize: number) => fontSize * 0.42;
+
+  const ensurePage = (requiredSpace = 20) => {
+    if (currentY + requiredSpace <= pageHeight - margins.y) return;
+    doc.addPage();
+    currentY = margins.y;
+  };
+
   const addTextBlock = async (
     text: string,
     y: number,
     {
       maxWidth = pageWidth,
-      fontSize = PDF_LAYOUT.FONT_SIZES.body,
+      fontSize = RESUME_PDF_LAYOUT.fontSizes.body,
       fontWeight = "normal",
       indent = 0,
       align,
       color,
-      linkUrl,
+      afterGap = spacing.paragraphGap,
     }: {
       maxWidth?: number;
       fontSize?: number;
@@ -130,895 +227,348 @@ export async function renderResumePDF(
       indent?: number;
       align?: "left" | "right" | "center";
       color?: [number, number, number];
-      linkUrl?: string;
+      afterGap?: number;
     } = {}
   ): Promise<number> => {
     const content = safeString(text);
+    if (!content.trim()) return y;
+
     const x = getStartX(indent, maxWidth);
     const targetAlign = align || defaultAlign;
-    const fontStyle: "normal" | "bold" | "italic" = fontWeight;
-    const colorStr = color ? `rgb(${color.join(",")})` : "#000000";
+    const textColor = color ?? RESUME_PDF_LAYOUT.colors.text;
 
     if (isRTL || containsHebrew(content)) {
-      return renderTextToPDF(
-        doc,
-        content,
-        x,
-        y,
-        maxWidth,
-        fontSize,
-        fontStyle,
-        colorStr
+      return (
+        (await renderTextToPDF(
+          doc,
+          content,
+          x,
+          y,
+          maxWidth,
+          fontSize,
+          fontWeight,
+          `rgb(${textColor.join(",")})`
+        )) + afterGap
       );
     }
 
-    doc.setFont(typography.font, fontWeight as "normal" | "bold" | "italic");
+    doc.setFont(typography.font, fontWeight);
     doc.setFontSize(fontSize);
-    if (color) doc.setTextColor(...color);
+    doc.setTextColor(...textColor);
     const lines = doc.splitTextToSize(content, maxWidth);
-    if (linkUrl && lines.length > 0) {
-      doc.textWithLink(lines[0], x, y, { url: linkUrl });
-      for (let i = 1; i < lines.length; i++) {
-        doc.text(lines[i], x, y + i * fontSize * 0.4, { align: targetAlign });
-      }
-    } else {
-      doc.text(lines, x, y, { align: targetAlign });
-    }
-    if (color) doc.setTextColor(...theme.text);
-    return y + lines.length * fontSize * 0.4 + 2;
+    doc.text(lines, x, y, { align: targetAlign });
+
+    return y + lines.length * getLineHeight(fontSize) + afterGap;
   };
 
-  /** Helper function to check if we need a new page
-   * @param requiredSpace - Required space
-   * @returns boolean
-   */
-  const checkNewPage = (requiredSpace: number = 20) => {
-    return currentY + requiredSpace > pageHeight - margins.y;
-  };
-
-  /** Helper function to add a new page
-   * @returns void
-   */
-  const addNewPage = () => {
-    doc.addPage();
-    currentY = margins.y;
-  };
-
-  /** Get spacing configuration with defaults
-   * @returns spacing configuration
-   */
-  let spacing = {
-    sectionGap:
-      options.customSpacing?.sectionGap ??
-      ("spacing" in layoutVariant
-        ? layoutVariant.spacing?.sectionGap
-        : undefined) ??
-      PDF_LAYOUT.SPACING.sectionGap,
-    paragraphGap:
-      options.customSpacing?.paragraphGap ??
-      ("spacing" in layoutVariant
-        ? layoutVariant.spacing?.paragraphGap
-        : undefined) ??
-      PDF_LAYOUT.SPACING.paragraphGap,
-    bulletGap:
-      options.customSpacing?.bulletGap ??
-      ("spacing" in layoutVariant
-        ? layoutVariant.spacing?.bulletGap
-        : undefined) ??
-      PDF_LAYOUT.SPACING.bulletGap,
-    experienceGap:
-      options.customSpacing?.experienceGap ??
-      ("spacing" in layoutVariant
-        ? layoutVariant.spacing?.experienceGap
-        : undefined) ??
-      PDF_LAYOUT.SPACING.experienceGap,
-    ruleGap:
-      options.customSpacing?.ruleGap ??
-      ("spacing" in layoutVariant
-        ? layoutVariant.spacing?.ruleGap
-        : undefined) ??
-      PDF_LAYOUT.SPACING.ruleGap,
-  };
-
-  // Tighter spacing for RTL (Hebrew) without changing font sizes
-  if (isRTL) {
-    const rtlFactor = 0.55;
-    spacing = {
-      sectionGap: spacing.sectionGap * rtlFactor,
-      paragraphGap: spacing.paragraphGap * rtlFactor,
-      bulletGap: spacing.bulletGap * rtlFactor,
-      experienceGap: spacing.experienceGap * rtlFactor,
-      ruleGap: spacing.ruleGap * rtlFactor,
-    };
-  }
-
-  /** Helper functions for visual elements
-   * @returns void
-   */
-  // const drawIcon = (
-  //   x: number,
-  //   y: number,
-  //   iconType: string,
-  //   size: number = PDF_VISUAL_ELEMENTS.icons.size
-  // ) => {
-  //   if (!options.visualElements.icons) return;
-
-  //   // Simple icon drawing - in a real implementation, you'd use actual icon fonts or SVGs
-  //   doc.setFontSize(size);
-  //   doc.setTextColor(...theme.accent);
-
-  //   switch (iconType) {
-  //     case "phone":
-  //       doc.text("📞", x, y);
-  //       break;
-  //     case "email":
-  //       doc.text("✉", x, y);
-  //       break;
-  //     case "location":
-  //       doc.text("📍", x, y);
-  //       break;
-  //     case "github":
-  //       doc.text("🐙", x, y);
-  //       break;
-  //     case "linkedin":
-  //       doc.text("💼", x, y);
-  //       break;
-  //     case "portfolio":
-  //       doc.text("🌐", x, y);
-  //       break;
-  //     default:
-  //       doc.text("•", x, y);
-  //   }
-  // };
-
-  // const drawBorder = (x: number, y: number, width: number, height: number) => {
-  //   if (!options.visualElements.borders) return;
-
-  //   doc.setDrawColor(...theme.accent);
-  //   doc.setLineWidth(PDF_VISUAL_ELEMENTS.borders.width);
-  //   doc.roundedRect(
-  //     x,
-  //     y,
-  //     width,
-  //     height,
-  //     PDF_VISUAL_ELEMENTS.borders.radius,
-  //     PDF_VISUAL_ELEMENTS.borders.radius,
-  //     "S"
-  //   );
-  // };
-
-  const drawShadow = (x: number, y: number, width: number, height: number) => {
-    if (!options.visualElements.shadows) return;
-
-    const shadow = PDF_VISUAL_ELEMENTS.shadows;
-    doc.setFillColor(...shadow.color);
-    doc.roundedRect(
-      x + shadow.offset.x,
-      y + shadow.offset.y,
-      width,
-      height,
-      PDF_VISUAL_ELEMENTS.borders.radius,
-      PDF_VISUAL_ELEMENTS.borders.radius,
-      "F"
-    );
-  };
-
-  const drawGradient = (
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    color1: [number, number, number],
-    color2: [number, number, number]
+  const addSection = async (
+    title: string,
+    content: () => Promise<void> | void,
+    requiredSpace = 18
   ) => {
-    if (!options.visualElements.gradients) return;
-
-    const steps = PDF_VISUAL_ELEMENTS.gradients.steps;
-    const stepHeight = height / steps;
-
-    for (let i = 0; i < steps; i++) {
-      const ratio = i / (steps - 1);
-      const r = Math.round(color1[0] + (color2[0] - color1[0]) * ratio);
-      const g = Math.round(color1[1] + (color2[1] - color1[1]) * ratio);
-      const b = Math.round(color1[2] + (color2[2] - color1[2]) * ratio);
-
-      doc.setFillColor(r, g, b);
-      doc.rect(x, y + i * stepHeight, width, stepHeight, "F");
-    }
-  };
-
-  /** Calculate header height based on content
-   * @returns header height
-   */
-  const headerHeight = PDF_LAYOUT.HEADER_HEIGHT;
-
-  // Header background with gradient if enabled
-  if (options.visualElements.gradients && theme.headerAccent) {
-    drawGradient(
-      0,
-      0,
-      PDF_LAYOUT.A4.w,
-      headerHeight,
-      theme.headerBg,
-      theme.headerAccent
-    );
-  } else {
-    doc.setFillColor(...theme.headerBg);
-    doc.rect(0, 0, PDF_LAYOUT.A4.w, headerHeight, "F");
-  }
-
-  // Add shadow to header if enabled
-  if (options.visualElements.shadows) {
-    drawShadow(0, 0, PDF_LAYOUT.A4.w, headerHeight);
-  }
-
-  if (theme.headerAccent) {
-    doc.setFillColor(
-      theme.headerAccent[0],
-      theme.headerAccent[1],
-      theme.headerAccent[2]
-    );
-    doc.rect(0, headerHeight, PDF_LAYOUT.A4.w, 2, "F");
-  }
-
-  // Name
-  doc.setTextColor(...theme.name);
-  doc.setFont(typography.font, "bold");
-  doc.setFontSize(PDF_LAYOUT.FONT_SIZES.name);
-  await addTextBlock(data.person.name, 15, {
-    fontSize: PDF_LAYOUT.FONT_SIZES.name,
-    fontWeight: "bold",
-    maxWidth: pageWidth * (isRTL ? 0.9 : 1),
-    align: isRTL ? "center" : undefined,
-  });
-
-  // Headline / Title (single line; headline preferred for new format)
-  const headlineText = data.headline ?? data.person.title;
-  doc.setTextColor(...theme.title);
-  doc.setFont(typography.font, "normal");
-  doc.setFontSize(PDF_LAYOUT.FONT_SIZES.title);
-  await addTextBlock(headlineText, 22, {
-    fontSize: PDF_LAYOUT.FONT_SIZES.title,
-    align: isRTL ? "center" : undefined,
-  });
-
-  // Reset text color for contact info (black text for visibility)
-  doc.setTextColor(0, 0, 0);
-  doc.setFont(typography.font, "normal");
-  doc.setFontSize(PDF_LAYOUT.FONT_SIZES.contacts);
-
-  let contactY = 37;
-  // const iconSpacing = PDF_VISUAL_ELEMENTS.icons.spacing;
-
-  // Phone and Email (kept as plain text for ATS parsing)
-  contactY = await addTextBlock(
-    `Phone: ${data.person.contacts.phone}`,
-    contactY,
-    { fontSize: PDF_LAYOUT.FONT_SIZES.contacts }
-  );
-
-  contactY = await addTextBlock(
-    `Email: ${data.person.contacts.email}`,
-    contactY,
-    { fontSize: PDF_LAYOUT.FONT_SIZES.contacts }
-  );
-
-  // Header links (Portfolio, LinkedIn, GitHub) with links data as first source.
-  const linksByLabel = new Map(
-    (data.links ?? []).map((link) => [link.label.toLowerCase(), link.url]),
-  );
-  const headerLinks: { label: string; url: string }[] = [];
-  const pushHeaderLink = (label: string, fallback?: string) => {
-    const resolved = linksByLabel.get(label.toLowerCase()) ?? fallback;
-    if (!resolved || resolved.trim().length === 0) return;
-    headerLinks.push({
-      label,
-      url: resolved.startsWith("http") ? resolved : `https://${resolved}`,
-    });
-  };
-
-  pushHeaderLink("Portfolio", data.person.contacts.portfolio);
-  pushHeaderLink("LinkedIn", data.person.contacts.linkedin);
-  pushHeaderLink("GitHub", data.person.contacts.github);
-
-  if (headerLinks.length > 0) {
-    doc.setFont(typography.font, "normal");
-    doc.setFontSize(PDF_LAYOUT.FONT_SIZES.contacts);
-    for (const headerLink of headerLinks) {
-      const linkText = `${headerLink.label}: ${headerLink.url}`;
-      doc.setTextColor(0, 0, 139);
-      contactY = await addTextBlock(linkText, contactY, {
-        fontSize: PDF_LAYOUT.FONT_SIZES.contacts,
-        linkUrl: headerLink.url,
-      });
-    }
-    doc.setTextColor(0, 0, 0);
-  }
-
-  // Reset text color for body
-  doc.setTextColor(...theme.text);
-  currentY = Math.max(60, contactY); // Start body content after header info
-
-  if (data.meta?.pdfSectionOrder) {
-    const sectionRenderers: Record<ResumePdfSectionKey, () => Promise<void>> = {
-      summary: async () => {
-        if (
-          (options as PDFRenderOptions).excludeSections?.includes(
-            "Professional Summary"
-          )
-        ) {
-          doc.setFont(typography.font, "normal");
-          doc.setFontSize(PDF_LAYOUT.FONT_SIZES.body);
-          currentY = await addTextBlock(data.summary, currentY, {
-            fontSize: PDF_LAYOUT.FONT_SIZES.body,
-          });
-          currentY += spacing.sectionGap;
-          return;
-        }
-
-        await addSection("Summary", async () => {
-          doc.setFont(typography.font, "normal");
-          doc.setFontSize(PDF_LAYOUT.FONT_SIZES.body);
-          currentY = await addTextBlock(data.summary, currentY, {
-            fontSize: PDF_LAYOUT.FONT_SIZES.body,
-          });
-        });
-      },
-      skills: async () => {
-        const hasCoreSkills = Boolean(data.coreSkills?.length);
-        const hasLegacySkills = Boolean(
-          data.tech &&
-            [
-              data.tech.frontend,
-              data.tech.backend,
-              data.tech.architecture,
-              data.tech.databases,
-              data.tech.cloudDevOps,
-              data.tech.aiTools,
-            ].some((items) => items && items.length > 0)
-        );
-
-        if (!hasCoreSkills && !hasLegacySkills) return;
-
-        const skillsSectionTitle = data.coreSkills
-          ? "Core Skills"
-          : "Technical Skills";
-
-        await addSection(skillsSectionTitle, async () => {
-          doc.setFont(typography.font, "normal");
-          doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
-
-          if (data.coreSkills && data.coreSkills.length > 0) {
-            for (const cat of data.coreSkills) {
-              const text = `${cat.category}: ${cat.items.join(", ")}`;
-              currentY = await addTextBlock(text, currentY, {
-                fontSize: PDF_LAYOUT.FONT_SIZES.small,
-              });
-            }
-          } else if (data.tech) {
-            const skillRows = [
-              ["Frontend", data.tech.frontend],
-              ["Backend", data.tech.backend],
-              ["Architecture", data.tech.architecture],
-              ["Databases", data.tech.databases],
-              ["Cloud & DevOps", data.tech.cloudDevOps],
-              ["AI & Tools", data.tech.aiTools],
-            ] as const;
-
-            for (const [label, items] of skillRows) {
-              if (items?.length) {
-                currentY = await addTextBlock(
-                  `${label}: ${items.join(", ")}`,
-                  currentY,
-                  { fontSize: PDF_LAYOUT.FONT_SIZES.small }
-                );
-              }
-            }
-          }
-        });
-      },
-      experience: async () => {
-        if (data.experience.length === 0) return;
-
-        await addSection("Professional Experience", async () => {
-          for (const [index, exp] of data.experience.entries()) {
-            if (index >= maxExperiences) break;
-
-            doc.setFont(typography.font, "bold");
-            doc.setFontSize(PDF_LAYOUT.FONT_SIZES.body);
-            currentY = await addTextBlock(
-              `${exp.role} - ${exp.company}`,
-              currentY,
-              {
-                fontSize: PDF_LAYOUT.FONT_SIZES.body,
-                fontWeight: "bold",
-              }
-            );
-
-            doc.setFont(typography.font, "normal");
-            doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
-            currentY = await addTextBlock(exp.period, currentY, {
-              fontSize: PDF_LAYOUT.FONT_SIZES.small,
-            });
-
-            const maxBullets = Math.min(exp.bullets.length, maxBulletsPerRole);
-            for (let i = 0; i < maxBullets; i++) {
-              currentY = await addTextBlock(`- ${exp.bullets[i]}`, currentY, {
-                fontSize: PDF_LAYOUT.FONT_SIZES.small,
-                indent: 3,
-                maxWidth: pageWidth - 5,
-              });
-            }
-            currentY += spacing.experienceGap;
-          }
-        });
-      },
-      projects: async () => {
-        if (!data.projects || data.projects.length === 0) return;
-        if (checkNewPage(60)) addNewPage();
-
-        await addSection("Selected Projects", async () => {
-          const maxProjectsCount = Math.min(data.projects!.length, maxProjects);
-
-          for (let i = 0; i < maxProjectsCount; i++) {
-            const project = data.projects![i];
-
-            doc.setFont(typography.font, "bold");
-            doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
-            currentY = await addTextBlock(`- ${project.name}`, currentY, {
-              fontSize: PDF_LAYOUT.FONT_SIZES.small,
-              fontWeight: "bold",
-            });
-
-            doc.setFont(typography.font, "normal");
-            currentY = await addTextBlock(project.line, currentY, {
-              fontSize: PDF_LAYOUT.FONT_SIZES.small,
-              indent: 3,
-              maxWidth: pageWidth - 5,
-            });
-
-            if (project.bullets && project.bullets.length > 0) {
-              const maxProjectBullets = Math.min(project.bullets.length, 4);
-              for (let b = 0; b < maxProjectBullets; b++) {
-                currentY = await addTextBlock(
-                  `  - ${project.bullets[b]}`,
-                  currentY,
-                  {
-                    fontSize: PDF_LAYOUT.FONT_SIZES.small,
-                    indent: 3,
-                    maxWidth: pageWidth - 5,
-                  }
-                );
-              }
-            }
-            currentY += 1;
-          }
-        });
-      },
-      education: async () => {
-        if (!data.education || data.education.length === 0) return;
-
-        await addSection("Education", async () => {
-          const educationList = isRTL
-            ? data.education.slice(0, 1)
-            : data.education;
-
-          for (const [index, edu] of educationList.entries()) {
-            doc.setFont(typography.font, "bold");
-            doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
-            currentY = await addTextBlock(edu.degree, currentY, {
-              fontSize: PDF_LAYOUT.FONT_SIZES.small,
-              fontWeight: "bold",
-            });
-
-            doc.setFont(typography.font, "normal");
-            doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
-            currentY = await addTextBlock(edu.institution, currentY, {
-              fontSize: PDF_LAYOUT.FONT_SIZES.small,
-            });
-
-            const gpaText = edu.gpa ? `GPA: ${edu.gpa}` : "";
-            currentY = await addTextBlock(
-              `${edu.period}${gpaText ? ` | ${gpaText}` : ""}`,
-              currentY,
-              { fontSize: PDF_LAYOUT.FONT_SIZES.small }
-            );
-
-            if (edu.achievements && edu.achievements.length > 0 && index === 0) {
-              const achievementsText = edu.achievements.slice(0, 2).join(", ");
-              doc.setFont(typography.font, "normal");
-              doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
-              currentY = await addTextBlock(`Key: ${achievementsText}`, currentY, {
-                fontSize: PDF_LAYOUT.FONT_SIZES.small,
-              });
-            }
-
-            currentY += 4;
-          }
-        });
-      },
-      certifications: async () => {
-        if (!data.certifications || data.certifications.length === 0) return;
-        const certifications = data.certifications;
-
-        await addSection("Certifications", async () => {
-          for (const certification of certifications.slice(0, 4)) {
-            doc.setFont(typography.font, "bold");
-            doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
-            currentY = await addTextBlock(certification.name, currentY, {
-              fontSize: PDF_LAYOUT.FONT_SIZES.small,
-              fontWeight: "bold",
-              linkUrl: certification.url,
-            });
-
-            doc.setFont(typography.font, "normal");
-            const issuerLine = [
-              certification.issuer,
-              certification.period,
-              certification.skills?.slice(0, 4).join(", "),
-            ]
-              .filter(Boolean)
-              .join(" | ");
-
-            currentY = await addTextBlock(issuerLine, currentY, {
-              fontSize: PDF_LAYOUT.FONT_SIZES.small,
-            });
-            currentY += 2;
-          }
-        });
-      },
-      additionalExperience: async () => {
-        if (isRTL) return;
-
-        if (data.additionalExperience && data.additionalExperience.length > 0) {
-          await addSection("Additional Experience", async () => {
-            for (const exp of data.additionalExperience!) {
-              doc.setFont(typography.font, "bold");
-              doc.setFontSize(PDF_LAYOUT.FONT_SIZES.body);
-              currentY = await addTextBlock(
-                `${exp.role} - ${exp.company}`,
-                currentY,
-                {
-                  fontSize: PDF_LAYOUT.FONT_SIZES.body,
-                  fontWeight: "bold",
-                }
-              );
-
-              doc.setFont(typography.font, "normal");
-              doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
-              currentY = await addTextBlock(exp.period, currentY, {
-                fontSize: PDF_LAYOUT.FONT_SIZES.small,
-              });
-
-              const maxBullets = Math.min(exp.bullets.length, maxBulletsPerRole);
-              for (let i = 0; i < maxBullets; i++) {
-                currentY = await addTextBlock(`- ${exp.bullets[i]}`, currentY, {
-                  fontSize: PDF_LAYOUT.FONT_SIZES.small,
-                  indent: 3,
-                  maxWidth: pageWidth - 5,
-                });
-              }
-              currentY += spacing.experienceGap;
-            }
-          });
-        } else if (data.additional) {
-          await addSection("Additional Activities", async () => {
-            doc.setFont(typography.font, "normal");
-            doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
-            currentY = await addTextBlock(data.additional!, currentY, {
-              fontSize: PDF_LAYOUT.FONT_SIZES.small,
-            });
-          });
-        }
-      },
-    };
-
-    for (const section of getPdfSectionOrder(data.meta.pdfSectionOrder)) {
-      await sectionRenderers[section]();
-    }
-  } else {
-
-  // Summary
-  if (
-    (options as PDFRenderOptions).excludeSections?.includes(
-      "Professional Summary"
-    )
-  ) {
-    doc.setFont(typography.font, "normal");
-    doc.setFontSize(PDF_LAYOUT.FONT_SIZES.body);
-    currentY = await addTextBlock(data.summary, currentY, {
-      fontSize: PDF_LAYOUT.FONT_SIZES.body,
-    });
+    ensurePage(requiredSpace);
     currentY += spacing.sectionGap;
-  } else {
-    await addSection("Summary", async () => {
-      doc.setFont(typography.font, "normal");
-      doc.setFontSize(PDF_LAYOUT.FONT_SIZES.body);
-      currentY = await addTextBlock(data.summary, currentY, {
-        fontSize: PDF_LAYOUT.FONT_SIZES.body,
+    currentY = await addTextBlock(title, currentY, {
+      fontSize: RESUME_PDF_LAYOUT.fontSizes.section,
+      fontWeight: "bold",
+      color: theme.accent,
+      afterGap: spacing.titleGap,
+    });
+    await content();
+  };
+
+  const addRecruiterSnapshot = async (text: string) => {
+    if (!text.trim()) return;
+
+    const maxWidth = pageWidth - 8;
+    doc.setFont(typography.font, "bold");
+    doc.setFontSize(RESUME_PDF_LAYOUT.fontSizes.hook);
+    const lines = doc.splitTextToSize(text, maxWidth);
+    const boxHeight =
+      lines.length * getLineHeight(RESUME_PDF_LAYOUT.fontSizes.hook) + 5;
+
+    ensurePage(boxHeight + 4);
+    const boxTop = currentY;
+    doc.setFillColor(...RESUME_PDF_LAYOUT.colors.hookBg);
+    doc.rect(margins.x, boxTop, pageWidth, boxHeight, "F");
+    doc.setDrawColor(...theme.accent);
+    doc.setLineWidth(0.8);
+    doc.line(margins.x, boxTop, margins.x, boxTop + boxHeight);
+
+    currentY = await addTextBlock(text, boxTop + 3.4, {
+      fontSize: RESUME_PDF_LAYOUT.fontSizes.hook,
+      fontWeight: "bold",
+      indent: 4,
+      maxWidth,
+      afterGap: 0,
+    });
+    currentY = Math.max(currentY, boxTop + boxHeight) + 2.2;
+  };
+
+  const renderHeader = async () => {
+    const linksByLabel = new Map(
+      (data.links ?? []).map((link) => [link.label.toLowerCase(), link.url])
+    );
+    const contactLine = uniqueNonEmpty([
+      data.person.contacts.phone ? `Phone: ${data.person.contacts.phone}` : "",
+      data.person.contacts.email ? `Email: ${data.person.contacts.email}` : "",
+      data.person.contacts.location || "",
+      normalizeUrl(
+        linksByLabel.get("portfolio") ?? data.person.contacts.portfolio
+      ),
+      normalizeUrl(
+        linksByLabel.get("linkedin") ?? data.person.contacts.linkedin
+      ),
+      normalizeUrl(linksByLabel.get("github") ?? data.person.contacts.github),
+    ]).join(" | ");
+
+    currentY = await addTextBlock(data.person.name, currentY, {
+      fontSize: RESUME_PDF_LAYOUT.fontSizes.name,
+      fontWeight: "bold",
+      afterGap: 1.4,
+    });
+    currentY = await addTextBlock(data.headline ?? data.person.title, currentY, {
+      fontSize: RESUME_PDF_LAYOUT.fontSizes.headline,
+      color: RESUME_PDF_LAYOUT.colors.muted,
+      afterGap: 1.6,
+    });
+    currentY = await addTextBlock(contactLine, currentY, {
+      fontSize: RESUME_PDF_LAYOUT.fontSizes.contact,
+      color: RESUME_PDF_LAYOUT.colors.muted,
+      afterGap: 2.4,
+    });
+    await addRecruiterSnapshot(buildRecruiterSnapshot(data));
+  };
+
+  const renderSummary = async () => {
+    const summary = getCompactSummary(data.summary);
+    if (!summary) return;
+
+    if (opts.excludeSections?.includes("Professional Summary")) {
+      currentY = await addTextBlock(summary, currentY, {
+        fontSize: RESUME_PDF_LAYOUT.fontSizes.body,
+      });
+      return;
+    }
+
+    await addSection("Professional Summary", async () => {
+      currentY = await addTextBlock(summary, currentY, {
+        fontSize: RESUME_PDF_LAYOUT.fontSizes.body,
       });
     });
-  }
+  };
 
-  // Core Skills (category-based) or Technical Skills (legacy flat)
-  const skillsSectionTitle = data.coreSkills ? "Core Skills" : "Technical Skills";
-  await addSection(skillsSectionTitle, async () => {
-    doc.setFont(typography.font, "normal");
-    doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
+  const renderSkills = async () => {
+    const skillRows = data.coreSkills?.length
+      ? data.coreSkills
+          .filter((category) => category.items.length > 0)
+          .map((category) => ({
+            category: category.category,
+            items: category.items,
+          }))
+      : [
+          { category: "Frontend", items: data.tech?.frontend ?? [] },
+          { category: "Backend", items: data.tech?.backend ?? [] },
+          { category: "Architecture", items: data.tech?.architecture ?? [] },
+          { category: "Databases", items: data.tech?.databases ?? [] },
+          { category: "Cloud / DevOps", items: data.tech?.cloudDevOps ?? [] },
+          { category: "Testing / Tooling", items: data.tech?.aiTools ?? [] },
+        ].filter((category) => category.items.length > 0);
 
-    if (data.coreSkills && data.coreSkills.length > 0) {
-      for (const cat of data.coreSkills) {
-        const text = `${cat.category}: ${cat.items.join(", ")}`;
-        currentY = await addTextBlock(text, currentY, {
-          fontSize: PDF_LAYOUT.FONT_SIZES.small,
-        });
-      }
-    } else if (data.tech) {
-      if (data.tech.frontend?.length > 0) {
+    if (skillRows.length === 0) return;
+
+    await addSection("Technical Skills", async () => {
+      for (const row of skillRows) {
         currentY = await addTextBlock(
-          `Frontend: ${data.tech.frontend.join(", ")}`,
+          `${row.category}: ${row.items.join(", ")}`,
           currentY,
-          { fontSize: PDF_LAYOUT.FONT_SIZES.small }
+          {
+            fontSize: RESUME_PDF_LAYOUT.fontSizes.small,
+            afterGap: 0.9,
+          }
         );
       }
-      if (data.tech.backend?.length > 0) {
-        currentY = await addTextBlock(
-          `Backend: ${data.tech.backend.join(", ")}`,
-          currentY,
-          { fontSize: PDF_LAYOUT.FONT_SIZES.small }
-        );
-      }
-      if (data.tech.architecture?.length > 0) {
-        currentY = await addTextBlock(
-          `Architecture: ${data.tech.architecture.join(", ")}`,
-          currentY,
-          { fontSize: PDF_LAYOUT.FONT_SIZES.small }
-        );
-      }
-      if (data.tech.databases?.length > 0) {
-        currentY = await addTextBlock(
-          `Databases: ${data.tech.databases.join(", ")}`,
-          currentY,
-          { fontSize: PDF_LAYOUT.FONT_SIZES.small }
-        );
-      }
-      if (data.tech.cloudDevOps?.length > 0) {
-        currentY = await addTextBlock(
-          `Cloud & DevOps: ${data.tech.cloudDevOps.join(", ")}`,
-          currentY,
-          { fontSize: PDF_LAYOUT.FONT_SIZES.small }
-        );
-      }
-      if (data.tech.aiTools?.length) {
-        currentY = await addTextBlock(
-          `AI & Tools: ${data.tech.aiTools.join(", ")}`,
-          currentY,
-          { fontSize: PDF_LAYOUT.FONT_SIZES.small }
-        );
-      }
-    }
-  });
+    });
+  };
 
-  // Professional Experience
-  await addSection("Professional Experience", async () => {
-    for (const [index, exp] of data.experience.entries()) {
-      if (index >= maxExperiences) break;
+  const renderExperience = async () => {
+    if (data.experience.length === 0) return;
 
-      // Role and Company
-      doc.setFont(typography.font, "bold");
-      doc.setFontSize(PDF_LAYOUT.FONT_SIZES.body);
-      currentY = await addTextBlock(`${exp.role} - ${exp.company}`, currentY, {
-        fontSize: PDF_LAYOUT.FONT_SIZES.body,
-        fontWeight: "bold",
-      });
+    await addSection("Professional Experience", async () => {
+      for (const [index, exp] of data.experience.entries()) {
+        if (index >= maxExperiences) break;
 
-      // Period
-      doc.setFont(typography.font, "normal");
-      doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
-      currentY = await addTextBlock(exp.period, currentY, {
-        fontSize: PDF_LAYOUT.FONT_SIZES.small,
-      });
+        ensurePage(25);
+        currentY = await addTextBlock(
+          `${exp.role} | ${exp.company} | ${exp.period}`,
+          currentY,
+          {
+            fontSize: RESUME_PDF_LAYOUT.fontSizes.body,
+            fontWeight: "bold",
+            afterGap: 1.1,
+          }
+        );
 
-      // Bullets (limited for space)
-      const maxBullets = Math.min(exp.bullets.length, maxBulletsPerRole);
-      for (let i = 0; i < maxBullets; i++) {
-        const bullet = `• ${exp.bullets[i]}`;
-        currentY = await addTextBlock(bullet, currentY, {
-          fontSize: PDF_LAYOUT.FONT_SIZES.small,
-          indent: 3,
-          maxWidth: pageWidth - 5,
-        });
+        for (const bullet of exp.bullets.slice(0, maxBulletsPerRole)) {
+          currentY = await addTextBlock(`- ${bullet}`, currentY, {
+            fontSize: RESUME_PDF_LAYOUT.fontSizes.small,
+            indent: 3,
+            maxWidth: pageWidth - 3,
+            afterGap: spacing.bulletGap,
+          });
+        }
+
+        currentY += spacing.experienceGap;
       }
-      currentY += spacing.experienceGap; // Extra space between experiences
-    }
-  });
+    }, 35);
+  };
 
-  // Selected Projects
-  if (data.projects && data.projects.length > 0) {
-    if (checkNewPage(60)) addNewPage();
+  const renderProjects = async () => {
+    const resumeProjects = data.projects;
+    if (!resumeProjects?.length) return;
+
     await addSection("Selected Projects", async () => {
-      const maxProjectsCount = Math.min(data.projects!.length, maxProjects);
-
-      for (let i = 0; i < maxProjectsCount; i++) {
-        const project = data.projects![i];
-
-        doc.setFont(typography.font, "bold");
-        doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
-        currentY = await addTextBlock(`• ${project.name}`, currentY, {
-          fontSize: PDF_LAYOUT.FONT_SIZES.small,
+      for (const project of resumeProjects.slice(0, maxProjects)) {
+        ensurePage(24);
+        currentY = await addTextBlock(project.name, currentY, {
+          fontSize: RESUME_PDF_LAYOUT.fontSizes.body,
           fontWeight: "bold",
+          afterGap: 0.8,
         });
-
-        doc.setFont(typography.font, "normal");
         currentY = await addTextBlock(project.line, currentY, {
-          fontSize: PDF_LAYOUT.FONT_SIZES.small,
-          indent: 3,
-          maxWidth: pageWidth - 5,
+          fontSize: RESUME_PDF_LAYOUT.fontSizes.small,
+          color: RESUME_PDF_LAYOUT.colors.muted,
+          afterGap: 0.9,
         });
 
-        if (project.bullets && project.bullets.length > 0) {
-          const maxProjectBullets = Math.min(project.bullets.length, 4);
-          for (let b = 0; b < maxProjectBullets; b++) {
-            const bullet = `  • ${project.bullets[b]}`;
-            currentY = await addTextBlock(bullet, currentY, {
-              fontSize: PDF_LAYOUT.FONT_SIZES.small,
+        for (const bullet of (project.bullets ?? []).slice(0, 2)) {
+          currentY = await addTextBlock(`- ${bullet}`, currentY, {
+            fontSize: RESUME_PDF_LAYOUT.fontSizes.small,
+            indent: 3,
+            maxWidth: pageWidth - 3,
+            afterGap: spacing.bulletGap,
+          });
+        }
+
+        currentY += spacing.experienceGap;
+      }
+    }, 32);
+  };
+
+  const renderAdditionalExperience = async () => {
+    if (isRTL) return;
+
+    if (data.additionalExperience?.length) {
+      await addSection("Additional Experience", async () => {
+        for (const exp of data.additionalExperience ?? []) {
+          ensurePage(18);
+          currentY = await addTextBlock(
+            `${exp.role} | ${exp.company} | ${exp.period}`,
+            currentY,
+            {
+              fontSize: RESUME_PDF_LAYOUT.fontSizes.small,
+              fontWeight: "bold",
+              afterGap: 0.9,
+            }
+          );
+
+          for (const bullet of exp.bullets.slice(0, 2)) {
+            currentY = await addTextBlock(`- ${bullet}`, currentY, {
+              fontSize: RESUME_PDF_LAYOUT.fontSizes.small,
               indent: 3,
-              maxWidth: pageWidth - 5,
+              maxWidth: pageWidth - 3,
+              afterGap: spacing.bulletGap,
             });
           }
+
+          currentY += spacing.experienceGap;
         }
-        currentY += 1;
-      }
-    });
-  }
+      }, 24);
+      return;
+    }
 
-  // Education
-  if (data.certifications && data.certifications.length > 0) {
-    await addSection("Certifications", async () => {
-      for (const certification of data.certifications!.slice(0, 4)) {
-        doc.setFont(typography.font, "bold");
-        doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
-        currentY = await addTextBlock(certification.name, currentY, {
-          fontSize: PDF_LAYOUT.FONT_SIZES.small,
-          fontWeight: "bold",
-          linkUrl: certification.url,
+    if (data.additional) {
+      await addSection("Additional Activities", async () => {
+        currentY = await addTextBlock(data.additional ?? "", currentY, {
+          fontSize: RESUME_PDF_LAYOUT.fontSizes.small,
         });
+      });
+    }
+  };
 
-        doc.setFont(typography.font, "normal");
+  const renderCertifications = async () => {
+    if (!data.certifications?.length) return;
+
+    await addSection("Certifications", async () => {
+      for (const certification of data.certifications?.slice(0, 4) ?? []) {
         const issuerLine = [
+          certification.name,
           certification.issuer,
           certification.period,
-          certification.skills?.slice(0, 4).join(", "),
         ]
           .filter(Boolean)
           .join(" | ");
 
         currentY = await addTextBlock(issuerLine, currentY, {
-          fontSize: PDF_LAYOUT.FONT_SIZES.small,
+          fontSize: RESUME_PDF_LAYOUT.fontSizes.small,
+          fontWeight: "bold",
+          afterGap: 0.8,
         });
-        currentY += 2;
-      }
-    });
-  }
 
-  // Education
-  if (data.education && data.education.length > 0) {
+        if (certification.skills?.length) {
+          currentY = await addTextBlock(
+            `Skills: ${certification.skills.slice(0, 4).join(", ")}`,
+            currentY,
+            {
+              fontSize: RESUME_PDF_LAYOUT.fontSizes.small,
+              color: RESUME_PDF_LAYOUT.colors.muted,
+              afterGap: 1,
+            }
+          );
+        }
+      }
+    }, 20);
+  };
+
+  const renderEducation = async () => {
+    if (!data.education.length) return;
+
     await addSection("Education", async () => {
       const educationList = isRTL ? data.education.slice(0, 1) : data.education;
 
-      for (const [index, edu] of educationList.entries()) {
-        // Single line format: Degree | Institution | Period | GPA
-        doc.setFont(typography.font, "bold");
-        doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
+      for (const edu of educationList) {
+        const educationLine = [
+          edu.degree,
+          edu.institution,
+          edu.period,
+          edu.gpa ? `GPA: ${edu.gpa}` : undefined,
+        ]
+          .filter(Boolean)
+          .join(" | ");
 
-        const degreeText = `${edu.degree}`;
-        const institutionText = `${edu.institution}`;
-        const periodText = `${edu.period}`;
-        const gpaText = edu.gpa ? `GPA: ${edu.gpa}` : "";
-
-        // First line: Degree only
-        currentY = await addTextBlock(degreeText, currentY, {
-          fontSize: PDF_LAYOUT.FONT_SIZES.small,
+        currentY = await addTextBlock(educationLine, currentY, {
+          fontSize: RESUME_PDF_LAYOUT.fontSizes.small,
           fontWeight: "bold",
+          afterGap: 1,
         });
-
-        // Second line: Institution
-        doc.setFont(typography.font, "normal");
-        doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
-        currentY = await addTextBlock(institutionText, currentY, {
-          fontSize: PDF_LAYOUT.FONT_SIZES.small,
-        });
-
-        // Third line: Period and GPA
-        const periodGpaLine = `${periodText}${gpaText ? ` | ${gpaText}` : ""}`;
-        currentY = await addTextBlock(periodGpaLine, currentY, {
-          fontSize: PDF_LAYOUT.FONT_SIZES.small,
-        });
-
-        if (edu.achievements && edu.achievements.length > 0 && index === 0) {
-          const achievementsText = edu.achievements.slice(0, 2).join(", ");
-          doc.setFont(typography.font, "normal");
-          doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
-          currentY = await addTextBlock(`Key: ${achievementsText}`, currentY, {
-            fontSize: PDF_LAYOUT.FONT_SIZES.small,
-          });
-        }
-
-        currentY += 4;
       }
-    });
-  }
+    }, 18);
+  };
 
-  // Additional Experience (structured roles) or Additional Activities (legacy string)
-  if (data.additionalExperience && data.additionalExperience.length > 0 && !isRTL) {
-    await addSection("Additional Experience", async () => {
-      for (const exp of data.additionalExperience!) {
-        doc.setFont(typography.font, "bold");
-        doc.setFontSize(PDF_LAYOUT.FONT_SIZES.body);
-        currentY = await addTextBlock(`${exp.role} - ${exp.company}`, currentY, {
-          fontSize: PDF_LAYOUT.FONT_SIZES.body,
-          fontWeight: "bold",
-        });
+  await renderHeader();
 
-        doc.setFont(typography.font, "normal");
-        doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
-        currentY = await addTextBlock(exp.period, currentY, {
-          fontSize: PDF_LAYOUT.FONT_SIZES.small,
-        });
+  const sectionRenderers: Record<ResumePdfSectionKey, () => Promise<void>> = {
+    summary: renderSummary,
+    skills: renderSkills,
+    experience: renderExperience,
+    projects: renderProjects,
+    additionalExperience: renderAdditionalExperience,
+    certifications: renderCertifications,
+    education: renderEducation,
+  };
 
-        const maxBullets = Math.min(exp.bullets.length, maxBulletsPerRole);
-        for (let i = 0; i < maxBullets; i++) {
-          const bullet = `• ${exp.bullets[i]}`;
-          currentY = await addTextBlock(bullet, currentY, {
-            fontSize: PDF_LAYOUT.FONT_SIZES.small,
-            indent: 3,
-            maxWidth: pageWidth - 5,
-          });
-        }
-        currentY += spacing.experienceGap;
-      }
-    });
-  } else if (data.additional && !isRTL) {
-    await addSection("Additional Activities", async () => {
-      doc.setFont(typography.font, "normal");
-      doc.setFontSize(PDF_LAYOUT.FONT_SIZES.small);
-      currentY = await addTextBlock(data.additional!, currentY, {
-        fontSize: PDF_LAYOUT.FONT_SIZES.small,
-      });
-    });
-  }
-  }
-
-  // Add section
-  async function addSection(
-    title: string,
-    content: () => Promise<void> | void
-  ) {
-    // Section title
-    currentY += spacing.sectionGap;
-    doc.setTextColor(...theme.accent);
-    doc.setFont(typography.font, "bold");
-    doc.setFontSize(PDF_LAYOUT.FONT_SIZES.sectionHeader);
-    await addTextBlock(title, currentY, {
-      fontSize: PDF_LAYOUT.FONT_SIZES.sectionHeader,
-      fontWeight: "bold",
-    });
-    currentY += spacing.sectionGap;
-
-    // Rule line with visual enhancements
-    doc.setDrawColor(...theme.rule);
-    doc.setLineWidth(0.3);
-
-    // Simple underline - no decorative elements
-    doc.line(margins.x, currentY, margins.x + pageWidth, currentY);
-
-    currentY += spacing.ruleGap;
-
-    // Reset text color
-    doc.setTextColor(...theme.text);
-
-    // Content
-    await content();
+  for (const section of getPdfSectionOrder(data.meta?.pdfSectionOrder)) {
+    await sectionRenderers[section]();
   }
 
   return doc;

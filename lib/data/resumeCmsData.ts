@@ -13,9 +13,9 @@ const DEFAULT_PDF_SECTION_ORDER = [
   "skills",
   "experience",
   "projects",
-  "certifications",
-  "education",
   "additionalExperience",
+  "education",
+  "certifications",
 ] satisfies NonNullable<ResumeData["meta"]>["pdfSectionOrder"];
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
@@ -24,14 +24,35 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
   timeZone: "UTC",
 });
 
+const preferredSkillCategories = [
+  "Languages",
+  "Frontend",
+  "Backend",
+  "Databases",
+  "Cloud / DevOps",
+  "Testing / Tooling",
+] as const;
+
 const skillCategoryLabels: Record<string, string> = {
-  cloud: "Cloud & DevOps",
+  "api design": "Backend",
+  backend: "Backend",
+  cloud: "Cloud / DevOps",
+  "cloud & devops": "Cloud / DevOps",
+  "cloud / devops": "Cloud / DevOps",
+  "cloud / infrastructure / devops": "Cloud / DevOps",
   database: "Databases",
-  framework: "Frameworks",
+  databases: "Databases",
+  devops: "Cloud / DevOps",
+  framework: "Frontend",
+  frameworks: "Frontend",
+  frontend: "Frontend",
   language: "Languages",
-  soft: "Soft Skills",
-  technical: "Technical",
-  tool: "Tools",
+  languages: "Languages",
+  testing: "Testing / Tooling",
+  "testing / tooling": "Testing / Tooling",
+  tool: "Testing / Tooling",
+  tooling: "Testing / Tooling",
+  tools: "Testing / Tooling",
 };
 
 function settledValue<T>(result: PromiseSettledResult<T>, fallback: T): T {
@@ -46,11 +67,19 @@ function formatPeriod(startDate: string, endDate: string | null) {
   return `${formatMonthYear(startDate)} - ${endDate ? formatMonthYear(endDate) : "Present"}`;
 }
 
+function uniqueStrings(values: string[]): string[] {
+  return values.filter(
+    (value, index, allValues) => value.trim() && allValues.indexOf(value) === index
+  );
+}
+
 function mapWorkExperience(item: WorkExperience): ResumeData["experience"][number] {
-  const bullets = [
-    ...item.achievements,
+  const achievements = uniqueStrings(item.achievements);
+  const fallbackBullets = uniqueStrings([
     ...item.responsibilities,
-  ].filter((value, index, values) => value && values.indexOf(value) === index);
+    item.description,
+  ]);
+  const bullets = achievements.length > 0 ? achievements : fallbackBullets;
 
   return {
     role: item.role,
@@ -118,12 +147,18 @@ function mapCertification(item: Certification): NonNullable<ResumeData["certific
   };
 }
 
+function getSkillCategoryLabel(skill: Skill) {
+  const rawCategory = skill.subCategory || skill.category;
+  const normalized = rawCategory.trim().toLowerCase();
+
+  return skillCategoryLabels[normalized] ?? rawCategory;
+}
+
 function groupSkills(skills: Skill[]): ResumeData["coreSkills"] {
   const groups = new Map<string, string[]>();
 
   for (const skill of skills) {
-    const key = skill.subCategory || skill.category;
-    const label = skillCategoryLabels[key] ?? skillCategoryLabels[skill.category] ?? key;
+    const label = getSkillCategoryLabel(skill);
     const existing = groups.get(label) ?? [];
 
     if (!existing.includes(skill.name)) {
@@ -131,10 +166,25 @@ function groupSkills(skills: Skill[]): ResumeData["coreSkills"] {
     }
   }
 
-  return Array.from(groups.entries()).map(([category, items]) => ({
+  const groupedSkills = Array.from(groups.entries()).map(([category, items]) => ({
     category,
-    items: items.slice(0, 12),
+    items: items.slice(0, 10),
   }));
+  const preferred = preferredSkillCategories.flatMap((category) =>
+    groupedSkills.filter((group) => group.category === category)
+  );
+
+  if (preferred.length >= 4) {
+    return preferred;
+  }
+
+  const fallback = groupedSkills.filter(
+    (group) => !preferredSkillCategories.includes(
+      group.category as (typeof preferredSkillCategories)[number]
+    )
+  );
+
+  return [...preferred, ...fallback].slice(0, 6);
 }
 
 type ResumeProfileMetadata = {
@@ -146,10 +196,13 @@ type ResumeProfileMetadata = {
   github?: unknown;
   linkedin?: unknown;
   location?: unknown;
+  photoUrl?: unknown;
   links?: unknown;
   pdfDateFormat?: unknown;
   pdfSectionOrder?: unknown;
 };
+
+const LEGACY_DEFAULT_PROFILE_PHOTO_URL = "/profile-photo.jpg";
 
 function stringValue(value: unknown) {
   return typeof value === "string" && value.trim() ? value.trim() : undefined;
@@ -175,6 +228,17 @@ function parseResumeLinks(value: unknown): ResumeData["links"] | undefined {
     .filter((item): item is NonNullable<typeof item> => item !== null);
 
   return links.length > 0 ? links : undefined;
+}
+
+function normalizeProfilePhotoUrl(
+  value: string | undefined,
+  fallback: string | undefined
+) {
+  if (!value || value === LEGACY_DEFAULT_PROFILE_PHOTO_URL) {
+    return fallback;
+  }
+
+  return value;
 }
 
 function parsePdfSectionOrder(value: unknown): ResumePdfSectionKey[] {
@@ -223,6 +287,10 @@ function applyResumeProfileBlocks(
       ...base.person,
       name: stringValue(metadata.name) ?? base.person.name,
       title: profile?.subtitle ?? base.person.title,
+      photoUrl: normalizeProfilePhotoUrl(
+        stringValue(metadata.photoUrl),
+        base.person.photoUrl
+      ),
       contacts: {
         ...base.person.contacts,
         phone: stringValue(metadata.phone) ?? base.person.contacts.phone,

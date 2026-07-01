@@ -33,9 +33,9 @@ const DEFAULT_PDF_SECTION_ORDER: ResumePdfSectionKey[] = [
   "skills",
   "experience",
   "projects",
-  "certifications",
-  "education",
   "additionalExperience",
+  "education",
+  "certifications",
 ];
 
 function normalizePdfSectionOrder(value: unknown): ResumePdfSectionKey[] {

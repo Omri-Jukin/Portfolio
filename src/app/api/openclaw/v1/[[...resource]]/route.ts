@@ -55,9 +55,9 @@ const DEFAULT_PDF_SECTION_ORDER: ResumePdfSectionKey[] = [
   "skills",
   "experience",
   "projects",
-  "certifications",
-  "education",
   "additionalExperience",
+  "education",
+  "certifications",
 ];
 
 type RouteContext = { params: Promise<{ resource?: string[] }> };
